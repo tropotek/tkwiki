@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<div class="Register">
+  
+  <h2 class="title">New Account</h2>
+  
+  <p class="notice" choice="success">Your new account has been created. Please check your email account to finish account activation</p>
+  
+  <div class="roundBorder">
+    <div var="User"></div>
+  </div>
+  
+  
+</div>

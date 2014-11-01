@@ -1,0 +1,7 @@
+#
+# Access
+#
+<Files "validImg.php">
+  Order Allow,Deny
+  Allow from All
+</Files>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<div class="Error">
+  
+  <h3 var="title">404 Resource Not Found</h3>
+  <p>
+    <em>
+      The page you are looking for cannot be found.<br/>
+      Please return to the <a herf="/index.html">Home Page</a> and try searching for the page you are after.
+    </em>
+  </p>
+  
+  
+  <pre var="msg"></pre>
+  
+  
+  <p>&#160;</p>
+</div>

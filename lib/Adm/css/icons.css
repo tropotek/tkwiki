@@ -1,0 +1,166 @@
+@charset "utf-8";
+
+
+/*  1 6 P X   I C O N   S E T  (ORIG) */
+.i16-icon {
+  background-position: top left;
+  background-repeat: no-repeat;
+  display: inline-block;
+  padding-left: 18px;
+  min-height: 18px;
+  margin-right: 5px; 
+}
+.i16-default { background-image: url('../images/icons/16/server.png'); }
+.i16-help { background-image: url('../images/icons/16/help.png'); }
+.i16-back { background-image: url('../images/icons/16/back.png'); }
+.i16-www { background-image: url('../images/icons/16/globe2.png'); }
+.i16-home { background-image: url('../images/icons/16/home.png'); }
+.i16-logout { background-image: url('../images/icons/16/logout.png'); }
+.i16-delete { background-image: url('../images/icons/16/btnCancel.png'); }
+.i16-process { background-image: url('../images/icons/16/operations.png'); }
+.i16-group { background-image: url('../images/icons/16/group.png'); }
+.i16-groupAdd { background-image: url('../images/icons/16/add_group.png'); }
+.i16-userEdit { background-image: url('../images/icons/16/settings.png'); }
+.i16-userAdd { background-image: url('../images/icons/16/add_user.png'); }
+.i16-aliases { background-image: url('../images/icons/16/showAlias.png'); }
+.i16-search { background-image: url('../images/icons/16/find.png'); }
+.i16-hide { background-image: url('../images/icons/16/hide2.png'); }
+.i16-show { background-image: url('../images/icons/16/show2.png'); }
+.i16-showAll { background-image: url('../images/icons/16/actions/viewmagfit.png'); }
+.i16-stats { background-image: url('../images/icons/16/stats.png'); }
+.i16-agtForum { background-image: url('../images/icons/16/actions/agt_forum.png'); }
+.i16-folderNew { background-image: url('../images/icons/16/actions/folder_new.png'); }
+.i16-folderWrite { background-image: url('../images/icons/16/apps/kwrite.png'); }
+.i16-webexport { background-image: url('../images/icons/16/actions/webexport.png'); }
+.i16-list { background-image: url('../images/icons/16/actions/list.png'); }
+.i16-blog { background-image: url('../images/icons/16/apps/easymoblog.png'); }
+.i16-blackbox { background-image: url('../images/icons/16/apps/kblackbox.png'); }
+.i16-tux { background-image: url('../images/icons/16/apps/neotux.png'); }
+.i16-csv { background-image: url('../images/icons/16/mimetypes/spreadsheet.png'); }
+.i16-network2 { background-image: url('../images/icons/16/apps/network2.png'); }
+.i16-network { background-image: url('../images/icons/16/apps/network.png'); }
+.i16-no3D { background-image: url('../images/icons/16/apps/no3D.png'); }
+.i16-package { background-image: url('../images/icons/16/apps/package.png'); }
+.i16-terminal { background-image: url('../images/icons/16/apps/terminal.png'); }
+.i16-edit { background-image: url('../images/icons/16/apps/kedit.png'); }
+.i16-email { background-image: url('../images/icons/16/apps/email.png'); }
+.i16-tick { background-image: url('../images/icons/16/apps/clean.png'); }
+.i16-calc { background-image: url('../images/icons/16/apps/business.png'); }
+
+
+
+/*
+.i16- { background-image: url('../images/icons/16/apps/.png'); }
+*/
+
+
+/*  3 2 P X   I C O N   S E T  (ORIG) */
+.icon a,
+.i32-icon {
+  background-position: top center;
+  background-repeat: no-repeat;
+  display: inline-block;
+  margin: 2px 5px;
+  padding: 34px 0px 4px 0px;
+  text-align: center;
+  width: 70px;
+  vertical-align: top;
+}
+.i32-default { background-image: url('../images/icons/32/kblackbox.png'); }
+.i32-back { background-image: url('../images/icons/32/back.png'); }
+.i32-settings { background-image: url('../images/icons/32/settings.png'); }
+.i32-userAdd { background-image: url('../images/icons/32/userAdd.png'); }
+.i32-userDelete { background-image: url('../images/icons/32/userDelete.png'); }
+.i32-userEdit { background-image: url('../images/icons/32/userEdit.png'); }
+.i32-groupAdd { background-image: url('../images/icons/32/groupAdd.png'); }
+.i32-groupDelete { background-image: url('../images/icons/32/groupDelete.png'); }
+.i32-groupEdit { background-image: url('../images/icons/32/groupEdit.png'); }
+.i32-stats { background-image: url('../images/icons/32/stats.png'); }
+.i32-folder { background-image: url('../images/icons/32/folder_yellow.png'); }
+.i32-network { background-image: url('../images/icons/32/network.png'); }
+.i32-server { background-image: url('../images/icons/32/server.png'); }
+.i32-print { background-image: url('../images/icons/32/print.png'); }
+.i32-cdMedia { background-image: url('../images/icons/32/cdMedia.png'); }
+.i32-exec { background-image: url('../images/icons/32/exec.png'); }
+.i32-fileNew { background-image: url('../images/icons/32/fileNew.png'); }
+.i32-fileSave { background-image: url('../images/icons/32/fileSave.png'); }
+.i32-identity { background-image: url('../images/icons/32/identity.png'); }
+.i32-mailDelete { background-image: url('../images/icons/32/mail_delete.png'); }
+.i32-mailForward { background-image: url('../images/icons/32/mail_forward.png'); }
+.i32-mail { background-image: url('../images/icons/32/mail_generic.png'); }
+.i32-mailGet { background-image: url('../images/icons/32/mail_get.png'); }
+.i32-mail_new { background-image: url('../images/icons/32/mail_new.png'); }
+.i32-mailReply { background-image: url('../images/icons/32/mail_reply.png'); }
+.i32-mailSend { background-image: url('../images/icons/32/mail_send.png'); }
+.i32-images { background-image: url('../images/icons/32/images.png'); }
+.i32-images2 { background-image: url('../images/icons/32/images2.png'); }
+.i32-globe  { background-image: url('../images/icons/32/globe.png'); }
+.i32-globeCompass { background-image: url('../images/icons/32/globeCompass.png'); }
+.i32-mapManager { background-image: url('../images/icons/32/mapManager.png'); }
+.i32-mapSearch { background-image: url('../images/icons/32/mapSearch.png'); }
+.i32-encrypt { background-image: url('../images/icons/32/encrypted.png'); }
+.i32-decrypt { background-image: url('../images/icons/32/decrypted.png'); }
+.i32-fileManager { background-image: url('../images/icons/32/file-manager.png'); }
+.i32-attach { background-image: url('../images/icons/32/attach.png'); }
+.i32-dbAdd { background-image: url('../images/icons/32/db_add.png'); }
+.i32-dbRemove { background-image: url('../images/icons/32/db_remove.png'); }
+.i32-email { background-image: url('../images/icons/32/email.png'); }
+.i32-konsole { background-image: url('../images/icons/32/konsole.png'); }
+.i32-klaptop { background-image: url('../images/icons/32/klaptop.png'); }
+.i32-no3D { background-image: url('../images/icons/32/no3D.png'); }
+.i32-run { background-image: url('../images/icons/32/run.png'); }
+.i32-viewTree { background-image: url('../images/icons/32/view_tree.png'); }
+.i32-agtForum { background-image: url('../images/icons/32/knewsticker.png'); }
+.i32-folderNew { background-image: url('../images/icons/32/fileopen.png'); }
+.i32-folderWrite { background-image: url('../images/icons/32/kwrite.png'); }
+.i32-webexport { background-image: url('../images/icons/32/fileimport.png'); }
+.i32-list { background-image: url('../images/icons/32/list.png'); }
+.i32-blog { background-image: url('../images/icons/32/easymoblog.png'); }
+.i32-blackbox { background-image: url('../images/icons/32/kblackbox.png'); }
+.i32-tux { background-image: url('../images/icons/32/neotux.png'); }
+.i32-network2 { background-image: url('../images/icons/32/network2.png'); }
+.i32-alarm { background-image: url('../images/icons/32/alarm.png'); }
+.i32-autostart { background-image: url('../images/icons/32/autostart.png'); }
+.i32-barcode { background-image: url('../images/icons/32/barcode.png'); }
+.i32-creditcard { background-image: url('../images/icons/32/creditcard.png'); }
+.i32-example { background-image: url('../images/icons/32/example.png'); }
+.i32-meeting { background-image: url('../images/icons/32/meeting.png'); }
+.i32-miscDoc { background-image: url('../images/icons/32/misc_doc.png'); }
+.i32-notebook { background-image: url('../images/icons/32/notebook.png'); }
+.i32-spreadsheet { background-image: url('../images/icons/32/spreadsheet.png'); }
+.i32-timezone { background-image: url('../images/icons/32/timezone.png'); }
+.i32-truetype { background-image: url('../images/icons/32/truetype.png'); }
+.i32-unknown { background-image: url('../images/icons/32/unknown.png'); }
+.i32-update { background-image: url('../images/icons/32/update.png'); }
+.i32-webCalendar { background-image: url('../images/icons/32/web-calendar.png'); }
+.i32-money1 { background-image: url('../images/icons/32/money1.png'); }
+.i32-money2 { background-image: url('../images/icons/32/money2.png'); }
+.i32-money3 { background-image: url('../images/icons/32/money3.png'); }
+.i32-menu { background-image: url('../images/icons/32/menu.png'); }
+.i32-waterDrop { background-image: url('../images/icons/32/waterDrop.png'); }
+.i32-blackFolder { background-image: url('../images/icons/32/blackFolder.png'); }
+.i32-invest { background-image: url('../images/icons/32/invest.png'); }
+.i32-calculator { background-image: url('../images/icons/32/calculator.png'); }
+.i32-package { background-image: url('../images/icons/32/package.png'); }
+.i32-sms { background-image: url('../images/icons/32/sms.png'); }
+.i32-magic8ball { background-image: url('../images/icons/32/magic8ball.png'); }
+.i32-accessibility { background-image: url('../images/icons/32/accessibility.png'); }
+.i32-bullitinBoard { background-image: url('../images/icons/32/bullitinBoard.png'); }
+.i32-percentage { background-image: url('../images/icons/32/percentage.png'); }
+.i32-manager { background-image: url('../images/icons/32/manager.png'); }
+.i32-gold { background-image: url('../images/icons/32/gold.png'); }
+.i32-special1 { background-image: url('../images/icons/32/special1.png'); }
+.i32-special2 { background-image: url('../images/icons/32/special2.png'); }
+
+
+/*
+.i32- { background-image: url('../images/icons/32/.png'); }
+*/
+
+.icon .disable, .i16-icon.disable, .i32-icon.disable {
+  opacity:0.5;
+  filter:alpha(opacity=50);
+  -moz-opacity:0.5;
+}
+
+

@@ -1,0 +1,213 @@
+  /********************************************
+   *   H  T  M  L    E  L  E  M  E  N  T  S   *
+   ********************************************/
+  body {
+    background-color: #FFF;
+    color: #333;
+    font: 0.85em Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  }
+  
+  /*--- Headings ------------------------------------------------------------------------*/
+
+  h1,h2,h3,h4,h5,h6 {
+    /*font-family: "Times New Roman", Times, serif;*/
+    font-weight:normal;
+    color:#222;
+    margin: 0 0 0.25em 0;
+  }
+
+  h1 { font-size: 2.5em; }                       /* 30px */
+  h2 { font-size: 2.0em; }                       /* 24px */
+  h3 { font-size: 1.5em; }                       /* 18px */
+  h4 { font-size: 1.33em; }                    /* 16px */
+  h5 { font-size: 1.16em; }                    /* 14px */
+  h6 { font-size: 1.16em; }                    /* 14px */
+  
+  /**
+   * (en) reset monospaced elements to font size 16px in all browsers
+   * @see: http://webkit.org/blog/67/strange-medium/
+   */
+  textarea, pre, code, kbd, samp, var, tt {
+    font-family: Consolas, "Lucida Console", "Andale Mono", "Bitstream Vera Sans Mono", "Courier New", Courier;
+  }
+  
+  /* --- Lists -------------------------------------------------------------------------------- */
+
+  ul,ol,dl {
+    margin: 0 0 0 10px;
+    padding: 0px 0px 0px 10px;
+  }
+  ul li {
+    list-style-image: url('images/icons/bullet.png');
+  }
+  ol li {
+    list-style-type: decimal;
+  }
+  ol ol li {
+    list-style-type: lower-latin;
+  }
+  li {
+    margin: 0;
+    line-height: 1.5em;
+  }
+  dt {
+    font-weight: bold;
+  }
+  dd {
+    margin: 0 0 1em 0.8em;
+  }
+  
+  
+  /* --- general text formatting  ------------------------------------------ */
+
+  p { line-height: 1em; margin: 0 0 0.5em 0; }
+
+  blockquote, cite,q {
+    /*font-family: Georgia, "Times New Roman", Times, serif;*/
+    font-style:italic;
+  }
+  blockquote { margin: 0 0 1em 1.6em; color: #666; }
+
+  strong,b { font-weight: bold; }
+  em,i { font-style: italic; }
+
+  /*
+  pre, code, kbd, tt, samp, var { font-size: 100%; }
+  pre, code { color: #000; }
+  pre { line-height: 1.5em; margin: 0 0 1em 0; }
+  */
+
+  .code, pre {
+  	display: block;
+    background-color: #F0EFFF;
+    padding: 0.5em;
+    border: 1px dashed #D3DFF3;
+    overflow: auto;
+    line-height: 1.2em;    
+    margin: 10px 30px;
+    font-size: 1em;  
+  }  
+  
+  
+  
+  kbd, samp, var { color: #444; }
+  var { font-style: italic; }
+
+  acronym, abbr {
+    border-bottom: 1px #aaa dotted;
+    font-variant: small-caps;
+    letter-spacing: .07em;
+    cursor: help;
+  }
+
+  sub, sup { font-size: 91.6667%; }
+  
+  
+  /**
+  * Generic Content Classes
+  *
+  * (en) standard classes for positioning and highlighting
+  * @section content-generic-classes
+  */
+  .highlight { color: #f60; }
+  .dimmed { color: #888; }
+
+  .info { background: #f8f8f8; color: #666; padding: 0px; margin-bottom: 0.5em; font-size: 91.7%; }
+
+  .notice { background: #efe; color: #040; border: 2px #484 solid; padding: 10px; margin-bottom: 1em; }
+  .warning { background: #ffe; color: #440; border: 2px #884 solid; padding: 10px; margin-bottom: 1em; }
+  .error { background: #fee; color: #400; border: 2px #844 solid; padding: 10px; margin-bottom: 1em; }
+
+  .float_left { float: left; display:inline; margin-right: 1em; margin-bottom: 0.15em; }
+  .float_right { float: right; display:inline; margin-left: 1em; margin-bottom: 0.15em; }
+  .center { display:block; text-align:center; margin: 0.5em auto; }
+
+ /**
+  * Tables | Tabellen
+  *
+  * (en) Generic classes for table-width and design definition
+  * @section content-tables
+  */
+  table { border-collapse:collapse; margin-bottom: 0.5em; border-top: 1px #CCC solid;  }
+  table caption { font-variant:small-caps; }
+  table.tFull { width: 100%; }
+  table.tCenter { margin: 0 auto; }
+  table.tFixed { table-layout:fixed; }
+
+  th,td { padding: 0.5em; }
+  th { font-weight: bold; color: #333; border-bottom: 1px #E0E0E0 solid; background: #e0e0e0; }
+  th[scope="row"], tbody th.sub { background: #f0f0f0; }
+
+  th { border-bottom: 1px solid #CCC; text-align: left; }
+  td { border-bottom: 1px solid #CCC; }
+ 
+/*
+  tr:hover th[scope="row"],
+  tr:hover tbody th.sub { background: #f0e8e8; }
+  tr:hover td { background: #DEF; }
+*/
+  
+  
+  a, a:link {
+    color: #369 !important;
+    text-decoration: none !important;
+  }
+  a:hover {
+    color: #036 !important;
+    text-decoration: underline !important;
+  }
+  
+
+  .item-list .title {
+    font-size: 1em;
+    color: #444;
+  }
+  img {
+    border: none;
+  }
+  
+  hr {
+    clear: none;
+    /* So that horizontal rules don't clear out floating blocks */
+    background: none;
+    height: 1px;
+    border-width: 0;
+    color: #ccc; /* IE 6/7 */
+    background-color: #ccc; /* FF */
+    margin: 0.5em 0; /* FF */
+    _margin: 0; /* IE6 */
+    #margin: 0; /* IE7 */
+  }
+  
+  
+  
+  /* --- images (with optional captions) ------------------ */
+
+  p.icaption_left { float:left; display:inline; margin: 0 1em 0.15em 0; }
+  p.icaption_right { float:right; display:inline; margin: 0 0 0.15em 1em; }
+
+  p.icaption_left img,
+  p.icaption_right img { padding:0; border: 1px #888 solid; }
+
+  body p.icaption_left i,
+  body p.icaption_left em {
+    display: inline;
+  }
+  body p.icaption_left i,
+  body p.icaption_left em,
+  body p.icaption_right i,
+  body p.icaption_right em { display:block; overflow:hidden; margin-top: 0px; padding: 0.3em 0.5em; background-color: #CCC; font-weight: normal; font-size: 91.667%; }
+  
+
+.flvplayer {
+  border: 1px solid #D6E1F3;
+}
+.mceItemFlash, object, embed {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+  
+  
+  

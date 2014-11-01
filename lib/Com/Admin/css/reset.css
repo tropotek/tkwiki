@@ -1,0 +1,72 @@
+@charset "utf-8";
+
+html,body {
+  margin: 0;
+  padding: 0
+}
+
+:link,:visited,:focus {
+  text-decoration: none;
+  outline: none;
+}
+
+ul,ol {
+  list-style: none
+}
+
+h1,h2,h3,h4,h5,h6,pre,code,kbd,table {
+  font-size: 1em;
+}
+
+dl,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,div,p,blockquote,fieldset,legend
+  {
+  margin: 0;
+  padding: 0
+}
+
+a img,:link img,:visited img,abbr,acronym,fieldset,iframe {
+  border: 0;
+}
+
+address,abbr,cite {
+  font-style: normal
+}
+
+caption {
+  text-align: left;
+}
+
+q:before,q:after {
+  content: '';
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+/* Clear */
+.clear:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clear {
+  display: inline-block;
+}
+
+/* required comment for clearfix to work in Opera \*/
+* html .clear {
+  height: 1%;
+}
+
+.clear {
+  display: block;
+}
+/* end clearfix */

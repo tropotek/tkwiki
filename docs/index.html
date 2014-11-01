@@ -1,0 +1,189 @@
+<html>
+<head>
+  <title>Project Documentation</title>
+  <link rel="stylesheet" type="text/css" href="media/style.css" />
+  <script type="text/javascript" src="media/jquery.js"></script>
+</head>
+<body>
+  
+  <div class="content">
+    <a name="top"></a>
+    
+    <h1>[ProjectName] Documentation</h1>
+    
+    <p>
+      Project: [ProjectName] <br />
+      Doc Version: [ProjectVersion] <br/>
+    </p>
+    
+    
+    
+    <h2>Table of Contents</h2>
+    <ul style="list-style: none">
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#require">System Requirements</a></li>
+      <li><a href="#install">Installation</a></li>
+      
+      <li><a href="#usage">[ProjectUsage]</a></li>
+      
+      <li><a href="#licence">Licences</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#support">Support</a></li>
+    </ul>
+    
+    
+    
+    <a name="intro"></a>
+    <a class="topLink" href="#top">Top</a>
+    <h2>Introduction</h2>
+  
+    <p>
+      This project provides HTML based web sites with the ability to publish Kooloivoo
+      product listings. Javascript is employed to render the product details to the clients
+      page while drawing current product data from the Koolivoo database. See <a href="#use">Project Usage</a> 
+      for more info.
+    </p>
+    
+    <a name="require"></a>
+    <a class="topLink" href="#top">Top</a>
+    <h2>System Requirements</h2>
+    
+    <h3>XML Data Server</h3>
+    <p>
+     This component was created directly for the communication between the Koolivoo MSSQL 2008 Database
+     and the project base site. It has been tested using Windows 2003 Server, IIS V6.0 with PHP5 ISAPI Module. 
+     PHP5 uses MSSQL libs installed with PHP to connect to the Database.
+    </p>
+    
+    <h3>Koolivoo Content Project</h3>
+    <p>
+     The content project has also been tested on the above system but will work on any system with the following installed:
+    </p>
+    <ul>
+      <li>Windows / Linux</li>
+      <li>IIS 6.0+ / Apache 1.2+</li>
+      <li>PHP5 ISAPI / PHP5 (GD, CURL)</li>
+    </ul>
+    
+    <a name="install"></a>
+    <a class="topLink" href="#top">Top</a>
+    <h2>Installation</h2>
+  
+    <h3>XML Data Service</h3>
+    <p>
+     There are a number of steps required to install the XML Data server successfully. We will assume you have 
+     Windows Server 2003, MSSQL Express 2008, IIS 6.0 and PHP5 installed.
+    </p>
+    <p>
+      After unpacking the project archive file, there will be a folder called `dataService` this needs to be 
+      copied to a webiste folder created in IIS, this will usually reside in `C:\Inetpub` somewhere.
+    </p>
+    <p>
+      Then make the data directory readable and writable by IIS/apache. This will hold any files used by the service.
+    </p>
+    <p>
+      Next step is to get the MSSQL user details and enter them into the config.ini. There should already be some example
+      data in the file called config.ini.in
+    </p>
+    <p>
+      Once completed you can use the test client that comes with the software at `http://[siteUrl]/docs/` This will 
+      give you a page outlining the Service XML Specifications and a web service javascript client that allows you to send
+      XML queries to your service. To test the install first try an XML Ping request. Then try sending an XML request to the server.
+    </p>
+    <p>
+      Once the setup is successful it is recommended that you delete or close off public access to the `docs` folder.
+    </p>
+    
+    <h3>Koolivoo Content JavaScript Server</h3>
+    <p>
+     This scomponent of the project should be able to be installed on any Windows or Linux server. From the unpacked project file
+     we need to make the server folder accessable to IIS or Apache and make the `/data` folder writable by the web server.
+    </p>
+    
+    <p>
+      The next step is to tell IIS/Apache that we want PHP to execute all .js files in the `server/djs` folder.
+    </p>
+    <h4>IIS</h4>
+    <p>
+      To do this open the `IIS Manager` navigate to the `djs` folder right click and select `Properties`.
+      Under the `Directory` tab in the `Aplication Settings` section click the configuration button. Here we need to add 
+      a new mapping, click `Add...` and browse to your php isapi DLL, use extension `.js` and ensure `Script engine` and 
+      `Verfy file exits` are checked. That should now mak all .js files behave like php scripts.
+    </p>
+    <h4>Apache</h4>
+    <p>
+      For Apache users there is a .htaccess file included to do this for you.
+    </p>
+    
+    <p>
+      Once you have successfully setup the JS Server files you need to edit the config.ini and insert the 
+      URL of where you have installed the `DataService`. Once that is done you can test the site using the 
+      files under the `client` folder. [<a href="../client/index.html" target="_blank">Client</a>] If this does not work edit the 
+      `client/index.html` file and update the javascript include line in the header of the document to reflect 
+      where the server is installed.
+    </p>
+    
+    
+    
+    
+    
+    
+    <a name="usage"></a>
+    <a class="topLink" href="#top">Top</a>
+    <h2>{Project Usage Documentation}</h2>
+    
+    <h3>Create A WIDGET</h3>
+    <p>
+    Donec id eros arcu? Aenean pellentesque velit vitae ligula varius ultrices. Donec dignissim, nisi ac lobortis molestie, quam purus suscipit massa, a aliquet lorem orci eu velit. Vestibulum rhoncus urna et augue posuere fringilla. Fusce ac dolor ac nunc sollicitudin imperdiet sit amet consequat sem! Suspendisse potenti. Aenean ac quam vitae neque tincidunt molestie quis lobortis mauris. Vestibulum ac lorem et mi tristique sodales sit amet et diam. Aliquam erat volutpat. In enim ligula; pharetra eget dapibus id, fringilla sed orci. Cras eget elementum dui. Sed tempus, augue nec consectetur vulputate, sem odio bibendum nunc; vel imperdiet ipsum turpis vitae velit. Fusce at tortor sit amet est tincidunt ultrices a in tortor. Proin consectetur justo vitae erat consectetur in volutpat est cursus. Etiam sodales, sem in blandit volutpat, dolor orci vulputate velit, non laoreet felis nibh imperdiet tortor? In eleifend odio eu velit tempus convallis! Vestibulum eget dui justo. Donec eu tincidunt est? Fusce vitae nulla justo, ut congue risus. Donec semper viverra erat vel ornare.
+    </p>
+    
+    <p>
+    Mauris eleifend purus orci, at rhoncus nibh. Ut quis fermentum felis. Quisque in nulla at ante adipiscing dapibus. Suspendisse porta convallis justo sed venenatis. Cras volutpat, arcu sed imperdiet vestibulum, nisl tortor tincidunt erat, vitae cursus dolor tellus ut ante! Fusce rutrum, neque tincidunt euismod rutrum; dui lectus dictum augue, vitae dictum risus mi rhoncus ipsum. Ut ac turpis eu nibh tempus malesuada! Suspendisse eros quam, condimentum vitae congue et, convallis eget erat. Nulla nisl mi, dapibus vel ullamcorper sit amet, convallis ut massa. Praesent pretium mollis est quis iaculis. Praesent molestie risus eget arcu gravida et commodo orci ultrices. In facilisis congue ligula, a egestas ante condimentum venenatis. In aliquet, tellus rutrum sollicitudin euismod, tellus odio condimentum lacus, in sodales tellus nisi ut urna. Quisque ut arcu enim. Sed non quam tellus. Sed faucibus lectus quis lectus posuere gravida? Vivamus a sem at urna blandit mollis. Nullam vel sem leo?
+    </p>
+    
+    <p>
+    Cras ante est, dignissim quis fringilla in, egestas quis leo. Pellentesque vehicula eleifend dui mollis volutpat. Suspendisse potenti. Sed id sem et lectus adipiscing dignissim id eu ipsum. Curabitur et lorem justo, non vehicula nunc. In scelerisque feugiat iaculis. Aliquam tortor quam; iaculis sed consectetur at, interdum nec nulla. Cras facilisis metus a neque pretium aliquet? Quisque viverra iaculis ultrices. Maecenas orci ligula, blandit at bibendum quis, lacinia egestas erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sodales diam sed augue posuere a cursus justo accumsan. Mauris vitae felis leo, sed elementum orci? Donec ac neque dolor, ac ullamcorper nisl. Proin sodales imperdiet lacus, sed accumsan massa iaculis ac! Praesent in odio leo; ut pharetra odio. Curabitur vulputate lacus non nibh convallis tincidunt?
+    </p>
+    
+    
+    
+    
+    <a name="licence"></a>
+    <a class="topLink" href="#top">Top</a>
+    <h2>Licences</h2>
+    
+    <p>Here is a list of opensource and closed source licenses that code used in this project contains:</p>
+    
+    <ul>
+      <li><a href="http://www.tropotek.com.au/" target="_blank">Tropotek Software Agreement</a></li>
+      <li><a href="http://www.gnu.org/licenses/lgpl.html" target="_blank">LGPL</a></li> 
+    </ul>
+  
+    <a name="faq"></a>
+    <a class="topLink" href="#top">Top</a>
+    <h2>FAQ</h2>
+
+    <ul>
+      <li>Q: What browsers are supported:<br/>
+          A: Only IE8+ and Firefox 2+ have been tested for this project.
+      </li>
+    </ul>
+    
+    <a name="support"></a>
+    <a class="topLink" href="#top">Top</a>
+    <h2>Support</h2>
+  
+    <p>
+      For support please contact <a href="http://www.tropotek.com/" target="_blank">Tropotek</a>.
+    </p>
+    
+    
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    
+  </div>
+
+
+
+</body>
+</html>

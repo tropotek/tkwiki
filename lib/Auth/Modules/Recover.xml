@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<div class="Register">
+  
+  <h2 class="title">Password Recovery</h2>
+  
+  <p class="notice" choice="success">Your new password has been sent to the account's email address.</p>
+  <p class="error" choice="fail">Unable to reset the account password, please <a href="/contactUs.html">contact support</a> for further assistance.</p>
+  
+  <p>To Recover your password please enter your account username/email.</p>
+  
+  <div class="roundBorder">
+    <div var="User"></div>
+  </div>
+  
+  
+</div>

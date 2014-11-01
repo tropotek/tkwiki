@@ -1,0 +1,42 @@
+/*
+ *   PRINT STYLES
+ */
+
+
+body {
+  background: #FFF !important;
+  position: relative;
+  font-size: 70%;
+}
+
+
+
+body div#content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0px;
+  overflow: 
+
+}
+
+body div#content > div {
+  margin: 0;
+  padding: 10px;
+
+
+}
+
+body .contentMenu,
+body .permissions {
+  display: none;
+}
+
+
+
+
+
+
+

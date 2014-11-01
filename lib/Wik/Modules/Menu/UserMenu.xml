@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ul class="menu userMenu">
+  
+  <li choice="admin">
+    <a href="/settingsEdit.html" title="Manage Site Wettings">Settings</a>
+  </li>
+  <li choice="admin">
+    <a href="/userManager.html" title="Manage WIKI Users">Wiki Users</a>
+  </li>
+  <li choice="admin">
+    <a href="/orphaned.html" title="Manage Orphaned WIKI Pages">Orphaned Pages</a>
+  </li>
+  
+  <li choice="user">
+    <a href="/myPages.html" title="List Your Authored Pages">My Pages</a>
+  </li>
+  <li choice="user">
+    <a href="/password.html" title="Change Your Account Password">Change Password</a>
+  </li>
+  <li choice="user">
+    <a href="/editDetails.html" title="Update Your Account Profile">My Account</a>
+  </li>
+  <li choice="user">
+    <a href="/login.html?logout=t" title="Logout">Logout</a>
+  </li>
+  
+  <li choice="register">
+    <a href="/register.html" title="Register A New Account">Register</a>
+  </li>
+  <li choice="public">
+    <a href="/login.html" title="Login">Login</a>
+  </li>
+</ul>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ul class="menu" choice="show">
+  <li var="view">
+    <a href="javascript:;" var="viewUrl">
+      <span>View</span>
+    </a>
+  </li>
+  <li var="edit" choice="user">
+    <a href="javascript:;" var="editUrl">
+      <span>Edit</span>
+    </a>
+  </li>
+  <li var="history">
+    <a href="javascript:;" var="historyUrl">
+      <span>History</span>
+    </a>
+  </li>
+  <li var="orphaned" choice="user">
+    <a href="/orphaned.html">
+      <span>Orphan's</span>
+    </a>
+  </li>
+
+  <li var="changePassword" choice="user">
+    <a href="/changePassword.html">
+      <span>Change Password</span>
+    </a>
+  </li>
+  <li var="editDetails" choice="user">
+    <a href="/editDetails.html">
+      <span>User Details</span>
+    </a>
+  </li>
+
+  <li var="userManager" choice="admin">
+    <a href="/admin/userManager.html">
+      <span>Users</span>
+    </a>
+  </li>
+  <li choice="user">
+    <a href="/index.html?logout=t">
+      <span>Logout</span>
+    </a>
+  </li>
+  <li choice="public">
+    <a href="/login.html" title="Login">Login</a>
+  </li>
+</ul>

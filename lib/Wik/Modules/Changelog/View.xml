@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div class="Wik_Modules_Changelog_View">
+
+  <div class="verBox" repeat="verBox">
+    <h3>
+      <span var="created" />
+      -
+      <span var="version" />
+    </h3>
+    <pre var="changelog"></pre>
+  </div>
+
+</div>

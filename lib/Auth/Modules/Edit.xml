@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<div class="Content_Edit">
+
+  <fieldset class="icon">
+    <legend>Tools</legend>
+    <a href="javascript: history.go(-1);" class="i32-back" title="Return to previous page." var="back">Back</a>
+    
+  </fieldset>
+    
+  <div var="User"></div>
+  
+</div>

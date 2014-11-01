@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div>
+  <div choice="update">
+    <div var="TitleBar" com-class="Wik_Modules_Page_Title"></div>
+  </div>
+  <div choice="noWrite" class="writeError">
+    <p>You do not have permissions to edit this page.</p>
+  </div>
+  
+  <div var="Edit"></div>
+  
+</div>

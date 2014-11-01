@@ -1,0 +1,41 @@
+
+[database]
+database.default.host           = localhost
+database.default.user           = user
+database.default.password       = pass
+database.default.name           = tkwiki
+
+
+[system]
+system.timezone                 = Australia/Victoria
+system.projectName              = Tk-Wiki
+system.logLevel                 = 2
+
+
+[site]
+; -- SiteTitle - DkWiki
+; If this is false then users cannot register through the site.
+; An admin of the site will have to create user accounts.
+system.siteTitle                = Untitled Wiki
+
+; -- Site Email
+; This address will be used for the contact us form...
+system.siteEmail                = wiki@example.com
+
+; -- UserRegistrationEnabled - yes
+; If this is false then users cannot register through the site.
+; An admin of the site will have to create user accounts.
+;UserRegistrationEnabled        = no
+
+
+
+[debug]
+;database.default.host           = localhost
+;database.default.user           = user
+;database.default.password       = pass
+
+;system.logLevel                 = 5
+;system.log                      = data/error.log
+;debug.enable                    = yes
+;debug.email                     = info@example.com
+

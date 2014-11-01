@@ -1,0 +1,201 @@
+@charset "utf-8";
+
+/**  T A B L E    M A N A G E R  (N E W)  **/
+.Table select,
+.Table textarea {
+  width: auto;
+}
+.Table .TableEvents input[type=checkbox] {
+  margin: 4px 0px;
+  display: inline-block;
+}
+.Table table {
+  width: auto;
+  max-width: auto;
+  display: block;
+}
+.Table label {
+  width: auto;
+  padding: 0 0;
+  margin: 0 5px 0 0px;
+}
+
+
+
+
+.Table .TableEvents {
+  /*
+  display: inline-block;
+  width: 100%;
+  */
+  border: 1px solid #ABC6DD;
+  margin-bottom: 10px;
+}
+
+.Table .actions {
+  display: inline-block;
+  width: 100%;
+  margin: 5px 0px;
+}
+.Table .actions a {
+  display: block;
+  float: left;
+  margin: 0px 10px;
+  height: 16px;
+  line-height: 16px;
+  padding: 0px 0px 0px 20px;
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+}
+
+.Table .filters {
+  display: inline-block;
+  width: 100%;
+  margin: 0px 0px;
+  padding: 5px 0px;
+  background-color: #D6DFF7;
+}
+.Table .filter {
+  display: block;
+  float: left;
+  margin: 0px 10px;
+  line-height: 18px;
+  
+}
+.Table .filter label {
+  font-weight: bold;
+  display: block;
+  float: none;
+  text-align: left;
+}
+.Table .TableControls {
+  display: inline-block;
+  width: 100%;
+}
+.Table .TableControls .control {
+  float: left;
+  width: 33.33%;
+}
+
+.Table .Table_Ui_Results,
+.Table .Table_Ui_Limit,
+.Table .Table_Ui_Pager {
+  margin: 0px 0px;  
+  padding: 0px 10px;
+}
+.Table .Table_Ui_Results {
+  float: left;
+}
+.Table .Table_Ui_Pager {
+  float: none;
+  width: 250px;
+  margin: 0px auto;
+}
+.Table .Table_Ui_Limit {
+  float: right;
+}
+.Table .Table_Ui_Limit li,
+.Table .Table_Ui_Pager li {
+  float: left;
+  display: inline;
+  margin: 0 5px 0 0;
+  display: block;
+  list-style: none;
+}
+.Table .Table_Ui_Limit li.selected,
+.Table .Table_Ui_Pager li.selected {
+  font-weight: bold;
+}
+.Table .Table_Ui_Pager li.off a {
+  color: #000;
+  text-decoration: none;
+}
+
+/*  <table>  */
+.Table table {
+  border-bottom: 1px solid #D6DFF7;
+  width: 100%;
+  margin: 2px 0px 5px 0px;
+}
+.Table th {
+  background-color: #D6DFF7;
+  border: 1px solid #FFF;
+  border-width: 1px 0px 1px 1px;
+  font-weight: bold;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+.Table th a,.Table th a:link {
+  text-decoration: none;
+  /*font-size: 90%;*/
+  color: #000;
+}
+.Table td {
+  font-weight: normal;
+  padding: 2px 8px;
+  /*text-align: right;*/
+  white-space: noWrap;
+}
+.Table td.left {
+  float: none;
+  text-align: left;
+}
+.Table td.right {
+  float: none;
+  text-align: right;
+}
+.Table td.center {
+  float: none;
+  text-align: center;
+}
+.Table .odd td {
+  background-color: #EEEEF8;
+}
+.Table .even td {
+  background-color: #FFF;
+}
+.Table .nest td.key {
+  padding-left: 30px;
+  background-image: url('../images/icons/16/subIcon.png');
+  background-position: 10px 5px;
+  background-repeat: no-repeat;
+}
+.Table .nest .nest td.key {
+  padding-left: 60px;
+  background-position: 40px 5px;
+}
+.Table .errorRow td {
+  background-color: #F99;
+}
+.Table .warningRow td {
+  background-color: #F96;
+}
+.Table .noticeRow td {
+  background-color: #99F;
+}
+.Table tr:hover td {
+  background-color: #DDEFFF;
+}
+.Table th a {
+  display: block;
+  padding: 2px 0px 2px 0px;
+}
+.Table th.key,
+.Table td.key {
+  width: 100%;
+}
+.Table th.orderAsc,
+.Table th.orderDesc {
+  background-color: #ABBEEF;
+}
+.Table th.orderAsc a {
+  background: #ABBEEF url('../images/icons/16/order_up.png') top right no-repeat;
+  padding-right: 12px;
+  padding: 2px 16px 2px 0px;
+}
+.Table th.orderDesc a {
+  background: #ABBEEF url('../images/icons/16/order_down.png') top right no-repeat;
+  padding-right: 12px;
+  padding: 2px 16px 2px 0px;
+}
+  

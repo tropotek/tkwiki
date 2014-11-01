@@ -1,0 +1,196 @@
+/* form.css */
+form.edit {
+  margin: 0;
+  padding: 0;
+  min-width: 800px;
+  width: 100%;
+}
+
+form.edit label {
+  font-size: 90%;
+}
+
+form.edit label u {
+  font-style: normal;
+  text-decoration: underline;
+}
+
+form.edit div.required,form.edit div.optional {
+  clear: left;
+  display: block;
+  margin: 5px 178px 0 0;
+  padding: 1px 3px;
+}
+
+form.edit div.notes {
+  float: right;
+  width: 165px;
+  margin: 0 0 10px 10px;
+  padding: 5px;
+  border: 1px solid #666666;
+  background-color: #ffffe1;
+  color: #666666;
+  font-size: 80%;
+}
+
+form.edit div.notes h4 {
+  background-image: url(../images/info.png);
+  background-repeat: no-repeat;
+  background-position: top left;
+  padding: 2px 0 2px 20px;
+  margin-bottom: 2px;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: #666666;
+  color: #666666;
+  font-size: 110%;
+  font-weight: bold;
+}
+
+form.edit div.notes p {
+  margin: 0em 0em 1.2em 0em;
+  color: #666666;
+}
+
+form.edit  div.notes p.last {
+  margin: 0em;
+}
+
+/*
+  form.edit div fieldset {
+    clear: none;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #666666;
+    margin: 0 0 0 144px;
+    padding: 0 5px 5px 5px;
+    width: 197px;
+  }
+  form.edit div fieldset legend {
+    padding: 0 3px 0 9px;
+  }
+  form.edit div.required fieldset legend {
+    font-weight: bold;
+  }
+  */
+form.edit div label {
+  display: block;
+  float: left;
+  width: 105px;
+  padding: 3px 5px;
+  margin: 0 0 5px 0;
+  text-align: right;
+  font-weight: normal;
+  font-size: 90%;
+}
+
+form.edit div.optional label,form.edit label.optional {
+  font-weight: normal;
+}
+
+form.edit div.required label:before,form.edit label.required:before {
+  color: #F00;
+  content: '* ';
+}
+
+form.edit div label.labelCheckbox,form.edit div label.labelRadio {
+  float: none;
+  display: inline;
+  zoom: 1;
+  padding: 0;
+  margin: 0 0 5px 102px;
+  text-align: left;
+}
+
+form.edit label.labelCheckbox .inputSubmit {
+  display: inline;
+}
+
+form.edit div.error {
+  background-color: #ffffe1;
+  background-image: url('../images/required_bg.png');
+  background-repeat: no-repeat;
+  background-position: top left;
+  border: 1px solid #ff0000;
+  padding: 5px 0px;
+  margin-right: 200px;
+}
+
+form.edit .error label {
+  width: 120px;
+  font-size: 90%;
+  margin: 4px 0px 4px 25px;
+}
+
+form.edit .error p.error {
+  background-image: url('../images/icons/16/warning.png');
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-color: transparent;
+  border-style: none;
+  font-weight: bold;
+  margin: 4px 0px 4px 117px;
+  color: #ff0000;
+  padding: 0px 0px 0px 20px;
+  line-height: 1.5em;
+}
+
+form.edit .submit {
+  margin: 10px 0px 0px 0px;
+  padding: 10px 0 0 116px;
+}
+
+form.edit div small {
+  display: block;
+  margin: 0 0 0px 115px;
+  padding: 2px 3px;
+  font-style: italic;
+}
+
+form.edit div label.labelCheckbox,form.edit div label.labelRadio,form.edit label.labelCheckbox,form.edit label.labelRadio
+  {
+  display: block;
+  width: 190px;
+  zoom: 1;
+  padding: 4px 0 0 18px;
+  text-indent: -18px;
+  line-height: 120%;
+}
+
+form.edit div label.compact {
+  display: inline;
+  width: auto;
+  padding: 4px 10px 0 0;
+  text-indent: 0;
+  margin: 0 0 0 0;
+}
+
+form.edit div.notes p,form.edit div small {
+  line-height: 125%;
+}
+
+form.edit div.notes ul {
+  padding-left: 25px;
+}
+
+form.edit .mceEditor div {
+  padding: 0px;
+  margin: 0px;
+}
+
+form.edit input[type=text],form.edit select,form.edit textarea {
+  width: 300px;
+}
+/*
+form.edit input,
+form.edit select,
+form.edit textarea {
+  font-size: 0.85em;
+}
+
+form.edit input:focus[type=text],
+form.edit textarea:focus {
+  background:#efefef;
+  color:#000;
+}
+*/

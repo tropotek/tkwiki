@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div class="message">
+      
+  <ul class="menu contentMenu clearfix" choice="page">
+    <li choice="save"><a href="javascript:;" var="saveUrl" onclick="submitForm(document.forms[0], 'save');">Save</a></li>
+    <li choice="edit"><a href="javascript:;" var="viewUrl">View</a></li>
+    <li choice="edit"><a href="javascript:;" var="historyUrl">History</a></li>
+    <li choice="edit"><a href="javascript:;" var="editUrl">Edit</a></li>
+    <li choice="delete"><a href="javascript:;" var="deleteUrl" onclick="return confirm('Are you 100% sure you want to delete this page and its history?');">Delete</a></li>
+    <li choice="writable"><a href="javascript:;" var="writable">Make Writable</a></li>
+  </ul>
+  
+  
+  <h2 var="title" choice="page"></h2>
+
+  <p class="contrib" choice="contrib">
+    <strong>Contributers:</strong>
+    <span var="contrib"></span>
+  </p>
+  
+  <p class="detail" choice="text">
+    <strong>Modified:</strong>
+    <span var="modified" />
+    (
+    <span title="Revision ID">
+      rev:
+      <span var="textId" />
+    </span>
+    )
+  </p>
+  
+  <p class="permissions" choice="user">
+    <strong>Comments:</strong> <span><a href="#commentList" var="commentCount">0</a></span> | 
+    <strong>Owner:</strong> <span var="userId">N/A</span> | 
+    <strong>Group:</strong> <span var="groupId">N/A</span> | 
+    <strong>Permissions:</strong> <span var="permissions">Err</span>
+  </p>
+  
+  <p class="warning" choice="revision">
+    <strong>Revision:</strong>
+    <a href="javascript:;" var="backUrl" title="Back to revision list">Back</a>
+    <a href="javascript:;" var="revertUrl" choice="revert"
+      onclick="return confirm('Do you wish to revert this document?');"
+      title="Revert this page back to this revision">Revert</a>
+  </p>
+  <p class="warning" choice="orphaned">
+    <strong>Orphaned:</strong>
+    <a href="javascript:;" var="backUrl" title="Back to orphaned list">Back</a>
+    <a href="javascript:;" var="deleteUrl" choice="delete"
+      onclick="return confirm('Do you wish to delete this pageand its history from the wiki?');"
+      title="Delete this orphaned page from the wiki">Delete</a>
+  </p>
+  <p class="warning" choice="locked">
+    This page is locked,
+    <span var="username">Someone</span>
+    is currently editing this page.
+  </p>
+  
+</div>

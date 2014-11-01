@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div class="SearchForm">
+
+  <form id="SearchForm" method="get">
+    <input type="text" name="search-keywords" id="fid-search-keywords" value="Search..."
+      onfocus="if (this.value = 'Search...') {this.value = '';this.style.color = '#000';}" />
+    <input type="submit" name="search" value="Go" class="dk-button" />
+  </form>
+
+</div>

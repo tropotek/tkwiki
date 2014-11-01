@@ -1,0 +1,103 @@
+body {
+  font-size: 80%;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; 
+  padding: 0px 20px 0px 20px;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+a {
+  color: #36C;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: #36C;
+}
+
+.content {
+  width: 60%;
+  margin: 0px auto;
+  border: 1px solid #CECECE;
+  padding: 5px 20px;
+  border-width: 0px 1px 0px 1px;
+}
+ 
+pre {
+  border: 1px dashed #000;
+  padding: 4px 8px;
+  background-color: #EEE;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  padding: 1px 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  background-color: #CCC;
+}
+tt {
+  font-size: 120%;
+}
+td {
+  padding: 1px 4px;
+  font-size: 80%;
+}
+
+label {
+  padding: 0px 0px;
+  font-weight: bold;
+}
+
+
+
+table.stationInput {
+  width: 0;
+}
+
+td.label {
+  padding: 0px 10px;
+  font-weight: bold;
+  width: 150px;
+  text-align: right;
+}
+td.data {
+  padding: 0px 10px; 
+}
+th.label {
+  
+}
+td.input {
+  text-align: center;
+  vertical-align: top;
+  padding: 10px 20px;
+}
+
+.spaced li {
+  padding: 5px 0px;
+}
+
+li.question {
+  padding: 10px 0px 0px 0px;
+  font-weight: bold;
+}
+li.answer {
+  padding: 0px 0px 10px 0px;
+}
+
+
+.topLink {
+  float: right;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+
+
+

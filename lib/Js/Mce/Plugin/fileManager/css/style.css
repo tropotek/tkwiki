@@ -1,0 +1,207 @@
+
+/** Main Layout */
+div#wrapper{float:left; width:100%;}
+div#content{margin: 0 5px 0 215px;}
+div#navigation{float:left; width:205px; padding: 0px 0px 0px 0px; margin-left:-100%;}
+
+/*** Common Custom CSS Styles ***/
+.clear {clear: both; height: 1px; overflow: hidden;}
+.left { float:left; }
+.right { float: right; }
+.error { color: #F00; }
+
+
+
+/** Page Styles **/
+body {
+  background-color: #FFF !important;
+  border: 1px solid;
+  padding: 5px !important;
+  margin:0;
+  color: #000;
+}
+p,div,ul,li {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+h1, h2, h3, h4 {
+  color: #000 !important;
+}
+p {
+  margin: 5px 0px;
+}
+#header {
+  padding: 10px 0px;
+}
+div#content {
+  padding: 10px;
+  overflow: auto;
+  height: 330px;
+  border: 1px inset #333;
+  background-color: #FFF;
+}
+div#navigation {
+  padding: 0px 5px;
+}
+.navWrap {
+  border: 1px inset #333;
+  height: 340px;
+  padding: 5px;
+  background-color: #FFF;
+}
+.previewwrap iframe {
+  margin: 5px auto;
+}
+.preview img {
+  width: 100%;
+}
+.actions {
+  text-align: center;
+  margin: 10px auto;
+}
+  .actions input {
+    text-align: center;
+    margin: 10px auto;
+  }
+
+
+ul.menu {
+  margin: 0px;
+  padding: 0px 20px;
+  white-space: nowrap;
+  line-height: 1.1em;
+  overflow: visible;
+  border-collapse: collapse;
+  list-style: none;
+}
+  ul.menu li {
+    display: inline;
+    overflow: visible;
+  }
+
+.path {
+  padding: 0px 20px;
+}
+.progress {
+  display: none;
+}
+#preview {
+  border: 1px solid #333;
+  width: 192px;
+  height: 150px;
+}
+
+.filemanagertop {
+  padding: 10px;
+  background-color: #FFF;
+  background-image: url(../img/check_arrow.gif);
+  background-position: 10px 15px;
+  background-repeat: no-repeat;
+}
+  .filemanagertop li.withSelected {
+    padding-left: 50px;
+  }
+
+td, th {
+  padding: 2px 4px;
+  height: 20px;
+}
+
+a {
+  color: #000 !important;
+}
+a:hover {
+  color: #666 !important;
+}
+th a, th a:link {
+  color: #000 !important;
+  text-decoration: none;
+  font-size: 11px;
+}
+th {
+  border-bottom: 1px solid #666;
+
+}
+td.check {
+  padding: 1px;
+}
+
+
+td.dir a {
+  background-image: url(../img/mime/directory.png);
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
+  padding-left: 20px;
+  display: block;
+  line-height: 2em;
+}
+td.file a {
+  background-image: url(../img/mime/txt.png);
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
+  padding-left: 20px;
+  display: block;
+  line-height: 2em;
+  
+}
+
+
+td.ext_3gp a { background-image: url(../img/mime/film.png); }
+td.ext_afp a { background-image: url(../img/mime/code.png); }
+td.ext_afpa a { background-image: url(../img/mime/code.png); }
+td.ext_asp a { background-image: url(../img/mime/code.png); }
+td.ext_aspx a { background-image: url(../img/mime/code.png); }
+td.ext_avi a { background-image: url(../img/mime/film.png); }
+td.ext_bat a { background-image: url(../img/mime/application.png); }
+td.ext_bmp a { background-image: url(../img/mime/picture.png); }
+td.ext_c   a { background-image: url(../img/mime/code.png); }
+td.ext_cfm a { background-image: url(../img/mime/code.png); }
+td.ext_cgi a { background-image: url(../img/mime/code.png); }
+td.ext_com a { background-image: url(../img/mime/application.png); }
+td.ext_cpp a { background-image: url(../img/mime/code.png); }
+td.ext_css a { background-image: url(../img/mime/css.png); }
+td.ext_doc a { background-image: url(../img/mime/doc.png); }
+td.ext_exe a { background-image: url(../img/mime/application.png); }
+td.ext_gif a { background-image: url(../img/mime/picture.png); }
+td.ext_fla a { background-image: url(../img/mime/flash.png); }
+td.ext_h   a { background-image: url(../img/mime/code.png); }
+td.ext_htm a { background-image: url(../img/mime/html.png); }
+td.ext_html a { background-image: url(../img/mime/html.png); }
+td.ext_jar a { background-image: url(../img/mime/java.png); }
+td.ext_jpg a { background-image: url(../img/mime/picture.png); }
+td.ext_jpeg a { background-image: url(../img/mime/picture.png); }
+td.ext_js a { background-image: url(../img/mime/script.png); }
+td.ext_lasso a { background-image: url(../img/mime/code.png); }
+td.ext_log a { background-image: url(../img/mime/txt.png); }
+td.ext_m4p a { background-image: url(../img/mime/music.png); }
+td.ext_mov a { background-image: url(../img/mime/film.png); }
+td.ext_mp3 a { background-image: url(../img/mime/music.png); }
+td.ext_mp4 a { background-image: url(../img/mime/film.png); }
+td.ext_mpg a { background-image: url(../img/mime/film.png); }
+td.ext_mpeg a { background-image: url(../img/mime/film.png); }
+td.ext_ogg a { background-image: url(../img/mime/music.png); }
+td.ext_pcx a { background-image: url(../img/mime/picture.png); }
+td.ext_pdf a { background-image: url(../img/mime/pdf.png); }
+td.ext_php a { background-image: url(../img/mime/php.png); }
+td.ext_png a { background-image: url(../img/mime/picture.png); }
+td.ext_ppt a { background-image: url(../img/mime/ppt.png); }
+td.ext_psd a { background-image: url(../img/mime/psd.png); }
+td.ext_pl a { background-image: url(../img/mime/script.png); }
+td.ext_py a { background-image: url(../img/mime/script.png); }
+td.ext_rb a { background-image: url(../img/mime/ruby.png); }
+td.ext_rbx a { background-image: url(../img/mime/ruby.png); }
+td.ext_rhtml a { background-image: url(../img/mime/ruby.png); }
+td.ext_rpm a { background-image: url(../img/mime/linux.png); }
+td.ext_ruby a { background-image: url(../img/mime/ruby.png); }
+td.ext_sql a { background-image: url(../img/mime/db.png); }
+td.ext_swf a { background-image: url(../img/mime/flash.png); }
+td.ext_tif a { background-image: url(../img/mime/picture.png); }
+td.ext_tiff a { background-image: url(../img/mime/picture.png); }
+td.ext_txt a { background-image: url(../img/mime/txt.png); }
+td.ext_vb a { background-image: url(../img/mime/code.png); }
+td.ext_wav a { background-image: url(../img/mime/music.png); }
+td.ext_wmv a { background-image: url(../img/mime/film.png); }
+td.ext_xls a { background-image: url(../img/mime/xls.png); }
+td.ext_xml a { background-image: url(../img/mime/code.png); }
+td.ext_zip a { background-image: url(../img/mime/zip.png); }

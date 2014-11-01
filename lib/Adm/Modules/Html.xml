@@ -1,0 +1,980 @@
+<?xml version="1.0"?>
+<div class="Admin_Html">
+    
+  <fieldset class="icon">
+    <legend>Tools</legend>
+    <a href="javascript: history.go(-1);" class="i32-back" title="Return to previous page." var="back" onmousedown="$(window).unbind('beforeunload');">Back</a>
+  </fieldset>
+  
+          <p>All icons and their associated class names</p>
+            
+          <fieldset class="icon">
+            <legend>Full Icon Layout</legend>
+            <a href="#i32-back" class="i32-icon i32-back">i32-back</a>
+            <a href="#i32-settings" class="i32-icon i32-settings">i32-settings</a>
+            <a href="#i32-userAdd" class="i32-icon i32-userAdd">i32-userAdd</a>
+            <a href="#i32-userDelete" class="i32-icon i32-userDelete">i32-userDelete</a>
+            <a href="#i32-userEdit" class="i32-icon i32-userEdit">i32-userEdit</a>
+            <a href="#i32-groupAdd" class="i32-icon i32-groupAdd">i32-groupAdd</a>
+            <a href="#i32-groupDelete" class="i32-icon i32-groupDelete">i32-groupDelete</a>
+            <a href="#i32-groupEdit" class="i32-icon i32-groupEdit">i32-groupEdit</a>
+            <a href="#i32-stats" class="i32-icon i32-stats">i32-stats</a>
+            <a href="#i32-folder" class="i32-icon i32-folder">i32-folder</a>
+            <a href="#i32-network" class="i32-icon i32-network">i32-network</a>
+            <a href="#i32-server" class="i32-icon i32-server">i32-server</a>
+            <a href="#i32-print" class="i32-icon i32-print">i32-print</a>
+            <a href="#i32-cdMedia" class="i32-icon i32-cdMedia">i32-cdMedia</a>
+            <a href="#i32-exec" class="i32-icon i32-exec">i32-exec</a>
+            <a href="#i32-fileNew" class="i32-icon i32-fileNew">i32-fileNew</a>
+            <a href="#i32-fileSave" class="i32-icon i32-fileSave">i32-fileSave</a>
+            <a href="#i32-identity" class="i32-icon i32-identity">i32-identity</a>
+            <a href="#i32-mailDelete" class="i32-icon i32-mailDelete">i32-mailDelete</a>
+            <a href="#i32-mailForward" class="i32-icon i32-mailForward">i32-mailForward</a>
+            <a href="#i32-mail" class="i32-icon i32-mail">i32-mail</a>
+            <a href="#i32-mailGet" class="i32-icon i32-mailGet">i32-mailGet</a>
+            <a href="#i32-mail_new" class="i32-icon i32-mail_new">i32-mail_new</a>
+            <a href="#i32-mailReply" class="i32-icon i32-mailReply">i32-mailReply</a>
+            <a href="#i32-mailSend" class="i32-icon i32-mailSend">i32-mailSend</a>
+            <a href="#i32-images" class="i32-icon i32-images">i32-images</a>
+            <a href="#i32-images2" class="i32-icon i32-images2">i32-images2</a>
+            <a href="#i32-globe" class="i32-icon i32-globe">i32-globe</a>
+            <a href="#i32-globeCompass" class="i32-icon i32-globeCompass">i32-globeCompass</a> &#160;&#160;&#160;&#160;
+            <a href="#i32-mapManager" class="i32-icon i32-mapManager">i32-mapManager</a> &#160;&#160;
+            <a href="#i32-mapSearch" class="i32-icon i32-mapSearch">i32-mapSearch</a>
+            <a href="#i32-agtForum" class="i32-icon i32-agtForum">i32-agtForum</a>
+            <a href="#i32-folderNew" class="i32-icon i32-folderNew">i32-folderNew</a>
+            <a href="#i32-folderWrite" class="i32-icon i32-folderWrite">i32-folderWrite</a>
+            <a href="#i32-webexport" class="i32-icon i32-webexport">i32-webexport</a>
+            <a href="#i32-list" class="i32-icon i32-list">i32-list</a>
+            <a href="#i32-blog" class="i32-icon i32-blog">i32-blog</a>
+            <a href="#i32-blackbox" class="i32-icon i32-blackbox">i32-blackbox</a>
+            <a href="#i32-tux" class="i32-icon i32-tux">i32-tux</a>
+            <a href="#i32-network2" class="i32-icon i32-network2">i32-network2</a>
+            <a href="#i32-encrypt" class="i32-icon i32-encrypt">i32-encrypt</a>
+            <a href="#i32-decrypt" class="i32-icon i32-decrypt">i32-decrypt</a>
+            <a href="#i32-fileManager" class="i32-icon i32-fileManager">i32-fileManager</a>
+            <a href="#i32-attach" class="i32-icon i32-attach">i32-attach</a>
+            <a href="#i32-dbAdd" class="i32-icon i32-dbAdd">i32-dbAdd</a>
+            <a href="#i32-dbRemove" class="i32-icon i32-dbRemove">i32-dbRemove</a>
+            <a href="#i32-email" class="i32-icon i32-email">i32-email</a>
+            <a href="#i32-konsole" class="i32-icon i32-konsole">i32-konsole</a>
+            <a href="#i32-klaptop" class="i32-icon i32-klaptop">i32-klaptop</a>
+            <a href="#i32-no3D" class="i32-icon i32-no3D">i32-no3D</a>
+            <a href="#i32-run" class="i32-icon i32-run">i32-run</a>
+            <a href="#i32-viewTree" class="i32-icon i32-viewTree">i32-viewTree</a>
+            <a href="#i32-alarm" class="i32-icon i32-alarm">i32-alarm</a>
+            <a href="#i32-autostart" class="i32-icon i32-autostart">i32-autostart</a>
+            <a href="#i32-barcode" class="i32-icon i32-barcode">i32-barcode</a>
+            <a href="#i32-creditcard" class="i32-icon i32-creditcard">i32-creditcard</a>
+            <a href="#i32-example" class="i32-icon i32-example">i32-example</a>
+            <a href="#i32-meeting" class="i32-icon i32-meeting">i32-meeting</a>
+            <a href="#i32-miscDoc" class="i32-icon i32-miscDoc">i32-miscDoc</a>
+            <a href="#i32-notebook" class="i32-icon i32-notebook">i32-notebook</a>
+            <a href="#i32-spreadsheet" class="i32-icon i32-spreadsheet">i32-spreadsheet</a>
+            <a href="#i32-timezone" class="i32-icon i32-timezone">i32-timezone</a>
+            <a href="#i32-truetype" class="i32-icon i32-truetype">i32-truetype</a>
+            <a href="#i32-unknown" class="i32-icon i32-unknown">i32-unknown</a>
+            <a href="#i32-update" class="i32-icon i32-update">i32-update</a>
+            <a href="#i32-webCalendar" class="i32-icon i32-webCalendar">i32-webCalendar</a>
+            <a href="#i32-money1" class="i32-icon i32-money1">i32-money1</a>
+            <a href="#i32-money2" class="i32-icon i32-money2">i32-money2</a>
+            <a href="#i32-money3" class="i32-icon i32-money3">i32-money3</a>
+            <a href="#i32-menu" class="i32-icon i32-menu">i32-menu</a>
+            <a href="#i32-waterDrop" class="i32-icon i32-waterDrop">i32-waterDrop</a>
+            <a href="#i32-blackFolder" class="i32-icon i32-blackFolder">i32-blackFolder</a>
+            <a href="#i32-invest" class="i32-icon i32-invest">i32-invest</a>
+            <a href="#i32-calculator" class="i32-icon i32-calculator">i32-calculator</a>
+            <a href="#i32-package" class="i32-icon i32-package">i32-package</a>
+            <a href="#i32-sms" class="i32-icon i32-sms">i32-sms</a>
+            <a href="#i32-magic8ball" class="i32-icon i32-magic8ball">i32-magic8ball</a>
+            <a href="#i32-accessibility" class="i32-icon i32-accessibility">i32-accessibility</a>
+            <a href="#i32-bullitinBoard" class="i32-icon i32-bullitinBoard">i32-bullitinBoard</a>
+            <a href="#i32-percentage" class="i32-icon i32-percentage">i32-percentage</a>
+            <a href="#i32-manager" class="i32-icon i32-manager">i32-manager</a>
+            <a href="#i32-gold" class="i32-icon i32-gold">i32-gold</a>
+            <a href="#i32-special1" class="i32-icon i32-special1">i32-special1</a>
+            <a href="#i32-special2" class="i32-icon i32-special2">i32-special2</a>
+
+            <!-- 
+            <a href="#i32-" class="i32-icon i32-">i32-</a>
+             -->
+          </fieldset>
+            
+          <fieldset class="icon">
+            <legend>Half Icon Layout</legend>
+            <a href="#i16-default" class="i16-icon i16-default">i16-default</a>
+            <a href="#i16-help" class="i16-icon i16-help">i16-help</a>
+            <a href="#i16-back" class="i16-icon i16-back">i16-back</a>
+            <a href="#i16-www" class="i16-icon i16-www">i16-www</a>
+            <a href="#i16-home" class="i16-icon i16-home">i16-home</a>
+            <a href="#i16-logout" class="i16-icon i16-logout">i16-logout</a>
+            <a href="#i16-delete" class="i16-icon i16-delete">i16-delete</a>
+            <a href="#i16-process" class="i16-icon i16-process">i16-process</a>
+            <a href="#i16-group" class="i16-icon i16-group">i16-group</a>
+            <a href="#i16-groupAdd" class="i16-icon i16-groupAdd">i16-groupAdd</a>
+            <a href="#i16-userEdit" class="i16-icon i16-userEdit">i16-userEdit</a>
+            <a href="#i16-userAdd" class="i16-icon i16-userAdd">i16-userAdd</a>
+            <a href="#i16-aliases" class="i16-icon i16-aliases">i16-aliases</a>
+            <a href="#i16-search" class="i16-icon i16-search">i16-search</a>
+            <a href="#i16-hide" class="i16-icon i16-hide">i16-hide</a>
+            <a href="#i16-show" class="i16-icon i16-show">i16-show</a>
+            <a href="#i16-showAll" class="i16-icon i16-showAll">i16-showAll</a>
+            <a href="#i16-stats" class="i16-icon i16-stats">i16-stats</a>
+            <a href="#i16-agtForum" class="i16-icon i16-agtForum">i16-agtForum</a>
+            <a href="#i16-folderNew" class="i16-icon i16-folderNew">i16-folderNew</a>
+            <a href="#i16-folderWrite" class="i16-icon i16-folderWrite">i16-folderWrite</a>
+            <a href="#i16-webexport" class="i16-icon i16-webexport">i16-webexport</a>
+            <a href="#i16-list" class="i16-icon i16-list">i16-list</a>
+            <a href="#i16-blog" class="i16-icon i16-blog">i16-blog</a>
+            <a href="#i16-blackbox" class="i16-icon i16-blackbox">i16-blackbox</a>
+            <a href="#i16-tux" class="i16-icon i16-tux">i16-tux</a>
+            <a href="#i16-csv" class="i16-icon i16-csv">i16-csv</a>
+            
+            <a href="#i16-network2" class="i16-icon i16-network2">i16-network2</a>
+            <a href="#i16-network" class="i16-icon i16-network">i16-network</a>
+            <a href="#i16-no3D" class="i16-icon i16-no3D">i16-no3D</a>
+            <a href="#i16-package" class="i16-icon i16-package">i16-package</a>
+            <a href="#i16-terminal" class="i16-icon i16-terminal">i16-terminal</a>
+            <a href="#i16-edit" class="i16-icon i16-edit">i16-edit</a>
+            <a href="#i16-email" class="i16-icon i16-email">i16-email</a>
+            <a href="#i16-tick" class="i16-icon i16-tick">i16-tick</a>
+            <a href="#i16-calc" class="i16-icon i16-calc">i16-calc</a>
+            <!--
+            <a href="#i16-" class="i16-icon i16-">i16-</a>
+             -->
+          </fieldset>
+          
+          
+    
+          <p>&#160;</p>
+    
+          
+          
+          
+          <fieldset>
+            <legend>Page Messages Layout</legend>
+            <p class="errorBox">
+              <em>Error:</em> This is a place for page errors.
+            </p>
+            <p class="warningBox">
+              <em>Warning:</em> This is a place for page warnings.
+            </p>
+            <p class="noticeBox">
+              <em>Message:</em> This is a place for page messages.
+            </p>
+          </fieldset>
+            
+    
+    
+          <p>&#160;</p>
+    
+    
+    
+           <fieldset>
+            <legend>Content Box Layout</legend>
+          
+            <div class="cBox-column">
+             
+              <div class="cBox">
+                <div class="head" id="trigger_cbox1">Server Information</div>
+                <div id="cbox1">
+                  <div class="boxContent">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td class="name">Hostname</td>
+                          <td>tropotek.quadravps.net.au</td>
+                        </tr>
+                        <tr>
+                          <td class="name">Plesk version</td>
+                          <td>psa v8.3.0_build83080131.20 os_CentOS 5</td>
+                        </tr>
+                        <tr>
+                          <td class="name">Operating system</td>
+                          <td>Linux 2.6.9-023stab044.11-smp</td>
+                        </tr>
+                        <tr>
+                          <td class="name">License key number</td>
+                          <td>PLSK.00641666.0001</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="foot">
+                    <a href="#" class="config">Site Config</a>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="cBox">
+                <div class="head" id="trigger_cbox2">Server Information</div>
+                <div id="cbox2">
+                  <div class="boxContent">
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+                      Nulla porta pharetra nibh. Nunc vel elit. Donec in libero. 
+                      Suspendisse dignissim nunc ac elit. Sed lectus! Pellentesque
+                      in justo at justo lacinia semper? Nunc dolor dui, fringilla 
+                      at, dapibus id, placerat id, nulla? Ut at turpis nec purus 
+                      posuere dapibus. Cras risus eros, sollicitudin non; facilisis 
+                      ullamcorper; dignissim eu, purus. Sed eget metus.
+                    </p>
+                    <p>
+                      Donec sit amet pede ut metus laoreet euismod. Pellentesque ac 
+                      tellus. Phasellus id justo sit amet nulla fermentum eleifend. 
+                      Aenean aliquet mauris sed dui. Nullam scelerisque quam a elit 
+                      aliquet accumsan. Pellentesque habitant morbi tristique senectus 
+                      et netus et malesuada fames ac turpis egestas. Vestibulum ante 
+                      ipsum primis in faucibus orci luctus et ultrices posuere cubilia 
+                      Curae; Pellentesque nec libero in quam pulvinar congue. Phasellus 
+                      tortor. Fusce luctus aliquam est. Nulla justo. Proin quis dui.
+                    </p>
+                  </div>
+                  <div class="foot">
+                    <a href="#" class="config">Site Config</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="cBox-column">
+              <div class="cBox">
+                <div class="head" id="trigger_cbox3">Server Information</div>
+                <div id="cbox3">
+                  <div class="boxContent">
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+                      Nulla porta pharetra nibh. Nunc vel elit. Donec in libero. 
+                      Suspendisse dignissim nunc ac elit. Sed lectus! Pellentesque
+                      in justo at justo lacinia semper? Nunc dolor dui, fringilla 
+                      at, dapibus id, placerat id, nulla? Ut at turpis nec purus 
+                      posuere dapibus. Cras risus eros, sollicitudin non; facilisis 
+                      ullamcorper; dignissim eu, purus. Sed eget metus.
+                    </p>
+                    <p>
+                      Donec sit amet pede ut metus laoreet euismod. Pellentesque ac tellus. 
+                      Phasellus id justo sit amet nulla fermentum eleifend. Aenean 
+                      aliquet mauris sed dui. Nullam scelerisque quam a elit aliquet accumsan. 
+                      Pellentesque habitant morbi tristique senectus et netus et malesuada 
+                      fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci 
+                      luctus et ultrices posuere cubilia Curae; Pellentesque nec libero in quam 
+                      pulvinar congue. Phasellus tortor. Fusce luctus aliquam est. Nulla justo. 
+                      Proin quis dui.
+                    </p>
+                    <p>
+                      Donec sit amet pede ut metus laoreet euismod. Pellentesque ac 
+                      tellus. Phasellus id justo sit amet nulla fermentum eleifend. 
+                      Aenean aliquet mauris sed dui. Nullam scelerisque quam a elit 
+                      aliquet accumsan. Pellentesque habitant morbi tristique senectus 
+                      et netus et malesuada fames ac turpis egestas. Vestibulum ante 
+                      ipsum primis in faucibus orci luctus et ultrices posuere cubilia 
+                      Curae; Pellentesque nec libero in quam pulvinar congue. Phasellus 
+                      tortor. Fusce luctus aliquam est. Nulla justo. Proin quis dui.
+                    </p>
+                  </div>
+                  <div class="foot">
+                    <a href="#" class="config">Site Config</a>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="clear" />
+            
+            
+            <div class="cBox clearfix">
+              <div class="head" id="trigger_cbox4">Server Information</div>
+              <div id="cbox4">
+                <div class="boxContent">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+                    Nulla porta pharetra nibh. Nunc vel elit. Donec in libero. 
+                    Suspendisse dignissim nunc ac elit. Sed lectus! Pellentesque
+                    in justo at justo lacinia semper? Nunc dolor dui, fringilla 
+                    at, dapibus id, placerat id, nulla? Ut at turpis nec purus 
+                    posuere dapibus. Cras risus eros, sollicitudin non; facilisis 
+                    ullamcorper; dignissim eu, purus. Sed eget metus.
+                  </p>
+                  <p>
+                    Donec sit amet pede ut metus laoreet euismod. Pellentesque ac tellus. 
+                    Phasellus id justo sit amet nulla fermentum eleifend. Aenean 
+                    aliquet mauris sed dui. Nullam scelerisque quam a elit aliquet accumsan. 
+                    Pellentesque habitant morbi tristique senectus et netus et malesuada 
+                    fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci 
+                    luctus et ultrices posuere cubilia Curae; Pellentesque nec libero in quam 
+                    pulvinar congue. Phasellus tortor. Fusce luctus aliquam est. Nulla justo. 
+                    Proin quis dui.
+                  </p>
+                  <p>
+                    Donec sit amet pede ut metus laoreet euismod. Pellentesque ac 
+                    tellus. Phasellus id justo sit amet nulla fermentum eleifend. 
+                    Aenean aliquet mauris sed dui. Nullam scelerisque quam a elit 
+                    aliquet accumsan. Pellentesque habitant morbi tristique senectus 
+                    et netus et malesuada fames ac turpis egestas. Vestibulum ante 
+                    ipsum primis in faucibus orci luctus et ultrices posuere cubilia 
+                    Curae; Pellentesque nec libero in quam pulvinar congue. Phasellus 
+                    tortor. Fusce luctus aliquam est. Nulla justo. Proin quis dui.
+                  </p>
+                </div>
+                <div class="foot">
+                  <a href="#" class="config">Site Config</a>
+                </div>
+              </div>
+            </div>
+              
+          </fieldset>
+          
+          
+          
+          <p>&#160;</p>
+          <p>&#160;</p>
+          
+          <p>&#160;</p>
+          
+          
+          
+          <fieldset>
+            <legend>Table Layout (New)</legend>
+
+
+
+<!--  NEW TABLE MARKUP  -->
+<div class="Table">
+  <form id="Table_0" method="post" action="#">
+  
+    <!-- Table Header -->
+    <div class="TableEvents">
+      <div class="filters">
+        <div class="filter">
+          <label for="fid-year" title="Finacial Year">Year:</label>
+          <select name="year" id="fid-year">
+            <option value="-1">All</option><option value="2009-2010">2009-2010</option><option value="2008-2009">2008-2009</option><option value="2007-2008">2007-2008</option><option value="2006-2007">2006-2007</option>
+          </select>
+        </div>
+        <div class="filter">
+          <label for="fid-text">Search:</label>
+          <input type="text" name="text" id="fid-text" style="width: 80px;" />
+        </div>
+        <div class="filter">
+          <label for="fid-check">Subscribed:</label>
+          <select name="check" id="fid-check">
+            <option value="-1">All</option><option value="1">Yes</option><option value="0">No</option>
+          </select>
+        </div>
+        <div class="filter">
+          <label>Total: </label>
+          <strong>$802.69</strong>
+        </div>
+        <div class="filter">
+          <label>&#160;</label>
+          <input type="submit" name="search" id="fid-search" value="Search" />
+          <input type="submit" name="clear" id="fid-search" value="Show All" />
+        </div>
+      </div>
+    
+      <div class="actions">
+        <a class="i16-delete" href="javascript:;" onclick="if(confirm('Do you want to delete these records?')) {submitForm(document.getElementById('TableEvent_0'), 'delete_0');}" title="Delete Selected">Delete Selected</a>
+        <a class="i16-userAdd" href="javascript:;" onclick="javascript:;" title="Add Expense">Add Expense</a>
+        <a class="i16-aliases" href="javascript:;" onclick="javascript:;" title="Company">Company</a>
+      </div>
+    </div>
+  
+  
+    <!-- Table Controls -->
+    <div class="TableControls">
+      <div class="control results">
+        <div class="Table_Ui_Results">
+          <span>1</span> -
+          <span>10</span> records of
+          <span>65</span> total
+        </div>
+      </div>
+      <div class="control pager">
+        <ul class="Table_Ui_Pager">
+          <li class="start off"><a href="javascript:;" rel="nofollow">Start</a></li>
+          <li class="back off"><a href="javascript:;">&lt;&lt;</a></li>
+          <li class="selected"><a href="#?limit_0=10&amp;offset_0=0" rel="nofollow" title="Current Page 1">1</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=10" rel="nofollow" title="Page 2">2</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=20" rel="nofollow" title="Page 3">3</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=30" rel="nofollow" title="Page 4">4</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=40" rel="nofollow" title="Page 5">5</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=50" rel="nofollow" title="Page 6">6</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=60" rel="nofollow" title="Page 7">7</a></li>
+          <li class="next"><a href="#?limit_0=10&amp;offset_0=10" title="Next Page">&gt;&gt;</a></li>
+          <li class="end"><a href="#?limit_0=10&amp;offset_0=60" rel="nofollow" title="Last Page">End</a></li>
+        </ul>
+      </div>
+      <div class="control limit">
+        <ul class="Table_Ui_Limit">
+          <li class="show">Records per page:</li>
+          <li class="selected"><a href="#?offset_0=0&amp;limit_0=10" rel="nofollow">10</a></li>
+          <li><a href="#?offset_0=0&amp;limit_0=25" rel="nofollow">25</a></li>
+          <li><a href="#?offset_0=0&amp;limit_0=50" rel="nofollow">50</a></li>
+          <li><a href="#?offset_0=0&amp;limit_0=100" rel="nofollow">100</a></li>
+        </ul>
+      </div>
+    </div>
+  
+  
+  
+    <!-- Table -->
+    <table border="0" cellpadding="0" cellspacing="0" class="tableData" id="Table_0">
+      <thead>
+        <tr>
+          <th>
+            <input name="cb_0" onchange="selectAllCheckbox(this);" onmouseover="setStatusText('Select all records');" onmouseout="setStatusText();" type="checkbox" />
+          </th>
+          <th class=" orderDesc"><a href="#?limit_0=10&amp;offset_0=0&amp;orderBy_0=">Id</a></th>
+          <th class=" key"><a href="#?limit_0=10&amp;offset_0=0&amp;orderBy_0=%60notes%60+ASC">Notes</a></th>
+          <th><a href="#?limit_0=10&amp;offset_0=0&amp;orderBy_0=%60expenseCompanyId%60+ASC">Expense Company Id</a></th>
+          <th><a href="#?limit_0=10&amp;offset_0=0&amp;orderBy_0=%60accountTypeId%60+ASC">Account Type Id</a></th>
+          <th><a href="#?limit_0=10&amp;offset_0=0&amp;orderBy_0=%60ratio%60+ASC">Ratio</a></th>
+          <th><a href="#?limit_0=10&amp;offset_0=0&amp;orderBy_0=%60total%60+ASC">Total</a></th>
+          <th><a href="#?limit_0=10&amp;offset_0=0&amp;orderBy_0=%60businessTotal%60+ASC">Business Total</a></th>
+          <th><a href="#?limit_0=10&amp;offset_0=0&amp;orderBy_0=%60date%60+ASC">Date</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="222" type="checkbox" /></td>
+          <td class=" mId right">222</td>
+          <td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=222">ADSL Internet</a></td>
+          <td class=" mExpenseCompanyId right">The Smelly Black Dog Company</td>
+          <td class=" mAccountTypeId right">Internet</td>
+          <td class=" mRatio right">100</td>
+          <td class=" mTotal right">$110.95</td>
+          <td class=" mBusinessTotal right">$110.95</td>
+          <td class=" mDate right">2010-01-12 00:00:00</td>
+        </tr>
+        <tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="221" type="checkbox" /></td><td class=" mId right">221</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=221">3G Wireless Credit</a></td><td class=" mExpenseCompanyId right">Telstra - 0740578072</td><td class=" mAccountTypeId right">Internet</td><td class=" mRatio right">100</td><td class=" mTotal right">$100.00</td><td class=" mBusinessTotal right">$100.00</td><td class=" mDate right">2009-12-19 00:00:00</td>
+        </tr>
+        <tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="220" type="checkbox" /></td><td class=" mId right">220</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=220">3G Wireless Internet USB Dongle</a></td><td class=" mExpenseCompanyId right">Telstra - 0740578072</td><td class=" mAccountTypeId right">Internet</td><td class=" mRatio right">100</td><td class=" mTotal right">$99.00</td><td class=" mBusinessTotal right">$99.00</td><td class=" mDate right">2009-12-19 00:00:00</td>
+        </tr>
+        <tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="219" type="checkbox" /></td><td class=" mId right">219</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=219">Mobile</a></td><td class=" mExpenseCompanyId right">Optus - 0401 665 538</td><td class=" mAccountTypeId right">Communication Costs</td><td class=" mRatio right">100</td><td class=" mTotal right">$9.00</td><td class=" mBusinessTotal right">$9.00</td><td class=" mDate right">2010-01-12 00:00:00</td>
+        </tr>
+        <tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="218" type="checkbox" /></td><td class=" mId right">218</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=218">Phone</a></td><td class=" mExpenseCompanyId right">Telstra - 0740579515</td><td class=" mAccountTypeId right">Communication Costs</td><td class=" mRatio right">100</td><td class=" mTotal right">$43.51</td><td class=" mBusinessTotal right">$43.51</td><td class=" mDate right">2010-01-12 00:00:00</td>
+        </tr>
+        <tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="217" type="checkbox" /></td><td class=" mId right">217</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=217">Rent</a></td><td class=" mExpenseCompanyId right">Cairns Beaches Reality</td><td class=" mAccountTypeId right">Rent</td><td class=" mRatio right">30</td><td class=" mTotal right">$500.00</td><td class=" mBusinessTotal right">$150.00</td><td class=" mDate right">2010-01-06 00:00:00</td>
+        </tr>
+        <tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="216" type="checkbox" /></td><td class=" mId right">216</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=216">Rent</a></td><td class=" mExpenseCompanyId right">The WareHouse</td><td class=" mAccountTypeId right">Rent</td><td class=" mRatio right">30</td><td class=" mTotal right">$240.00</td><td class=" mBusinessTotal right">$72.00</td><td class=" mDate right">2010-01-06 00:00:00</td>
+        </tr>
+        <tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="215" type="checkbox" /></td><td class=" mId right">215</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=215">Rent</a></td><td class=" mExpenseCompanyId right">Cairns Beaches Reality</td><td class=" mAccountTypeId right">Rent</td><td class=" mRatio right">30</td><td class=" mTotal right">$340.00</td><td class=" mBusinessTotal right">$102.00</td><td class=" mDate right">2009-12-14 00:00:00</td>
+        </tr>
+        <tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="214" type="checkbox" /></td><td class=" mId right">214</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=214">Fix Pentax SLR Camera, Remove Manual Lens</a></td><td class=" mExpenseCompanyId right">The WareHouse</td><td class=" mAccountTypeId right">Photographic Equipment</td><td class=" mRatio right">100</td><td class=" mTotal right">$100.00</td><td class=" mBusinessTotal right">$100.00</td><td class=" mDate right">2009-12-22 00:00:00</td>
+        </tr>
+        <tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="213" type="checkbox" /></td><td class=" mId right">213</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=213">VOIP</a></td><td class=" mExpenseCompanyId right">www.engin.com.au</td><td class=" mAccountTypeId right">Communication Costs</td><td class=" mRatio right">100</td><td class=" mTotal right">$16.23</td><td class=" mBusinessTotal right">$16.23</td><td class=" mDate right">2010-01-07 00:00:00</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Table Controls -->
+    <div class="TableControls">
+      <div class="results">
+        <div class="Table_Ui_Results">
+          <span>1</span> -
+          <span>10</span> records of
+          <span>65</span> total
+        </div>
+      </div>
+      <div class="pager">
+        <ul class="Table_Ui_Pager">
+          <li class="start off"><a href="javascript:;" rel="nofollow">Start</a></li>
+          <li class="back off"><a href="javascript:;">&lt;&lt;</a></li>
+          <li class="selected"><a href="#?limit_0=10&amp;offset_0=0" rel="nofollow" title="Current Page 1">1</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=10" rel="nofollow" title="Page 2">2</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=20" rel="nofollow" title="Page 3">3</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=30" rel="nofollow" title="Page 4">4</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=40" rel="nofollow" title="Page 5">5</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=50" rel="nofollow" title="Page 6">6</a></li>
+          <li><a href="#?limit_0=10&amp;offset_0=60" rel="nofollow" title="Page 7">7</a></li>
+          <li class="next"><a href="#?limit_0=10&amp;offset_0=10" title="Next Page">&gt;&gt;</a></li>
+          <li class="end"><a href="#?limit_0=10&amp;offset_0=60" rel="nofollow" title="Last Page">End</a></li>
+        </ul>
+      </div>
+      <div class="limit">
+        <ul class="Table_Ui_Limit">
+          <li class="show">Records per page:</li>
+          <li class="selected"><a href="#?offset_0=0&amp;limit_0=10" rel="nofollow">10</a></li>
+          <li><a href="#?offset_0=0&amp;limit_0=25" rel="nofollow">25</a></li>
+          <li><a href="#?offset_0=0&amp;limit_0=50" rel="nofollow">50</a></li>
+          <li><a href="#?offset_0=0&amp;limit_0=100" rel="nofollow">100</a></li>
+        </ul>
+      </div>
+    </div>
+    
+  </form>
+</div>
+
+
+
+
+
+          </fieldset>
+          
+          
+          
+          
+          
+          
+          
+
+
+
+
+          <p>&#160;</p>
+          <div class="clear" />
+          <p>&#160;</p>
+          
+          <fieldset>
+            <legend>Table Layout (Org)</legend>
+            
+            <div class="Adm_Table">
+              <form id="Table_4" method="get" action="#">
+                <div class="actions">
+                  <div class="actionRow">
+                    <div class="left">
+                      <a class="i16-delete" href="javascript:;" onclick="if(confirm('Do you want to delete these records?')) {submitForm(document.getElementById('Table_4'), 'delete_4');}" title="Delete Selected">Delete Selected</a>
+                      <a class="i16-userAdd" href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html" onclick="" title="Add Expense">Add Expense</a>
+                      <a class="i16-aliases" href="http://ttek.org/tropotek/iris2/expenseCompanyManager.html" onclick="" title="Company">Company</a>
+                    </div>
+                  </div>
+                  <div class="filterRow" id="filterRow">
+                    <div>
+                      <label for="fid-year" style="padding-left: 5px; padding-right: 5px;" title="Finacial Year">Year:</label>
+                      <select name="year" onchange="this.form.submit();">
+                        <option value="2009-2010">2009-2010</option>
+                        <option value="2008-2009">2008-2009</option>
+                        <option value="2007-2008">2007-2008</option>
+                        <option value="2006-2007">2006-2007</option>
+                        <option value="2005-2006">2005-2006</option>
+                      </select>
+                      <div style="padding-left: 15px; padding-right: 5px;">Page Total: <strong>$802.69</strong></div>
+                    </div>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                
+                
+                <div class="pager">
+                  <table border="0" cellpadding="0" cellspacing="0"><tbody><tr>
+                    <td class="r">
+                      <div class="_resultsWrapper">
+                        <div class="Com_Ui_Results clearfix">
+                          <span>1</span> -
+                          <span>10</span> records of
+                          <span>65</span> total
+                        </div>
+                      </div>
+                    </td>
+                    <td class="p">
+                      <div class="_pagerWrapper">
+                        <ul class="Com_Ui_Pager clearfix">
+                          <li class="start off"><a href="javascript:;" rel="nofollow">Start</a></li>
+                          <li class="back off"><a href="javascript:;">&lt;&lt;</a></li>
+                          <li class="selected"><a href="#?limit_4=10&amp;offset_4=0" rel="nofollow" title="Current Page 1">1</a></li>
+                          <li><a href="#?limit_4=10&amp;offset_4=10" rel="nofollow" title="Page 2">2</a></li>
+                          <li><a href="#?limit_4=10&amp;offset_4=20" rel="nofollow" title="Page 3">3</a></li>
+                          <li><a href="#?limit_4=10&amp;offset_4=30" rel="nofollow" title="Page 4">4</a></li>
+                          <li><a href="#?limit_4=10&amp;offset_4=40" rel="nofollow" title="Page 5">5</a></li>
+                          <li><a href="#?limit_4=10&amp;offset_4=50" rel="nofollow" title="Page 6">6</a></li>
+                          <li><a href="#?limit_4=10&amp;offset_4=60" rel="nofollow" title="Page 7">7</a></li>
+                          <li class="next"><a href="#?limit_4=10&amp;offset_4=10" title="Next Page">&gt;&gt;</a></li>
+                          <li class="end"><a href="#?limit_4=10&amp;offset_4=60" rel="nofollow" title="Last Page">End</a></li>
+                        </ul>
+                      </div>
+                    </td>
+                    <td class="l">
+                      <div class="_limitWrapper">
+                        <ul class="Com_Ui_Limit clearfix">
+                          <li class="show">Records per page:</li>
+                          <li class="selected"><a href="#?offset_4=0&amp;limit_4=10" rel="nofollow">10</a></li>
+                          <li><a href="#?offset_4=0&amp;limit_4=25" rel="nofollow">25</a></li>
+                          <li><a href="#?offset_4=0&amp;limit_4=50" rel="nofollow">50</a></li>
+                          <li><a href="#?offset_4=0&amp;limit_4=100" rel="nofollow">100</a></li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr></tbody></table>
+                </div>
+                
+                
+    <table class="manager" border="0" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th>
+            <input name="cb_4" onchange="selectAllCheckbox(this);" onmouseover="setStatusText('Select all records');" onmouseout="setStatusText();" type="checkbox" />
+          </th>
+          <th class=" orderDesc"><a href="#?limit_4=10&amp;offset_4=0&amp;orderBy_4=">Id</a></th><th class=" key"><a href="#?limit_4=10&amp;offset_4=0&amp;orderBy_4=%60notes%60+ASC">Notes</a></th><th><a href="#?limit_4=10&amp;offset_4=0&amp;orderBy_4=%60expenseCompanyId%60+ASC">Expense Company Id</a></th><th><a href="#?limit_4=10&amp;offset_4=0&amp;orderBy_4=%60accountTypeId%60+ASC">Account Type Id</a></th><th><a href="#?limit_4=10&amp;offset_4=0&amp;orderBy_4=%60ratio%60+ASC">Ratio</a></th><th><a href="#?limit_4=10&amp;offset_4=0&amp;orderBy_4=%60total%60+ASC">Total</a></th><th><a href="#?limit_4=10&amp;offset_4=0&amp;orderBy_4=%60businessTotal%60+ASC">Business Total</a></th><th><a href="#?limit_4=10&amp;offset_4=0&amp;orderBy_4=%60date%60+ASC">Date</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="222" type="checkbox" /></td><td class=" mId right">222</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=222">ADSL Internet</a></td><td class=" mExpenseCompanyId right">THe Smelly Black Dog Company</td><td class=" mAccountTypeId right">Internet</td><td class=" mRatio right">100</td><td class=" mTotal right">$110.95</td><td class=" mBusinessTotal right">$110.95</td><td class=" mDate right">2010-01-12 00:00:00</td>
+        </tr><tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="221" type="checkbox" /></td><td class=" mId right">221</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=221">3G Wireless Credit</a></td><td class=" mExpenseCompanyId right">Telstra - 0740578072</td><td class=" mAccountTypeId right">Internet</td><td class=" mRatio right">100</td><td class=" mTotal right">$100.00</td><td class=" mBusinessTotal right">$100.00</td><td class=" mDate right">2009-12-19 00:00:00</td>
+        </tr><tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="220" type="checkbox" /></td><td class=" mId right">220</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=220">3G Wireless Internet USB Dongle</a></td><td class=" mExpenseCompanyId right">Telstra - 0740578072</td><td class=" mAccountTypeId right">Internet</td><td class=" mRatio right">100</td><td class=" mTotal right">$99.00</td><td class=" mBusinessTotal right">$99.00</td><td class=" mDate right">2009-12-19 00:00:00</td>
+        </tr><tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="219" type="checkbox" /></td><td class=" mId right">219</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=219">Mobile</a></td><td class=" mExpenseCompanyId right">Optus - 0401 665 538</td><td class=" mAccountTypeId right">Communication Costs</td><td class=" mRatio right">100</td><td class=" mTotal right">$9.00</td><td class=" mBusinessTotal right">$9.00</td><td class=" mDate right">2010-01-12 00:00:00</td>
+        </tr><tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="218" type="checkbox" /></td><td class=" mId right">218</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=218">Phone</a></td><td class=" mExpenseCompanyId right">Telstra - 0740579515</td><td class=" mAccountTypeId right">Communication Costs</td><td class=" mRatio right">100</td><td class=" mTotal right">$43.51</td><td class=" mBusinessTotal right">$43.51</td><td class=" mDate right">2010-01-12 00:00:00</td>
+        </tr><tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="217" type="checkbox" /></td><td class=" mId right">217</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=217">Rent</a></td><td class=" mExpenseCompanyId right">Cairns Beaches Reality</td><td class=" mAccountTypeId right">Rent</td><td class=" mRatio right">30</td><td class=" mTotal right">$500.00</td><td class=" mBusinessTotal right">$150.00</td><td class=" mDate right">2010-01-06 00:00:00</td>
+        </tr><tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="216" type="checkbox" /></td><td class=" mId right">216</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=216">Rent</a></td><td class=" mExpenseCompanyId right">The WareHouse</td><td class=" mAccountTypeId right">Rent</td><td class=" mRatio right">30</td><td class=" mTotal right">$240.00</td><td class=" mBusinessTotal right">$72.00</td><td class=" mDate right">2010-01-06 00:00:00</td>
+        </tr><tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="215" type="checkbox" /></td><td class=" mId right">215</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=215">Rent</a></td><td class=" mExpenseCompanyId right">Cairns Beaches Reality</td><td class=" mAccountTypeId right">Rent</td><td class=" mRatio right">30</td><td class=" mTotal right">$340.00</td><td class=" mBusinessTotal right">$102.00</td><td class=" mDate right">2009-12-14 00:00:00</td>
+        </tr><tr class="even  ">
+          <td class=" mC right"><input name="cb_4[]" value="214" type="checkbox" /></td><td class=" mId right">214</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=214">Fix Pentax SLR Camera, Remove Manual Lens</a></td><td class=" mExpenseCompanyId right">The WareHouse</td><td class=" mAccountTypeId right">Photographic Equipment</td><td class=" mRatio right">100</td><td class=" mTotal right">$100.00</td><td class=" mBusinessTotal right">$100.00</td><td class=" mDate right">2009-12-22 00:00:00</td>
+        </tr><tr class="odd  ">
+          <td class=" mC right"><input name="cb_4[]" value="213" type="checkbox" /></td><td class=" mId right">213</td><td class=" mNotes key left"><a href="http://ttek.org/tropotek/iris2/expenseEntryEdit.html?expenseEntryId=213">VOIP</a></td><td class=" mExpenseCompanyId right">www.engin.com.au</td><td class=" mAccountTypeId right">Communication Costs</td><td class=" mRatio right">100</td><td class=" mTotal right">$16.23</td><td class=" mBusinessTotal right">$16.23</td><td class=" mDate right">2010-01-07 00:00:00</td>
+
+        </tr>
+      </tbody>
+    </table>
+    
+    
+    <div class="pager">
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr>
+        <td class="r">
+          <div class="_resultsWrapper">
+            <div class="Com_Ui_Results clearfix">
+              <span>1</span> -
+              <span>10</span> records of
+              <span>65</span> total
+            </div>
+          </div>
+        </td>
+        <td class="p">
+          <div class="_pagerWrapper">
+            <ul class="Com_Ui_Pager clearfix">
+              <li class="start off"><a href="javascript:;" rel="nofollow">Start</a></li>
+              <li class="back off"><a href="javascript:;">&lt;&lt;</a></li>
+              <li class="selected"><a href="#?limit_4=10&amp;offset_4=0" rel="nofollow" title="Current Page 1">1</a></li><li><a href="#?limit_4=10&amp;offset_4=10" rel="nofollow" title="Page 2">2</a></li><li><a href="#?limit_4=10&amp;offset_4=20" rel="nofollow" title="Page 3">3</a></li><li><a href="#?limit_4=10&amp;offset_4=30" rel="nofollow" title="Page 4">4</a></li><li><a href="#?limit_4=10&amp;offset_4=40" rel="nofollow" title="Page 5">5</a></li><li><a href="#?limit_4=10&amp;offset_4=50" rel="nofollow" title="Page 6">6</a></li><li><a href="#?limit_4=10&amp;offset_4=60" rel="nofollow" title="Page 7">7</a></li>
+              <li class="next"><a href="#?limit_4=10&amp;offset_4=10" title="Next Page">&gt;&gt;</a></li>
+              <li class="end"><a href="#?limit_4=10&amp;offset_4=60" rel="nofollow" title="Last Page">End</a></li>
+            </ul>
+          </div>
+        </td>
+        <td class="l">
+          <div class="_limitWrapper">
+            <ul class="Com_Ui_Limit clearfix">
+              <li class="show">Records per page:</li>
+              <li class="selected"><a href="#?offset_4=0&amp;limit_4=10" rel="nofollow">10</a></li><li><a href="#?offset_4=0&amp;limit_4=25" rel="nofollow">25</a></li><li><a href="#?offset_4=0&amp;limit_4=50" rel="nofollow">50</a></li><li><a href="#?offset_4=0&amp;limit_4=100" rel="nofollow">100</a></li>
+            </ul>
+          </div>
+        </td>
+      </tr></tbody></table>
+    </div>
+  </form>
+
+    <div class="clear" />
+  </div>
+
+          </fieldset>
+
+          <p>&#160;</p>
+          <p>&#160;</p>
+          
+  <fieldset class="icon">
+    <legend>Tools</legend>
+    <a href="javascript: history.go(-1);" class="i32-back" title="Back to previous page.">Back</a>
+  </fieldset>
+  
+    
+    
+  <form id="Advert" method="post" enctype="multipart/form-data" class="admForm">
+    <p class="errorBox" var="form-error" choiceS="form-error">The form contains an error</p>
+    
+    <div class="submit left">
+      <input type="submit" name="add" value="Add" choiceS="add" />
+      <input type="submit" name="save" value="Save" choiceS="update"/>
+      <input type="submit" name="update" value="Update" choiceS="update" />
+      <input type="submit" name="cancel" value="Cancel" />
+    </div>
+    
+    
+    <div class="admFieldBox">
+    
+      <div class="notes">
+        <h4>Login Information</h4>
+        <p>Your username and password must both be at least 8 characters long and are case-sensitive. Please do not enter accented characters.</p>
+        <p>We recommend that your password is not a word you can find in the dictionary, includes both capital and lower case letters, and contains at least one special character (1-9, !, *, _, etc.).</p>
+        <p class="last">Your password will be encrypted and stored in our system.  Due to the encryption, we <strong>cannot</strong> retrieve your password for you.  If you lose or forget your password, we offer the ability to reset it.</p>
+      </div>
+      
+      <div class="optional error">
+        <p class="error" var="alt-error" choice1="alt-error">Invalid Field Value</p>
+        <label for="fid-alt">Title:</label>
+        <input type="text" name="alt" id="fid-alt"  /> 
+        <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+      </div>
+        
+      <div class="required">
+        <p class="error" var="userId-error" choice="userId-error"></p>
+        <label for="fid-userId">User:</label>
+        <select name="userId" id="fid-userId"><option value="0">-- Select --</option></select> 
+        <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+      </div>
+  
+      <div class="required">
+        <p class="error" var="advertTypeId-error" choice="advertTypeId-error"></p>
+        <label for="fid-advertTypeId">Advert Type:</label>
+        <select name="advertTypeId" id="fid-advertTypeId"><option value="0">-- Select --</option></select> 
+        <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+      </div>
+  
+      <div class="required">
+        <p class="error" var="startDate-error" choice="startDate-error"></p>
+        <label for="fid-startDate">Start Date:</label>
+        <input type="text" name="startDate" id="fid-startDate" class="f-date" />
+        <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+        <small>This is some help text</small>
+      </div>
+      
+      <div class="optional">
+        <p class="error" var="publish-error" choice="publish-error"></p>
+        <label for="fid-publish">Publish:</label>
+        <input type="checkbox" name="publish" id="fid-publish" value="publish" /> 
+        <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+      </div>
+  
+      <div class="optional">
+        <p class="error" var="notes-error" choice="notes-error"></p>
+        <label for="fid-notes">Notes:</label>
+        <textarea name="notes" id="fid-notes" style="width: 250px; height: 100px;"></textarea> 
+        <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+      </div>
+      
+    </div>
+    
+    <div class="submit left">
+      <input type="submit" name="add" value="Add" choiceS="add" />
+      <input type="submit" name="save" value="Save" choiceS="update"/>
+      <input type="submit" name="update" value="Update" choiceS="update" />
+      <input type="submit" name="cancel" value="Cancel" />
+    </div>
+  </form>
+
+
+
+<p>&#160;</p>
+
+
+
+<fieldset>
+  <legend>Edit</legend>
+  
+  <form id="Advert" method="post" enctype="multipart/form-data" class="admForm">
+    <p class="errorBox" var="form-error" choiceS="form-error">The form contains an error</p>   
+    
+    <div class="submit left">
+      <input type="submit" name="add" value="Add" choiceS="add" />
+      <input type="submit" name="save" value="Save" choiceS="update"/>
+      <input type="submit" name="update" value="Update" choiceS="update" />
+      <input type="submit" name="cancel" value="Cancel" />
+    </div>
+    
+    
+    <div id="tabs" class="tabs">
+      <ul>
+        <li><a href="#tabs-1">Tab 1</a></li>
+        <li><a href="#tabs-2">Tab 2</a></li>
+        <li><a href="#tabs-3">Tab 3</a></li>
+      </ul>
+      
+      <div id="tabs-1">
+        <div class="notes">
+          <h4>Login Information</h4>
+          <p>Your username and password must both be at least 8 characters long and are case-sensitive. Please do not enter accented characters.</p>
+          <p>We recommend that your password is not a word you can find in the dictionary, includes both capital and lower case letters, and contains at least one special character (1-9, !, *, _, etc.).</p>
+          <p class="last">Your password will be encrypted and stored in our system.  Due to the encryption, we <strong>cannot</strong> retrieve your password for you.  If you lose or forget your password, we offer the ability to reset it.</p>
+        </div>
+        <div class="optional error">
+          <p class="error" var="alt-error" choiceS="alt-error">Invalid Field Value</p>
+          <label for="fid-alt">Title:</label>
+          <input type="text" name="alt" id="fid-alt"  /> 
+          <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+        </div>
+          
+        <div class="required">
+          <p class="error" var="userId-error" choice="userId-error"></p>
+          <label for="fid-userId">User:</label>
+          <select name="userId" id="fid-userId"><option value="0">-- Select --</option></select> 
+          <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+        </div>
+    
+        <div class="required">
+          <p class="error" var="advertTypeId-error" choice="advertTypeId-error"></p>
+          <label for="fid-advertTypeId">Advert Type:</label>
+          <select name="advertTypeId" id="fid-advertTypeId"><option value="0">-- Select --</option></select> 
+          <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+        </div>
+    
+        <div class="required error">
+          <p class="error" var="startDate-error" choiceS="startDate-error">Invalid Field Value</p>
+          <label for="fid-startDate">Start Date:</label>
+          <input type="text" name="startDate" id="fid-startDate" class="f-date" /> 
+        </div>
+    
+        <div class="required">
+          <p class="error" var="endDate-error" choice="endDate-error"></p>
+          <label for="fid-endDate">End Date:</label>
+          <input type="text" name="endDate" id="fid-endDate" class="f-date" /> 
+        </div>
+        
+      </div>
+      <div id="tabs-2">
+        <div class="notes">
+          <h4>Login Information</h4>
+          <p class="last">Your password will be encrypted and stored in our system.  Due to the encryption, we <strong>cannot</strong> retrieve your password for you.  If you lose or forget your password, we offer the ability to reset it.</p>
+        </div>
+        <div class="optional">
+          <p class="error" var="fileType-error" choice="fileType-error"></p>
+          <label for="fid-fileType">File Type:</label>
+          <select name="fileType" id="fid-fileType">
+            <option value="FILE">File (Image/Flash)</option>
+            <option value="HTML">Html (External Hosted Advert)</option>
+          </select> 
+        </div>
+        
+        <div class="required">
+          <p class="error" var="image-error" choice="image-error"></p>
+          <label for="fid-image">Image:</label>
+          <input type="file" name="image" id="fid-image" /> 
+          <input type="button" name="view" value="View" class="button" var="viewImage" choice1="image"/>
+          <input type="submit" name="deleteImage" value="Delete" class="button" choice1="image" />
+          <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+          <small>Valid Types: JPG, PNG, GIF, SWF</small>
+        </div>
+      </div>
+      
+      
+      <div id="tabs-3">
+        <div class="optional">
+          <p class="error" var="url-error" choice="url-error"></p>
+          <label for="fid-url">Url:</label>
+          <input type="text" name="url" id="fid-url"  />
+          <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+          <small>Not required for SWF files. Tracker url: <span var="tracker">[RequestURI]?track=[advertId]</span></small>
+        </div>
+        
+        <div class="required">
+          <p class="error" var="html-error" choice="html-error"></p>
+          <label for="fid-html">Html:</label>
+          <textarea name="html" id="fid-html" style="width: 300px; height: 100px;"></textarea> 
+        </div>
+        
+        <div class="optional">
+          <p class="error" var="publish-error" choice="publish-error"></p>
+          <label for="fid-publish">Publish:</label>
+          <input type="checkbox" name="publish" id="fid-publish" value="publish" /> 
+        </div>
+      </div>
+        
+      <div class="optional">
+        <p class="error" var="notes-error" choice="notes-error"></p>
+        <label for="fid-notes">Notes:</label>
+        <textarea name="notes" id="fid-notes" style="width: 250px; height: 100px;"></textarea> 
+        <a href="javascript:;" class="admFieldHelp" title="Start Date: This could be some tilltip/context help">Help</a>
+      </div>
+    </div>
+      
+    
+    <div class="submit left">
+      <input type="submit" name="add" value="Add" choiceS="add" />
+      <input type="submit" name="save" value="Save" choiceS="update"/>
+      <input type="submit" name="update" value="Update" choiceS="update" />
+      <input type="submit" name="cancel" value="Cancel" />
+    </div>
+  </form>
+  
+</fieldset>
+          
+          
+          <p>&#160;</p>
+            
+            
+          <fieldset>
+            <legend>Dialog Box</legend>
+            
+            <p>We are going to do an example of a jquery dialog box.</p>
+            
+            <p style="padding: 15px 10px;">
+              <a href="#" id="dialogTrigger">O P E N &#160; D I A L O G</a>
+            </p>
+            <div id="dialog" title="Dialog Window">
+              <p>
+                <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+                Your files have downloaded successfully into the My Downloads folder.
+              </p>
+              <p>Currently using <b>36% of your storage space</b>.</p>
+            </div>
+            
+            
+            <p>
+              The Javascript code required to open a dialog is:
+            </p>
+<pre>
+&lt;script type="text/javascript" choice="close"&gt;
+  $.ui.dialog.defaults.bgiframe = true;
+  $('#dialog').dialog({
+      width: 500,
+      height: 200,
+      modal: true,
+      autoOpen: false,
+      buttons: {'OK': function () {$(this).dialog('close');} }
+  });
+  $('#dialogTrigger').click(function () {
+      $('#dialog').dialog('open');
+  });
+&lt;/script&gt;
+</pre>
+            <p>
+              The HTML code required to open a dialog is:
+            </p>
+            
+<pre>
+&lt;p style="padding: 15px 10px;"&gt;
+  &lt;a href="#" id="dialogTrigger"&gt;O P E N &#160; D I A L O G&lt;/a&gt;
+&lt;/p&gt;
+&lt;div id="dialog" title="Dialog Window"&gt;
+  &lt;p&gt;
+    &lt;span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"&gt;&lt;/span&gt;
+    Your files have downloaded successfully into the My Downloads folder.
+  &lt;/p&gt;
+  &lt;p&gt;Currently using &lt;b&gt;36% of your storage space&lt;/b&gt;.&lt;/p&gt;
+&lt;/div&gt;
+</pre>
+            
+          <p>&#160;</p>
+            <p>
+              The code required to close and reload a page within an iframe is below,
+              it needs to be added near the footer of the iframe page:
+            </p>
+<pre>
+&lt;script type="text/javascript" choice="close"&gt;
+  self.parent.document.location.reload();
+  self.parent.$('#dialog').dialog('close');
+&lt;/script&gt;
+</pre>
+            <p>For more info on the jQuery UI dialog see <a href="http://jqueryui.com/demos/dialog/">http://jqueryui.com/demos/dialog/</a></p>
+          </fieldset>
+          
+          
+          <p>&#160;</p>
+          <p>&#160;</p>
+          <p>&#160;</p>
+          <p>&#160;</p>
+  
+</div>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div class="History">
+
+  <div var="TitleBar" com-class="Wik_Modules_Page_Title"></div>
+  
+  
+  <h2>Page History</h2>
+  
+  <div var="Table"></div>
+  
+  
+</div>

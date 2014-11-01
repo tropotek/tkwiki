@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<div class="Content_Manager">
+  
+  <fieldset class="icon">
+    <legend>Tools</legend>
+    <a href="javascript: history.go(-1);" class="i32-back" title="Return to previous page." var="back">Back</a>
+    <a href="/admin/userEdit.html" class="i32-userAdd" title="Add a new User." >Add User</a>
+  </fieldset>
+  
+  <fieldset>
+    <legend>List</legend>
+    <div var="Table"></div>
+  </fieldset>
+  
+</div>

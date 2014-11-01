@@ -1,0 +1,340 @@
+@charset "utf-8";
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/*  E R R O R S  */
+p.error {
+  background-color: #ff0000;
+  background-image: url('../images/form/icon_error.gif');
+  background-repeat: no-repeat;
+  background-position: 3px 3px;
+  color: #ffffff;
+  padding: 3px 3px 5px 27px;
+  border: 1px solid #000000;
+  margin: auto 100px;
+  z-index: 999;
+}
+form div.error {
+  background-color: #ffffe1;
+  background-image: url('../images/form/required_bg.gif');
+  background-repeat: no-repeat;
+  background-position: top left;
+  color: #666666;
+  border: 1px solid #ff0000;
+  margin-right: 180px;
+  z-index: 999;
+}
+form div.error p.error {
+  background-image: url('../images/form/icon_error.gif');
+  background-position: top left;
+  background-color: transparent;
+  border-style: none;
+  font-size: 88%;
+  font-weight: bold;
+  margin: 0 0 0 118px;
+  width: 400px;
+  color: #ff0000;
+  z-index: 999;
+}
+.tabs li.error a {
+  color: #C00 ;
+  z-index: 999;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  width: 100%;
+}
+form.edit {
+  position: relative;
+}
+
+textarea {
+  overflow: auto;
+}
+/*
+form h3, form h4 {
+  border-bottom: 1px solid #999;
+  margin: 10px 185px 10px 10px;
+}
+form h3 {
+  font-size: 1.4em;
+}
+form h4 {
+  font-size: 1.2em;
+}
+*/
+form div.optional,
+form div.required,
+form div.field  {
+  position: relative;
+  clear: left;
+  display: block;
+  margin: 0px 0px 1px 0;
+  padding: 5px 3px 5px 3px;
+  
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  z-index: 999;
+}
+form div.odd {
+  background-color: #E5EFFD;
+}
+form div.even {
+  background-color: #FFFFFF;
+}
+
+form div fieldset {
+  clear: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ABC6DD;
+  margin: 0 0 0 144px;
+  padding: 0 5px 5px 5px;
+  width: 197px;
+}
+form div fieldset legend {
+  font-size: 100%;
+  padding: 0 3px 0 9px;
+}
+form div.required fieldset legend {
+  font-weight: bold;
+}
+form div label {
+  display: block;
+  float: left;
+  width: 130px;
+  padding: 3px 5px;
+  margin: 0;
+  text-align: right;
+}
+form div.optional label, 
+label.optional {
+  font-weight: normal;
+}
+form div.required label, 
+label.required {
+  font-weight: bold;
+}
+form div label.labelCheckbox, 
+form div label.labelRadio {
+  float: none;
+  display: block;
+  width: 200px;
+  padding: 0;
+  margin: 0 0 5px 142px;
+  text-align: left;
+}
+form div fieldset label.labelCheckbox, 
+form div fieldset label.labelRadio {
+  margin: 0 0 5px 0;
+  width: 170px;
+}
+
+form div select, 
+form div textarea {
+  width: 300px;
+  padding: 1px 3px;
+  margin: 0 0 0 0;
+}
+form div input[type=text],
+form div input.inputText, 
+form div input.inputPassword {
+  width: 300px;
+  padding: 1px 3px;
+  margin: 0 0 0 0;
+}
+form div input.inputFile {
+  width: 211px;
+}
+form div select.selectOne, 
+form div select.selectMultiple {
+  width: 311px;
+  padding: 1px 3px;
+}
+form div select optgroup option {
+  margin-left: 10px;
+}
+
+form.edit .admGroupBox {
+  width: 600px;
+  display: inline-block;
+  min-width: 200px;
+  padding: 0px 25px 0px 5px;
+  margin: 0 0 0px 0;
+}
+form.edit .admGroupBox li {
+  display: block;
+  list-style: none;
+  float:left;
+  margin: 2px 15px;
+  padding: 0;
+  width:150px;  
+}
+form.edit .admGroupBox li:hover {
+  background-color: #CBDDF2;
+}
+form.edit .admGroupBox input {
+  margin: 0;
+}
+form.edit .admGroupBox label {
+  display: inline;
+  float: none;
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+input.inputCheckbox, 
+input.inputRadio {
+  display: inline;
+  height: auto;
+  width: auto;
+  border-width: 0;
+  padding: 0;
+  margin: 0 0 0 5px;
+}
+form.edit div.field div.events {
+  display: inline;
+}
+form div.submit {
+  padding: 10px 0 5px 146px;
+}
+form div.submit input {
+  margin-right: 5px;
+}
+form div.submit.left {
+  padding: 15px 0 5px 10px;
+  float: none;
+}
+form div.submit div {
+  display: inline;
+  float: left;
+  text-align: left;
+  width: auto;
+  padding: 0;
+  margin: 0;
+}
+form div input.inputSubmit, 
+form div input.inputButton, 
+input.inputSubmit,
+input.inputButton {
+  width: auto;
+  padding: 0 6px;
+  margin: 0;
+}
+form div.submit div input.inputSubmit, 
+form div.submit div input.inputButton {
+  float: right;
+  margin: 0 0 0 5px;
+}
+
+form .admFieldHelp {
+  position: absolute;
+  left: 550px;
+  top: 0;
+  background-image: url('../images/icons/16/help.png');
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
+  display: block;
+  margin: 5px;
+  padding: 0;
+  float: right;
+  overflow: hidden;
+  text-indent: -9000px;
+  width: 16px;
+  height: 16px;
+}
+form .admShort {
+  width: 80px
+}
+
+/*  N O T E S  */
+form div.formNotes {
+  position: absolute;
+  right: 20px;
+  z-index: 100;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
+  width: 158px;
+  height: auto;
+  margin: 0 1px 10px 10px;
+  padding: 5px;
+  border: 1px solid #666666;
+  background-color: #ffffe1;
+  color: #666666;
+  font-size: 88%;
+}
+form div.formNotes h4 {
+  background-image: url('../images/form/icon_info.gif');
+  background-repeat: no-repeat;
+  background-position: top left;
+  padding: 3px 0 3px 27px;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: #666666;
+  color: #666666;
+  font-size: 110%;
+  margin: 0;
+  width: auto;
+}
+form div.formNotes p {
+  margin: 0em 0em 1.2em 0em;
+  color: #666666;
+}
+form div.formNotes p.last {
+  margin: 0em;
+}
+form div small {
+  display: block;
+  margin: 0 0 0px 142px;
+  padding: 1px 3px;
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+
+
+/*  J Q U E R Y _ U I   */
+div.admFieldBox {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border:1px solid #A6C9E2;
+  padding: 5px;
+  z-index: 999;
+}
+
+.ui-tabs .ui-tabs-panel {
+  padding: 1em 0;
+}
+
+form .extraBlock {
+  display: inline-block;
+}
+a.view {
+  display: inline-block;
+  margin: 0px 10px;
+  font-weight: bold;
+}
+.formBox {
+  width: 80%;
+}
+.formBox.errorBox {
+  z-index: 9999;
+}
+.ui-widget {
+  font-family: inherit;
+}
+
+
+.eventTop {
+  display: none;
+}

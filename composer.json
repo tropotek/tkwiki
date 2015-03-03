@@ -1,60 +1,56 @@
 {
-  "name": "ttek/tkwiki",
-  "type": "project",
-  "description": "My trusty old wiki has now been composerfied",
-  "keywords": ["tropotek", "tk004"],
-  "time": "2014-10-31",
-  "license": "GPL",
-  "version": "trunk",
-  "minimum-stability": "stable",
-  "authors": [
-    {
-      "name": "Michael Mifsud",
-      "email": "info@tropotek.com.au",
-      "homepage": "http://www.tropotek.com/"
-    }
-  ],
-  "autoload": {
-    "psr-0": {
-        "": [
-          "lib/"
-        ]
-    }
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "config\\ComposerEvent::postInstall"
+    "name": "ttek/tkwiki",
+    "type": "project",
+    "description": "My trusty old wiki has now been composerfied",
+    "keywords":  [
+        "tropotek",
+        "tk004"
     ],
-    "post-update-cmd": [
-      "config\\ComposerEvent::postUpdate"
-    ]
-  },
-
-  "repositories": [
-    {
-      "tk-name": "ttek",
-      "type": "composer",
-      "url": "http://package.ttek.org/"
+    "time": "2014-10-31",
+    "license": "GPL",
+    "version": "trunk",
+    "minimum-stability": "stable",
+    "authors":  [
+         {
+            "name": "Michael Mifsud",
+            "email": "info@tropotek.com.au",
+            "homepage": "http://www.tropotek.com/"
+        }
+    ],
+    "autoload":  {
+        "psr-0":  {
+            "":  [
+                "lib/"
+            ]
+        }
+    },
+    "scripts":  {
+        "post-install-cmd":  [
+            "config\\ComposerEvent::postInstall"
+        ],
+        "post-update-cmd":  [
+            "config\\ComposerEvent::postUpdate"
+        ]
+    },
+    "repositories":  [
+         {
+            "tk-name": "ttek",
+            "type": "composer",
+            "url": "http://package.ttek.org/"
+        }
+    ],
+    "require":  {
+        "php": ">=5.2",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-gd": "*",
+        "ttek/installers": "~1.0"
+    },
+    "require-dev":  {
+    },
+    "extra":  {
+        "branch-alias":  {
+            "dev-trunk": "1.0.x-dev"
+        }
     }
-  ],
-
-  "require": {
-    "php": ">=5.2",
-    "ext-curl": "*",
-    "ext-json": "*",
-    "ext-gd": "*",
-
-    "ttek/installers": "~1.0"
-
-  },
-
-  "require-dev": {
-    
-  },
-
-  "extra": {
-      "branch-alias": {
-          "dev-trunk": "1.0.x-dev"
-      }
-  }
 }

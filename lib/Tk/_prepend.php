@@ -162,7 +162,7 @@ Tk_Config::setSupportEmail('');
 /*
  * Set the default site title
  */
-Tk_Config::setSiteTitle('Untitled Site');
+Tk_Config::setSiteTitle('Untitled TK WIKI');
 
 /*
  * Set the email log level
@@ -175,6 +175,6 @@ Tk_Config::set('system.emailLogLevel', Tk::LOG_DISABLED);
  * Set this to false if ssl is not available
  *
  */
-Tk_Config::set('system.enableSsl', true);
+Tk_Config::set('system.enableSsl', false);
 
 

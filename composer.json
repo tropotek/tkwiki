@@ -6,9 +6,9 @@
         "tropotek",
         "tk004"
     ],
-    "time": "2015-03-04",
+    "time": "2014-10-31",
     "license": "GPL",
-    "version": "1.0.1",
+    "version": "trunk",
     "minimum-stability": "stable",
     "authors":  [
          {

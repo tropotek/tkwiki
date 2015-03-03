@@ -33,7 +33,7 @@ try {
         Tk_Response::getInstance()->write($dcon->getHtml());
     }
     
-    Tk_Response::getInstance()->flushBuffer();
+    Tk_Response::getInstance()->flush();
     exit();
 } catch (Exception $e) {
     var_dump("index.php: \n" . $e->__toString());

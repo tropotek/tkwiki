@@ -13,6 +13,9 @@ the Free Software Foundation <http://www.gnu.org/licenses/>.
 -----------------------------------------------------
 
 
+##NOTE: OLD INSTALL DOCS##
+
+
 REQUIREMENTS:
 
  - Linux

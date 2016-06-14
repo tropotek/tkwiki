@@ -1,6 +1,5 @@
-
 Tk-Wiki
--------
+=======
 `Copyright (C) 2005 Michael Mifsud`
 
 
@@ -12,8 +11,8 @@ Ver 1.0.1 [2015-03-04]:
  - Made SSL off by default.
 
 
-Ver 1.0.0 [04-03-2015]
---------------------
+Ver 1.0.0 [2015-03-04]
+-------------------------------
 
  - Released first github version of the site
  - All file in the lib folder are now static

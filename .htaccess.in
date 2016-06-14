@@ -1,44 +1,19 @@
 
-# Site will not work without mod_rewrite
+
+<FilesMatch "\.(ht(access|passwd)|in|ini|inc|tpl)$">
+order allow,deny
+deny from all
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
   RewriteBase /
-  
-  # Removes trailing slashes (prevents SEO duplicate content issues)
+
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^(.+)/$ $1 [L,R=301]
-  
-  # Server these pages directly with no rewrite
-  RewriteCond %{REQUEST_FILENAME} -s [OR]
-  RewriteCond %{REQUEST_FILENAME} -l [OR]
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} ^.*/data/.*$ [OR] 
-  RewriteCond %{REQUEST_FILENAME} ^.*/lib/.*$  [OR]
-  RewriteCond %{REQUEST_FILENAME} ^.*/html/.*$  [OR]
-  RewriteCond %{REQUEST_FILENAME} ^.*/scripts/.*$ 
-  RewriteRule ^.*$ - [L]
-  
-  # link media directly to the template folder
-  # NOTE: change path to the template folder (this case `html/`)
-  RewriteCond %{REQUEST_URI} !^(.*)/lib/(.*)$ [NC] 
-  RewriteRule (css|js|images|media)/(.*) html/$1/$2 [NC,L]
-  
-  # Use Front Controller as last resort
-  RewriteRule ^.*$ index.php [L]
-  
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.php [L]
+
 </IfModule>
 
-# Secure non-accessable files types
-<FilesMatch "\.(ht(access|passwd)|in|ini|inc)$">
-  order allow,deny
-  deny from all
-</FilesMatch>
-<Files index.php>
-  order deny,allow
-  allow from all
-</Files>
 
-# Compress javascript, css and all text files
-<ifmodule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
-</ifmodule>

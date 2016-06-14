@@ -1,2 +1,0 @@
-This part of the lib is deprecated and should not be used
-Use teh Adm lib in the TkLib source tree.

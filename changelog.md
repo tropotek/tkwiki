@@ -5,9 +5,15 @@ Tk-Wiki
 
 #CHANGELOG#
 
+
+
+VER 2.0 Dev Started
+===================
+
+
 Ver 1.0.2 [2016-06-15]:
 -------------------------------
-
+ - Tagged github branch of old wiki to 'wikione'
 
 Ver 1.0.1 [2015-03-04]:
 -------------------------------

@@ -1,38 +1,33 @@
-Tropotek 
-=====================================
+# tkwiki :boom: 
 
-Published: 14 Dec 2012
+__Project:__ tkwiki  
+__Published:__ 16 May 2016  
+__Web:__ <http://www.tropotek.com/>  
+__Authors:__ Michael Mifsud <http://www.tropotek.com/>  
 
-Authors:
-  * Michael Mifsud <http://www.tropotek.com/>
+A WIKI that is easy to use for people that want a website to store info and
+be easly accessable.
+
+## Contents
+
+- [Installation](#installation)
+- [Introduction](#introduction)
+
+## Installation
+
+Start by getting the dependant libs:
+
+~~~bash
+# git clone https://github.com/tropotek/tkwiki.git
+# cd tkwiki
+# composer install
+~~~
+
+Then edit the /src/App/config/config.php file to your required settings.
+
+Next check the /src/App/sql folder for any .sql files you need to install to your database
+
+## Introduction
 
 
-Installation
-------------
-
-Be sure to install the following sql files after a `composer update`
-
-  /lib/Wik/sql/install.sql
-  /lib/Wik/sql/install-data.sql
-
-Then edit the config.ini to add the DB access details.
-
-
-
-Documentation
--------------
-
-
-Contributing
-------------
-
-
-
-Bugs
-----
-
-To file bug reports please send email to: <info@tropotek.com>
-
-Please include with your report: (1) the example input; (2) the output you
-expected; (3) the URL of the problem page
 

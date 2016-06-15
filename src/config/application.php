@@ -15,8 +15,7 @@ include_once(__DIR__ . '/routes.php');
 
 
 // Template folders for pages
-$config['template.admin.path'] = '/html/admin';
-$config['template.public.path'] = '/html/purpose';
+$config['template.admin.path'] = '/html';
 
 
 // -- AUTH CONFIG --

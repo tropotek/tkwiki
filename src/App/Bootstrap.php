@@ -1,11 +1,9 @@
 <?php
 namespace App;
 
-
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\NullLogger;
-
 
 /**
  * Class Bootstrap

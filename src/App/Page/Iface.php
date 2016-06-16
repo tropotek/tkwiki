@@ -15,57 +15,47 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
      * @var \App\Controller\Iface
      */
     protected $controller = null;
-    
-    
+
+    /**
+     * @var string
+     */
+    protected $templateFile = '';
+
+
     /**
      * Iface constructor.
      *
      * @param \App\Controller\Iface $controller
+     * @param string $templateFile
      */
-    public function __construct(\App\Controller\Iface $controller)
+    public function __construct(\App\Controller\Iface $controller, $templateFile = '')
     {
         $this->controller = $controller;
-        $this->setPageHeading($this->getController()->getPageTitle());
-
+        if (!$templateFile) {
+            $templateFile = $this->getTemplatePath() . '/main.xtpl';
+        }
+        $this->templateFile = $templateFile;
+        
         // TODO: Check this call should be here, or called externally????
-        // It could lead to possible rendering issues....
         $this->show();
-    }
-
-    /**
-     * 
-     * @return string
-     */
-    public function getTemplatePath()
-    {
-        return $this->controller->getTemplatePath();
-    }
-
-    /**
-     *
-     */
-    public function showAlerts()
-    {
-        // Alert boxes
-        $noticeTpl = $notice = \App\Alert::getInstance()->show()->getTemplate();
-        $this->getTemplate()->insertTemplate('alerts', $noticeTpl);
     }
 
     /**
      * Set the page heading, should be set from main controller
      *
-     * @param $heading
      * @return $this
      * @throws \Dom\Exception
      */
-    public function setPageHeading($heading)
+    protected function initPage()
     {
-        if (!$heading) return $this;
         /** @var \Dom\Template $template */
         $template = $this->getTemplate();
-        $template->setTitleText($heading . ' - ' . $template->getTitleText());
-        $template->insertText('pageHeading', $heading);
-        $template->setChoice('pageHeading');
+        
+        if ($this->getController()->getPageTitle()) {
+            $template->setTitleText($this->getController()->getPageTitle() . ' - ' . $template->getTitleText());
+            $template->insertText('pageHeading', $this->getController()->getPageTitle());
+            $template->setChoice('pageHeading');
+        }
         
         if ($this->controller->getUser()) {
             $template->setChoice('logout');
@@ -73,6 +63,8 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
             $template->setChoice('login');
         }
         
+        $noticeTpl = \App\Alert::getInstance()->show()->getTemplate();
+        $this->getTemplate()->insertTemplate('alerts', $noticeTpl)->setChoice('alerts');
         
         return $this;
     }
@@ -80,7 +72,7 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
     /**
      * Set the page Content
      *
-     * @param string|\Dom\Template|\Dom\Renderer\Iface|\DOMDocument $content
+     * @param string|\Dom\Template|\Dom\Renderer\RendererInterface|\DOMDocument $content
      * @return PublicPage
      */
     public function setPageContent($content)
@@ -88,7 +80,7 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
         if (!$content) return $this;
         if ($content instanceof \Dom\Template) {
             $this->getTemplate()->appendTemplate('content', $content);
-        } else if ($content instanceof \Dom\Renderer\Iface) {
+        } else if ($content instanceof \Dom\Renderer\RendererInterface) {
             $this->getTemplate()->appendTemplate('content', $content->getTemplate());
         } else if ($content instanceof \DOMDocument) {
             $this->getTemplate()->insertDoc('content', $content);
@@ -96,6 +88,33 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
             $this->template->insertHtml('content', $content);
         }
         return $this;
+    }
+    
+    
+    /**
+     * @return string
+     */
+    public function getTemplateFile()
+    {
+        return $this->templateFile;
+    }
+
+    /**
+     * @param string $templateFile
+     */
+    public function setTemplateFile($templateFile)
+    {
+        $this->templateFile = $templateFile;
+    }
+    
+    /**
+     * Get the template path location
+     * 
+     * @return string
+     */
+    public function getTemplatePath()
+    {
+        return $this->controller->getTemplatePath();
     }
 
     /**
@@ -114,6 +133,16 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
     public function getConfig()
     {
         return \Tk\Config::getInstance();
+    }
+
+    /**
+     * DomTemplate magic method
+     *
+     * @return \Dom\Template
+     */
+    public function __makeTemplate()
+    {
+        return \Dom\Loader::loadFile($this->getTemplateFile());
     }
 
 }

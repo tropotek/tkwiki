@@ -51,8 +51,12 @@ class FrontController extends \Tk\Kernel\HttpKernel
         
         
         // (kernel.request)
+        $matcher = new \Tk\Routing\StaticMatcher($this->config->getSitePath().$this->config->get('template.path'), '\App\Controller\StaticPage::doDefault');
+        $this->dispatcher->addSubscriber(new \Tk\Listener\RouteListener($matcher));
+        
         $matcher = new \Tk\Routing\UrlMatcher($this->config['site.routes']);
         $this->dispatcher->addSubscriber(new \Tk\Listener\RouteListener($matcher));
+        
         $this->dispatcher->addSubscriber(new Listener\StartupHandler($logger));
 
         

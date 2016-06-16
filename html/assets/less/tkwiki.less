@@ -8,4 +8,98 @@
 //@import "mixins.less";
 
 // Reset and dependencies
+@icon-font-path: '@{_siteUrl}/html/assets/bootstrap-3.3.6/fonts/';
+
+
 @import '../bootstrap-3.3.6/less/bootstrap';
+@import 'mega-menu';
+
+
+.navbar {
+  margin-bottom:0 !important;
+  border-width: 0 0 0 0;
+  position: relative;
+}
+.navbar-bg {
+  position: relative;
+  min-height: @navbar-height; // Ensure a navbar always shows (e.g., without a .navbar-brand in collapsed mode)
+  //margin-bottom: @navbar-margin-bottom;
+  margin-bottom: 10px;
+  //border: 1px solid transparent;
+  border-width: 0 0 1px 0;
+
+  background-color: @navbar-default-bg;
+  border-color: @navbar-default-border;
+  @media (min-width: @grid-float-breakpoint) {
+    border-radius: @navbar-border-radius;
+  }
+}
+
+.pageWrapper {
+  padding: 0px 15px;
+  
+  // A fix for adding padding to the top of the scroll 
+  //  position when an anchor is clicked.
+  *[id]:before { 
+    display: block; 
+    content: " "; 
+    margin-top: -15px; 
+    height: 15px; 
+    visibility: hidden; 
+  }
+  
+  .blog-post-meta {
+    margin: 0 0 0 0;
+  }
+}
+
+.no-top-margin {
+  margin-top: 0;
+}
+
+.dropdown-header {
+  font-weight: bold;
+}
+
+
+.toc-menu {
+  //width: auto;
+  //float: right;
+  margin: 0 0 10px 10px;
+  overflow: hidden;
+  
+  ul {
+    list-style-position: inside;
+    list-style-type: none;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    ul {
+      margin: 0 0 0 10px;
+      padding: 0 0 0 0;
+    }
+  }
+  li {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    
+    a {
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+  }
+  
+  &.toc-type-nested {
+    ul {
+      list-style-type: none;
+      counter-reset: list-item;
+    }
+    li {
+      counter-increment: list-item;
+    }
+    li::before {
+      content: counters(list-item, '.') '. ';
+    }
+  }
+}
+
+

@@ -84,15 +84,7 @@ class User extends Model
      */
     public function getHomeUrl()
     {
-        $access = Access::create($this);
-        
-        if ($access->hasRole(Access::ROLE_ADMIN))
-            return '/admin/index.html';
-        if ($access->hasRole(Access::ROLE_USER))
-            return '/user/index.html';
-        return '/index.html';   // Should not get here unless their is no roles
-        //maybe we should throw an exception instead??
-        //throw new \Tk\Exception('No suitable roles found please contact your administrator.'); 
+        return '/index.html';   // Should not get here unless their is no roles 
     }
     
     /**

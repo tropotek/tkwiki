@@ -108,6 +108,7 @@ class Factory
         if (!self::getConfig()->getDomModifier()) {
             $dm = new \Dom\Modifier\Modifier();
             $dm->add(new \Dom\Modifier\Filter\UrlPath(self::getConfig()->getSiteUrl()));
+            $dm->add(new \Dom\Modifier\Filter\Less(self::getConfig()));
             $dm->add(new \Dom\Modifier\Filter\JsLast());
             self::getConfig()->setDomModifier($dm);
         }

@@ -1,0 +1,77 @@
+/**
+ * Mega Menu
+ * @source http://bootsnipp.com/snippets/featured/mega-menu-slide-down-on-hover-with-carousel
+ */
+
+.mega-dropdown {
+  position: static !important;
+
+  .mega-dropdown-menu {
+    padding: 20px 0px;
+    width: 100%;
+    min-height: 200px;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+
+    > li  ul {
+      padding: 0;
+      margin: 0;
+      
+       li {
+        list-style: none;
+        position: relative;
+        height: 100%;
+      }
+       li > a {
+        display: block;
+        color: #222;
+        padding: 3px 5px;
+      }
+       li > a {
+        display: block;
+        color: #222;
+        padding: 3px 5px;
+      }
+       li > a:hover,
+       li > a:focus {
+        text-decoration: underline;
+      }
+    }
+
+    .btn-menu-edit {
+      position: absolute;
+      right: 10px;
+      bottom: 0px;
+    }
+    
+    .dropdown-header {
+      font-size: 18px;
+      color: @brand-primary;
+      padding: 5px 60px 5px 5px;
+      line-height: 30px;
+    }
+    
+  }
+
+  .carousel-control {
+    width: 30px;
+    height: 30px;
+    top: -35px;
+  }
+
+  .left.carousel-control {
+    right: 30px;
+    left: inherit;
+  }
+
+  .carousel-control .glyphicon-chevron-left,
+  .carousel-control .glyphicon-chevron-right {
+    font-size: 12px;
+    background-color: #fff;
+    line-height: 30px;
+    text-shadow: none;
+    color: #333;
+    border: 1px solid #ddd;
+  }
+
+}

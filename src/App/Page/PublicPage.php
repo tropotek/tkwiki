@@ -17,29 +17,21 @@ class PublicPage extends Iface
      * AdminPage constructor.
      *
      * @param \App\Controller\Iface $controller
+     * @param string $templateFile
      */
-    public function __construct(\App\Controller\Iface $controller)
+    public function __construct(\App\Controller\Iface $controller, $templateFile = '')
     {
-        parent::__construct($controller);
-    }
-
-    public function show()
-    {
-        /** @var \Dom\Template $template */
-        $template = $this->getTemplate();
-
-        $this->showAlerts();
+        parent::__construct($controller, $templateFile);
     }
 
     /**
-     * DomTemplate magic method
-     *
-     * @return \Dom\Template
+     * 
      */
-    public function __makeTemplate()
+    public function show()
     {
-        $tplFile =  $this->getTemplatePath().'/main.xtpl';
-        return \Dom\Loader::loadFile($tplFile);
-    }
+        
+        $this->initPage();
 
+    }
+    
 }

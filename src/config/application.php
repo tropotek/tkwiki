@@ -13,9 +13,8 @@ $config = \Tk\Config::getInstance();
 include_once(__DIR__ . '/session.php');
 include_once(__DIR__ . '/routes.php');
 
-
 // Template folders for pages
-$config['template.admin.path'] = '/html';
+$config['template.path'] = '/html';
 
 
 // -- AUTH CONFIG --

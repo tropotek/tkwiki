@@ -47,8 +47,6 @@ class Bootstrap
             // php version must be high enough to support traits
             throw new \Exception('Your PHP5 version must be greater than 5.4.0 [Curr Ver: '.phpversion().']');
         }
-
-        error_log('App: bootstrap.php');
         
         // Do not call \Tk\Config::getInstance() before this point
         $config = Factory::getConfig();

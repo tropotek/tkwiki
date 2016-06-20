@@ -213,14 +213,14 @@
 
   <div class="container wiki-container">
 
+    <!-- Module: Module Header -->
     <div class="row clearfix" choice2="pageHeading">
       <div class="col-md-12">
         <h1 var="pageHeading">Sample Blog Post</h1>
       </div>
       <div class="col-md-6">
         <p class="blog-post-meta">
-          <small><strong>Contributers:</strong> <a href="#" title="View user contributed pages">Administrator</a>
-          </small>
+          <small><strong>Contributers:</strong> <a href="#" title="View user contributed pages">Administrator</a></small>
         </p>
         <p class="blog-post-meta">
           <small><strong>Modified:</strong> <span>Thursday, 19 May 2016 07:22 AM</span></small>
@@ -228,14 +228,10 @@
       </div>
       <div class="col-md-6 text-right">
         <p class="blog-post-meta">
-          <a href="#" title="View The Page" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-eye-open"></i>
-            View</a>
-          <a href="#" title="Edit The Page" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-pencil"></i>
-            Edit</a>
-          <a href="#" title="Delete The Page" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i>
-            Delete</a>
-          <a href="#" title="Page Revision History" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-time"></i>
-            History</a>
+          <a href="#" title="Save The Page" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-save"></i> Save</a>
+          <a href="#" title="Save The Page" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-eye-open"></i> View</a>
+          <!-- a href="#" title="Page Revision History" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-time"></i> History</a -->
+          <a href="#" title="Delete The Page" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-remove"></i> Delete</a>
         </p>
         <p class="permissions">
           <small>
@@ -247,95 +243,128 @@
         </p>
       </div>
     </div>
+    
+    
     <hr class="no-top-margin"/>
     <div class="" choice="alerts">
       <div var="alerts"></div>
     </div>
 
-    <nav class="well toc-menu toc-type-nested col-md-4 pull-right hidden-xs">
-      <button type="button" class="toc-close close" data-dismiss=".toc-menu" title="Close TOC">
-        <span aria-hidden="true">&times;</span></button>
-      <p><strong>Contents:</strong></p>
-    </nav>
-
-    <div class="wiki-content" var="wiki-edit">
+    <div class="wiki-edit" var="wiki-edit">
       <form class="form-horizontal">
 
-        <div class="col-md-12">
-          <div class="form-group">
-            <label for="inputEmail3" class="control-label">Page Title:</label>
-            <input type="text" class="form-control" id="inputEmail3"/>
+        <div class="col-md-9">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fid-title" class="control-label">Title:</label>
+              <input type="text" id="fid-title" name="title" class="form-control"/>
+            </div>
           </div>
-        </div>
-        
-        <div class="col-md-12">
-          <div class="form-group">
-            <label for="inputEmail33" class="control-label">Keywords:</label>
-            <input type="text" class="form-control" id="inputEmail33"/>
+          <div class="col-md-12">
+            <div class="form-group">
+              <textarea name="content" id="fid-content" class="form-control" style="height: 500px"></textarea>
+            </div>
           </div>
+          <!--
+          WYSIWYG Editors:
+           - Code Mirror: https://codemirror.net/   (IDE)
+           - TinyMCE: https://www.tinymce.com/ (We know this works with the plugins for page creation...)
+           - Markitup: http://markitup.jaysalvat.com/ ()
+           - bootstrap-wysihtml5: http://bootstrap-wysiwyg.github.io/bootstrap3-wysiwyg/
+           
+          File Managers:
+           - elFinder: http://studio-42.github.io/elFinder/#elf_l1_SW1hZ2Vz (Used it and it works well.)
+          -->
+          
+          
+          
+          
+          <!-- div class="form-group">
+            <div class="col-sm-12">
+              <button type="submit" name="save" value="save" class="btn btn-primary">Save</button>
+              <button type="submit" name="cancel" value="cancel" class="btn btn-default">Cancel</button>
+            </div>
+          </div -->
         </div>
         
         <div class="col-md-3">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fid-url" class="control-label">Url:</label>
+              <input type="text" id="fid-url" name="url" class="form-control"/>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fid-keywords" class="control-label">Keywords:</label>
+              <input type="text" class="form-control" id="fid-keywords" name="keywords"/>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fid-user" class="control-label">User:</label>
+              <input type="text" class="form-control" id="fid-user" name="user"/>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fid-group" class="control-label">Group:</label>
+              <input type="text" class="form-control" id="fid-group" name="group"/>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fid-permission" class="control-label">Permission:</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="fid-permission" name="permission" value="777"/>
+                <div class="input-group-btn"><a href="#" class="btn btn-default"><i class="glyphicon glyphicon-question-sign"></i></a></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fid-comments" class="control-label">Comments:</label>
+              <select class="form-control" name="comments" id="fid-comments">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fid-template" class="control-label">Template:</label>
+              <select class="form-control" name="template" id="fid-template">
+                <option value="main.xtpl">Main</option>
+                <option value="home.xtpl">Home</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12 hide">
+            <div class="form-group">
+              <label for="fid-css" class="control-label">CSS:</label>
+              <textarea name="css" id="fid-css" class="form-control" style=""></textarea>
+            </div>
+          </div>
+          <div class="col-md-12 hide">
+            <div class="form-group">
+              <label for="fid-js" class="control-label">Javascript:</label>
+              <textarea name="css" id="fid-js" class="form-control" style=""></textarea>
+            </div>
+          </div>
+
           <div class="form-group">
-            <label for="inputEmail4" class="control-label">User:</label>
-            <input type="text" class="form-control" id="inputEmail4"/>
+            <div class="col-sm-12">
+              <button type="submit" name="save" value="save" class="btn btn-primary">Save</button>
+              <button type="submit" name="cancel" value="cancel" class="btn btn-default">Cancel</button>
+            </div>
           </div>
+
         </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="inputEmail5" class="control-label">Group:</label>
-            <input type="text" class="form-control" id="inputEmail5"/>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="fid-select1" class="control-label">Comments:</label>
-            <select class="form-control" name="comments" id="fid-select1">
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="inputEmail6" class="control-label">Permissions:</label>
-            <input type="text" class="form-control" id="inputEmail6" value="777"/>
-          </div>
-        </div>
-        
-        
-        <div class="col-md-12">
-          <div class="form-group">
-            <textarea name="content" id="fid-content" class="form-control" style="height: 500px"></textarea>
-          </div>
-        </div>
-        
-        
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="fid-select1" class="control-label">CSS:</label>
-            <textarea name="css" id="fid-css" class="form-control" style=""></textarea>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="inputEmail6" class="control-label">Javascript:</label>
-            <textarea name="css" id="fid-js" class="form-control" style=""></textarea>
-          </div>
-        </div>
-        
-        
-        <div class="form-group">
-          <div class="col-sm-12">
-            <button type="submit" name="save" value="save" class="btn btn-default">Save</button>
-          </div>
-        </div>
+
       </form>
 
 
     </div>
-
-
   </div>
 </div>
 

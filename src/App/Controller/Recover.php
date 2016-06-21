@@ -80,7 +80,7 @@ class Recover extends Iface
         }
 
         $newPass = $user->createPassword();
-        $user->password = $user->hashPassword($newPass);
+        $user->password = \App\Factory::hashPassword($newPass);
         $user->save();
         
         // Fire the login event to allow developing of misc auth plugins
@@ -89,7 +89,7 @@ class Recover extends Iface
         $event->set('password', $newPass);
         $event->set('templatePath', $this->getTemplatePath());
         
-        \$this->dispatcher->dispatch('auth.onRecover', $event);
+        $this->dispatcher->dispatch('auth.onRecover', $event);
         
         \App\Alert::addSuccess('You new access details have been sent to your email address.');
         \Tk\Uri::create()->redirect();

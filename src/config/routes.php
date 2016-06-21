@@ -35,22 +35,26 @@ $routes->add('register', new \Tk\Routing\Route('/register.html', 'App\Controller
 $routes->add('recover', new \Tk\Routing\Route('/recover.html', 'App\Controller\Recover::doDefault'));
 
 
+$routes->add('settings', new \Tk\Routing\Route('/settings.html', 'App\Controller\Admin\Settings::doDefault'));
+
+
+
 
 // TODO: Implement the pages
 $routes->add('search', new \Tk\Routing\Route('/search.html', 'App\Controller\Search::doDefault'));
 
-$routes->add('settings', new \Tk\Routing\Route('/setup.html', 'App\Controller\Settings::doDefault'));
 $routes->add('userEdit', new \Tk\Routing\Route('/userEdit.html', 'App\Controller\User\Edit::doDefault'));
 $routes->add('userManager', new \Tk\Routing\Route('/userManager.html', 'App\Controller\User\Manager::doDefault'));
 $routes->add('orphaned', new \Tk\Routing\Route('/orphaned.html', 'App\Controller\Page\Orphaned::doDefault'));
 
-$routes->add('pageView', new \Tk\Routing\Route('/page/{name}', 'App\Controller\Page\View:doDefault', array('name' => 'Home')));
+
 $routes->add('pageEdit', new \Tk\Routing\Route('/edit.html', 'App\Controller\Page\Edit:doDefault'));
 $routes->add('pageHistory', new \Tk\Routing\Route('/history.html', 'App\Controller\Page\History::doDefault'));
 
 $routes->add('myPages', new \Tk\Routing\Route('/edit.html', 'App\Controller\Page\Manager::doDefault'));
 $routes->add('myProfile', new \Tk\Routing\Route('/profile.html', 'App\Controller\Profile::doDefault'));
 
-
+// Catch all pages not defined and look for a wiki page...
+$routes->add('pageView', new \Tk\Routing\Route('/{name}', 'App\Controller\Page\View:doDefault', array('name' => 'Home')));
 
 

@@ -13,7 +13,6 @@ use Tk\Db\Map\Model;
  */
 class User extends Model
 {
-    static $HASH_FUNCTION = 'md5';
     
     /**
      * @var int
@@ -33,17 +32,17 @@ class User extends Model
     /**
      * @var string
      */
+    public $image = '';
+
+    /**
+     * @var string
+     */
     public $username = '';
 
     /**
      * @var string
      */
     public $password = '';
-
-    /**
-     * @var string
-     */
-    public $role = '';
 
     /**
      * @var bool
@@ -54,6 +53,16 @@ class User extends Model
      * @var string
      */
     public $hash = '';
+
+    /**
+     * @var int
+     */
+    public $failed = 0;
+
+    /**
+     * @var \DateTime
+     */
+    public $lastLogin = null;
 
     /**
      * @var \DateTime
@@ -84,7 +93,7 @@ class User extends Model
      */
     public function getHomeUrl()
     {
-        return '/index.html';   // Should not get here unless their is no roles 
+        return '/index.html'; 
     }
     
     /**
@@ -117,16 +126,7 @@ class User extends Model
         if ($isTemp) {
             $key .= date('YmdHis');
         }
-        return hash(self::$HASH_FUNCTION, $key);
-    }
-
-    /**
-     * @param $password
-     * @return string
-     */
-    static function hashPassword($password)
-    {
-        return hash(self::$HASH_FUNCTION, $password);
+        return hash('md5', $key);
     }
     
 }

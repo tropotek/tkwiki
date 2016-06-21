@@ -16,35 +16,50 @@ use Tk\Db\Map\ArrayObject;
  */
 class UserMap extends Mapper
 {
-    
+    /**
+     * 
+     * @param \stdClass|Model $obj
+     * @return array
+     */
     public function unmap($obj)
     {
         $arr = array(
             'id' => $obj->id,
             'name' => $obj->name,
             'email' => $obj->email,
+            'image' => $obj->image,
             'username' => $obj->username,
             'password' => $obj->password,
-            'role' => $obj->role,
             'active' => (int)$obj->active,
             'hash' => $obj->hash,
+            'failed' => (int)$obj->failed,
             'modified' => $obj->modified->format('Y-m-d H:i:s'),
             'created' => $obj->created->format('Y-m-d H:i:s')
         );
+        if ($obj->lastLogin)
+            $arr['last_login'] = $obj->lastLogin->format('Y-m-d H:i:s');
+            
         return $arr;
     }
 
+    /**
+     * @param array|\stdClass|Model $row
+     * @return User
+     */
     public function map($row)
     {
         $obj = new User();
         $obj->id = $row['id'];
         $obj->name = $row['name'];
         $obj->email = $row['email'];
+        $obj->image = $row['image'];
         $obj->username = $row['username'];
         $obj->password = $row['password'];
-        $obj->role = $row['role'];
         $obj->active = ($row['active'] == 1);
         $obj->hash = $row['hash'];
+
+        if ($row['last_login'])
+            $obj->lastLogin = new \DateTime($row['last_login']);
         if ($row['modified'])
             $obj->modified = new \DateTime($row['modified']);
         if ($row['created'])
@@ -71,8 +86,6 @@ class UserMap extends Mapper
             $obj->username = $row['username'];
         if (isset($row['password']))
             $obj->password = $row['password'];
-        if (isset($row['role']))
-            $obj->role = $row['role'];
         if (isset($row['active']))
             $obj->active = ($row['active'] == 'active');
 
@@ -93,7 +106,6 @@ class UserMap extends Mapper
             'email' => $obj->email,
             'username' => $obj->username,
             'password' => $obj->password,
-            'role' => $obj->role,
             'active' => (int)$obj->active,
             'modified' => $obj->modified->format('Y-m-d H:i:s'),
             'created' => $obj->created->format('Y-m-d H:i:s')

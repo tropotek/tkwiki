@@ -115,7 +115,7 @@ class Register extends Iface
         $hash = $this->user->generateHash(true);
         $this->user->hash = $hash;
         $this->user->active = false;
-        $this->user->password = \App\Db\User::hashPassword($this->user->password);
+        $this->user->password = \App\Factory::hashPassword($this->user->password);
         
         $this->user->save();
 

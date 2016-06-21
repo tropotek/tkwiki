@@ -19,11 +19,6 @@ $config['template.path'] = '/html';
 
 // -- AUTH CONFIG --
 
-// Hash function to use for authentication 
-// Warning: do not change after install, or else 
-//   ALL existing passwords will be invalid and need to be reset.
-$config['hash.function'] = 'md5';
-\App\Db\User::$HASH_FUNCTION = $config['hash.function']; 
 
 // \Tk\Auth\Adapter\DbTable
 $config['system.auth.dbtable.tableName'] = 'user';
@@ -31,15 +26,10 @@ $config['system.auth.dbtable.usernameColumn'] = 'username';
 $config['system.auth.dbtable.passwordColumn'] = 'password';
 $config['system.auth.dbtable.activeColumn'] = 'active';
 
-// \Tk\Auth\Adapter\Config
-$config['system.auth.username'] = 'admin';
-$config['system.auth.password'] = 'password';
-
 $config['system.auth.adapters'] = array(
+    'Trap' => '\Tk\Auth\Adapter\Trapdoor',
     'DbTable' => '\Tk\Auth\Adapter\DbTable',
-    //'Config' => '\Tk\Auth\Adapter\Config',
-    'Trap' => '\Tk\Auth\Adapter\Trapdoor'
-    //'LDAP' => '\Tk\Auth\Adapter\Ldap'
+    //'LDAP' => '\Tk\Auth\Adapter\Ldap'     // TODO: Need to create a user if this method is used...
 );
 
 

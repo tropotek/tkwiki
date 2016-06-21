@@ -171,14 +171,16 @@
                 <ul class="dropdown-menu" role="menu">
                   <li class="disabled"><a href="#">My Profile</a></li>
                   <li class="disabled"><a href="#">My Pages</a></li>
+                  
                   <!-- Admin Menu -->
-                  <li class="divider"></li>
-                  <li class="dropdown-header">Wiki Admin</li>
-                  <li class="disabled"><a href="#">Settings</a></li>
-                  <li class="disabled"><a href="#">Users</a></li>
-                  <li class="disabled"><a href="#">Pages</a></li>
-                  <li class="disabled"><a href="#">Orphaned</a></li>
-                  <li class="disabled"><a href="#">Plugins</a></li>
+                  <li choice1="admin" class="divider"></li>
+                  <li choice1="admin" class="dropdown-header">Wiki Admin</li>
+                  <li choice1="admin"><a href="/settings.html">Settings</a></li>
+                  <li choice="admin" class="disabled"><a href="#">Users</a></li>
+                  <li choice="admin" class="disabled"><a href="#">Pages</a></li>
+                  <li choice="admin" class="disabled"><a href="#">Orphaned</a></li>
+                  <li choice="admin" class="disabled"><a href="#">Plugins</a></li>
+                  
                   <li class="divider"></li>
                   <li><a href="/logout.html">Logout</a></li>
                 </ul>

@@ -3,10 +3,11 @@
 .directory
 *.swp
 *.bak
-/_notes
 /data
 /assets
 /vendor
 composer.lock
 /src/config/config.php
+/_notes
+/_db
 

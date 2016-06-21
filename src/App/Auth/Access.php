@@ -53,12 +53,12 @@ class Access
     public function hasRole($role) 
     {
         if (!is_array($role)) $role = array($role);
-        foreach ($role as $r) {
-            if ($r == $this->user->role || preg_match('/'.preg_quote($r).'/', $this->user->role)) {
-                return true;
-            }
-        }
-        return false;
+//        foreach ($role as $r) {
+//            if ($r == $this->user->role || preg_match('/'.preg_quote($r).'/', $this->user->role)) {
+//                return true;
+//            }
+//        }
+        return true;
     }
 
     /**

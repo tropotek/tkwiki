@@ -27,7 +27,7 @@ class Index extends Iface
     public function doDefault(Request $request)
     {
         // TODO: 
-        
+        //throw new \Tk\Exception('This page should neot need a controller...its a wiki DOPE!!!');
         
 
         return $this->showDefault($request);
@@ -58,7 +58,7 @@ class Index extends Iface
     {
         $xhtml = <<<HTML
 <div>
-  <p>This is a template... DO   </p>
+  <p>TODO: REPLACE THIS PAGE WITH A WIKI PAGE...... The /home, /index.html , /index.php, etc page should be assumed to exist</p>
 </div>
 HTML;
 

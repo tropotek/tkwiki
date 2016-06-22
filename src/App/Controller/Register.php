@@ -49,6 +49,13 @@ class Register extends Iface
      */
     public function doDefault(Request $request)
     {
+        if (!$this->getConfig()->get('site.user.registration')) {
+            \App\Alert::addError('User registration has been disabled on this site.');
+            \Tk\Uri::create('/');
+        }
+        
+        
+        
         if ($request->has('h')) {
             $this->doConfirmation($request);
         }
@@ -118,8 +125,6 @@ class Register extends Iface
         $this->user->password = \App\Factory::hashPassword($this->user->password);
         
         $this->user->save();
-
-        
         
         // Fire the login event to allow developing of misc auth plugins
         $event = new \App\Event\FormEvent($form);
@@ -129,7 +134,7 @@ class Register extends Iface
 
         
         // Redirect with message to check their email
-        \App\Alert::addSuccess('Your New Account Has Been Created.');
+        \App\Alert::addSuccess('Your New Account Has Been Created. Check your email to activate the account.');
         \Tk\Config::getInstance()->getSession()->set('h', $this->user->hash);
         \Tk\Uri::create()->redirect();
     }

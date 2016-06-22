@@ -33,6 +33,8 @@ class AuthHandler implements SubscriberInterface
             if ($result && $result->getCode() == \Tk\Auth\Result::SUCCESS) { 
                 $config->setUser(\App\Db\User::getMapper()->findByUsername($event->getAuth()->getIdentity()));
                 $event->setResult($result);
+                $config->getUser()->lastLogin = \Tk\Date::create();
+                $config->getUser()->save();
                 return;
             }
         }
@@ -58,13 +60,14 @@ class AuthHandler implements SubscriberInterface
         $controller = current($event->getController());
         $user = $controller->getUser();
         if ($controller instanceof \App\Controller\Iface) {
-            // TODO: This would be a good place for an ACL or RBAC in the future
-            $access = $event->getRequest()->getAttribute('access');
+            
+            $access = $controller->getAccess();
             
             // Check the user has access to the controller in question
             if (empty($access)) return;
             if (!$user) \Tk\Uri::create('/login.html')->redirect();
-            if (!\App\Auth\Access::create($user)->hasRole($access)) {
+            if (!$user->getAccess()->hasRole($access)) { 
+            //if (!\App\Auth\Access::create($user)->hasRole($access)) {
                 // Could redirect to a authentication error page...
                 // Could cause a loop if the permissions are stuffed
                 \App\Alert::getInstance()->addWarning('You do not have access to the requested page.');
@@ -83,13 +86,21 @@ class AuthHandler implements SubscriberInterface
         /** @var \App\Db\User $user */
         $user = $event->get('user');
 
+        // Add some default roles
+        // TODO: Get these from the config/settings...
+        foreach ([3,4,5,6,7] as $roleId) {
+            \App\Db\Role::getMapper()->addUserRole($roleId, $user->id);
+        }
+        
+        
+        
         // on success email user confirmation
         $message = \Dom\Loader::loadFile($event->get('templatePath').'/xtpl/mail/account.registration.xtpl');
         $message->insertText('name', $user->name);
         $url = \Tk\Uri::create()->set('h', $user->hash);
         $message->insertText('url', $url->toString());
         $message->setAttr('url', 'href', $url->toString());
-
+        
         // TODO: Send the email here
         vd($message->toString());
         
@@ -106,11 +117,10 @@ class AuthHandler implements SubscriberInterface
         $url = \Tk\Uri::create('/login.html');
         $message->insertText('url', $url->toString());
         $message->setAttr('url', 'href', $url->toString());
-
-
+        
         // TODO: Send the email here
         vd($message->toString());
-
+        
     }
 
     public function onRecover(\Tk\Event\RequestEvent $event)
@@ -118,7 +128,7 @@ class AuthHandler implements SubscriberInterface
         /** @var \App\Db\User $user */
         $user = $event->get('user');
         $pass = $event->get('password');
-
+        
         // Send an email to confirm account active 
         $message = \Dom\Loader::loadFile($event->get('templatePath').'/xtpl/mail/account.recover.xtpl');
         $message->insertText('name', $user->name);
@@ -126,11 +136,10 @@ class AuthHandler implements SubscriberInterface
         $url = \Tk\Uri::create('/login.html');
         $message->insertText('url', $url->toString());
         $message->setAttr('url', 'href', $url->toString());
-
-
+        
         // TODO: Send the email here
         vd($message->toString());
-
+        
     }
 
     /**

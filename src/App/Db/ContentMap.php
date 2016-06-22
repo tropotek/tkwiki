@@ -7,14 +7,14 @@ use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 
 /**
- * Class UserMap
+ * Class ContentMap
  *
  *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class UserMap extends Mapper
+class ContentMap extends Mapper
 {
     /**
      * 
@@ -25,19 +25,17 @@ class UserMap extends Mapper
     {
         $arr = array(
             'id' => $obj->id,
-            'name' => $obj->name,
-            'email' => $obj->email,
-            'image' => $obj->image,
-            'username' => $obj->username,
-            'password' => $obj->password,
-            'active' => (int)$obj->active,
-            'hash' => $obj->hash,
+            'page_id' => $obj->pageId,
+            'user_id' => $obj->userId,
+            'html' => $obj->html,
+            'keywords' => $obj->keywords,
+            'description' => $obj->description,
+            'css' => $obj->css,
+            'js' => $obj->js,
+            'size' => (int)$obj->size,
             'modified' => $obj->modified->format('Y-m-d H:i:s'),
             'created' => $obj->created->format('Y-m-d H:i:s')
         );
-        if ($obj->lastLogin)
-            $arr['last_login'] = $obj->lastLogin->format('Y-m-d H:i:s');
-            
         return $arr;
     }
 
@@ -49,16 +47,15 @@ class UserMap extends Mapper
     {
         $obj = new User();
         $obj->id = $row['id'];
-        $obj->name = $row['name'];
-        $obj->email = $row['email'];
-        $obj->image = $row['image'];
-        $obj->username = $row['username'];
-        $obj->password = $row['password'];
-        $obj->active = ($row['active'] == 1);
-        $obj->hash = $row['hash'];
+        $obj->pageId = $row['page_id'];
+        $obj->userId = $row['user_id'];
+        $obj->html = $row['html'];
+        $obj->keywords = $row['keywords'];
+        $obj->description = $row['description'];
+        $obj->css = $row['css'];
+        $obj->js = $row['js'];
+        $obj->size = (int)$row['size'];
 
-        if ($row['last_login'])
-            $obj->lastLogin = new \DateTime($row['last_login']);
         if ($row['modified'])
             $obj->modified = new \DateTime($row['modified']);
         if ($row['created'])
@@ -77,18 +74,17 @@ class UserMap extends Mapper
             $obj = new User();
         }
         //$obj->id = $row['id'];
-        if (isset($row['name']))
-            $obj->name = $row['name'];
-        if (isset($row['email']))
-            $obj->email = $row['email'];
-        if (isset($row['username']))
-            $obj->username = $row['username'];
-        if (isset($row['password']))
-            $obj->password = $row['password'];
-        if (isset($row['active']))
-            $obj->active = ($row['active'] == 'active');
+        if (isset($row['html']))
+            $obj->html = $row['html'];
+        if (isset($row['keywords']))
+            $obj->keywords = $row['keywords'];
+        if (isset($row['description']))
+            $obj->discription = $row['description'];
+        if (isset($row['css']))
+            $obj->css = $row['css'];
+        if (isset($row['js']))
+            $obj->js = $row['js'];
 
-        // TODO: This has to be tested, should parse date string using config['system.date.format.php']
         if (isset($row['modified']))
             $obj->modified = new \DateTime($row['modified']);
         if (isset($row['created']))
@@ -101,39 +97,18 @@ class UserMap extends Mapper
     {
         $arr = array(
             'id' => $obj->id,
-            'name' => $obj->name,
-            'email' => $obj->email,
-            'username' => $obj->username,
-            'password' => $obj->password,
-            'active' => (int)$obj->active,
+            'html' => $obj->html,
+            'keywords' => $obj->keywords,
+            'description' => $obj->description,
+            'css' => $obj->css,
+            'js' => $obj->js,
             'modified' => $obj->modified->format('Y-m-d H:i:s'),
             'created' => $obj->created->format('Y-m-d H:i:s')
         );
         return $arr;
     }
     
-    /**
-     * 
-     * 
-     * @param $username
-     * @return mixed
-     */
-    public function findByUsername($username)
-    {
-        $result = $this->select('username = ' . $this->getDb()->quote($username) );
-        return $result->current();
-    }
 
-
-    public function findByEmail($email)
-    {
-        return $this->select('email = ' . $this->getDb()->quote($email))->current();
-    }
-
-    public function findByHash($hash)
-    {
-        return $this->select('hash = ' . $this->getDb()->quote($hash))->current();
-    }
 
 
 
@@ -152,10 +127,9 @@ class UserMap extends Mapper
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->getDb()->escapeString($filter['keywords']) . '%';
             $w = '';
-            $w .= sprintf('a.name LIKE %s OR ', $this->getDb()->quote($kw));
-            $w .= sprintf('a.username LIKE %s OR ', $this->getDb()->quote($kw));
-            $w .= sprintf('a.email LIKE %s OR ', $this->getDb()->quote($kw));
-            $w .= sprintf('a.role LIKE %s OR ', $this->getDb()->quote($kw));
+            $w .= sprintf('a.keywords LIKE %s OR ', $this->getDb()->quote($kw));
+            $w .= sprintf('a.description LIKE %s OR ', $this->getDb()->quote($kw));
+            $w .= sprintf('a.html LIKE %s OR ', $this->getDb()->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);

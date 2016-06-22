@@ -55,11 +55,6 @@ class User extends Model
     public $hash = '';
 
     /**
-     * @var int
-     */
-    public $failed = 0;
-
-    /**
      * @var \DateTime
      */
     public $lastLogin = null;
@@ -73,6 +68,11 @@ class User extends Model
      * @var \DateTime
      */
     public $created = null;
+
+    /**
+     * @var Access
+     */
+    private $access = null;
 
 
     /**
@@ -93,7 +93,7 @@ class User extends Model
      */
     public function getHomeUrl()
     {
-        return '/index.html'; 
+        return '/'; 
     }
     
     /**
@@ -128,6 +128,18 @@ class User extends Model
         }
         return hash('md5', $key);
     }
+
+    /**
+     * 
+     * @return Access
+     */
+    public function getAccess()
+    {
+        if (!$this->access) {
+            $this->access = Access::create($this);
+        }
+        return $this->access;
+    }
     
 }
 
@@ -154,10 +166,6 @@ class UserValidator extends \App\Helper\Validator
                 $this->addError('username', 'This username is already in use.');
             }
         }
-        if (!$obj->role) {
-            $this->addError('role', 'The user must have a role assigned for the permission system');
-        }
-
         if (!filter_var($obj->email, FILTER_VALIDATE_EMAIL)) {
             $this->addError('email', 'Please enter a valid email address');
         } else {
@@ -166,6 +174,14 @@ class UserValidator extends \App\Helper\Validator
                 $this->addError('email', 'This email is already in use.');
             }
         }
+        
+        // disallow the deletion or role change of user record id 1 (admin user).
 
+        /*
+         * TODO: Check the user roles
+        if (!$obj->role) {
+            $this->addError('role', 'The user must have a role assigned for the permission system');
+        }
+        */
     }
 }

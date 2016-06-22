@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` VARCHAR(64) NOT NULL DEFAULT '',
   `active` TINYINT(1) NOT NULL DEFAULT 1,
   `hash` VARCHAR(64) NOT NULL DEFAULT '',
-  `failed` INT(10) NOT NULL DEFAULT 0,
   `last_login` DATETIME,
   `modified` DATETIME NOT NULL,
   `created` DATETIME NOT NULL,

@@ -7,7 +7,7 @@ use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 
 /**
- * Class UserMapper
+ * Class RoleMap
  *
  *
  * @author Michael Mifsud <info@tropotek.com>

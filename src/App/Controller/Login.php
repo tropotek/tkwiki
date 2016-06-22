@@ -71,7 +71,11 @@ class Login extends Iface
     public function show()
     {
         $template = $this->getTemplate();
-
+        
+        if ($this->getConfig()->get('site.user.registration')) {
+            $template->setChoice('register');
+        }
+        
         // Render the form
         $ren = new \Tk\Form\Renderer\DomStatic($this->form, $template);
         $ren->show();

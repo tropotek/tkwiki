@@ -1,4 +1,4 @@
-/*!
+/*
  * tkWiki less css
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
@@ -11,9 +11,10 @@
 @icon-font-path: '@{_siteUrl}/html/assets/bootstrap-3.3.6/fonts/';
 
 
-@import '../bootstrap-3.3.6/less/bootstrap';
+@import '../assets/bootstrap-3.3.6/less/bootstrap';
 @import 'mega-menu';
-
+@import 'form';
+@import 'table';
 
 
 /* WIKI Common styles*/
@@ -24,14 +25,15 @@
   margin: 0;
 }
 
-
-.wiki-meta .author {
-  font-weight: bold;
-} 
-
+.no-top-margin {
+  margin-top: 0;
+}
 
 
 
+
+
+/* HEADER AND NAVIGATION */
 .navbar {
   margin-bottom:0 !important;
   border-width: 0 0 0 0;
@@ -53,7 +55,7 @@
 }
 
 .pageWrapper {
-  padding: 0px 15px;
+  padding: 0 15px;
   
   // A fix for adding padding to the top of the scroll 
   //  position when an anchor is clicked.
@@ -61,7 +63,7 @@
     display: block; 
     content: " "; 
     margin-top: -15px; 
-    height: 15px; 
+    height: 15px;
     visibility: hidden; 
   }
   
@@ -70,11 +72,14 @@
   }
 }
 
-.no-top-margin {
-  margin-top: 0;
+.dropdown-header {
+  font-weight: bold;
 }
 
-.dropdown-header {
+
+/* WIKI PAGE CONTENT */
+
+.wiki-meta .author {
   font-weight: bold;
 }
 
@@ -118,5 +123,6 @@
     }
   }
 }
+
 
 

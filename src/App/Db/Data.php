@@ -6,16 +6,7 @@ namespace App\Db;
 /**
  * Class Data
  * 
- * 
- *    NOTE NOTE NOTE:   The below has just been proven wrong... There must be something else ???????????????
- *                      Check if we can remove the cleanKey() method.....
- * 
- * Note: When accessing data using the key name, any `-` or `_` characters are replaced to a `.`
- *   This is for when accepting data from forms, because field names cannot use the `.` char
- *   Thus 
- *      `system_name_value` becomes `system.name.value` 
- *   or
- *      `system-name-value` becomes `system.name.value`
+ * A database object to manage the data table values.
  * 
  *
  * @author Michael Mifsud <info@tropotek.com>
@@ -24,6 +15,7 @@ namespace App\Db;
  */
 class Data extends \Tk\Collection
 {
+    
     /**
      * @var \Tk\Db\Pdo
      */
@@ -43,8 +35,9 @@ class Data extends \Tk\Collection
      * @var string
      */
     protected $foreignKey = '';
-
-
+    
+    
+    
     /**
      * Data constructor.
      *
@@ -53,20 +46,40 @@ class Data extends \Tk\Collection
      * @param string $table (optional) Default: `data`
      * @param \Tk\Db\Pdo|null $db
      */
-    public function __construct($foreignId = 0, $foreignKey ='system', $table = 'data', $db = null)
+    public function __construct($foreignId = 0, $foreignKey = 'system', $table = 'data', $db = null)
     {
         parent::__construct([]);
-        if (!$db) {
-            $db = \App\Factory::getDb();      // @dependency
-        }
         $this->db = $db;
         $this->table = $table;
         $this->foreignId = $foreignId;
         $this->foreignKey = $foreignKey;
-        $this->loadData();
+    }
+
+
+    /**
+     * Creates an instance of the Data object and loads that data from the DB
+     * 
+     * If the DB is null then the \App\Factory::getDb() is used.
+     * 
+     * @param int $foreignId
+     * @param string $foreignKey
+     * @param string $table
+     * @param null $db
+     * @return static
+     */
+    public static function create($foreignId = 0, $foreignKey = 'system', $table = 'data', $db = null)
+    {
+        if (!$db) {
+            $db = \App\Factory::getDb();      // @dependency
+        }
+        $obj = new static($foreignId, $foreignKey, $table, $db);
+        $obj->load();
+        return $obj;
     }
 
     /**
+     * Get the table name for queries
+     * 
      * @return string
      */
     protected function getTable()
@@ -75,11 +88,11 @@ class Data extends \Tk\Collection
     }
 
     /**
-     * Load this object with all available data
+     * Load this object with available data from the DB
      * 
      * @return $this
      */
-    public function loadData()
+    public function load()
     {
         $sql = sprintf('SELECT * FROM %s WHERE foreign_id = %d AND foreign_key = %s ', $this->getTable(), 
             (int)$this->foreignId, $this->db->quote($this->foreignKey));
@@ -96,7 +109,7 @@ class Data extends \Tk\Collection
      * 
      * @return $this
      */
-    public function saveData()
+    public function save()
     {
         foreach($this as $k => $v) {
             $this->dbSet($k, $v);
@@ -105,7 +118,7 @@ class Data extends \Tk\Collection
     }
 
     /**
-     * set a single data value in the Database 
+     * Set a single data value in the Database 
      * 
      * @param $key
      * @param $value
@@ -137,7 +150,7 @@ class Data extends \Tk\Collection
      */
     protected function dbGet($key)
     {
-        $sql = sprintf('SELECT * FROM %s WHERE `key` = %s AND foreign_id = %d, foreign_key = %s ', $this->getTable(),  
+        $sql = sprintf('SELECT * FROM %s WHERE key = %s AND foreign_id = %d AND foreign_key = %s ', $this->getTable(),  
             $this->db->quote($key), (int)$this->foreignId, $this->db->quote($this->foreignKey));
         $row = $this->db->query($sql)->fetchObject();
         if ($row) {
@@ -154,10 +167,10 @@ class Data extends \Tk\Collection
      */
     protected function dbHas($key)
     {
-        $sql = sprintf('SELECT * FROM %s WHERE `key` = %s AND foreign_id = %d, foreign_key = %s ', $this->getTable(),
+        $sql = sprintf('SELECT * FROM %s WHERE key = %s AND foreign_id = %d AND foreign_key = %s ', $this->getTable(),
             $this->db->quote($key), (int)$this->foreignId, $this->db->quote($this->foreignKey));
-        $row = $this->db->query($sql)->fetchObject();
-        if ($row) return true;
+        $res = $this->db->query($sql);
+        if ($res && $res->rowCount()) return true;
         return false;
     }
 
@@ -169,72 +182,10 @@ class Data extends \Tk\Collection
      */
     protected function dbDelete($key)
     {
-        $sql = sprintf('DELETE FROM %s WHERE `key` = %s AND foreign_id = %d, foreign_key = %s  ', $this->getTable(), 
+        $sql = sprintf('DELETE FROM %s WHERE key = %s AND foreign_id = %d AND foreign_key = %s  ', $this->getTable(), 
             $this->db->quote($key), (int)$this->foreignId, $this->db->quote($this->foreignKey));
         $this->db->exec($sql);
         return $this;
-    }
-    
-    
-    
-    // SEE THE NOTES ABOVE, THIS MAY NOT BE NEEDED.
-    
-    // Fix keys: (one-key to one.key) or (one_key to one.key)
-    
-
-    /**
-     * Set an item in the collection
-     *
-     * @param $key
-     * @param $value
-     * @return $this
-     */
-    public function set($key, $value)
-    {
-        return parent::set($this->cleanKey($key), $value);
-    }
-
-    /**
-     * Get collection item for key
-     *
-     * @param $key
-     * @param null|mixed $default
-     * @return mixed
-     */
-    public function get($key, $default = null)
-    {
-        return parent::get($this->cleanKey($key), $default);
-    }
-    
-    /**
-     * Does this collection have a given key?
-     *
-     * @param string $key The data key
-     * @return bool
-     */
-    public function has($key)
-    {
-        return parent::has($this->cleanKey($key));
-    }
-
-    /**
-     * Remove item from collection
-     *
-     * @param string $key The data key
-     * @return $this
-     */
-    public function remove($key)
-    {
-        return parent::remove($this->cleanKey($key));
-    }
-    
-    /**
-     * @param string $key
-     * @return string 
-     */
-    protected function cleanKey($key)
-    {
-        return preg_replace('/[_-]/', '.', $key);
     }
     
     

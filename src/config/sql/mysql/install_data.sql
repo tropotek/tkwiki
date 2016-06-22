@@ -1,3 +1,5 @@
+
+
 INSERT INTO `user` (`name`, `email`, `username`, `password`, `active`, `hash`, `modified`, `created`) VALUES
   ('Administrator', 'admin@example.com', 'admin', md5('password'), 1, MD5(CONCAT('admin@example.com', NOW())), NOW(),
    NOW()),

@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS "user" (
   password VARCHAR(64),
   active BOOLEAN,
   hash VARCHAR(64),
-  failed int NOT NULL DEFAULT 0,
   last_login TIMESTAMP,
   modified TIMESTAMP DEFAULT NOW(),
   created TIMESTAMP DEFAULT NOW(),

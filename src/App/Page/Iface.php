@@ -64,7 +64,13 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
         }
         
         $noticeTpl = \App\Alert::getInstance()->show()->getTemplate();
-        $this->getTemplate()->insertTemplate('alerts', $noticeTpl)->setChoice('alerts');
+        $template->insertTemplate('alerts', $noticeTpl)->setChoice('alerts');
+        
+        if ($this->getConfig()->get('site.user.registration')) {
+            $template->setChoice('register');
+        }
+        
+        
         
         return $this;
     }

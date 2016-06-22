@@ -33,9 +33,8 @@ class Settings extends Iface
      */
     public function __construct()
     {
-        parent::__construct('WIKI Settings');
-        $this->data = new \App\Db\Data();
-        $this->data->loadData();
+        parent::__construct('WIKI Settings', \App\Auth\Access::ROLE_ADMIN);
+        $this->data = \App\Db\Data::create();
     }
 
     /**
@@ -46,22 +45,19 @@ class Settings extends Iface
      */
     public function doDefault(Request $request)
     {
-
-        $this->form = new Form('formEdit');
+        $this->form = new Form('formEdit', $request);
 
         $this->form->addField(new Field\Input('site.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('site.email'))->setLabel('Site Email')->setRequired(true);
+        $this->form->addField(new Field\Checkbox('site.user.registration'))->setLabel('User Registration')->setNotes('Allow users to create new accounts');
+        $this->form->addField(new Field\Checkbox('site.user.activation'))->setLabel('User Activation')->setNotes('Allow users to activate their own accounts');
         
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\Link('cancel', \Tk\Uri::create('/index.html')));
+        $this->form->addField(new Event\Link('cancel', \Tk\Uri::create('/')));
 
-
-        //$this->form->load($this->data->toArray());
         $this->form->load($this->data);
-
         $this->form->execute();
-
 
         return $this->show();
     }
@@ -74,36 +70,26 @@ class Settings extends Iface
     public function doSubmit($form)
     {
         $values = $form->getValues();
-
-        /** @var Field\File $attach */
-        $attach = $form->getField('attach');
-
-        if (empty($values['name'])) {
-            $form->addFieldError('name', 'Please enter your name');
-        }
-        if (empty($values['email']) || !filter_var($values['email'], \FILTER_VALIDATE_EMAIL)) {
-            $form->addFieldError('email', 'Please enter a valid email address');
-        }
-        if (empty($values['message'])) {
-            $form->addFieldError('message', 'Please enter some message text');
-        }
-
-        //$form->addFieldError('test', 'ggggg');
+        $this->data->replace($values);
         
-        // validate any files
-        $attach->isValid();
+        if (empty($values['site.title']) || strlen($values['site.title']) < 3) {
+            $form->addFieldError('site.title', 'Please enter your name');
+        }
+        if (empty($values['site.email']) || !filter_var($values['site.email'], \FILTER_VALIDATE_EMAIL)) {
+            $form->addFieldError('site.email', 'Please enter a valid email address');
+        }
 
+        
         if ($this->form->hasErrors()) {
             return;
         }
-        if ($attach->hasFile()) {
-            $attach->moveUploadedFile($this->getConfig()->getDataPath() . '/contact/' . date('d-m-Y') . '-' . str_replace('@', '_', $values['email']));
+        
+        $this->data->save();
+        
+        \App\Alert::addSuccess('Site settings saved.');
+        if ($form->getTriggeredEvent()->getName() == 'update') {
+            \Tk\Uri::create('/')->redirect();
         }
-
-//        if ($this->sendEmail($form)) {
-//            \App\Alert::getInstance()->addSuccess('<strong>Success!</strong> Your form has been sent.');
-//        }
-
         \Tk\Uri::create()->redirect();
     }
 
@@ -137,8 +123,8 @@ class Settings extends Iface
   <div class="col-lg-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <i class="fa fa-user fa-fw"></i>
-        <span var="username"></span>
+        <i class="glyphicon glyphicon-cog"></i>
+        Site Settings
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body ">

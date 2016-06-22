@@ -53,6 +53,9 @@ class Bootstrap
         
         // Include any config overriding settings
         include($config->getSrcPath() . '/config/config.php');
+
+        // Import settings from DB
+        $config->import(\App\Db\Data::create());
         
         \Tk\Uri::$BASE_URL_PATH = $config->getSiteUrl();
         

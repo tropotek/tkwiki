@@ -7,7 +7,7 @@
           <div class="basic-login clearfix">
             <div class="alert alert-danger" role="alert" choice="error"><strong>Error!</strong> <span var="errMsg">Invalid login credentials</span></div>
             <form role="form" id="loginForm" method="post">
-              <input type="hidden" name="act" value="login" />
+              <!-- input type="hidden" name="act" value="login" / -->
 
               <div class="form-group" var="username-group">
                 <label for="login-username"><i class="icon-user"></i> <b>Username</b></label>
@@ -22,7 +22,7 @@
                   <input type="checkbox" name="remember" value="remember" id="login-remember" /> Remember me
                 </label -->
                 <a href="/recover.html" class="forgot-password">Forgot password?</a>
-                <button type="submit" name="login" class="btn pull-right">Login</button>
+                <button type="submit" name="login" value="login" class="btn pull-right">Login</button>
               </div>
             </form>
           </div>

@@ -36,6 +36,7 @@ $routes->add('userManager', new \Tk\Routing\Route('/userManager.html', 'App\Cont
 $routes->add('userEdit', new \Tk\Routing\Route('/userEdit.html', 'App\Controller\Admin\User\Edit::doDefault'));
 $routes->add('userProfile', new \Tk\Routing\Route('/profile.html', 'App\Controller\Admin\User\Edit::doDefault'));
 
+$routes->add('pageEdit', new \Tk\Routing\Route('/edit.html', 'App\Controller\Page\Edit::doDefault'));
 
 
 // TODO: Implement the pages
@@ -43,7 +44,6 @@ $routes->add('userProfile', new \Tk\Routing\Route('/profile.html', 'App\Controll
 
 //$routes->add('orphaned', new \Tk\Routing\Route('/orphaned.html', 'App\Controller\Page\Orphaned::doDefault'));
 
-//$routes->add('pageEdit', new \Tk\Routing\Route('/edit.html', 'App\Controller\Page\Edit:doDefault'));
 //$routes->add('pageHistory', new \Tk\Routing\Route('/history.html', 'App\Controller\Page\History::doDefault'));
 
 //$routes->add('myPages', new \Tk\Routing\Route('/edit.html', 'App\Controller\Page\Manager::doDefault'));
@@ -53,5 +53,5 @@ $routes->add('userProfile', new \Tk\Routing\Route('/profile.html', 'App\Controll
 
 
 // DO NOT MOVE.... CatchAll must be the last route.
-$routes->add('pageView', new \Tk\Routing\Route('/{name}', 'App\Controller\Page\View::doDefault', array('name' => 'Home')));
+$routes->add('pageView', new \Tk\Routing\Route('/{pageUrl}', 'App\Controller\Page\View::doDefault', array('pageUrl' => \App\Db\Page::DEFAULT_TAG)));
 

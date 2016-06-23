@@ -76,9 +76,8 @@ CREATE TABLE IF NOT EXISTS data (
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS page (
   id SERIAL PRIMARY KEY,
-  content_id INTEGER NOT NULL DEFAULT 0,          -- The current content for the page
   user_id INTEGER NOT NULL DEFAULT 0,             -- The author of the page
-  type VARCHAR(64) NOT NULL DEFAULT 'page',       -- The page type: `page`, `menu`, etc...
+  type VARCHAR(64) NOT NULL DEFAULT 'page',       -- The page type: `page`, `nav`, etc...
   template varchar(255) NOT NULL DEFAULT '',      -- use a different page template if selected
   title VARCHAR(128) NOT NULL DEFAULT '',
   url VARCHAR(128) NOT NULL DEFAULT '',           -- the base url of the page

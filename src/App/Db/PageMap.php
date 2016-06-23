@@ -7,17 +7,16 @@ use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 
 /**
- * Class ContentMap
- *
+ * 
  *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class ContentMap extends Mapper
+class PageMap extends Mapper
 {
     /**
-     * 
+     *
      * @param \stdClass|Model $obj
      * @return array
      */
@@ -25,14 +24,12 @@ class ContentMap extends Mapper
     {
         $arr = array(
             'id' => $obj->id,
-            'page_id' => $obj->pageId,
             'user_id' => $obj->userId,
-            'html' => $obj->html,
-            'keywords' => $obj->keywords,
-            'description' => $obj->description,
-            'css' => $obj->css,
-            'js' => $obj->js,
-            'size' => (int)$obj->size,
+            'type' => $obj->type,
+            'template' => $obj->template,
+            'title' => $obj->title,
+            'url' => $obj->url,
+            'views' => (int)$obj->views,
             'modified' => $obj->modified->format('Y-m-d H:i:s'),
             'created' => $obj->created->format('Y-m-d H:i:s')
         );
@@ -45,16 +42,14 @@ class ContentMap extends Mapper
      */
     public function map($row)
     {
-        $obj = new Content();
+        $obj = new Page();
         $obj->id = $row['id'];
-        $obj->pageId = $row['page_id'];
         $obj->userId = $row['user_id'];
-        $obj->html = $row['html'];
-        $obj->keywords = $row['keywords'];
-        $obj->description = $row['description'];
-        $obj->css = $row['css'];
-        $obj->js = $row['js'];
-        $obj->size = (int)$row['size'];
+        $obj->type = $row['type'];
+        $obj->template = $row['template'];
+        $obj->title = $row['title'];
+        $obj->url = $row['url'];
+        $obj->views = (int)$row['views'];
 
         if ($row['modified'])
             $obj->modified = new \DateTime($row['modified']);
@@ -71,19 +66,21 @@ class ContentMap extends Mapper
     static function mapForm($row, $obj = null)
     {
         if (!$obj) {
-            $obj = new Content();
+            $obj = new Page();
         }
         //$obj->id = $row['id'];
-        if (isset($row['html']))
-            $obj->html = $row['html'];
-        if (isset($row['keywords']))
-            $obj->keywords = $row['keywords'];
-        if (isset($row['description']))
-            $obj->discription = $row['description'];
-        if (isset($row['css']))
-            $obj->css = $row['css'];
-        if (isset($row['js']))
-            $obj->js = $row['js'];
+        if (isset($row['userId']))
+            $obj->userId = $row['userId'];
+        if (isset($row['type']))
+            $obj->type = $row['type'];
+        if (isset($row['template']))
+            $obj->template = $row['template'];
+        if (isset($row['title']))
+            $obj->title = $row['title'];
+        if (isset($row['url']))
+            $obj->url = $row['url'];
+        if (isset($row['views']))
+            $obj->views = $row['views'];
 
         if (isset($row['modified']))
             $obj->modified = new \DateTime($row['modified']);
@@ -97,11 +94,12 @@ class ContentMap extends Mapper
     {
         $arr = array(
             'id' => $obj->id,
-            'html' => $obj->html,
-            'keywords' => $obj->keywords,
-            'description' => $obj->description,
-            'css' => $obj->css,
-            'js' => $obj->js,
+            'userId' => $obj->userId,
+            'type' => $obj->type,
+            'template' => $obj->template,
+            'title' => $obj->title,
+            'url' => $obj->url,
+            'views' => $obj->views,
             'modified' => $obj->modified->format('Y-m-d H:i:s'),
             'created' => $obj->created->format('Y-m-d H:i:s')
         );
@@ -109,18 +107,7 @@ class ContentMap extends Mapper
     }
 
     /**
-     * 
-     * @param $pageId
-     * @param \Tk\Db\Tool $tool
-     * @return ArrayObject
-     */
-    public function findByPageId($pageId, $tool = null)
-    {
-        return $this->select('page_id = ' . (int)$pageId, $tool);
-    }
-
-    /**
-     * 
+     *
      * @param $userId
      * @param \Tk\Db\Tool $tool
      * @return ArrayObject
@@ -128,6 +115,16 @@ class ContentMap extends Mapper
     public function findByUserId($userId, $tool = null)
     {
         return $this->select('user_id = ' . (int)$userId, $tool);
+    }
+
+    /**
+     *
+     * @param $url
+     * @return Page
+     */
+    public function findByUrl($url)
+    {
+        return $this->select('url = ' . $this->getDb()->quote($url))->current();
     }
 
     /**
@@ -145,9 +142,8 @@ class ContentMap extends Mapper
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->getDb()->escapeString($filter['keywords']) . '%';
             $w = '';
-            $w .= sprintf('a.keywords LIKE %s OR ', $this->getDb()->quote($kw));
-            $w .= sprintf('a.description LIKE %s OR ', $this->getDb()->quote($kw));
-            $w .= sprintf('a.html LIKE %s OR ', $this->getDb()->quote($kw));
+            $w .= sprintf('a.title LIKE %s OR ', $this->getDb()->quote($kw));
+            $w .= sprintf('a.url LIKE %s OR ', $this->getDb()->quote($kw));;
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);
@@ -156,7 +152,7 @@ class ContentMap extends Mapper
                 $where .= '(' . substr($w, 0, -3) . ') AND ';
             }
         }
-        
+
 //        if (!empty($filter['lti_context_id'])) {
 //            $where .= sprintf('a.lti_context_id = %s AND ', $this->getDb()->quote($filter['lti_context_id']));
 //        }

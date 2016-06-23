@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `id` int(11) unsigned AUTO_INCREMENT PRIMARY KEY,
   `content_id` int(11) unsigned NOT NULL DEFAULT '0',   -- The current content for the page
   `user_id` int(10) unsigned NOT NULL DEFAULT '1',      -- The author of the page
-  `type` varchar(64) NOT NULL DEFAULT 'page',           -- The page type: `page`, `menu`, etc...
+  `type` varchar(64) NOT NULL DEFAULT 'page',           -- The page type: `page`, `nav`, etc...
   `template` varchar(255) NOT NULL DEFAULT '',          -- use a different page template if selected
   `title` varchar(128) NOT NULL DEFAULT '',
   `url` varchar(128) NOT NULL,                          -- the base url of the page

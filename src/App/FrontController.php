@@ -40,15 +40,20 @@ class FrontController extends \Tk\Kernel\HttpKernel
     /**
      * init Application front controller
      * 
+     * NOTE: I have tried to add the handlers in the order they are fired but 
+     * this is only a rough estimate as some handlers have multiple subscribed events
+     * Use this as more of a guide as to the order of the events that are fired (see comments)
      */
     public function init()
     {
         $logger = $this->config->getLog();
         
 
+        
+        
+        
         // (kernel.init)
         $this->dispatcher->addSubscriber(new Listener\BootstrapHandler($this->config));
-        
         
         // (kernel.request)
         $matcher = new \Tk\Routing\StaticMatcher($this->config->getSitePath().$this->config->get('template.path'), '\App\Controller\StaticPage::doDefault');
@@ -58,13 +63,16 @@ class FrontController extends \Tk\Kernel\HttpKernel
         $this->dispatcher->addSubscriber(new \Tk\Listener\RouteListener($matcher));
         
         $this->dispatcher->addSubscriber(new Listener\StartupHandler($logger));
-
         
         // Auth events
         $this->dispatcher->addSubscriber(new \App\Listener\AuthHandler());
         
         // (kernel.controller)
-
+        
+        
+        // (wiki.view)
+        $this->dispatcher->addSubscriber(new \App\Listener\WikiHandler());
+        
 
         // (kernel.view)
 
@@ -82,6 +90,7 @@ class FrontController extends \Tk\Kernel\HttpKernel
         
         // (kernel.terminate)
         $this->dispatcher->addSubscriber(new Listener\ShutdownHandler($logger));
+        
         
         
     }

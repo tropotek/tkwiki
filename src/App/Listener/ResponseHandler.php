@@ -74,6 +74,11 @@ class ResponseHandler implements SubscriberInterface
         if ($result instanceof \Dom\Template) {
             $event->setResponse(new Response($result->toString()));
         } else if ($result instanceof \Dom\Renderer\RendererInterface) {
+            // TODO: test, as we would not want to call show() multiple times, isParsed is not a fullproof flag for show()
+            // If a controller returns a display interface and has not been executed
+            if ($result instanceof \Dom\Renderer\DisplayInterface && !$result->getTemplate()->isParsed()) {
+                $result->show();
+            }
             $event->setResponse(new Response($result->getTemplate()->toString()));
         } else if (is_string($result)) {
             $event->setResponse(new Response($result));

@@ -25,26 +25,18 @@ class PublicPage extends Iface
     }
 
     /**
-     * Get the logged in user.
-     * 
-     * @return \App\Db\User
-     */
-    public function getUser()
-    {
-        return $this->getConfig()->getUser();
-    }
-
-    /**
      * 
      */
     public function show()
     {
         $this->initPage();
+        $template = $this->getTemplate();
         
+         
         if ($this->getUser()) {
-            
-            // todo, show choices `admin` `moderator` `user` .... 
-            
+            // User Menu Setup 
+            $url = \Tk\Uri::create('/search.html')->set('mode', 'user:'.$this->getUser()->id);
+            $template->setAttr('myPages', 'href', $url);
         }
         
         

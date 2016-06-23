@@ -152,25 +152,21 @@
                         <li><a href="#">Glyphicon</a></li>
                         <li><a href="#">Google Fonts</a></li>
                       </ul>
-
-
-                      <a href="#" class="btn btn-primary btn-sm btn-menu-edit"><i class="glyphicon glyphicon-pencil"></i>
-                        Edit</a>
+                      
+                      <a href="#" class="btn btn-primary btn-sm btn-menu-edit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                     </div>
                   </li>
                 </ul>
               </li>
+              
               <li class=""><a href="#" title="New Menu Tab"><span class="glyphicon glyphicon-plus"></span></a></li>
             </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-              <li class="dropdown" choice="logout">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Account
-                  <span class="caret"></span></a>
+            
+            <ul class="nav navbar-nav navbar-right" choice="logout">
+              <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Account <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li class=""><a href="/profile.html">My Profile</a></li>
-                  <li class="disabled"><a href="#">My Pages</a></li>
-                  
+                  <li><a href="/profile.html">My Profile</a></li>
+                  <li><a href="#" var="myPages">My Pages</a></li>
                   <!-- Admin Menu -->
                   <li choice1="admin" class="divider"></li>
                   <li choice1="admin" class="dropdown-header">Wiki Admin</li>
@@ -179,15 +175,24 @@
                   <li choice="admin" class="disabled"><a href="#">Pages</a></li>
                   <li choice="admin" class="disabled"><a href="#">Orphaned</a></li>
                   <li choice="admin" class="disabled"><a href="#">Plugins</a></li>
-                  
                   <li class="divider"></li>
                   <li><a href="/logout.html">Logout</a></li>
                 </ul>
               </li>
             </ul>
+            
+            <form class="navbar-form navbar-right" role="search" choice="logout" method="post" action="/search.html" id="wiki-search">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="keywords" value="" />
+                <span class="input-group-btn">
+                  <button type="submit" class="btn btn-default" name="search" value="search">Go!</button>
+                </span>
+              </div>
+            </form>
+            
             <form action="/login.html" method="post" class="navbar-form navbar-right" choice="login">
-              <input type="hidden" name="act" value="login" />
-              <input type="hidden" name="/" value="redirect"/>
+              <!-- input type="hidden" name="act" value="login" / -->
+              
               <div class="form-group">
                 <input type="text" name="username" placeholder="Username" class="form-control"/>
               </div>
@@ -210,7 +215,7 @@
       <div class="container" choice="pageHeading">
         <div class="row">
           <div class="col-md-6">
-            <h1 var="pageHeading">UNTITLED</h1>
+            <h1 var="pageHeading"></h1>
           </div>
         </div>
       </div>

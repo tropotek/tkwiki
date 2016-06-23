@@ -22,9 +22,14 @@
       // Define some default settings that can be overridden
       settings = $.extend({
         // Only look for headings inside this element
-        scope: "body",
+        scope: 'body',
         // Build the table of contents from these headings
         heading_tags: ["h1", "h2", "h3", "h4", "h5", "h6"],
+        
+        template: '<nav class="well toc-menu toc-type-nested col-md-4 pull-right hidden-xs">'+
+'<button type="button" class="toc-close close" data-dismiss=".toc-menu" title="Close TOC"><span aria-hidden="true">&times;</span></button>'+
+'<p><strong>Contents:</strong></p></nav>',
+        
         // Should the table of contents be ordered or unordered?
         list_type: "ul",
         // Exclude elements with the `.toc-exclude` class
@@ -84,14 +89,16 @@
       
       if ($headings.length) {
         // Append the list to the table of contents
-        el.append($(text));
-        el.show();
-      } else {
-        el.hide();
+        var tpl = $(settings.template);
+        tpl.find('.toc-close').click(function(e) {
+          $(this).closest($(this).data('dismiss')).hide();
+        });
+        tpl.append($(text));
+        el.prepend(tpl);
       }
       
       // todo: ad numbers to the headings????
-      console.log($('.section4 > a').text());
+      //console.log($('.section4 > a').text());
       //heading.prepend('<span>0.0.1 </span>');
 
       // Return the table of contents

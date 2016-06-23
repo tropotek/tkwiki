@@ -2,11 +2,11 @@
 namespace App\Controller\Admin\User;
 
 use Tk\Request;
+use App\Controller\Iface;
 use Dom\Template;
 use Tk\Form;
 use Tk\Form\Field;
 use Tk\Form\Event;
-use App\Controller\Iface;
 use Tk\Form\Field\Option\ArrayObjectIterator;
 
 /**

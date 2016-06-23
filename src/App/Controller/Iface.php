@@ -23,7 +23,7 @@ abstract class Iface extends \Dom\Renderer\Renderer
     /**
      * @var \App\Page\Iface
      */
-    protected $page = null;
+    private $page = null;
 
 
     /**
@@ -50,6 +50,18 @@ abstract class Iface extends \Dom\Renderer\Renderer
         return $this->page;
     }
 
+    /**
+     * Set the pagefor this controller
+     * 
+     * @param $page
+     * @return $this
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+        return $this;
+    }
+    
     /**
      * 
      * @return string

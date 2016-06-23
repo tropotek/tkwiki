@@ -132,6 +132,16 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
     }
 
     /**
+     * Get the logged in user.
+     * 
+     * @return \App\Db\User
+     */
+    public function getUser()
+    {
+        return $this->getConfig()->getUser();
+    }
+
+    /**
      * Get the global config object.
      *
      * @return \Tk\Config

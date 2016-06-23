@@ -15,30 +15,55 @@ class View extends Iface
 {
 
     /**
+     * @var \App\Db\Page
+     */
+    protected $wPage = null;
+    
+    /**
+     * @var \App\Db\Content
+     */
+    protected $wContent= null;
+    
+    
+
+    /**
      *
      */
     public function __construct()
     {
-        parent::__construct('Wiki Page....');
+        parent::__construct();
     }
 
     /**
      * @param Request $request
+     * @param $pageUrl
      * @return \App\Page\Iface
+     * @throws \Tk\Exception
      */
-    public function doDefault(Request $request, $name)
+    public function doDefault(Request $request, $pageUrl)
     {
-        $this->setPageTitle($name);
-        // TODO: 
-        //throw new \Tk\Exception('This page should neot need a controller...its a wiki DOPE!!!');
+        $this->wPage = \App\Db\Page::findPage($pageUrl);
+        if (!$this->wPage) {
+            throw new \Tk\HttpException(404, 'Page not found');
+        }
         
+        $this->wContent = $this->wPage->getContent();
+        if (!$this->wContent) {
+            // May redirect to the edit page if the user has edit privileges or send alert if not.
+            throw new \Tk\Exception('Page content not found');
+        }
+        
+        
+        // TODO: 
+        //throw new \Tk\Exception('This page should need need a controller...its a wiki DOPE!!!');
+
 
         return $this->showDefault($request);
     }
 
 
     /**
-     * Note: no longer a dependacy on show() allows for many show methods for many 
+     * Note: no longer a dependency on show() allows for many show methods for many 
      * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
      * 
      * @param Request $request
@@ -48,20 +73,33 @@ class View extends Iface
     {
         $template = $this->getTemplate();
         
+        $header = new \App\Controller\Page\Header($this->wPage, $this->getUser());
+        $template->insertTemplate('header', $header->show());
+        
+        $template->insertHtml('content', $this->wContent->html);
+        if ($this->wContent->css) {
+            $template->appendCss($this->wContent->css);
+        }
+        if ($this->wContent->js) {
+            $template->appendJs($this->wContent->js);
+        }
+        
+        
         return $this->getPage()->setPageContent($template);
     }
 
 
     /**
      * DomTemplate magic method
-     *
+     * 
      * @return \Dom\Template
      */
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
-<div>
-  <p>This is a new wiki page</p>
+<div class="wiki-view">
+  <div var="header" class="wiki-header"></div>
+  <div var="content" class="wiki-content"></div>
 </div>
 HTML;
 

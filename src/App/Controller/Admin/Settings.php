@@ -49,6 +49,8 @@ class Settings extends Iface
 
         $this->form->addField(new Field\Input('site.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('site.email'))->setLabel('Site Email')->setRequired(true);
+        // TODO: Add a look up dialog 
+        $this->form->addField(new Field\Input('wiki.page.default'))->setLabel('Home Page')->setNotes('The default wiki home page URL');
         $this->form->addField(new Field\Checkbox('site.user.registration'))->setLabel('User Registration')->setNotes('Allow users to create new accounts');
         $this->form->addField(new Field\Checkbox('site.user.activation'))->setLabel('User Activation')->setNotes('Allow users to activate their own accounts');
         

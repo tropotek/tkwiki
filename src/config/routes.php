@@ -25,6 +25,16 @@ $routes = new \Tk\Routing\RouteCollection();
 $config['site.routes'] = $routes;
 
 
+
+
+// AJAX Routes
+$routes->add('ajax-pageList', new \Tk\Routing\Route('/ajax/getPageList', 'App\Ajax\Page::doGetPageList'));
+
+
+
+
+// Site Routes
+
 $routes->add('login', new \Tk\Routing\Route('/login.html', 'App\Controller\Login::doDefault'));
 $routes->add('logout', new \Tk\Routing\Route('/logout.html', 'App\Controller\Logout::doDefault'));
 $routes->add('register', new \Tk\Routing\Route('/register.html', 'App\Controller\Register::doDefault'));
@@ -52,6 +62,13 @@ $routes->add('pageEdit', new \Tk\Routing\Route('/edit.html', 'App\Controller\Pag
 
 
 
+
+
+
+
+
 // DO NOT MOVE.... CatchAll must be the last route.
 $routes->add('pageView', new \Tk\Routing\Route('/{pageUrl}', 'App\Controller\Page\View::doDefault', array('pageUrl' => \App\Db\Page::DEFAULT_TAG)));
+
+
 

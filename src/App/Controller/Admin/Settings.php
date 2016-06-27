@@ -50,7 +50,7 @@ class Settings extends Iface
         $this->form->addField(new Field\Input('site.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('site.email'))->setLabel('Site Email')->setRequired(true);
         // TODO: Add a look up dialog 
-        $this->form->addField(new Field\Input('wiki.page.default'))->setLabel('Home Page')->setNotes('The default wiki home page URL');
+        $this->form->addField(new \App\Form\ButtonInput('wiki.page.default', 'glyphicon glyphicon-folder-open'))->setLabel('Home Page')->setNotes('The default wiki home page URL');
         $this->form->addField(new Field\Checkbox('site.user.registration'))->setLabel('User Registration')->setNotes('Allow users to create new accounts');
         $this->form->addField(new Field\Checkbox('site.user.activation'))->setLabel('User Activation')->setNotes('Allow users to activate their own accounts');
         
@@ -80,7 +80,6 @@ class Settings extends Iface
         if (empty($values['site.email']) || !filter_var($values['site.email'], \FILTER_VALIDATE_EMAIL)) {
             $form->addFieldError('site.email', 'Please enter a valid email address');
         }
-
         
         if ($this->form->hasErrors()) {
             return;
@@ -103,11 +102,46 @@ class Settings extends Iface
     public function show()
     {
         $template = $this->getTemplate();
-
+        
         // Render the form
         $fren = new \Tk\Form\Renderer\Dom($this->form);
         $template->insertTemplate($this->form->getId(), $fren->show()->getTemplate());
 
+
+
+        $listUrl = \Tk\Uri::create('/ajax/getPageList')->toString();
+        $js = <<<JS
+jQuery(function($) {
+  
+  $(document.getElementById('fid_btn_wiki.page.default')).on('click', function(e) {
+    $('#pageSelectModal').modal('show');
+  });
+  
+});
+JS;
+        $template->appendJs($js);
+        $pageSelect = new \App\Helper\PageSelect();
+        $pageSelect->show();
+        $template->appendTemplate('content', $pageSelect->getTemplate());
+        
+        
+        $listUrl = \Tk\Uri::create('/ajax/getPageList');
+        $js = <<<JS
+jQuery(function($) {
+  
+  $('.pageList').pageList({
+    ajaxUrl : '$listUrl',
+    onPageSelect : function (page) {
+      $(document.getElementById('fid_wiki.page.default')).val(page.url);
+      $('#pageSelectModal').modal('hide');
+      console.log('Setting input to - ' + page.url);
+    }
+  })
+  
+});
+JS;
+        $template->appendJs($js);
+        
         return $this->getPage()->setPageContent($template);
     }
 
@@ -121,7 +155,7 @@ class Settings extends Iface
     public function __makeTemplate()
     {
         $xhtml = <<<XHTML
-<div class="row">
+<div class="row" var="content">
   <div class="col-lg-12">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -129,7 +163,7 @@ class Settings extends Iface
         Site Settings
       </div>
       <!-- /.panel-heading -->
-      <div class="panel-body ">
+      <div class="panel-body">
         <div class="row">
           <div class="col-lg-12">
 

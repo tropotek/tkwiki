@@ -69,7 +69,9 @@ class ButtonInput extends \Tk\Form\Field\Input
             $template->addClass('icon', $this->icon);
             $template->setAttr('btn', 'id', $this->makeId('fid_btn_'));
             $template->setChoice('btn');
-            
+            if ($this->getAttr('disabled')) {
+                $template->addClass('btn', 'disabled');
+            }
         }
         
         return $template;

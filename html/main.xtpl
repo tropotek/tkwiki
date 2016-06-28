@@ -212,6 +212,21 @@
     <!-- Page Title -->
     <div class="pageWrapper">
 
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ol class="breadcrumb">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Link 1</a></li>
+              <li class="active">Link 2</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      
+      
+      
       <div class="container" choice="pageHeading">
         <div class="row">
           <div class="col-md-6">
@@ -246,6 +261,7 @@
     <script src="/html/assets/jquery-1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/html/assets/bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
+    <script src="/html/js/tinymce/tinymce.min.js"></script>
 
     <script src="/html/js/jquery-toc/jquery-toc.js"></script>
     <script src="/html/js/tkwiki.js"></script>

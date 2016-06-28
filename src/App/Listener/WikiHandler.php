@@ -20,31 +20,18 @@ class WikiHandler implements SubscriberInterface
 
     
     /**
-     * 
-     */
-    function __construct()
-    {
-        
-    }
-
-
-    /**
-     * domModify
      *
-     * @param ControllerResultEvent $event
+     * @param \App\Event\ContentEvent $event
      */
-    public function doWikiView(ControllerResultEvent $event)
+    public function contentPreRender(\App\Event\ContentEvent $event)
     {
-        $controller = $event->getRequest()->getAttribute('controller');
-        if (!$controller instanceof \App\Controller\Page\View) {
-            return;
-        }
-        $result = $event->getControllerResult();
+        vd('------------- '.\App\Events::WIKI_CONTENT_VIEW.' -------------');
         
-        vd('------------- wiki.view -------------');
-        
-        
-        
+        $content = $event->getContent();
+        $formatter = new \App\Helper\HtmlFormatter($content->html);
+        $event->set('htmlFormatter', $formatter);
+        // Format the content html
+        $content->html = $formatter->getFormattedHtml();
         
     }
 
@@ -57,7 +44,7 @@ class WikiHandler implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::VIEW => array('doWikiView', 0)
+            \App\Events::WIKI_CONTENT_VIEW => ['contentPreRender', 10]
         );
     }
 

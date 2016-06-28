@@ -11,15 +11,24 @@ namespace App\Helper;
  */
 class PageSelect extends \Dom\Renderer\Renderer
 {
+    /**
+     * @var string
+     */
+    protected $buttonSelector = '';
 
+    /**
+     * @var string
+     */
+    protected $inputSelector = '';
 
+    
     /**
      * constructor.
      */
-    public function __construct()
+    public function __construct($buttonSelector, $inputSelector)
     {
-        
-        
+        $this->buttonSelector = $buttonSelector;
+        $this->inputSelector = $inputSelector;
     }
 
     /**
@@ -29,23 +38,36 @@ class PageSelect extends \Dom\Renderer\Renderer
     {
         $template = $this->getTemplate();
 
-        $template->appendJsUrl(\Tk\Uri::create('/html/js/jquery-pageList.js'));
-//        
-//        $listUrl = \Tk\Uri::create('/ajax/getPageList');
-//        
-//        $js = <<<JS
-//jQuery(function($) {
-//  
-//  $('.pageList').pageList({
-//    ajaxUrl : '$listUrl',
-//    onPageSelect : function (page) {
-//      console.log(page);
-//    }
-//  })
-//  
-//});
-//JS;
-//        $template->appendJs($js);
+        $template->appendJsUrl(\Tk\Uri::create('/html/js/jquery-jtable.js'));
+        
+        $listUrl = \Tk\Uri::create('/ajax/getPageList');
+        $js = <<<JS
+jQuery(function($) {
+
+  // required for the pageSelect renderer
+  config.pageSelect = {
+    button : $('{$this->buttonSelector}'),
+    input : $('{$this->inputSelector}')
+  };
+
+  
+  $('.jtable').jtable({
+    properties : ['title', 'modified'],
+    dataUrl : '$listUrl',
+    onSelect : function (object) {
+      config.pageSelect.input.val(object.url);
+      $('#pageSelectModal').modal('hide');
+    }
+  });
+  
+  // show dialog trigger
+  config.pageSelect.button.on('click', function(e) {
+    $('#pageSelectModal').modal('show');
+  });
+  
+});
+JS;
+        $template->appendJs($js);
         
         return $template;
     }
@@ -69,7 +91,7 @@ class PageSelect extends \Dom\Renderer\Renderer
       </div>
       <div class="modal-body">
         
-        <div class="pageList"></div>
+        <div class="jtable"></div>
         
       </div>
       <div class="modal-footer">

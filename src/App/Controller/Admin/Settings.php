@@ -106,41 +106,25 @@ class Settings extends Iface
         // Render the form
         $fren = new \Tk\Form\Renderer\Dom($this->form);
         $template->insertTemplate($this->form->getId(), $fren->show()->getTemplate());
-
-
-
-        $listUrl = \Tk\Uri::create('/ajax/getPageList')->toString();
+        
+        // Render select page dialog
         $js = <<<JS
 jQuery(function($) {
   
-  $(document.getElementById('fid_btn_wiki.page.default')).on('click', function(e) {
-    $('#pageSelectModal').modal('show');
-  });
+  // required for the pageSelect renderer
+  config.pageSelect = {
+     button : $(document.getElementById('fid_btn_wiki.page.default')),
+     input : $(document.getElementById('fid_wiki.page.default'))
+  };
   
 });
 JS;
-        $template->appendJs($js);
-        $pageSelect = new \App\Helper\PageSelect();
+        //$template->appendJs($js);
+        
+        
+        $pageSelect = new \App\Helper\PageSelect('#fid_btn_wiki\\\\.page\\\\.default', '#fid_wiki\\\\.page\\\\.default');
         $pageSelect->show();
         $template->appendTemplate('content', $pageSelect->getTemplate());
-        
-        
-        $listUrl = \Tk\Uri::create('/ajax/getPageList');
-        $js = <<<JS
-jQuery(function($) {
-  
-  $('.pageList').pageList({
-    ajaxUrl : '$listUrl',
-    onPageSelect : function (page) {
-      $(document.getElementById('fid_wiki.page.default')).val(page.url);
-      $('#pageSelectModal').modal('hide');
-      console.log('Setting input to - ' + page.url);
-    }
-  })
-  
-});
-JS;
-        $template->appendJs($js);
         
         return $this->getPage()->setPageContent($template);
     }

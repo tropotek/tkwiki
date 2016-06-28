@@ -77,7 +77,9 @@ class Edit extends Iface
 
         $this->form->addField(new Field\Input('title'))->setRequired(true);
         $this->form->addField(new Field\Textarea('html'));
-        $this->form->addField(new Field\Input('url'))->setRequired(true)->setAttr('disabled');
+        $this->form->addField(new Field\Input('url'))->setRequired(true);
+        
+        $this->form->addField(new Field\Select('permission'));
         $this->form->addField(new Field\Input('keywords'));
         $this->form->addField(new Field\Input('description'));
         $this->form->addField(new Field\Textarea('css'));
@@ -100,7 +102,7 @@ class Edit extends Iface
     }
 
     /**
-     * @param $form
+     * @param Form $form
      */
     public function doSubmit($form)
     {
@@ -113,8 +115,9 @@ class Edit extends Iface
         
         if ($this->wPage->id == 1) {
             $this->wPage->url = 'Home';
+            $this->wPage->permission = 0;
         }
-                
+        
         
         if ($form->hasErrors()) {
             return;
@@ -171,16 +174,29 @@ class Edit extends Iface
         if ($this->wPage->id == 1) {
             $field = $domForm->getFormElement('url');
             $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page URL must be static.');
+            $field = $domForm->getFormElement('permission');
+            $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page permissions must be public.');
         }
         
         
-        $header = new \App\Controller\Page\Header($this->wPage, $this->getUser());
+        $header = new \App\Helper\PageHeader($this->wPage, $this->getUser());
         $template->insertTemplate('header', $header->show());
 
 
         // Render the form
         $ren = new \Tk\Form\Renderer\DomStatic($this->form, $template);
         $ren->show();
+        
+        
+        
+        // Fix disabled buttons
+        $js = <<<JS
+jQuery(function($) {
+
+
+});
+JS;
+        //$template->appendJs($js);
         
         
         return $this->getPage()->setPageContent($template);
@@ -212,7 +228,7 @@ class Edit extends Iface
 
           <div class="col-md-12">
             <div class="form-group">
-              <textarea name="html" id="fid-html" class="form-control" style="min-height: 500px"></textarea>
+              <textarea name="html" id="fid-html" class="form-control tinymce" style="min-height: 500px"></textarea>
             </div>
           </div>
         </div>
@@ -228,6 +244,16 @@ class Edit extends Iface
                   <a href="#" class="btn btn-default wiki-create-url-trigger" title="Auto Generate page URL from Title"><i class="glyphicon glyphicon-link"></i></a>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fid-permission" class="control-label">Permission:</label>
+              <select class="form-control" id="fid-permission" name="permission">
+                <option value="0">Public</option>
+                <option value="1">Protected</option>
+                <option value="2">Private</option>
+              </select>
             </div>
           </div>
           <div class="col-md-12">

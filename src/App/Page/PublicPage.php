@@ -38,7 +38,16 @@ class PublicPage extends Iface
             $url = \Tk\Uri::create('/search.html')->set('mode', 'user:'.$this->getUser()->id);
             $template->setAttr('myPages', 'href', $url);
         }
-        
+        $siteUrl = $this->getConfig()->getSiteUrl();
+        $dataUrl = $this->getConfig()->getDataUrl();
+        $js = <<<JS
+
+var config = {
+  siteUrl : '$siteUrl',
+  dataUrl : '$dataUrl'
+};
+JS;
+        $template->appendJs($js, ['data-jsl-priority' => -1000]);
         
         
     }

@@ -9,39 +9,41 @@
  * <code>
  *   $(document).ready(function() {
  *     // attach the plugin to an element
- *     $('#element').pageList({'foo': 'bar'});
+ *     $('#element').jtable({'foo': 'bar'});
  *
  *     // call a public method
- *     $('#element').data('pageList').foo_public_method();
+ *     $('#element').data('jtable').foo_public_method();
  *
  *     // get the value of a property
- *     $('#element').data('pageList').settings.foo;
+ *     $('#element').data('jtable').settings.foo;
  *   
  *   });
  * </code>
  */
-
-// remember to change every instance of "pageList" to the name of your plugin!
+// remember to change every instance of "jtable" to the name of your plugin!
 (function($) {
 
   // here we go!
-  var pageList = function(element, options) {
+  var jtable = function(element, options) {
 
     // plugin's default options
     // this is private property and is  accessible only from inside the plugin
     var defaults = {
-      ajaxUrl: '',
+      properties: null,
+      labels: null,
+      key: '', 
+      dataUrl: '',
       template : 
-        '<div class="pageListWrapper"><div class="filter clearfix"><div class="input-group input-group-sm col-md-4 pageList-search pull-right">'+
+        '<div class="jtable-wrapper"><div class="filter clearfix"><div class="input-group input-group-sm col-md-4 jtable-search pull-right">'+
         '<input type="text" class="form-control" placeholder="search" />' +
         '<span class="input-group-btn">' +
         '<button class="btn btn-default" type="button">Go!</button>' +
         '</span></div></div><br/>' + 
-        '<table class="table table-condensed table-hover"><tr><th>Title</th><th>Modified</th></tr></table>'+
+        '<table class="table table-condensed table-hover"></table>'+
         '</div>',
       tool : {orderBy: 'title', offset: 0, limit: 20, total: 0, keywords: ''},
       pageIdx: 0,    // page that is showing now 0 = 1
-      onPageSelect : function(page) {}
+      onSelect : function(object) {}
     };
 
     // to avoid confusions, use "plugin" to reference the 
@@ -51,7 +53,7 @@
     // this will hold the merged default, and user-provided options
     // plugin's properties will be available through this object like:
     // plugin.settings.propertyName from inside the plugin or
-    // element.data('pageList').settings.propertyName from outside the plugin, 
+    // element.data('jtable').settings.propertyName from outside the plugin, 
     // where "element" is the element the plugin is attached to;
     plugin.settings = {};
 
@@ -62,7 +64,21 @@
       // the plugin's final properties are the merged default and 
       // user-provided options (if any)
       plugin.settings = $.extend({}, defaults, options);
-
+      
+      if (plugin.settings.properties == null || plugin.settings.properties.length == 0) {
+        alert('There are no properties available for this table.');
+        return;
+      }
+      if (plugin.settings.labels == null || plugin.settings.labels.length == 0) {
+        plugin.settings.labels = [];
+        for(var i=0; i < plugin.settings.properties.length; i++) {
+          plugin.settings.labels[plugin.settings.labels.length] = plugin.settings.properties[i].jtableLabel();
+        }
+      }
+      if (plugin.settings.key == '') {
+        plugin.settings.key = plugin.settings.properties[0];
+      }
+      
       // code goes here
       getPageList();    // Show the table...
       
@@ -75,39 +91,61 @@
     // a private method. for demonstration purposes only - remove it!
     var show = function(data) {
       // code goes here
+      var i = 0;
       var table = $(plugin.settings.template);
       $element.empty();
       $element.append(table);
       
+      // Show headers
+      var header = $('<tr></tr>');
+      for (i=0; i < plugin.settings.labels.length; i++) {
+        header.append('<th>'+plugin.settings.labels[i]+'</th>');
+      }
+      table.find('table').append(header);
+      
+      // show data
       var list = data.list;
       plugin.settings.tool = data.tool;
-      for(var i = 0; i < list.length; i++) {
-        var page = list[i];
-        var item = $('<tr class="pageData"><td><a href="#">'+page.title+'</a></td><td>'+page.modified+'</td></tr>');
-        item.data('page', page);
-        table.find('table').append(item);
+      for(i = 0; i < list.length; i++) {
+        var object = list[i];
+        var row = $('<tr></tr>');
+        row.data('object', object);
+        for (i=0; i < plugin.settings.labels.length; i++) {
+          var css = '';
+          var prop = plugin.settings.properties[i];
+          var text = object[prop];
+          
+          if (plugin.settings.key == prop) {
+            css = plugin.settings.properties[i] + ' key';
+            text = '<a href="javascript:;">'+text+'</a>';
+          }
+          row.append('<td class="'+css+'">'+text+'</td>');
+        }
+        table.find('table').append(row);
       }
-      table.find('tr.pageData td a').on('click', function(e) {
-        var page = $(this).parents('tr.pageData').data('page');
-        plugin.settings.onPageSelect.apply(this, [page]);
+      
+      
+      // Setup Table Events
+      table.find('td.key a').on('click', function(e) {
+        plugin.settings.onSelect.apply(this, [$(this).parents('tr').data('object')]);
       });
       
-      table.find('.pageList-search input').val(plugin.settings.tool.keywords);
-      table.find('.pageList-search button').on('click', function(e) {
-        var input = table.find('.pageList-search input');
+      table.find('.jtable-search button').on('click', function(e) {
+        var input = table.find('.jtable-search input');
         plugin.settings.tool.offset = 0;
         plugin.settings.tool.keywords = input.val();
         getPageList();
       });
+      
+      // Set the keywords input value if available
+      table.find('.jtable-search input').val(plugin.settings.tool.keywords);
       
       // Pager
       var pager = showPager(plugin.settings.tool);
       if (pager)
         table.append(pager);
       
-      
     };
-    
     
     var showPager = function(tool) {
       var pager = $('<nav class="text-center"><ul class="pagination pagination-center pagination-sm"></ul></nav>');
@@ -161,10 +199,9 @@
     
     
     var getPageList = function() {
-      // TODO Cache the response data values to save looking it up each click
-      
+      // TODO: Cache the response data values to save looking it up each click
       processing(true);
-      $.getJSON(plugin.settings.ajaxUrl, plugin.settings.tool, function(data) {
+      $.getJSON(plugin.settings.dataUrl, plugin.settings.tool, function(data) {
         show(data);
       }).always(function (data) {
         processing(false);
@@ -173,9 +210,11 @@
     
     var processing = function(show) {
       if (show) {
+        $element.addClass('disabled');
         // Show processing icon
         console.log('Show Waiting');
       } else {
+        //$element.removeClass('disabled');
         // Hide processing icon
         console.log('Hide Waiting');
       }
@@ -185,7 +224,7 @@
     // public methods
     // these methods can be called like:
     // plugin.methodName(arg1, arg2, ... argn) from inside the plugin or
-    // element.data('pageList').publicMethod(arg1, arg2, ... argn) from outside 
+    // element.data('jtable').publicMethod(arg1, arg2, ... argn) from outside 
     // the plugin, where "element" is the element the plugin is attached to;
 
     // a public method. for demonstration purposes only - remove it!
@@ -200,25 +239,36 @@
   };
 
   // add the plugin to the jQuery.fn object
-  $.fn.pageList = function(options) {
+  $.fn.jtable = function(options) {
     // iterate through the DOM elements we are attaching the plugin to
     return this.each(function() {
       // if plugin has not already been attached to the element
-      if (undefined == $(this).data('pageList')) {
+      if (undefined == $(this).data('jtable')) {
 
         // create a new instance of the plugin
         // pass the DOM element and the user-provided options as arguments
-        var plugin = new pageList(this, options);
+        var plugin = new jtable(this, options);
 
         // in the jQuery version of the element
         // store a reference to the plugin object
         // you can later access the plugin and its methods and properties like
-        // element.data('pageList').publicMethod(arg1, arg2, ... argn) or
-        // element.data('pageList').settings.propertyName
-        $(this).data('pageList', plugin);
+        // element.data('jtable').publicMethod(arg1, arg2, ... argn) or
+        // element.data('jtable').settings.propertyName
+        $(this).data('jtable', plugin);
       }
     });
 
   }
 
 })(jQuery);
+
+
+// Not sure if we should do this or leave the global namespace and 
+// add a method to the plugin instead... see how it goes.
+String.prototype.jtableLabel = function(str) {
+  return this
+      // insert a space before all caps
+      .replace(/([A-Z])/g, ' $1')
+      // uppercase the first character
+      .replace(/^./, function(str){ return str.toUpperCase(); })
+};

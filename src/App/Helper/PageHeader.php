@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Page;
+namespace App\Helper;
 
 
 use Dom\Renderer\Renderer;
@@ -13,7 +13,7 @@ use Dom\Template;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class Header extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
+class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
     /**
      * @var \App\Db\Page
@@ -90,17 +90,16 @@ class Header extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInte
         $template->insertText('modified', \Tk\Date::toRelativeString($content->modified));
         
         // contributers
-        $contentList = \App\Db\Content::getMapper()->findByPageId($this->wPage->id, \Tk\Db\Tool::create('modified'));
+        $contentList = \App\Db\Content::getMapper()->findContributors($this->wPage->id);
         $html = [];
-        /** @var \App\Db\Content $c */
+        /** @var \stdClass $c */
         foreach($contentList as $i => $c) {
-            $user = $c->getUser();
+            $user = \App\Db\User::getMapper()->find($c->user_id);
             if (!$user) continue;
-            $url = \Tk\Uri::create('/search.html')->set('mode', 'user:'.$user->id);
+            $url = \Tk\Uri::create('/search.html')->set('mode', 'user:'.$user->hash);
             $class = [];
-            //$title = $c->modified->format(\Tk\Date::LONG_DATETIME);
-            $title = \Tk\Date::toRelativeString($c->modified);
-            if ($this->wPage->getUser()->id = $c->getUser()->id) {
+            $title = \Tk\Date::toRelativeString(\Tk\Date::create($c->modified));
+            if ($this->wPage->getUser()->id = $user->id) {
                 $class[] = 'author';
                 $title = 'Contributed: ' . $title;
             }

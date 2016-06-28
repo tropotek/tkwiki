@@ -20,7 +20,28 @@ class Page extends Model
      */
     const DEFAULT_TAG = '__default';
     
+    /**
+     * All users can read page
+     * Only registered users with edit roles can edit
+     */
+    const PERMISSION_PUBLIC = 0;
+    /**
+     * All registered users can read page
+     * Only registered users with edit roles can edit 
+     */
+    const PERMISSION_PROTECTED = 1;
+    /**
+     * Only the author can edit and read the page
+     */
+    const PERMISSION_PRIVATE = 2;
+    
+    /**
+     * This type is a standard content page
+     */
     const TYPE_PAGE = 'page';
+    /**
+     * This type means that the page is to be used with the menu/nav only
+     */
     const TYPE_NAV = 'nav';
     
     
@@ -58,6 +79,11 @@ class Page extends Model
      * @var integer
      */
     public $views = 0;
+
+    /**
+     * @var integer
+     */
+    public $permission = 0;
 
     /**
      * @var \DateTime
@@ -119,7 +145,7 @@ class Page extends Model
     public function getContent()
     {
         if (!$this->content) {
-            $this->content = \App\Db\Content::getMapper()->findByPageId($this->id, \Tk\Db\Tool::create('created', 1))->current();
+            $this->content = \App\Db\Content::getMapper()->findByPageId($this->id, \Tk\Db\Tool::create('created DESC', 1))->current();
         }
         return $this->content;
     }
@@ -135,7 +161,6 @@ class Page extends Model
         }
         return $this->user;
     }
-
 
 }
 

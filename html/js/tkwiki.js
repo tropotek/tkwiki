@@ -30,6 +30,28 @@ jQuery(function ($) {
     $(this).removeClass('open');
   });
 
+  tinymce.init({
+    selector: '.tinymce',
+    plugins: [
+      "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+      "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+      "table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern"
+    ],
+
+    toolbar1: "cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | styleselect formatselect",
+    toolbar2: "searchreplace | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor",
+    toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking",
+
+    menubar: false,
+    toolbar_items_size: 'small',
+    
+    browser_spellcheck: true,
+    convert_urls: false,
+    
+    content_css : config.siteUrl + '/html/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
+    content_style :  'body {padding: 10px;}'
+  });
+
 });
 
 
@@ -59,6 +81,11 @@ jQuery(function ($) {
     // ajax request a url, checking for duplicates.
     $(this).blur();
     
+  });
+
+  // For static form fields
+  $('.input-group .form-control[disabled]').each(function (i, el) {
+    $(this).closest('.input-group').find('.input-group-btn a').addClass('disabled');
   });
   
 });

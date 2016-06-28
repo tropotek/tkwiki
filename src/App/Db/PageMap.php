@@ -29,6 +29,7 @@ class PageMap extends Mapper
             'template' => $obj->template,
             'title' => $obj->title,
             'url' => $obj->url,
+            'permission' => $obj->permission,
             'views' => (int)$obj->views,
             'modified' => $obj->modified->format('Y-m-d H:i:s'),
             'created' => $obj->created->format('Y-m-d H:i:s')
@@ -49,6 +50,7 @@ class PageMap extends Mapper
         $obj->template = $row['template'];
         $obj->title = $row['title'];
         $obj->url = $row['url'];
+        $obj->permission = (int)$row['permission'];
         $obj->views = (int)$row['views'];
 
         if ($row['modified'])
@@ -81,6 +83,8 @@ class PageMap extends Mapper
             $obj->url = $row['url'];
         if (isset($row['views']))
             $obj->views = $row['views'];
+        if (isset($row['permission']))
+            $obj->permission = $row['permission'];
 
         if (isset($row['modified']))
             $obj->modified = new \DateTime($row['modified']);
@@ -99,6 +103,7 @@ class PageMap extends Mapper
             'template' => $obj->template,
             'title' => $obj->title,
             'url' => $obj->url,
+            'permission' => $obj->permission,
             'views' => $obj->views,
             'modified' => $obj->modified->format('Y-m-d H:i:s'),
             'created' => $obj->created->format('Y-m-d H:i:s')
@@ -151,6 +156,10 @@ class PageMap extends Mapper
             if ($w) {
                 $where .= '(' . substr($w, 0, -3) . ') AND ';
             }
+        }
+
+        if (isset($filter['permission'])) {
+            $where .= sprintf('a.permission = %s AND ', (int)$filter['permission']);
         }
 
 //        if (!empty($filter['lti_context_id'])) {

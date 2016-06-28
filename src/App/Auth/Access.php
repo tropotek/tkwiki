@@ -1,7 +1,8 @@
 <?php
 namespace App\Auth;
 
-use \App\Db\Role;
+use App\Db\Role;
+use App\Db\Page;
 
 /**
  * Class RoleAccess
@@ -16,6 +17,11 @@ class Access
     const ROLE_ADMIN = 'admin';
     const ROLE_MODERATOR = 'moderator';
     const ROLE_USER = 'user';
+
+    const ROLE_CREATE = 'create';
+    const ROLE_EDIT = 'edit';
+    const ROLE_DELETE = 'delete';
+    const ROLE_EDIT_EXTRA = 'editExtra';
     
     
     /**
@@ -52,9 +58,11 @@ class Access
      * 
      * @param string|array $role
      * @return boolean
+     * @todo Optimise this code....
      */
     public function hasRole($role)
     {
+        if (!$this->user) return false;
         if (!is_array($role)) $role = array($role);
 
         foreach ($role as $r) {
@@ -123,40 +131,80 @@ class Access
     
     /**
      * 
-     * @param $wikiPage
+     * @param Page $wikiPage
      * @return bool
      */
     public function canCreate($wikiPage)
     {
-        return true;
+        return $this->hasRole(self::ROLE_CREATE);
     }
     
     /**
-     * @param $wikiPage
+     * @param Page $wikiPage
      * @return bool
      */
     public function canEdit($wikiPage)
     {
-        return true;
+        if ($this->hasRole(self::ROLE_EDIT) && $this->hasPermission($wikiPage)) {
+            return true;
+        }
+        return false;
     }
     
     /**
-     * @param $wikiPage
+     * @param Page $wikiPage
      * @return bool
      */
     public function canDelete($wikiPage)
     {
-        return true;
+        if ($this->hasRole(self::ROLE_DELETE) && $this->hasPermission($wikiPage)) {
+            return true;
+        }
+        return false;
     }
     
     /**
-     * @param $wikiPage
+     * @param Page $wikiPage
      * @return bool
      */
     public function canEditExtra($wikiPage)
     {
-        return true;
+        if ($this->hasRole(self::ROLE_EDIT_EXTRA) && $this->hasPermission($wikiPage)) {
+            return true;
+        }
+        return false;
     }
     
     
+
+    /**
+     * @param Page $wikiPage
+     * @return bool
+     */
+    public function isAuthor($wikiPage)
+    {
+        return ($this->user->id == $wikiPage->userId);
+    }
+
+    /**
+     * @param Page $wikiPage
+     * @return bool
+     */
+    public function hasPermission($wikiPage)
+    {
+        switch($wikiPage->permission) {
+            case Page::PERMISSION_PUBLIC:
+                return true;
+            case Page::PERMISSION_PROTECTED:
+                if ($this->hasRole([self::ROLE_ADMIN, self::ROLE_MODERATOR])) {
+                    return true;
+                }
+                break;
+            case Page::PERMISSION_PRIVATE:
+                if ($this->isAuthor($wikiPage) || $this->hasRole(self::ROLE_ADMIN)) {
+                    return true;
+                }
+        }
+        return false;
+    }
 }

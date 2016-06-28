@@ -131,6 +131,35 @@ class ContentMap extends Mapper
     }
 
     /**
+     * returns an array of \stdClass objects with the user_id, modified, created fields:
+     * 
+     * Array (
+     *   [0] => stdClass Object (
+     *     [user_id] => 114
+     *     [modified] => 2016-06-23 08:37:27
+     *     [created] => 2016-06-23 08:37:27
+     *   )
+     * )
+     * 
+     * @param $pageId
+     * @return array
+     */
+    public function findContributors($pageId) 
+    {        
+        $sql = sprintf('SELECT DISTINCT ON (user_id) user_id, modified, created FROM %s WHERE page_id = %s ORDER BY user_id, modified DESC ',
+            $this->getDb()->quoteParameter($this->getTable()), (int)$pageId);
+        $stmt = $this->getDb()->query($sql);
+        $res = [];
+        foreach($stmt as $row) {
+            $res[] = $row;
+        }
+        
+        return $res;
+    }
+    
+    
+    
+    /**
      * Find filtered records
      *
      * @param array $filter

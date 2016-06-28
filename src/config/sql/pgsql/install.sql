@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS page (
   template varchar(255) NOT NULL DEFAULT '',      -- use a different page template if selected
   title VARCHAR(128) NOT NULL DEFAULT '',
   url VARCHAR(128) NOT NULL DEFAULT '',           -- the base url of the page
+  permission INTEGER NOT NULL DEFAULT 0,          -- Page permission 0 - public, 1 - protected, 2 - private
   views INTEGER NOT NULL DEFAULT 0,               -- Page views per (1 per session)
   modified TIMESTAMP DEFAULT NOW(),
   created TIMESTAMP DEFAULT NOW(),

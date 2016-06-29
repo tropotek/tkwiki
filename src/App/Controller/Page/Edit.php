@@ -50,26 +50,29 @@ class Edit extends Iface
     {
         
         $this->wPage = \App\Db\Page::getMapper()->find($request->get('pageId'));
-        if (!$this->wPage) {
-            /**
-             * Check the org wiki 
-             * I think the page is created after a page is saved and the 
-             * link is found in the page content.
-             * 
-             * So in reality we should not be creating new page objects in this page.
-             * 
-             */
-            throw new \Tk\Exception('NEW PAGES NOT IMPLEMENTED YET!!!!!!!!');
+        
+        if (!$this->wPage && $request->has('u') && $this->getUser()->getAccess()->canCreate()) {
+            // Create a new page
+            $this->wPage = new \App\Db\Page();
+            $this->wPage->userId = $this->getUser()->id;
+            $this->wPage->url = $request->get('u');
+            $this->wPage->title = str_replace('_', ' ', $this->wPage->url);
+            $this->wPage->permission = \App\Db\Page::PERMISSION_PRIVATE;
+            //$this->wPage->save();
+            $this->wContent = new \App\Db\Content();
+            //$this->wContent->pageId = $this->wPage->id;
+            $this->wContent->userId = $this->getUser()->id;
+            //$this->wContent->save();
+            
         }
-        $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
-//        if (!$this->wContent->pageId)
-//            $this->wContent->pageId = $this->wPage->id;
-//        $this->wContent = $this->wPage->getContent();
-//        if (!$this->wContent) {
-//            $this->wContent = new \App\Db\Content();
-//            $this->wContent->userId = $this->getUser()->getId();
-//            $this->wContent->pageId = $this->wPage->getId();
-//        }
+        
+        if (!$this->wPage) {
+            throw new \Tk\HttpException(404, 'Page not found');
+        }
+        if (!$this->wContent) {
+            $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
+        }
+        
         
         // Form
 
@@ -77,7 +80,7 @@ class Edit extends Iface
 
         $this->form->addField(new Field\Input('title'))->setRequired(true);
         $this->form->addField(new Field\Textarea('html'));
-        $this->form->addField(new Field\Input('url'))->setRequired(true);
+        //$this->form->addField(new Field\Input('url'))->setRequired(true);
         
         $this->form->addField(new Field\Select('permission'));
         $this->form->addField(new Field\Input('keywords'));
@@ -131,6 +134,7 @@ class Edit extends Iface
         
         vd('--- Submitted ---');
         
+        $this->wPage->getUrl()->redirect();
     }
 
     /**
@@ -172,8 +176,8 @@ class Edit extends Iface
         $domForm = $template->getForm('pageEdit');
 
         if ($this->wPage->id == 1) {
-            $field = $domForm->getFormElement('url');
-            $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page URL must be static.');
+            //$field = $domForm->getFormElement('url');
+            //$field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page URL must be static.');
             $field = $domForm->getFormElement('permission');
             $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page permissions must be public.');
         }
@@ -235,7 +239,7 @@ JS;
         
         <div class="col-md-3 well">
 
-          <div class="col-md-12">
+          <!-- div class="col-md-12">
             <div class="form-group">
               <label for="fid-url" class="control-label">Url:</label>
               <div class="input-group">
@@ -245,7 +249,7 @@ JS;
                 </div>
               </div>
             </div>
-          </div>
+          </div -->
           <div class="col-md-12">
             <div class="form-group">
               <label for="fid-permission" class="control-label">Permission:</label>

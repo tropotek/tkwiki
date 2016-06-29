@@ -37,10 +37,9 @@
           </div>
 
           <div id="navbar" class="collapse navbar-collapse js-navbar-collapse ">
-            <ul class="nav navbar-nav">
-              <!-- li class="active"><a href="#">Home</a></li -->
-              <li class=""><a href="/pageView.html">View</a></li>
-              <li class=""><a href="/pageEdit.html">Edit</a></li>
+            <ul class="nav navbar-nav" var="todo-nav">
+              <li class=""><a href="javascript:;">Link 1</a></li>
+              <li class=""><a href="javascript:;">Link 2</a></li>
 
               <li class="dropdown mega-dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Men <span class="caret"></span></a>
@@ -261,9 +260,15 @@
     <script src="/html/assets/jquery-1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/html/assets/bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
-    <script src="/html/js/tinymce/tinymce.min.js"></script>
 
     <script src="/html/js/jquery-toc/jquery-toc.js"></script>
+    <script src="/html/js/jquery-jtable.js"></script>
+    
+    <script src="/html/assets/tinymce/tinymce.min.js"></script>
+    <script src="/html/js/tinymce/plugins/wikilink/wikilink.js"></script>
+    <script src="/html/js/tinymce/plugins/wikisave/wikisave.js"></script>
+    
+    
     <script src="/html/js/tkwiki.js"></script>
 
 

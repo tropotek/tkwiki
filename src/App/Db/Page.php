@@ -125,6 +125,16 @@ class Page extends Model
     }
 
     /**
+     * This returns a \Tk\Uri object pointing to the page.
+     * 
+     * @return \Tk\Uri
+     */
+    public function getUrl()
+    {
+        return \Tk\Uri::create('/'.$this->url);
+    }
+    
+    /**
      * 
      * @param string $url
      * @return Page

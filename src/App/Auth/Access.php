@@ -131,11 +131,12 @@ class Access
     
     /**
      * 
-     * @param Page $wikiPage
      * @return bool
      */
-    public function canCreate($wikiPage)
+    public function canCreate()
     {
+        if ($this->isAdmin() || $this->isModerator())
+            return true;
         return $this->hasRole(self::ROLE_CREATE);
     }
     

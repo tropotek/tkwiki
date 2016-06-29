@@ -110,6 +110,7 @@ class Factory
             $dm->add(new \Dom\Modifier\Filter\UrlPath(self::getConfig()->getSiteUrl()));
             $dm->add(new \Dom\Modifier\Filter\Less(self::getConfig()));
             $dm->add(new \Dom\Modifier\Filter\JsLast());
+            $dm->add(new \App\Helper\UrlModifierFilter());
             self::getConfig()->setDomModifier($dm);
         }
         return self::getConfig()->getDomModifier();

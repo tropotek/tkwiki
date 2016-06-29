@@ -216,9 +216,9 @@ class ContentValidator extends \App\Helper\Validator
         /** @var Content $obj */
         $obj = $this->getObject();
 
-        if (!$obj->pageId) {
-            $this->addError('pageId', 'Invalid page ID value.');
-        }
+//        if (!$obj->pageId) {  // Cannot check this here as the page id is not saved
+//            $this->addError('pageId', 'Invalid page ID value.');
+//        }
         if (!$obj->userId) {
             $this->addError('userId', 'Invalid user ID value.');
         }

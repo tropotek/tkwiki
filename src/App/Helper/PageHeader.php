@@ -50,9 +50,6 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     {
         $template = $this->getTemplate();
         
-        // TODO: Implement show() method.
-        $content = $this->wPage->getContent();
-        
         if ($this->isView()) {
             $template->setChoice('view');
         } else {
@@ -85,9 +82,17 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         // title
         $template->appendHtml('title', $this->wPage->title);
 
+        
+        // TODO: Implement show() method.
+        $content = $this->wPage->getContent();
+        
         // modified
-        //$template->insertText('modified', $content->modified->format(\Tk\Date::LONG_DATETIME));
-        $template->insertText('modified', \Tk\Date::toRelativeString($content->modified));
+        if ($content) {
+            vd($content);
+            //$template->insertText('modified', $content->modified->format(\Tk\Date::LONG_DATETIME));
+            $template->insertText('modified', \Tk\Date::toRelativeString($content->modified));
+            $template->setChoice('modified');
+        }
         
         // contributers
         $contentList = \App\Db\Content::getMapper()->findContributors($this->wPage->id);
@@ -104,9 +109,12 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
                 $title = 'Contributed: ' . $title;
             }
             $html[] = sprintf('<a href="%s" class="%s" title="%s">%s</a>', $url, implode(' ', $class), $title, $user->name);
-            
         }
-        $template->insertHtml('contrib', implode(', ', $html));
+        if (count($html)) {
+            $template->insertHtml('contrib', implode(', ', $html));
+            $template->setChoice('contrib');
+        }
+        
         
         
         return $template;
@@ -139,8 +147,8 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
       <h1 var="title"></h1>
     </div>
     <div class="col-md-6">
-      <p class="wiki-meta"><strong>Contributers:</strong> <span var="contrib"><a href="#" title="Author" class="author">User</a>, <a href="#" title="Last Contributed: Thursday, 19 May 2016 07:22 AM">Administrator</a></span></p>
-      <p class="wiki-meta"><strong>Modified:</strong> <span var="modified">Thursday, 19 May 2016 07:22 AM</span></p>
+      <p class="wiki-meta" choice="contrib"><strong>Contributers:</strong> <span var="contrib"><a href="#" title="Author" class="author">User</a>, <a href="#" title="Last Contributed: Thursday, 19 May 2016 07:22 AM">Administrator</a></span></p>
+      <p class="wiki-meta" choice="modified"><strong>Modified:</strong> <span var="modified">Thursday, 19 May 2016 07:22 AM</span></p>
     </div>
     <div class="col-md-6 text-right" choice="edit">
       <p class="wiki-meta">

@@ -12,7 +12,6 @@ jQuery(function ($) {
     menu.toc({scope: '.wiki-content'});
   }
   
-  
   /* -- Mega Menu -- */
   $('.dropdown.mega-dropdown').on('click', function(e) {
     if ($(this).hasClass('open')) {
@@ -30,27 +29,88 @@ jQuery(function ($) {
     $(this).removeClass('open');
   });
 
-  tinymce.init({
-    selector: '.tinymce',
-    plugins: [
-      "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
-      "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-      "table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern"
-    ],
-
-    toolbar1: "cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | styleselect formatselect",
-    toolbar2: "searchreplace | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor",
-    toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking",
-
-    menubar: false,
-    toolbar_items_size: 'small',
+  // elFinder integration docs
+  // See: https://github.com/Studio-42/elFinder/wiki/Integration-with-TinyMCE-4.x
+  
+  if (typeof(tinyMCE) != 'undefined') {
     
-    browser_spellcheck: true,
-    convert_urls: false,
+    function elFinderBrowser (callback, value, meta) {
+      tinymce.activeEditor.windowManager.open({
+        file: config.siteUrl + '/html/assets/elfinder/elfinder.html', // use an absolute path!
+        title: 'TkWiki File Manager',
+        width: 900,
+        height: 450,
+        resizable: 'yes'
+      }, {
+        oninsert: function (file, elf) {
+          var url, reg, info;
+
+          // URL normalization
+          url = file.url;
+          reg = /\/[^/]+?\/\.\.\//;
+          while(url.match(reg)) {
+            url = url.replace(reg, '/');
+          }
+
+          // Make file info
+          info = file.name + ' (' + elf.formatSize(file.size) + ')';
+
+          // Provide file and text for the link dialog
+          if (meta.filetype == 'file') {
+            callback(url, {text: info, title: info});
+          }
+
+          // Provide image and alt text for the image dialog
+          if (meta.filetype == 'image') {
+            callback(url, {alt: info});
+          }
+
+          // Provide alternative source and posted for the media dialog
+          if (meta.filetype == 'media') {
+            callback(url);
+          }
+        }
+      });
+      return false;
+    }
     
-    content_css : config.siteUrl + '/html/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
-    content_style :  'body {padding: 10px;}'
-  });
+    tinymce.init({
+      selector: '.tinymce',
+      plugins: [
+        'wikisave wikilink advlist autolink autosave link image lists charmap print preview hr anchor',
+        'searchreplace visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+        'table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern visualblocks'
+      ],
+
+      toolbar1: 'wikisave wikilink | undo redo | cut copy paste searchreplace | bold italic underline strikethrough | styleselect | bullist numlist | outdent indent blockquote',
+      toolbar2: ' link unlink anchor image media | hr subscript superscript | nonbreaking insertdatetime | forecolor backcolor',
+      toolbar3: 'table | visualchars visualblocks ltr rtl | charmap emoticons | print preview | removeformat fullscreen code',
+
+      menubar: false,
+      toolbar_items_size: 'small',
+      browser_spellcheck: true,
+      convert_urls: false,
+      
+      wikilink_ajaxUrl : config.siteUrl + '/ajax/getPageList',
+      wikisave_enablewhendirty: true,
+      wikisave_onsavecallback: function () { submitForm($('#pageEdit').get(0), 'save'); },
+      file_picker_callback : elFinderBrowser,
+      
+      
+      content_css: [
+        config.siteUrl + '/html/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
+        config.siteUrl + '/html/css/tinymce.css'
+      ],
+      content_style: 'body {padding: 10px;}'
+    });
+
+    // Prevent Bootstrap dialog from blocking focusin
+    $(document).on('focusin', function(e) {
+      if ($(e.target).closest('.mce-window').length) {
+        e.stopImmediatePropagation();
+      }
+    });
+  }
 
 });
 

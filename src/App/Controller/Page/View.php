@@ -29,6 +29,7 @@ class View extends Iface
      */
     protected $dispatcher = null;
 
+    
     /**
      *
      */
@@ -36,7 +37,6 @@ class View extends Iface
     {
         parent::__construct();
         $this->dispatcher = $this->getConfig()->getEventDispatcher();
-        
     }
 
     /**
@@ -49,6 +49,12 @@ class View extends Iface
     {
         $this->wPage = \App\Db\Page::findPage($pageUrl);
         if (!$this->wPage) {
+            if ($this->getUser() && $this->getUser()->getAccess()->canCreate()) {
+                // Create a redirect to the page edit controller
+                \Tk\Uri::create('/edit.html')->set('u', $pageUrl)->redirect();
+            }
+            
+            
             throw new \Tk\HttpException(404, 'Page not found');
         }
         

@@ -68,8 +68,8 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     public function show()
     {
         $template = $this->getTemplate();
-        //if (!count($this->list)) return $template;
-        if ($this->user->getAccess()->canCreate()) {
+        
+        if ($this->user && $this->user->getAccess()->canCreate()) {
             $template->setChoice('canCreate');
             $url = \Tk\Uri::create('/edit.html')->set('type', \App\Db\Page::TYPE_NAV);
             $template->setAttr('create', 'href', $url);

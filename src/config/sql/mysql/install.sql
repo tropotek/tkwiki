@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   `js` TEXT,
   `size` int(11) unsigned NOT NULL DEFAULT '0',         -- page size in bytes 
   
+  `modified` DATETIME NOT NULL,
   `created` datetime NOT NULL,
   KEY `page_id` (`page_id`),
   KEY `user_id` (`user_id`)

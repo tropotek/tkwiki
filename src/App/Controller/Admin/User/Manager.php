@@ -43,7 +43,7 @@ class Manager extends Iface
         $this->table->addCell(new \Tk\Table\Cell\Text('name'))->addCellCss('key')->setUrl(\Tk\Uri::create('userEdit.html'));
         $this->table->addCell(new \Tk\Table\Cell\Text('username'));
         $this->table->addCell(new \Tk\Table\Cell\Text('email'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('uid'))->setLabel('UID');
+        //$this->table->addCell(new \Tk\Table\Cell\Text('uid'))->setLabel('UID');
         $this->table->addCell(new \Tk\Table\Cell\Boolean('active'));
         //$this->table->addCell(new \Tk\Table\Cell\Date('created'))->setFormat(\Tk\Table\Cell\Date::FORMAT_RELATIVE);
         $this->table->addCell(new \Tk\Table\Cell\Date('created'));

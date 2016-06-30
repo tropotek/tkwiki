@@ -32,7 +32,8 @@ INSERT INTO `data` (`foreign_id`, `foreign_key`, `key`, `value`) VALUES
   (0, 'system', 'site.meta.keywords', ''),
   (0, 'system', 'site.meta.description', ''),
   (0, 'system', 'site.global.js', ''),
-  (0, 'system', 'site.global.css', '');
+  (0, 'system', 'site.global.css', ''),
+  (0, 'system', 'wiki.page.default', 'Home');
 
 
 -- Add the home page to the site This should be non-deletable

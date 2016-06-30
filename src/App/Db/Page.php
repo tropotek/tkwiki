@@ -63,7 +63,7 @@ class Page extends Model
     /**
      * @var string
      */
-    public $template = 'main.xtpl';
+    public $template = '';
 
     /**
      * @var string

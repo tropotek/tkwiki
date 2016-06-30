@@ -119,7 +119,19 @@ class PageMap extends Mapper
      */
     public function findByUserId($userId, $tool = null)
     {
-        return $this->select('user_id = ' . (int)$userId, $tool);
+        $sql = sprintf('user_id = %s AND type = %s', (int)$userId, $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
+        return $this->select($sql, $tool);
+    }
+
+    /**
+     *
+     * @param \Tk\Db\Tool $tool
+     * @return ArrayObject
+     */
+    public function findNavPages($tool = null)
+    {
+        $sql = sprintf('type = %s', $this->getDb()->quote(\App\Db\Page::TYPE_NAV));
+        return $this->select($sql, $tool);
     }
 
     /**
@@ -129,7 +141,8 @@ class PageMap extends Mapper
      */
     public function findByUrl($url)
     {
-        return $this->select('url = ' . $this->getDb()->quote($url))->current();
+        $sql = sprintf('url = %s AND type = %s', $this->getDb()->quote($url), $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
+        return $this->select($sql)->current();
     }
 
     /**
@@ -148,7 +161,7 @@ class PageMap extends Mapper
             $kw = '%' . $this->getDb()->escapeString($filter['keywords']) . '%';
             $w = '';
             $w .= sprintf('a.title LIKE %s OR ', $this->getDb()->quote($kw));
-            $w .= sprintf('a.url LIKE %s OR ', $this->getDb()->quote($kw));;
+            $w .= sprintf('a.url LIKE %s OR ', $this->getDb()->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);
@@ -166,7 +179,8 @@ class PageMap extends Mapper
 //            $where .= sprintf('a.lti_context_id = %s AND ', $this->getDb()->quote($filter['lti_context_id']));
 //        }
 
-
+        $where .= sprintf('a.type = %s AND ', $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
+        
         if ($where) {
             $where = substr($where, 0, -4);
         }

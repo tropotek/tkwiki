@@ -6,7 +6,7 @@ use App\Controller\Iface;
 use Tk\Form;
 use Tk\Form\Field;
 use Tk\Form\Event;
-use Tk\Form\Field\Option\ArrayObjectIterator;
+use App\Helper\HtmlFormatter;
 
 /**
  * Class Index
@@ -49,21 +49,25 @@ class Edit extends Iface
     public function doDefault(Request $request)
     {
         
-        $this->wPage = \App\Db\Page::getMapper()->find($request->get('pageId'));
         
+        $this->wPage = \App\Db\Page::getMapper()->find($request->get('pageId'));
         if (!$this->wPage && $request->has('u') && $this->getUser()->getAccess()->canCreate()) {
-            // Create a new page
             $this->wPage = new \App\Db\Page();
             $this->wPage->userId = $this->getUser()->id;
             $this->wPage->url = $request->get('u');
             $this->wPage->title = str_replace('_', ' ', $this->wPage->url);
             $this->wPage->permission = \App\Db\Page::PERMISSION_PRIVATE;
-            //$this->wPage->save();
             $this->wContent = new \App\Db\Content();
-            //$this->wContent->pageId = $this->wPage->id;
             $this->wContent->userId = $this->getUser()->id;
-            //$this->wContent->save();
-            
+        }
+        if ($request->has('type') && $this->getUser()->getAccess()->canCreate()) {
+            $this->wPage = new \App\Db\Page();
+            $this->wPage->type = \App\Db\Page::TYPE_NAV;
+            $this->wPage->userId = $this->getUser()->id;
+            $this->wPage->title = 'Menu Item';
+            $this->wPage->permission = \App\Db\Page::PERMISSION_PUBLIC;
+            $this->wContent = new \App\Db\Content();
+            $this->wContent->userId = $this->getUser()->id;
         }
         
         if (!$this->wPage) {
@@ -71,17 +75,21 @@ class Edit extends Iface
         }
         if (!$this->wContent) {
             $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
+            // Find page urls and remove wiki-page-new class..
+            try {
+                if ($this->wContent->html) {
+                    $formatter = new HtmlFormatter($this->wContent->html, false);
+                    $this->wContent->html = $formatter->getHtml();
+                }
+            } catch(\Exception $e) {
+                \App\Alert::addInfo($e->getMessage());
+            } 
         }
         
-        
         // Form
-
         $this->form = new Form('pageEdit');
-
         $this->form->addField(new Field\Input('title'))->setRequired(true);
         $this->form->addField(new Field\Textarea('html'));
-        //$this->form->addField(new Field\Input('url'))->setRequired(true);
-        
         $this->form->addField(new Field\Select('permission'));
         $this->form->addField(new Field\Input('keywords'));
         $this->form->addField(new Field\Input('description'));
@@ -89,19 +97,20 @@ class Edit extends Iface
         $this->form->addField(new Field\Textarea('js'));
 
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\Button('delete', array($this, 'doDelete')));
-        $this->form->addField(new Event\Link('cancel', \Tk\Uri::create($this->wPage->url)));
+        $url = $this->wPage->getUrl();
+        if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
+            $url = \Tk\Uri::create('/');
+        }
+        $this->form->addField(new Event\Button('cancel', function ($form) use ($url) { $url->redirect(); }));
         
         $this->form->load(\App\Db\PageMap::unmapForm($this->wPage));
         $this->form->load(\App\Db\ContentMap::unmapForm($this->wContent));
-        
         $this->form->execute();
         
-        if ($request->has('del') && $this->wPage) {
-            $this->doDelete($this->form);
+        if ($request->has('del')) {
+            $this->doDelete($request);
         }
-        
-        return $this->showDefault($request);
+        return $this->show($request);
     }
 
     /**
@@ -109,18 +118,16 @@ class Edit extends Iface
      */
     public function doSubmit($form)
     {
-
         \App\Db\PageMap::mapForm($form->getValues(), $this->wPage);
         \App\Db\ContentMap::mapForm($form->getValues(), $this->wContent);
         
         $form->addFieldErrors(\App\Db\PageValidator::create($this->wPage)->getErrors());
         $form->addFieldErrors(\App\Db\ContentValidator::create($this->wContent)->getErrors());
-        
-        if ($this->wPage->id == 1) {
+
+        if ($this->wPage->url == \App\Db\Page::getHomeUrl()) {
             $this->wPage->url = 'Home';
             $this->wPage->permission = 0;
         }
-        
         
         if ($form->hasErrors()) {
             return;
@@ -129,39 +136,26 @@ class Edit extends Iface
         $this->wPage->save();
         $this->wContent->pageId = $this->wPage->id;
         $this->wContent->save();
-        
-        // Search the content for new pages and create them here....
-        
-        vd('--- Submitted ---');
-        
+        if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
+            \Tk\Uri::create('/')->redirect();
+        }
         $this->wPage->getUrl()->redirect();
     }
 
     /**
-     * @param $form
+     * @param Request $request
      */
-    public function doDelete($form)
+    public function doDelete(Request $request)
     {
-
-        vd('--- DO DELETE IF YOU DARE ---');
-        
+        $page = \App\Db\Page::getMapper()->find($request->get('del'));
+        if (!$page || !$this->getUser() || !$this->getUser()->getAccess()->canDelete($page)) {
+            \App\Alert::addWarning('You do not have the permissions to delete this page.');
+            return;
+        }
+        $page->delete();
         // Redirect to homepage
         \Tk\Uri::create('/')->redirect();
     }
-    
-    
-    
-    
-/*
-  WYSIWYG Editors:
-   - Code Mirror: https://codemirror.net/   (IDE)
-   - TinyMCE: https://www.tinymce.com/ (We know this works with the plugins for page creation...)
-   - Markitup: http://markitup.jaysalvat.com/ ()
-   - bootstrap-wysihtml5: http://bootstrap-wysiwyg.github.io/bootstrap3-wysiwyg/
-   
-  File Managers:
-   - elFinder: http://studio-42.github.io/elFinder/#elf_l1_SW1hZ2Vz (Used it and it works well.)
-*/
 
     /**
      * Note: no longer a dependency on show() allows for many show methods for many 
@@ -170,43 +164,26 @@ class Edit extends Iface
      * @param Request $request
      * @return \App\Page\PublicPage
      */
-    public function showDefault(Request $request)
+    public function show(Request $request)
     {
         $template = $this->getTemplate();
         $domForm = $template->getForm('pageEdit');
 
-        if ($this->wPage->id == 1) {
-            //$field = $domForm->getFormElement('url');
-            //$field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page URL must be static.');
+        if ($this->wPage->url == \App\Db\Page::getHomeUrl()) {
             $field = $domForm->getFormElement('permission');
             $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page permissions must be public.');
         }
         
-        
         $header = new \App\Helper\PageHeader($this->wPage, $this->getUser());
         $template->insertTemplate('header', $header->show());
-
 
         // Render the form
         $ren = new \Tk\Form\Renderer\DomStatic($this->form, $template);
         $ren->show();
         
-        
-        
-        // Fix disabled buttons
-        $js = <<<JS
-jQuery(function($) {
-
-
-});
-JS;
-        //$template->appendJs($js);
-        
-        
         return $this->getPage()->setPageContent($template);
     }
-
-
+    
     /**
      * DomTemplate magic method
      * 
@@ -217,8 +194,7 @@ JS;
         $xhtml = <<<HTML
 <div>
   <div var="header" class="wiki-header"></div>
-  
-  
+    
     <div class="row wiki-edit" var="wiki-edit">
       <form class="form-horizontal" id="pageEdit" method="post">
 
@@ -238,18 +214,6 @@ JS;
         </div>
         
         <div class="col-md-3 well">
-
-          <!-- div class="col-md-12">
-            <div class="form-group">
-              <label for="fid-url" class="control-label">Url:</label>
-              <div class="input-group">
-                <input type="text" id="fid-url" name="url" class="form-control"/>
-                <div class="input-group-btn">
-                  <a href="#" class="btn btn-default wiki-create-url-trigger" title="Auto Generate page URL from Title"><i class="glyphicon glyphicon-link"></i></a>
-                </div>
-              </div>
-            </div>
-          </div -->
           <div class="col-md-12">
             <div class="form-group">
               <label for="fid-permission" class="control-label">Permission:</label>
@@ -297,13 +261,9 @@ JS;
         </div>
 
       </form>
-
-
     </div>
-  
 </div>
 HTML;
-
         return \Dom\Loader::load($xhtml);
     }
 

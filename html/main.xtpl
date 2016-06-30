@@ -37,7 +37,8 @@
           </div>
 
           <div id="navbar" class="collapse navbar-collapse js-navbar-collapse ">
-            <ul class="nav navbar-nav" var="todo-nav">
+            
+            <ul class="nav navbar-nav" var="wiki-menu">
               <li class=""><a href="javascript:;">Link 1</a></li>
               <li class=""><a href="javascript:;">Link 2</a></li>
 

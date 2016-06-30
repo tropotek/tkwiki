@@ -53,23 +53,18 @@ class View extends Iface
                 // Create a redirect to the page edit controller
                 \Tk\Uri::create('/edit.html')->set('u', $pageUrl)->redirect();
             }
-            
-            
             throw new \Tk\HttpException(404, 'Page not found');
         }
         
         $this->wContent = $this->wPage->getContent();
         if (!$this->wContent) {
             // May redirect to the edit page if the user has edit privileges or send alert if not.
-            throw new \Tk\Exception('Page content not found');
+            //throw new \Tk\Exception('Page content not found');
+            \App\Alert::addWarning('Page content lost, please create new content.');
+            \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->redirect();
         }
         
-        
-        // TODO: 
-        //throw new \Tk\Exception('This page should need need a controller...its a wiki DOPE!!!');
-
-
-        return $this->showDefault($request);
+        return $this->show($request);
     }
 
 
@@ -81,7 +76,7 @@ class View extends Iface
      * @return \App\Page\PublicPage
      * @todo Look at implementing a cache for page views.
      */
-    public function showDefault(Request $request)
+    public function show(Request $request)
     {
         $template = $this->getTemplate();
         
@@ -90,9 +85,8 @@ class View extends Iface
         
         $event = new \App\Event\ContentEvent($this->wContent, $this, $request);
         $this->dispatcher->dispatch(\App\Events::WIKI_CONTENT_VIEW, $event);
-//        vd($this->wContent->html);
+
         $template->insertHtml('content', $this->wContent->html);
-                
         
         if ($this->wContent->css) {
             $template->appendCss($this->wContent->css);
@@ -100,8 +94,6 @@ class View extends Iface
         if ($this->wContent->js) {
             $template->appendJs($this->wContent->js);
         }
-        
-        
         return $this->getPage()->setPageContent($template);
     }
 

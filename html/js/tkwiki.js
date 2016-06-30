@@ -21,7 +21,7 @@ jQuery(function ($) {
       $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideDown('400');
       $(this).addClass('open');
     }
-    return false;
+    //return false; // stops link execution.
   });
   
   $('.dropdown.mega-dropdown').on('mouseleave', function(e) {
@@ -79,7 +79,7 @@ jQuery(function ($) {
       plugins: [
         'wikisave wikilink advlist autolink autosave link image lists charmap print preview hr anchor',
         'searchreplace visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-        'table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern visualblocks'
+        'table contextmenu directionality emoticons template textcolor paste textcolor colorpicker textpattern visualblocks'
       ],
 
       toolbar1: 'wikisave wikilink | undo redo | cut copy paste searchreplace | bold italic underline strikethrough | styleselect | bullist numlist | outdent indent blockquote',
@@ -99,9 +99,50 @@ jQuery(function ($) {
       
       content_css: [
         config.siteUrl + '/html/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
-        config.siteUrl + '/html/css/tinymce.css'
+        config.siteUrl + '/html/css/tkwiki.css'
       ],
-      content_style: 'body {padding: 10px;}'
+      body_class: 'mce-content-body wiki-content',
+
+      content_style: 'body {padding: 10px;}',
+      
+      style_formats: [
+        { title: 'Styles', selector: 'img', items: [
+          {title: 'Float Left', selector: 'img', classes: 'left'},
+          {title: 'Float Right', selector: 'img', classes: 'right'},
+          {title: 'Text Top', selector: 'img', classes: 'text-top'},
+          {title: 'Text Bottom', selector: 'img', classes: 'text-bottom'},
+          {title: 'Text Baseline', selector: 'img', classes: 'text-baseline'},
+          {title: 'Responsive', selector: 'img', classes: 'img-responsive'}
+        ]},
+        { title: 'Headers', items: [
+          { title: 'h1', block: 'h1' },
+          { title: 'h2', block: 'h2' },
+          { title: 'h3', block: 'h3' },
+          { title: 'h4', block: 'h4' },
+          { title: 'h5', block: 'h5' },
+          { title: 'h6', block: 'h6' }
+        ] },
+
+        { title: 'Blocks', items: [
+          { title: 'p', block: 'p' },
+          { title: 'div', block: 'div' },
+          { title: 'pre', block: 'pre' }
+        ] },
+
+        { title: 'Containers', items: [
+          { title: 'section', block: 'section', wrapper: true, merge_siblings: false },
+          { title: 'article', block: 'article', wrapper: true, merge_siblings: false },
+          { title: 'blockquote', block: 'blockquote', wrapper: true },
+          { title: 'hgroup', block: 'hgroup', wrapper: true },
+          { title: 'aside', block: 'aside', wrapper: true },
+          { title: 'figure', block: 'figure', wrapper: true }
+        ] },
+
+        { title: 'Inline', items: [
+          {title: 'Code', inline: 'code', wrapper: true }
+        ] }
+      ]
+
     });
 
     // Prevent Bootstrap dialog from blocking focusin
@@ -143,7 +184,7 @@ jQuery(function ($) {
     
   });
 
-  // For static form fields
+  // For static form input-button fields
   $('.input-group .form-control[disabled]').each(function (i, el) {
     $(this).closest('.input-group').find('.input-group-btn a').addClass('disabled');
   });

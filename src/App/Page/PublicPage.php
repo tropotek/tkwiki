@@ -50,6 +50,10 @@ JS;
         $template->appendJs($js, ['data-jsl-priority' => -1000]);
         
         
+        $menu = new \App\Helper\Menu($this->getUser());
+        $menu->show();
+        $template->insertTemplate('wiki-menu', $menu->getTemplate());
+        
     }
     
 }

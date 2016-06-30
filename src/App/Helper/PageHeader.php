@@ -67,7 +67,11 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
                 $template->setAttr('delete', 'href', $url);
                 $template->setChoice('canDelete');
             }
-            $url = \Tk\Uri::create($this->wPage->url);
+            
+            $url = $this->wPage->getUrl();
+            if ($this->wPage->type == \App\Db\Page::TYPE_NAV || !$this->wPage->id) {
+                $url = \Tk\Uri::create('/');
+            }
             $template->setAttr('cancel', 'href', $url);
         }
 
@@ -77,18 +81,17 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         $url = \Tk\Uri::create($this->wPage->url);
         $template->setAttr('view', 'href', $url);
         
-        
+        $template->insertText('permission', ucfirst($this->wPage->getPermissionLabel()));
+        $template->addClass('permission', $this->wPage->getPermissionLabel());
         
         // title
         $template->appendHtml('title', $this->wPage->title);
-
         
         // TODO: Implement show() method.
         $content = $this->wPage->getContent();
         
         // modified
         if ($content) {
-            vd($content);
             //$template->insertText('modified', $content->modified->format(\Tk\Date::LONG_DATETIME));
             $template->insertText('modified', \Tk\Date::toRelativeString($content->modified));
             $template->setChoice('modified');
@@ -99,6 +102,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         $html = [];
         /** @var \stdClass $c */
         foreach($contentList as $i => $c) {
+            /** @var \App\Db\User $user */
             $user = \App\Db\User::getMapper()->find($c->user_id);
             if (!$user) continue;
             $url = \Tk\Uri::create('/search.html')->set('mode', 'user:'.$user->hash);
@@ -147,22 +151,26 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
       <h1 var="title"></h1>
     </div>
     <div class="col-md-6">
-      <p class="wiki-meta" choice="contrib"><strong>Contributers:</strong> <span var="contrib"><a href="#" title="Author" class="author">User</a>, <a href="#" title="Last Contributed: Thursday, 19 May 2016 07:22 AM">Administrator</a></span></p>
-      <p class="wiki-meta" choice="modified"><strong>Modified:</strong> <span var="modified">Thursday, 19 May 2016 07:22 AM</span></p>
+      <p class="wiki-meta contrib" choice="contrib"><strong>Contributers:</strong> <span var="contrib"><a href="#" title="Author" class="author">User</a>, <a href="#" title="Last Contributed: Thursday, 19 May 2016 07:22 AM">Administrator</a></span></p>
+      <p class="wiki-meta modified" choice="modified"><strong>Modified:</strong> <span var="modified">Thursday, 19 May 2016 07:22 AM</span></p>
     </div>
-    <div class="col-md-6 text-right" choice="edit">
+    <div class="col-md-6 text-right edit" choice="edit">
       <p class="wiki-meta">
-        <!-- a href="#" title="Save The Page" class="btn btn-primary btn-xs wiki-save-trigger" var="save" choice="canEdit"><i class="glyphicon glyphicon-save"></i> Save</a -->
-        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view"><i class="glyphicon glyphicon-eye-open"></i> View</a>
         <a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="glyphicon glyphicon-remove"></i> Delete</a>
-        <!-- a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="cancel"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</a -->
+      </p>
+      <p class="wiki-meta">
+        <a href="#" title="Save The Page" class="btn btn-primary btn-xs wiki-save-trigger" var="save" choice="canEdit"><i class="glyphicon glyphicon-save"></i> Save</a>
+        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view"><i class="glyphicon glyphicon-eye-open"></i> View</a>
+        <!--  a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="glyphicon glyphicon-remove"></i> Delete</a -->
+        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="cancel"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</a>
       </p>
     </div>
     <div class="col-md-6 text-right" choice="view">
-      <p class="wiki-meta">  
+      <p class="wiki-meta view">  
         <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>  
         <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history"><i class="glyphicon glyphicon-time"></i> History</a>
       </p>
+      <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span></p>
     </div>
   </div>
   <hr class="no-top-margin"/>

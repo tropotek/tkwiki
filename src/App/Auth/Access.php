@@ -128,6 +128,8 @@ class Access
     {
         return $this->hasRole(self::ROLE_USER);
     }
+
+
     
     /**
      * 
@@ -139,59 +141,12 @@ class Access
             return true;
         return $this->hasRole(self::ROLE_CREATE);
     }
-    
-    /**
-     * @param Page $wikiPage
-     * @return bool
-     */
-    public function canEdit($wikiPage)
-    {
-        if ($this->hasRole(self::ROLE_EDIT) && $this->hasPermission($wikiPage)) {
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * @param Page $wikiPage
-     * @return bool
-     */
-    public function canDelete($wikiPage)
-    {
-        if ($this->hasRole(self::ROLE_DELETE) && $this->hasPermission($wikiPage)) {
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * @param Page $wikiPage
-     * @return bool
-     */
-    public function canEditExtra($wikiPage)
-    {
-        if ($this->hasRole(self::ROLE_EDIT_EXTRA) && $this->hasPermission($wikiPage)) {
-            return true;
-        }
-        return false;
-    }
-    
-    
 
     /**
      * @param Page $wikiPage
      * @return bool
      */
-    public function isAuthor($wikiPage)
-    {
-        return ($this->user->id == $wikiPage->userId);
-    }
-
-    /**
-     * @param Page $wikiPage
-     * @return bool
-     */
-    public function hasPermission($wikiPage)
+    public function canView($wikiPage)
     {
         switch($wikiPage->permission) {
             case Page::PERMISSION_PUBLIC:
@@ -207,5 +162,52 @@ class Access
                 }
         }
         return false;
+    }
+
+    /**
+     * @param Page $wikiPage
+     * @return bool
+     */
+    public function canEdit($wikiPage)
+    {
+        if ($this->hasRole(self::ROLE_EDIT) && $this->canView($wikiPage)) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * @param Page $wikiPage
+     * @return bool
+     */
+    public function canDelete($wikiPage)
+    {
+        if ($wikiPage->id && $wikiPage->url != \App\Db\Page::getHomeUrl() && $this->hasRole(self::ROLE_DELETE) && $this->canView($wikiPage)) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * @param Page $wikiPage
+     * @return bool
+     */
+    public function canEditExtra($wikiPage)
+    {
+        if ($this->hasRole(self::ROLE_EDIT_EXTRA) && $this->canView($wikiPage)) {
+            return true;
+        }
+        return false;
+    }
+    
+    
+
+    /**
+     * @param Page $wikiPage
+     * @return bool
+     */
+    public function isAuthor($wikiPage)
+    {
+        return ($this->user->id == $wikiPage->userId);
     }
 }

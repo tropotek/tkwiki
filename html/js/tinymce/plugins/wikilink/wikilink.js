@@ -92,14 +92,11 @@ tinymce.PluginManager.add('wikilink', function(editor, url) {
         template :
         '<div class="jtable-wrapper"><div class="filter clearfix"><div class="jtable-search">'+
         '<input type="text" class="mce-textbox" placeholder="search" />' +
-        '' +
         '<div class="mce-widget mce-btn mce-primary mce-abs-layout-item mce-btn-has-text"><button class="" type="button">Go!</button></div>' +
         '</div></div><br/>' +
         '<table class="table table-condensed table-hover" style="width: 100%;"></table>'+
         '</div>',
         onSelect: function (object) {
-          console.log(object);
-
           insert(object.url, object.title);
           win.close();
         }

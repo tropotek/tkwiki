@@ -35,11 +35,11 @@ class Page extends \App\Controller\Iface
         $pageList = \App\Db\Page::getMapper()->findFiltered($filter, $tool);
         $list = [];
         foreach($pageList as $page) {
+            if (!$this->getUser()->getAccess()->canView($page)) continue;
             $page->modified = $page->modified->format(\Tk\Date::SHORT_DATETIME);
-            $page->created = $page->created->format(\Tk\Date::SHORT_DATETIME);  
+            $page->created = $page->created->format(\Tk\Date::SHORT_DATETIME);
             $list[] = $page;
         }
-        
         $data = array(
             'list' => $list,
             'tool' => array(

@@ -115,13 +115,52 @@ class Page extends Model
         $this->modified = new \DateTime();
         $this->created = new \DateTime();
     }
+
+    /**
+     * create a unique url by comparing to the 
+     * existing urls and adding to a tail count if duplicated exist.
+     * 
+     * EG: 
+     *   Home
+     *   Home_1
+     *   Home_2
+     *   ...
+     * 
+     * @param $title
+     * @return mixed|string
+     */
+    static public function makeUrl($title)
+    {
+        $url = preg_replace('/[^a-z0-9_-]/i', '_', $title);
+        do {
+            $comp = \App\Db\Page::getMapper()->findByUrl($url);
+            if ($comp) {
+                if (preg_match('/(.+)(_([0-9]+))$/', $url, $regs)) {
+                    $url = $regs[1] . '_' . ($regs[3]+1);
+                } else {
+                    $url = $url.'_1';
+                }
+            }
+        } while($comp);
+        return $url;
+    }
     
     public function save()
     {
-        // TODO: make sure the url is unique
-        // Do not error on the url it needs to be automatic
+        if (!$this->url && !$this->id) {
+            $this->url = $this->makeUrl($this->title);
+        }
         
-        return parent::save();
+        parent::save();
+    }
+
+    public function delete()
+    {
+        $contentList = \App\Db\Content::getMapper()->findByPageId($this->id);
+        foreach ($contentList as $c) {
+            $c->delete();
+        }
+        return parent::delete();
     }
 
     /**
@@ -149,6 +188,14 @@ class Page extends Model
     }
 
     /**
+     * @return string
+     */
+    static public function getHomeUrl()
+    {
+        return \App\Factory::getConfig()->get('wiki.page.default');
+    }
+
+    /**
      * 
      * @return \App\Db\Content
      */
@@ -159,6 +206,24 @@ class Page extends Model
         }
         return $this->content;
     }
+
+
+    /**
+     * Get the page permission level as a string
+     * @return string
+     */
+    public function getPermissionLabel()
+    {
+        switch($this->permission) {
+            case self::PERMISSION_PRIVATE;
+                return 'private';
+            case self::PERMISSION_PROTECTED;
+                return 'protected';
+            
+        }
+        return 'public';
+    }
+    
 
     /**
      *
@@ -192,14 +257,15 @@ class PageValidator extends \App\Helper\Validator
         if (!$obj->title) {
             $this->addError('title', 'Please enter a title for your page');
         }
-        
-        $comp = \App\Db\Page::getMapper()->findByUrl($obj->url);
-        if ($comp && $comp->id != $obj->id) {
-            $this->addError('url', 'This url already exists, try again.');
+        if($obj->id) {
+            $comp = \App\Db\Page::getMapper()->findByUrl($obj->url);
+            if ($comp && $comp->id != $obj->id) {
+                $this->addError('url', 'This url already exists, try again.');
+            }
         }
-        if (!$obj->url) {
-            $this->addError('url', 'Please enter a URL for your page');
-        }
+//        if (!$obj->url) {
+//            $this->addError('url', 'Please enter a URL for your page');
+//        }
         
         // TODO: ????
         

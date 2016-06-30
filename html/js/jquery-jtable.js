@@ -92,16 +92,16 @@
     var show = function(data) {
       // code goes here
       var i = 0;
-      var table = $(plugin.settings.template);
+      //var table = $(plugin.settings.template);
       $element.empty();
-      $element.append(table);
+      $element.append(plugin.settings.template);
       
       // Show headers
       var header = $('<tr></tr>');
       for (i=0; i < plugin.settings.labels.length; i++) {
         header.append('<th>'+plugin.settings.labels[i]+'</th>');
       }
-      table.find('table').append(header);
+      $element.find('table').append(header);
       
       // show data
       var list = data.list;
@@ -110,35 +110,34 @@
         var object = list[i];
         var row = $('<tr></tr>');
         row.data('object', object);
-        for (i=0; i < plugin.settings.labels.length; i++) {
+        for (var j=0; j < plugin.settings.labels.length; j++) {
           var css = '';
-          var prop = plugin.settings.properties[i];
+          var prop = plugin.settings.properties[j];
           var text = object[prop];
-          
           if (plugin.settings.key == prop) {
-            css = plugin.settings.properties[i] + ' key';
+            css = plugin.settings.properties[j] + ' key';
             text = '<a href="javascript:;">'+text+'</a>';
           }
           row.append('<td class="'+css+'">'+text+'</td>');
         }
-        table.find('table').append(row);
+        $element.find('table').append(row);
       }
       
       
       // Setup Table Events
-      table.find('td.key a').on('click', function(e) {
+      $element.find('td.key a').on('click', function(e) {
         plugin.settings.onSelect.apply(this, [$(this).parents('tr').data('object')]);
       });
-      
-      table.find('.jtable-search button').on('click', function(e) {
-        var input = table.find('.jtable-search input');
+
+      $element.find('.jtable-search button').on('click', function(e) {
+        var input = $element.find('.jtable-search input');
         plugin.settings.tool.offset = 0;
         plugin.settings.tool.keywords = input.val();
         getPageList();
       });
       
       // Set the keywords input value if available
-      table.find('.jtable-search input').val(plugin.settings.tool.keywords);
+      $element.find('.jtable-search input').val(plugin.settings.tool.keywords);
       
       // Pager
       var pager = showPager(plugin.settings.tool);

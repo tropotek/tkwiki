@@ -17,7 +17,6 @@ use Tk\Kernel\KernelEvents;
  */
 class WikiHandler implements SubscriberInterface
 {
-
     
     /**
      *
@@ -25,17 +24,17 @@ class WikiHandler implements SubscriberInterface
      */
     public function contentPreRender(\App\Event\ContentEvent $event)
     {
-        vd('------------- '.\App\Events::WIKI_CONTENT_VIEW.' -------------');
-        
         $content = $event->getContent();
-        $formatter = new \App\Helper\HtmlFormatter($content->html);
-        $event->set('htmlFormatter', $formatter);
-        // Format the content html
-        $content->html = $formatter->getFormattedHtml();
-        
+        try {
+            $formatter = new \App\Helper\HtmlFormatter($content->html);
+            $event->set('htmlFormatter', $formatter);
+            // Format the content html
+            $content->html = $formatter->getHtml();
+        } catch (\Exception $e) {
+            $content->html = '<div role="alert" class="alert alert-danger"><strong>Error:</strong> '.$e->getMessage().'</div>';
+        }
     }
-
-
+    
     /**
      * getSubscribedEvents
      *

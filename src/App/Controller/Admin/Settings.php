@@ -108,23 +108,11 @@ class Settings extends Iface
         $template->insertTemplate($this->form->getId(), $fren->show()->getTemplate());
         
         // Render select page dialog
-        $js = <<<JS
-jQuery(function($) {
-  
-  // required for the pageSelect renderer
-  config.pageSelect = {
-     button : $(document.getElementById('fid_btn_wiki.page.default')),
-     input : $(document.getElementById('fid_wiki.page.default'))
-  };
-  
-});
-JS;
-        //$template->appendJs($js);
-        
-        
         $pageSelect = new \App\Helper\PageSelect('#fid_btn_wiki\\\\.page\\\\.default', '#fid_wiki\\\\.page\\\\.default');
         $pageSelect->show();
         $template->appendTemplate('content', $pageSelect->getTemplate());
+        
+        
         
         return $this->getPage()->setPageContent($template);
     }

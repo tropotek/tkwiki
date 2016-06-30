@@ -1,0 +1,29 @@
+
+
+
+.wiki-content a.wiki-page-new {
+  color: #d00;
+}
+
+.wiki-content img {
+  margin: 0 10px;
+}
+.wiki-content .left {
+  float: left;
+}
+.wiki-content .right {
+  float: right;
+}
+.wiki-content .text-top {
+  vertical-align: text-top;
+}
+.wiki-content .text-bottom {
+  vertical-align: text-bottom;
+}
+.wiki-content .text-baseline {
+  vertical-align: baseline;
+}
+
+
+
+

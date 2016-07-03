@@ -1,7 +1,7 @@
 <?php
 namespace App\Event;
 
-use Tk\Event\ControllerEvent;
+use Tk\EventDispatcher\Event;
 use Tk\Request;
 use App\Db\Content;
 
@@ -11,7 +11,7 @@ use App\Db\Content;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class ContentEvent extends ControllerEvent
+class ContentEvent extends Event
 {
     /**
      * @var Content
@@ -21,25 +21,12 @@ class ContentEvent extends ControllerEvent
 
     /**
      * __construct
-     *
      * @param Content $content
-     * @param mixed $controller
-     * @param Request $request
      */
-    public function __construct($content, $controller, $request)
+    public function __construct($content)
     {
-        parent::__construct($controller, $request);
+        parent::__construct();
         $this->content = $content;
-    }
-
-    /**
-     * 
-     * 
-     * @return \DOMDocument
-     */
-    public function getContentDoc()
-    {
-        return $this->doc;
     }
 
     /**

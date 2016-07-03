@@ -107,7 +107,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             if (!$user) continue;
             $url = \Tk\Uri::create('/search.html')->set('mode', 'user:'.$user->hash);
             $class = [];
-            $title = \Tk\Date::toRelativeString(\Tk\Date::create($c->modified));
+            $title = \Tk\Date::toRelativeString(\Tk\Date::create($c->created));
             if ($this->wPage->getUser()->id = $user->id) {
                 $class[] = 'author';
                 $title = 'Contributed: ' . $title;
@@ -151,8 +151,8 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
       <h1 var="title"></h1>
     </div>
     <div class="col-md-6">
-      <p class="wiki-meta contrib" choice="contrib"><strong>Contributers:</strong> <span var="contrib"><a href="#" title="Author" class="author">User</a>, <a href="#" title="Last Contributed: Thursday, 19 May 2016 07:22 AM">Administrator</a></span></p>
-      <p class="wiki-meta modified" choice="modified"><strong>Modified:</strong> <span var="modified">Thursday, 19 May 2016 07:22 AM</span></p>
+      <p class="wiki-meta contrib" choice="contrib"><strong>Contributers:</strong> <span var="contrib"></span></p>
+      <p class="wiki-meta modified" choice="modified"><strong>Modified:</strong> <span var="modified"></span></p>
     </div>
     <div class="col-md-6 text-right edit" choice="edit">
       <p class="wiki-meta">

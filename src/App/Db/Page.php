@@ -156,6 +156,9 @@ class Page extends Model
 
     public function delete()
     {
+        // TODO: remove page any locks
+        
+        // Remove all content
         $contentList = \App\Db\Content::getMapper()->findByPageId($this->id);
         foreach ($contentList as $c) {
             $c->delete();

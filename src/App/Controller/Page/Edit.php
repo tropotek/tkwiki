@@ -48,9 +48,9 @@ class Edit extends Iface
      */
     public function doDefault(Request $request)
     {
-        
-        
+        // Find requested page
         $this->wPage = \App\Db\Page::getMapper()->find($request->get('pageId'));
+        // Create a new page
         if (!$this->wPage && $request->has('u') && $this->getUser()->getAccess()->canCreate()) {
             $this->wPage = new \App\Db\Page();
             $this->wPage->userId = $this->getUser()->id;
@@ -60,6 +60,7 @@ class Edit extends Iface
             $this->wContent = new \App\Db\Content();
             $this->wContent->userId = $this->getUser()->id;
         }
+        // Create a new Nav page
         if ($request->has('type') && $this->getUser()->getAccess()->canCreate()) {
             $this->wPage = new \App\Db\Page();
             $this->wPage->type = \App\Db\Page::TYPE_NAV;
@@ -69,13 +70,26 @@ class Edit extends Iface
             $this->wContent = new \App\Db\Content();
             $this->wContent->userId = $this->getUser()->id;
         }
-        
         if (!$this->wPage) {
             throw new \Tk\HttpException(404, 'Page not found');
         }
+        
+        
+        if (!$this->wPage->id) {
+            // Aquire page lock.
+            
+            
+        }
+        // check if the user can edit the page
+        if (!$this->getUser()->getAccess()->canEdit($this->wPage)) {
+            \App\Alert::addWarning('You do not have permission to edit this page.');
+            $this->wPage->getUrl()->redirect();
+        }
+        
+        
         if (!$this->wContent) {
             $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
-            // Find page urls and remove wiki-page-new class..
+            // Execute the pre-formatter (TODO: This could be an event)
             try {
                 if ($this->wContent->html) {
                     $formatter = new HtmlFormatter($this->wContent->html, false);
@@ -85,6 +99,8 @@ class Edit extends Iface
                 \App\Alert::addInfo($e->getMessage());
             } 
         }
+        
+        
         
         // Form
         $this->form = new Form('pageEdit');
@@ -136,6 +152,9 @@ class Edit extends Iface
         $this->wPage->save();
         $this->wContent->pageId = $this->wPage->id;
         $this->wContent->save();
+        
+        // TODO: Remove any page locks
+        
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
             \Tk\Uri::create('/')->redirect();
         }

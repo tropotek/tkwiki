@@ -68,6 +68,8 @@ class User extends Model
      * @var \DateTime
      */
     public $created = null;
+    
+    public $ip = '';
 
     /**
      * @var Access
@@ -83,6 +85,7 @@ class User extends Model
     {
         $this->modified = new \DateTime();
         $this->created = new \DateTime();
+        $this->ip = \App\Factory::getRequest()->getIp();
     }
 
     /**

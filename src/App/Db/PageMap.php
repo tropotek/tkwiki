@@ -188,4 +188,15 @@ class PageMap extends Mapper
         $res = $this->selectFrom($from, $where, $tool);
         return $res;
     }
+    
+    
+    
+    
+    
+    
+    // TODO: See LinkMap.....
+    
+    
+    
+    
 }

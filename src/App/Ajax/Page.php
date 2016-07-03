@@ -22,6 +22,19 @@ class Page extends \App\Controller\Iface
     }
 
     /**
+     * 
+     * @param Request $request
+     */
+    public function doRefreshLock(Request $request)
+    {
+        $pageId = $request->get('pid');
+        $user =$this->getUser();
+        
+        // TODO: refresh the lock timeout to prevent user loosing the lock over long edits.
+        
+    }
+
+    /**
      * @param Request $request
      * @return \App\Page\Iface
      */

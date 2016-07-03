@@ -145,15 +145,21 @@ class ContentMap extends Mapper
      * @return array
      */
     public function findContributors($pageId) 
-    {        
-        $sql = sprintf('SELECT DISTINCT ON (user_id) user_id, modified, created FROM %s WHERE page_id = %s ORDER BY user_id, modified DESC ',
+    {
+        // pgsql
+        $sql = sprintf('SELECT DISTINCT ON (user_id) user_id, created FROM %s WHERE page_id = %s ORDER BY user_id, created DESC ',
             $this->getDb()->quoteParameter($this->getTable()), (int)$pageId);
+        // Mysql
+        if($this->getDb()->getDriver() == 'mysql') {
+            $sql = sprintf('SELECT DISTINCT user_id, created FROM %s WHERE page_id = %s GROUP BY user_id ORDER BY user_id, created DESC ',
+                $this->getDb()->quoteParameter($this->getTable()), (int)$pageId);
+        }
+        
         $stmt = $this->getDb()->query($sql);
         $res = [];
         foreach($stmt as $row) {
             $res[] = $row;
         }
-        
         return $res;
     }
     

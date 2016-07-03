@@ -26,6 +26,11 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
      * @var null
      */
     protected $list = array();
+
+    /**
+     * @var \Tk\EventDispatcher\EventDispatcher
+     */
+    protected $dispatcher = null;
     
     
     /**
@@ -37,6 +42,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     {
         $this->user = $user;
         $this->init();
+        $this->dispatcher = \App\Factory::getConfig()->getEventDispatcher();
     }
 
     /**
@@ -79,14 +85,12 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
         foreach($this->list as $page) {
             $row = $template->getRepeat('row');
             $row->insertText('title', $page->title);
-            $html = $page->getContent()->html;
-            try {
-                $formatter = new \App\Helper\HtmlFormatter($html);
-                $html = $formatter->getHtml();
-            } catch (\Exception $e) {
-                $html = $page->getContent()->html;
-            }
-            $row->insertHtml('html', $html);
+
+            $content = $page->getContent();
+            $event = new \App\Event\ContentEvent($content);
+            $this->dispatcher->dispatch(\App\Events::WIKI_CONTENT_VIEW, $event);
+            
+            $row->insertHtml('html', $content->html);
             
             if ($this->user->getAccess()->canEdit($page)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $page->id);

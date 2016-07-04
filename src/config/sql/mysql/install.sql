@@ -8,7 +8,7 @@
 # DROP TABLE IF EXISTS `data`;
 # DROP TABLE IF EXISTS `page`;
 # DROP TABLE IF EXISTS `content`;
-# DROP TABLE IF EXISTS `pagelink`;
+# DROP TABLE IF EXISTS `links`;
 # DROP TABLE IF EXISTS `lock`;
 # DROP TABLE IF EXISTS `version`;
 
@@ -110,23 +110,13 @@ CREATE TABLE IF NOT EXISTS `content` (
 
 
 -- --------------------------------------------------------
--- Table structure for table `pagelink`
+-- Table structure for table `links`
 -- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pagelink` (
-  `page_from` int(11) unsigned NOT NULL DEFAULT '0',
-  `page_to_name` varchar(255) NOT NULL DEFAULT '',
-  UNIQUE KEY `page_from` (`page_from`, `page_to_name`),
-  KEY `page_to_name` (`page_to_name`, `page_from`)
+CREATE TABLE IF NOT EXISTS `links` (
+  `page_id` int(11) unsigned NOT NULL DEFAULT '0',  -- The containing page ID
+  `page_url` varchar(255) NOT NULL DEFAULT '',      -- The page url (we use url instead of id to cater for non-existing pages)
+  UNIQUE KEY `page_from` (`page_id`, `page_url`)
 ) ENGINE=InnoDB;
-
--- Proposed new pagelink
-# DROP TABLE IF EXISTS `pagelink`;
-# CREATE TABLE IF NOT EXISTS `pagelink` (
-#   `page_from_id` int(11) unsigned NOT NULL DEFAULT '0',
-#   `page_to_id` int(11) unsigned NOT NULL DEFAULT '0',
-#   UNIQUE KEY `page_from_id` (`page_from_id`, `page_to_id`),
-#   KEY `page_to_id` (`page_to_id`, `page_from_id`)
-# ) ENGINE=InnoDB;
 
 
 -- --------------------------------------------------------
@@ -142,6 +132,7 @@ CREATE TABLE IF NOT EXISTS `lock` (
   KEY `page_id` (`page_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB;
+
 
 -- --------------------------------------------------------
 -- Table structure for table `version`

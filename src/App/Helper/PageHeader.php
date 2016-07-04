@@ -15,10 +15,16 @@ use Dom\Template;
  */
 class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
+    
     /**
      * @var \App\Db\Page
      */
     protected $wPage = null;
+    
+    /**
+     * @var \App\Db\Content
+     */
+    protected $wContent = null;
 
     /**
      * Logged in user
@@ -31,11 +37,13 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
      * Header constructor.
      *
      * @param \App\Db\Page $wPage
+     * @param \App\Db\Content $wContent
      * @param \App\Db\User $user
      */
-    public function __construct($wPage, $user)
+    public function __construct($wPage, $wContent, $user)
     {
         $this->wPage = $wPage;
+        $this->wContent = $wContent;
         $this->user = $user;
     }
     
@@ -49,12 +57,28 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     public function show()
     {
         $template = $this->getTemplate();
+        $title = $this->wPage->title;
         
-        if ($this->isView()) {
-            $template->setChoice('view');
-        } else {
+        if ($this->isEdit()) {
             $template->setChoice('edit');
+        } else if ($this->isHistory()) {
+            $template->setChoice('history');
+            $title .= ' (History)';
+        } else {
+            if (\App\Factory::getRequest()->has('contentId')) {
+                $template->setChoice('viewRevision');
+                $title .= ' <small>(Revision '.$this->wContent->id.')</small>';
+                $template->addClass('content', 'revision');
+                if ($this->user->getAccess()->canEdit($this->wPage)) {
+                    $template->setChoice('revert');
+                }
+            } else {
+                $template->setChoice('view');
+            }
         }
+        
+        // title
+        $template->appendHtml('title', $title);
         
         if ($this->user) {
             if ($this->user->getAccess()->canEdit($this->wPage)) {
@@ -78,14 +102,20 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         $url = \Tk\Uri::create('/history.html')->set('pageId', $this->wPage->id);
         $template->setAttr('history', 'href', $url);
 
+        if ($this->wContent) {
+            $url = \Tk\Uri::create('/history.html')->set('r', $this->wContent->id);
+            $template->setAttr('revert', 'href', $url);
+            
+            $template->insertText('contentId', $this->wContent->id);
+        }
+
         $url = \Tk\Uri::create($this->wPage->url);
         $template->setAttr('view', 'href', $url);
         
         $template->insertText('permission', ucfirst($this->wPage->getPermissionLabel()));
         $template->addClass('permission', $this->wPage->getPermissionLabel());
         
-        // title
-        $template->appendHtml('title', $this->wPage->title);
+        
         
         // TODO: Implement show() method.
         $content = $this->wPage->getContent();
@@ -126,12 +156,25 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
 
     /**
      * Is the page url a view url or an edit url
-     *  
+     *
      * @return bool
      */
-    public function isView()
+    public function isEdit()
     {
-        if (\Tk\Uri::create()->getBasename() != 'edit.html') {
+        if (\Tk\Uri::create()->getBasename() == 'edit.html') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Is the page url a view url or an edit url
+     *
+     * @return bool
+     */
+    public function isHistory()
+    {
+        if (\Tk\Uri::create()->getBasename() == 'history.html') {
             return true;
         }
         return false;
@@ -170,7 +213,21 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>  
         <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history"><i class="glyphicon glyphicon-time"></i> History</a>
       </p>
-      <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span></p>
+      <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
+    </div>
+    <div class="col-md-6 text-right" choice="history">
+      <p class="wiki-meta view">  
+        <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>  
+        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view"><i class="glyphicon glyphicon-eye-open"></i> View</a>  
+      </p>
+      <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
+    </div>
+    <div class="col-md-6 text-right" choice="viewRevision">
+      <p class="wiki-meta view">
+        <a href="#" title="Page Revision History" class="btn btn-danger btn-xs wiki-revert-trigger" var="revert" choice="revert"><i class="glyphicon glyphicon-share"></i> Revert</a>
+        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history"><i class="glyphicon glyphicon-time"></i> History</a>
+      </p>
+      <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
   </div>
   <hr class="no-top-margin"/>

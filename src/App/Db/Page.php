@@ -150,13 +150,16 @@ class Page extends Model
         if (!$this->url && !$this->id) {
             $this->url = $this->makeUrl($this->title);
         }
-        
         parent::save();
     }
 
     public function delete()
     {
-        // TODO: remove page any locks
+        // remove page any locks (this could be redundant and left up to the expired cleanup)
+        \App\Factory::getLockMap()->unlock($this->id);
+        
+        // delete all page links referred to by this page.
+        $this->getMapper()->deleteLinkByPageId($this->id);
         
         // Remove all content
         $contentList = \App\Db\Content::getMapper()->findByPageId($this->id);
@@ -266,12 +269,6 @@ class PageValidator extends \App\Helper\Validator
                 $this->addError('url', 'This url already exists, try again.');
             }
         }
-//        if (!$obj->url) {
-//            $this->addError('url', 'Please enter a URL for your page');
-//        }
-        
-        // TODO: ????
-        
         
     }
 }

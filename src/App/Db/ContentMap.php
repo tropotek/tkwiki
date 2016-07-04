@@ -191,7 +191,11 @@ class ContentMap extends Mapper
                 $where .= '(' . substr($w, 0, -3) . ') AND ';
             }
         }
-        
+
+        if (!empty($filter['pageId'])) {
+            $where .= sprintf('a.page_id = %d AND ', (int)$filter['pageId']);
+        }
+
 //        if (!empty($filter['lti_context_id'])) {
 //            $where .= sprintf('a.lti_context_id = %s AND ', $this->getDb()->quote($filter['lti_context_id']));
 //        }

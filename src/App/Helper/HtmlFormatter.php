@@ -54,7 +54,6 @@ class HtmlFormatter
         $html = $this->cleanHtml('<div>' . $html . '</div>');
         $this->doc = $this->parseDomDocument($html);
         $this->parseLinks($this->doc);
-        return trim(substr($this->doc->saveXML($this->doc->documentElement), 5, -6));
     }
 
     /**
@@ -64,7 +63,16 @@ class HtmlFormatter
      */
     public function getHtml()
     {
-        return $this->html;
+        return trim(substr($this->doc->saveXML($this->doc->documentElement), 5, -6));
+    }
+
+    /**
+     * 
+     * @return \DOMDocument
+     */
+    public function getDocument() 
+    {
+        return $this->doc;
     }
 
     

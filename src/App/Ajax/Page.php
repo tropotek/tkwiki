@@ -22,19 +22,28 @@ class Page extends \App\Controller\Iface
     }
 
     /**
+     * doRefreshLock
      * 
      * @param Request $request
+     * @return \Tk\Response
      */
     public function doRefreshLock(Request $request)
     {
         $pageId = $request->get('pid');
-        $user =$this->getUser();
-        
-        // TODO: refresh the lock timeout to prevent user loosing the lock over long edits.
-        
+        // Refresh the lock timeout to prevent user loosing the lock over long edits.
+        $data = ['status' => 'ok', 'lock' => false];
+        if (\App\Factory::getLockMap()->isLocked($pageId)) {
+            $b = \App\Factory::getLockMap()->lock($pageId);
+            $data['lock'] = $b;
+        }
+        $json = json_encode($data);
+        $response = new \Tk\Response($json);
+        return $response;
     }
 
     /**
+     * doGetPageList
+     * 
      * @param Request $request
      * @return \App\Page\Iface
      */
@@ -64,8 +73,6 @@ class Page extends \App\Controller\Iface
             )
         );
         
-        
-        // TODO: Make a JsonResponse object
         $json = json_encode($data);
         $response = new \Tk\Response($json);
         return $response;

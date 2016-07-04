@@ -9,7 +9,7 @@
 -- DROP TABLE IF EXISTS data CASCADE;
 -- DROP TABLE IF EXISTS page CASCADE;
 -- DROP TABLE IF EXISTS content CASCADE;
--- DROP TABLE IF EXISTS pagelink CASCADE;
+-- DROP TABLE IF EXISTS links CASCADE;
 -- DROP TABLE IF EXISTS lock CASCADE;
 -- DROP TABLE IF EXISTS version CASCADE;
 
@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS data (
   CONSTRAINT foreign_fields UNIQUE (foreign_id, foreign_key, key)
 );
 
+
 -- --------------------------------------------------------
 -- Table structure for table `page`
 -- --------------------------------------------------------
@@ -88,6 +89,7 @@ CREATE TABLE IF NOT EXISTS page (
   CONSTRAINT url UNIQUE (url),
   FOREIGN KEY (user_id) REFERENCES "user"(id)
 );
+
 
 -- --------------------------------------------------------
 -- Table structure for table `content`
@@ -112,22 +114,14 @@ CREATE TABLE IF NOT EXISTS content (
 
 
 -- --------------------------------------------------------
--- Table structure for table `pagelink`
+-- Table structure for table `links`
 -- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS pagelink (
-  page_from INTEGER NOT NULL DEFAULT '0',
-  page_to_url VARCHAR(255) NOT NULL DEFAULT '',
-  CONSTRAINT page_from_to UNIQUE (page_from, page_to_url),
-  FOREIGN KEY (page_from) REFERENCES page(id) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS links (
+  page_id INTEGER NOT NULL DEFAULT '0',   -- The containing page ID
+  page_url VARCHAR(255) NOT NULL DEFAULT '',   -- The page url (we use url instead of id to cater for non-existing pages)
+  CONSTRAINT page_from_to UNIQUE (page_id, page_url),
+  FOREIGN KEY (page_id) REFERENCES page(id) ON DELETE CASCADE
 );
--- proposed new pagelink table
--- CREATE TABLE IF NOT EXISTS pagelink (
---   page_from_id INTEGER NOT NULL DEFAULT '0',
---   page_to_id INTEGER NOT NULL DEFAULT '0',
---   CONSTRAINT page UNIQUE (page_from_id, page_to_id),
---   FOREIGN KEY (page_from_id) REFERENCES page(id),
---   FOREIGN KEY (page_to_id) REFERENCES page(id)
--- );
 
 
 -- --------------------------------------------------------

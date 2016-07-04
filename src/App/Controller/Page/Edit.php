@@ -14,6 +14,10 @@ use App\Helper\HtmlFormatter;
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
+ * 
+ * @todo One issue here is that a page can be created from any random URL even if it does not exist on a page.
+ * @todo We would have to change the page urls to include a flag to indicate it came from a page and we should create
+ *       a new one, if none present then we can use the page not found error. Not urgent but a nice to have feature.
  */
 class Edit extends Iface
 {
@@ -27,6 +31,11 @@ class Edit extends Iface
      * @var \App\Db\Content
      */
     protected $wContent= null;
+
+    /**
+     * @var HtmlFormatter
+     */
+    protected $formatter = null;
 
     /**
      * @var \Tk\Form
@@ -74,36 +83,47 @@ class Edit extends Iface
             throw new \Tk\HttpException(404, 'Page not found');
         }
         
-        
-        if (!$this->wPage->id) {
-            // Aquire page lock.
-            
-            
-        }
         // check if the user can edit the page
+        $error = false;
         if (!$this->getUser()->getAccess()->canEdit($this->wPage)) {
             \App\Alert::addWarning('You do not have permission to edit this page.');
-            $this->wPage->getUrl()->redirect();
+            $error = true;
         }
-        
+        if ($this->wPage->id && !\App\Factory::getLockMap()->canAccess($this->wPage->id)) {
+            \App\Alert::addWarning('The page is currently being edited by another user. Try again later.');
+            $error = true;
+        }
+        if ($error) {
+            $url = $this->wPage->getUrl();
+            if (!$this->wPage->id) {
+                $url = \Tk\Uri::create('/');
+            }
+            $url->redirect();
+        }
+
+        // Acquire page lock.
+        \App\Factory::getLockMap()->lock($this->wPage->id);
         
         if (!$this->wContent) {
             $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
             // Execute the pre-formatter (TODO: This could be an event)
             try {
                 if ($this->wContent->html) {
-                    $formatter = new HtmlFormatter($this->wContent->html, false);
-                    $this->wContent->html = $formatter->getHtml();
+                    $this->formatter = new HtmlFormatter($this->wContent->html, false);
+                    $this->wContent->html = $this->formatter->getHtml();
                 }
             } catch(\Exception $e) {
                 \App\Alert::addInfo($e->getMessage());
-            } 
+            }
         }
         
-        
+        if ($request->has('del')) {
+            $this->doDelete($request);
+        }
         
         // Form
         $this->form = new Form('pageEdit');
+        $this->form->addField(new Field\Hidden('pid', $this->wPage->id));
         $this->form->addField(new Field\Input('title'))->setRequired(true);
         $this->form->addField(new Field\Textarea('html'));
         $this->form->addField(new Field\Select('permission'));
@@ -113,22 +133,28 @@ class Edit extends Iface
         $this->form->addField(new Field\Textarea('js'));
 
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $url = $this->wPage->getUrl();
-        if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
-            $url = \Tk\Uri::create('/');
-        }
-        $this->form->addField(new Event\Button('cancel', function ($form) use ($url) { $url->redirect(); }));
+        $this->form->addField(new Event\Button('cancel', array($this, 'doCancel')));
         
         $this->form->load(\App\Db\PageMap::unmapForm($this->wPage));
         $this->form->load(\App\Db\ContentMap::unmapForm($this->wContent));
         $this->form->execute();
         
-        if ($request->has('del')) {
-            $this->doDelete($request);
-        }
         return $this->show($request);
     }
 
+    /**
+     * @param $form
+     */
+    public function doCancel($form)
+    {
+        $url = $this->wPage->getUrl();
+        if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
+            $url = \Tk\Uri::create('/');
+        }
+        \App\Factory::getLockMap()->unlock($this->wPage->id); 
+        $url->redirect();
+    }
+    
     /**
      * @param Form $form
      */
@@ -153,7 +179,12 @@ class Edit extends Iface
         $this->wContent->pageId = $this->wPage->id;
         $this->wContent->save();
         
-        // TODO: Remove any page locks
+        // Index page links
+        if ($this->wContent->html)
+            $this->indexLinks($this->wPage, new HtmlFormatter($this->wContent->html, false));
+        
+        // Remove page lock
+        \App\Factory::getLockMap()->unlock($this->wPage->id);
         
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
             \Tk\Uri::create('/')->redirect();
@@ -177,6 +208,25 @@ class Edit extends Iface
     }
 
     /**
+     *
+     * @param \App\Db\Page $page
+     * @param HtmlFormatter $formatter
+     */
+    protected function indexLinks($page, $formatter)
+    {
+        \App\Db\Page::getMapper()->deleteLinkByPageId($page->id);
+        $nodeList = $formatter->getDocument()->getElementsByTagName('a');
+        foreach ($nodeList as $node) {
+            $regs = array();
+            if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
+                if (isset ($regs[1])) {
+                    \App\Db\Page::getMapper()->insertLink($page->id, $regs[1]);
+                }
+            }
+        }
+    }
+
+    /**
      * Note: no longer a dependency on show() allows for many show methods for many 
      * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
      * 
@@ -193,7 +243,7 @@ class Edit extends Iface
             $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page permissions must be public.');
         }
         
-        $header = new \App\Helper\PageHeader($this->wPage, $this->getUser());
+        $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getUser());
         $template->insertTemplate('header', $header->show());
 
         // Render the form

@@ -194,7 +194,7 @@
       });
       
       return pager;
-    }
+    };
     
     
     var getPageList = function() {
@@ -204,7 +204,7 @@
         show(data);
       }).always(function (data) {
         processing(false);
-      })
+      });
     };
     
     var processing = function(show) {

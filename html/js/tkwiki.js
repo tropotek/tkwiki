@@ -5,12 +5,23 @@
 /******************************** WIKI Style Script (optional) ********************************/
 // NOTE: Edit this as needed for the template
 jQuery(function ($) {
+
+  $('[data-toggle="tooltip"]').tooltip();
   
   /* -- TOC Menu -- */
   var menu = $('.wiki-content');
   if (menu.length && menu.toc) {
     menu.toc({scope: '.wiki-content'});
   }
+  
+  $('#NavSearch').on('submit', function(e) {
+    if (!$(this).find('input').val()) {
+      $(this).find('input').parent().addClass('has-error').find('button').removeClass('btn-default').addClass('btn-danger');
+      $(this).find('input').attr('placeholder', 'Enter some search text.');
+      return false;
+    }
+  });
+  
   
   /* -- Mega Menu -- */
   $('.dropdown.mega-dropdown').on('click', function(e) {
@@ -74,8 +85,19 @@ jQuery(function ($) {
       return false;
     }
     
+    var lockTimeout = 110*1000;   // 1*1000 = 1 sec
+    var url = config.siteUrl + '/ajax/lockPage';
+    function saveLock() {
+      $.getJSON(url, {pid: $('#pageEdit #fid_pid').val()}, function(data) {});
+      setTimeout(saveLock, lockTimeout);
+    }
+    
     tinymce.init({
       selector: '.tinymce',
+      init_instance_callback : function(editor) {
+        // setup a page lock loop
+        setTimeout(saveLock, lockTimeout);
+      },
       plugins: [
         'wikisave wikilink advlist autolink autosave link image lists charmap print preview hr anchor',
         'searchreplace visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
@@ -89,13 +111,18 @@ jQuery(function ($) {
       menubar: false,
       toolbar_items_size: 'small',
       browser_spellcheck: true,
-      convert_urls: false,
       
+      convert_urls: false,
+      //urlconverter_callback : function (url, node, on_save, name) {},
+      
+      autosave_interval: '10m',
       wikilink_ajaxUrl : config.siteUrl + '/ajax/getPageList',
       wikisave_enablewhendirty: true,
       wikisave_onsavecallback: function () { submitForm($('#pageEdit').get(0), 'save'); },
       file_picker_callback : elFinderBrowser,
-      
+      onchange_callback : function(inst) { 
+        console.log('Knock Knock');
+      },
       
       content_css: [
         config.siteUrl + '/html/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
@@ -182,6 +209,10 @@ jQuery(function ($) {
     // ajax request a url, checking for duplicates.
     $(this).blur();
     
+  });
+  
+  $('.wiki-revert-trigger').on('click', function(e) {
+    return confirm('Are you sure you want to revert to this change?');
   });
 
   // For static form input-button fields

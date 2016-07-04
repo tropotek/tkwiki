@@ -67,6 +67,24 @@ class View extends Iface
         return $this->show($request);
     }
 
+    /**
+     * @param Request $request
+     * @return \App\Page\Iface
+     * @throws \Tk\Exception
+     */
+    public function doContentView(Request $request)
+    {
+        $this->wContent = \App\Db\Content::getMapper()->find($request->get('contentId'));
+        if (!$this->wContent) {
+            throw new \Tk\HttpException(404, 'Page not found');
+        }
+        $this->wPage = $this->wContent->getPage();
+        if (!$this->wPage) {
+            throw new \Tk\HttpException(404, 'Page not found');
+        }
+        return $this->show($request);
+    }
+
 
     /**
      * Note: no longer a dependency on show() allows for many show methods for many 
@@ -80,7 +98,7 @@ class View extends Iface
     {
         $template = $this->getTemplate();
         
-        $header = new \App\Helper\PageHeader($this->wPage, $this->getUser());
+        $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getUser());
         $template->insertTemplate('header', $header->show());
         
         $event = new \App\Event\ContentEvent($this->wContent);

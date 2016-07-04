@@ -35,7 +35,7 @@ class PublicPage extends Iface
          
         if ($this->getUser()) {
             // User Menu Setup 
-            $url = \Tk\Uri::create('/search.html')->set('mode', 'user:'.$this->getUser()->id);
+            $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$this->getUser()->id);
             $template->setAttr('myPages', 'href', $url);
         }
         $siteUrl = $this->getConfig()->getSiteUrl();

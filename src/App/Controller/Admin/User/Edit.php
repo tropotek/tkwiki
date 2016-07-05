@@ -141,6 +141,11 @@ class Edit extends Iface
             // Ensure admin is not disabled
             $this->user->active = true;
         }
+        
+        if ($this->form->getFieldValue('newPassword')) {
+            $this->user->password = \App\Factory::hashPassword($this->form->getFieldValue('newPassword'));
+        }
+
         $this->user->save();
 
         // Update user role list if not admin
@@ -152,14 +157,13 @@ class Edit extends Iface
         }
 
         \App\Alert::addSuccess('User record saved!');
-        vd($form->getTriggeredEvent()->getName());
         if ($form->getTriggeredEvent()->getName() == 'update') {
             if ($this->isProfile()) {
                 \Tk\Uri::create('/')->redirect();
             }
             \Tk\Uri::create('/userManager.html')->redirect();
         }
-        \Tk\Uri::create()->redirect();
+        \Tk\Uri::create()->set('userId', $this->user->id)->redirect();
     }
 
     /**

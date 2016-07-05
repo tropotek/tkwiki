@@ -55,6 +55,11 @@ class View extends Iface
             }
             throw new \Tk\HttpException(404, 'Page not found');
         }
+        if (!$this->canView()) {
+            \App\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
+            \Tk\Uri::create('/')->redirect();
+        }
+        
         
         $this->wContent = $this->wPage->getContent();
         if (!$this->wContent) {
@@ -65,6 +70,14 @@ class View extends Iface
         }
         
         return $this->show($request);
+    }
+    
+    public function canView()
+    {
+        if (!$this->getUser()) {
+            return ($this->wPage->permission == \App\Db\Page::PERMISSION_PUBLIC);
+        }
+        return $this->getUser()->getAccess()->canView($this->wPage);
     }
 
     /**

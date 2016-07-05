@@ -83,6 +83,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
         
         /** @var \App\Db\Page $page */
         foreach($this->list as $page) {
+            if (!\App\Auth\Access::create($this->user)->canView($page)) return;
             $row = $template->getRepeat('row');
             $row->insertText('title', $page->title);
 
@@ -127,7 +128,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     </ul>
   </li>
   
-  <li class="wiki-menu-create" choice="canCreate"><a href="#" title="New Menu Tab" var="create"><span class="glyphicon glyphicon-plus"></span></a></li>
+  <li class="wiki-menu-create" choice="canCreate"><a href="#" class="navbar-toggle" title="New Menu Tab" var="create"><span class="glyphicon glyphicon-plus"></span></a></li>
 </ul>
 HTML;
         return \Dom\Loader::load($xhtml);

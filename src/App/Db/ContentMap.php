@@ -89,7 +89,6 @@ class ContentMap extends Mapper
             $obj->modified = new \DateTime($row['modified']);
         if (isset($row['created']))
             $obj->created = new \DateTime($row['created']);
-
         return $obj;
     }
 

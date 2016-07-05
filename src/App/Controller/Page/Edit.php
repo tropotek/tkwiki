@@ -21,6 +21,10 @@ use App\Helper\HtmlFormatter;
  */
 class Edit extends Iface
 {
+    /**
+     * the session ID for the referring page
+     */
+    const SID_REFERRER = 'edit_ref';
 
     /**
      * @var \App\Db\Page
@@ -43,7 +47,7 @@ class Edit extends Iface
     protected $form = null;
     
     /**
-     *
+     * 
      */
     public function __construct()
     {
@@ -57,6 +61,10 @@ class Edit extends Iface
      */
     public function doDefault(Request $request)
     {
+        if (!\App\Factory::getSession()->has(self::SID_REFERRER) && $request->getReferer()) {
+            \App\Factory::getSession()->set(self::SID_REFERRER, $request->getReferer());
+        }
+        
         // Find requested page
         $this->wPage = \App\Db\Page::getMapper()->find($request->get('pageId'));
         // Create a new page
@@ -65,7 +73,7 @@ class Edit extends Iface
             $this->wPage->userId = $this->getUser()->id;
             $this->wPage->url = $request->get('u');
             $this->wPage->title = str_replace('_', ' ', $this->wPage->url);
-            $this->wPage->permission = \App\Db\Page::PERMISSION_PRIVATE;
+            $this->wPage->permission = \App\Db\Page::PERMISSION_PUBLIC;
             $this->wContent = new \App\Db\Content();
             $this->wContent->userId = $this->getUser()->id;
         }
@@ -103,6 +111,7 @@ class Edit extends Iface
 
         // Acquire page lock.
         \App\Factory::getLockMap()->lock($this->wPage->id);
+
         
         if (!$this->wContent) {
             $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
@@ -120,15 +129,17 @@ class Edit extends Iface
         if ($request->has('del')) {
             $this->doDelete($request);
         }
-        
+        //vd($this->wContent->html);
         // Form
         $this->form = new Form('pageEdit');
         $this->form->addField(new Field\Hidden('pid', $this->wPage->id));
         $this->form->addField(new Field\Input('title'))->setRequired(true);
         $this->form->addField(new Field\Textarea('html'));
-        $this->form->addField(new Field\Select('permission'));
-        $this->form->addField(new Field\Input('keywords'));
-        $this->form->addField(new Field\Input('description'));
+        if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
+            $this->form->addField(new Field\Select('permission'));
+            $this->form->addField(new Field\Input('keywords'));
+            $this->form->addField(new Field\Input('description'));
+        }
         $this->form->addField(new Field\Textarea('css'));
         $this->form->addField(new Field\Textarea('js'));
 
@@ -186,10 +197,15 @@ class Edit extends Iface
         // Remove page lock
         \App\Factory::getLockMap()->unlock($this->wPage->id);
         
+        
+        $url = $this->wPage->getUrl();
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
-            \Tk\Uri::create('/')->redirect();
+            \Tk\Uri::create('/');
         }
-        $this->wPage->getUrl()->redirect();
+        if (\App\Factory::getSession()->has(self::SID_REFERRER)) {
+            $url = \App\Factory::getSession()->getOnce(self::SID_REFERRER);
+        }
+        $url->redirect();
     }
 
     /**
@@ -242,6 +258,8 @@ class Edit extends Iface
             $field = $domForm->getFormElement('permission');
             $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page permissions must be public.');
         }
+        $template->setChoice($this->wPage->type);
+        vd($this->wContent->css);
         
         $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getUser());
         $template->insertTemplate('header', $header->show());
@@ -283,7 +301,7 @@ class Edit extends Iface
         </div>
         
         <div class="col-md-3 well">
-          <div class="col-md-12">
+          <div class="col-md-12" choice="page">
             <div class="form-group">
               <label for="fid-permission" class="control-label">Permission:</label>
               <select class="form-control" id="fid-permission" name="permission">
@@ -293,13 +311,13 @@ class Edit extends Iface
               </select>
             </div>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12" choice="page">
             <div class="form-group">
               <label for="fid-keywords" class="control-label">Keywords:</label>
               <input type="text" class="form-control" id="fid-keywords" name="keywords"/>
             </div>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12" choice="page">
             <div class="form-group">
               <label for="fid-description" class="control-label">Description:</label>
               <input type="text" class="form-control" id="fid-description" name="description" />

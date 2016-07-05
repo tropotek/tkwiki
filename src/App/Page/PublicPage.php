@@ -35,8 +35,13 @@ class PublicPage extends Iface
          
         if ($this->getUser()) {
             // User Menu Setup 
-            $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$this->getUser()->id);
+            $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$this->getUser()->hash);
             $template->setAttr('myPages', 'href', $url);
+            $template->insertText('username', $this->getUser()->name);
+            
+            if ($this->getUser()->getAccess()->isAdmin()) {
+                $template->setChoice('admin');
+            }
         }
         $siteUrl = $this->getConfig()->getSiteUrl();
         $dataUrl = $this->getConfig()->getDataUrl();
@@ -49,10 +54,14 @@ var config = {
 JS;
         $template->appendJs($js, ['data-jsl-priority' => -1000]);
         
-        
         $menu = new \App\Helper\Menu($this->getUser());
         $menu->show();
-        $template->insertTemplate('wiki-menu', $menu->getTemplate());
+        $template->replaceTemplate('wiki-menu', $menu->getTemplate());
+        
+        $crumbs = \App\Helper\Crumbs::instance(\Tk\Uri::create());
+        $crumbs->show();
+        $template->replaceTemplate('wiki-crumbs', $crumbs->getTemplate());
+        
         
     }
     

@@ -44,6 +44,7 @@ $routes->add('userManager', new \Tk\Routing\Route('/userManager.html', 'App\Cont
 $routes->add('userEdit', new \Tk\Routing\Route('/userEdit.html', 'App\Controller\Admin\User\Edit::doDefault'));
 $routes->add('userProfile', new \Tk\Routing\Route('/profile.html', 'App\Controller\Admin\User\Edit::doDefault'));
 
+$routes->add('pageManager', new \Tk\Routing\Route('/pageManager.html', 'App\Controller\Page\Manager::doDefault'));
 $routes->add('pageEdit', new \Tk\Routing\Route('/edit.html', 'App\Controller\Page\Edit::doDefault'));
 $routes->add('pageView', new \Tk\Routing\Route('/view.html', 'App\Controller\Page\View::doContentView'));
 

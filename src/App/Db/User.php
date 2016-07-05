@@ -87,6 +87,14 @@ class User extends Model
         $this->created = new \DateTime();
         $this->ip = \App\Factory::getRequest()->getIp();
     }
+    
+    public function save()
+    {
+        if (!$this->hash) {
+            $this->hash = $this->generateHash();
+        }
+        parent::save();
+    }
 
     /**
      * Return the users home|dashboard relative url

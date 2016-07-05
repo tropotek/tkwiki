@@ -26,7 +26,6 @@ VALUES
   (3, 3),(3, 4),(3, 5),(3, 6),(3, 7)
 ;
 
-
 INSERT INTO data (foreign_id, foreign_key, key, value) VALUES
   (0, 'system', 'site.title', 'TkWiki II'),
   (0, 'system', 'site.email', 'tkwiki@example.com'),
@@ -34,13 +33,15 @@ INSERT INTO data (foreign_id, foreign_key, key, value) VALUES
   (0, 'system', 'site.meta.description', ''),
   (0, 'system', 'site.global.js', ''),
   (0, 'system', 'site.global.css', ''),
-  (0, 'system', 'wiki.page.default', 'Home')
+  (0, 'system', 'wiki.page.default', 'Home'),
+  (0, 'system', 'wiki.page.home.lock', 'wiki.page.home.lock')
 ;
 
 -- Add the home page to the site This should be non-deletable
 INSERT INTO page (user_id, type, template, title, url, modified, created) VALUES 
   (1, 'page', '', 'Home', 'Home', date_trunc('seconds', NOW()), date_trunc('seconds', NOW()))
 ;
+
 INSERT INTO content (page_id, user_id, html, modified, created) VALUES 
   (1, 1, '<p>This blog post shows a few different types of content that''s supported and styled with Bootstrap. Basic
          typography, images, and code are all supported.</p>
@@ -92,16 +93,6 @@ INSERT INTO content (page_id, user_id, html, modified, created) VALUES
       <h3>Sub-heading</h3>
       <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>', date_trunc('seconds', NOW()), date_trunc('seconds', NOW()))
 ;
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -171,9 +162,5 @@ INSERT INTO "version" (version, changelog, modified, created) VALUES
 - Completely re-written codebase to use new PHP5.3+
 - Added new postgress DB files',
 '2016-06-01 12:00:00', '2016-06-01 12:00:00');
-
-
-
-
 
 

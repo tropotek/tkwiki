@@ -70,7 +70,7 @@ class AuthHandler implements SubscriberInterface
             //if (!\App\Auth\Access::create($user)->hasRole($access)) {
                 // Could redirect to a authentication error page...
                 // Could cause a loop if the permissions are stuffed
-                \App\Alert::getInstance()->addWarning('You do not have access to the requested page.');
+                \App\Alert::getInstance()->addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
                 \Tk\Uri::create($user->getHomeUrl())->redirect();
             }
         }
@@ -91,8 +91,6 @@ class AuthHandler implements SubscriberInterface
         foreach ([3,4,5,6,7] as $roleId) {
             \App\Db\Role::getMapper()->addUserRole($roleId, $user->id);
         }
-        
-        
         
         // on success email user confirmation
         $message = \Dom\Loader::loadFile($event->get('templatePath').'/xtpl/mail/account.registration.xtpl');

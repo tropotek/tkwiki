@@ -10,6 +10,8 @@ use App\Db\Page;
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
+ * @todo This does not feel like the best way to manage the page permissions,
+ *       implement something else if you get a brainwave,,,,
  */
 class Access 
 {
@@ -28,6 +30,7 @@ class Access
      * @var \App\Db\User
      */
     protected $user = null;
+    
     
 
     /**
@@ -97,11 +100,22 @@ class Access
      */
     public function getRoles()
     {
+        if (!$this->user) return [];
         $arr = \App\Db\Role::getMapper()->findByUserId($this->user->id);
         return $arr;
     }
 
-
+    /**
+     * @return string
+     */
+    public function getGroup()
+    {
+        if ($this->isAdmin()) return self::ROLE_ADMIN;
+        if ($this->isModerator()) return self::ROLE_MODERATOR;
+        if ($this->isUser()) return self::ROLE_USER;
+        return '';
+    }
+    
     /**
      *
      * @return boolean
@@ -128,8 +142,6 @@ class Access
     {
         return $this->hasRole(self::ROLE_USER);
     }
-
-
     
     /**
      * 
@@ -143,21 +155,29 @@ class Access
     }
 
     /**
-     * @param Page $wikiPage
+     * @param Page $page
      * @return bool
      */
-    public function canView($wikiPage)
+    public function canView($page)
     {
-        switch($wikiPage->permission) {
+        if ($this->isAuthor($page)) return true;
+        $pa = self::create($page->getUser());
+        switch($page->permission) {
             case Page::PERMISSION_PUBLIC:
                 return true;
             case Page::PERMISSION_PROTECTED:
-                if ($this->hasRole([self::ROLE_ADMIN, self::ROLE_MODERATOR])) {
+                if ($pa->getGroup() == $this->getGroup()) {
+                    return true;
+                }
+                if ($this->isModerator() && $pa->getGroup() == self::ROLE_USER) {
+                    return true;
+                }
+                if ($this->isAdmin()) {
                     return true;
                 }
                 break;
             case Page::PERMISSION_PRIVATE:
-                if ($this->isAuthor($wikiPage) || $this->hasRole(self::ROLE_ADMIN)) {
+                if ($this->hasRole(self::ROLE_ADMIN)) {
                     return true;
                 }
         }
@@ -165,49 +185,51 @@ class Access
     }
 
     /**
-     * @param Page $wikiPage
+     * @param Page $page
      * @return bool
      */
-    public function canEdit($wikiPage)
+    public function canEdit($page)
     {
-        if ($this->hasRole(self::ROLE_EDIT) && $this->canView($wikiPage)) {
+        if ($page->url == \App\Db\Page::getHomeUrl() && !$this->isAdmin()) {
+            return false;
+        }
+        if ($this->hasRole(self::ROLE_EDIT) && $this->canView($page)) {
             return true;
         }
         return false;
     }
     
     /**
-     * @param Page $wikiPage
+     * @param Page $page
      * @return bool
      */
-    public function canDelete($wikiPage)
+    public function canDelete($page)
     {
-        if ($wikiPage->id && $wikiPage->url != \App\Db\Page::getHomeUrl() && $this->hasRole(self::ROLE_DELETE) && $this->canView($wikiPage)) {
+        if ($page->id && $page->url != \App\Db\Page::getHomeUrl() && $this->hasRole(self::ROLE_DELETE) && $this->canView($page)) {
             return true;
         }
         return false;
     }
     
     /**
-     * @param Page $wikiPage
+     * @param Page $page
      * @return bool
      */
-    public function canEditExtra($wikiPage)
+    public function canEditExtra($page)
     {
-        if ($this->hasRole(self::ROLE_EDIT_EXTRA) && $this->canView($wikiPage)) {
+        if ($this->hasRole(self::ROLE_EDIT_EXTRA) && $this->canView($page)) {
             return true;
         }
         return false;
     }
     
-    
-
     /**
-     * @param Page $wikiPage
+     * @param Page $page
      * @return bool
      */
-    public function isAuthor($wikiPage)
+    public function isAuthor($page)
     {
-        return ($this->user->id == $wikiPage->userId);
+        if (!$this->user) return false;
+        return ($this->user->id == $page->userId);
     }
 }

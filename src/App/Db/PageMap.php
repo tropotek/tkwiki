@@ -134,7 +134,7 @@ class PageMap extends Mapper
         $sql = sprintf('user_id = %s AND type = %s', (int)$userId, $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
         $perms = '';
         foreach($permissions as $p) {
-            $perms .= sprintf('permission = %s OR', $this->getDb()->quote($p));
+            $perms .= sprintf(' permission = %s OR ', $this->getDb()->quote($p));
         }
         if ($perms) {
             $sql .= ' AND (' . rtrim($perms, 'OR ') . ') ';
@@ -193,8 +193,10 @@ class PageMap extends Mapper
         if (isset($filter['permission'])) {
             $where .= sprintf('a.permission = %s AND ', (int)$filter['permission']);
         }
-
-        $where .= sprintf('a.type = %s AND ', $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
+        if (isset($filter['type'])) {
+            //$where .= sprintf('a.type = %s AND ', $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
+            $where .= sprintf('a.type = %s AND ', $this->getDb()->quote($filter['type']));
+        }
         
         if ($where) {
             $where = substr($where, 0, -4);

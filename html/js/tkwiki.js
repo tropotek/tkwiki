@@ -31,8 +31,8 @@ jQuery(function ($) {
     } else {
       $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideDown('400');
       $(this).addClass('open');
+      return false; // stops link execution.
     }
-    //return false; // stops link execution.
   });
   
   $('.dropdown.mega-dropdown').on('mouseleave', function(e) {
@@ -93,7 +93,9 @@ jQuery(function ($) {
     }
     
     tinymce.init({
+      //mode : 'exact',
       selector: '.tinymce',
+      //encoding: 'xml',
       init_instance_callback : function(editor) {
         // setup a page lock loop
         setTimeout(saveLock, lockTimeout);
@@ -111,7 +113,7 @@ jQuery(function ($) {
       menubar: false,
       toolbar_items_size: 'small',
       browser_spellcheck: true,
-      
+      schema: 'html5',
       convert_urls: false,
       //urlconverter_callback : function (url, node, on_save, name) {},
       

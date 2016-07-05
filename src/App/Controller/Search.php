@@ -15,6 +15,7 @@ use Tk\Form\Field;
  */
 class Search extends Iface
 {
+    const SID = 'search.terms';
 
     /**
      * @var Form
@@ -26,7 +27,12 @@ class Search extends Iface
     /**
      * @var \Tk\Db\Map\ArrayObject
      */
-    protected $list = null;
+    protected $list = [];
+
+    /**
+     * @var \App\Db\User
+     */
+    protected $user = null;
     
     
     /**
@@ -45,28 +51,45 @@ class Search extends Iface
      */
     public function doDefault(Request $request)
     {
-        $this->config = \Tk\Config::getInstance();
-        $this->terms = $request->get('search-terms');
+        if ($this->getConfig()->getSession()->has(self::SID)) {
+            $this->terms = $this->getConfig()->getSession()->get(self::SID);
+        }
+        if ($request->has('search-terms')) {
+            $this->terms = $request->get('search-terms');
+            $this->getConfig()->getSession()->set(self::SID, $this->terms);
+            \Tk\Uri::create()->delete('search-terms')->redirect();
+        }
         $tool = \Tk\Db\Tool::create();
         
-        if (preg_match('/user:([0-9]+)/', $this->terms, $regs)) {
-            $user = \App\Db\User::getMapper()->find($regs[1]);
+        if (preg_match('/user:([0-9a-f]{32})/i', $this->terms, $regs)) {
+            $this->user = \App\Db\User::getMapper()->findByHash($regs[1]);
+            $this->terms = '';
             // TODO: Test this is correct for public private etc pages...
-            if ($user) {
+            if ($this->user) {
                 if ($this->getUser()->getAccess()->isAdmin()) {
-                    $this->list = \App\Db\Page::getMapper()->findUserPages($user->id, [], $tool);
+                    $this->list = \App\Db\Page::getMapper()->findUserPages($this->user->id, [], $tool);
                 } else if ($this->getUser()->getAccess()->isModerator()) {
-                    $this->list = \App\Db\Page::getMapper()->findUserPages($user->id, [\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC], $tool);
+                    $this->list = \App\Db\Page::getMapper()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC], $tool);
                 } else {
-                    $this->list = \App\Db\Page::getMapper()->findUserPages($user->id, [\App\Db\Page::PERMISSION_PUBLIC], $tool);
+                    $this->list = \App\Db\Page::getMapper()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PUBLIC], $tool);
                 }
             }
         } else {
+            
+            
             // TODO
             // TODO: Need to create a real search function
             // TODO
-            $filter = ['keywords' => $this->terms];
-            $this->list = \App\Db\Page::getMapper()->findFiltered($filter, $tool);
+            if ($this->terms) {
+                $filter = ['keywords' => $this->terms, 'type' => \App\Db\Page::TYPE_PAGE];
+                $this->list = \App\Db\Page::getMapper()->findFiltered($filter, $tool);
+            }
+            // TODO
+            // TODO: Need to create a real search function
+            // TODO
+            
+            
+            
         }
         
         return $this->show();
@@ -84,11 +107,12 @@ class Search extends Iface
         if ($searchForm) {
             $searchForm->getFormElement('search-terms')->setValue($this->terms);
         }
-        $template->insertText('terms', '"'.$this->terms.'"');
-        $template->insertText('found', $this->list->getFoundRows());
         
+        $access = \App\Auth\Access::create($this->getUser());
+        $i = 0;
         /** @var \App\Db\Page $page */
         foreach($this->list as $page) {
+            if (!$access->canView($page)) continue;
             $rpt = $template->getRepeat('row');
             $rpt->insertText('title', $page->title);
             $rpt->setAttr('title', 'title', $page->title);
@@ -97,6 +121,7 @@ class Search extends Iface
             $description = $page->getContent()->description;
             if (!$description)
                 $description = substr(strip_tags(html_entity_decode($page->getContent()->html)), 0, 256);
+            
             $rpt->insertText('description', $description);
 
             $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::MED_DATE));
@@ -107,7 +132,16 @@ class Search extends Iface
             }
             
             $rpt->appendRepeat();
+            $i++;
         }
+        
+        $terms = '"'.$this->terms.'"';
+        if ($this->user) {
+            $terms = '"User: '.$this->user->name.'"';
+        }
+        $template->insertText('terms', $terms);
+        
+        $template->insertText('found', $i);
 
         return $this->getPage()->setPageContent($template);
     }
@@ -122,10 +156,11 @@ class Search extends Iface
     {
         $xhtml = <<<HTML
 <div class="wiki-search">
-
-  <hgroup class="mb20">
+  
+  <div class="search-head">
     <h2 class="lead"><strong class="text-danger" var="found">0</strong> results were found for the search for <strong class="text-danger" var="terms"></strong></h2>								
-  </hgroup>
+  </div>
+  
   <article class="search-result row" repeat="row">
     <div class="col-xs-12 col-sm-12 col-md-2">
       <ul class="meta-search">

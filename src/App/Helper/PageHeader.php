@@ -61,6 +61,9 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         
         if ($this->isEdit()) {
             $template->setChoice('edit');
+            if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
+                $template->setChoice('canView');
+            }
         } else if ($this->isHistory()) {
             $template->setChoice('history');
             $title .= ' (History)';
@@ -135,7 +138,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             /** @var \App\Db\User $user */
             $user = \App\Db\User::getMapper()->find($c->user_id);
             if (!$user) continue;
-            $url = \Tk\Uri::create('/search.html')->set('mode', 'user:'.$user->hash);
+            $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->hash);
             $class = [];
             $title = \Tk\Date::toRelativeString(\Tk\Date::create($c->created));
             if ($this->wPage->getUser()->id = $user->id) {
@@ -203,15 +206,16 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
       </p>
       <p class="wiki-meta">
         <a href="#" title="Save The Page" class="btn btn-primary btn-xs wiki-save-trigger" var="save" choice="canEdit"><i class="glyphicon glyphicon-save"></i> Save</a>
-        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view"><i class="glyphicon glyphicon-eye-open"></i> View</a>
+        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view" choice="canView"><i class="glyphicon glyphicon-eye-open"></i> View</a>
         <!--  a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="glyphicon glyphicon-remove"></i> Delete</a -->
         <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="cancel"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</a>
       </p>
     </div>
     <div class="col-md-6 text-right" choice="view">
-      <p class="wiki-meta view">  
+      <p class="wiki-meta view">
+        &nbsp;
         <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>  
-        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history"><i class="glyphicon glyphicon-time"></i> History</a>
+        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="glyphicon glyphicon-time"></i> History</a>
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
@@ -225,7 +229,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     <div class="col-md-6 text-right" choice="viewRevision">
       <p class="wiki-meta view">
         <a href="#" title="Page Revision History" class="btn btn-danger btn-xs wiki-revert-trigger" var="revert" choice="revert"><i class="glyphicon glyphicon-share"></i> Revert</a>
-        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history"><i class="glyphicon glyphicon-time"></i> History</a>
+        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="glyphicon glyphicon-time"></i> History</a>
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>

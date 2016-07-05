@@ -27,7 +27,7 @@ class Manager extends Iface
      */
     public function __construct()
     {
-        parent::__construct('User Manager');
+        parent::__construct('User Manager', \App\Auth\Access::ROLE_ADMIN);
     }
 
     /**
@@ -37,7 +37,7 @@ class Manager extends Iface
      */
     public function doDefault(Request $request)
     {
-        $this->table = new \Tk\Table('tableOne');
+        $this->table = new \Tk\Table('userTable');
 
         $this->table->addCell(new \Tk\Table\Cell\Checkbox('id'));
         $this->table->addCell(new \Tk\Table\Cell\Text('name'))->addCellCss('key')->setUrl(\Tk\Uri::create('userEdit.html'));
@@ -58,7 +58,6 @@ class Manager extends Iface
         $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
         
         $filter = $this->table->getFilterValues();
-        $filter['institutionId'] = 0;
         $users = \App\Db\User::getMapper()->findFiltered($filter, $this->table->makeDbTool('a.name'));
         $this->table->setList($users);
 
@@ -92,15 +91,12 @@ class Manager extends Iface
       <div class="panel-heading">
         <i class="fa fa-users fa-fw"></i> Users
       </div>
-      <!-- /.panel-heading -->
       <div class="panel-body ">
 
         <div var="table"></div>
 
       </div>
-      <!-- /.panel-body -->
     </div>
-    <!-- /.panel -->
   </div>
 
 </div>

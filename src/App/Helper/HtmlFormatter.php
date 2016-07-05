@@ -51,7 +51,8 @@ class HtmlFormatter
     {
         if (!$html) return $html;
         // Tidy HTML if available
-        $html = $this->cleanHtml('<div>' . $html . '</div>');
+        $html = '<div>' . $html . '</div>';
+        $html = $this->cleanHtml($html);
         $this->doc = $this->parseDomDocument($html);
         $this->parseLinks($this->doc);
     }
@@ -92,7 +93,7 @@ class HtmlFormatter
                 'tab-size' => 2,
                 'indent-spaces' => 2,
                 'wrap' => 200,
-                'drop-font-tags' => true,
+//                'drop-font-tags' => true,     // Do not use removes up top-most wrapper <div> tags???
                 'drop-empty-paras' => false,
                 'drop-proprietary-attributes' => true,
                 'fix-backslash' => true,
@@ -135,7 +136,6 @@ class HtmlFormatter
      *
      * @param \DOMDocument $doc
      * @return \DOMDocument
-     * @todo This needs to be verified after the edit page is working.
      */
     protected function parseLinks($doc)
     {
@@ -145,18 +145,26 @@ class HtmlFormatter
             $regs = array();
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                 
-                $url = new \Tk\Uri('/' . $regs[1]);
                 $page = \App\Db\Page::getMapper()->findByUrl($regs[1]);
+                if ($this->isView) {
+                    $url = new \Tk\Uri('/' . $regs[1]);
+                    $node->setAttribute('href', $url->getRelativePath());
+                }
+                
                 if ($page) {
-                    $node->setAttribute('class', $this->addClass($node->getAttribute('class'), 'wiki-page'));
+                    $css = '';
+                    if ($this->isView) {
+                        if (\App\Auth\Access::create(\App\Factory::getConfig()->getUser())->canView($page)) {
+                            $css = ' wiki-canView';
+                        } else {
+                            $css = ' wiki-notView disabled';
+                        }
+                    }
+                    $node->setAttribute('class', $this->addClass($node->getAttribute('class'), 'wiki-page').$css);
                     $node->setAttribute('class', $this->removeClass($node->getAttribute('class'), 'wiki-page-new'));
                 } else {
                     $node->setAttribute('class', $this->addClass($node->getAttribute('class'), 'wiki-page-new'));
                     $node->setAttribute('class', $this->removeClass($node->getAttribute('class'), 'wiki-page'));
-                }
-                if ($this->isView) {
-                    //$node->setAttribute('href', $url->toString());
-                    $node->setAttribute('href', $url->getRelativePath());
                 }
             } else if ($this->isView && preg_match('/^http|https|ftp|telnet|gopher|news/i', $node->getAttribute('href'), $regs)) {
                 //TODO: should this be a config option to open external links in new window???

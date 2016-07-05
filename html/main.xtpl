@@ -38,143 +38,23 @@
 
           <div id="navbar" class="collapse navbar-collapse js-navbar-collapse ">
             
-            <ul class="nav navbar-nav" var="wiki-menu">
-              <li class=""><a href="javascript:;">Link 1</a></li>
-              <li class=""><a href="javascript:;">Link 2</a></li>
-
-              <li class="dropdown mega-dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Men <span class="caret"></span></a>
-                <ul class="dropdown-menu mega-dropdown-menu">
-                  <li class="col-sm-12">
-                    <div>
-                      <p>This is a test</p>
-
-                      <ul class="col-sm-3">
-                        <li class="dropdown-header">Features</li>
-                        <li><a href="#">Auto Carousel</a></li>
-                        <li><a href="#">Carousel Control</a></li>
-                        <li><a href="#">Left &amp; Right Navigation</a></li>
-                        <li><a href="#">Four Columns Grid</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Fonts</li>
-                        <li><a href="#">Glyphicon</a></li>
-                        <li><a href="#">Google Fonts</a></li>
-                      </ul>
-                      <ul class="col-sm-3">
-                        <li class="dropdown-header">Features</li>
-                        <li><a href="#">Auto Carousel</a></li>
-                        <li><a href="#">Carousel Control</a></li>
-                        <li><a href="#">Left &amp; Right Navigation</a></li>
-                        <li><a href="#">Four Columns Grid</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Fonts</li>
-                        <li><a href="#">Glyphicon</a></li>
-                        <li><a href="#">Google Fonts</a></li>
-                      </ul>
-                      <ul class="col-sm-3">
-                        <li class="dropdown-header">Features</li>
-                        <li><a href="#">Auto Carousel</a></li>
-                        <li><a href="#">Carousel Control</a></li>
-                        <li><a href="#">Left &amp; Right Navigation</a></li>
-                        <li><a href="#">Four Columns Grid</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Fonts</li>
-                        <li><a href="#">Glyphicon</a></li>
-                        <li><a href="#">Google Fonts</a></li>
-                      </ul>
-                      <ul class="col-sm-3">
-                        <li class="dropdown-header">Features</li>
-                        <li><a href="#">Auto Carousel</a></li>
-                        <li><a href="#">Carousel Control</a></li>
-                        <li><a href="#">Left &amp; Right Navigation</a></li>
-                        <li><a href="#">Four Columns Grid</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Fonts</li>
-                        <li><a href="#">Glyphicon</a></li>
-                        <li><a href="#">Google Fonts</a></li>
-                      </ul>
-
-
-                      <a href="#" class="btn btn-primary btn-sm btn-menu-edit"><i class="glyphicon glyphicon-pencil"></i>
-                        Edit</a>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-              <li class="dropdown mega-dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Women <span class="caret"></span></a>
-                <ul class="dropdown-menu mega-dropdown-menu">
-                  <li class="col-sm-12">
-                    <div>
-                      <p>This is a test</p>
-
-                      <ul class="col-sm-3">
-                        <li class="dropdown-header">Features</li>
-                        <li><a href="#">Auto Carousel</a></li>
-                        <li><a href="#">Carousel Control</a></li>
-                        <li><a href="#">Left &amp; Right Navigation</a></li>
-                        <li><a href="#">Four Columns Grid</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Fonts</li>
-                        <li><a href="#">Glyphicon</a></li>
-                        <li><a href="#">Google Fonts</a></li>
-                      </ul>
-                      <ul class="col-sm-3">
-                        <li class="dropdown-header">Features</li>
-                        <li><a href="#">Auto Carousel</a></li>
-                        <li><a href="#">Carousel Control</a></li>
-                        <li><a href="#">Left &amp; Right Navigation</a></li>
-                        <li><a href="#">Four Columns Grid</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Fonts</li>
-                        <li><a href="#">Glyphicon</a></li>
-                        <li><a href="#">Google Fonts</a></li>
-                      </ul>
-                      <ul class="col-sm-3">
-                        <li class="dropdown-header">Features</li>
-                        <li><a href="#">Auto Carousel</a></li>
-                        <li><a href="#">Carousel Control</a></li>
-                        <li><a href="#">Left &amp; Right Navigation</a></li>
-                        <li><a href="#">Four Columns Grid</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Fonts</li>
-                        <li><a href="#">Glyphicon</a></li>
-                        <li><a href="#">Google Fonts</a></li>
-                      </ul>
-                      <ul class="col-sm-3">
-                        <li class="dropdown-header">Features</li>
-                        <li><a href="#">Auto Carousel</a></li>
-                        <li><a href="#">Carousel Control</a></li>
-                        <li><a href="#">Left &amp; Right Navigation</a></li>
-                        <li><a href="#">Four Columns Grid</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Fonts</li>
-                        <li><a href="#">Glyphicon</a></li>
-                        <li><a href="#">Google Fonts</a></li>
-                      </ul>
-                      
-                      <a href="#" class="btn btn-primary btn-sm btn-menu-edit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-              
-              <li class=""><a href="#" title="New Menu Tab"><span class="glyphicon glyphicon-plus"></span></a></li>
-            </ul>
+            <ul class="nav navbar-nav" var="wiki-menu"></ul>
             
             <ul class="nav navbar-nav navbar-right" choice="logout">
               <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Account <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
+                  <li class="dropdown-header" var="username"></li>
                   <li><a href="/profile.html">My Profile</a></li>
                   <li><a href="#" var="myPages">My Pages</a></li>
+                  <li><a href="/search.html">Search</a></li>
                   <!-- Admin Menu -->
-                  <li choice1="admin" class="divider"></li>
-                  <li choice1="admin" class="dropdown-header">Wiki Admin</li>
-                  <li choice1="admin"><a href="/settings.html">Settings</a></li>
-                  <li choice1="admin"><a href="/userManager.html">Users</a></li>
-                  <li choice="admin" class="disabled"><a href="#">Pages</a></li>
-                  <li choice="admin" class="disabled"><a href="#">Orphaned</a></li>
-                  <li choice="admin" class="disabled"><a href="#">Plugins</a></li>
+                  <li choice="admin" class="divider"></li>
+                  <li choice="admin" class="dropdown-header">Wiki Admin</li>
+                  <li choice="admin"><a href="/settings.html">Settings</a></li>
+                  <li choice="admin"><a href="/userManager.html">Users</a></li>
+                  <li choice="admin"><a href="/pageManager.html">Pages</a></li>
+                  <li choice="admin"><a href="/orphaned.html">Orphaned</a></li>
+                  <li choice="admin_todo" class="disabled"><a href="#">Plugins</a></li>
                   <li class="divider"></li>
                   <li><a href="/logout.html">Logout</a></li>
                 </ul>
@@ -205,6 +85,7 @@
               <button type="submit" name="login" value="login" class="btn btn-success">Sign in</button>
               <a class="btn btn-primary" href="/register.html" choice="register">Register</a>
             </form>
+            
           </div><!--/.nav-collapse -->
         </nav>
       </div>
@@ -217,12 +98,8 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-md-12">
-            <ol class="breadcrumb">
-              <li><a href="#">Home</a></li>
-              <li><a href="#">Link 1</a></li>
-              <li class="active">Link 2</li>
-            </ol>
+          <div class="col-md-12" var="wiki-crumbs">
+            
           </div>
         </div>
       </div>

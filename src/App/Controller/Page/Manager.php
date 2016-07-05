@@ -7,25 +7,28 @@ use Tk\Form\Field;
 use App\Controller\Iface;
 
 /**
- * Class Index
+ *
  *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Orphaned extends Iface
+class Manager extends Iface
 {
 
+    /**
+     * @var \Tk\Table
+     */
+    protected $table = null;
     
-    
+
     /**
      *
      */
     public function __construct()
     {
-        parent::__construct('Orphaned Page Manager', ['admin', 'moderator']);
+        parent::__construct('Page Manager', \App\Auth\Access::ROLE_ADMIN);
     }
-
 
     /**
      *
@@ -34,11 +37,11 @@ class Orphaned extends Iface
      */
     public function doDefault(Request $request)
     {
-        $this->table = new \Tk\Table('tableOne');
+        $this->table = new \Tk\Table('pageTable');
 
         $this->table->addCell(new \Tk\Table\Cell\Checkbox('id'));
         $this->table->addCell(new \Tk\Table\Cell\Text('title'))->addCellCss('key')->setUrl(\Tk\Uri::create('/edit.html'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('userId'));
+        $this->table->addCell(new \Tk\Table\Cell\Text('userId'))->setOrderProperty('user_id');
         $this->table->addCell(new \Tk\Table\Cell\Text('type'));
         $this->table->addCell(new \Tk\Table\Cell\Text('url'));
         $this->table->addCell(new \Tk\Table\Cell\Text('permission'));
@@ -48,14 +51,14 @@ class Orphaned extends Iface
 
         // Filters
         $this->table->addFilter(new Field\Input('keywords'))->setLabel('')->setAttr('placeholder', 'Keywords');
-
+        
         // Actions
         $this->table->addAction(\Tk\Table\Action\Button::getInstance('New Page', 'glyphicon glyphicon-plus', \Tk\Uri::create('/edit.html')));
         $this->table->addAction(new \Tk\Table\Action\Delete());
         $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
-
+        
         $filter = $this->table->getFilterValues();
-        $users = \App\Db\Page::getMapper()->findOrphanedPages($this->table->makeDbTool('a.title'));
+        $users = \App\Db\Page::getMapper()->findFiltered($filter, $this->table->makeDbTool('a.title'));
         $this->table->setList($users);
 
         return $this->show();
@@ -101,5 +104,6 @@ XHTML;
 
         return \Dom\Loader::load($xhtml);
     }
+
 
 }

@@ -31,11 +31,22 @@
 
 .breadcrumb {
   margin-bottom: 0;
+  overflow: hidden;
 }
 
 a.wiki-page-new {
   color: #d00;
 }
+a.wiki-canView {
+  
+}
+a.wiki-notView {
+  text-decoration: line-through !important;
+  color: #999;
+}
+
+
+
 .wiki-header .revision h1 {
   color: #d00;
 }
@@ -135,14 +146,12 @@ a.wiki-page-new {
 }
 
 
-
-hgroup {  border-bottom: 1px solid #ccc; }
-hgroup h1 { font: 500 normal 1.625em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin-top: 0; line-height: 1.15; }
-hgroup h2.lead { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin: 0; padding-bottom: 10px; }
+.wiki-search .search-head {  border-bottom: 1px solid #ccc; }
+.wiki-search .search-head h1 { font: 500 normal 1.625em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin-top: 0; line-height: 1.15; }
+.wiki-search .search-head h2.lead { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin: 0; padding-bottom: 10px; }
 
 .search-result {
   margin-top: 20px;
-  
   
   .thumbnail {
     border-radius: 0 !important;
@@ -202,3 +211,104 @@ hgroup h2.lead { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; 
   }
 
 }
+
+
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+  #NavSearch {
+    display: none;
+  }
+}
+
+
+@media (max-width: @screen-sm-max) {
+
+  /* Make mce responsive */
+  .mce-window {
+    width: auto !important;
+    top: 0px !important;
+    left: 0px !important;
+    right: 0px !important;
+    bottom: 0px !important;
+    background: none !important;
+  }
+
+  .mce-window-head {
+    background: #FFFFFF !important;
+  }
+
+  .mce-window-body {
+    background: #FFFFFF !important;
+  }
+
+  .mce-foot > .mce-container-body {
+    padding: 10px !important;
+    width: 80% !important;
+  }
+
+  .mce-panel {
+    max-width: 100% !important;
+  }
+
+  .mce-container {
+    max-width: 100% !important;
+    height: auto !important;
+    overflow: auto;
+  }
+
+  .mce-container-body {
+    max-width: 100% !important;
+    height: auto !important;
+    overflow: auto;
+  }
+
+  .mce-form {
+    padding: 10px !important;
+  }
+
+  .mce-tabs {
+    max-width: 100% !important;
+  }
+
+  .mce-formitem {
+    margin: 10px 0 !important;
+  }
+
+  .mce-abs-layout-item {
+    position: static !important;
+    width: auto !important;
+  }
+
+  .mce-abs-layout-item.mce-label {
+    display: block !important;
+  }
+
+  .mce-abs-layout-item.mce-textbox {
+    -webkit-box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .mce-abs-layout-item.mce-combobox {
+    display: flex !important;
+  }
+
+  .mce-abs-layout-item.mce-combobox > .mce-textbox {
+    -ms-flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    height: 29px !important;
+    width: 80% !important;
+  }
+
+  .mce-container-body.mce-window-body.mce-abs-layout iframe {
+    height: 500px !important;
+  }
+
+  /*this only use with responsive file manager 9*/
+
+}
+
+
+

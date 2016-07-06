@@ -1,5 +1,6 @@
 <?php
 namespace App;
+
 use Tk\Db\Pdo;
 
 /**
@@ -180,7 +181,7 @@ class Factory
      */
     static public function getLockMap()
     {
-        $lm = \App\Db\LockMap::instance(self::getConfig()->getUser(), self::getDb());
+        $lm = \App\Db\LockMap::getInstance(self::getConfig()->getUser(), self::getDb());
         return $lm;
     }
     

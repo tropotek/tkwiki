@@ -95,8 +95,7 @@ class Bootstrap
         Factory::getCookie();
         // * Session    
         Factory::getSession();
-        
-        
+
         return $config;
     }
 

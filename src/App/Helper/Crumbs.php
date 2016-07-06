@@ -60,7 +60,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      * @param \Tk\Session $session
      * @return Crumbs|mixed|static
      */
-    static public function instance($requestUri = null, $session = null)
+    static public function getInstance($requestUri = null, $session = null)
     {
         if (!$session) $session = \App\Factory::getSession();
         if (!self::$instance) {

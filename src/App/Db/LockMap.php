@@ -48,7 +48,7 @@ class LockMap
      * @param \Tk\Db\Pdo $db
      * @return LockMap
      */
-    static function instance($user = null, $db = null)
+    static function getInstance($user = null, $db = null)
     {
         if (!self::$instance) {
             if (!$db) {

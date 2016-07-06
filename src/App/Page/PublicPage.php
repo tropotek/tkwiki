@@ -58,7 +58,7 @@ JS;
         $menu->show();
         $template->replaceTemplate('wiki-menu', $menu->getTemplate());
         
-        $crumbs = \App\Helper\Crumbs::instance(\Tk\Uri::create());
+        $crumbs = \App\Helper\Crumbs::getInstance(\Tk\Uri::create());
         $crumbs->show();
         $template->replaceTemplate('wiki-crumbs', $crumbs->getTemplate());
         

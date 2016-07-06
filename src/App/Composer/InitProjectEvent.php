@@ -92,6 +92,7 @@ STR;
 
         // Finally check if the DB is setup
         include $configPath;
+        $config = \Tk\Config::getInstance();
         $db = \Tk\Db\Pdo::getInstance($config['db.name'], $config->getGroup('db'));
         if ($db) {
             if (!$db->tableExists('data')) {

@@ -35,6 +35,11 @@ class FrontController extends \Tk\Kernel\HttpKernel
         $this->config = $config;
         
         $this->init();
+
+
+        // TODO REMOVE THIS,...........................
+        $migrate = new \Tk\Db\Migrate(Factory::getDb(), $this->config->getSitePath());
+        $migrate->run();
     }
 
     /**

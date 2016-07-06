@@ -57,12 +57,12 @@ STR;
             if (!@is_file($sitePath . '/src/config/config.php')) {
                 $results = self::userInput($io);
                 foreach ($results as $k => $v) {
-                    $configContents = self::setConfigValue($k, $v, $configContents);
+                    $configContents = self::setConfigValue($k, self::quote($v), $configContents);
                 }
             } else {
                 $configContents = file_get_contents($configPath);
             }
-            // Set debug mode
+            // Set dev/debug mode
             if ($composer->getPackage()->isDev()) {
                 $configContents = self::setConfigValue('debug', 'true', $configContents);
             }
@@ -90,6 +90,10 @@ STR;
             // TODO: Test if dir writable by apache/user running the site ????
         }
 
+        // Finally check if the DB is setup
+        print_r(class_exists('\Tk\Uri'));
+
+
     }
 
     /**
@@ -104,12 +108,12 @@ STR;
         $io->write('<options=bold>');
         $i = $io->select('Select the DB type[mysql]: ', $dbTypes, 0);
         $io->write('</>');
-        $config['db.type'] = self::quote($dbTypes[$i]);
+        $config['db.type'] = $dbTypes[$i];
 
-        $config['db.host'] = self::quote($io->ask(self::bold('Set the DB hostname[localhost]: '), 'localhost'));
-        $config['db.name'] = self::quote($io->askAndValidate(self::bold('Set the DB name: '), function ($data) { if (!$data) throw new \Exception('Please enter the DB name to use.');  return $data; }));
-        $config['db.user'] = self::quote($io->askAndValidate(self::bold('Set the DB user: '), function ($data) { if (!$data) throw new \Exception('Please enter the DB username.'); return $data; }));
-        $config['db.pass'] = self::quote($io->askAndValidate(self::bold('Set the DB password: '), function ($data) { if (!$data) throw new \Exception('Please enter the DB password.'); return $data; }));
+        $config['db.host'] = $io->ask(self::bold('Set the DB hostname[localhost]: '), 'localhost');
+        $config['db.name'] = $io->askAndValidate(self::bold('Set the DB name: '), function ($data) { if (!$data) throw new \Exception('Please enter the DB name to use.');  return $data; });
+        $config['db.user'] = $io->askAndValidate(self::bold('Set the DB user: '), function ($data) { if (!$data) throw new \Exception('Please enter the DB username.'); return $data; });
+        $config['db.pass'] = $io->askAndValidate(self::bold('Set the DB password: '), function ($data) { if (!$data) throw new \Exception('Please enter the DB password.'); return $data; });
 
         return $config;
     }

@@ -55,8 +55,8 @@ STR;
         if (@is_file($configInPath)) {
             $configContents = file_get_contents($configInPath);
             if (!@is_file($sitePath . '/src/config/config.php')) {
-                $results = self::userInput($io);
-                foreach ($results as $k => $v) {
+                $input = self::userInput($io);
+                foreach ($input as $k => $v) {
                     $configContents = self::setConfigValue($k, self::quote($v), $configContents);
                 }
             } else {
@@ -91,9 +91,17 @@ STR;
         }
 
         // Finally check if the DB is setup
-        print_r(class_exists('\Tk\Uri'));
+        include $configPath;
+        $db = \Tk\Db\Pdo::getInstance($config['db.name'], $config->getGroup('db'));
+        if ($db) {
+            if (!$db->tableExists('data')) {
+                // migrate/install db
+
+                // Maybe create a lib for this?????
 
 
+            }
+        }
     }
 
     /**

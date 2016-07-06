@@ -59,12 +59,12 @@ class History extends Iface
         }
         
         
-        $this->table = new \Tk\Table('tableOne');
+        $this->table = new \Tk\Table('historyTable');
 
         $this->table->addCell(new ActionCell('actions'));
         $this->table->addCell(new \Tk\Table\Cell\Text('id'));
         $this->table->addCell(new DateCell('created'))->addCellCss('key')->setUrl(\Tk\Uri::create('/view.html'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('userId'));
+        $this->table->addCell(new \Tk\Table\Cell\Text('userId'))->setOrderProperty('user_id');
         $this->table->addCell(new BytesCell('size'))->setLabel('Bytes');
         
 
@@ -189,6 +189,12 @@ class BytesCell extends \Tk\Table\Cell\Text
 
 class ActionCell extends \Tk\Table\Cell\Iface
 {
+
+    public function __construct($property, $label = null)
+    {
+        parent::__construct($property, $label);
+        $this->setOrderProperty('');
+    }
 
     /**
      *

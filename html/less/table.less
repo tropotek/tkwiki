@@ -4,28 +4,58 @@
  * Basic table styles for bootstrap templates
  */
 
-
-.tk-table .tk-form-events,
-.tk-table .tk-form-fields {
-  display: inline-block;
+.tk-table {
+  
+  thead {
+    .orderAsc {
+      a:before {
+        font-family: 'Glyphicons Halflings';
+        font-size: 0.8em;
+        font-weight: normal;
+        content: "\e155";
+        padding: 0px 5px;
+        display: inline-block;
+        opacity: 0.70; 
+      }
+    }
+    .orderDesc {
+      a:before {
+        font-family: 'Glyphicons Halflings';
+        font-size: 0.8em;
+        font-weight: normal;
+        content: "\e156";
+        padding: 0px 5px;
+        display: inline-block;
+        opacity: 0.70; 
+      }
+    }
+  }
+    
+  .tk-form-events,
+  .tk-form-fields {
+    display: inline-block;
+  }
+  .key {
+    width: 100%;
+  }
+  td,
+  th {
+    white-space: nowrap;
+  }
+  .btn {
+    margin-right: 5px;
+  }
+  .tk-form {
+    padding: 5px 0px;
+  }
+  .tk-actions {
+    padding: 5px 0px;
+  }
 }
 
-.tk-table .key {
-  width: 100%;
-}
-.tk-table td,
-.tk-table th {
-  white-space: nowrap;
-}
-.tk-table .btn {
-  margin-right: 5px;
-}
-.tk-table .tk-form {
-  padding: 5px 0px;
-}
-.tk-actions {
-  padding: 5px 0px;
-}
 
 
 
+
+
+            

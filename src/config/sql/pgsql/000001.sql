@@ -42,7 +42,7 @@ INSERT INTO page (user_id, type, template, title, url, modified, created) VALUES
   (1, 'page', '', 'Home', 'Home', date_trunc('seconds', NOW()), date_trunc('seconds', NOW()))
 ;
 
-INSERT INTO content (page_id, user_id, html, modified, created) VALUES 
+INSERT INTO "content" (page_id, user_id, html, modified, created) VALUES
   (1, 1, '<p>This blog post shows a few different types of content that''s supported and styled with Bootstrap. Basic
          typography, images, and code are all supported.</p>
       <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu

@@ -32,7 +32,7 @@ window.elFinderSupportVer1 = function(upload) {
 			
 			return self.normalize('upload', data);
 		}
-	}
+	};
 	
 	
 	this.send = function(opts) {
@@ -47,7 +47,7 @@ window.elFinderSupportVer1 = function(upload) {
 			
 		dfrd.abort = function() {
 			xhr.state() == 'pending' && xhr.abort();
-		}
+		};
 		
 		switch (cmd) {
 			case 'open':
@@ -91,7 +91,7 @@ window.elFinderSupportVer1 = function(upload) {
 							}
 						})
 				});
-				return dfrd.resolve({})
+				return dfrd.resolve({});
 				break;
 				
 			case 'mkdir':
@@ -99,7 +99,7 @@ window.elFinderSupportVer1 = function(upload) {
 				opts.data.current = opts.data.target;
 				break;
 			case 'paste':
-				opts.data.current = opts.data.dst
+				opts.data.current = opts.data.dst;
 				break;
 				
 			case 'size':
@@ -131,10 +131,10 @@ window.elFinderSupportVer1 = function(upload) {
 				} else {
 					dfrd.resolve(data);
 				}
-			})
+			});
 			
 		return dfrd;
-	}
+	};
 	
 	// fix old connectors errors messages as possible
 	// this.errors = {
@@ -235,7 +235,7 @@ window.elFinderSupportVer1 = function(upload) {
 			options : {tmb : !!data.tmb}
 		}, diff);
 		
-	}
+	};
 	
 	/**
 	 * Convert old api tree into plain array of dirs
@@ -251,7 +251,7 @@ window.elFinderSupportVer1 = function(upload) {
 				
 				for (i = 0; i < dirs.length; i++) {
 					dir = dirs[i];
-					result.push(self.normalizeFile(dir, phash))
+					result.push(self.normalizeFile(dir, phash));
 					dir.dirs.length && traverse(dir.dirs, dir.hash);
 				}
 			};
@@ -259,7 +259,7 @@ window.elFinderSupportVer1 = function(upload) {
 		traverse([root]);
 
 		return result;
-	}
+	};
 	
 	/**
 	 * Convert file info from old api format into new one
@@ -312,7 +312,7 @@ window.elFinderSupportVer1 = function(upload) {
 			info.resize = file.resize;
 		}
 		return info;
-	}
+	};
 	
 	this.normalizeOptions = function(data) {
 		var opts = {

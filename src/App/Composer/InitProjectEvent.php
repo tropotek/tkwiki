@@ -97,9 +97,9 @@ STR;
         if ($db) {
             if (!$db->tableExists('data')) {
                 // migrate/install db
-
-                // Maybe create a lib for this?????
-
+                $migrate = new \Tk\Db\Migrate($db, $config->getSitePath());
+                $migrate->setTempPath($config->getTempPath());
+                $migrate->migrate($config->getSrcPath().'/config/sql');
 
             }
         }

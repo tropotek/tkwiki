@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 try {
 	if (! elFinder.prototype.commands.quicklook.plugins) {

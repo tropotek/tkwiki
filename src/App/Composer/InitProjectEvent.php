@@ -38,71 +38,78 @@ class InitProjectEvent
      */
     static function init(Event $event)
     {
-        $sitePath = $_SERVER['PWD'];
-        $io = $event->getIO();
-        $composer = $event->getComposer();
+        try {
+            $sitePath = $_SERVER['PWD'];
+            $io = $event->getIO();
+            $composer = $event->getComposer();
 
-        $head = <<<STR
+            $head = <<<STR
 ---------------------------------------------------------
 |                    tkWiki V2.0                        |
 |                   Author: Godar                       |
 |                 (c) Tropotek 2016                     |
 ---------------------------------------------------------
 STR;
-        $io->write(self::bold($head));
-        $configInPath = $sitePath.'/src/config/config.php.in';
-        $configPath = $sitePath . '/src/config/config.php';
-        if (@is_file($configInPath)) {
-            $configContents = file_get_contents($configInPath);
-            if (!@is_file($sitePath . '/src/config/config.php')) {
-                $input = self::userInput($io);
-                foreach ($input as $k => $v) {
-                    $configContents = self::setConfigValue($k, self::quote($v), $configContents);
+            $io->write(self::bold($head));
+            $configInPath = $sitePath . '/src/config/config.php.in';
+            $configPath = $sitePath . '/src/config/config.php';
+            if (@is_file($configInPath)) {
+                $configContents = file_get_contents($configInPath);
+                if (!@is_file($sitePath . '/src/config/config.php')) {
+                    $io->write(self::green('Setup new config.php'));
+                    $input = self::userInput($io);
+                    foreach ($input as $k => $v) {
+                        $configContents = self::setConfigValue($k, self::quote($v), $configContents);
+                    }
+                } else {
+                    $io->write(self::green('Update existing config.php'));
+                    $configContents = file_get_contents($configPath);
                 }
-            } else {
-                $configContents = file_get_contents($configPath);
+                // Set dev/debug mode
+                if ($composer->getPackage()->isDev()) {
+                    $configContents = self::setConfigValue('debug', 'true', $configContents);
+                }
+                $io->write(self::green('Saving config.php'));
+                file_put_contents($sitePath . '/src/config/config.php', $configContents);
             }
-            // Set dev/debug mode
-            if ($composer->getPackage()->isDev()) {
-                $configContents = self::setConfigValue('debug', 'true', $configContents);
+
+            if (!@is_file($sitePath . '/.htaccess') && @is_file($sitePath . '/.htaccess.in')) {
+                $io->write(self::green('Setup new .htaccess file'));
+                copy($sitePath . '/.htaccess.in', $sitePath . '/.htaccess');
+                $path = '/';
+                if (preg_match('/(.+)\/public_html\/(.*)/', $sitePath, $regs)) {
+                    $user = basename($regs[1]);
+                    $path = '/~' . $user . '/' . $regs[2] . '/';
+                }
+                $path = trim($io->ask(self::bold('What is the site base URL path[' . $path . ']: '), $path));
+                if (!$path) $path = '/';
+                $io->write(self::green('Saving new .htaccess file'));
+                $buf = file_get_contents($sitePath . '/.htaccess');
+                $buf = str_replace('RewriteBase /', 'RewriteBase ' . $path, $buf);
+                file_put_contents($sitePath . '/.htaccess', $buf);
             }
-            file_put_contents($sitePath . '/src/config/config.php', $configContents);
+
+            if (!is_dir($sitePath . '/data')) {
+                $io->write(self::green('Creating: Site data directory `/data`'));
+                mkdir($sitePath . '/data', 0755, true);
+            }
+
+            // Migrate the SQL db
+            $io->write(self::green('Migrate the Database'));
+            include $configPath;
+            $config = \Tk\Config::getInstance();
+            $db = \Tk\Db\Pdo::getInstance($config['db.name'], $config->getGroup('db'));
+            $migrate = new \Tk\Util\SqlMigrate($db, $config->getSitePath());
+            $migrate->setTmpPath($config->getTempPath());
+            $files = $migrate->migrate($config->getSrcPath() . '/config/sql');
+            foreach ($files as $f) {
+                $io->write(self::green('  ' . $f));
+            }
+        } catch (\Exception $e) {
+            $io->write(self::red($e->getMessage()));
+            error_log($e->__toString());
         }
 
-        if (!@is_file($sitePath.'/.htaccess') && @is_file($sitePath.'/.htaccess.in')) {
-            copy($sitePath.'/.htaccess.in', $sitePath.'/.htaccess');
-            $path = '/';
-            if (preg_match('/(.+)\/public_html\/(.*)/', $sitePath, $regs)) {
-                $user = basename($regs[1]);
-                $path = '/~' . $user . '/' . $regs[2] . '/';
-            }
-            $path = trim($io->ask(self::bold('What is the site base URL path['.$path.']: '), $path));
-            if (!$path) $path = '/';
-            $io->write('Installing: `.htaccess` for front controller.');
-            $buf = file_get_contents($sitePath.'/.htaccess');
-            $buf = str_replace('RewriteBase /', 'RewriteBase ' . $path, $buf);
-            file_put_contents($sitePath.'/.htaccess', $buf);
-        }
-
-        if (!is_dir($sitePath.'/data')) {
-            $io->write('Creating: Site data directory `/data`.');
-            mkdir($sitePath.'/data', 0755, true);
-            // TODO: Test if dir writable by apache/user running the site ????
-        }
-
-        // Finally check if the DB is setup
-        include $configPath;
-        $config = \Tk\Config::getInstance();
-        $db = \Tk\Db\Pdo::getInstance($config['db.name'], $config->getGroup('db'));
-        if ($db) {
-            if (!$db->tableExists('data')) {
-                // migrate/install db
-                $migrate = new \Tk\Util\Migrate($db, $config->getSitePath());
-                $migrate->setTempPath($config->getTempPath());
-                $migrate->migrate($config->getSrcPath().'/config/sql');
-
-            }
-        }
     }
 
     /**
@@ -143,6 +150,10 @@ STR;
     }
 
     static function bold($str) { return '<options=bold>'.$str.'</>'; }
+
+    static function green($str) { return '<fg=green>'.$str.'</>'; }
+
+    static function red($str) { return '<fg=white;bg=red>'.$str.'</>'; }
 
     static function quote($str) { return '\''.$str.'\''; }
 

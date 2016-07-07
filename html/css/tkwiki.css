@@ -7,6 +7,7 @@
 
 .wiki-content img {
   margin: 0 10px;
+  max-width: 100%;
 }
 .wiki-content .left {
   float: left;

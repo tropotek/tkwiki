@@ -10,17 +10,17 @@
 // Reset and dependencies
 @icon-font-path: '@{_siteUrl}/html/assets/bootstrap-3.3.6/fonts/';
 
-
 @import '../assets/bootstrap-3.3.6/less/bootstrap';
 @import 'mega-menu';
 @import 'form';
 @import 'table';
-
+//@import '../css/tkWiki.css';
 
 /* WIKI Common styles*/
 .no-padding {
   padding: 0;
 }
+
 .no-margin {
   margin: 0;
 }
@@ -37,15 +37,41 @@
 a.wiki-page-new {
   color: #d00;
 }
+
 a.wiki-canView {
-  
+
 }
+
 a.wiki-notView {
   text-decoration: line-through !important;
   color: #999;
 }
 
+.wiki-content {
+  a.wiki-page-new {
+    color: #d00;
+  }
 
+  img {
+    margin: 0 10px;
+    max-width: 100%;
+  }
+  .left {
+    float: left;
+  }
+  .right {
+    float: right;
+  }
+  .text-top {
+    vertical-align: text-top;
+  }
+  .text-bottom {
+    vertical-align: text-bottom;
+  }
+  .text-baseline {
+    vertical-align: baseline;
+  }
+}
 
 .wiki-header .revision h1 {
   color: #d00;
@@ -53,10 +79,11 @@ a.wiki-notView {
 
 /* HEADER AND NAVIGATION */
 .navbar {
-  margin-bottom:0 !important;
+  margin-bottom: 0 !important;
   border-width: 0 0 0 0;
   position: relative;
 }
+
 .navbar-bg {
   position: relative;
   min-height: @navbar-height; // Ensure a navbar always shows (e.g., without a .navbar-brand in collapsed mode)
@@ -71,23 +98,24 @@ a.wiki-notView {
     border-radius: @navbar-border-radius;
   }
 }
+
 .navbar-fixed-top, .navbar-fixed-bottom {
   z-index: 100;
 }
 
 .pageWrapper {
   padding: 0 15px;
-  
+
   // A fix for adding padding to the top of the scroll 
   //  position when an anchor is clicked.
-  *[id]:before { 
-    display: block; 
-    content: " "; 
-    margin-top: -15px; 
+  *[id]:before {
+    display: block;
+    content: " ";
+    margin-top: -15px;
     height: 15px;
-    visibility: hidden; 
+    visibility: hidden;
   }
-  
+
   .blog-post-meta {
     margin: 0 0 0 0;
   }
@@ -97,20 +125,18 @@ a.wiki-notView {
   font-weight: bold;
 }
 
-
 /* WIKI PAGE CONTENT */
 
 .wiki-meta .author {
   font-weight: bold;
 }
 
-
 .toc-menu {
   //width: auto;
   //float: right;
   margin: 0 0 10px 10px;
   overflow: hidden;
-  
+
   ul {
     list-style-position: inside;
     list-style-type: none;
@@ -124,13 +150,13 @@ a.wiki-notView {
   li {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
-    
+
     a {
       display: inline-block;
       margin-bottom: 5px;
     }
   }
-  
+
   &.toc-type-nested {
     ul {
       list-style-type: none;
@@ -145,14 +171,27 @@ a.wiki-notView {
   }
 }
 
+.wiki-search .search-head {
+  border-bottom: 1px solid #ccc;
+}
 
-.wiki-search .search-head {  border-bottom: 1px solid #ccc; }
-.wiki-search .search-head h1 { font: 500 normal 1.625em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin-top: 0; line-height: 1.15; }
-.wiki-search .search-head h2.lead { font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; color: #2a3644; margin: 0; padding-bottom: 10px; }
+.wiki-search .search-head h1 {
+  font: 500 normal 1.625em "Roboto", Arial, Verdana, sans-serif;
+  color: #2a3644;
+  margin-top: 0;
+  line-height: 1.15;
+}
+
+.wiki-search .search-head h2.lead {
+  font: normal normal 1.125em "Roboto", Arial, Verdana, sans-serif;
+  color: #2a3644;
+  margin: 0;
+  padding-bottom: 10px;
+}
 
 .search-result {
   margin-top: 20px;
-  
+
   .thumbnail {
     border-radius: 0 !important;
   }
@@ -212,13 +251,11 @@ a.wiki-notView {
 
 }
 
-
 @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
   #NavSearch {
     display: none;
   }
 }
-
 
 @media (max-width: @screen-sm-max) {
 
@@ -309,6 +346,4 @@ a.wiki-notView {
   /*this only use with responsive file manager 9*/
 
 }
-
-
 

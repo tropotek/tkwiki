@@ -43,6 +43,12 @@ class PublicPage extends Iface
                 $template->setChoice('admin');
             }
         }
+
+        if ($this->getConfig()->get('site.title')) {
+            $template->setAttr('siteName', 'title', $this->getConfig()->get('site.title'));
+            $template->setTitleText(trim($template->getTitleText() . ' - ' . $this->getConfig()->get('site.title'), '- '));
+        }
+
         $siteUrl = $this->getConfig()->getSiteUrl();
         $dataUrl = $this->getConfig()->getDataUrl();
         $js = <<<JS

@@ -121,8 +121,9 @@ WHERE a.`id` = b.`currentTextId`;
 RENAME TABLE `pageLink` TO `links`;
 ALTER TABLE `links` CHANGE `pageFrom` `page_id` INT( 11 ) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `links` CHANGE `pageToName` `page_url` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '';
-ALTER TABLE `links` DROP INDEX `pageFrom`;
-ALTER TABLE `links` DROP INDEX `pageToName`;
+
+ALTER TABLE `links` DROP INDEX IF EXISTS `pageFrom`;
+ALTER TABLE `links` DROP INDEX IF EXISTS `pageToName`;
 ALTER TABLE `links` ADD UNIQUE (`page_id` , `page_url`);
 
 -- lock

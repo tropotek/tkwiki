@@ -68,7 +68,7 @@ tinymce.PluginManager.add('wikilink', function(editor, url) {
     
     var linkAttrs = {
       href: 'page://' + pageUrl,
-      "class": 'wiki-page',
+      'class': 'wiki-page',
       title: title
     };
     if (isNew) {

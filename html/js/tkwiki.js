@@ -93,12 +93,15 @@ jQuery(function ($) {
     }
     
     tinymce.init({
-      //mode : 'exact',
       selector: '.tinymce',
-      //encoding: 'xml',
       init_instance_callback : function(editor) {
         // setup a page lock loop
         setTimeout(saveLock, lockTimeout);
+      },
+      setup : function(ed){
+          ed.on('NodeChange', function(e){
+            $('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');  
+          });
       },
       plugins: [
         'wikisave wikilink advlist autolink autosave link image lists charmap print preview hr anchor',
@@ -112,20 +115,23 @@ jQuery(function ($) {
 
       menubar: false,
       toolbar_items_size: 'small',
-      browser_spellcheck: true,
-      schema: 'html5',
+      
+      extended_valid_elements : 'a[class|name|href|target|title|onclick|rel|style],script[data-jsl-static|data-jsl-priority|type|src|language],style[*],iframe[src|style|width|height|scrolling|marginwidth|marginheight|frameborder],img[style|class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name]',
+      
+      keep_styles: true,
+      
       convert_urls: false,
       //urlconverter_callback : function (url, node, on_save, name) {},
-      
+
+      browser_spellcheck: true,
       autosave_interval: '10m',
       wikilink_ajaxUrl : config.siteUrl + '/ajax/getPageList',
       wikisave_enablewhendirty: true,
-      wikisave_onsavecallback: function () { submitForm($('#pageEdit').get(0), 'save'); },
-      file_picker_callback : elFinderBrowser,
-      onchange_callback : function(inst) { 
-        console.log('Knock Knock');
+      wikisave_onsavecallback: function (ed) {
+        console.log(ed.getContent());
+          submitForm($('#pageEdit').get(0), 'save');
       },
-      
+      file_picker_callback : elFinderBrowser,      
       content_css: [
         config.siteUrl + '/html/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
         config.siteUrl + '/html/css/tkwiki.css'

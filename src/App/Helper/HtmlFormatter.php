@@ -93,9 +93,8 @@ class HtmlFormatter
                 'tab-size' => 2,
                 'indent-spaces' => 2,
                 'wrap' => 200,
-//                'drop-font-tags' => true,     // Do not use removes up top-most wrapper <div> tags???
                 'drop-empty-paras' => false,
-                'drop-proprietary-attributes' => true,
+                'drop-proprietary-attributes' => false,
                 'fix-backslash' => true,
                 'fix-bad-comments' => true,
                 'logical-emphasis' => true,

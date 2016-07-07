@@ -64,7 +64,6 @@ class Edit extends Iface
         if (!\App\Factory::getSession()->has(self::SID_REFERRER) && $request->getReferer()) {
             \App\Factory::getSession()->set(self::SID_REFERRER, $request->getReferer());
         }
-        
         // Find requested page
         $this->wPage = \App\Db\Page::getMapper()->find($request->get('pageId'));
         // Create a new page

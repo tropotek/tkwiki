@@ -1,9 +1,9 @@
 
 
 INSERT INTO "user" (name, email, username, password, active, hash, modified, created) VALUES
-('Administrator', 'admin@example.com', 'admin', md5('password'), TRUE, MD5(CONCAT('admin@example.com', date_trunc('seconds', NOW()))), date_trunc('seconds', NOW()) , date_trunc('seconds', NOW())),
-('Moderator', 'modder@example.com', 'modder', md5('password'), TRUE, MD5(CONCAT('modder@example.com', date_trunc('seconds', NOW()))), date_trunc('seconds', NOW()) , date_trunc('seconds', NOW())),
-('User', 'user@example.com', 'user', md5('password'), TRUE, MD5(CONCAT('user@example.com', date_trunc('seconds', NOW()))), date_trunc('seconds', NOW()) , date_trunc('seconds', NOW()))
+('Administrator', 'admin@example.com', 'admin', md5('password'), TRUE, MD5(CONCAT('admin@example.com', date_trunc('seconds', NOW()))), date_trunc('seconds', NOW()) , date_trunc('seconds', NOW()))
+--.ARRAY('Moderator', 'modder@example.com', 'modder', md5('password'), TRUE, MD5(CONCAT('modder@example.com', date_trunc('seconds', NOW()))), date_trunc('seconds', NOW()) , date_trunc('seconds', NOW())),
+--('User', 'user@example.com', 'user', md5('password'), TRUE, MD5(CONCAT('user@example.com', date_trunc('seconds', NOW()))), date_trunc('seconds', NOW()) , date_trunc('seconds', NOW()))
 ;
 
 INSERT INTO role (name, description) VALUES
@@ -19,11 +19,11 @@ INSERT INTO role (name, description) VALUES
 INSERT INTO user_role (user_id, role_id)
 VALUES
   -- Administrator
-  (1, 1),(1, 2),(1, 3),(1, 4),(1, 5),(1, 6),(1, 7),
+  (1, 1),(1, 2),(1, 3),(1, 4),(1, 5),(1, 6),(1, 7)
   -- Moderator
-  (2, 2),(2, 3),(2, 4),(2, 5),(2, 6),(2, 7),
+  --,(2, 2),(2, 3),(2, 4),(2, 5),(2, 6),(2, 7),
   -- User
-  (3, 3),(3, 4),(3, 5),(3, 6),(3, 7)
+  --(3, 3),(3, 4),(3, 5),(3, 6),(3, 7)
 ;
 
 INSERT INTO data (foreign_id, foreign_key, key, value) VALUES

@@ -1,11 +1,10 @@
 
 
 INSERT INTO `user` (`name`, `email`, `username`, `password`, `active`, `hash`, `modified`, `created`) VALUES
-  ('Administrator', 'admin@example.com', 'admin', md5('password'), 1, MD5(CONCAT('admin@example.com', NOW())), NOW(),
-   NOW()),
-  ('Moderator', 'modder@example.com', 'modder', md5('password'), 1, MD5(CONCAT('modder@example.com', NOW())), NOW(),
-   NOW()),
-  ('User', 'user@example.com', 'user', md5('password'), 1, MD5(CONCAT('user@example.com', NOW())), NOW(), NOW());
+  ('Administrator', 'admin@example.com', 'admin', md5('password'), 1, MD5(CONCAT('admin@example.com', NOW())), NOW(), NOW())
+--  ,('Moderator', 'modder@example.com', 'modder', md5('password'), 1, MD5(CONCAT('modder@example.com', NOW())), NOW(), NOW()),
+--  ('User', 'user@example.com', 'user', md5('password'), 1, MD5(CONCAT('user@example.com', NOW())), NOW(), NOW())
+;
 
 INSERT INTO `role` (`name`, `description`) VALUES
   ('admin', 'Manage site, groups, users, pages, etc no restrictions'),
@@ -19,12 +18,12 @@ INSERT INTO `role` (`name`, `description`) VALUES
 INSERT INTO user_role (user_id, role_id)
 VALUES
   -- Administrator
-  (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8),
+  (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8)
   -- Moderator
-  (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), (2, 8),
+--  ,(2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), (2, 8),
   -- User
-  (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8);
-
+--  (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8)
+;
 
 INSERT INTO `data` (`foreign_id`, `foreign_key`, `key`, `value`) VALUES
   (0, 'system', 'site.title', 'TkWiki II'),

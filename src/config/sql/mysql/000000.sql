@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `type` varchar(64) NOT NULL DEFAULT 'page',           -- The page type: `page`, `nav`, etc...
   `template` varchar(255) NOT NULL DEFAULT '',          -- use a different page template if selected
   `title` varchar(128) NOT NULL DEFAULT '',
-  `url` varchar(128) NOT NULL,                          -- the base url of the page
+  `url` varchar(128) NOT NULL DEFAULT '',                          -- the base url of the page
   `permission` int(11) unsigned NOT NULL DEFAULT '0',   -- Page permission 0 - public, 1 - protected, 2 - private
   `views` int(11) unsigned NOT NULL DEFAULT '0',        -- Page views per (1 per session)
   `modified` datetime NOT NULL,

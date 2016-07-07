@@ -138,8 +138,10 @@ STR;
             $p = $io->ask(self::bold('Please create a new `admin` user password: '), 'admin');
             $hashed = \App\Factory::hashPassword($p);
             $sql = sprintf('UPDATE %s SET password = %s WHERE id = 1', $db->quoteParameter('user'), $db->quote($hashed));
+
             $r = $db->exec($sql);
-            if (!$r) {
+            if ($r === false) {
+                print_r($db->errorInfo());
                 $io->write(self::red('Error updating admin user password.'));
             } else {
                 $io->write(self::green('Administrator password updated.'));
@@ -160,7 +162,7 @@ STR;
     {
         $config = [];
         // Prompt for the database access
-        $dbTypes = ['mysql (default)', 'pgsql', 'sqlite'];
+        $dbTypes = ['mysql', 'pgsql', 'sqlite'];
         $io->write('<options=bold>');
         $i = $io->select('Select the DB type [mysql]: ', $dbTypes, 0);
         $io->write('</>');

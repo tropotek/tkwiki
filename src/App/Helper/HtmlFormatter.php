@@ -142,6 +142,13 @@ class HtmlFormatter
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             $regs = array();
+
+            // TODO: See the TinyMce event NodeChange() in the tkWiki.js
+            //  we need to to this in the app not on the client.... 
+            //$('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');
+
+
+
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                 
                 $page = \App\Db\Page::getMapper()->findByUrl($regs[1]);

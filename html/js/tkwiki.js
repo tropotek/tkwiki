@@ -100,6 +100,7 @@ jQuery(function ($) {
       },
       setup : function(ed){
           ed.on('NodeChange', function(e){
+            // TODO: move this into the HtmlFormatter
             $('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');  
           });
       },

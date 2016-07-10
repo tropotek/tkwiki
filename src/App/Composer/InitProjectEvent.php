@@ -42,6 +42,7 @@ class InitProjectEvent
      */
     static function init(Event $event, $isInstall = false)
     {
+        $isCleanInstall = false;
         try {
             $sitePath = $_SERVER['PWD'];
             $io = $event->getIO();
@@ -135,16 +136,20 @@ STR;
             // TODO Prompt for new admin user password and update DB
             // TODO This could be considered unsecure and may need to be removed in favor of an email address only?
             // TODO ----------------------------------------------------------------------------------------
-            $p = $io->ask(self::bold('Please create a new `admin` user password: '), 'admin');
-            $hashed = \App\Factory::hashPassword($p);
-            $sql = sprintf('UPDATE %s SET password = %s WHERE id = 1', $db->quoteParameter('user'), $db->quote($hashed));
+            $sql = sprintf('SELECT * FROM %s WHERE username = %s ', $db->quoteParameter('user'), $db->quote('admin'));
+            $r = $db->query($sql);
+            if (!$r || !$r->rowCount()) {
+                $p = $io->ask(self::bold('Please create a new `admin` user password: '), 'admin');
+                $hashed = \App\Factory::hashPassword($p);
+                $sql = sprintf('UPDATE %s SET password = %s WHERE id = 1', $db->quoteParameter('user'), $db->quote($hashed));
 
-            $r = $db->exec($sql);
-            if ($r === false) {
-                print_r($db->errorInfo());
-                $io->write(self::red('Error updating admin user password.'));
-            } else {
-                $io->write(self::green('Administrator password updated.'));
+                $r = $db->exec($sql);
+                if ($r === false) {
+                    print_r($db->errorInfo());
+                    $io->write(self::red('Error updating admin user password.'));
+                } else {
+                    $io->write(self::green('Administrator password updated.'));
+                }
             }
 
         } catch (\Exception $e) {

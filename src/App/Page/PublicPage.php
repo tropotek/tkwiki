@@ -31,8 +31,7 @@ class PublicPage extends Iface
     {
         $this->initPage();
         $template = $this->getTemplate();
-        
-         
+
         if ($this->getUser()) {
             // User Menu Setup 
             $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$this->getUser()->hash);
@@ -47,6 +46,9 @@ class PublicPage extends Iface
         if ($this->getConfig()->get('site.title')) {
             $template->setAttr('siteName', 'title', $this->getConfig()->get('site.title'));
             $template->setTitleText(trim($template->getTitleText() . ' - ' . $this->getConfig()->get('site.title'), '- '));
+        }
+        if ($this->getConfig()->isDebug()) {
+            $template->setTitleText(trim('DEBUG: ' . $this->getConfig()->get('site.title'), '- '));
         }
 
         $siteUrl = $this->getConfig()->getSiteUrl();
@@ -67,7 +69,6 @@ JS;
         $crumbs = \App\Helper\Crumbs::getInstance(\Tk\Uri::create());
         $crumbs->show();
         $template->replaceTemplate('wiki-crumbs', $crumbs->getTemplate());
-        
         
     }
     

@@ -57,9 +57,9 @@ class ContentMap extends Mapper
         $obj->size = (int)$row['size'];
 
         if ($row['modified'])
-            $obj->modified = new \DateTime($row['modified']);
+            $obj->modified = \Tk\Date::create($row['modified']);
         if ($row['created'])
-            $obj->created = new \DateTime($row['created']);
+            $obj->created = \Tk\Date::create($row['created']);
         return $obj;
     }
 
@@ -86,9 +86,9 @@ class ContentMap extends Mapper
             $obj->js = $row['js'];
 
         if (isset($row['modified']))
-            $obj->modified = new \DateTime($row['modified']);
+            $obj->modified = \Tk\Date::create($row['modified']);
         if (isset($row['created']))
-            $obj->created = new \DateTime($row['created']);
+            $obj->created = \Tk\Date::create($row['created']);
         return $obj;
     }
 

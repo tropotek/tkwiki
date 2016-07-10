@@ -83,8 +83,8 @@ class User extends Model
      */
     public function __construct()
     {
-        $this->modified = new \DateTime();
-        $this->created = new \DateTime();
+        $this->modified = \Tk\Date::create();
+        $this->created = \Tk\Date::create();
         $this->ip = \App\Factory::getRequest()->getIp();
     }
     

@@ -54,9 +54,9 @@ class PageMap extends Mapper
         $obj->views = (int)$row['views'];
 
         if ($row['modified'])
-            $obj->modified = new \DateTime($row['modified']);
+            $obj->modified = \Tk\Date::create($row['modified']);
         if ($row['created'])
-            $obj->created = new \DateTime($row['created']);
+            $obj->created = \Tk\Date::create($row['created']);
         return $obj;
     }
 
@@ -87,9 +87,9 @@ class PageMap extends Mapper
             $obj->permission = $row['permission'];
 
         if (isset($row['modified']))
-            $obj->modified = new \DateTime($row['modified']);
+            $obj->modified = \Tk\Date::create($row['modified']);
         if (isset($row['created']))
-            $obj->created = new \DateTime($row['created']);
+            $obj->created = \Tk\Date::create($row['created']);
 
         return $obj;
     }

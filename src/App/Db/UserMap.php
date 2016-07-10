@@ -58,11 +58,11 @@ class UserMap extends Mapper
         $obj->hash = $row['hash'];
 
         if ($row['last_login'])
-            $obj->lastLogin = new \DateTime($row['last_login']);
+            $obj->lastLogin = \Tk\Date::create($row['last_login']);
         if ($row['modified'])
-            $obj->modified = new \DateTime($row['modified']);
+            $obj->modified = \Tk\Date::create($row['modified']);
         if ($row['created'])
-            $obj->created = new \DateTime($row['created']);
+            $obj->created = \Tk\Date::create($row['created']);
         return $obj;
     }
 
@@ -90,9 +90,9 @@ class UserMap extends Mapper
 
         // TODO: This has to be tested, should parse date string using config['system.date.format.php']
         if (isset($row['modified']))
-            $obj->modified = new \DateTime($row['modified']);
+            $obj->modified = \Tk\Date::create($row['modified']);
         if (isset($row['created']))
-            $obj->created = new \DateTime($row['created']);
+            $obj->created = \Tk\Date::create($row['created']);
 
         return $obj;
     }

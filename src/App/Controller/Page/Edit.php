@@ -199,14 +199,11 @@ class Edit extends Iface
         
         $url = $this->wPage->getUrl();
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
-            vd('home');
             \Tk\Uri::create('/');
         }
         if (\App\Factory::getSession()->has(self::SID_REFERRER)) {
-            vd('sess');
             $url = \App\Factory::getSession()->getOnce(self::SID_REFERRER);
         }
-        vd($url);
         $url->redirect();
     }
 

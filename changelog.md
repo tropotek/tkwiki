@@ -5,6 +5,36 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.0 [2016-07-10]:
+-------------------------------
+ - Fixed edit javascript and tidy code
+ - Added upgrade script from 1.6
+ - 2.0 for MYSQL only
+ - Added prompts to composer install plugin
+ - Added DB backup and migration classes
+ - Started adding new DB migration script to enable the installer to install new DB
+ - Added installer script to setup the site
+ - Fixed page access permissions
+ - Fixed Responsivenes of template
+ - Added new admin pages
+ - Added crumbs menu
+ - Added History, Search pages
+ - Added Link management
+ - Added Lock management
+ - Fixed Menu when not logged in
+ - Added Nav editing
+ - Finished page Editor
+ - Added more to the edit page, filemanager, wiki links, save, and more...
+ - Added tinymce to edit page...
+ - Added page url selector jquery plugin and updated setting page
+ - Added basic view and edit controllers for wiki pages
+ - Finished user login, register
+ - Started Wiki pages and routing
+ - More wiki updates, updated the Auth adapters too
+ - Added staticMatcher for routing
+ - Added new tkWiki files for v2
+
+
 
 
 VER 2.0 Dev Started

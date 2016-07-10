@@ -50,7 +50,10 @@ $config['session.gc_divisor'] = 100;
 $config['session.validate'] = array('user_agent');
 
 
-
+/*
+ * defaults to server session folder
+ */
+//$config['session.save_path'] = '/tmp';
 
 
 

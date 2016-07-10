@@ -136,7 +136,7 @@ STR;
             // TODO Prompt for new admin user password and update DB
             // TODO This could be considered unsecure and may need to be removed in favor of an email address only?
             // TODO ----------------------------------------------------------------------------------------
-            $sql = sprintf('SELECT * FROM %s WHERE username = %s ', $db->quoteParameter('user'), $db->quote('admin'));
+            $sql = sprintf('SELECT * FROM %s a, %s b WHERE  b.role_id = 1 AND b.user_id = a.id', $db->quoteParameter('user'), $db->quoteParameter('user_role'));
             $r = $db->query($sql);
             if (!$r || !$r->rowCount()) {
                 $p = $io->ask(self::bold('Please create a new `admin` user password: '), 'admin');

@@ -56,9 +56,9 @@ class Factory
     static public function getSession()
     {
         if (!self::getConfig()->getSession()) {
-            $obj = new \Tk\Session(self::getConfig(), self::getRequest(), self::getCookie());
-            //$obj->start(new \Tk\Session\Adapter\Database( self::getDb() ));
-            $obj->start();
+            $adapter = null;
+            //$adapter = new \Tk\Session\Adapter\Database(self::getConfig()->getDb());
+            $obj = \Tk\Session::getInstance(self::getConfig(), $adapter, self::getRequest(), self::getCookie());
             self::getConfig()->setSession($obj);
         }
         return self::getConfig()->getSession();

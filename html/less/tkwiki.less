@@ -130,42 +130,46 @@ a.wiki-notView {
   font-weight: bold;
 }
 
-.toc-menu {
-  //width: auto;
-  //float: right;
-  margin: 0 0 10px 10px;
-  overflow: hidden;
+.wiki-toc {
+  display: none;
+  float: right;
+  max-width: 30%;
 
-  ul {
-    list-style-position: inside;
-    list-style-type: none;
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
+  .toc-menu {
+    width: 100%;
+    overflow: hidden;
+
     ul {
-      margin: 0 0 0 10px;
-      padding: 0 0 0 0;
-    }
-  }
-  li {
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
-
-    a {
-      display: inline-block;
-      margin-bottom: 5px;
-    }
-  }
-
-  &.toc-type-nested {
-    ul {
+      list-style-position: inside;
       list-style-type: none;
-      counter-reset: list-item;
+      margin: 0 0 0 0;
+      padding: 0 0 0 0;
+      ul {
+        margin: 0 0 0 10px;
+        padding: 0 0 0 0;
+      }
     }
     li {
-      counter-increment: list-item;
+      margin: 0 0 0 0;
+      padding: 0 0 0 0;
+
+      a {
+        display: inline-block;
+        margin-bottom: 5px;
+      }
     }
-    li::before {
-      content: counters(list-item, '.') '. ';
+
+    &.toc-type-nested {
+      ul {
+        list-style-type: none;
+        counter-reset: list-item;
+      }
+      li {
+        counter-increment: list-item;
+      }
+      li::before {
+        content: counters(list-item, '.') '. ';
+      }
     }
   }
 }

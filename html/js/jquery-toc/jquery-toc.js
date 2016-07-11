@@ -26,7 +26,7 @@
         // Build the table of contents from these headings
         heading_tags: ["h1", "h2", "h3", "h4", "h5", "h6"],
         
-        template: '<nav class="well toc-menu toc-type-nested col-md-4 pull-right hidden-xs">'+
+        template: '<nav class="well toc-menu toc-type-nested col-md-4">'+
 '<button type="button" class="toc-close close" data-dismiss=".toc-menu" title="Close TOC"><span aria-hidden="true">&times;</span></button>'+
 '<p><strong>Contents:</strong></p></nav>',
         
@@ -95,6 +95,7 @@
         });
         tpl.append($(text));
         el.prepend(tpl);
+        el.show();
       }
       
       // todo: ad numbers to the headings????

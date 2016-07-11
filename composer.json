@@ -1,7 +1,7 @@
 {
     "name": "ttek/tkwiki",
     "type": "project",
-    "description": "My trusty tkWiki has now been composerfied",
+    "description": "The tkWiki re-borne. V2 has a responsive template, new base lib, php 5.4+ optimized, and uses composer to install.",
     "keywords":  [
         "tropotek"
     ],
@@ -49,9 +49,9 @@
         "ttek/tk-domtemplate": "~2.0",
         "ttek/tk-form": "~2.0",
         "ttek/tk-table": "~2.0",
-        "monolog/monolog": "^1.13@dev"
+        "monolog/monolog": "^1.13@dev",
+        "ttek/tk-debug": "~2.0"
     },
     "require-dev":  {
-        "ttek/tk-debug": "~2.0"
     }
 }

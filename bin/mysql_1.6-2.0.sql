@@ -89,6 +89,7 @@ ALTER TABLE `page` CHANGE `hits` `views` INT( 11 ) UNSIGNED NOT NULL DEFAULT '0'
 
 UPDATE `page` SET `permissions` = '2' WHERE `permissions` = '700';
 UPDATE `page` SET `permissions` = '1' WHERE `permissions` = '744';
+UPDATE `page` SET `permissions` = '1' WHERE `permissions` = '760';
 UPDATE `page` SET `permissions` = '0' WHERE `permissions` != '2' AND `permissions` != '1';
 ALTER TABLE `page` CHANGE `permissions` `permission` INT NOT NULL DEFAULT 0;
 

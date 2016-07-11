@@ -61,11 +61,8 @@ class Bootstrap
         
         if ($config->has('date.timezone')) {
             ini_set('date.timezone', $config->get('date.timezone'));
-            //date_default_timezone_set($config->get('date.timezone'));
         }
-        
-        
-        
+
         
         /**
          * This makes our life easier when dealing with paths. Everything is relative

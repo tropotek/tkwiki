@@ -33,6 +33,7 @@ $config['system.auth.adapters'] = array(
 );
 
 
+$config['date.timezone'] = 'Australia/Victoria';
 
 
 

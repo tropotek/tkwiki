@@ -179,8 +179,8 @@ class PageMap extends Mapper
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->getDb()->escapeString($filter['keywords']) . '%';
             $w = '';
-            $w .= sprintf('a.title ILIKE %s OR ', $this->getDb()->quote($kw));
-            $w .= sprintf('a.url ILIKE %s OR ', $this->getDb()->quote($kw));
+            $w .= sprintf('LOWER(a.title) LIKE %s OR ', strtolower($this->getDb()->quote($kw)));
+            $w .= sprintf('LOWER(a.url) LIKE %s OR ', strtolower($this->getDb()->quote($kw)));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);

@@ -129,6 +129,13 @@
         plugin.settings.onSelect.apply(this, [$(this).parents('tr').data('object')]);
       });
 
+      $('.jtable-search input').keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  { // the enter key code
+          $('.jtable-search button').click();
+          return false;
+        }
+      });
       $element.find('.jtable-search button').on('click', function(e) {
         var input = $element.find('.jtable-search input');
         plugin.settings.tool.offset = 0;
@@ -142,7 +149,7 @@
       // Pager
       var pager = showPager(plugin.settings.tool);
       if (pager)
-        table.append(pager);
+        $element.find('table').append(pager);
       
     };
     

@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.3 [2016-07-11]:
+-------------------------------
+ - Added new TOC button to tineymce editor
+
+
 Ver 2.0.2 [2016-07-11]:
 -------------------------------
 

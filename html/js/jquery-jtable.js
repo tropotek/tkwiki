@@ -41,7 +41,7 @@
         '</span></div></div><br/>' + 
         '<table class="table table-condensed table-hover"></table>'+
         '</div>',
-      tool : {orderBy: 'title', offset: 0, limit: 20, total: 0, keywords: ''},
+      tool : {orderBy: 'title', offset: 0, limit: 15, total: 0, keywords: ''},
       pageIdx: 0,    // page that is showing now 0 = 1
       onSelect : function(object) {}
     };
@@ -149,7 +149,7 @@
       // Pager
       var pager = showPager(plugin.settings.tool);
       if (pager)
-        $element.find('table').append(pager);
+        $element.find('table').after(pager);
       
     };
     
@@ -218,11 +218,11 @@
       if (show) {
         $element.addClass('disabled');
         // Show processing icon
-        console.log('Show Waiting');
+        //console.log('Show Waiting');
       } else {
         //$element.removeClass('disabled');
         // Hide processing icon
-        console.log('Hide Waiting');
+        //console.log('Hide Waiting');
       }
     };
     

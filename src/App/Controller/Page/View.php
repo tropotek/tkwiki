@@ -59,9 +59,9 @@ class View extends Iface
             \App\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
             \Tk\Uri::create('/')->redirect();
         }
-        
-        
+
         $this->wContent = $this->wPage->getContent();
+        
         if (!$this->wContent) {
             // May redirect to the edit page if the user has edit privileges or send alert if not.
             //throw new \Tk\Exception('Page content not found');

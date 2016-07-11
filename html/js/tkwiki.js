@@ -9,7 +9,11 @@ jQuery(function ($) {
   $('[data-toggle="tooltip"]').tooltip();
   
   /* -- TOC Menu -- */
-  var menu = $('.wiki-content');
+  // var menu = $('.wiki-content');
+  // if (menu.length && menu.toc) {
+  //   menu.toc({scope: '.wiki-content'});
+  // }
+  var menu = $('.wiki-toc');
   if (menu.length && menu.toc) {
     menu.toc({scope: '.wiki-content'});
   }
@@ -105,12 +109,12 @@ jQuery(function ($) {
           });
       },
       plugins: [
-        'wikisave wikilink advlist autolink autosave link image lists charmap print preview hr anchor',
+        'wikisave wikilink wikitoc advlist autolink autosave link image lists charmap print preview hr anchor',
         'searchreplace visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
         'table contextmenu directionality emoticons template textcolor paste textcolor colorpicker textpattern visualblocks'
       ],
 
-      toolbar1: 'wikisave wikilink | undo redo | cut copy paste searchreplace | bold italic underline strikethrough | styleselect | bullist numlist | outdent indent blockquote',
+      toolbar1: 'wikisave wikilink wikitoc | undo redo | cut copy paste searchreplace | bold italic underline strikethrough | styleselect | bullist numlist | outdent indent blockquote',
       toolbar2: ' link unlink anchor image media | hr subscript superscript | nonbreaking insertdatetime | forecolor backcolor',
       toolbar3: 'table | visualchars visualblocks ltr rtl | charmap emoticons | print preview | removeformat fullscreen code',
 
@@ -140,7 +144,7 @@ jQuery(function ($) {
       body_class: 'mce-content-body wiki-content',
 
       content_style: 'body {padding: 10px;}',
-      
+      style_formats_merge: true,
       style_formats: [
         { title: 'Styles', selector: 'img', items: [
           {title: 'Float Left', selector: 'img', classes: 'left'},

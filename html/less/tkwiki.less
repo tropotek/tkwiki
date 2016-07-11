@@ -134,10 +134,17 @@ a.wiki-notView {
   display: none;
   float: right;
   max-width: 30%;
+  min-width: 180px;
 
   .toc-menu {
     width: 100%;
     overflow: hidden;
+
+    .toc-close.close {
+      position: absolute;
+      top: 0;
+      right: 5px;
+    }
 
     ul {
       list-style-position: inside;

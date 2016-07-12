@@ -47,13 +47,29 @@ class InitProjectEvent
             $sitePath = $_SERVER['PWD'];
             $io = $event->getIO();
             $composer = $event->getComposer();
+            $pkg = $composer->getPackage();
+
+            $name = substr($pkg->getName(), strrpos($pkg->getName(), '/')+1);
+            $version = $pkg->getVersion();
+            $releaseDate = $pkg->getReleaseDate()->format('Y-m-d H:i:s');
+            $year = $pkg->getReleaseDate()->format('Y');
+            $desc = wordwrap($pkg->getDescription(), 45, "\n               ");
+            $authors =  [];
+            foreach ($pkg->getAuthors() as $auth) {
+                $authors[] = $auth['name'];
+            }
+            $authors = implode(', ', $authors);
 
             $head = <<<STR
----------------------------------------------------------
-|                    tkWiki V2.0                        |
-|                   Author: Godar                       |
-|                 (c) Tropotek 2016                     |
----------------------------------------------------------
+-----------------------------------------------------------
+       $name Installer - (c) tropotek.com $year
+-----------------------------------------------------------
+  Project:     $name
+  Version:     $version
+  Released:    $releaseDate
+  Author:      $authors
+  Description: $desc
+-----------------------------------------------------------
 STR;
             $io->write(self::bold($head));
             $configInFile = $sitePath . '/src/config/config.php.in';
@@ -136,12 +152,14 @@ STR;
             // TODO Prompt for new admin user password and update DB
             // TODO This could be considered unsecure and may need to be removed in favor of an email address only?
             // TODO ----------------------------------------------------------------------------------------
+            // TODO THIS IS NOT RELIABLE, IF AN ADMIN RECORD DOES NOT EXIST .....
             $sql = sprintf('SELECT * FROM %s a, %s b WHERE  b.role_id = 1 AND b.user_id = a.id', $db->quoteParameter('user'), $db->quoteParameter('user_role'));
             $r = $db->query($sql);
             if (!$r || !$r->rowCount()) {
+                $user = $r->fetch();
                 $p = $io->ask(self::bold('Please create a new `admin` user password: '), 'admin');
                 $hashed = \App\Factory::hashPassword($p);
-                $sql = sprintf('UPDATE %s SET password = %s WHERE id = 1', $db->quoteParameter('user'), $db->quote($hashed));
+                $sql = sprintf('UPDATE %s SET password = %s WHERE id = %s', $db->quoteParameter('user'), $db->quote($hashed), (int)$user->id);
 
                 $r = $db->exec($sql);
                 if ($r === false) {

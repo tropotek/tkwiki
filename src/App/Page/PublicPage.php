@@ -42,25 +42,6 @@ class PublicPage extends Iface
                 $template->setChoice('admin');
             }
         }
-
-        if ($this->getConfig()->get('site.title')) {
-            $template->setAttr('siteName', 'title', $this->getConfig()->get('site.title'));
-            $template->setTitleText(trim($template->getTitleText() . ' - ' . $this->getConfig()->get('site.title'), '- '));
-        }
-        if ($this->getConfig()->isDebug()) {
-            $template->setTitleText(trim('DEBUG: ' . $this->getConfig()->get('site.title'), '- '));
-        }
-
-        $siteUrl = $this->getConfig()->getSiteUrl();
-        $dataUrl = $this->getConfig()->getDataUrl();
-        $js = <<<JS
-
-var config = {
-  siteUrl : '$siteUrl',
-  dataUrl : '$dataUrl'
-};
-JS;
-        $template->appendJs($js, ['data-jsl-priority' => -1000]);
         
         $menu = new \App\Helper\Menu($this->getUser());
         $menu->show();

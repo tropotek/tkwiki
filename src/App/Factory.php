@@ -210,7 +210,7 @@ class Factory
      * @return \Tk\Auth\Adapter\Iface
      * @throws \Tk\Auth\Exception
      */
-    static public function getAuthAdapter($class, $submittedData = [])
+    static public function getAuthAdapter($class, $submittedData = array())
     {
         $config = self::getConfig();
         /** @var \Tk\Auth\Adapter\Iface $adapter */

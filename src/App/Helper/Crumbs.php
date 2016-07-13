@@ -102,7 +102,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     public function trim($url) 
     {
         if (!$url) return;
-        $arr = [];
+        $arr = array();
         $i = 0;
         /** @var \Tk\Uri $u */
         foreach($this->list as $k => $u) {

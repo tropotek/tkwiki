@@ -103,7 +103,7 @@ class Edit extends Iface
         
         $this->form->load(\App\Db\UserMap::unmapForm($this->user));
         if (!$this->isProfile()) {
-            $selected = [];
+            $selected = array();
             foreach($this->user->getAccess()->getRoles() as $obj) {
                 $selected[] = $obj->id;
             }

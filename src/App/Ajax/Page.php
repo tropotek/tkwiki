@@ -55,7 +55,7 @@ class Page extends \App\Controller\Iface
         $filter = array('keywords' => $keywords);
         /** @var \Tk\Db\Map\ArrayObject $pageList */
         $pageList = \App\Db\Page::getMapper()->findFiltered($filter, $tool);
-        $list = [];
+        $list = array();
         foreach($pageList as $page) {
             if (!$this->getUser()->getAccess()->canView($page)) continue;
             $page->modified = $page->modified->format(\Tk\Date::SHORT_DATETIME);

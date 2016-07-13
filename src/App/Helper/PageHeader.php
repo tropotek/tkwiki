@@ -132,14 +132,14 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         
         // contributers
         $contentList = \App\Db\Content::getMapper()->findContributors($this->wPage->id);
-        $html = [];
+        $html = array();
         /** @var \stdClass $c */
         foreach($contentList as $i => $c) {
             /** @var \App\Db\User $user */
             $user = \App\Db\User::getMapper()->find($c->user_id);
             if (!$user) continue;
             $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->hash);
-            $class = [];
+            $class = array();
             $title = \Tk\Date::toRelativeString(\Tk\Date::create($c->created));
             if ($this->wPage->getUser()->id = $user->id) {
                 $class[] = 'author';

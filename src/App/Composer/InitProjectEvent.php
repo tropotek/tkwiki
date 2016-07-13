@@ -54,7 +54,7 @@ class InitProjectEvent
             $releaseDate = $pkg->getReleaseDate()->format('Y-m-d H:i:s');
             $year = $pkg->getReleaseDate()->format('Y');
             $desc = wordwrap($pkg->getDescription(), 45, "\n               ");
-            $authors =  [];
+            $authors =  array();
             foreach ($pkg->getAuthors() as $auth) {
                 $authors[] = $auth['name'];
             }
@@ -183,7 +183,7 @@ STR;
      */
     static function userInput($io)
     {
-        $config = [];
+        $config = array();
         // Prompt for the database access
         $dbTypes = ['mysql', 'pgsql', 'sqlite'];
         $io->write('<options=bold>');

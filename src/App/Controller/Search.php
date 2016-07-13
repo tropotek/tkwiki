@@ -27,7 +27,7 @@ class Search extends Iface
     /**
      * @var \Tk\Db\Map\ArrayObject
      */
-    protected $list = [];
+    protected $list = array();
 
     /**
      * @var \App\Db\User

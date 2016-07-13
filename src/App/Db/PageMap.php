@@ -129,7 +129,7 @@ class PageMap extends Mapper
      * @param \Tk\Db\Tool $tool
      * @return ArrayObject
      */
-    public function findUserPages($userId, $permissions = [], $tool = null)
+    public function findUserPages($userId, $permissions = array(), $tool = null)
     {
         $sql = sprintf('user_id = %s AND type = %s', (int)$userId, $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
         $perms = '';

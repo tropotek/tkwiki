@@ -216,7 +216,7 @@ class ActionCell extends \Tk\Table\Cell\Iface
      */
     public function getCellHtml($obj)
     {
-        $html = [];
+        $html = array();
 
         $html[] = $this->makeButton(\Tk\Uri::create('/history.html')->set('r', $obj->id), 'glyphicon glyphicon-share', 'Revert', 'fid-revert-btn', 'btn btn-default btn-xs wiki-revert-trigger');
         $html[] = $this->makeButton(\Tk\Uri::create('/view.html')->set('contentId', $obj->id), 'glyphicon glyphicon-eye-open', 'Preview', 'fid-preview-btn');

@@ -18,7 +18,7 @@ class ButtonInput extends \Tk\Form\Field\Input
     /**
      * @var array
      */
-    protected $btnAttr  = [];
+    protected $btnAttr  = array();
 
 
     /**

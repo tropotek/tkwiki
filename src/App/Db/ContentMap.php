@@ -155,7 +155,7 @@ class ContentMap extends Mapper
         }
         
         $stmt = $this->getDb()->query($sql);
-        $res = [];
+        $res = array();
         foreach($stmt as $row) {
             $res[] = $row;
         }

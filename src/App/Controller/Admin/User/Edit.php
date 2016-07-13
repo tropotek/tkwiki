@@ -99,7 +99,7 @@ class Edit extends Iface
 
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\Link('cancel', \Tk\Uri::create('userManager.html')));
+        $this->form->addField(new Event\LinkButton('cancel', \Tk\Uri::create('userManager.html')));
         
         $this->form->load(\App\Db\UserMap::unmapForm($this->user));
         if (!$this->isProfile()) {

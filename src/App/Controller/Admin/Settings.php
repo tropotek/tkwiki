@@ -58,7 +58,7 @@ class Settings extends Iface
         
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\Link('cancel', \Tk\Uri::create('/')));
+        $this->form->addField(new Event\LinkButton('cancel', \Tk\Uri::create('/')));
 
         $this->form->load($this->data);
         $this->form->execute();

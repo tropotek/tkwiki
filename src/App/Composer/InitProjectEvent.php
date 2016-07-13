@@ -185,7 +185,7 @@ STR;
     {
         $config = array();
         // Prompt for the database access
-        $dbTypes = ['mysql', 'pgsql', 'sqlite'];
+        $dbTypes = array('mysql', 'pgsql', 'sqlite');
         $io->write('<options=bold>');
         $i = $io->select('Select the DB type [mysql]: ', $dbTypes, 0);
         $io->write('</>');

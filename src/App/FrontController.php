@@ -87,9 +87,8 @@ class FrontController extends \Tk\Kernel\HttpKernel
         
         // (kernel.terminate)
         $this->dispatcher->addSubscriber(new Listener\ShutdownHandler($logger));
-        
-        
-        
+
+
     }
     
 

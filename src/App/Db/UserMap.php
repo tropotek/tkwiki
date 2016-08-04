@@ -1,10 +1,11 @@
 <?php
 namespace App\Db;
 
-use Tk\Db\Map\Mapper;
 use Tk\Db\Map\Model;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
+use Tk\DataMap\Db;
+use Tk\DataMap\Form;
 
 /**
  * Class UserMap
@@ -16,100 +17,53 @@ use Tk\Db\Map\ArrayObject;
  */
 class UserMap extends Mapper
 {
-    /**
-     * 
-     * @param \stdClass|Model $obj
-     * @return array
-     */
-    public function unmap($obj)
-    {
-        $arr = array(
-            'id' => $obj->id,
-            'name' => $obj->name,
-            'email' => $obj->email,
-            'image' => $obj->image,
-            'username' => $obj->username,
-            'password' => $obj->password,
-            'active' => (int)$obj->active,
-            'hash' => $obj->hash,
-            'modified' => $obj->modified->format('Y-m-d H:i:s'),
-            'created' => $obj->created->format('Y-m-d H:i:s')
-        );
-        if ($obj->lastLogin)
-            $arr['last_login'] = $obj->lastLogin->format('Y-m-d H:i:s');
-            
-        return $arr;
-    }
+
 
     /**
-     * @param array|\stdClass|Model $row
-     * @return User
+     *
+     * @return \Tk\DataMap\DataMap
      */
-    public function map($row)
+    public function getDbMap()
     {
-        $obj = new User();
-        $obj->id = $row['id'];
-        $obj->name = $row['name'];
-        $obj->email = $row['email'];
-        $obj->image = $row['image'];
-        $obj->username = $row['username'];
-        $obj->password = $row['password'];
-        $obj->active = ($row['active'] == 1);
-        $obj->hash = $row['hash'];
+        if (!$this->dbMap) {
+            $this->dbMap = new \Tk\DataMap\DataMap();
+            $this->dbMap->addProperty(new Db\Number('id'), 'key');
+            $this->dbMap->addProperty(new Db\Text('name'));
+            $this->dbMap->addProperty(new Db\Text('email'));
+            $this->dbMap->addProperty(new Db\Text('image'));
+            $this->dbMap->addProperty(new Db\Text('username'));
+            $this->dbMap->addProperty(new Db\Text('password'));
+            //$this->dbMap->addProperty(new Db\Text('role'));
+            $this->dbMap->addProperty(new Db\Boolean('active'));
+            $this->dbMap->addProperty(new Db\Text('hash'));
+            //$this->dbMap->addProperty(new Db\Date('lastLogin', 'last_login'));
+            $this->dbMap->addProperty(new Db\Date('modified'));
+            $this->dbMap->addProperty(new Db\Date('created'));
 
-        if ($row['last_login'])
-            $obj->lastLogin = \Tk\Date::create($row['last_login']);
-        if ($row['modified'])
-            $obj->modified = \Tk\Date::create($row['modified']);
-        if ($row['created'])
-            $obj->created = \Tk\Date::create($row['created']);
-        return $obj;
-    }
-
-    /**
-     * @param array $row
-     * @param User $obj
-     * @return User
-     */
-    static function mapForm($row, $obj = null)
-    {
-        if (!$obj) {
-            $obj = new User();
+            $this->setPrimaryKey($this->dbMap->currentProperty('key')->getColumnName());
         }
-        //$obj->id = $row['id'];
-        if (isset($row['name']))
-            $obj->name = $row['name'];
-        if (isset($row['email']))
-            $obj->email = $row['email'];
-        if (isset($row['username']))
-            $obj->username = $row['username'];
-        if (isset($row['password']))
-            $obj->password = $row['password'];
-        if (isset($row['active']))
-            $obj->active = ($row['active'] == 'active');
-
-        // TODO: This has to be tested, should parse date string using config['system.date.format.php']
-        if (isset($row['modified']))
-            $obj->modified = \Tk\Date::create($row['modified']);
-        if (isset($row['created']))
-            $obj->created = \Tk\Date::create($row['created']);
-
-        return $obj;
+        return $this->dbMap;
     }
 
-    static function unmapForm($obj)
+    /**
+     *
+     * @return \Tk\DataMap\DataMap
+     */
+    public function getFormMap()
     {
-        $arr = array(
-            'id' => $obj->id,
-            'name' => $obj->name,
-            'email' => $obj->email,
-            'username' => $obj->username,
-            'password' => $obj->password,
-            'active' => (int)$obj->active,
-            'modified' => $obj->modified->format('Y-m-d H:i:s'),
-            'created' => $obj->created->format('Y-m-d H:i:s')
-        );
-        return $arr;
+        if (!$this->formMap) {
+            $this->formMap = new \Tk\DataMap\DataMap();
+            $this->formMap->addProperty(new Form\Number('id'), 'key');
+            $this->formMap->addProperty(new Form\Text('name'));
+            $this->formMap->addProperty(new Form\Text('email'));
+            $this->formMap->addProperty(new Form\Text('username'));
+            $this->formMap->addProperty(new Form\Text('password'));
+            //$this->formMap->addProperty(new Form\Text('role'));
+            $this->formMap->addProperty(new Form\Boolean('active'));
+
+            $this->setPrimaryKey($this->formMap->currentProperty('key')->getColumnName());
+        }
+        return $this->formMap;
     }
     
     /**

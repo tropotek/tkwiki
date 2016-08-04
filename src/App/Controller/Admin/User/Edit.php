@@ -101,12 +101,13 @@ class Edit extends Iface
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\LinkButton('cancel', \Tk\Uri::create('userManager.html')));
         
-        $this->form->load(\App\Db\UserMap::unmapForm($this->user));
+        $this->form->load(\App\Db\UserMap::create()->unmapForm($this->user));
         if (!$this->isProfile()) {
             $selected = array();
             foreach($this->user->getAccess()->getRoles() as $obj) {
                 $selected[] = $obj->id;
             }
+            vd($selected);
             $this->form->setFieldValue('role', $selected);
         }
         
@@ -122,7 +123,7 @@ class Edit extends Iface
     {
         // Load the object with data from the form using a helper object
         //\App\Form\ModelLoader::loadObject($form, $this->user);
-        \App\Db\UserMap::mapForm($form->getValues(), $this->user);
+        \App\Db\UserMap::create()->mapForm($form->getValues(), $this->user);
         
         // Password validation needs to be here
         if ($this->form->getFieldValue('newPassword')) {
@@ -147,7 +148,7 @@ class Edit extends Iface
         }
 
         $this->user->save();
-
+vd($form->getFieldValue('role'));
         // Update user role list if not admin
         if (!$this->isProfile() && $this->user->id != 1) {
             \App\Db\Role::getMapper()->deleteAllUserRoles($this->user->id);

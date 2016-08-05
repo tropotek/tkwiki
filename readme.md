@@ -50,6 +50,18 @@ Or alternatively download the zip and extract it to your tkWiki folder and then 
 Be sure to check out the `/src/config/config/php` file if you want do add/remove any settings for the tkWiki.
 This file will not be removed during updates.
 
+
+__Upgrading From ver 1.* to ver 2.*__
+
+There is a file in bin/mysql_1.6-2.0.sql that can be used to migrate old tkWiki databases. Howerver it may
+not work for all instances and may need a little adjustment for your version, so before running it backup 
+your existing database, execute the file and check for any errors, if there are errors you can update the
+migration sql and restore the database and try again. 
+
+The only issues I have found so fare is that an index key may not exist and you have to comment our a line in the
+migration file or rename the index name. other than that it should work fine.
+
+
 Please leave any issues at GitHub (https://github.com/tropotek/tkWiki/issues)
 
 ## Introduction

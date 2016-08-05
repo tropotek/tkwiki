@@ -3,6 +3,7 @@
 .directory
 *.swp
 *.bak
+*.iml
 /data
 /assets
 /vendor

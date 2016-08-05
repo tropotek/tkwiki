@@ -1,10 +1,10 @@
 <?php
 namespace App\Db;
 
-use Tk\Db\Map\Mapper;
-use Tk\Db\Map\Model;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
+use Tk\DataMap\Db;
+use Tk\DataMap\Form;
 
 /**
  * Class RoleMap
@@ -18,70 +18,48 @@ class RoleMap extends Mapper
 {
 
     /**
-     * Map the form fields data to the object
      *
-     * @param array $row
-     * @param Role $obj
-     * @return Role
+     * @return \Tk\DataMap\DataMap
      */
-    static function mapForm($row, $obj = null)
+    public function getDbMap()
     {
-        if (!$obj) {
-            $obj = new Role();
-        }
-        //$obj->id = $row['id'];
-        if (isset($row['name']))
-            $obj->name = $row['name'];
-        if (isset($row['description']))
-            $obj->description = $row['description'];
+        if (!$this->dbMap) {
+            $this->dbMap = new \Tk\DataMap\DataMap();
+            $this->dbMap->addProperty(new Db\Number('id'), 'key');
+            $this->dbMap->addProperty(new Db\Text('name'));
+            $this->dbMap->addProperty(new Db\Text('description'));
 
-        return $obj;
+            $this->setPrimaryKey($this->dbMap->currentProperty('key')->getColumnName());
+        }
+        return $this->dbMap;
     }
 
     /**
-     * Unmap the object to an array for the form fields
      *
-     * @param $obj
-     * @return array
+     * @return \Tk\DataMap\DataMap
      */
-    static function unmapForm($obj)
+    public function getFormMap()
     {
-        $arr = array(
-            'id' => $obj->id,
-            'name' => $obj->name,
-            'description' => $obj->description
-        );
-        return $arr;
+        if (!$this->formMap) {
+            $this->formMap = new \Tk\DataMap\DataMap();
+            $this->formMap->addProperty(new Form\Number('id'), 'key');
+            $this->formMap->addProperty(new Form\Text('name'));
+            $this->formMap->addProperty(new Form\Text('description'));
+
+            $this->setPrimaryKey($this->formMap->currentProperty('key')->getColumnName());
+        }
+        return $this->formMap;
     }
 
-    public function map($row)
-    {
-        $obj = new Role();
-        $obj->id = $row['id'];
-        $obj->name = $row['name'];
-        $obj->description = $row['description'];
-        return $obj;
-    }
-
-    public function unmap($obj)
-    {
-        $arr = array(
-            'id' => $obj->id,
-            'name' => $obj->name,
-            'description' => $obj->description
-        );
-        return $arr;
-    }
 
     /**
      * @param $name
-     * @return Model
+     * @return Role
      */
     public function findByName($name)
     {
         return $this->select('name = ' . $this->getDb()->quote($name))->current();
     }
-
 
     /**
      * @param int $userId

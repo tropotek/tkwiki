@@ -95,24 +95,25 @@ class Edit extends Iface
             if ($this->user->id == 1) {
                 $f->setAttr('disabled');
             }
+
+            if (!$this->isProfile()) {
+                $selected = array();
+                foreach($this->user->getAccess()->getRoles() as $obj) {
+                    $selected[] = $obj->id;
+                }
+                $this->form->setFieldValue('role', $selected);
+            }
+
         }
 
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\LinkButton('cancel', \Tk\Uri::create('userManager.html')));
-        
+
         $this->form->load(\App\Db\UserMap::create()->unmapForm($this->user));
-        if (!$this->isProfile()) {
-            $selected = array();
-            foreach($this->user->getAccess()->getRoles() as $obj) {
-                $selected[] = $obj->id;
-            }
-            vd($selected);
-            $this->form->setFieldValue('role', $selected);
-        }
-        
         $this->form->execute();
-        
+
+
         return $this->show();
     }
 
@@ -148,7 +149,7 @@ class Edit extends Iface
         }
 
         $this->user->save();
-vd($form->getFieldValue('role'));
+
         // Update user role list if not admin
         if (!$this->isProfile() && $this->user->id != 1) {
             \App\Db\Role::getMapper()->deleteAllUserRoles($this->user->id);

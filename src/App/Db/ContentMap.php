@@ -1,10 +1,10 @@
 <?php
 namespace App\Db;
 
-use Tk\Db\Map\Mapper;
-use Tk\Db\Map\Model;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
+use Tk\DataMap\Db;
+use Tk\DataMap\Form;
 
 /**
  * Class ContentMap
@@ -16,95 +16,55 @@ use Tk\Db\Map\ArrayObject;
  */
 class ContentMap extends Mapper
 {
-    /**
-     * 
-     * @param \stdClass|Model $obj
-     * @return array
-     */
-    public function unmap($obj)
-    {
-        $arr = array(
-            'id' => $obj->id,
-            'page_id' => $obj->pageId,
-            'user_id' => $obj->userId,
-            'html' => $obj->html,
-            'keywords' => $obj->keywords,
-            'description' => $obj->description,
-            'css' => $obj->css,
-            'js' => $obj->js,
-            'size' => (int)$obj->size,
-            'modified' => $obj->modified->format('Y-m-d H:i:s'),
-            'created' => $obj->created->format('Y-m-d H:i:s')
-        );
-        return $arr;
-    }
 
     /**
-     * @param array|\stdClass|Model $row
-     * @return User
+     *
+     * @return \Tk\DataMap\DataMap
      */
-    public function map($row)
+    public function getDbMap()
     {
-        $obj = new Content();
-        $obj->id = $row['id'];
-        $obj->pageId = $row['page_id'];
-        $obj->userId = $row['user_id'];
-        $obj->html = $row['html'];
-        $obj->keywords = $row['keywords'];
-        $obj->description = $row['description'];
-        $obj->css = $row['css'];
-        $obj->js = $row['js'];
-        $obj->size = (int)$row['size'];
+        if (!$this->dbMap) {
+            $this->dbMap = new \Tk\DataMap\DataMap();
+            $this->dbMap->addProperty(new Db\Number('id'), 'key');
+            $this->dbMap->addProperty(new Db\Number('pageId', 'page_id'));
+            $this->dbMap->addProperty(new Db\Number('userId', 'user_id'));
+            $this->dbMap->addProperty(new Db\Text('html'));
+            $this->dbMap->addProperty(new Db\Text('keywords'));
+            $this->dbMap->addProperty(new Db\Text('description'));
+            $this->dbMap->addProperty(new Db\Text('css'));
+            $this->dbMap->addProperty(new Db\Text('js'));
+            $this->dbMap->addProperty(new Db\Number('size'));
+            $this->dbMap->addProperty(new Db\Date('modified'));
+            $this->dbMap->addProperty(new Db\Date('created'));
 
-        if ($row['modified'])
-            $obj->modified = \Tk\Date::create($row['modified']);
-        if ($row['created'])
-            $obj->created = \Tk\Date::create($row['created']);
-        return $obj;
-    }
-
-    /**
-     * @param array $row
-     * @param User $obj
-     * @return User
-     */
-    static function mapForm($row, $obj = null)
-    {
-        if (!$obj) {
-            $obj = new Content();
+            $this->setPrimaryKey($this->dbMap->currentProperty('key')->getColumnName());
         }
-        //$obj->id = $row['id'];
-        if (isset($row['html']))
-            $obj->html = $row['html'];
-        if (isset($row['keywords']))
-            $obj->keywords = $row['keywords'];
-        if (isset($row['description']))
-            $obj->discription = $row['description'];
-        if (isset($row['css']))
-            $obj->css = $row['css'];
-        if (isset($row['js']))
-            $obj->js = $row['js'];
-
-        if (isset($row['modified']))
-            $obj->modified = \Tk\Date::create($row['modified']);
-        if (isset($row['created']))
-            $obj->created = \Tk\Date::create($row['created']);
-        return $obj;
+        return $this->dbMap;
     }
 
-    static function unmapForm($obj)
+    /**
+     *
+     * @return \Tk\DataMap\DataMap
+     */
+    public function getFormMap()
     {
-        $arr = array(
-            'id' => $obj->id,
-            'html' => $obj->html,
-            'keywords' => $obj->keywords,
-            'description' => $obj->description,
-            'css' => $obj->css,
-            'js' => $obj->js,
-            'modified' => $obj->modified->format('Y-m-d H:i:s'),
-            'created' => $obj->created->format('Y-m-d H:i:s')
-        );
-        return $arr;
+        if (!$this->formMap) {
+            $this->formMap = new \Tk\DataMap\DataMap();
+            $this->formMap->addProperty(new Form\Number('id'), 'key');
+            $this->dbMap->addProperty(new Form\Number('pageId'));
+            $this->dbMap->addProperty(new Form\Number('userId'));
+            $this->dbMap->addProperty(new Form\Text('html'));
+            $this->dbMap->addProperty(new Form\Text('keywords'));
+            $this->dbMap->addProperty(new Form\Text('description'));
+            $this->dbMap->addProperty(new Form\Text('css'));
+            $this->dbMap->addProperty(new Form\Text('js'));
+            $this->dbMap->addProperty(new Form\Number('size'));
+//            $this->dbMap->addProperty(new Form\Date('modified'));
+//            $this->dbMap->addProperty(new Form\Date('created'));
+
+            $this->setPrimaryKey($this->formMap->currentProperty('key')->getColumnName());
+        }
+        return $this->formMap;
     }
 
     /**

@@ -1,10 +1,10 @@
 <?php
 namespace App\Db;
 
-use Tk\Db\Map\Mapper;
-use Tk\Db\Map\Model;
 use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
+use Tk\DataMap\Db;
+use Tk\DataMap\Form;
 
 /**
  * 
@@ -15,101 +15,55 @@ use Tk\Db\Map\ArrayObject;
  */
 class PageMap extends Mapper
 {
+
     /**
      *
-     * @param \stdClass|Model $obj
-     * @return array
+     * @return \Tk\DataMap\DataMap
      */
-    public function unmap($obj)
+    public function getDbMap()
     {
-        $arr = array(
-            'id' => $obj->id,
-            'user_id' => $obj->userId,
-            'type' => $obj->type,
-            'template' => $obj->template,
-            'title' => $obj->title,
-            'url' => $obj->url,
-            'permission' => $obj->permission,
-            'views' => (int)$obj->views,
-            'modified' => $obj->modified->format('Y-m-d H:i:s'),
-            'created' => $obj->created->format('Y-m-d H:i:s')
-        );
-        return $arr;
-    }
+        if (!$this->dbMap) {
+            $this->dbMap = new \Tk\DataMap\DataMap();
+            $this->dbMap->addProperty(new Db\Number('id'), 'key');
+            $this->dbMap->addProperty(new Db\Number('userId', 'user_id'));
+            $this->dbMap->addProperty(new Db\Text('type'));
+            $this->dbMap->addProperty(new Db\Text('template'));
+            $this->dbMap->addProperty(new Db\Text('title'));
+            $this->dbMap->addProperty(new Db\Text('url'));
+            $this->dbMap->addProperty(new Db\Number('permission'));
+            $this->dbMap->addProperty(new Db\Number('views'));
+            $this->dbMap->addProperty(new Db\Date('modified'));
+            $this->dbMap->addProperty(new Db\Date('created'));
 
-    /**
-     * @param array|\stdClass|Model $row
-     * @return User
-     */
-    public function map($row)
-    {
-        $obj = new Page();
-        $obj->id = $row['id'];
-        $obj->userId = $row['user_id'];
-        $obj->type = $row['type'];
-        $obj->template = $row['template'];
-        $obj->title = $row['title'];
-        $obj->url = $row['url'];
-        $obj->permission = (int)$row['permission'];
-        $obj->views = (int)$row['views'];
-
-        if ($row['modified'])
-            $obj->modified = \Tk\Date::create($row['modified']);
-        if ($row['created'])
-            $obj->created = \Tk\Date::create($row['created']);
-        return $obj;
-    }
-
-    /**
-     * @param array $row
-     * @param User $obj
-     * @return User
-     */
-    static function mapForm($row, $obj = null)
-    {
-        if (!$obj) {
-            $obj = new Page();
+            $this->setPrimaryKey($this->dbMap->currentProperty('key')->getColumnName());
         }
-        //$obj->id = $row['id'];
-        if (isset($row['userId']))
-            $obj->userId = $row['userId'];
-        if (isset($row['type']))
-            $obj->type = $row['type'];
-        if (isset($row['template']))
-            $obj->template = $row['template'];
-        if (isset($row['title']))
-            $obj->title = $row['title'];
-        if (isset($row['url']))
-            $obj->url = $row['url'];
-        if (isset($row['views']))
-            $obj->views = $row['views'];
-        if (isset($row['permission']))
-            $obj->permission = $row['permission'];
-
-        if (isset($row['modified']))
-            $obj->modified = \Tk\Date::create($row['modified']);
-        if (isset($row['created']))
-            $obj->created = \Tk\Date::create($row['created']);
-
-        return $obj;
+        return $this->dbMap;
     }
 
-    static function unmapForm($obj)
+    /**
+     *
+     * @return \Tk\DataMap\DataMap
+     */
+    public function getFormMap()
     {
-        $arr = array(
-            'id' => $obj->id,
-            'userId' => $obj->userId,
-            'type' => $obj->type,
-            'template' => $obj->template,
-            'title' => $obj->title,
-            'url' => $obj->url,
-            'permission' => $obj->permission,
-            'views' => $obj->views,
-            'modified' => $obj->modified->format('Y-m-d H:i:s'),
-            'created' => $obj->created->format('Y-m-d H:i:s')
-        );
-        return $arr;
+        if (!$this->formMap) {
+            $this->formMap = new \Tk\DataMap\DataMap();
+            $this->formMap->addProperty(new Form\Number('id'), 'key');
+            $this->dbMap->addProperty(new Form\Number('userId'));
+            $this->dbMap->addProperty(new Form\Text('type'));
+            $this->dbMap->addProperty(new Form\Text('template'));
+            $this->dbMap->addProperty(new Form\Text('title'));
+            $this->dbMap->addProperty(new Form\Text('url'));
+            $this->dbMap->addProperty(new Form\Number('permission'));
+            $this->dbMap->addProperty(new Form\Number('views'));
+
+            $this->setPrimaryKey($this->formMap->currentProperty('key')->getColumnName());
+        }
+        return $this->formMap;
     }
+
+
+
 
     /**
      *

@@ -2,15 +2,15 @@
 
 
 
-# DROP TABLE IF EXISTS `user`;
-# DROP TABLE IF EXISTS `role`;
-# DROP TABLE IF EXISTS `user_role`;
-# DROP TABLE IF EXISTS `data`;
-# DROP TABLE IF EXISTS `page`;
-# DROP TABLE IF EXISTS `content`;
-# DROP TABLE IF EXISTS `links`;
-# DROP TABLE IF EXISTS `lock`;
-# DROP TABLE IF EXISTS `version`;
+-- DROP TABLE IF EXISTS `user`;
+-- DROP TABLE IF EXISTS `role`;
+-- DROP TABLE IF EXISTS `user_role`;
+-- DROP TABLE IF EXISTS `data`;
+-- DROP TABLE IF EXISTS `page`;
+-- DROP TABLE IF EXISTS `content`;
+-- DROP TABLE IF EXISTS `links`;
+-- DROP TABLE IF EXISTS `lock`;
+-- DROP TABLE IF EXISTS `version`;
 
 
 -- --------------------------------------------------------

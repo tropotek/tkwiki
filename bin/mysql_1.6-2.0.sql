@@ -123,10 +123,26 @@ RENAME TABLE `pageLink` TO `links`;
 ALTER TABLE `links` CHANGE `pageFrom` `page_id` INT( 11 ) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `links` CHANGE `pageToName` `page_url` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '';
 
+
+-- TODO: You may have to adjust these to match your existing db
+
 -- ALTER TABLE `links` DROP INDEX `pageFrom`;
 -- ALTER TABLE `links` DROP INDEX `pageToName`;
--- ALTER TABLE `links` ADD UNIQUE (`page_id` , `page_url`);
-ALTER TABLE `links` ADD PRIMARY KEY( `page_id`, `page_url`);
+
+-- ALTER TABLE `links` ADD PRIMARY KEY( `page_id`, `page_url`);
+ALTER TABLE `links` ADD UNIQUE KEY `page_from` (`page_id` , `page_url`);
+
+-- The final result should be this:
+-- CREATE TABLE IF NOT EXISTS `links` (
+--   `page_id` int(11) unsigned NOT NULL DEFAULT '0',  -- The containing page ID
+--   `page_url` varchar(255) NOT NULL DEFAULT '',      -- The page url (we use url instead of id to cater for non-existing pages)
+--   UNIQUE KEY `page_from` (`page_id`, `page_url`)
+-- ) ENGINE=InnoDB;
+
+
+-- ----------------------------------------------------------
+
+
 
 -- lock
 RENAME TABLE `pageLock` TO `lock` ;

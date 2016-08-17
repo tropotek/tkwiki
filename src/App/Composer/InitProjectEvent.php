@@ -48,7 +48,11 @@ class InitProjectEvent
             $io = $event->getIO();
             $composer = $event->getComposer();
             $pkg = $composer->getPackage();
-            $userData = posix_getpwuid(fileowner(__FILE__));
+            if (function_exists('posix_getpwuid')) {
+                $userData = posix_getpwuid(fileowner(__FILE__));
+            } else {
+                $userData = `whoami`;       // Not sure if this is the best way but its a default.
+            }
 
             $name = substr($pkg->getName(), strrpos($pkg->getName(), '/')+1);
             $version = $pkg->getVersion();

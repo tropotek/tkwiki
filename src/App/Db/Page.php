@@ -133,7 +133,7 @@ class Page extends Model
     {
         $url = preg_replace('/[^a-z0-9_-]/i', '_', $title);
         do {
-            $comp = \App\Db\Page::getMapper()->findByUrl($url);
+            $comp = \App\Db\PageMap::create()->findByUrl($url);
             if ($comp) {
                 if (preg_match('/(.+)(_([0-9]+))$/', $url, $regs)) {
                     $url = $regs[1] . '_' . ($regs[3]+1);
@@ -162,7 +162,7 @@ class Page extends Model
         $this->getMapper()->deleteLinkByPageId($this->id);
         
         // Remove all content
-        $contentList = \App\Db\Content::getMapper()->findByPageId($this->id);
+        $contentList = \App\Db\ContentMap::create()->findByPageId($this->id);
         foreach ($contentList as $c) {
             $c->delete();
         }
@@ -208,7 +208,7 @@ class Page extends Model
     public function getContent()
     {
         if (!$this->content) {
-            $this->content = \App\Db\Content::getMapper()->findByPageId($this->id, \Tk\Db\Tool::create('created DESC', 1))->current();
+            $this->content = \App\Db\ContentMap::create()->findByPageId($this->id, \Tk\Db\Tool::create('created DESC', 1))->current();
         }
         return $this->content;
     }
@@ -238,7 +238,7 @@ class Page extends Model
     public function getUser()
     {
         if (!$this->user) {
-            $this->user = \App\Db\User::getMapper()->find($this->userId);
+            $this->user = \App\Db\UserMap::create()->find($this->userId);
         }
         return $this->user;
     }
@@ -264,7 +264,7 @@ class PageValidator extends \App\Helper\Validator
             $this->addError('title', 'Please enter a title for your page');
         }
         if($obj->id) {
-            $comp = \App\Db\Page::getMapper()->findByUrl($obj->url);
+            $comp = \App\Db\PageMap::create()->findByUrl($obj->url);
             if ($comp && $comp->id != $obj->id) {
                 $this->addError('url', 'This url already exists, try again.');
             }

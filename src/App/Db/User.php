@@ -172,7 +172,7 @@ class UserValidator extends \App\Helper\Validator
         if (!$obj->username) {
             $this->addError('username', 'Invalid field value.');
         } else {
-            $dup = User::getMapper()->findByUsername($obj->username);
+            $dup = UserMap::create()->findByUsername($obj->username);
             if ($dup && $dup->getId() != $obj->getId()) {
                 $this->addError('username', 'This username is already in use.');
             }
@@ -180,7 +180,7 @@ class UserValidator extends \App\Helper\Validator
         if (!filter_var($obj->email, FILTER_VALIDATE_EMAIL)) {
             $this->addError('email', 'Please enter a valid email address');
         } else {
-            $dup = User::getMapper()->findByEmail($obj->email);
+            $dup = UserMap::create()->findByEmail($obj->email);
             if ($dup && $dup->getId() != $obj->getId()) {
                 $this->addError('email', 'This email is already in use.');
             }

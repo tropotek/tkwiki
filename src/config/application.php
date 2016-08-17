@@ -10,8 +10,8 @@ $config = \Tk\Config::getInstance();
  * Config the session using PHP option names prepended with 'session.'
  * @see http://php.net/session.configuration
  */
-include_once(__DIR__ . '/session.php');
-include_once(__DIR__ . '/routes.php');
+include_once(dirname(__FILE__) . '/session.php');
+include_once(dirname(__FILE__) . '/routes.php');
 
 // Template folders for pages
 $config['template.path'] = '/html';

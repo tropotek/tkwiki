@@ -70,9 +70,9 @@ class Recover extends Iface
         /** @var \App\Db\User $user */
         $user = null;
         if (filter_var($account, FILTER_VALIDATE_EMAIL)) {
-            $user = \App\Db\User::getMapper()->findByEmail($account);
+            $user = \App\Db\UserMap::create()->findByEmail($account);
         } else {
-            $user = \App\Db\User::getMapper()->findByUsername($account);
+            $user = \App\Db\UserMap::create()->findByUsername($account);
         }
         if (!$user) {
             $form->addFieldError('account', 'Please enter a valid username or email');

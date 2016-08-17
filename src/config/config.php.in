@@ -7,7 +7,7 @@
 $config = \Tk\Config::getInstance();
 
 //Default config setup
-include_once(__DIR__ . '/application.php');
+include_once(dirname(__FILE__) . '/application.php');
 
 // Database access
 $config['db.type'] = 'mysql';

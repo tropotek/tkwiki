@@ -87,7 +87,7 @@ class View extends Iface
      */
     public function doContentView(Request $request)
     {
-        $this->wContent = \App\Db\Content::getMapper()->find($request->get('contentId'));
+        $this->wContent = \App\Db\ContentMap::create()->find($request->get('contentId'));
         if (!$this->wContent) {
             throw new \Tk\HttpException(404, 'Page not found');
         }

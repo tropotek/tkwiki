@@ -54,7 +54,7 @@ class Page extends \App\Controller\Iface
         
         $filter = array('keywords' => $keywords);
         /** @var \Tk\Db\Map\ArrayObject $pageList */
-        $pageList = \App\Db\Page::getMapper()->findFiltered($filter, $tool);
+        $pageList = \App\Db\PageMap::create()->findFiltered($filter, $tool);
         $list = array();
         foreach($pageList as $page) {
             if (!$this->getUser()->getAccess()->canView($page)) continue;

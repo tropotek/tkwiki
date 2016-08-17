@@ -131,12 +131,12 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         }
         
         // contributers
-        $contentList = \App\Db\Content::getMapper()->findContributors($this->wPage->id);
+        $contentList = \App\Db\ContentMap::create()->findContributors($this->wPage->id);
         $html = array();
         /** @var \stdClass $c */
         foreach($contentList as $i => $c) {
             /** @var \App\Db\User $user */
-            $user = \App\Db\User::getMapper()->find($c->user_id);
+            $user = \App\Db\UserMap::create()->find($c->user_id);
             if (!$user) continue;
             $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->hash);
             $class = array();

@@ -61,7 +61,7 @@ class Edit extends Iface
         if ($this->isProfile()) {
             $this->user = $this->getUser();
         } else if ($request->get('userId')) {
-            $this->user = \App\Db\User::getMapper()->find($request->get('userId'));
+            $this->user = \App\Db\UserMap::create()->find($request->get('userId'));
         }
 
         $this->form = new Form('formEdit');
@@ -89,7 +89,7 @@ class Edit extends Iface
 
         
         if (!$this->isProfile()) {
-            $roles = \App\Db\Role::getMapper()->findAll(\Tk\Db\Tool::create('a.id'))->toArray();
+            $roles = \App\Db\RoleMap::create()->findAll(\Tk\Db\Tool::create('a.id'))->toArray();
             $list = new ArrayObjectIterator($roles);
             $f = $this->form->addField(new Field\CheckboxGroup('role', $list))->setNotes('Select the access level for this user')->setRequired(true)->setTabGroup('Roles');
             if ($this->user->id == 1) {
@@ -152,9 +152,9 @@ class Edit extends Iface
 
         // Update user role list if not admin
         if (!$this->isProfile() && $this->user->id != 1) {
-            \App\Db\Role::getMapper()->deleteAllUserRoles($this->user->id);
+            \App\Db\RoleMap::create()->deleteAllUserRoles($this->user->id);
             foreach ($form->getFieldValue('role') as $roleId) {
-                \App\Db\Role::getMapper()->addUserRole($roleId, $this->user->id);
+                \App\Db\RoleMap::create()->addUserRole($roleId, $this->user->id);
             }
         }
 

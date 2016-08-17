@@ -51,16 +51,16 @@ class ContentMap extends Mapper
         if (!$this->formMap) {
             $this->formMap = new \Tk\DataMap\DataMap();
             $this->formMap->addProperty(new Form\Number('id'), 'key');
-            $this->dbMap->addProperty(new Form\Number('pageId'));
-            $this->dbMap->addProperty(new Form\Number('userId'));
-            $this->dbMap->addProperty(new Form\Text('html'));
-            $this->dbMap->addProperty(new Form\Text('keywords'));
-            $this->dbMap->addProperty(new Form\Text('description'));
-            $this->dbMap->addProperty(new Form\Text('css'));
-            $this->dbMap->addProperty(new Form\Text('js'));
-            $this->dbMap->addProperty(new Form\Number('size'));
-//            $this->dbMap->addProperty(new Form\Date('modified'));
-//            $this->dbMap->addProperty(new Form\Date('created'));
+            $this->formMap->addProperty(new Form\Number('pageId'));
+            $this->formMap->addProperty(new Form\Number('userId'));
+            $this->formMap->addProperty(new Form\Text('html'));
+            $this->formMap->addProperty(new Form\Text('keywords'));
+            $this->formMap->addProperty(new Form\Text('description'));
+            $this->formMap->addProperty(new Form\Text('css'));
+            $this->formMap->addProperty(new Form\Text('js'));
+            $this->formMap->addProperty(new Form\Number('size'));
+//            $this->formMap->addProperty(new Form\Date('modified'));
+//            $this->formMap->addProperty(new Form\Date('created'));
 
             $this->setPrimaryKey($this->formMap->currentProperty('key')->getColumnName());
         }

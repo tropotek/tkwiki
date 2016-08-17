@@ -5,7 +5,7 @@
  * @license Copyright 2007 Michael Mifsud
  */
 
-$appPath = __DIR__;
+$appPath = dirname(__FILE__);
 $composer = include($appPath . '/vendor/autoload.php');
 
 $request = \App\Factory::getRequest();

@@ -117,7 +117,7 @@ class Content extends Model
     public function getPage()
     {
         if (!$this->page) {
-            $this->page = \App\Db\Page::getMapper()->find($this->pageId);
+            $this->page = \App\Db\PageMap::create()->find($this->pageId);
         }
         return $this->page;
     }
@@ -129,7 +129,7 @@ class Content extends Model
     public function getUser()
     {
         if (!$this->user) {
-            $this->user = \App\Db\User::getMapper()->find($this->userId);
+            $this->user = \App\Db\UserMap::create()->find($this->userId);
         }
         return $this->user;
     }

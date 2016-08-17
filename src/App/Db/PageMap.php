@@ -49,13 +49,13 @@ class PageMap extends Mapper
         if (!$this->formMap) {
             $this->formMap = new \Tk\DataMap\DataMap();
             $this->formMap->addProperty(new Form\Number('id'), 'key');
-            $this->dbMap->addProperty(new Form\Number('userId'));
-            $this->dbMap->addProperty(new Form\Text('type'));
-            $this->dbMap->addProperty(new Form\Text('template'));
-            $this->dbMap->addProperty(new Form\Text('title'));
-            $this->dbMap->addProperty(new Form\Text('url'));
-            $this->dbMap->addProperty(new Form\Number('permission'));
-            $this->dbMap->addProperty(new Form\Number('views'));
+            $this->formMap->addProperty(new Form\Number('userId'));
+            $this->formMap->addProperty(new Form\Text('type'));
+            $this->formMap->addProperty(new Form\Text('template'));
+            $this->formMap->addProperty(new Form\Text('title'));
+            $this->formMap->addProperty(new Form\Text('url'));
+            $this->formMap->addProperty(new Form\Number('permission'));
+            $this->formMap->addProperty(new Form\Number('views'));
 
             $this->setPrimaryKey($this->formMap->currentProperty('key')->getColumnName());
         }

@@ -153,7 +153,7 @@ class Register extends Iface
             throw new \InvalidArgumentException('Cannot locate user. Please contact administrator.');
         }
         /** @var \App\Db\User $user */
-        $user = \App\Db\User::getMapper()->findByHash($hash);
+        $user = \App\Db\UserMap::create()->findByHash($hash);
         if (!$user) {
             throw new \InvalidArgumentException('Cannot locate user. Please contact administrator.');
         }

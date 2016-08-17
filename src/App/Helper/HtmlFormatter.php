@@ -151,7 +151,7 @@ class HtmlFormatter
 
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                 
-                $page = \App\Db\Page::getMapper()->findByUrl($regs[1]);
+                $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
                 if ($this->isView) {
                     $url = new \Tk\Uri('/' . $regs[1]);
                     $node->setAttribute('href', $url->getRelativePath());

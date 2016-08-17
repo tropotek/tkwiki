@@ -2,7 +2,9 @@
 namespace App\Auth;
 
 use App\Db\Role;
+use App\Db\RoleMap;
 use App\Db\Page;
+use App\Db\PageMap;
 
 /**
  * Class RoleAccess
@@ -70,10 +72,10 @@ class Access
 
         foreach ($role as $r) {
             if (!$r instanceof Role) {
-                $r = Role::getMapper()->findByName($r);
+                $r = RoleMap::create()->findByName($r);
             }
             if ($r) {
-                $obj = Role::getMapper()->findRole($r->id, $this->user->id);
+                $obj = RoleMap::create()->findRole($r->id, $this->user->id);
                 if ($obj && $obj->id = $r->id) {
                     return true;
                 }
@@ -101,7 +103,7 @@ class Access
     public function getRoles()
     {
         if (!$this->user) return [];
-        $arr = \App\Db\Role::getMapper()->findByUserId($this->user->id);
+        $arr = \App\Db\RoleMap::create()->findByUserId($this->user->id);
         return $arr;
     }
 

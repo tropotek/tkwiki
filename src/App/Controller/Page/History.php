@@ -48,7 +48,7 @@ class History extends Iface
         }
         
         
-        $this->wPage = \App\Db\Page::getMapper()->find($request->get('pageId'));
+        $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
         if (!$this->wPage) {
             throw new \Tk\HttpException(404, 'Page not found');
         }
@@ -73,7 +73,7 @@ class History extends Iface
 
         $filter = $this->table->getFilterValues();
         $filter['pageId'] = $this->wPage->id;
-        $users = \App\Db\Content::getMapper()->findFiltered($filter, $this->table->makeDbTool('a.created DESC'));
+        $users = \App\Db\ContentMap::create()->findFiltered($filter, $this->table->makeDbTool('a.created DESC'));
         $this->table->setList($users);
         
         
@@ -85,7 +85,7 @@ class History extends Iface
      */
     protected function doRevert(Request $request)
     {
-        $rev = \App\Db\Content::getMapper()->find($request->get('r'));
+        $rev = \App\Db\ContentMap::create()->find($request->get('r'));
         if (!$rev) {
             throw new \Tk\Exception('Revert content not found!');
         }

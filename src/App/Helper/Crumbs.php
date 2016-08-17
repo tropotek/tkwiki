@@ -84,7 +84,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     {
         if (!$url) return;
         if ($url->getRelativePath() == '/' || trim($url->getRelativePath()) == \App\Db\Page::getHomeUrl()) return;
-        $page = \App\Db\Page::getMapper()->findByUrl(trim($url->getRelativePath(), '/'));
+        $page = \App\Db\PageMap::create()->findByUrl(trim($url->getRelativePath(), '/'));
         if (!$page) return;
         $this->trim($url);
         $this->list[$page->title] = $url;

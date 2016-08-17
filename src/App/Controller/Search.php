@@ -62,16 +62,16 @@ class Search extends Iface
         $tool = \Tk\Db\Tool::create();
         
         if (preg_match('/user:([0-9a-f]{32})/i', $this->terms, $regs)) {
-            $this->user = \App\Db\User::getMapper()->findByHash($regs[1]);
+            $this->user = \App\Db\UserMap::create()->findByHash($regs[1]);
             $this->terms = '';
             // TODO: Test this is correct for public private etc pages...
             if ($this->user) {
                 if ($this->getUser()->getAccess()->isAdmin()) {
-                    $this->list = \App\Db\Page::getMapper()->findUserPages($this->user->id, [], $tool);
+                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [], $tool);
                 } else if ($this->getUser()->getAccess()->isModerator()) {
-                    $this->list = \App\Db\Page::getMapper()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC], $tool);
+                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC], $tool);
                 } else {
-                    $this->list = \App\Db\Page::getMapper()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PUBLIC], $tool);
+                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PUBLIC], $tool);
                 }
             }
         } else {
@@ -82,7 +82,7 @@ class Search extends Iface
             // TODO
             if ($this->terms) {
                 $filter = ['keywords' => $this->terms, 'type' => \App\Db\Page::TYPE_PAGE];
-                $this->list = \App\Db\Page::getMapper()->findFiltered($filter, $tool);
+                $this->list = \App\Db\PageMap::create()->findFiltered($filter, $tool);
             }
             // TODO
             // TODO: Need to create a real search function

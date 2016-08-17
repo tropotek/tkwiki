@@ -52,7 +52,6 @@ class Edit extends Iface
     public function __construct()
     {
         parent::__construct('', array('edit', 'moderator', 'admin'));
-        exit();
     }
 
     /**
@@ -66,7 +65,9 @@ class Edit extends Iface
             \App\Factory::getSession()->set(self::SID_REFERRER, $request->getReferer());
         }
         // Find requested page
-        $this->wPage = \App\Db\Page::getMapper()->find($request->get('pageId'));
+
+        $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
+
         // Create a new page
         if (!$this->wPage && $request->has('u') && $this->getUser()->getAccess()->canCreate()) {
             $this->wPage = new \App\Db\Page();
@@ -131,7 +132,7 @@ class Edit extends Iface
         }
         //vd($this->wContent->html);
         // Form
-        $this->form = new Form('pageEdit');
+        $this->form = new Form('pageEdit', $request);
         $this->form->addField(new Field\Hidden('pid', $this->wPage->id));
         $this->form->addField(new Field\Input('title'))->setRequired(true);
         $this->form->addField(new Field\Textarea('html'));
@@ -145,9 +146,10 @@ class Edit extends Iface
 
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('cancel', array($this, 'doCancel')));
-        
+
         $this->form->load(\App\Db\PageMap::create()->unmapForm($this->wPage));
         $this->form->load(\App\Db\ContentMap::create()->unmapForm($this->wContent));
+
         $this->form->execute();
         
         return $this->show($request);
@@ -171,8 +173,8 @@ class Edit extends Iface
      */
     public function doSubmit($form)
     {
-        \App\Db\PageMap::mapForm($form->getValues(), $this->wPage);
-        \App\Db\ContentMap::mapForm($form->getValues(), $this->wContent);
+        \App\Db\PageMap::create()->mapForm($form->getValues(), $this->wPage);
+        \App\Db\ContentMap::create()->mapForm($form->getValues(), $this->wContent);
         
         $form->addFieldErrors(\App\Db\PageValidator::create($this->wPage)->getErrors());
         $form->addFieldErrors(\App\Db\ContentValidator::create($this->wContent)->getErrors());
@@ -213,7 +215,7 @@ class Edit extends Iface
      */
     public function doDelete(Request $request)
     {
-        $page = \App\Db\Page::getMapper()->find($request->get('del'));
+        $page = \App\Db\PageMap::create()->find($request->get('del'));
         if (!$page || !$this->getUser() || !$this->getUser()->getAccess()->canDelete($page)) {
             \App\Alert::addWarning('You do not have the permissions to delete this page.');
             return;
@@ -230,13 +232,13 @@ class Edit extends Iface
      */
     protected function indexLinks($page, $formatter)
     {
-        \App\Db\Page::getMapper()->deleteLinkByPageId($page->id);
+        \App\Db\PageMap::create()->deleteLinkByPageId($page->id);
         $nodeList = $formatter->getDocument()->getElementsByTagName('a');
         foreach ($nodeList as $node) {
             $regs = array();
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                 if (isset ($regs[1])) {
-                    \App\Db\Page::getMapper()->insertLink($page->id, $regs[1]);
+                    \App\Db\PageMap::create()->insertLink($page->id, $regs[1]);
                 }
             }
         }
@@ -259,8 +261,7 @@ class Edit extends Iface
             $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page permissions must be public.');
         }
         $template->setChoice($this->wPage->type);
-        vd($this->wContent->css);
-        
+
         $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getUser());
         $template->insertTemplate('header', $header->show());
 

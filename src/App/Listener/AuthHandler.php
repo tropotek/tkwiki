@@ -31,7 +31,7 @@ class AuthHandler implements SubscriberInterface
             $adapter = \App\Factory::getAuthAdapter($class, $event->all());
             $result = $event->getAuth()->authenticate($adapter);
             if ($result && $result->getCode() == \Tk\Auth\Result::SUCCESS) { 
-                $config->setUser(\App\Db\User::getMapper()->findByUsername($event->getAuth()->getIdentity()));
+                $config->setUser(\App\Db\UserMap::create()->findByUsername($event->getAuth()->getIdentity()));
                 $event->setResult($result);
                 $config->getUser()->lastLogin = \Tk\Date::create();
                 $config->getUser()->save();
@@ -89,7 +89,7 @@ class AuthHandler implements SubscriberInterface
         // Add some default roles
         // TODO: Get these from the config/settings...
         foreach ([3,4,5,6,7] as $roleId) {
-            \App\Db\Role::getMapper()->addUserRole($roleId, $user->id);
+            \App\Db\RoleMap::create()->addUserRole($roleId, $user->id);
         }
         
         // on success email user confirmation

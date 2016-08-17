@@ -48,6 +48,7 @@ class InitProjectEvent
             $io = $event->getIO();
             $composer = $event->getComposer();
             $pkg = $composer->getPackage();
+            $userData = posix_getpwuid(fileowner(__FILE__));
 
             $name = substr($pkg->getName(), strrpos($pkg->getName(), '/')+1);
             $version = $pkg->getVersion();
@@ -110,6 +111,11 @@ STR;
                 // Set dev/debug mode
                 if ($composer->getPackage()->isDev()) {
                     $configContents = self::setConfigValue('debug', 'true', $configContents);
+                    $logPath = '/home/user/log/error.log';
+                    if (!empty($userData['dir'])) {
+                        $logPath = $userData['dir'] . '/log/error.log';
+                    }
+                    $configContents = self::setConfigValue('system.log.path', "'$logPath'", $configContents);
                 }
                 $io->write(self::green('Saving config.php'));
                 file_put_contents($configFile, $configContents);

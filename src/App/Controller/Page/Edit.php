@@ -52,6 +52,7 @@ class Edit extends Iface
     public function __construct()
     {
         parent::__construct('', array('edit', 'moderator', 'admin'));
+        exit();
     }
 
     /**
@@ -145,8 +146,8 @@ class Edit extends Iface
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('cancel', array($this, 'doCancel')));
         
-        $this->form->load(\App\Db\PageMap::unmapForm($this->wPage));
-        $this->form->load(\App\Db\ContentMap::unmapForm($this->wContent));
+        $this->form->load(\App\Db\PageMap::create()->unmapForm($this->wPage));
+        $this->form->load(\App\Db\ContentMap::create()->unmapForm($this->wContent));
         $this->form->execute();
         
         return $this->show($request);

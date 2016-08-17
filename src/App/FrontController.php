@@ -48,7 +48,7 @@ class FrontController extends \Tk\Kernel\HttpKernel
     {
         $logger = $this->config->getLog();
         
-        
+
         // (kernel.init)
         $this->dispatcher->addSubscriber(new Listener\BootstrapHandler($this->config));
         

@@ -16,8 +16,12 @@ jQuery(function ($) {
   var menu = $('.wiki-toc');
   if (menu.length && menu.toc) {
     menu.toc({scope: '.wiki-content'});
+
+    // http://keith-wood.name/sticky.html
+    $('.wiki-toc').sticky({boundedBy: '.wiki-content'});
+
   }
-  
+
   $('#NavSearch').on('submit', function(e) {
     if (!$(this).find('input').val()) {
       $(this).find('input').parent().addClass('has-error').find('button').removeClass('btn-default').addClass('btn-danger');

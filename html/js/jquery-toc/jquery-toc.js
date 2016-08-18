@@ -27,8 +27,8 @@
         heading_tags: ["h1", "h2", "h3", "h4", "h5", "h6"],
         
         template: '<nav class="well toc-menu toc-type-nested col-md-4">'+
-'<button type="button" class="toc-close close" data-dismiss=".toc-menu" title="Close TOC"><span aria-hidden="true">&times;</span></button>'+
-'<p><strong>Contents:</strong></p></nav>',
+'<button type="button" class="toc-close close" data-dismiss=".toc-menu" title="Close Contents Window"><span aria-hidden="true">&times;</span></button>'+
+'<p class="toc-title"><span>Contents</span> <a href="#top" title="Return to the top of the page.">Top</a></p></nav>',
         
         // Should the table of contents be ordered or unordered?
         list_type: "ul",
@@ -78,7 +78,7 @@
 
         // Build the text for this item in the table of contents
         // and leave the list item open
-        text += '<li class="section'+id+'"><a href="#section' + id + '">' + heading.text() + '</a>';
+        text += '<li class="section'+id+'"><a href="#section' + id + '">' + heading.text().substr(0, 40) + '</a>';
 
         // Add section id and `.section-heading` class to this heading tag
         heading.attr('id', 'section' + id).addClass('section-heading');
@@ -114,7 +114,7 @@
     } else if (typeof method === "object" || undefined == method) {
       return methods.init.apply(this, arguments);
     } else {
-      $.error("Method " +  method + " does not exist on jQuery.toc");
+      $.error("Method " +  method + " does not exist in jQuery-toc.js");
     }
   }
 }) (jQuery);

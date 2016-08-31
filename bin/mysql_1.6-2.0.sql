@@ -221,8 +221,10 @@ CREATE TABLE IF NOT EXISTS `migration` (
   PRIMARY KEY (`path`)
 ) ENGINE=InnoDB;
 INSERT INTO `migration` (`path`, `created`) VALUES
-  ('/src/config/sql/mysql/000000.sql', '2016-07-07 03:17:10'),
-  ('/src/config/sql/mysql/000001.sql', '2016-07-07 03:17:10');
+  ('/src/config/sql/mysql/000000.sql', '2016-08-31 02:46:36'),
+  ('/src/config/sql/mysql/000001.sql', '2016-08-31 02:46:36'),
+  ('/vendor/ttek/tk-site/config/sql/mysql/000000.sql', '2016-08-31 02:46:36');
+
 
 -- --------------------------------------
 -- Table data: version

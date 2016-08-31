@@ -16,6 +16,11 @@ use App\Controller\Iface;
 class Orphaned extends Iface
 {
 
+    /**
+     * @var \Tk\Table
+     */
+    protected $table = null;
+
     
     
     /**

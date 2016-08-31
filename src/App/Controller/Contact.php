@@ -149,7 +149,7 @@ Message:
 
 $attachCount
 MSG;
-        
+        // TODO: fire an event to send the message
         vd($message);
         return true;
     }

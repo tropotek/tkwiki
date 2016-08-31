@@ -108,9 +108,11 @@ class Factory
     {
         if (!self::getConfig()->getDomModifier()) {
             $dm = new \Dom\Modifier\Modifier();
-            $dm->add(new \Dom\Modifier\Filter\UrlPath(self::getConfig()->getSiteUrl()));
-            $dm->add(new \Dom\Modifier\Filter\Less(self::getConfig()));
+            $config = self::getConfig();
+            $dm->add(new \Dom\Modifier\Filter\UrlPath($config->getSiteUrl()));
             $dm->add(new \Dom\Modifier\Filter\JsLast());
+            $dm->add(new \Dom\Modifier\Filter\Less($config->getSitePath(), $config->getSiteUrl(), $config->getCachePath(),
+                array('siteUrl' => $config->getSiteUrl(), 'dataUrl' => $config->getDataUrl(), 'templateUrl' => $config->getTemplateUrl())));
             $dm->add(new \App\Helper\UrlModifierFilter());
             self::getConfig()->setDomModifier($dm);
         }

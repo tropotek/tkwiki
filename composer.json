@@ -49,6 +49,7 @@
         "ttek/tk-domtemplate": "~2.0",
         "ttek/tk-form": "~2.0",
         "ttek/tk-table": "~2.0",
+        "ttek/tk-site": "~2.0",
         "monolog/monolog": "^1.13@dev",
         "ttek/tk-debug": "~2.0"
     },

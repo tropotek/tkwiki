@@ -26,10 +26,10 @@
     },
     "scripts":  {
         "post-install-cmd":  [
-            "App\\Composer\\InitProjectEvent::postInstall"
+            "Ts\\Composer\\InitProjectEvent::postInstall"
         ],
         "post-update-cmd":  [
-            "App\\Composer\\InitProjectEvent::postUpdate"
+            "Ts\\Composer\\InitProjectEvent::postUpdate"
         ]
     },
     "extra":  {
@@ -50,6 +50,7 @@
         "ttek/tk-form": "~2.0",
         "ttek/tk-table": "~2.0",
         "ttek/tk-site": "~2.0",
+        "ttek/tk-mail": "~2.0",
         "monolog/monolog": "^1.13@dev",
         "ttek/tk-debug": "~2.0"
     },

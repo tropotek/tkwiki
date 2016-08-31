@@ -23,7 +23,7 @@ class Settings extends Iface
     protected $form = null;
 
     /**
-     * @var \App\Db\Data|null
+     * @var \Ts\Db\Data|null
      */
     protected $data = null;
 
@@ -34,7 +34,7 @@ class Settings extends Iface
     public function __construct()
     {
         parent::__construct('WIKI Settings', \App\Auth\Access::ROLE_ADMIN);
-        $this->data = \App\Db\Data::create();
+        $this->data = \Ts\Db\Data::create();
     }
 
     /**
@@ -89,7 +89,7 @@ class Settings extends Iface
         
         $this->data->save();
         
-        \App\Alert::addSuccess('Site settings saved.');
+        \Ts\Alert::addSuccess('Site settings saved.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
             \Tk\Uri::create('/')->redirect();
         }
@@ -113,9 +113,7 @@ class Settings extends Iface
         $pageSelect = new \App\Helper\PageSelect('#fid_btn_wiki\\\\.page\\\\.default', '#fid_wiki\\\\.page\\\\.default');
         $pageSelect->show();
         $template->appendTemplate('content', $pageSelect->getTemplate());
-        
-        
-        
+
         return $this->getPage()->setPageContent($template);
     }
 

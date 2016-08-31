@@ -3,9 +3,10 @@ namespace App\Listener;
 
 
 use Tk\EventDispatcher\SubscriberInterface;
-use App\Event\AuthEvent;
 use Tk\Kernel\KernelEvents;
 use Tk\Event\ControllerEvent;
+use Tk\Event\AuthEvent;
+use Tk\Auth\AuthEvents;
 
 
 /**
@@ -19,36 +20,22 @@ class AuthHandler implements SubscriberInterface
 {
 
     /**
-     * @param AuthEvent $event
-     * @throws \Exception
+     * do any auth init setup
+     *
+     * @param GetResponseEvent $event
      */
-    public function onLogin(AuthEvent $event)
+    public function onSystemInit(GetResponseEvent $event)
     {
+        // if a user is in the session add them to the global config
+        // Only the identity details should be in the auth session not the full user object, to save space and be secure.
         $config = \App\Factory::getConfig();
-        $result = null;
-        $adapterList = $config->get('system.auth.adapters');
-        foreach($adapterList as $name => $class) {
-            $adapter = \App\Factory::getAuthAdapter($class, $event->all());
-            $result = $event->getAuth()->authenticate($adapter);
-            if ($result && $result->getCode() == \Tk\Auth\Result::SUCCESS) { 
-                $config->setUser(\App\Db\UserMap::create()->findByUsername($event->getAuth()->getIdentity()));
-                $event->setResult($result);
-                $config->getUser()->lastLogin = \Tk\Date::create();
-                $config->getUser()->save();
-                return;
-            }
+        $auth = \App\Factory::getAuth();
+        if ($auth->getIdentity()) {
+            $user = \App\Db\UserMap::create()->findByUsername($auth->getIdentity());
+            $config->setUser($user);
         }
     }
 
-    /**
-     * @param AuthEvent $event
-     * @throws \Exception
-     */
-    public function onLogout(AuthEvent $event)
-    {
-        $event->getAuth()->clearIdentity();
-    }
-    
     /**
      * Check the user has access to this controller
      *
@@ -60,84 +47,132 @@ class AuthHandler implements SubscriberInterface
         $controller = $event->getController();
         $user = $controller->getUser();
         if ($controller instanceof \App\Controller\Iface) {
-            
             $access = $controller->getAccess();
-            
             // Check the user has access to the controller in question
             if (empty($access)) return;
             if (!$user) \Tk\Uri::create('/login.html')->redirect();
-            if (!$user->getAccess()->hasRole($access)) { 
+            if (!$user->getAccess()->hasRole($access)) {
             //if (!\App\Auth\Access::create($user)->hasRole($access)) {
                 // Could redirect to a authentication error page...
                 // Could cause a loop if the permissions are stuffed
-                \App\Alert::getInstance()->addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
+                \Ts\Alert::getInstance()->addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
                 \Tk\Uri::create($user->getHomeUrl())->redirect();
             }
         }
     }
 
     /**
-     * 
-     * 
-     * @param \App\Event\FormEvent $event
+     * @param AuthEvent $event
+     * @throws \Exception
      */
-    public function onRegister(\App\Event\FormEvent $event)
+    public function onLogin(AuthEvent $event)
     {
-        /** @var \App\Db\User $user */
-        $user = $event->get('user');
-
-        // Add some default roles
-        // TODO: Get these from the config/settings...
-        foreach ([3,4,5,6,7] as $roleId) {
-            \App\Db\RoleMap::create()->addUserRole($roleId, $user->id);
+        $config = \App\Factory::getConfig();
+        $result = null;
+        $adapterList = $config->get('system.auth.adapters');
+        foreach($adapterList as $name => $class) {
+            $adapter = \App\Factory::getAuthAdapter($class, $event->all());
+            $result = $event->getAuth()->authenticate($adapter);
+            $event->setResult($result);
+            if ($result && $result->isValid()) {
+                break;
+            }
         }
-        
-        // on success email user confirmation
-        $message = \Dom\Loader::loadFile($event->get('templatePath').'/xtpl/mail/account.registration.xtpl');
-        $message->insertText('name', $user->name);
-        $url = \Tk\Uri::create()->set('h', $user->hash);
-        $message->insertText('url', $url->toString());
-        $message->setAttr('url', 'href', $url->toString());
-        
-        // TODO: Send the email here
-        vd($message->toString());
-        
+        if (!$result) {
+            throw new \Tk\Auth\Exception('Invalid username or password');
+        }
+        if (!$result->isValid()) {
+            return;
+        }
+        $user = \App\Db\UserMap::create()->findByUsername($result->getIdentity());
+        if (!$user) {
+            throw new \Tk\Auth\Exception('User not found: Contact Your Administrator');
+        }
+        $config->setUser($user);
+        $event->set('user', $user);
     }
 
-    public function onRegisterConfirm(\Tk\Event\RequestEvent $event)
+    /**
+     * @param AuthEvent $event
+     * @throws \Exception
+     */
+    public function onLoginSuccess(AuthEvent $event)
+    {
+        /** @var \App\Db\User $user */
+        $user = $event->get('user');
+        if (!$user) {
+            throw new \Tk\Exception('No user found.');
+        }
+        $user->lastLogin = \Tk\Date::create();
+        $user->save();
+        \Tk\Uri::create($user->getHomeUrl())->redirect();
+
+    }
+
+    /**
+     * @param AuthEvent $event
+     * @throws \Exception
+     */
+    public function onLogout(AuthEvent $event)
+    {
+        $event->getAuth()->clearIdentity();
+    }
+
+
+    public function onRegister(\Tk\EventDispatcher\Event $event)
     {
         /** @var \App\Db\User $user */
         $user = $event->get('user');
 
-        // Send an email to confirm account active 
-        $message = \Dom\Loader::loadFile($event->get('templatePath').'/xtpl/mail/account.activated.xtpl');
-        $message->insertText('name', $user->name);
-        $url = \Tk\Uri::create('/login.html');
-        $message->insertText('url', $url->toString());
-        $message->setAttr('url', 'href', $url->toString());
-        
-        // TODO: Send the email here
-        vd($message->toString());
-        
+        // on success email user confirmation
+        $body = \Dom\Loader::loadFile($event->get('templatePath').'/xtpl/mail/account.registration.xtpl');
+        $body->insertText('name', $user->name);
+        $url = \Tk\Uri::create('/register.html')->set('h', $user->hash);
+        $body->insertText('url', $url->toString());
+        $body->setAttr('url', 'href', $url->toString());
+        $subject = 'Account Registration Request.';
+
+        $message = new \Tk\Mail\Message($body->toString(), $subject, $user->email, \App\Factory::getConfig()->get('site.email'));
+        $message->send();
+
     }
 
-    public function onRecover(\Tk\Event\RequestEvent $event)
+    public function onRegisterConfirm(\Tk\EventDispatcher\Event $event)
+    {
+        /** @var \App\Db\User $user */
+        $user = $event->get('user');
+
+        // Send an email to confirm account active
+        $body = \Dom\Loader::loadFile($event->get('templatePath').'/xtpl/mail/account.activated.xtpl');
+        $body->insertText('name', $user->name);
+        $url = \Tk\Uri::create('/login.html');
+        $body->insertText('url', $url->toString());
+        $body->setAttr('url', 'href', $url->toString());
+        $subject = 'Account Registration Activation.';
+
+        $message = new \Tk\Mail\Message($body->toString(), $subject, $user->email, \App\Factory::getConfig()->get('site.email'));
+        $message->send();
+
+    }
+
+    public function onRecover(\Tk\EventDispatcher\Event $event)
     {
         /** @var \App\Db\User $user */
         $user = $event->get('user');
         $pass = $event->get('password');
-        
-        // Send an email to confirm account active 
-        $message = \Dom\Loader::loadFile($event->get('templatePath').'/xtpl/mail/account.recover.xtpl');
-        $message->insertText('name', $user->name);
-        $message->insertText('password', $pass);
+
+        // Send an email to confirm account active
+        $body = \Dom\Loader::loadFile($event->get('templatePath').'/xtpl/mail/account.recover.xtpl');
+        $body->insertText('name', $user->name);
+        $body->insertText('password', $pass);
         $url = \Tk\Uri::create('/login.html');
-        $message->insertText('url', $url->toString());
-        $message->setAttr('url', 'href', $url->toString());
-        
-        // TODO: Send the email here
-        vd($message->toString());
-        
+        $body->insertText('url', $url->toString());
+        $body->setAttr('url', 'href', $url->toString());
+        $subject = 'Account Password Recovery.';
+
+        $message = new \Tk\Mail\Message($body->toString(), $subject, $user->email, \App\Factory::getConfig()->get('site.email'));
+        $message->send();
+
     }
 
     /**
@@ -163,12 +198,14 @@ class AuthHandler implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            KernelEvents::REQUEST => 'onSystemInit',
             KernelEvents::CONTROLLER => 'onControllerAccess',
-            'auth.onLogin' => 'onLogin',
-            'auth.onLogout' => 'onLogout',
-            'auth.onRegister' => 'onRegister',
-            'auth.onRegisterConfirm' => 'onRegisterConfirm',
-            'auth.onRecover' => 'onRecover'
+            AuthEvents::LOGIN => 'onLogin',
+            AuthEvents::LOGIN_SUCCESS => 'onLoginSuccess',
+            AuthEvents::LOGOUT => 'onLogout',
+            AuthEvents::REGISTER => 'onRegister',
+            AuthEvents::REGISTER_CONFIRM => 'onRegisterConfirm',
+            AuthEvents::RECOVER => 'onRecover'
         );
     }
     

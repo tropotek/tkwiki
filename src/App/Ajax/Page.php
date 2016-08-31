@@ -45,7 +45,7 @@ class Page extends \App\Controller\Iface
      * doGetPageList
      * 
      * @param Request $request
-     * @return \App\Page\Iface
+     * @return \Tk\Response
      */
     public function doGetPageList(Request $request)
     {

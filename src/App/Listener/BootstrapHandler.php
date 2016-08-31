@@ -33,11 +33,6 @@ class BootstrapHandler implements SubscriberInterface
      */
     public function onInit(KernelEvent $event)
     {
-        // initalise Dom Loader
-        \App\Factory::getDomLoader();
-
-        // Initiate the default database connection
-        \App\Factory::getDb();
         
         // Init Auth
         $auth = \App\Factory::getAuth();

@@ -54,9 +54,6 @@ class Bootstrap
         // Include any config overriding settings
         include($config->getSrcPath() . '/config/config.php');
 
-        // Import settings from DB
-        $config->import(\App\Db\Data::create());
-        
         \Tk\Uri::$BASE_URL_PATH = $config->getSiteUrl();
         
         if ($config->has('date.timezone')) {
@@ -69,15 +66,15 @@ class Bootstrap
          * to the application root now.
          */
         chdir($config->getSitePath());
-        
+
         // This maybe should be created in a Factory or DI Container....
         $config['log'] = new NullLogger();
         if (is_readable($config['system.log.path'])) {
             ini_set('error_log', $config['system.log.path']);
             $logger = new Logger('system');
             $handler = new StreamHandler($config['system.log.path'], $config['system.log.level']);
-            //$formatter = new LineFormatter(null, 'H:i:s', true, true);
-            $formatter = new Util\LogLineFormatter();
+            $formatter = new \Tk\Log\MonologLineFormatter();
+            $formatter->setScripTime($config->getScriptTime());
             $handler->setFormatter($formatter);
             $logger->pushHandler($handler);
             $config['log'] = $logger;
@@ -100,6 +97,14 @@ class Bootstrap
         Factory::getCookie();
         // * Session    
         Factory::getSession();
+
+        // initalise Dom Loader
+        \App\Factory::getDomLoader();
+
+        // Initiate the default database connection
+        \App\Factory::getDb();
+        // Import settings from DB
+        $config->replace(\Ts\Db\Data::create());
 
         return $config;
     }

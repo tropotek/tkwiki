@@ -95,11 +95,11 @@ class Edit extends Iface
         // check if the user can edit the page
         $error = false;
         if (!$this->getUser()->getAccess()->canEdit($this->wPage)) {
-            \App\Alert::addWarning('You do not have permission to edit this page.');
+            \Ts\Alert::addWarning('You do not have permission to edit this page.');
             $error = true;
         }
         if ($this->wPage->id && !\App\Factory::getLockMap()->canAccess($this->wPage->id)) {
-            \App\Alert::addWarning('The page is currently being edited by another user. Try again later.');
+            \Ts\Alert::addWarning('The page is currently being edited by another user. Try again later.');
             $error = true;
         }
         if ($error) {
@@ -123,7 +123,7 @@ class Edit extends Iface
                     $this->wContent->html = $this->formatter->getHtml();
                 }
             } catch(\Exception $e) {
-                \App\Alert::addInfo($e->getMessage());
+                \Ts\Alert::addInfo($e->getMessage());
             }
         }
         
@@ -217,7 +217,7 @@ class Edit extends Iface
     {
         $page = \App\Db\PageMap::create()->find($request->get('del'));
         if (!$page || !$this->getUser() || !$this->getUser()->getAccess()->canDelete($page)) {
-            \App\Alert::addWarning('You do not have the permissions to delete this page.');
+            \Ts\Alert::addWarning('You do not have the permissions to delete this page.');
             return;
         }
         $page->delete();

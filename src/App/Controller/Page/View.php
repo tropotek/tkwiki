@@ -56,7 +56,7 @@ class View extends Iface
             throw new \Tk\HttpException(404, 'Page not found');
         }
         if (!$this->canView()) {
-            \App\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
+            \Ts\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
             \Tk\Uri::create('/')->redirect();
         }
 
@@ -65,7 +65,7 @@ class View extends Iface
         if (!$this->wContent) {
             // May redirect to the edit page if the user has edit privileges or send alert if not.
             //throw new \Tk\Exception('Page content not found');
-            \App\Alert::addWarning('Page content lost, please create new content.');
+            \Ts\Alert::addWarning('Page content lost, please create new content.');
             \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->redirect();
         }
         

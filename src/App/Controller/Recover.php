@@ -91,7 +91,7 @@ class Recover extends Iface
         
         $this->dispatcher->dispatch('auth.onRecover', $event);
         
-        \App\Alert::addSuccess('You new access details have been sent to your email address.');
+        \Ts\Alert::addSuccess('You new access details have been sent to your email address.');
         \Tk\Uri::create()->redirect();
         
     }

@@ -35,8 +35,6 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
             $templateFile = $this->getTemplatePath() . '/main.xtpl';
         }
         $this->templateFile = $templateFile;
-        
-        // TODO: Check this call should be here, or called externally????
         $this->show();
     }
 
@@ -51,20 +49,25 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
         /** @var \Dom\Template $template */
         $template = $this->getTemplate();
 
+        if ($this->getConfig()->get('site.meta.keywords')) {
+            $template->appendMetaTag('keywords', $this->getConfig()->get('site.meta.keywords'));
+        }
+        if ($this->getConfig()->get('site.meta.description')) {
+            $template->appendMetaTag('description', $this->getConfig()->get('site.meta.description'));
+        }
+
+        if ($this->getConfig()->get('system.authors'))
+            $template->appendMetaTag('tk-author', $this->getConfig()->get('system.authors'), $template->getTitleElement());
+        if ($this->getConfig()->get('system.project'))
+            $template->appendMetaTag('tk-project', $this->getConfig()->get('system.project'), $template->getTitleElement());
+        if ($this->getConfig()->get('system.version'))
+            $template->appendMetaTag('tk-version', $this->getConfig()->get('system.version'), $template->getTitleElement());
+
 
         if ($this->getConfig()->get('site.title')) {
             $template->setAttr('siteName', 'title', $this->getConfig()->get('site.title'));
             $template->setTitleText(trim($template->getTitleText() . ' - ' . $this->getConfig()->get('site.title'), '- '));
         }
-        if ($this->getController()->getPageTitle()) {
-            $template->setTitleText($this->getController()->getPageTitle() . ' - ' . $template->getTitleText());
-            $template->insertText('pageHeading', $this->getController()->getPageTitle());
-            $template->setChoice('pageHeading');
-        }
-        if ($this->getConfig()->isDebug()) {
-            $template->setTitleText(trim('DEBUG: ' . $template->getTitleText(), '- '));
-        }
-
 
         if ($this->controller->getUser()) {
             $template->setChoice('logout');
@@ -72,37 +75,61 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
             $template->setChoice('login');
         }
         
-        $noticeTpl = \App\Alert::getInstance()->show()->getTemplate();
+        $noticeTpl = \Ts\Alert::getInstance()->show()->getTemplate();
         $template->insertTemplate('alerts', $noticeTpl)->setChoice('alerts');
         
         if ($this->getConfig()->get('site.user.registration')) {
             $template->setChoice('register');
         }
 
-
         $siteUrl = $this->getConfig()->getSiteUrl();
         $dataUrl = $this->getConfig()->getDataUrl();
-        $js = <<<JS
+        $templateUrl = $this->getConfig()->getTemplateUrl();
 
+        $js = <<<JS
 var config = {
   siteUrl : '$siteUrl',
-  dataUrl : '$dataUrl'
+  dataUrl : '$dataUrl',
+  templateUrl: '$templateUrl' 
 };
 JS;
         $template->appendJs($js, ['data-jsl-priority' => -1000]);
-        
+
+        if ($this->getConfig()->get('site.global.js')) {
+            $template->appendJs($this->getConfig()->get('site.global.js'));
+        }
+        if ($this->getConfig()->get('site.global.css')) {
+            $template->appendCss($this->getConfig()->get('site.global.css'));
+        }
         
         return $this;
+    }
+
+    /**
+     *
+     */
+    protected function renderPageTitle()
+    {
+        $template = $this->getTemplate();
+        if ($this->getController()->getPageTitle()) {
+            $template->setTitleText(trim($this->getController()->getPageTitle() . ' - ' . $template->getTitleText(), '- '));
+            $template->insertText('pageHeading', $this->getController()->getPageTitle());
+            $template->setChoice('pageHeading');
+        }
+        if ($this->getConfig()->isDebug()) {
+            $template->setTitleText(trim('DEBUG: ' . $template->getTitleText(), '- '));
+        }
     }
 
     /**
      * Set the page Content
      *
      * @param string|\Dom\Template|\Dom\Renderer\RendererInterface|\DOMDocument $content
-     * @return PublicPage
+     * @return $this
      */
     public function setPageContent($content)
     {
+        $this->renderPageTitle();
         if (!$content) return $this;
         if ($content instanceof \Dom\Template) {
             $this->getTemplate()->appendTemplate('content', $content);

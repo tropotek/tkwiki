@@ -193,10 +193,6 @@ UPDATE `data` a, `settings` b
 set a.`value` = b.`footerScript` WHERE a.`key` = 'site.global.js';
 
 
-
-
-
-
 ALTER TABLE `user` DROP `groupId`;
 ALTER TABLE `page` DROP `currentTextId`;
 ALTER TABLE `page` DROP `groupId`;
@@ -207,8 +203,6 @@ ALTER TABLE `page` DROP `score`;
 ALTER TABLE `page` DROP `enableComment`;
 DROP TABLE comment;
 DROP TABLE settings;
-
-
 
 
 

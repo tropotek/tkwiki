@@ -3,6 +3,8 @@ namespace App\Controller;
 
 use Tk\Request;
 use Dom\Template;
+use Tk\Auth\AuthEvents;
+use Tk\Event\AuthEvent;
 
 /**
  * Class Index
@@ -21,11 +23,10 @@ class Logout extends Iface
      */
     public function doDefault(Request $request)
     {
+        $event = new AuthEvent($this->getConfig()->getAuth());
+        $this->getConfig()->getEventDispatcher()->dispatch(AuthEvents::LOGOUT, $event);
         
-        $event = new \App\Event\AuthEvent($this->getConfig()->getAuth());
-        $this->getConfig()->getEventDispatcher()->dispatch('auth.onLogout', $event);
-        
-        \Tk\Uri::create('/')->redirect(307);
+        \Tk\Uri::create('/')->redirect();
     }
 
     /**

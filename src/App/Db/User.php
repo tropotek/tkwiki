@@ -11,7 +11,7 @@ use Tk\Db\Map\Model;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class User extends Model
+class User extends Model implements \Tk\ValidInterface
 {
     
     /**
@@ -151,48 +151,89 @@ class User extends Model
         }
         return $this->access;
     }
-    
-}
-
-class UserValidator extends \App\Helper\Validator
-{
 
     /**
-     * Implement the validating rules to apply.
+     * Validate this object's current state and return an array
+     * with error messages. This will be useful for validating
+     * objects for use within forms.
      *
+     * @return array
      */
-    protected function validate()
+    public function validate()
     {
-        /** @var User $obj */
-        $obj = $this->getObject();
+        $errors = array();
 
-        if (!$obj->name) {
-            $this->addError('name', 'Invalid field value.');
+        if (!$this->name) {
+            $errors['name'] = 'Invalid field value';
         }
-        if (!$obj->username) {
-            $this->addError('username', 'Invalid field value.');
+        if (!$this->username) {
+            $errors['username'] = 'Invalid field value';
         } else {
-            $dup = UserMap::create()->findByUsername($obj->username);
-            if ($dup && $dup->getId() != $obj->getId()) {
-                $this->addError('username', 'This username is already in use.');
+            $dup = UserMap::create()->findByUsername($this->username);
+            if ($dup && $dup->getId() != $this->getId()) {
+                $errors['username'] = 'This username is already in use';
             }
         }
-        if (!filter_var($obj->email, FILTER_VALIDATE_EMAIL)) {
-            $this->addError('email', 'Please enter a valid email address');
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Please enter a valid email address';
         } else {
-            $dup = UserMap::create()->findByEmail($obj->email);
-            if ($dup && $dup->getId() != $obj->getId()) {
-                $this->addError('email', 'This email is already in use.');
+            $dup = UserMap::create()->findByEmail($this->email);
+            if ($dup && $dup->getId() != $this->getId()) {
+                $errors['email'] = 'This email is already in use';
             }
         }
-        
+
         // disallow the deletion or role change of user record id 1 (admin user).
-
         /*
          * TODO: Check the user roles
-        if (!$obj->role) {
-            $this->addError('role', 'The user must have a role assigned for the permission system');
+        if (!$this->role) {
+            $errors['role'] = 'The user must have a role assigned for the permission system';
         }
         */
+
+        return $errors;
     }
 }
+
+//class UserValidator extends \App\Helper\Validator
+//{
+//
+//    /**
+//     * Implement the validating rules to apply.
+//     *
+//     */
+//    protected function validate()
+//    {
+//        /** @var User $obj */
+//        $obj = $this->getObject();
+//
+//        if (!$obj->name) {
+//            $this->addError('name', 'Invalid field value.');
+//        }
+//        if (!$obj->username) {
+//            $this->addError('username', 'Invalid field value.');
+//        } else {
+//            $dup = UserMap::create()->findByUsername($obj->username);
+//            if ($dup && $dup->getId() != $obj->getId()) {
+//                $this->addError('username', 'This username is already in use.');
+//            }
+//        }
+//        if (!filter_var($obj->email, FILTER_VALIDATE_EMAIL)) {
+//            $this->addError('email', 'Please enter a valid email address');
+//        } else {
+//            $dup = UserMap::create()->findByEmail($obj->email);
+//            if ($dup && $dup->getId() != $obj->getId()) {
+//                $this->addError('email', 'This email is already in use.');
+//            }
+//        }
+//
+//        // disallow the deletion or role change of user record id 1 (admin user).
+//
+//        /*
+//         * TODO: Check the user roles
+//        if (!$obj->role) {
+//            $this->addError('role', 'The user must have a role assigned for the permission system');
+//        }
+//        */
+//    }
+//}

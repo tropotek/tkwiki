@@ -11,7 +11,7 @@ use Tk\Db\Map\Model;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Page extends Model
+class Page extends Model implements \Tk\ValidInterface
 {
     /**
      * The default tag string used for routes
@@ -243,32 +243,57 @@ class Page extends Model
         return $this->user;
     }
 
-}
-
-class PageValidator extends \App\Helper\Validator
-{
-
     /**
-     * Implement the validating rules to apply.
+     * Validate this object's current state and return an array
+     * with error messages. This will be useful for validating
+     * objects for use within forms.
      *
+     * @return array
      */
-    protected function validate()
+    public function validate()
     {
-        /** @var Page $obj */
-        $obj = $this->getObject();
+        $errors = array();
 
-        if (!$obj->userId) {
-            $this->addError('userId', 'Invalid user ID value.');
+        if (!$this->userId) {
+            $errors['userId'] = 'Invalid user ID value';
         }
-        if (!$obj->title) {
-            $this->addError('title', 'Please enter a title for your page');
+        if (!$this->title) {
+            $errors['title'] = 'Please enter a title for your page';
         }
-        if($obj->id) {
-            $comp = \App\Db\PageMap::create()->findByUrl($obj->url);
-            if ($comp && $comp->id != $obj->id) {
-                $this->addError('url', 'This url already exists, try again.');
+        if($this->id) {
+            $comp = \App\Db\PageMap::create()->findByUrl($this->url);
+            if ($comp && $comp->id != $this->id) {
+                $errors['url'] = 'This url already exists, try again';
             }
         }
-        
+        return $errors;
     }
 }
+
+//class PageValidator extends \App\Helper\Validator
+//{
+//
+//    /**
+//     * Implement the validating rules to apply.
+//     *
+//     */
+//    protected function validate()
+//    {
+//        /** @var Page $obj */
+//        $obj = $this->getObject();
+//
+//        if (!$obj->userId) {
+//            $this->addError('userId', 'Invalid user ID value.');
+//        }
+//        if (!$obj->title) {
+//            $this->addError('title', 'Please enter a title for your page');
+//        }
+//        if($obj->id) {
+//            $comp = \App\Db\PageMap::create()->findByUrl($obj->url);
+//            if ($comp && $comp->id != $obj->id) {
+//                $this->addError('url', 'This url already exists, try again.');
+//            }
+//        }
+//
+//    }
+//}

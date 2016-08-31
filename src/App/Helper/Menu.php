@@ -89,7 +89,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
 
             $content = $page->getContent();
             $event = new \App\Event\ContentEvent($content);
-            $this->dispatcher->dispatch(\App\Events::WIKI_CONTENT_VIEW, $event);
+            $this->dispatcher->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
             
             $row->insertHtml('html', $content->html);
             

@@ -11,7 +11,7 @@ use Tk\Db\Map\Model;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Content extends Model
+class Content extends Model implements \Tk\ValidInterface
 {
     
     /**
@@ -201,30 +201,53 @@ class Content extends Model
         return $d;
     }
 
-
-}
-
-class ContentValidator extends \App\Helper\Validator
-{
-
     /**
      * Implement the validating rules to apply.
      *
      */
-    protected function validate()
+    public function validate()
     {
-        /** @var Content $obj */
-        $obj = $this->getObject();
-
-//        if (!$obj->pageId) {  // Cannot check this here as the page id is not saved
-//            $this->addError('pageId', 'Invalid page ID value.');
+        $errors = array();
+//        if (!$this->pageId) {  // Cannot check this here as the page id is not saved
+//            $errors['pageId'] = 'Invalid page ID value.';
 //        }
-        if (!$obj->userId) {
-            $this->addError('userId', 'Invalid user ID value.');
+        if (!$this->userId) {
+            $errors['userId'] = 'Invalid user ID value.';
         }
-        
-        // TODO: ????
-        
-        
+        return $errors;
     }
+
 }
+
+/**
+ * Class ContentValidator
+ *
+ * @author Michael Mifsud <info@tropotek.com>
+ * @link http://www.tropotek.com/
+ * @license Copyright 2016 Michael Mifsud
+ * @deprecated
+ */
+//class ContentValidator extends \App\Helper\Validator
+//{
+//
+//    /**
+//     * Implement the validating rules to apply.
+//     *
+//     */
+//    protected function validate()
+//    {
+//        /** @var Content $obj */
+//        $obj = $this->getObject();
+//
+////        if (!$obj->pageId) {  // Cannot check this here as the page id is not saved
+////            $this->addError('pageId', 'Invalid page ID value.');
+////        }
+//        if (!$obj->userId) {
+//            $this->addError('userId', 'Invalid user ID value.');
+//        }
+//
+//        // TODO: ????
+//
+//
+//    }
+//}

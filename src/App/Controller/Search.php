@@ -51,24 +51,23 @@ class Search extends Iface
      */
     public function doDefault(Request $request)
     {
-        if ($this->getConfig()->getSession()->has(self::SID)) {
-            $this->terms = $this->getConfig()->getSession()->get(self::SID);
-        }
         if ($request->has('search-terms')) {
             $this->terms = $request->get('search-terms');
             $this->getConfig()->getSession()->set(self::SID, $this->terms);
             \Tk\Uri::create()->delete('search-terms')->redirect();
         }
+        if ($this->getConfig()->getSession()->has(self::SID)) {
+            $this->terms = $this->getConfig()->getSession()->get(self::SID);
+        }
         $tool = \Tk\Db\Tool::create();
-        
         if (preg_match('/user:([0-9a-f]{32})/i', $this->terms, $regs)) {
             $this->user = \App\Db\UserMap::create()->findByHash($regs[1]);
             $this->terms = '';
             // TODO: Test this is correct for public private etc pages...
             if ($this->user) {
-                if ($this->getUser()->getAccess()->isAdmin()) {
+                if ($this->getUser() && $this->getUser()->getAccess()->isAdmin()) {
                     $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [], $tool);
-                } else if ($this->getUser()->getAccess()->isModerator()) {
+                } else if ($this->getUser() && $this->getUser()->getAccess()->isModerator()) {
                     $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC], $tool);
                 } else {
                     $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PUBLIC], $tool);

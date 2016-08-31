@@ -176,8 +176,8 @@ class Edit extends Iface
         \App\Db\PageMap::create()->mapForm($form->getValues(), $this->wPage);
         \App\Db\ContentMap::create()->mapForm($form->getValues(), $this->wContent);
         
-        $form->addFieldErrors(\App\Db\PageValidator::create($this->wPage)->getErrors());
-        $form->addFieldErrors(\App\Db\ContentValidator::create($this->wContent)->getErrors());
+        $form->addFieldErrors($this->wPage->validate());
+        $form->addFieldErrors($this->wContent->validate());
 
         if ($this->wPage->url == \App\Db\Page::getHomeUrl()) {
             $this->wPage->url = 'Home';

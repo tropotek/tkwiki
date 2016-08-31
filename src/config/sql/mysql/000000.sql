@@ -1,21 +1,5 @@
 
 
-
-
--- DROP TABLE IF EXISTS `user`;
--- DROP TABLE IF EXISTS `role`;
--- DROP TABLE IF EXISTS `user_role`;
--- DROP TABLE IF EXISTS `data`;
--- DROP TABLE IF EXISTS `page`;
--- DROP TABLE IF EXISTS `content`;
--- DROP TABLE IF EXISTS `links`;
--- DROP TABLE IF EXISTS `lock`;
--- DROP TABLE IF EXISTS `version`;
-
-
--- --------------------------------------------------------
-
-
 -- --------------------------------------------------------
 -- Table structure for table `user`
 -- --------------------------------------------------------
@@ -50,24 +34,6 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   `user_id` int(10) unsigned NOT NULL,
   `role_id` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB;
-
-
--- --------------------------------------------------------
--- Table structure for table `data`
--- This is the replacement for the `settings` table
--- Use foreign_id = 0 and foreign_key = `system` for site settings (suggestion only)
--- Can be used for other object data using the foreign_id and foreign_key
--- foreign_key can be a class namespace or anything describing the data group
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `data` (
-  `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `foreign_id` INT NOT NULL DEFAULT 0, 
-  `foreign_key` VARCHAR(128) NOT NULL DEFAULT '',
-  `key` VARCHAR(255) NOT NULL DEFAULT '',
-  `value` TEXT,
-  UNIQUE KEY `foreign_fields` (`foreign_id`, `foreign_key`, `key`)
-) ENGINE=InnoDB;
-
 
 -- --------------------------------------------------------
 -- Table structure for table `page`

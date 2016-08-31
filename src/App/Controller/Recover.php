@@ -5,6 +5,7 @@ use Tk\Form;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Request;
+use Tk\Auth\AuthEvents;
 
 
 /**
@@ -82,14 +83,14 @@ class Recover extends Iface
         $newPass = $user->createPassword();
         $user->password = \App\Factory::hashPassword($newPass);
         $user->save();
-        
+
         // Fire the login event to allow developing of misc auth plugins
-        $event = new \App\Event\FormEvent($form);
+        $event = new \Tk\EventDispatcher\Event();
+        $event->set('form', $form);
         $event->set('user', $user);
         $event->set('password', $newPass);
         $event->set('templatePath', $this->getTemplatePath());
-        
-        $this->dispatcher->dispatch('auth.onRecover', $event);
+        $this->dispatcher->dispatch(AuthEvents::RECOVER, $event);
         
         \Ts\Alert::addSuccess('You new access details have been sent to your email address.');
         \Tk\Uri::create()->redirect();

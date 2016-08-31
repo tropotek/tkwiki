@@ -56,23 +56,6 @@ CREATE TABLE IF NOT EXISTS user_role (
 
 
 -- --------------------------------------------------------
--- Table structure for table `data`
--- This is the replacement for the `settings` table
--- Use foreign_id = 0 and foreign_key = `system` for site settings (suggestion only)
--- Can be used for other object data using the foreign_id and foreign_key
--- foreign_key can be a class namespace or anything describing the data group
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS data (
-  id SERIAL PRIMARY KEY,
-  foreign_id INTEGER NOT NULL DEFAULT 0,
-  foreign_key VARCHAR(128) NOT NULL DEFAULT '',
-  key VARCHAR(255),
-  value TEXT,
-  CONSTRAINT foreign_fields UNIQUE (foreign_id, foreign_key, key)
-);
-
-
--- --------------------------------------------------------
 -- Table structure for table `page`
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS page (

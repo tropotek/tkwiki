@@ -133,7 +133,7 @@ class Edit extends Iface
                 $form->addFieldError('confPassword');
             }
         }
-        $form->addFieldErrors(\App\Db\UserValidator::create($this->user)->getErrors());
+        $form->addFieldErrors($this->user->validate());
         
         if ($form->hasErrors()) {
             return;

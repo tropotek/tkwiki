@@ -5,6 +5,7 @@ use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 use Tk\DataMap\Db;
 use Tk\DataMap\Form;
+use \Ts\Db\Mapper;
 
 /**
  * Class UserMap
@@ -35,7 +36,7 @@ class UserMap extends Mapper
             //$this->dbMap->addProperty(new Db\Text('role'));
             $this->dbMap->addProperty(new Db\Boolean('active'));
             $this->dbMap->addProperty(new Db\Text('hash'));
-            //$this->dbMap->addProperty(new Db\Date('lastLogin', 'last_login'));
+            $this->dbMap->addProperty(new Db\Date('lastLogin', 'last_login'));
             $this->dbMap->addProperty(new Db\Date('modified'));
             $this->dbMap->addProperty(new Db\Date('created'));
 

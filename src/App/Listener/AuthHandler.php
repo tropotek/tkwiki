@@ -5,6 +5,7 @@ namespace App\Listener;
 use Tk\EventDispatcher\SubscriberInterface;
 use Tk\Kernel\KernelEvents;
 use Tk\Event\ControllerEvent;
+use Tk\Event\GetResponseEvent;
 use Tk\Event\AuthEvent;
 use Tk\Auth\AuthEvents;
 

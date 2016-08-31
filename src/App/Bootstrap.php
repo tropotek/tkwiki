@@ -60,7 +60,6 @@ class Bootstrap
             ini_set('date.timezone', $config->get('date.timezone'));
         }
 
-        
         /**
          * This makes our life easier when dealing with paths. Everything is relative
          * to the application root now.

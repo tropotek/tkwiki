@@ -43,7 +43,7 @@ class WikiHandler implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            \App\Events::WIKI_CONTENT_VIEW => ['contentPreRender', 10]
+            \App\WikiEvents::WIKI_CONTENT_VIEW => ['contentPreRender', 10]
         );
     }
 

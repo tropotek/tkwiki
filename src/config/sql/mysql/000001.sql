@@ -26,8 +26,6 @@ VALUES
 ;
 
 INSERT INTO `data` (`foreign_id`, `foreign_key`, `key`, `value`) VALUES
-  (0, 'system', 'site.title', 'TkWiki II'),
-  (0, 'system', 'site.email', 'tkwiki@example.com'),
   (0, 'system', 'site.meta.keywords', ''),
   (0, 'system', 'site.meta.description', ''),
   (0, 'system', 'site.global.js', ''),

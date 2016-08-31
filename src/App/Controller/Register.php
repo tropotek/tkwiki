@@ -1,11 +1,11 @@
 <?php
 namespace App\Controller;
 
-use App\Alert;
 use Tk\Form;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Request;
+use Tk\Auth\AuthEvents;
 
 
 /**
@@ -51,23 +51,18 @@ class Register extends Iface
     {
         if (!$this->getConfig()->get('site.user.registration')) {
             \Ts\Alert::addError('User registration has been disabled on this site.');
-            \Tk\Uri::create('/');
+            \Tk\Uri::create('/')->redirect();
         }
-        
-        
-        
         if ($request->has('h')) {
             $this->doConfirmation($request);
         }
         if ($this->getUser()) {
-            // Todo: Redirect to the users homepage
             \Tk\Uri::create($this->getUser()->getHomeUrl())->redirect();
         }
 
         $this->user = new \App\Db\User();
         $this->user->role = \App\Auth\Access::ROLE_USER;
-        
-        
+
         $this->form = new Form('registerForm', $request);
 
         $this->form->addField(new Field\Input('name'));
@@ -77,7 +72,7 @@ class Register extends Iface
         $this->form->addField(new Field\Password('passwordConf'));
         $this->form->addField(new Event\Button('login', array($this, 'doRegister')));
 
-        $this->form->load(\App\Db\UserMap::unmapForm($this->user));
+        $this->form->load(\App\Db\UserMap::create()->unmapForm($this->user));
         
         // Find and Fire submit event
         $this->form->execute();
@@ -94,7 +89,7 @@ class Register extends Iface
      */
     public function doRegister($form)
     {
-        \App\Db\UserMap::mapForm($form->getValues(), $this->user);
+        \App\Db\UserMap::create()->mapForm($form->getValues(), $this->user);
 
         
         if (!$this->form->getFieldValue('password')) {
@@ -125,13 +120,13 @@ class Register extends Iface
         $this->user->password = \App\Factory::hashPassword($this->user->password);
         
         $this->user->save();
-        
+
         // Fire the login event to allow developing of misc auth plugins
-        $event = new \App\Event\FormEvent($form);
+        $event = new \Tk\EventDispatcher\Event();
+        $event->set('form', $form);
         $event->set('user', $this->user);
         $event->set('templatePath', $this->getTemplatePath());
-        $this->dispatcher->dispatch('auth.onRegister', $event);
-
+        $this->dispatcher->dispatch(AuthEvents::REGISTER, $event);
         
         // Redirect with message to check their email
         \Ts\Alert::addSuccess('Your New Account Has Been Created. Check your email to activate the account.');
@@ -176,7 +171,7 @@ class Register extends Iface
     {
         $template = $this->getTemplate();
 
-        if (\Tk\Config::getInstance()->getSession()->getOnce('h')) {
+        if ($this->getConfig()->getSession()->getOnce('h')) {
             $template->setChoice('success');
             
         } else {

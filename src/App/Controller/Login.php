@@ -7,7 +7,8 @@ use Tk\Form;
 use Tk\Form\Field;
 use Tk\Form\Event;
 use Tk\Auth;
-use Tk\Auth\Result;
+use Tk\Auth\AuthEvents;
+use Tk\Event\AuthEvent;
 
 
 /**
@@ -64,6 +65,49 @@ class Login extends Iface
     }
 
     /**
+     * doLogin()
+     *
+     * @param \Tk\Form $form
+     * @throws \Tk\Exception
+     */
+    public function doLogin($form)
+    {
+        /** @var Auth $auth */
+        $auth = \App\Factory::getAuth();
+
+        if (!$form->getFieldValue('username') || !preg_match('/[a-z0-9_ -]{4,32}/i', $form->getFieldValue('username'))) {
+            $form->addFieldError('username', 'Please enter a valid username');
+        }
+        if (!$form->getFieldValue('password') || !preg_match('/[a-z0-9_ -]{4,32}/i', $form->getFieldValue('password'))) {
+            $form->addFieldError('password', 'Please enter a valid password');
+        }
+
+        if ($form->hasErrors()) {
+            return;
+        }
+
+        try {
+            // Fire the login event to allow developing of misc auth plugins
+            $event = new AuthEvent($auth, $form->getValues());
+            $this->dispatcher->dispatch(AuthEvents::LOGIN, $event);
+            // Use the event to process the login like below....
+            $result = $event->getResult();
+            if (!$result) {
+                $form->addError('Invalid username or password');
+                return;
+            }
+            if (!$result->isValid()) {
+                $form->addError( implode("<br/>\n", $result->getMessages()) );
+                return;
+            }
+            $this->dispatcher->dispatch(AuthEvents::LOGIN_SUCCESS, $event);
+        } catch (\Exception $e) {
+            $form->addError($e->getMessage());
+        }
+
+    }
+
+    /**
      * show()
      *
      * @return \App\Page\Iface
@@ -83,49 +127,6 @@ class Login extends Iface
         return $this->getPage()->setPageContent($template);
     }
 
-
-    /**
-     * doLogin()
-     *
-     * @param \Tk\Form $form
-     * @throws \Tk\Exception
-     */
-    public function doLogin($form)
-    {
-        /** @var Auth $auth */
-        $auth = \App\Factory::getAuth();
-
-        if (!$form->getFieldValue('username') || !preg_match('/[a-z0-9_ -]{4,32}/i', $form->getFieldValue('username'))) {
-            $form->addFieldError('username', 'Please enter a valid username');
-        }
-        if (!$form->getFieldValue('password') || !preg_match('/[a-z0-9_ -]{4,32}/i', $form->getFieldValue('password'))) {
-            $form->addFieldError('password', 'Please enter a valid password');
-        }
-        
-        if ($form->hasErrors()) {
-            return;
-        }
-
-        // Fire the login event to allow developing of misc auth plugins
-        $event = new \App\Event\AuthEvent($auth);
-        $event->replace($form->getValues());
-        $this->dispatcher->dispatch('auth.onLogin', $event);
-        
-        // Use the event to process the login like below....
-        $result = $event->getResult();
-        
-        if (!$result) {
-            $form->addError('Invalid login details');
-            //$form->addError('No valid authentication result received.');
-            return;
-        }
-        if ($result->getCode() == Result::SUCCESS) {
-            // Redirect based on role
-            \Tk\Uri::create($this->getUser()->getHomeUrl())->redirect();
-        }
-        $form->addError( implode("<br/>\n", $result->getMessages()) );
-        return;
-    }
 
 
     /**

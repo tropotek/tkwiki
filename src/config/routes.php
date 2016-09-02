@@ -52,6 +52,8 @@ $routes->add('pageHistory', new \Tk\Routing\Route('/history.html', 'App\Controll
 $routes->add('orphaned', new \Tk\Routing\Route('/orphaned.html', 'App\Controller\Page\Orphaned::doDefault'));
 $routes->add('search', new \Tk\Routing\Route('/search.html', 'App\Controller\Search::doDefault'));
 
+$routes->add('admin-plugin-manager', new \Tk\Routing\Route('/plugins.html', 'App\Controller\Admin\PluginManager::doDefault'));
+$routes->add('dev-events', new \Tk\Routing\Route('/dev/events.html', 'App\Controller\Admin\Dev\Events::doDefault'));
 
 // DO NOT MOVE.... CatchAll must be the last route.
 $routes->add('pageCatchAll', new \Tk\Routing\Route('/{pageUrl}', 'App\Controller\Page\View::doDefault', array('pageUrl' => \App\Db\Page::DEFAULT_TAG)));

@@ -1,7 +1,7 @@
 {
     "name": "ttek/tkwiki",
     "type": "project",
-    "description": "The tkWiki re-borne. V2 has a responsive template, new base lib, php 5.4+ optimized, and uses composer to install.",
+    "description": "The tkWiki re-borne. V2 has a responsive HTML5 template, new base lib, php 5.4+ optimized, and uses composer to install.",
     "keywords":  [
         "tropotek"
     ],

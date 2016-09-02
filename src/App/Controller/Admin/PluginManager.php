@@ -64,7 +64,7 @@ class PluginManager extends Iface
 
         $this->form = new Form('formEdit');
         $this->form->addField(new Field\File('package', $request))->setRequired(true);
-        $this->form->addField(new Event\Button('upload', array($this, 'doUpload')))->addCssClass('btn-primary');
+        $this->form->addField(new Event\Button('upload', array($this, 'doUpload'), 'fa fa-upload'))->addCssClass('btn-primary');
 
         $this->form->execute();
 

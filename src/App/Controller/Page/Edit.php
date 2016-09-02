@@ -51,7 +51,7 @@ class Edit extends Iface
      */
     public function __construct()
     {
-        parent::__construct('', array('edit', 'moderator', 'admin'));
+        parent::__construct('');
     }
 
     /**
@@ -69,7 +69,7 @@ class Edit extends Iface
         $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
 
         // Create a new page
-        if (!$this->wPage && $request->has('u') && $this->getUser()->getAccess()->canCreate()) {
+        if (!$this->wPage && $request->has('u') && $this->getUser()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
             $this->wPage->userId = $this->getUser()->id;
             $this->wPage->url = $request->get('u');
@@ -79,7 +79,7 @@ class Edit extends Iface
             $this->wContent->userId = $this->getUser()->id;
         }
         // Create a new Nav page
-        if ($request->has('type') && $this->getUser()->getAccess()->canCreate()) {
+        if ($request->has('type') && $this->getUser()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
             $this->wPage->type = \App\Db\Page::TYPE_NAV;
             $this->wPage->userId = $this->getUser()->id;
@@ -94,7 +94,7 @@ class Edit extends Iface
         
         // check if the user can edit the page
         $error = false;
-        if (!$this->getUser()->getAccess()->canEdit($this->wPage)) {
+        if (!$this->getUser()->getAcl()->canEdit($this->wPage)) {
             \Ts\Alert::addWarning('You do not have permission to edit this page.');
             $error = true;
         }
@@ -216,7 +216,7 @@ class Edit extends Iface
     public function doDelete(Request $request)
     {
         $page = \App\Db\PageMap::create()->find($request->get('del'));
-        if (!$page || !$this->getUser() || !$this->getUser()->getAccess()->canDelete($page)) {
+        if (!$page || !$this->getUser() || !$this->getUser()->getAcl()->canDelete($page)) {
             \Ts\Alert::addWarning('You do not have the permissions to delete this page.');
             return;
         }
@@ -249,7 +249,7 @@ class Edit extends Iface
      * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
      * 
      * @param Request $request
-     * @return \App\Page\PublicPage
+     * @return \App\Page\Page
      */
     public function show(Request $request)
     {

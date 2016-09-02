@@ -57,7 +57,7 @@ class Page extends \App\Controller\Iface
         $pageList = \App\Db\PageMap::create()->findFiltered($filter, $tool);
         $list = array();
         foreach($pageList as $page) {
-            if (!$this->getUser()->getAccess()->canView($page)) continue;
+            if (!$this->getUser()->getAcl()->canView($page)) continue;
             $page->modified = $page->modified->format(\Tk\Date::SHORT_DATETIME);
             $page->created = $page->created->format(\Tk\Date::SHORT_DATETIME);
             $list[] = $page;

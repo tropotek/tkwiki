@@ -12,19 +12,9 @@ abstract class Iface extends \Dom\Renderer\Renderer
 {
     
     /**
-     * @var array
-     */
-    protected $access = array();
-
-    /**
      * @var string
      */
     protected $pageTitle = '';
-
-    /**
-     * @var string
-     */
-    protected $templatePath = '';
     
     /**
      * @var \App\Page\Iface
@@ -34,13 +24,11 @@ abstract class Iface extends \Dom\Renderer\Renderer
 
     /**
      * @param string $pageTitle
-     * @param string $access
      */
-    public function __construct($pageTitle = '', $access = '')
+    public function __construct($pageTitle = '')
     {
-        $this->setAccess($access);
         $this->setPageTitle($pageTitle);
-        $this->templatePath = $this->getConfig()->getSitePath() . $this->getConfig()->get('template.path');
+        $this->getPage();
     }
     
     /**
@@ -50,22 +38,11 @@ abstract class Iface extends \Dom\Renderer\Renderer
      */
     public function getPage()
     {
+        //$pageAccess = $this->getConfig()->getRequest()->getAttribute('access');
         if (!$this->page) {
-            $this->page = new \App\Page\PublicPage($this);
+            $this->page = new \App\Page\Page($this);
         }
         return $this->page;
-    }
-
-    /**
-     * Set the pagefor this controller
-     * 
-     * @param $page
-     * @return $this
-     */
-    public function setPage($page)
-    {
-        $this->page = $page;
-        return $this;
     }
     
     /**
@@ -74,7 +51,7 @@ abstract class Iface extends \Dom\Renderer\Renderer
      */
     public function getTemplatePath()
     {
-        return $this->templatePath;
+        return $this->getConfig()->getTemplatePath();
     }
 
     /**
@@ -115,31 +92,6 @@ abstract class Iface extends \Dom\Renderer\Renderer
     public function getUser()
     {
         return $this->getConfig()->getUser();
-    }
-    
-    /**
-     * Add a role(s) that can access this page
-     *
-     * @param string|array $role
-     * @return $this
-     */
-    public function setAccess($role)
-    {
-        if (!$role) return $this;
-        if (!is_array($role)) $role = array($role);
-        $this->access = $role;
-        return $this;
-    }
-
-    /**
-     * Get the access details of this page.
-     * Will return an array of role names that can be checked against the logged in user
-     * 
-     * @return array
-     */
-    public function getAccess()
-    {
-        return $this->access;
     }
     
 

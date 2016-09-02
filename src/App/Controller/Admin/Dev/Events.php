@@ -25,7 +25,7 @@ class Events extends Iface
      */
     public function __construct()
     {
-        parent::__construct('Available Events', \App\Auth\Access::ROLE_ADMIN);
+        parent::__construct('Available Events');
     }
     
     /**

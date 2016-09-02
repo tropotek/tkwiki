@@ -47,7 +47,7 @@ class Search extends Iface
      * doDefault
      *
      * @param Request $request
-     * @return \App\Page\PublicPage
+     * @return \App\Page\Page
      */
     public function doDefault(Request $request)
     {
@@ -65,9 +65,9 @@ class Search extends Iface
             $this->terms = '';
             // TODO: Test this is correct for public private etc pages...
             if ($this->user) {
-                if ($this->getUser() && $this->getUser()->getAccess()->isAdmin()) {
+                if ($this->getUser() && $this->getUser()->getAcl()->isAdmin()) {
                     $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [], $tool);
-                } else if ($this->getUser() && $this->getUser()->getAccess()->isModerator()) {
+                } else if ($this->getUser() && $this->getUser()->getAcl()->isModerator()) {
                     $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC], $tool);
                 } else {
                     $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PUBLIC], $tool);
@@ -97,7 +97,7 @@ class Search extends Iface
     /**
      * show()
      *
-     * @return \App\Page\PublicPage
+     * @return \App\Page\Page
      */
     public function show()
     {
@@ -107,7 +107,7 @@ class Search extends Iface
             $searchForm->getFormElement('search-terms')->setValue($this->terms);
         }
         
-        $access = \App\Auth\Access::create($this->getUser());
+        $access = \App\Auth\Acl::create($this->getUser());
         $i = 0;
         /** @var \App\Db\Page $page */
         foreach($this->list as $page) {

@@ -10,7 +10,7 @@ use Tk\Request;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class PublicPage extends Iface
+class Page extends Iface
 {
 
     /**
@@ -19,9 +19,9 @@ class PublicPage extends Iface
      * @param \App\Controller\Iface $controller
      * @param string $templateFile
      */
-    public function __construct(\App\Controller\Iface $controller, $templateFile = '')
+    public function __construct(\App\Controller\Iface $controller)
     {
-        parent::__construct($controller, $templateFile);
+        parent::__construct($controller);
     }
 
     /**
@@ -38,7 +38,7 @@ class PublicPage extends Iface
             $template->setAttr('myPages', 'href', $url);
             $template->insertText('username', $this->getUser()->name);
             
-            if ($this->getUser()->getAccess()->isAdmin()) {
+            if ($this->getUser()->getAcl()->isAdmin()) {
                 $template->setChoice('admin');
             }
         }

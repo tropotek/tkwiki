@@ -14,7 +14,7 @@ include_once(dirname(__FILE__) . '/session.php');
 include_once(dirname(__FILE__) . '/routes.php');
 
 // Template folders for pages
-$config['template.path'] = '/html';
+//$config['system.template.path'] = '/html';
 
 
 // -- AUTH CONFIG --

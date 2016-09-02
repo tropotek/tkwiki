@@ -27,7 +27,7 @@ class Manager extends Iface
      */
     public function __construct()
     {
-        parent::__construct('User Manager', \App\Auth\Access::ROLE_ADMIN);
+        parent::__construct('User Manager');
     }
 
     /**

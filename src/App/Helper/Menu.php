@@ -57,7 +57,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
                 $this->list[] = $page;
                 continue;
             }
-            if ($this->user && $this->user->getAccess()->canView($page)) {
+            if ($this->user && $this->user->getAcl()->canView($page)) {
                 $this->list[] = $page;
                 continue;
             }
@@ -75,7 +75,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     {
         $template = $this->getTemplate();
         
-        if ($this->user && $this->user->getAccess()->canCreate()) {
+        if ($this->user && $this->user->getAcl()->canCreate()) {
             $template->setChoice('canCreate');
             $url = \Tk\Uri::create('/edit.html')->set('type', \App\Db\Page::TYPE_NAV);
             $template->setAttr('create', 'href', $url);
@@ -83,7 +83,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
         
         /** @var \App\Db\Page $page */
         foreach($this->list as $page) {
-            if (!\App\Auth\Access::create($this->user)->canView($page)) return;
+            if (!\App\Auth\Acl::create($this->user)->canView($page)) return;
             $row = $template->getRepeat('row');
             $row->insertText('title', $page->title);
 
@@ -93,7 +93,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
             
             $row->insertHtml('html', $content->html);
             
-            if ($this->user && $this->user->getAccess()->canEdit($page)) {
+            if ($this->user && $this->user->getAcl()->canEdit($page)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $page->id);
                 $row->setAttr('edit', 'href', $url);
                 $row->setChoice('edit');

@@ -26,7 +26,7 @@ class StaticPage extends Iface
      */
     public function doDefault(Request $request)
     {
-        $page = new \App\Page\PublicPage($this, $request->getAttribute('_staticPath'));
+        $page = new \App\Page\Page($this, $request->getAttribute('_staticPath'));
         
         return $page;
     }

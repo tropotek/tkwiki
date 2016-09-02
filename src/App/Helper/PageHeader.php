@@ -72,7 +72,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
                 $template->setChoice('viewRevision');
                 $title .= ' <small>(Revision '.$this->wContent->id.')</small>';
                 $template->addClass('content', 'revision');
-                if ($this->user->getAccess()->canEdit($this->wPage)) {
+                if ($this->user->getAcl()->canEdit($this->wPage)) {
                     $template->setChoice('revert');
                 }
             } else {
@@ -84,12 +84,12 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         $template->appendHtml('title', $title);
         
         if ($this->user) {
-            if ($this->user->getAccess()->canEdit($this->wPage)) {
+            if ($this->user->getAcl()->canEdit($this->wPage)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id);
                 $template->setAttr('edit', 'href', $url);
                 $template->setChoice('canEdit');
             }
-            if ($this->user->getAccess()->canDelete($this->wPage)) {
+            if ($this->user->getAcl()->canDelete($this->wPage)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->set('del', $this->wPage->id);
                 $template->setAttr('delete', 'href', $url);
                 $template->setChoice('canDelete');

@@ -33,7 +33,7 @@ class History extends Iface
      */
     public function __construct()
     {
-        parent::__construct('', array('edit', 'moderator', 'admin'));
+        parent::__construct('');
     }
 
     /**
@@ -47,15 +47,14 @@ class History extends Iface
             $this->doRevert($request);
         }
         
-        
         $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
         if (!$this->wPage) {
             throw new \Tk\HttpException(404, 'Page not found');
         }
 
-        if (!$this->getUser()->getAccess()->canEdit($this->wPage)) {
+        if (!$this->getUser()->getAcl()->canEdit($this->wPage)) {
             \Ts\Alert::addWarning('You do not have permission to edit this page.');
-            $error = true;
+            \Tk\Url::create('/')->redirect();
         }
         
         
@@ -102,7 +101,7 @@ class History extends Iface
      * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
      * 
      * @param Request $request
-     * @return \App\Page\PublicPage
+     * @return \App\Page\Page
      * @todo Look at implementing a cache for page views.
      */
     public function show(Request $request)

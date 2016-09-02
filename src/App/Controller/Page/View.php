@@ -49,7 +49,7 @@ class View extends Iface
     {
         $this->wPage = \App\Db\Page::findPage($pageUrl);
         if (!$this->wPage) {
-            if ($this->getUser() && $this->getUser()->getAccess()->canCreate()) {
+            if ($this->getUser() && $this->getUser()->getAcl()->canCreate()) {
                 // Create a redirect to the page edit controller
                 \Tk\Uri::create('/edit.html')->set('u', $pageUrl)->redirect();
             }
@@ -77,7 +77,7 @@ class View extends Iface
         if (!$this->getUser()) {
             return ($this->wPage->permission == \App\Db\Page::PERMISSION_PUBLIC);
         }
-        return $this->getUser()->getAccess()->canView($this->wPage);
+        return $this->getUser()->getAcl()->canView($this->wPage);
     }
 
     /**
@@ -104,7 +104,7 @@ class View extends Iface
      * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
      * 
      * @param Request $request
-     * @return \App\Page\PublicPage
+     * @return \App\Page\Page
      * @todo Look at implementing a cache for page views.
      */
     public function show(Request $request)

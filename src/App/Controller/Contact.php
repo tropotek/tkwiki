@@ -34,7 +34,7 @@ class Contact extends Iface
      * doDefault
      *
      * @param Request $request
-     * @return \App\Page\PublicPage
+     * @return \App\Page\Page
      */
     public function doDefault(Request $request)
     {
@@ -62,7 +62,7 @@ class Contact extends Iface
     /**
      * show()
      *
-     * @return \App\Page\PublicPage
+     * @return \App\Page\Page
      */
     public function show()
     {

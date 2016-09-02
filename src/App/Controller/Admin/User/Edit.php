@@ -98,7 +98,7 @@ class Edit extends Iface
 
             if (!$this->isProfile()) {
                 $selected = array();
-                foreach($this->user->getAccess()->getRoles() as $obj) {
+                foreach($this->user->getAcl()->getRoles() as $obj) {
                     $selected[] = $obj->id;
                 }
                 $this->form->setFieldValue('role', $selected);

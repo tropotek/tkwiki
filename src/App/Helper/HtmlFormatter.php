@@ -160,7 +160,7 @@ class HtmlFormatter
                 if ($page) {
                     $css = '';
                     if ($this->isView) {
-                        if (\App\Auth\Access::create(\App\Factory::getConfig()->getUser())->canView($page)) {
+                        if (\App\Auth\Acl::create(\App\Factory::getConfig()->getUser())->canView($page)) {
                             $css = ' wiki-canView';
                         } else {
                             $css = ' wiki-notView disabled';

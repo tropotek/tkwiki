@@ -16,11 +16,6 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
      */
     protected $controller = null;
 
-    /**
-     * @var string
-     */
-    protected $templateFile = '';
-
 
     /**
      * Iface constructor.
@@ -28,13 +23,9 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
      * @param \App\Controller\Iface $controller
      * @param string $templateFile
      */
-    public function __construct(\App\Controller\Iface $controller, $templateFile = '')
+    public function __construct(\App\Controller\Iface $controller)
     {
         $this->controller = $controller;
-        if (!$templateFile) {
-            $templateFile = $this->getTemplatePath() . '/main.xtpl';
-        }
-        $this->templateFile = $templateFile;
         $this->show();
     }
 
@@ -69,7 +60,7 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
             $template->setTitleText(trim($template->getTitleText() . ' - ' . $this->getConfig()->get('site.title'), '- '));
         }
 
-        if ($this->controller->getUser()) {
+        if ($this->getUser()) {
             $template->setChoice('logout');
         } else {
             $template->setChoice('login');
@@ -156,31 +147,13 @@ JS;
         return $this;
     }
     
-    
     /**
-     * @return string
-     */
-    public function getTemplateFile()
-    {
-        return $this->templateFile;
-    }
-
-    /**
-     * @param string $templateFile
-     */
-    public function setTemplateFile($templateFile)
-    {
-        $this->templateFile = $templateFile;
-    }
-    
-    /**
-     * Get the template path location
-     * 
+     *
      * @return string
      */
     public function getTemplatePath()
     {
-        return $this->controller->getTemplatePath();
+        return $this->getConfig()->getTemplatePath();
     }
 
     /**
@@ -211,6 +184,7 @@ JS;
         return \Tk\Config::getInstance();
     }
 
+
     /**
      * DomTemplate magic method
      *
@@ -218,7 +192,8 @@ JS;
      */
     public function __makeTemplate()
     {
-        return \Dom\Loader::loadFile($this->getTemplateFile());
+        $tplFile =  $this->getConfig()->getTemplatePath().'/main.xtpl';
+        return \Dom\Loader::loadFile($tplFile);
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 namespace App\Db;
 
-use App\Auth\Access;
+use App\Auth\Acl;
 use Tk\Db\Map\Model;
 
 /**
@@ -72,9 +72,9 @@ class User extends Model implements \Tk\ValidInterface
     public $ip = '';
 
     /**
-     * @var Access
+     * @var Acl
      */
-    private $access = null;
+    private $acl = null;
 
 
     /**
@@ -142,14 +142,23 @@ class User extends Model implements \Tk\ValidInterface
 
     /**
      * 
-     * @return Access
+     * @return Acl
      */
-    public function getAccess()
+    public function getAcl()
     {
-        if (!$this->access) {
-            $this->access = Access::create($this);
+        if (!$this->acl) {
+            $this->acl = Acl::create($this);
         }
-        return $this->access;
+        return $this->acl;
+    }
+
+    /**
+     * @param $role
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        return $this->getAcl()->hasRole($role);
     }
 
     /**

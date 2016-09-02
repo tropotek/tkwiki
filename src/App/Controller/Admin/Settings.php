@@ -33,7 +33,7 @@ class Settings extends Iface
      */
     public function __construct()
     {
-        parent::__construct('WIKI Settings', \App\Auth\Access::ROLE_ADMIN);
+        parent::__construct('WIKI Settings');
         $this->data = \Ts\Db\Data::create();
     }
 

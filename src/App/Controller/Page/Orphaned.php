@@ -28,7 +28,8 @@ class Orphaned extends Iface
      */
     public function __construct()
     {
-        parent::__construct('Orphaned Page Manager', ['admin', 'moderator']);
+        //parent::__construct('Orphaned Page Manager', ['admin', 'moderator']);
+        parent::__construct('Orphaned Page Manager');
     }
 
 

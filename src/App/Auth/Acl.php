@@ -15,7 +15,7 @@ use App\Db\PageMap;
  * @todo This does not feel like the best way to manage the page permissions,
  *       implement something else if you get a brainwave,,,,
  */
-class Access 
+class Acl 
 {
 
     const ROLE_ADMIN = 'admin';
@@ -51,7 +51,7 @@ class Access
      *   - Access::create($user)->isAdmin();
      * 
      * @param \App\Db\User $user
-     * @return Access
+     * @return Acl
      */
     static function create($user)
     {

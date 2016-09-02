@@ -13,13 +13,8 @@ $config = \Tk\Config::getInstance();
 include_once(dirname(__FILE__) . '/session.php');
 include_once(dirname(__FILE__) . '/routes.php');
 
-// Template folders for pages
-//$config['system.template.path'] = '/html';
-
 
 // -- AUTH CONFIG --
-
-
 // \Tk\Auth\Adapter\DbTable
 $config['system.auth.dbtable.tableName'] = 'user';
 $config['system.auth.dbtable.usernameColumn'] = 'username';
@@ -27,13 +22,17 @@ $config['system.auth.dbtable.passwordColumn'] = 'password';
 $config['system.auth.dbtable.activeColumn'] = 'active';
 
 $config['system.auth.adapters'] = array(
-    'Trap' => '\Tk\Auth\Adapter\Trapdoor',
+    //'Trap' => '\Tk\Auth\Adapter\Trapdoor',
     'DbTable' => '\Tk\Auth\Adapter\DbTable',
     //'LDAP' => '\Tk\Auth\Adapter\Ldap'     // TODO: Need to create a user if this method is used...
 );
 
-
+// Timezone config
 $config['date.timezone'] = 'Australia/Victoria';
+
+
+
+
 
 
 

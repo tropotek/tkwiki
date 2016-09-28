@@ -70,6 +70,7 @@ jQuery(function ($) {
           while(url.match(reg)) {
             url = url.replace(reg, '/');
           }
+          console.log(url);
 
           // Make file info
           info = file.name + ' (' + elf.formatSize(file.size) + ')';

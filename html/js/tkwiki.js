@@ -69,7 +69,6 @@ jQuery(function ($) {
           reg = /\/[^/]+?\/\.\.\//;
           while(url.match(reg)) {
             url = url.replace(reg, '/');
-            url = url.replace(/\/\//, '/');
           }
 
           // Make file info
@@ -184,7 +183,8 @@ jQuery(function ($) {
         ] },
 
         { title: 'Inline', items: [
-          {title: 'Code', inline: 'code', wrapper: true }
+          {title: 'Code', inline: 'code', wrapper: true },
+          { title: 'small', block: 'small' }
         ] }
       ]
 

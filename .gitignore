@@ -1,10 +1,10 @@
 /data
 /assets
 /vendor
-/composer.lock
-/src/config/config.php
 /_notes
 /_db
+/composer.lock
+/src/config/config.php
 /.htaccess
 /.idea
 /.directory

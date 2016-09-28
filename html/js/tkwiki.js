@@ -70,8 +70,8 @@ jQuery(function ($) {
           while(url.match(reg)) {
             url = url.replace(reg, '/');
           }
+          // Remove double // from path
           url = url.replace('//', '/');
-          console.log(url);
 
           // Make file info
           info = file.name + ' (' + elf.formatSize(file.size) + ')';

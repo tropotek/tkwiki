@@ -69,8 +69,8 @@ jQuery(function ($) {
           reg = /\/[^/]+?\/\.\.\//;
           while(url.match(reg)) {
             url = url.replace(reg, '/');
-            url = url.replace('//', '/');
           }
+          url = url.replace('//', '/');
           console.log(url);
 
           // Make file info

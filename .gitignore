@@ -1,14 +1,14 @@
-./.htaccess
-.idea
-.directory
+/.htaccess
+/.idea
+/.directory
 *.swp
 *.bak
 *.iml
-./data
-./assets
-./vendor
-composer.lock
-./src/config/config.php
-./_notes
-./_db
+/data
+/assets
+/vendor
+/composer.lock
+/src/config/config.php
+/_notes
+/_db
 

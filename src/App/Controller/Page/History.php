@@ -211,9 +211,10 @@ class ActionCell extends \Tk\Table\Cell\Iface
 
     /**
      * @param mixed $obj
+     * @param null $rowIdx
      * @return string
      */
-    public function getCellHtml($obj)
+    public function getCellHtml($obj, $rowIdx = null)
     {
         $html = array();
 

@@ -90,19 +90,18 @@ class Edit extends Iface
         
         if (!$this->isProfile()) {
             $roles = \App\Db\RoleMap::create()->findAll(\Tk\Db\Tool::create('a.id'))->toArray();
+
             $list = new ArrayObjectIterator($roles);
             $f = $this->form->addField(new Field\CheckboxGroup('role', $list))->setNotes('Select the access level for this user')->setRequired(true)->setTabGroup('Roles');
-            if ($this->user->id == 1) {
+            if ($this->user->id == 1) {         // Disable for admin user.... Has all roles and cannot be revoked
                 $f->setAttr('disabled');
             }
 
-            if (!$this->isProfile()) {
-                $selected = array();
-                foreach($this->user->getAcl()->getRoles() as $obj) {
-                    $selected[] = $obj->id;
-                }
-                $this->form->setFieldValue('role', $selected);
+            $selected = array();
+            foreach($this->user->getAcl()->getRoles() as $obj) {
+                $selected[] = $obj->id;
             }
+            $this->form->setFieldValue('role', $selected);
 
         }
 

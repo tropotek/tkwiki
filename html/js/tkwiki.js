@@ -7,7 +7,9 @@
 jQuery(function ($) {
 
   $('[data-toggle="tooltip"]').tooltip();
-  
+
+  $('input[type=file].fileinput').fileinput({dataUrl: config.dataUrl});
+
   /* -- TOC Menu -- */
   // var menu = $('.wiki-content');
   // if (menu.length && menu.toc) {

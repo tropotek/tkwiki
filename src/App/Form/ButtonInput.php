@@ -86,7 +86,7 @@ class ButtonInput extends \Tk\Form\Field\Input
     {
         $xhtml = <<<XHTML
 <div class="input-group input-group-sm" var="group">
-  <input type="text" var="element" />
+  <input type="text" var="element" class="form-control" />
   <div class="input-group-btn" choice="btn">
     <a href="#" class="btn btn-default" var="btn"><i var="icon"></i></a>
   </div>

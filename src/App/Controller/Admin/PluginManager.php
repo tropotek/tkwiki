@@ -63,7 +63,7 @@ class PluginManager extends Iface
         }
 
         $this->form = new Form('formEdit');
-        $this->form->addField(new Field\File('package', $request))->setRequired(true);
+        $this->form->addField(new Field\File('package', $request))->addCssClass('fileinput')->setRequired(true)->setAttr('accept', '.zip,.tgz,.gz');
         $this->form->addField(new Event\Button('upload', array($this, 'doUpload'), 'fa fa-upload'))->addCssClass('btn-primary');
 
         $this->form->execute();
@@ -123,7 +123,7 @@ class PluginManager extends Iface
         }
         $this->pluginFactory->activatePlugin($pluginName);
         \Ts\Alert::addSuccess('Plugin `' . $pluginName . '` activated successfully');
-        \Tk\Url::create()->reset()->redirect();
+        \Tk\Uri::create()->reset()->redirect();
     }
 
     protected function doDeactivatePlugin(Request $request)
@@ -136,7 +136,7 @@ class PluginManager extends Iface
         $this->pluginFactory->deactivatePlugin($pluginName);
         \Ts\Alert::addSuccess('Plugin `' . $pluginName . '` deactivated successfully');
 
-        \Tk\Url::create()->reset()->redirect();
+        \Tk\Uri::create()->reset()->redirect();
     }
 
     protected function doDeletePlugin(Request $request)
@@ -144,21 +144,21 @@ class PluginManager extends Iface
         $pluginName = strip_tags(trim($request->get('del')));
         if (!$pluginName) {
             \Ts\Alert::addWarning('Cannot locate Plugin: ' . $pluginName);
-            \Tk\Url::create()->reset()->redirect();
+            \Tk\Uri::create()->reset()->redirect();
             return;
         }
         $pluginPath = $this->pluginFactory->makePluginPath($pluginName);
 
         if (!is_dir($pluginPath)) {
             \Ts\Alert::addWarning('Plugin `' . $pluginName . '` path not found');
-            \Tk\Url::create()->reset()->redirect();
+            \Tk\Uri::create()->reset()->redirect();
             return;
         }
 
         // So when we install plugins the archive must be left in the main plugin folder
         if ((!is_file($pluginPath.'.zip') && !is_file($pluginPath.'.tar.gz') && !is_file($pluginPath.'.tgz'))) {
             \Ts\Alert::addWarning('Plugin is protected and must be deleted manually.');
-            \Tk\Url::create()->reset()->redirect();
+            \Tk\Uri::create()->reset()->redirect();
             return;
         }
 
@@ -168,7 +168,7 @@ class PluginManager extends Iface
         if (is_file($pluginPath.'.tgz'))  unlink($pluginPath.'.tgz');
         \Ts\Alert::addSuccess('Plugin `' . $pluginName . '` deleted successfully');
 
-        \Tk\Url::create()->reset()->redirect();
+        \Tk\Uri::create()->reset()->redirect();
     }
 
 
@@ -194,7 +194,7 @@ class PluginManager extends Iface
 
             if ($this->pluginFactory->isActive($pluginName)) {
                 $repeat->setChoice('active');
-                $repeat->setAttr('deact', 'href', \Tk\Url::create()->reset()->set('deact', $pluginName));
+                $repeat->setAttr('deact', 'href', \Tk\Uri::create()->reset()->set('deact', $pluginName));
                 
                 $plugin = $this->pluginFactory->getPlugin($pluginName);
                 if (method_exists($plugin, 'getSettingsUrl')) {
@@ -204,11 +204,11 @@ class PluginManager extends Iface
                 
             } else {
                 $repeat->setChoice('inactive');
-                $repeat->setAttr('act', 'href', \Tk\Url::create()->reset()->set('act', $pluginName));
+                $repeat->setAttr('act', 'href', \Tk\Uri::create()->reset()->set('act', $pluginName));
                 
                 $pluginPath = $this->pluginFactory->makePluginPath($pluginName);
                 if ((is_file($pluginPath.'.zip') || is_file($pluginPath.'.tar.gz') || is_file($pluginPath.'.tgz'))) {
-                    $repeat->setAttr('del', 'href', \Tk\Url::create()->reset()->set('del', $pluginName));
+                    $repeat->setAttr('del', 'href', \Tk\Uri::create()->reset()->set('del', $pluginName));
                     $repeat->setChoice('del');
                 }
             }

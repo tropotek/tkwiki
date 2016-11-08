@@ -51,6 +51,7 @@ class Settings extends Iface
         $this->form->addField(new Field\Input('site.email'))->setLabel('Site Email')->setRequired(true);
         // TODO: Add a look up dialog 
         $this->form->addField(new \App\Form\ButtonInput('wiki.page.default', 'glyphicon glyphicon-folder-open'))->setLabel('Home Page')->setNotes('The default wiki home page URL');
+
         $this->form->addField(new Field\Checkbox('wiki.page.home.lock'))->setLabel('Lock Home Page')->setNotes('Only Allow Admin to edit the home page');
         $this->form->addField(new Field\Checkbox('site.user.registration'))->setLabel('User Registration')->setNotes('Allow users to create new accounts');
         $this->form->addField(new Field\Checkbox('site.user.activation'))->setLabel('User Activation')->setNotes('Allow users to activate their own accounts');

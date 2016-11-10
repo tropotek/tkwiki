@@ -53,11 +53,11 @@ class AuthHandler implements SubscriberInterface
             // Check the user has access to the controller in question
             if (empty($role)) return;
             if (!$user) {
-                \Ts\Alert::getInstance()->addWarning('You must be logged in to access the requested page.');
+                \Ts\Alert::addWarning('You must be logged in to access the requested page.');
                 \Tk\Uri::create('/login.html')->redirect();
             }
             if (!$user->hasRole($role)) {
-                \Ts\Alert::getInstance()->addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
+                \Ts\Alert::addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
                 \Tk\Uri::create($user->getHomeUrl())->redirect();
             }
         }
@@ -135,7 +135,7 @@ class AuthHandler implements SubscriberInterface
         $subject = 'Account Registration Request.';
 
         $message = new \Tk\Mail\Message($body->toString(), $subject, $user->email, \App\Factory::getConfig()->get('site.email'));
-        $message->send();
+        \App\Factory::getEmailGateway()->send($message);
 
     }
 
@@ -153,7 +153,7 @@ class AuthHandler implements SubscriberInterface
         $subject = 'Account Registration Activation.';
 
         $message = new \Tk\Mail\Message($body->toString(), $subject, $user->email, \App\Factory::getConfig()->get('site.email'));
-        $message->send();
+        \App\Factory::getEmailGateway()->send($message);
 
     }
 
@@ -173,7 +173,7 @@ class AuthHandler implements SubscriberInterface
         $subject = 'Account Password Recovery.';
 
         $message = new \Tk\Mail\Message($body->toString(), $subject, $user->email, \App\Factory::getConfig()->get('site.email'));
-        $message->send();
+        \App\Factory::getEmailGateway()->send($message);
 
     }
 

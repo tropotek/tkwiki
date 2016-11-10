@@ -53,11 +53,14 @@ class Bootstrap
         
         // Include any config overriding settings
         include($config->getSrcPath() . '/config/config.php');
-
-        \Tk\Uri::$BASE_URL_PATH = $config->getSiteUrl();
         
         if ($config->has('date.timezone')) {
             ini_set('date.timezone', $config->get('date.timezone'));
+        }
+
+        \Tk\Uri::$BASE_URL_PATH = $config->getSiteUrl();
+        if ($config->isDebug()) {
+            \Dom\Template::$enableTracer = true;
         }
 
         /**
@@ -103,13 +106,16 @@ class Bootstrap
         // Initiate the default database connection
         \App\Factory::getDb();
         // Import settings from DB
-        $config->replace(\Ts\Db\Data::create());
+        $config->replace(\Ts\Db\Data::create()->all());
         
         // Init the event dispatcher
         Factory::getEventDispatcher();
 
         // Init the plugins
         \Tk\Plugin\Factory::getInstance($config);
+
+        // Initiate the email gateway
+        \App\Factory::getEmailGateway();
 
         return $config;
     }

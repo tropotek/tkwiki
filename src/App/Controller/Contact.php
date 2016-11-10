@@ -48,7 +48,7 @@ class Contact extends Iface
         $opts = new Field\Option\ArrayIterator(array('General', 'Services', 'Orders'));
         $this->form->addField(new Field\Select('type[]', $opts));
         
-        $this->form->addField(new Field\File('attach[]'));
+        $this->form->addField(new Field\File('attach[]', $request));
         $this->form->addField(new Field\Textarea('message'));
         
         $this->form->addField(new Event\Button('send', array($this, 'doSubmit')));
@@ -106,11 +106,11 @@ class Contact extends Iface
             return;
         }
         if ($attach->hasFile()) {
-            $attach->moveUploadedFile($this->getConfig()->getDataPath() . '/contact/' . date('d-m-Y') . '-' . str_replace('@', '_', $values['email']));
+            $attach->moveTo($this->getConfig()->getDataPath() . '/contact/' . date('d-m-Y') . '-' . str_replace('@', '_', $values['email']));
         }
 
         if ($this->sendEmail($form)) {
-            \Ts\Alert::getInstance()->addSuccess('<strong>Success!</strong> Your form has been sent.');
+            \Ts\Alert::addSuccess('<strong>Success!</strong> Your form has been sent.');
         }
 
         \Tk\Uri::create()->redirect();
@@ -150,8 +150,7 @@ Message:
 $attachCount
 MSG;
         // TODO: fire an event to send the message
-        vd($message);
-        return true;
+        return \App\Factory::getEmailGateway()->send($message);
     }
 
 

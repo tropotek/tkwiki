@@ -5,6 +5,25 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.4 [2016-11-11]:
+-------------------------------
+ - Minor Code Updates
+ - Updated Wiki for new lib updates
+ - Fixed page role access system
+ - Added Event and plugin management pages
+ - Upgraded a bit of the lib
+ - Added todo.md so we can track new requirements
+ - Fixed the shamozzle...
+ - Fixed Form load issue for checkboxes and radios
+ - Updated Wiki to use DataMaps
+ - Started to add the new datamap....Finish it....
+ - Changed all = [] to = array()
+ - Change php version check to gt php5.0.0
+ - Updated session exitsts() to has()
+ - Fixed page select dialog search function
+ - Added new TOC button to tineymce editor
+
+
 Ver 2.0.3 [2016-07-11]:
 -------------------------------
  - Added new TOC button to tineymce editor

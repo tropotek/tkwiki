@@ -46,6 +46,12 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
         if ($this->getConfig()->get('site.meta.description')) {
             $template->appendMetaTag('description', $this->getConfig()->get('site.meta.description'));
         }
+        if ($this->getConfig()->get('site.favicon')) {
+            $template->setAttr('favicon', 'href', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.favicon'));
+        }
+        if ($this->getConfig()->get('site.logo')) {
+            $template->setAttr('logo', 'src', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.logo'));
+        }
 
         if ($this->getConfig()->get('system.authors'))
             $template->appendMetaTag('tk-author', $this->getConfig()->get('system.authors'), $template->getTitleElement());

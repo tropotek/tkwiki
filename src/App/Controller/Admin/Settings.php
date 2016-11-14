@@ -49,7 +49,8 @@ class Settings extends Iface
 
         $this->form->addField(new Field\Input('site.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('site.email'))->setLabel('Site Email')->setRequired(true);
-        // TODO: Add a look up dialog 
+        $this->form->addField(new Field\File('site.logo', $request))->setLabel('Site Logo')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
+
         $this->form->addField(new \App\Form\ButtonInput('wiki.page.default', 'glyphicon glyphicon-folder-open'))->setLabel('Home Page')->setNotes('The default wiki home page URL');
 
         $this->form->addField(new Field\Checkbox('wiki.page.home.lock'))->setLabel('Lock Home Page')->setNotes('Only Allow Admin to edit the home page');
@@ -61,7 +62,7 @@ class Settings extends Iface
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\LinkButton('cancel', \Tk\Uri::create('/')));
 
-        $this->form->load($this->data->toArray());
+        $this->form->load($this->data->all());
         $this->form->execute();
 
         return $this->show();
@@ -76,20 +77,38 @@ class Settings extends Iface
     {
         $values = $form->getValues();
         $this->data->replace($values);
+
+        /** @var \Tk\Form\Field\File $logo */
+        $logo = $form->getField('site.logo');
         
-        if (empty($values['site.title']) || strlen($values['site.title']) < 3) {
+        if (!$this->form->getFieldValue('site.title')) {
             $form->addFieldError('site.title', 'Please enter your name');
         }
-        if (empty($values['site.email']) || !filter_var($values['site.email'], \FILTER_VALIDATE_EMAIL)) {
+        if ($this->form->getFieldValue('site.email') && !filter_var($this->form->getFieldValue('site.email'), \FILTER_VALIDATE_EMAIL)) {
             $form->addFieldError('site.email', 'Please enter a valid email address');
         }
+
+        $logo->isValid();
         
         if ($this->form->hasErrors()) {
             return;
         }
-        
+
+        if ($logo->hasFile()) {
+            $rel = '/site/logo.' . \Tk\File::getExtension($logo->getUploadedFile()->getFilename());
+            $fullPath = $this->getConfig()->getDataPath() . $rel;
+            $logo->moveTo($fullPath);
+            $this->data->set('site.logo', $rel);
+
+            $rel1 = '/site/favicon.' . \Tk\File::getExtension($logo->getUploadedFile()->getFilename());
+            $fullPath1 = $this->getConfig()->getDataPath() . $rel1;
+            $this->data->set('site.favicon', $rel1);
+
+            \Tk\Image::create($fullPath)->squareCrop(16)->save($fullPath1);
+        }
         $this->data->save();
-        
+
+
         \Ts\Alert::addSuccess('Site settings saved.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
             \Tk\Uri::create('/')->redirect();

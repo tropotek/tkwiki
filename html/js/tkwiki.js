@@ -131,7 +131,7 @@ jQuery(function ($) {
       
       valid_elements : "*[*]",
       extended_valid_elements : "*[*]",
-      // extended_valid_elements : 'i,em,strong,b,a[class|name|href|target|title|onclick|rel|style],script[data-jsl-static|data-jsl-priority|type|src|language],style[*],iframe[src|style|width|height|scrolling|marginwidth|marginheight|frameborder],img[style|class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name]',
+      //extended_valid_elements : 'i[*],em[*],strong[*],b[*],a[class|name|href|target|title|onclick|rel|style],script[data-jsl-static|data-jsl-priority|type|src|language],style[*],iframe[src|style|width|height|scrolling|marginwidth|marginheight|frameborder],img[style|class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name]',
       
       keep_styles: true,
       

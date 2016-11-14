@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.6 [2016-11-14]:
+-------------------------------
+ - Merge branch 'master' of github.com:tropotek/tkWiki
+ - Minor Code Updates
+
+
 Ver 2.0.5 [2016-11-14]:
 -------------------------------
  - Minor Code Updates

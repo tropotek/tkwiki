@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.5 [2016-11-14]:
+-------------------------------
+ - Minor Code Updates
+ - 252s-dev.vet.unimelb.edu.au
+
+
 Ver 2.0.4 [2016-11-11]:
 -------------------------------
  - Minor Code Updates

@@ -60,9 +60,9 @@ class Orphaned extends Iface
         $this->table->addAction(new \Tk\Table\Action\Delete());
         $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
 
-        $filter = $this->table->getFilterValues();
-        $users = \App\Db\PageMap::create()->findOrphanedPages($this->table->makeDbTool('a.title'));
-        $this->table->setList($users);
+        //$filter = $this->table->getFilterValues();
+        $list = \App\Db\PageMap::create()->findOrphanedPages($this->table->makeDbTool('title'));
+        $this->table->setList($list);
 
         return $this->show();
     }

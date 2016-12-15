@@ -170,13 +170,25 @@ class PageMap extends Mapper
      */
     public function findOrphanedPages($tool)
     {
+
         $homeUrl = \App\Factory::getConfig()->get('wiki.page.default');
-        $sql = sprintf('SELECT a.* FROM %s a LEFT JOIN links b ON (a.url = b.page_url)
-WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s)', $this->getDb()->quoteParameter($this->getTable()),
-            $this->getDb()->quote($homeUrl), $this->getDb()->quote(Page::TYPE_NAV) );
-        $res = $this->getDb()->query($sql);
-        $arr = ArrayObject::createFromMapper($this, $res, $tool);
-        return $arr;
+        
+        $from = sprintf('%s a LEFT JOIN %s b ON (a.%s = b.%s)', $this->getDb()->quoteParameter($this->getTable()), $this->getDb()->quoteParameter('links'),
+            $this->getDb()->quoteParameter('url'), $this->getDb()->quoteParameter('page_url'));
+        $where = sprintf('b.%s IS NULL AND (a.%s != %s AND a.%s != %s)', $this->getDb()->quoteParameter('page_id'), 
+            $this->getDb()->quoteParameter('url'), $this->getDb()->quote($homeUrl), 
+            $this->getDb()->quoteParameter('type'), $this->getDb()->quote(Page::TYPE_NAV));
+
+        $res = $this->selectFrom($from, $where, $tool);
+        return $res;
+        
+        
+//        $sql = sprintf('SELECT a.* FROM %s a LEFT JOIN links b ON (a.url = b.page_url)
+//WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s)', $this->getDb()->quoteParameter($this->getTable()),
+//            $this->getDb()->quote($homeUrl), $this->getDb()->quote(Page::TYPE_NAV) );
+//        $res = $this->getDb()->query($sql);
+//        $arr = ArrayObject::createFromMapper($this, $res, $tool);
+//        return $arr;
     }
 
     /**

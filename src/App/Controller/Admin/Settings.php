@@ -23,7 +23,7 @@ class Settings extends Iface
     protected $form = null;
 
     /**
-     * @var \Ts\Db\Data|null
+     * @var \Tk\Db\Data
      */
     protected $data = null;
 
@@ -34,7 +34,7 @@ class Settings extends Iface
     public function __construct()
     {
         parent::__construct('WIKI Settings');
-        $this->data = \Ts\Db\Data::create();
+        $this->data = \Tk\Db\Data::create();
     }
 
     /**

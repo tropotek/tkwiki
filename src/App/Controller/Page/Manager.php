@@ -53,13 +53,13 @@ class Manager extends Iface
         $this->table->addFilter(new Field\Input('keywords'))->setLabel('')->setAttr('placeholder', 'Keywords');
         
         // Actions
-        $this->table->addAction(\Tk\Table\Action\Button::getInstance('New Page', 'glyphicon glyphicon-plus', \Tk\Uri::create('/edit.html')));
+        $this->table->addAction(\Tk\Table\Action\Button::create('New Page', 'glyphicon glyphicon-plus', \Tk\Uri::create('/edit.html')));
         $this->table->addAction(new \Tk\Table\Action\Delete());
         $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
         
         $filter = $this->table->getFilterValues();
-        $users = \App\Db\PageMap::create()->findFiltered($filter, $this->table->makeDbTool('a.title'));
-        $this->table->setList($users);
+        $list = \App\Db\PageMap::create()->findFiltered($filter, $this->table->makeDbTool('a.title'));
+        $this->table->setList($list);
 
         return $this->show();
     }

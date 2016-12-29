@@ -5,6 +5,15 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.7 [2016-12-30]:
+-------------------------------
+ - Minor Code Updates
+ - Added ability to create new templates just change teh config param system.template.path to your
+   templates location
+ - Upgraded to use new lib cass names
+ - Fixed Orphaned sort bug
+
+
 Ver 2.0.6 [2016-11-14]:
 -------------------------------
  - Merge branch 'master' of github.com:tropotek/tkWiki

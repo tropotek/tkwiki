@@ -43,7 +43,7 @@ class Events extends Iface
         $this->table->addCell(new \Tk\Table\Cell\Text('eventClass'));
         $this->table->addCell(new \Tk\Table\Cell\Html('doc'))->addCellCss('key');
 
-        $this->table->addAction(\Tk\Table\Action\Csv::getInstance($this->getConfig()->getDb()));
+        $this->table->addAction(\Tk\Table\Action\Csv::create($this->getConfig()->getDb()));
 
         $list = $this->convertEventData(\App\Factory::getEventDispatcher()->getAvailableEvents(\App\Factory::getConfig()->getSitePath()));
         $this->table->setList($list);

@@ -12,7 +12,7 @@
     <title></title>
 
     <!-- TkWiki Theme -->
-    <link href="/html/less/tkwiki.less" rel="stylesheet"/>
+    <link href="less/tkwiki.less" rel="stylesheet"/>
 
     <link href="/vendor/ttek/tk-form/js/fileinput/jquery.fileinput.css" rel="stylesheet"/>
     
@@ -138,24 +138,24 @@
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/html/assets/jquery-1.11.3/jquery.min.js"></script>
+    <script src="assets/jquery-1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/html/assets/bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
-    <script src="/html/assets/jquery-sticky/jquery.plugin.js"></script>
-    <script src="/html/assets/jquery-sticky/jquery.sticky.js"></script>
+    <script src="assets/bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
+    <script src="assets/jquery-sticky/jquery.plugin.js"></script>
+    <script src="assets/jquery-sticky/jquery.sticky.js"></script>
 
     <script src="/vendor/ttek/tk-form/js/fileinput/jquery.fileinput.js"></script>
 
-    <script src="/html/js/jquery-toc/jquery-toc.js"></script>
-    <script src="/html/js/jquery-jtable.js"></script>
+    <script src="js/jquery-toc/jquery-toc.js"></script>
+    <script src="js/jquery-jtable.js"></script>
     
-    <script src="/html/assets/tinymce/tinymce.min.js"></script>
-    <script src="/html/js/tinymce/plugins/wikilink/wikilink.js"></script>
-    <script src="/html/js/tinymce/plugins/wikisave/wikisave.js"></script>
-    <script src="/html/js/tinymce/plugins/wikitoc/wikitoc.js"></script>
+    <script src="assets/tinymce/tinymce.min.js"></script>
+    <script src="js/tinymce/plugins/wikilink/wikilink.js"></script>
+    <script src="js/tinymce/plugins/wikisave/wikisave.js"></script>
+    <script src="js/tinymce/plugins/wikitoc/wikitoc.js"></script>
     
     
-    <script src="/html/js/tkwiki.js"></script>
+    <script src="js/tkwiki.js"></script>
 
 
   </body>

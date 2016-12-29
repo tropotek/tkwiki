@@ -53,7 +53,7 @@ class Manager extends Iface
         
 
         // Actions
-        $this->table->addAction(\Tk\Table\Action\Button::getInstance('New User', 'glyphicon glyphicon-plus', \Tk\Uri::create('userEdit.html')));
+        $this->table->addAction(\Tk\Table\Action\Button::create('New User', 'glyphicon glyphicon-plus', \Tk\Uri::create('userEdit.html')));
         $this->table->addAction(new \Tk\Table\Action\Delete());
         $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
         

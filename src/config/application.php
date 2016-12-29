@@ -27,6 +27,7 @@ include_once(dirname(__FILE__) . '/routes.php');
 //$config['site.url'] = dirname($_SERVER['PHP_SELF']);
 
 
+$config['system.template.path'] = '/html/default';
 
 
 /*  

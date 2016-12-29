@@ -133,10 +133,10 @@ class Contact extends Iface
         $message = $form->getFieldValue('message');
         $attachCount = '';
 
-        $field = $form->getField('attach');
-        if ($field->count()) {
-            $attachCount = 'Attachments: ' . $field->count();
-        }
+//        $field = $form->getField('attach');
+//        if ($field->count()) {
+//            $attachCount = 'Attachments: ' . $field->count();
+//        }
 
         $message = <<<MSG
 Dear $name,
@@ -147,7 +147,7 @@ Type: $type
 Message:
   $message
 
-$attachCount
+
 MSG;
         // TODO: fire an event to send the message
         return \App\Factory::getEmailGateway()->send($message);

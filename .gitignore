@@ -3,7 +3,6 @@
 /vendor
 /_notes
 /_db
-/composer.lock
 /src/config/config.php
 /.htaccess
 /.idea

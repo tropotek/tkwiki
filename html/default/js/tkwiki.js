@@ -57,7 +57,7 @@ jQuery(function ($) {
     
     function elFinderBrowser (callback, value, meta) {
       tinymce.activeEditor.windowManager.open({
-        file: config.siteUrl + '/html/assets/elfinder/elfinder.html', // use an absolute path!
+        file: config.templateUrl + '/assets/elfinder/elfinder.html', // use an absolute path!
         title: 'TkWiki File Manager',
         width: 900,
         height: 450,
@@ -148,8 +148,8 @@ jQuery(function ($) {
       },
       file_picker_callback : elFinderBrowser,      
       content_css: [
-        config.siteUrl + '/html/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
-        config.siteUrl + '/html/css/tkwiki.css'
+        config.templateUrl + '/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
+        config.templateUrl + '/css/tkwiki.css'
       ],
       body_class: 'mce-content-body wiki-content',
 

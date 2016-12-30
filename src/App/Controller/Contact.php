@@ -45,12 +45,13 @@ class Contact extends Iface
         $this->form->addField(new Field\Input('name'));
         $this->form->addField(new Field\Input('email'));
         
-        $opts = new Field\Option\ArrayIterator(array('General', 'Services', 'Orders'));
-        $this->form->addField(new Field\Select('type[]', $opts));
+        //$opts = new Field\Option\ArrayIterator(array('General', 'Services', 'Orders'));
+        //$this->form->addField(new Field\Select('type[]', $opts));
         
-        $this->form->addField(new Field\File('attach[]', $request));
+        //$this->form->addField(new Field\File('attach[]', $request));
         $this->form->addField(new Field\Textarea('message'));
-        
+        //$this->form->addField(new Field\ReCapture('validate'));
+
         $this->form->addField(new Event\Button('send', array($this, 'doSubmit')));
         
         // Find and Fire submit event

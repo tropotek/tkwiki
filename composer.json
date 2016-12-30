@@ -5,9 +5,9 @@
     "keywords":  [
         "tropotek"
     ],
-    "time": "2014-10-31",
+    "time": "2016-12-30",
     "license": "GPL",
-    "version": "master",
+    "version": "2.0.8",
     "minimum-stability": "stable",
     "authors":  [
          {

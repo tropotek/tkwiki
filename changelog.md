@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.8 [2016-12-30]:
+-------------------------------
+ - Fixed elFinder file manager scripts.
+
+
 Ver 2.0.7 [2016-12-30]:
 -------------------------------
  - Minor Code Updates

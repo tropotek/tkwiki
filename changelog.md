@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.10 [2017-01-06]:
+-------------------------------
+ - Fixed page not found error for public view
+ - Fixed css main menu issues
+
+
 Ver 2.0.9 [2017-01-06]:
 -------------------------------
  - Fixed page not found error for public view

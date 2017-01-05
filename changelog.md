@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.11 [2017-01-06]:
+-------------------------------
+ - Fixed jquery-jtable issues
+
+
 Ver 2.0.10 [2017-01-06]:
 -------------------------------
  - Fixed page not found error for public view

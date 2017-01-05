@@ -53,20 +53,21 @@ class View extends Iface
                 // Create a redirect to the page edit controller
                 \Tk\Uri::create('/edit.html')->set('u', $pageUrl)->redirect();
             }
-            throw new \Tk\HttpException(404, 'Page not found');
-        }
-        if (!$this->canView()) {
-            \Ts\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
-            \Tk\Uri::create('/')->redirect();
-        }
+            //throw new \Tk\HttpException(404, 'Page not found');
+        } else {
+            if (!$this->canView()) {
+                \Ts\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
+                \Tk\Uri::create('/')->redirect();
+            }
 
-        $this->wContent = $this->wPage->getContent();
-        
-        if (!$this->wContent) {
-            // May redirect to the edit page if the user has edit privileges or send alert if not.
-            //throw new \Tk\Exception('Page content not found');
-            \Ts\Alert::addWarning('Page content lost, please create new content.');
-            \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->redirect();
+            $this->wContent = $this->wPage->getContent();
+
+            if (!$this->wContent) {
+                // May redirect to the edit page if the user has edit privileges or send alert if not.
+                //throw new \Tk\Exception('Page content not found');
+                \Ts\Alert::addWarning('Page content lost, please create new content.');
+                \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->redirect();
+            }
         }
         
         return $this->show($request);
@@ -111,19 +112,22 @@ class View extends Iface
     {
         $template = $this->getTemplate();
         
+        
         $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getUser());
         $template->insertTemplate('header', $header->show());
-        
-        $event = new \App\Event\ContentEvent($this->wContent);
-        $this->dispatcher->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
+            
+        if ($this->wPage) {
+            $event = new \App\Event\ContentEvent($this->wContent);
+            $this->dispatcher->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
 
-        $template->insertHtml('content', $this->wContent->html);
-        
-        if ($this->wContent->css) {
-            $template->appendCss($this->wContent->css);
-        }
-        if ($this->wContent->js) {
-            $template->appendJs($this->wContent->js);
+            $template->insertHtml('content', $this->wContent->html);
+
+            if ($this->wContent->css) {
+                $template->appendCss($this->wContent->css);
+            }
+            if ($this->wContent->js) {
+                $template->appendJs($this->wContent->js);
+            }
         }
         return $this->getPage()->setPageContent($template);
     }

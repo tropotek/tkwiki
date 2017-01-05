@@ -57,7 +57,20 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     public function show()
     {
         $template = $this->getTemplate();
-        $title = $this->wPage->title;
+
+        // Page Title
+        $title = str_replace('_', ' ', \Tk\Uri::create()->getBasename()) ;
+        if ($this->wPage) {
+            $title = $this->wPage->title;
+        }
+        $template->appendHtml('title', $title);
+
+        // Throw an info style page if no page exists and public user
+        if (!$this->wPage && !$this->user) {
+            $template->setChoice('noCreated');
+            return $template;
+        }
+        
         
         if ($this->isEdit()) {
             $template->setChoice('edit');
@@ -70,7 +83,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         } else {
             if (\App\Factory::getRequest()->has('contentId')) {
                 $template->setChoice('viewRevision');
-                $title .= ' <small>(Revision '.$this->wContent->id.')</small>';
+                $title .= ' <small>(Revision ' . $this->wContent->id . ')</small>';
                 $template->addClass('content', 'revision');
                 if ($this->user->getAcl()->canEdit($this->wPage)) {
                     $template->setChoice('revert');
@@ -79,9 +92,6 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
                 $template->setChoice('view');
             }
         }
-        
-        // title
-        $template->appendHtml('title', $title);
         
         if ($this->user) {
             if ($this->user->getAcl()->canEdit($this->wPage)) {
@@ -151,7 +161,6 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             $template->insertHtml('contrib', implode(', ', $html));
             $template->setChoice('contrib');
         }
-        
         
         
         return $template;

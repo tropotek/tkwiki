@@ -3,6 +3,12 @@
  * @source http://bootsnipp.com/snippets/featured/mega-menu-slide-down-on-hover-with-carousel
  */
 
+.mega-dropdown .mega-dropdown-menu > li .wiki-menu-content ul li > a {
+  display: inline-block;
+  padding: 0;
+}
+
+
 .mega-dropdown {
   position: static !important;
 
@@ -10,8 +16,19 @@
     padding: 20px 0px;
     width: 100%;
     min-height: 200px;
-    box-shadow: none;
+    box-shadow: 2px 2px 2px #CCC;
     -webkit-box-shadow: none;
+
+    > li .wiki-menu-content ul {
+      li > a {
+        display: inline;
+        padding: 0;
+      }
+      li > a {
+        display: inline;
+        padding: 0;
+      }
+    }
 
     > li  ul {
       padding: 0;

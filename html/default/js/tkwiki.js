@@ -34,19 +34,20 @@ jQuery(function ($) {
   
   
   /* -- Mega Menu -- */
+  var delay = 0;
   $('.dropdown.mega-dropdown').on('click', function(e) {
     if ($(this).hasClass('open')) {
-      $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideUp('400');
+      $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideUp(delay);
       $(this).removeClass('open');
     } else {
-      $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideDown('400');
+      $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideDown(delay);
       $(this).addClass('open');
       return false; // stops link execution.
     }
   });
   
   $('.dropdown.mega-dropdown').on('mouseleave', function(e) {
-    $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideUp('400');
+    $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideUp(delay);
     $(this).removeClass('open');
   });
 

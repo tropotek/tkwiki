@@ -5,6 +5,13 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.9 [2017-01-06]:
+-------------------------------
+ - Fixed page not found error for public view
+ - Fixed css main menu issues
+ - Fixed elFinder file manager scripts.
+
+
 Ver 2.0.8 [2016-12-30]:
 -------------------------------
  - Fixed elFinder file manager scripts.

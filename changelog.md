@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.12 [2017-01-10]:
+-------------------------------
+ - Updated tinymce and added slightly responcive mce layouts
+
+
 Ver 2.0.11 [2017-01-06]:
 -------------------------------
  - Fixed jquery-jtable issues

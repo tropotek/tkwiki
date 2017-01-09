@@ -31,7 +31,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     /**
      * @var int
      */
-    protected $max = 3;
+    protected $max = 4;
     
     
     /**
@@ -58,11 +58,12 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      *
      * @param \Tk\Uri $requestUri
      * @param \Tk\Session $session
-     * @return Crumbs|mixed|static
+     * @return Crumbs
      */
     static public function getInstance($requestUri = null, $session = null)
     {
         if (!$session) $session = \App\Factory::getSession();
+
         if (!self::$instance) {
             self::$instance = new static();
             if ($session->has(self::SID)) {
@@ -83,11 +84,13 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     public function addCrumb($url)
     {
         if (!$url) return;
-        if ($url->getRelativePath() == '/' || trim($url->getRelativePath()) == \App\Db\Page::getHomeUrl()) return;
         $page = \App\Db\PageMap::create()->findByUrl(trim($url->getRelativePath(), '/'));
+        if ($url->getRelativePath() == '/' || trim($url->getRelativePath()) == \App\Db\Page::getHomeUrl()) {
+            $page = \App\Db\PageMap::create()->findByUrl(\App\Db\Page::getHomeUrl());
+        }
         if (!$page) return;
         $this->trim($url);
-        $this->list[$page->title] = $url;
+        $this->list[$page->title] = $page->getUrl();
         if (count($this->list) > $this->max) {
             array_shift($this->list);
         }
@@ -101,8 +104,8 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      */
     public function trim($url) 
     {
-        if (!$url) return;
         $arr = array();
+        if (!$url) return $arr;
         $i = 0;
         /** @var \Tk\Uri $u */
         foreach($this->list as $k => $u) {
@@ -149,7 +152,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     {
         $xhtml = <<<HTML
 <ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
+  <!-- li><a href="/">Home</a></li -->
   <li repeat="crumb"><a href="#" var="url"></a></li>
   <li class="active" var="active"></li>
 </ol>

@@ -18,10 +18,8 @@ jQuery(function ($) {
   var menu = $('.wiki-toc');
   if (menu.length && menu.toc) {
     menu.toc({scope: '.wiki-content'});
-
     // http://keith-wood.name/sticky.html
-    $('.wiki-toc').sticky({boundedBy: '.wiki-content'});
-
+    menu.sticky({boundedBy: '.wiki-content'});
   }
 
   $('#NavSearch').on('submit', function(e) {
@@ -44,9 +42,7 @@ jQuery(function ($) {
       $(this).addClass('open');
       return false; // stops link execution.
     }
-  });
-  
-  $('.dropdown.mega-dropdown').on('mouseleave', function(e) {
+  }).on('mouseleave', function(e) {
     $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideUp(delay);
     $(this).removeClass('open');
   });
@@ -104,40 +100,38 @@ jQuery(function ($) {
       $.getJSON(url, {pid: $('#pageEdit #fid_pid').val()}, function(data) {});
       setTimeout(saveLock, lockTimeout);
     }
-    
-    tinymce.init({
+
+
+
+
+
+    var initLarge = {
       selector: '.tinymce',
-      init_instance_callback : function(editor) {
-        // setup a page lock loop
+      init_instance_callback : function(editor) { // setup a page lock loop
         setTimeout(saveLock, lockTimeout);
       },
       setup : function(ed){
-          ed.on('NodeChange', function(e){
-            // TODO: move this into the HtmlFormatter
-            $('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');  
-          });
+        ed.on('NodeChange', function(e){
+          // TODO: move this into the HtmlFormatter
+          $('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');
+        });
       },
       plugins: [
         'wikisave wikilink wikitoc advlist autolink autosave link image lists charmap print preview hr anchor',
-        'searchreplace visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-        'table contextmenu directionality emoticons template textcolor paste textcolor colorpicker textpattern visualblocks'
+        'searchreplace code fullscreen insertdatetime media nonbreaking codesample',
+        'table directionality emoticons template textcolor paste textcolor colorpicker textpattern visualchars visualblocks'
       ],
 
-      toolbar1: 'wikisave wikilink wikitoc | undo redo | cut copy paste searchreplace | bold italic underline strikethrough | styleselect | bullist numlist | outdent indent blockquote',
-      toolbar2: ' link unlink anchor image media | hr subscript superscript | nonbreaking insertdatetime | forecolor backcolor',
-      toolbar3: 'table | visualchars visualblocks ltr rtl | charmap emoticons | print preview | removeformat fullscreen code',
+      toolbar1: 'wikisave wikilink wikitoc | undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect | bullist numlist | outdent indent',
+      toolbar2: 'cut copy paste searchreplace | link unlink anchor image media | hr subscript superscript | forecolor backcolor blockquote',
+      toolbar3: 'table | visualchars visualblocks ltr rtl | nonbreaking insertdatetime | charmap emoticons | print preview | removeformat fullscreen code codesample',
 
       menubar: false,
       toolbar_items_size: 'small',
-      
       valid_elements : "*[*]",
       extended_valid_elements : "*[*]",
-      //extended_valid_elements : 'i[*],em[*],strong[*],b[*],a[class|name|href|target|title|onclick|rel|style],script[data-jsl-static|data-jsl-priority|type|src|language],style[*],iframe[src|style|width|height|scrolling|marginwidth|marginheight|frameborder],img[style|class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name]',
-      
       keep_styles: true,
-      
       convert_urls: false,
-      //urlconverter_callback : function (url, node, on_save, name) {},
 
       browser_spellcheck: true,
       autosave_interval: '10m',
@@ -145,59 +139,75 @@ jQuery(function ($) {
       wikisave_enablewhendirty: true,
       wikisave_onsavecallback: function (ed) {
         console.log(ed.getContent());
-          submitForm($('#pageEdit').get(0), 'save');
+        submitForm($('#pageEdit').get(0), 'save');
       },
-      file_picker_callback : elFinderBrowser,      
+      file_picker_callback : elFinderBrowser,
       content_css: [
         config.templateUrl + '/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
         config.templateUrl + '/css/tkwiki.css'
       ],
       body_class: 'mce-content-body wiki-content',
-
       content_style: 'body {padding: 10px;}',
-      style_formats_merge: true,
-      style_formats: [
-        { title: 'Styles', selector: 'img', items: [
-          {title: 'Float Left', selector: 'img', classes: 'left'},
-          {title: 'Float Right', selector: 'img', classes: 'right'},
-          {title: 'Text Top', selector: 'img', classes: 'text-top'},
-          {title: 'Text Bottom', selector: 'img', classes: 'text-bottom'},
-          {title: 'Text Baseline', selector: 'img', classes: 'text-baseline'},
-          {title: 'Responsive', selector: 'img', classes: 'img-responsive'}
-        ]},
-        { title: 'Headers', items: [
-          { title: 'h1', block: 'h1' },
-          { title: 'h2', block: 'h2' },
-          { title: 'h3', block: 'h3' },
-          { title: 'h4', block: 'h4' },
-          { title: 'h5', block: 'h5' },
-          { title: 'h6', block: 'h6' }
-        ] },
+      style_formats_merge: true
+    };
 
-        { title: 'Blocks', items: [
-          { title: 'p', block: 'p' },
-          { title: 'div', block: 'div' },
-          { title: 'pre', block: 'pre' }
-        ] },
 
-        { title: 'Containers', items: [
-          { title: 'section', block: 'section', wrapper: true, merge_siblings: false },
-          { title: 'article', block: 'article', wrapper: true, merge_siblings: false },
-          { title: 'blockquote', block: 'blockquote', wrapper: true },
-          { title: 'hgroup', block: 'hgroup', wrapper: true },
-          { title: 'aside', block: 'aside', wrapper: true },
-          { title: 'figure', block: 'figure', wrapper: true }
-        ] },
+    var initSmall = {
+      selector: '.tinymce',
+      init_instance_callback : function(editor) {
+        setTimeout(saveLock, lockTimeout);
+      },
+      setup : function(ed){
+        ed.on('NodeChange', function(e){
+          // TODO: move this into the HtmlFormatter
+          $('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');
+        });
+      },
+      plugins: [
+        'wikisave wikilink wikitoc advlist autolink autosave link image lists charmap print preview hr anchor',
+        'searchreplace visualchars code fullscreen insertdatetime media nonbreaking',
+        'table paste visualblocks codesample'
+      ],
 
-        { title: 'Inline', items: [
-          {title: 'Code', inline: 'code', wrapper: true },
-          { title: 'small', block: 'small' }
-        ] }
-      ]
+      toolbar: 'wikilink wikitoc | undo redo | insert | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | removeformat fullscreen code',
 
-    });
+      menubar: false,
+      //toolbar_items_size: 'small',
+      valid_elements : "*[*]",
+      extended_valid_elements : "*[*]",
+      keep_styles: true,
+      convert_urls: false,
+      browser_spellcheck: true,
+      autosave_interval: '10m',
+      wikilink_ajaxUrl : config.siteUrl + '/ajax/getPageList',
+      wikisave_enablewhendirty: true,
+      wikisave_onsavecallback: function (ed) {
+        console.log(ed.getContent());
+        submitForm($('#pageEdit').get(0), 'save');
+      },
+      file_picker_callback : elFinderBrowser,
+      content_css: [
+        config.templateUrl + '/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
+        config.templateUrl + '/css/tkwiki.css'
+      ],
+      body_class: 'mce-content-body wiki-content',
+      content_style: 'body {padding: 10px;}',
+      style_formats_merge: true
+    };
 
-    // Prevent Bootstrap dialog from blocking focusin
+
+    if (document.documentElement.clientWidth < config.widthBreakpoints[3]) {
+      tinymce.init(initSmall);
+    } else {
+      tinymce.init(initLarge);
+    }
+
+
+    tinymce.init(initSmall);
+
+
+
+    // Prevent Bootstrap dialog from blocking focusing
     $(document).on('focusin', function(e) {
       if ($(e.target).closest('.mce-window').length) {
         e.stopImmediatePropagation();
@@ -206,6 +216,10 @@ jQuery(function ($) {
   }
 
 });
+
+
+
+
 
 
 /******************************** WIKI System script (Required) ********************************/

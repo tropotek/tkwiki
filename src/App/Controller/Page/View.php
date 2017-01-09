@@ -105,7 +105,7 @@ class View extends Iface
      * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
      * 
      * @param Request $request
-     * @return \App\Page\Page
+     * @return \App\Page\Iface
      * @todo Look at implementing a cache for page views.
      */
     public function show(Request $request)
@@ -128,6 +128,8 @@ class View extends Iface
             if ($this->wContent->js) {
                 $template->appendJs($this->wContent->js);
             }
+            $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/assets/prism/prism.js'));
+            $template->appendCssUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/assets/prism/prism.css'));
         }
         return $this->getPage()->setPageContent($template);
     }

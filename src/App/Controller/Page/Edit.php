@@ -198,15 +198,16 @@ class Edit extends Iface
         
         // Remove page lock
         \App\Factory::getLockMap()->unlock($this->wPage->id);
-        
-        
+
         $url = $this->wPage->getUrl();
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
             \Tk\Uri::create('/');
+            if (\App\Factory::getSession()->has(self::SID_REFERRER)) {
+                $url = \App\Factory::getSession()->getOnce(self::SID_REFERRER);
+            }
+
         }
-        if (\App\Factory::getSession()->has(self::SID_REFERRER)) {
-            $url = \App\Factory::getSession()->getOnce(self::SID_REFERRER);
-        }
+
         $url->redirect();
     }
 
@@ -249,7 +250,7 @@ class Edit extends Iface
      * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
      * 
      * @param Request $request
-     * @return \App\Page\Page
+     * @return \App\Page\Iface
      */
     public function show(Request $request)
     {

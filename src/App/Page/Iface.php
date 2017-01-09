@@ -87,7 +87,8 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
 var config = {
   siteUrl : '$siteUrl',
   dataUrl : '$dataUrl',
-  templateUrl: '$templateUrl' 
+  templateUrl: '$templateUrl',
+  widthBreakpoints: [0, 320, 481, 641, 961, 1025, 1281]
 };
 JS;
         $template->appendJs($js, ['data-jsl-priority' => -1000]);

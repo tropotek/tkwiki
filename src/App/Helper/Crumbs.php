@@ -31,7 +31,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     /**
      * @var int
      */
-    protected $max = 4;
+    protected $max = 5;
     
     
     /**

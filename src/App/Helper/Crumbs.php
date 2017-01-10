@@ -84,7 +84,6 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     public function addCrumb($url)
     {
         if (!$url) {
-            vd('No URL');
             return;
         }
         $page = \App\Db\PageMap::create()->findByUrl(trim($url->getRelativePath(), '/'));
@@ -92,7 +91,6 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
             $page = \App\Db\PageMap::create()->findByUrl(\App\Db\Page::getHomeUrl());
         }
         if (!$page) {
-            vd('No Page');
             return;
         }
 

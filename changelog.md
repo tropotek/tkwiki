@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.14 [2017-01-11]:
+-------------------------------
+ - Minor Code Updates
+ - 252s-dev.vet.unimelb.edu.au
+
+
 Ver 2.0.13 [2017-01-10]:
 -------------------------------
  - Updated tinymce and added slightly responcive mce layouts

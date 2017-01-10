@@ -83,13 +83,20 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      */
     public function addCrumb($url)
     {
-        if (!$url) return;
+        if (!$url) {
+            vd('No URL');
+            return;
+        }
         $page = \App\Db\PageMap::create()->findByUrl(trim($url->getRelativePath(), '/'));
         if ($url->getRelativePath() == '/' || trim($url->getRelativePath()) == \App\Db\Page::getHomeUrl()) {
             $page = \App\Db\PageMap::create()->findByUrl(\App\Db\Page::getHomeUrl());
         }
-        if (!$page) return;
-        $this->trim($url);
+        if (!$page) {
+            vd('No Page');
+            return;
+        }
+
+        $this->trim($page->getUrl());
         $this->list[$page->title] = $page->getUrl();
         if (count($this->list) > $this->max) {
             array_shift($this->list);

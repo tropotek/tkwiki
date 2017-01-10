@@ -259,9 +259,9 @@ jQuery(function ($) {
 /**
  * Submit a form with an event attached so php scripts can fire the event.
  * 
- * @param formElement form
- * @param string action
- * @param string value (optional) If not supplied, action is used.
+ * @param form
+ * @param action
+ * @internal value (optional) If not supplied, action is used.
  */
 function submitForm(form, action)
 {

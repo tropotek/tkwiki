@@ -1,31 +1,30 @@
 <?php
-$appPath = dirname(dirname(dirname(dirname(__DIR__))));
+$appPath = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))));
 
 // EDIT THESE AS REQUIRED
 $dataPath = $appPath.'/data/siteFiles';
-$dataUrl = dirname(dirname(dirname(dirname(dirname($_SERVER['PHP_SELF']))))) . '/data/siteFiles';
+$dataUrl = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['PHP_SELF'])))))) . '/data/siteFiles';
 if (is_dir($appPath.'/data/fileManager')) {
 	$dataPath = $appPath . '/data/fileManager';
-	$dataUrl = dirname(dirname(dirname(dirname(dirname($_SERVER['PHP_SELF']))))) . '/data/fileManager';
+	$dataUrl = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER['PHP_SELF'])))))) . '/data/fileManager';
 }
 
-//include($appPath . '/vendor/autoload.php');
 
 if (!is_dir($dataPath)) {
 	mkdir($dataPath, 0777, true);
 }
 error_reporting(0); // Set E_ALL for debuging
 
-// load composer autoload before load elFinder autoload If you need composer
-//require './vendor/autoload.php';
-
 // elFinder autoload
 require './autoload.php';
+
 // ===============================================
 
 // Enable FTP connector netmount
 elFinder::$netDrivers['ftp'] = 'FTP';
+
 // ===============================================
+
 
 /**
  * # Dropbox volume driver need `composer require dropbox-php/dropbox-php:dev-master@dev`

@@ -30,8 +30,7 @@ jQuery(function ($) {
       return false;
     }
   });
-  
-  
+
   /* -- Mega Menu -- */
   var delay = 0;
   $('.dropdown.mega-dropdown').on('click', function(e) {
@@ -96,7 +95,7 @@ jQuery(function ($) {
       return false;
     }
     
-    var lockTimeout = 110*1000;   // 1*1000 = 1 sec
+    var lockTimeout = 110 * 1000;     // 1 * 1000 = 1 sec
     var url = config.siteUrl + '/ajax/lockPage';
     function saveLock() {
       //$.getJSON(url, {pid: $('#pageEdit #fid_pid').val()}, function(data) {});
@@ -131,7 +130,6 @@ jQuery(function ($) {
       extended_valid_elements : "*[*]",
       keep_styles: true,
       convert_urls: false,
-
       browser_spellcheck: true,
       autosave_interval: '10m',
       wikilink_ajaxUrl : config.siteUrl + '/ajax/getPageList',
@@ -200,9 +198,6 @@ jQuery(function ($) {
     } else {
       tinymce.init(initLarge);
     }
-
-
-    //tinymce.init(initSmall);
 
 
 

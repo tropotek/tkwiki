@@ -15,6 +15,7 @@ jQuery(function ($) {
   // if (menu.length && menu.toc) {
   //   menu.toc({scope: '.wiki-content'});
   // }
+
   var menu = $('.wiki-toc');
   if (menu.length && menu.toc) {
     menu.toc({scope: '.wiki-content'});
@@ -52,13 +53,13 @@ jQuery(function ($) {
   
   if (typeof(tinyMCE) != 'undefined') {
     
-    function elFinderBrowser (callback, value, meta) {
+    function elFinderPickerCallback (callback, value, meta) {
       tinymce.activeEditor.windowManager.open({
         file: config.templateUrl + '/assets/elfinder/elfinder.html', // use an absolute path!
         title: 'TkWiki File Manager',
         width: 900,
         height: 450,
-        resizable: 'yes'
+        resizable: true
       }, {
         oninsert: function (file, elf) {
           var url, reg, info;
@@ -89,6 +90,7 @@ jQuery(function ($) {
           if (meta.filetype == 'media') {
             callback(url);
           }
+
         }
       });
       return false;
@@ -97,13 +99,10 @@ jQuery(function ($) {
     var lockTimeout = 110*1000;   // 1*1000 = 1 sec
     var url = config.siteUrl + '/ajax/lockPage';
     function saveLock() {
-      $.getJSON(url, {pid: $('#pageEdit #fid_pid').val()}, function(data) {});
+      //$.getJSON(url, {pid: $('#pageEdit #fid_pid').val()}, function(data) {});
+      $.getJSON(url, {pid: $('#fid_pid').val()}, function(data) {});
       setTimeout(saveLock, lockTimeout);
     }
-
-
-
-
 
     var initLarge = {
       selector: '.tinymce',
@@ -138,10 +137,11 @@ jQuery(function ($) {
       wikilink_ajaxUrl : config.siteUrl + '/ajax/getPageList',
       wikisave_enablewhendirty: true,
       wikisave_onsavecallback: function (ed) {
-        console.log(ed.getContent());
+        //console.log(ed.getContent());
         submitForm($('#pageEdit').get(0), 'save');
       },
-      file_picker_callback : elFinderBrowser,
+      file_picker_callback : elFinderPickerCallback,
+
       content_css: [
         config.templateUrl + '/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
         config.templateUrl + '/css/tkwiki.css'
@@ -182,10 +182,9 @@ jQuery(function ($) {
       wikilink_ajaxUrl : config.siteUrl + '/ajax/getPageList',
       wikisave_enablewhendirty: true,
       wikisave_onsavecallback: function (ed) {
-        console.log(ed.getContent());
         submitForm($('#pageEdit').get(0), 'save');
       },
-      file_picker_callback : elFinderBrowser,
+      file_picker_callback : elFinderPickerCallback,
       content_css: [
         config.templateUrl + '/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
         config.templateUrl + '/css/tkwiki.css'
@@ -203,7 +202,7 @@ jQuery(function ($) {
     }
 
 
-    tinymce.init(initSmall);
+    //tinymce.init(initSmall);
 
 
 

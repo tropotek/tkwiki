@@ -56,8 +56,12 @@ class Settings extends Iface
         $this->form->addField(new Field\Checkbox('wiki.page.home.lock'))->setLabel('Lock Home Page')->setNotes('Only Allow Admin to edit the home page');
         $this->form->addField(new Field\Checkbox('site.user.registration'))->setLabel('User Registration')->setNotes('Allow users to create new accounts');
         $this->form->addField(new Field\Checkbox('site.user.activation'))->setLabel('User Activation')->setNotes('Allow users to activate their own accounts');
-        
-        
+
+
+        $this->form->addField(new Field\Textarea('site.global.js'))->setLabel('Site Script');
+        $this->form->addField(new Field\Textarea('site.global.css'))->setLabel('Site Styles');
+
+
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\LinkButton('cancel', \Tk\Uri::create('/')));

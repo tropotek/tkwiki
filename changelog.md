@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.13 [2017-01-10]:
+-------------------------------
+ - Updated tinymce and added slightly responcive mce layouts
+
+
 Ver 2.0.12 [2017-01-10]:
 -------------------------------
  - Updated tinymce and added slightly responcive mce layouts

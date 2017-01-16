@@ -107,6 +107,30 @@ jQuery(function ($) {
       selector: '.tinymce',
       init_instance_callback : function(editor) { // setup a page lock loop
         setTimeout(saveLock, lockTimeout);
+
+        // FIX empty CDATA issue in javascript
+        // jw: this code is heavily borrowed from tinymce.jquery.js:12231 but modified so that it will
+        //     just remove the escaping and not add it back.
+        editor.serializer.addNodeFilter('script,style', function(nodes, name) {
+          var i = nodes.length, node, value, type;
+
+          function trim(value) {
+            /*jshint maxlen:255 */
+            /*eslint max-len:0 */
+            return value.replace(/(<!--\[CDATA\[|\]\]-->)/g, '\n')
+              .replace(/^[\r\n]*|[\r\n]*$/g, '')
+              .replace(/^\s*((<!--)?(\s*\/\/)?\s*<!\[CDATA\[|(<!--\s*)?\/\*\s*<!\[CDATA\[\s*\*\/|(\/\/)?\s*<!--|\/\*\s*<!--\s*\*\/)\s*[\r\n]*/gi, '')
+              .replace(/\s*(\/\*\s*\]\]>\s*\*\/(-->)?|\s*\/\/\s*\]\]>(-->)?|\/\/\s*(-->)?|\]\]>|\/\*\s*-->\s*\*\/|\s*-->\s*)\s*$/g, '');
+          }
+          while (i--) {
+            node = nodes[i];
+            value = node.firstChild ? node.firstChild.value : '';
+
+            if (value.length > 0) {
+              node.firstChild.value = trim(value);
+            }
+          }
+        });
       },
       setup : function(ed){
         ed.on('NodeChange', function(e){
@@ -154,6 +178,30 @@ jQuery(function ($) {
       selector: '.tinymce',
       init_instance_callback : function(editor) {
         setTimeout(saveLock, lockTimeout);
+
+        // FIX empty CDATA issue in javascript
+        // jw: this code is heavily borrowed from tinymce.jquery.js:12231 but modified so that it will
+        //     just remove the escaping and not add it back.
+        editor.serializer.addNodeFilter('script,style', function(nodes, name) {
+          var i = nodes.length, node, value, type;
+
+          function trim(value) {
+            /*jshint maxlen:255 */
+            /*eslint max-len:0 */
+            return value.replace(/(<!--\[CDATA\[|\]\]-->)/g, '\n')
+              .replace(/^[\r\n]*|[\r\n]*$/g, '')
+              .replace(/^\s*((<!--)?(\s*\/\/)?\s*<!\[CDATA\[|(<!--\s*)?\/\*\s*<!\[CDATA\[\s*\*\/|(\/\/)?\s*<!--|\/\*\s*<!--\s*\*\/)\s*[\r\n]*/gi, '')
+              .replace(/\s*(\/\*\s*\]\]>\s*\*\/(-->)?|\s*\/\/\s*\]\]>(-->)?|\/\/\s*(-->)?|\]\]>|\/\*\s*-->\s*\*\/|\s*-->\s*)\s*$/g, '');
+          }
+          while (i--) {
+            node = nodes[i];
+            value = node.firstChild ? node.firstChild.value : '';
+
+            if (value.length > 0) {
+              node.firstChild.value = trim(value);
+            }
+          }
+        });
       },
       setup : function(ed){
         ed.on('NodeChange', function(e){

@@ -47,18 +47,23 @@ class Settings extends Iface
     {
         $this->form = new Form('formEdit', $request);
 
-        $this->form->addField(new Field\Input('site.title'))->setLabel('Site Title')->setRequired(true);
-        $this->form->addField(new Field\Input('site.email'))->setLabel('Site Email')->setRequired(true);
-        $this->form->addField(new Field\File('site.logo', $request))->setLabel('Site Logo')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
+        $this->form->addField(new Field\Input('site.title'))->setTabGroup('Details')->setLabel('Site Title')->setRequired(true);
+        $this->form->addField(new Field\Input('site.email'))->setTabGroup('Details')->setLabel('Site Email')->setRequired(true);
+        $this->form->addField(new Field\File('site.logo', $request))->setTabGroup('Details')->setLabel('Site Logo')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
 
-        $this->form->addField(new \App\Form\ButtonInput('wiki.page.default', 'glyphicon glyphicon-folder-open'))->setLabel('Home Page')->setNotes('The default wiki home page URL');
+        $this->form->addField(new Field\Textarea('site.meta.keywords'))->setTabGroup('Details')->setLabel('META Keywords');
+        $this->form->addField(new Field\Textarea('site.meta.description'))->setTabGroup('Details')->setLabel('META Description');
+        
+        $this->form->addField(new Field\Textarea('site.global.js'))->setTabGroup('Details')->setLabel('Global Script');
+        $this->form->addField(new Field\Textarea('site.global.css'))->setTabGroup('Details')->setLabel('Global Styles');
+        
+        
+        
+        $this->form->addField(new \App\Form\ButtonInput('wiki.page.default', 'glyphicon glyphicon-folder-open'))->setTabGroup('Setup')->setLabel('Home Page')->setNotes('The default wiki home page URL');
 
-        $this->form->addField(new Field\Checkbox('wiki.page.home.lock'))->setLabel('Lock Home Page')->setNotes('Only Allow Admin to edit the home page');
-        $this->form->addField(new Field\Checkbox('site.user.registration'))->setLabel('User Registration')->setNotes('Allow users to create new accounts');
-        $this->form->addField(new Field\Checkbox('site.user.activation'))->setLabel('User Activation')->setNotes('Allow users to activate their own accounts');
-
-        $this->form->addField(new Field\Textarea('site.global.js'))->setLabel('Site Script');
-        $this->form->addField(new Field\Textarea('site.global.css'))->setLabel('Site Styles');
+        $this->form->addField(new Field\Checkbox('wiki.page.home.lock'))->setTabGroup('Setup')->setLabel('Lock Home Page')->setNotes('Only Allow Admin to edit the home page');
+        $this->form->addField(new Field\Checkbox('site.user.registration'))->setTabGroup('Setup')->setLabel('User Registration')->setNotes('Allow users to create new accounts');
+        $this->form->addField(new Field\Checkbox('site.user.activation'))->setTabGroup('Setup')->setLabel('User Activation')->setNotes('Allow users to activate their own accounts');
 
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));

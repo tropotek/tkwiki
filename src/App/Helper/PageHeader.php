@@ -202,14 +202,15 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         $xhtml = <<<HTML
 <div var="content">
   <div class="row clearfix wiki-header">
-    <div class="col-md-12">
+    <div class="col-xs-12">
       <h1 var="title"></h1>
     </div>
-    <div class="col-md-6">
+    
+    <div class="col-xs-6">
       <p class="wiki-meta contrib" choice="contrib"><strong>Contributers:</strong> <span var="contrib"></span></p>
       <p class="wiki-meta modified" choice="modified"><strong>Modified:</strong> <span var="modified"></span></p>
     </div>
-    <div class="col-md-6 text-right edit" choice="edit">
+    <div class="col-xs-6 text-right edit" choice="edit">
       <p class="wiki-meta">
         <a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="glyphicon glyphicon-remove"></i> Delete</a>
       </p>
@@ -220,7 +221,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="cancel"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</a>
       </p>
     </div>
-    <div class="col-md-6 text-right" choice="view">
+    <div class="col-xs-6 text-right" choice="view">
       <p class="wiki-meta view">
         &nbsp;
         <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>  
@@ -228,14 +229,14 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
-    <div class="col-md-6 text-right" choice="history">
+    <div class="col-xs-6 text-right" choice="history">
       <p class="wiki-meta view">  
         <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>  
         <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view"><i class="glyphicon glyphicon-eye-open"></i> View</a>  
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
-    <div class="col-md-6 text-right" choice="viewRevision">
+    <div class="col-xs-6 text-right" choice="viewRevision">
       <p class="wiki-meta view">
         <a href="#" title="Page Revision History" class="btn btn-danger btn-xs wiki-revert-trigger" var="revert" choice="revert"><i class="glyphicon glyphicon-share"></i> Revert</a>
         <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="glyphicon glyphicon-time"></i> History</a>

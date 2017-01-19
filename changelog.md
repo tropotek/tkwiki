@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.0.17 [2017-01-20]:
+-------------------------------
+ - Fixed contributor search bug  #1
+ - Minor Code Updates
+
+
 Ver 2.0.16 [2017-01-16]:
 -------------------------------
  - Minor Code Updates

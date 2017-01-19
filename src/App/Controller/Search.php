@@ -111,7 +111,10 @@ class Search extends Iface
         $i = 0;
         /** @var \App\Db\Page $page */
         foreach($this->list as $page) {
+            
             if (!$access->canView($page)) continue;
+            
+            
             $rpt = $template->getRepeat('row');
             $rpt->insertText('title', $page->title);
             $rpt->setAttr('title', 'title', $page->title);
@@ -122,10 +125,13 @@ class Search extends Iface
             $rpt->insertText('time', $page->created->format('H:i'));
             
             if ($page->getContent()) {
+
                 $description = $page->getContent()->description;
+                $description .= $page->getContent()->keywords;
+                // This is a security risk as is can show sensitive data from the content, do not do this...
                 if (!$description)
-                    $description = substr(strip_tags(html_entity_decode($page->getContent()->html)), 0, 256);
-                $rpt->insertText('description', $description);
+                    $description = substr(strip_tags(trim(html_entity_decode($page->getContent()->html))), 0, 256);
+                $rpt->insertText('description', trim($description));
 
                 $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));
                 $rpt->insertText('time', $page->getContent()->created->format('H:i'));

@@ -97,7 +97,7 @@ class Search extends Iface
     /**
      * show()
      *
-     * @return \App\Page\Page
+     * @return \App\Page\Iface
      */
     public function show()
     {
@@ -116,18 +116,23 @@ class Search extends Iface
             $rpt->insertText('title', $page->title);
             $rpt->setAttr('title', 'title', $page->title);
             $rpt->setAttr('title', 'href', $page->getUrl());
-            
-            $description = $page->getContent()->description;
-            if (!$description)
-                $description = substr(strip_tags(html_entity_decode($page->getContent()->html)), 0, 256);
-            
-            $rpt->insertText('description', $description);
 
-            $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::MED_DATE));
-            $rpt->insertText('time', $page->getContent()->created->format('H:i'));
-            if (trim($page->getContent()->keywords)) {
-                $rpt->insertText('keywords', $page->getContent()->keywords);
-                $rpt->setChoice('keywords');
+            $rpt->insertText('description', 'No Content.');
+            $rpt->insertText('date', $page->created->format(\Tk\Date::FORMAT_MED_DATE));
+            $rpt->insertText('time', $page->created->format('H:i'));
+            
+            if ($page->getContent()) {
+                $description = $page->getContent()->description;
+                if (!$description)
+                    $description = substr(strip_tags(html_entity_decode($page->getContent()->html)), 0, 256);
+                $rpt->insertText('description', $description);
+
+                $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));
+                $rpt->insertText('time', $page->getContent()->created->format('H:i'));
+                if (trim($page->getContent()->keywords)) {
+                    $rpt->insertText('keywords', $page->getContent()->keywords);
+                    $rpt->setChoice('keywords');
+                }
             }
             
             $rpt->appendRepeat();

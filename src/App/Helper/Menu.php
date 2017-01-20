@@ -50,7 +50,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
      */
     public function init()
     {
-        $list = \App\Db\PageMap::create()->findNavPages(\Tk\Db\Tool::create('title'));
+        $list = \App\Db\PageMap::create()->findNavPages(\Tk\Db\Tool::create());
         /** @var \App\Db\Page $page */
         foreach($list as $page) {
             if ($page->permission == \App\Db\Page::PERMISSION_PUBLIC) {

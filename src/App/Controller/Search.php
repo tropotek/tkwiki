@@ -127,11 +127,11 @@ class Search extends Iface
             if ($page->getContent()) {
 
                 $description = $page->getContent()->description;
-                $description .= $page->getContent()->keywords;
                 // This is a security risk as is can show sensitive data from the content, do not do this...
                 if (!$description)
                     $description = substr(strip_tags(trim(html_entity_decode($page->getContent()->html))), 0, 256);
-                $rpt->insertText('description', trim($description));
+                
+                $rpt->insertHtml('description', trim($description," \t\n\r\0\x0B"));
 
                 $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));
                 $rpt->insertText('time', $page->getContent()->created->format('H:i'));
@@ -181,7 +181,7 @@ class Search extends Iface
     </div>
     <div class="col-xs-12 col-sm-12 col-md-10 excerpet">
       <h3><a href="#" title="" var="title">Voluptatem, exercitationem, suscipit, distinctio</a></h3>
-      <p var="description">
+      <p var="description" class="search-description">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, 
         qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.
       </p>

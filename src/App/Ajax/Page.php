@@ -52,14 +52,14 @@ class Page extends \App\Controller\Iface
         $keywords = trim(strip_tags($request->get('keywords')));
         $tool = \Tk\Db\Tool::createFromArray($request->all(), 'title', 5);
         
-        $filter = array('keywords' => $keywords);
+        $filter = array('keywords' => $keywords, 'type' => \App\Db\Page::TYPE_PAGE);
         /** @var \Tk\Db\Map\ArrayObject $pageList */
         $pageList = \App\Db\PageMap::create()->findFiltered($filter, $tool);
         $list = array();
         foreach($pageList as $page) {
             if (!$this->getUser()->getAcl()->canView($page)) continue;
-            $page->modified = $page->modified->format(\Tk\Date::SHORT_DATETIME);
-            $page->created = $page->created->format(\Tk\Date::SHORT_DATETIME);
+            $page->modified = $page->modified->format(\Tk\Date::FORMAT_SHORT_DATETIME);
+            $page->created = $page->created->format(\Tk\Date::FORMAT_SHORT_DATETIME);
             $list[] = $page;
         }
         $data = array(

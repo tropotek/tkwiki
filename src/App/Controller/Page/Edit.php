@@ -136,8 +136,8 @@ class Edit extends Iface
         $this->form->addField(new Field\Hidden('pid', $this->wPage->id));
         $this->form->addField(new Field\Input('title'))->setRequired(true);
         $this->form->addField(new Field\Textarea('html'));
+        $this->form->addField(new Field\Select('permission'));
         if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
-            $this->form->addField(new Field\Select('permission'));
             $this->form->addField(new Field\Input('keywords'));
             $this->form->addField(new Field\Input('description'));
         }

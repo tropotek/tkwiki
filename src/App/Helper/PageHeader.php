@@ -214,11 +214,11 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     {
         $xhtml = <<<HTML
 <div var="content">
-  <div class="row clearfix wiki-header">
-    <div class="col-xs-12" choice="showTitle">
+  <div class="clearfix wiki-header">
+    <div class="head-title" choice="showTitle">
       <h1 var="title"></h1>
     </div>
-    <div choice="showHeadInfo">
+    <div class="row" choice="showHeadInfo">
     <div class="col-xs-6">
       <p class="wiki-meta contrib" choice="contrib"><strong>Contributers:</strong> <span var="contrib"></span></p>
       <p class="wiki-meta modified" choice="modified"><strong>Modified:</strong> <span var="modified"></span></p>

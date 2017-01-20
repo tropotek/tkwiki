@@ -58,18 +58,30 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     {
         $template = $this->getTemplate();
 
+        
         // Page Title
         $title = str_replace('_', ' ', \Tk\Uri::create()->getBasename()) ;
         if ($this->wPage) {
             $title = $this->wPage->title;
         }
-        $template->appendHtml('title', $title);
+        
 
+        if (!\Tk\Db\Data::create()->get('site.page.header.title.hide') || $this->user) {
+            $template->appendHtml('title', $title);
+            $template->setChoice('showTitle');
+        }
+
+        
         // Throw an info style page if no page exists and public user
         if (!$this->wPage && !$this->user) {
             $template->setChoice('noCreated');
             return $template;
         }
+
+        if (\Tk\Db\Data::create()->get('site.page.header.hide') && !$this->user) {
+            return $template;
+        }
+        
         
         
         if ($this->isEdit()) {
@@ -162,6 +174,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             $template->setChoice('contrib');
         }
         
+        $template->setChoice('showHeadInfo');
         
         return $template;
     }
@@ -202,10 +215,10 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         $xhtml = <<<HTML
 <div var="content">
   <div class="row clearfix wiki-header">
-    <div class="col-xs-12">
+    <div class="col-xs-12" choice="showTitle">
       <h1 var="title"></h1>
     </div>
-    
+    <div choice="showHeadInfo">
     <div class="col-xs-6">
       <p class="wiki-meta contrib" choice="contrib"><strong>Contributers:</strong> <span var="contrib"></span></p>
       <p class="wiki-meta modified" choice="modified"><strong>Modified:</strong> <span var="modified"></span></p>
@@ -243,8 +256,8 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
+    </div>
   </div>
-  <hr class="no-top-margin"/>
 </div>
 HTML;
 

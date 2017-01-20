@@ -112,9 +112,9 @@ class View extends Iface
     {
         $template = $this->getTemplate();
         
-        
         $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getUser());
         $template->insertTemplate('header', $header->show());
+        
             
         if ($this->wPage) {
             $event = new \App\Event\ContentEvent($this->wContent);
@@ -155,7 +155,7 @@ class View extends Iface
     {
         $xhtml = <<<HTML
 <div class="wiki-view">
-  <div var="header" class="wiki-header"></div>
+  <div var="header"></div>
   <div var="content" class="wiki-content"></div>
 </div>
 HTML;

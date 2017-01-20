@@ -65,6 +65,8 @@ class Settings extends Iface
         $this->form->addField(new Field\Checkbox('wiki.page.home.lock'))->setTabGroup('Config')->setLabel('Lock Home Page')->setNotes('Only Allow Admin to edit the home page');
         $this->form->addField(new Field\Checkbox('site.user.registration'))->setTabGroup('Config')->setLabel('User Registration')->setNotes('Allow users to create new accounts');
         $this->form->addField(new Field\Checkbox('site.user.activation'))->setTabGroup('Config')->setLabel('User Activation')->setNotes('Allow users to activate their own accounts');
+        $this->form->addField(new Field\Checkbox('site.page.header.hide'))->setTabGroup('Config')->setLabel('Hide Header Info')->setNotes('Hide the page header info from public view.');
+        $this->form->addField(new Field\Checkbox('site.page.header.title.hide'))->setTabGroup('Config')->setLabel('Hide Header Title')->setNotes('Hide the page header title from public view.');
 
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));

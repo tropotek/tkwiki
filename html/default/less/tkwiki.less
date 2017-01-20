@@ -34,7 +34,7 @@
 }
 
 .breadcrumb {
-  margin-bottom: 0;
+  margin-bottom: 10px;
   overflow: hidden;
 }
 
@@ -79,9 +79,17 @@ a.wiki-notView {
   }
 }
 
-.wiki-header .revision h1 {
-  color: #d00;
-}
+.wiki-header {
+  border-bottom: 1px solid @navbar-default-border;
+  margin-bottom: 20px;
+  
+  h1 {
+    margin-top: 0px;
+  }
+  .revision h1 {
+    color: #d00;
+  }
+} 
 
 .jtable {
   .pagination {
@@ -92,6 +100,16 @@ a.wiki-notView {
   }
 }
 
+.footer {
+  background: @navbar-default-bg;
+  border-top: 1px solid @navbar-default-border;
+  min-height: 80px;
+  .container {
+    
+    padding-top: 20px;
+    margin-top: 10px;
+  }
+}
 
 
 /* HEADER AND NAVIGATION */

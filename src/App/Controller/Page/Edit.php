@@ -137,6 +137,7 @@ class Edit extends Iface
         $this->form->addField(new Field\Input('title'))->setRequired(true);
         $this->form->addField(new Field\Textarea('html'));
         $this->form->addField(new Field\Select('permission'));
+        
         if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
             $this->form->addField(new Field\Input('keywords'));
             $this->form->addField(new Field\Input('description'));
@@ -303,7 +304,7 @@ class Edit extends Iface
         </div>
         
         <div class="col-md-3 well">
-          <div class="col-md-12" choice="page">
+          <div class="col-md-12">
             <div class="form-group">
               <label for="fid-permission" class="control-label">Permission:</label>
               <select class="form-control" id="fid-permission" name="permission">

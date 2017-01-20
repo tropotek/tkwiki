@@ -129,8 +129,8 @@ class Search extends Iface
                 $description = $page->getContent()->description;
                 $description .= $page->getContent()->keywords;
                 // This is a security risk as is can show sensitive data from the content, do not do this...
-                if (!$description)
-                    $description = substr(strip_tags(trim(html_entity_decode($page->getContent()->html))), 0, 256);
+//                if (!$description)
+//                    $description = substr(strip_tags(trim(html_entity_decode($page->getContent()->html))), 0, 256);
                 $rpt->insertText('description', trim($description));
 
                 $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));

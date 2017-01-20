@@ -1,8 +1,6 @@
 /data
-/assets
 /vendor
 /_notes
-/_db
 /src/config/config.php
 /.htaccess
 /.idea

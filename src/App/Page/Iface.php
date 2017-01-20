@@ -41,11 +41,13 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
         $template = $this->getTemplate();
 
         if ($this->getConfig()->get('site.meta.keywords')) {
-            $template->appendMetaTag('keywords', $this->getConfig()->get('site.meta.keywords'));
+            $template->appendMetaTag('keywords', $this->getConfig()->get('site.meta.keywords'), $template->getTitleElement());
         }
         if ($this->getConfig()->get('site.meta.description')) {
-            $template->appendMetaTag('description', $this->getConfig()->get('site.meta.description'));
+            $template->appendMetaTag('description', $this->getConfig()->get('site.meta.description'), $template->getTitleElement());
         }
+        
+        
         if ($this->getConfig()->get('site.favicon')) {
             $template->setAttr('favicon', 'href', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.favicon'));
         }

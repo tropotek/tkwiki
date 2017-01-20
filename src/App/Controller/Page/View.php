@@ -128,6 +128,17 @@ class View extends Iface
             if ($this->wContent->js) {
                 $template->appendJs($this->wContent->js);
             }
+
+            if ($this->wContent->keywords) {
+                $this->getPage()->getTemplate()->appendMetaTag('keywords', $this->wContent->keywords, $this->getPage()->getTemplate()->getTitleElement());
+            }
+
+            if ($this->wContent->description) {
+                $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->description, $this->getPage()->getTemplate()->getTitleElement());
+            }
+            $this->getPage()->getTemplate()->setTitleText($this->getPage()->getTemplate()->getTitleText() . ' - ' . $this->wPage->title);
+            
+            
             $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/assets/prism/prism.js'));
             $template->appendCssUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/assets/prism/prism.css'));
         }

@@ -52,7 +52,8 @@
         "ttek/tk-site": "~2.0",
         "ttek/tk-mail": "~2.0",
         "ttek/tk-plugin": "~2.0",
-        "monolog/monolog": "^1.13@dev"
+        "monolog/monolog": "^1.13@dev",
+        "ttek-plg/example": "~1.0"
     },
     "require-dev":  {
     }

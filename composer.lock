@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "23fa168bab2d72fa46f454b28273e278",
-    "content-hash": "89c2658ed56b03e6a720aa29b8177058",
+    "hash": "d43491a0ce10db5ffb6759059533ee10",
+    "content-hash": "954687520a775aa38da8f948b46d2c5c",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -840,52 +840,6 @@
                 "tropotek"
             ],
             "time": "2017-02-22 21:40:56"
-        },
-        {
-            "name": "ttek/tk-plugin",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tropotek/tk-plugin.git",
-                "reference": "2a9bda12bcc40fa94569bedeed80ce36c02d9332"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-plugin/zipball/2a9bda12bcc40fa94569bedeed80ce36c02d9332",
-                "reference": "2a9bda12bcc40fa94569bedeed80ce36c02d9332",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Tk\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Mifsud",
-                    "email": "info@tropotek.com.au",
-                    "homepage": "http://www.tropotek.com/"
-                }
-            ],
-            "description": "Manage and add plugin functionality to a site",
-            "keywords": [
-                "plugin",
-                "tropotek"
-            ],
-            "time": "2017-02-22 02:55:36"
         },
         {
             "name": "ttek/tk-routing",

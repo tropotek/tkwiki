@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.1.1 [2017-02-23]:
+-------------------------------
+ - Minor Code Updates
+
+
 Ver 2.1.0 [2017-02-23]:
 -------------------------------
  - Minor Code Updates

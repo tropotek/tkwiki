@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "518c59f7ba62c8ed1dc964c38b8bc13c",
+    "hash": "93f88f2c47f4a182ede4bce32a4a89e8",
     "content-hash": "58c1b5fb11de5567fc703c942ede3c44",
     "packages": [
         {
@@ -648,12 +648,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-installers.git",
-                "reference": "369c873a97a85c9a36dffd28b2216e7f7ff69d45"
+                "reference": "00be1cf411357b50a2595b394e1246a9dc269262"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/369c873a97a85c9a36dffd28b2216e7f7ff69d45",
-                "reference": "369c873a97a85c9a36dffd28b2216e7f7ff69d45",
+                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/00be1cf411357b50a2595b394e1246a9dc269262",
+                "reference": "00be1cf411357b50a2595b394e1246a9dc269262",
                 "shasum": ""
             },
             "require": {
@@ -693,7 +693,7 @@
                 "tools",
                 "tropotek"
             ],
-            "time": "2017-02-22 21:46:05"
+            "time": "2017-02-22 22:30:08"
         },
         {
             "name": "ttek/tk-mail",

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d43491a0ce10db5ffb6759059533ee10",
-    "content-hash": "954687520a775aa38da8f948b46d2c5c",
+    "hash": "518c59f7ba62c8ed1dc964c38b8bc13c",
+    "content-hash": "58c1b5fb11de5567fc703c942ede3c44",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -346,54 +346,6 @@
                 "psr-3"
             ],
             "time": "2016-10-10 12:19:37"
-        },
-        {
-            "name": "ttek-plg/example",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tropotek/plg-example.git",
-                "reference": "3c4a403b9e7d578e96cd8ec76988eced482e79c5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/plg-example/zipball/3c4a403b9e7d578e96cd8ec76988eced482e79c5",
-                "reference": "3c4a403b9e7d578e96cd8ec76988eced482e79c5",
-                "shasum": ""
-            },
-            "require": {
-                "ttek/tk-installers": "~2.0"
-            },
-            "type": "ttek-plugin",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Eg\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Mifsud",
-                    "homepage": "http://www.tropotek.com/"
-                }
-            ],
-            "description": "Example Tk II plugin",
-            "homepage": "http://www.tropotek.com/",
-            "keywords": [
-                "Tk II",
-                "example",
-                "plugin",
-                "tropotek"
-            ],
-            "time": "2017-02-22 21:46:48"
         },
         {
             "name": "ttek/tk-auth",
@@ -840,6 +792,52 @@
                 "tropotek"
             ],
             "time": "2017-02-22 21:40:56"
+        },
+        {
+            "name": "ttek/tk-plugin",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tropotek/tk-plugin.git",
+                "reference": "2a9bda12bcc40fa94569bedeed80ce36c02d9332"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tropotek/tk-plugin/zipball/2a9bda12bcc40fa94569bedeed80ce36c02d9332",
+                "reference": "2a9bda12bcc40fa94569bedeed80ce36c02d9332",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Tk\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Mifsud",
+                    "email": "info@tropotek.com.au",
+                    "homepage": "http://www.tropotek.com/"
+                }
+            ],
+            "description": "Manage and add plugin functionality to a site",
+            "keywords": [
+                "plugin",
+                "tropotek"
+            ],
+            "time": "2017-02-22 02:55:36"
         },
         {
             "name": "ttek/tk-routing",

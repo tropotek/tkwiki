@@ -54,7 +54,7 @@
                   <li choice="admin"><a href="/userManager.html">Users</a></li>
                   <li choice="admin"><a href="/pageManager.html">Pages</a></li>
                   <li choice="admin"><a href="/orphaned.html">Orphaned</a></li>
-                  <li choice="admin"><a href="/plugins.html">Plugins</a></li>
+                  <li choice="admin"><a href="/admin/plugins.html">Plugins</a></li>
                   <li class="divider" choice="admin"></li>
                   <li choice="admin"><a href="/dev/events.html">Events</a></li>
                   <li class="divider"></li>

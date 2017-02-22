@@ -26,15 +26,15 @@
     },
     "scripts":  {
         "post-install-cmd":  [
-            "Ts\\Composer\\InitProjectEvent::postInstall"
+            "Tk\\Composer\\InitProjectEvent::postInstall"
         ],
         "post-update-cmd":  [
-            "Ts\\Composer\\InitProjectEvent::postUpdate"
+            "Tk\\Composer\\InitProjectEvent::postUpdate"
         ]
     },
     "extra":  {
         "branch-alias":  {
-            "dev-trunk": "2.0.x-dev"
+            "dev-trunk": "2.1.x-dev"
         }
     },
     "require":  {
@@ -49,11 +49,10 @@
         "ttek/tk-mvc": "~2.0",
         "ttek/tk-form": "~2.0",
         "ttek/tk-table": "~2.0",
-        "ttek/tk-site": "~2.0",
         "ttek/tk-mail": "~2.0",
         "ttek/tk-plugin": "~2.0",
-        "monolog/monolog": "^1.13@dev",
-        "ttek-plg/example": "~1.0"
+        "ttek-plg/example": "~1.0",
+        "monolog/monolog": "^1.13@dev"
     },
     "require-dev":  {
     }

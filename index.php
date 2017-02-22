@@ -11,7 +11,7 @@ $composer = include($appPath . '/vendor/autoload.php');
 $request = \App\Factory::getRequest();
 $kernel = \App\Factory::getFrontController();
 
-//var_dump($composer);exit();
+\Tk\Config::getInstance()->setComposer($composer);
 
 $response = $kernel->handle($request)->send();
 $kernel->terminate($request, $response);

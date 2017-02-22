@@ -96,7 +96,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             if (\App\Factory::getRequest()->has('contentId')) {
                 $template->setChoice('viewRevision');
                 $title .= ' <small>(Revision ' . $this->wContent->id . ')</small>';
-                $template->addClass('content', 'revision');
+                $template->addCss('content', 'revision');
                 if ($this->user->getAcl()->canEdit($this->wPage)) {
                     $template->setChoice('revert');
                 }
@@ -138,7 +138,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         $template->setAttr('view', 'href', $url);
         
         $template->insertText('permission', ucfirst($this->wPage->getPermissionLabel()));
-        $template->addClass('permission', $this->wPage->getPermissionLabel());
+        $template->addCss('permission', $this->wPage->getPermissionLabel());
         
         
         

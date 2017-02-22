@@ -43,7 +43,7 @@ class Orphaned extends Iface
         $this->table = new \Tk\Table('tableOne');
 
         $this->table->addCell(new \Tk\Table\Cell\Checkbox('id'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('title'))->addCellCss('key')->setUrl(\Tk\Uri::create('/edit.html'));
+        $this->table->addCell(new \Tk\Table\Cell\Text('title'))->addCss('key')->setUrl(\Tk\Uri::create('/edit.html'));
         $this->table->addCell(new \Tk\Table\Cell\Text('userId'));
         $this->table->addCell(new \Tk\Table\Cell\Text('type'));
         $this->table->addCell(new \Tk\Table\Cell\Text('url'));

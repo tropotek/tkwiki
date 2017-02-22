@@ -53,6 +53,7 @@ $routes->add('orphaned', new \Tk\Routing\Route('/orphaned.html', 'App\Controller
 $routes->add('search', new \Tk\Routing\Route('/search.html', 'App\Controller\Search::doDefault'));
 
 $routes->add('admin-plugin-manager', new \Tk\Routing\Route('/plugins.html', 'App\Controller\Admin\PluginManager::doDefault', array('access' => array('admin'))));
+$routes->add('admin-plugin-manager', new \Tk\Routing\Route('/admin/plugins.html', 'App\Controller\Admin\PluginManager::doDefault', array('access' => array('admin'))));
 $routes->add('dev-events', new \Tk\Routing\Route('/dev/events.html', 'App\Controller\Admin\Dev\Events::doDefault', array('access' => array('admin'))));
 
 // DO NOT MOVE.... CatchAll must be the last route.

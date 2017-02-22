@@ -62,7 +62,7 @@ class History extends Iface
 
         $this->table->addCell(new ActionCell('actions'));
         $this->table->addCell(new \Tk\Table\Cell\Text('id'));
-        $this->table->addCell(new DateCell('created'))->addCellCss('key')->setUrl(\Tk\Uri::create('/view.html'));
+        $this->table->addCell(new DateCell('created'))->addCss('key')->setUrl(\Tk\Uri::create('/view.html'));
         $this->table->addCell(new \Tk\Table\Cell\Text('userId'))->setOrderProperty('user_id');
         $this->table->addCell(new BytesCell('size'))->setLabel('Bytes');
         

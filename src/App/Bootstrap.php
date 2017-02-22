@@ -50,9 +50,7 @@ class Bootstrap
         
         // Do not call \Tk\Config::getInstance() before this point
         $config = Factory::getConfig();
-        
-        // Include any config overriding settings
-        include($config->getSrcPath() . '/config/config.php');
+
         
         if ($config->has('date.timezone')) {
             ini_set('date.timezone', $config->get('date.timezone'));
@@ -70,7 +68,7 @@ class Bootstrap
         chdir($config->getSitePath());
 
         // This maybe should be created in a Factory or DI Container....
-        $config['log'] = new NullLogger();
+        $logger = new NullLogger();
         if (is_readable($config['system.log.path'])) {
             ini_set('error_log', $config['system.log.path']);
             $logger = new Logger('system');
@@ -79,8 +77,8 @@ class Bootstrap
             $formatter->setScriptTime($config->getScriptTime());
             $handler->setFormatter($formatter);
             $logger->pushHandler($handler);
-            $config['log'] = $logger;
         }
+        $config->setLog($logger);
         
         
         // * Logger [use error_log()]
@@ -112,7 +110,7 @@ class Bootstrap
         Factory::getEventDispatcher();
 
         // Init the plugins
-        \Tk\Plugin\Factory::getInstance($config);
+        \App\Factory::getPluginFactory();
 
         // Initiate the email gateway
         \App\Factory::getEmailGateway();

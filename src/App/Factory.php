@@ -12,17 +12,28 @@ use Tk\Db\Pdo;
  */
 class Factory
 {
-    
+
     /**
-     * Get Config object or array
-     * 
+     * @var \Tk\Config
+     */
+    public static $config = null;
+
+
+    /**
+     * getConfig
+     *
      * @param string $sitePath
      * @param string $siteUrl
      * @return \Tk\Config
      */
-    static public function getConfig($sitePath = '', $siteUrl = '')
+    public static function getConfig($sitePath = '', $siteUrl = '')
     {
-        return \Tk\Config::getInstance($sitePath, $siteUrl);
+        if (!self::$config) {
+            self::$config = \Tk\Config::getInstance($sitePath, $siteUrl);
+            // Include any config overriding settings
+            include(self::$config->getSrcPath() . '/config/config.php');
+        }
+        return self::$config;
     }
 
     /**
@@ -77,6 +88,19 @@ class Factory
             self::getConfig()->setEmailGateway($gateway);
         }
         return self::getConfig()->getEmailGateway();
+    }
+
+    /**
+     * getPluginFactory
+     *
+     * @return \Tk\Plugin\Factory
+     */
+    public static function getPluginFactory()
+    {
+        if (!self::getConfig()->getPluginFactory()) {
+            self::getConfig()->setPluginFactory(\Tk\Plugin\Factory::getInstance(self::getDb(), self::getConfig()->getPluginPath(), self::getEventDispatcher()));
+        }
+        return self::getConfig()->getPluginFactory();
     }
 
     /**

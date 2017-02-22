@@ -5,7 +5,7 @@ use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 use Tk\DataMap\Db;
 use Tk\DataMap\Form;
-use \Ts\Db\Mapper;
+use \Tk\Db\Mapper;
 
 /**
  * Class RoleMap

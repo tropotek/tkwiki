@@ -50,7 +50,7 @@ class FrontController extends \Tk\Kernel\HttpKernel
         
 
         // (kernel.init)
-        $this->dispatcher->addSubscriber(new \Ts\Listener\StartupHandler($logger, $this->config->getRequest(), $this->config->getSession()));
+        $this->dispatcher->addSubscriber(new \Tk\Listener\StartupHandler($logger, $this->config->getRequest(), $this->config->getSession()));
         //$this->dispatcher->addSubscriber(new Listener\BootstrapHandler($this->config));
         
         // (kernel.request)
@@ -70,16 +70,16 @@ class FrontController extends \Tk\Kernel\HttpKernel
         // (kernel.view)
 
         // (kernel.response)
-        $this->dispatcher->addSubscriber(new \Ts\Listener\ResponseHandler(Factory::getDomModifier()));
+        $this->dispatcher->addSubscriber(new \Tk\Listener\ResponseHandler(Factory::getDomModifier()));
 
         // (kernel.finish_request)
         
         // (kernel.exception)
         $this->dispatcher->addSubscriber(new \Tk\Listener\ExceptionListener($logger));
-        //$this->dispatcher->addSubscriber(new \Ts\Listener\ExceptionEmailListener(\App\Factory::getEmailGateway(), $logger, $this->config->get('site.email'), $this->config->get('site.title')));
+        //$this->dispatcher->addSubscriber(new \Tk\Listener\ExceptionEmailListener(\App\Factory::getEmailGateway(), $logger, $this->config->get('site.email'), $this->config->get('site.title')));
 
         // (kernel.terminate)
-        $sh = new \Ts\Listener\ShutdownHandler($logger, $this->config->getScriptTime());
+        $sh = new \Tk\Listener\ShutdownHandler($logger, $this->config->getScriptTime());
         $sh->setPageBytes(\App\Factory::getDomFilterPageBytes());
         $this->dispatcher->addSubscriber($sh);
 

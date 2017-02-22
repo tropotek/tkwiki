@@ -53,11 +53,11 @@ class AuthHandler implements SubscriberInterface
             // Check the user has access to the controller in question
             if (empty($role)) return;
             if (!$user) {
-                \Ts\Alert::addWarning('You must be logged in to access the requested page.');
+                \Tk\Alert::addWarning('You must be logged in to access the requested page.');
                 \Tk\Uri::create('/login.html')->redirect();
             }
             if (!$user->hasRole($role)) {
-                \Ts\Alert::addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
+                \Tk\Alert::addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
                 \Tk\Uri::create($user->getHomeUrl())->redirect();
             }
         }

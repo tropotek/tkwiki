@@ -53,7 +53,7 @@ class History extends Iface
         }
 
         if (!$this->getUser()->getAcl()->canEdit($this->wPage)) {
-            \Ts\Alert::addWarning('You do not have permission to edit this page.');
+            \Tk\Alert::addWarning('You do not have permission to edit this page.');
             \Tk\Url::create('/')->redirect();
         }
         
@@ -91,7 +91,7 @@ class History extends Iface
         $content = \App\Db\Content::cloneContent($rev);
         $content->save();
         
-        \Ts\Alert::addSuccess('Page reverted to version ' . $rev->id . ' [' . $rev->created->format(\Tk\Date::SHORT_DATETIME) . ']');
+        \Tk\Alert::addSuccess('Page reverted to version ' . $rev->id . ' [' . $rev->created->format(\Tk\Date::SHORT_DATETIME) . ']');
         $content->getPage()->getUrl()->redirect();
     }
 

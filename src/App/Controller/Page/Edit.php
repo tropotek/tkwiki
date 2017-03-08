@@ -271,7 +271,7 @@ class Edit extends Iface
         $ren = new \Tk\Form\Renderer\DomStatic($this->form, $template);
         $ren->show();
 
- 
+
         $saveEvent = $this->form->getField('save')->getEventName();
         $formId = $this->form->getId();
 

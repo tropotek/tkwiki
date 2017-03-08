@@ -270,6 +270,18 @@ class Edit extends Iface
         // Render the form
         $ren = new \Tk\Form\Renderer\DomStatic($this->form, $template);
         $ren->show();
+
+ 
+        $saveEvent = $this->form->getField('save')->getEventName();
+        $formId = $this->form->getId();
+
+        $js = <<<JS
+config.pageEdit = {
+  formId : '$formId',
+  saveEvent : '$saveEvent'
+};
+JS;
+        $template->appendJs($js, ['data-jsl-priority' => -1000]);
         
         return $this->getPage()->setPageContent($template);
     }

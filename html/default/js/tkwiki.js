@@ -159,8 +159,8 @@ jQuery(function ($) {
       wikilink_ajaxUrl : config.siteUrl + '/ajax/getPageList',
       wikisave_enablewhendirty: true,
       wikisave_onsavecallback: function (ed) {
-        //console.log(ed.getContent());
-        submitForm($('#pageEdit').get(0), 'save');
+        if (config.pageEdit)
+          submitForm($('#'+config.pageEdit.formId).get(0), config.pageEdit.saveEvent);
       },
       file_picker_callback : elFinderPickerCallback,
 
@@ -228,7 +228,8 @@ jQuery(function ($) {
       wikilink_ajaxUrl : config.siteUrl + '/ajax/getPageList',
       wikisave_enablewhendirty: true,
       wikisave_onsavecallback: function (ed) {
-        submitForm($('#pageEdit').get(0), 'save');
+        if (config.pageEdit)
+          submitForm($('#'+config.pageEdit.formId).get(0), config.pageEdit.saveEvent);
       },
       file_picker_callback : elFinderPickerCallback,
       content_css: [

@@ -89,7 +89,7 @@ class HtmlFormatter
         if (class_exists('tidy')) {
             $config = array(
                 'numeric-entities' => true,
-                'output-xhtml' => true,
+                //'output-xhtml' => true,
                 'tab-size' => 2,
                 'indent-spaces' => 2,
                 'wrap' => 200,

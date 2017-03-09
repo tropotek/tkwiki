@@ -113,10 +113,11 @@ jQuery(function ($) {
         //     just remove the escaping and not add it back.
         editor.serializer.addNodeFilter('script,style', function(nodes, name) {
           var i = nodes.length, node, value, type;
-
+          
           function trim(value) {
             /*jshint maxlen:255 */
             /*eslint max-len:0 */
+        console.log('-------------');
             return value.replace(/(<!--\[CDATA\[|\]\]-->)/g, '\n')
               .replace(/^[\r\n]*|[\r\n]*$/g, '')
               .replace(/^\s*((<!--)?(\s*\/\/)?\s*<!\[CDATA\[|(<!--\s*)?\/\*\s*<!\[CDATA\[\s*\*\/|(\/\/)?\s*<!--|\/\*\s*<!--\s*\*\/)\s*[\r\n]*/gi, '')
@@ -125,7 +126,6 @@ jQuery(function ($) {
           while (i--) {
             node = nodes[i];
             value = node.firstChild ? node.firstChild.value : '';
-
             if (value.length > 0) {
               node.firstChild.value = trim(value);
             }
@@ -196,7 +196,6 @@ jQuery(function ($) {
           while (i--) {
             node = nodes[i];
             value = node.firstChild ? node.firstChild.value : '';
-
             if (value.length > 0) {
               node.firstChild.value = trim(value);
             }

@@ -107,7 +107,7 @@ class HtmlFormatter
      */
     protected function cleanHtml($html)
     {
-        //$html = \Tk\Str::numericEntities($html);
+        $html = \Tk\Str::numericEntities($html);
         
         // Tidy is dissabled untill we can figure out a way for tinymce and tidy to worktogether.
         // IE havin major issues with the ifame end tag.....

@@ -138,7 +138,6 @@ class HtmlFormatter
             // Remove head and foot of xhtml output
             $html = trim(substr($html, stripos($html, '<body>')+6, - (strlen($html) - strripos($html, '</body>'))));
         }
-        vd($html);
         return $html;
     }
     

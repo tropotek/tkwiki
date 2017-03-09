@@ -120,7 +120,9 @@ class Edit extends Iface
             try {
                 if ($this->wContent->html) {
                     $this->formatter = new HtmlFormatter($this->wContent->html, false);
+                    vd($this->wContent->html);
                     $this->wContent->html = $this->formatter->getHtml();
+                    vd($this->wContent->html);
                 }
             } catch(\Exception $e) {
                 \Tk\Alert::addInfo($e->getMessage());

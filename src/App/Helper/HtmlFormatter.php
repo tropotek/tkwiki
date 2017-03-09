@@ -64,7 +64,29 @@ class HtmlFormatter
      */
     public function getHtml()
     {
-        return trim(substr($this->doc->saveXML($this->doc->documentElement), 5, -6));
+        $html = $this->doc->saveXML($this->doc->documentElement);
+        //vd($html);
+        $html = trim(str_replace(array('<html><body>', '</body></html>'), '', $html));
+        $html = trim(substr($html, 5, -6));
+        //vd($html);
+        return $html;
+    }
+
+    /**
+     * getParsedText
+     *
+     * @param string $html
+     * @return \DOMDocument
+     * @throws \Tk\Exception
+     */
+    protected function parseDomDocument($html)
+    {
+        $doc = new \DOMDocument('1.0', 'utf-8');
+        //vd($html);
+        if (!$doc->loadXML($html)) {
+            throw new \Tk\Exception('Cannot format page content. Contact Administrator');
+        }
+        return $doc;
     }
 
     /**
@@ -85,46 +107,39 @@ class HtmlFormatter
      */
     protected function cleanHtml($html)
     {
-        $html = \Tk\Str::numericEntities($html);
-        if (class_exists('tidy')) {
+        //$html = \Tk\Str::numericEntities($html);
+        
+        // Tidy is dissabled untill we can figure out a way for tinymce and tidy to worktogether.
+        // IE havin major issues with the ifame end tag.....
+        if (false) {
+        ///if (class_exists('tidy')) {
             $config = array(
-                'numeric-entities' => true,
-                //'output-xhtml' => true,
+                //'output-xml' => true,
+                'numeric-entities' => true,                      // This option specifies if Tidy should output entities other than the built-in HTML entities (&amp;, &lt;, &gt; and &quot;) in the numeric rather than the named entity form.
+                'drop-empty-paras' => false,
+                'hide-endtags' => false,                         // This option specifies if Tidy should omit optional end-tags when generating the pretty printed markup. This option is ignored if you are outputting to XML. 
+                //'new-empty-tags' => 'iframe,i,span,div',       // This option specifies new empty inline tags. This option takes a space or comma separated list of tag names.
+                                                                 // Unless you declare new tags, Tidy will refuse to generate a tidied file if the input includes previously unknown tags.
+                                                                 // Remember to also declare empty tags as either inline or blocklevel. This option is ignored in XML mode. 
+
+                'fix-backslash' => true,            // This option specifies if Tidy should replace backslash characters "\" in URLs by forward slashes "/"
                 'tab-size' => 2,
                 'indent-spaces' => 2,
                 'wrap' => 200,
-                'drop-empty-paras' => false,
-                'drop-proprietary-attributes' => false,
-                'fix-backslash' => true,
-                'fix-bad-comments' => true,
-                'logical-emphasis' => true,
-                'vertical-space' => true,
-                'char-encoding' => 'utf8',
+                'logical-emphasis' => true,         // This option specifies if Tidy should replace any occurrence of <I> by <EM> and any occurrence of <B> by <STRONG>
+                'vertical-space' => true,           // This option specifies if Tidy should add some empty lines for readability. 
+                'char-encoding' => 'utf-8',
                 'force-output' => true,
-                'add-xml-space' => true
+                'add-xml-space' => true            // This option specifies if Tidy should add xml:space="preserve" to elements such as <PRE>, <STYLE> 
             );
             $tidy = new \tidy();
+            
             $html = $tidy->repairString($html, $config);
             // Remove head and foot of xhtml output
-            $html = substr($html, stripos($html, '<body>')+6, - (strlen($html) - strripos($html, '</body>')));
+            $html = trim(substr($html, stripos($html, '<body>')+6, - (strlen($html) - strripos($html, '</body>'))));
         }
+        vd($html);
         return $html;
-    }
-
-    /**
-     * getParsedText
-     *
-     * @param string $html
-     * @return \DOMDocument
-     * @throws \Tk\Exception
-     */
-    protected function parseDomDocument($html)
-    {
-        $doc = new \DOMDocument();
-        if (!$doc->loadXML($html)) {
-            throw new \Tk\Exception('Cannot format page content. Contact Administrator');
-        }
-        return $doc;
     }
     
     /**
@@ -146,9 +161,6 @@ class HtmlFormatter
             // TODO: See the TinyMce event NodeChange() in the tkWiki.js
             //  we need to to this in the app not on the client.... 
             //$('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');
-
-
-
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                 
                 $page = \App\Db\PageMap::create()->findByUrl($regs[1]);

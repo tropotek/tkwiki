@@ -117,7 +117,6 @@ jQuery(function ($) {
           function trim(value) {
             /*jshint maxlen:255 */
             /*eslint max-len:0 */
-        console.log('-------------');
             return value.replace(/(<!--\[CDATA\[|\]\]-->)/g, '\n')
               .replace(/^[\r\n]*|[\r\n]*$/g, '')
               .replace(/^\s*((<!--)?(\s*\/\/)?\s*<!\[CDATA\[|(<!--\s*)?\/\*\s*<!\[CDATA\[\s*\*\/|(\/\/)?\s*<!--|\/\*\s*<!--\s*\*\/)\s*[\r\n]*/gi, '')

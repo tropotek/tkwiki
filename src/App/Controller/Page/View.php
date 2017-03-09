@@ -119,7 +119,7 @@ class View extends Iface
         if ($this->wPage) {
             $event = new \App\Event\ContentEvent($this->wContent);
             $this->dispatcher->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
-
+vd($this->wContent->html);
             $template->insertHtml('content', $this->wContent->html);
 
             if ($this->wContent->css) {

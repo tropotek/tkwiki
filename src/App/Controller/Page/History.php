@@ -58,7 +58,7 @@ class History extends Iface
         }
         
         
-        $this->table = new \Tk\Table('historyTable');
+        $this->table = \Tk\Table::create('historyTable');
 
         $this->table->addCell(new ActionCell('actions'));
         $this->table->addCell(new \Tk\Table\Cell\Text('id'));

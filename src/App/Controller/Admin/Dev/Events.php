@@ -35,7 +35,7 @@ class Events extends Iface
      */
     public function doDefault(Request $request)
     {
-        $this->table = new \Tk\Table('EventList');
+        $this->table = \Tk\Table::create('EventList');
         $this->table->setParam('renderer', \Tk\Table\Renderer\Dom\Table::create($this->table));
 
         $this->table->addCell(new \Tk\Table\Cell\Text('name'));

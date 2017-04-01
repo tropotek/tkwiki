@@ -37,7 +37,7 @@ class Manager extends Iface
      */
     public function doDefault(Request $request)
     {
-        $this->table = new \Tk\Table('userTable');
+        $this->table = \Tk\Table::create('userTable');
 
         $this->table->addCell(new \Tk\Table\Cell\Checkbox('id'));
         $this->table->addCell(new \Tk\Table\Cell\Text('name'))->addCss('key')->setUrl(\Tk\Uri::create('userEdit.html'));

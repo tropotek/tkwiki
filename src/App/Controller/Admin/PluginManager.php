@@ -49,18 +49,17 @@ class PluginManager extends Iface
 
         // Upload plugin
         $this->form = Form::create('formEdit');
-        $this->form->addField(new Field\File('package', $request))->setRequired(true)->addCss('tkFileinput');
+        $this->form->addField(new Field\File('package', '', $this->getConfig()->getPluginPath()))->setRequired(true)->setAttr('accept', 'zip,tgz,gz')->addCss('tk-fileinput');
         $this->form->addField(new Event\Button('upload', array($this, 'doUpload')))->addCss('btn-primary');
         $this->form->execute();
 
         // Plugin manager table
-        $this->table = new \Tk\Table('PluginList');
+        $this->table = \Tk\Table::create('PluginList');
         $this->table->setParam('renderer', \Tk\Table\Renderer\Dom\Table::create($this->table));
 
         $this->table->addCell(new IconCell('icon'))->setLabel('');
         $this->table->addCell(new \Tk\Table\Cell\Text('name'))->addCss('key')->setOrderProperty('');
         $this->table->addCell(new \Tk\Table\Cell\Text('version'))->setOrderProperty('');
-        //$this->table->addCell(new AccessCell('access'));
         $this->table->addCell(new \Tk\Table\Cell\Date('time'))->setLabel('Created')->setOrderProperty('');
         $this->table->addCell(new ActionsCell('actions'));
 
@@ -83,22 +82,22 @@ class PluginManager extends Iface
         }
         return $list;
     }
-
+    
     /**
      * @param \Tk\Form $form
      */
     public function doUpload($form)
     {
-        /* @var Field\File $package */
+        /** @var Field\File $package */
         $package = $form->getField('package');
         if (!$package->isValid()) {
             return;
         }
-        if (!preg_match('/\.(zip|gz|tgz)$/i', $package->getUploadedFile()->getFilename())) {
+        if (!preg_match('/\.(zip|gz|tgz)$/i', $package->getValue())) {
             $form->addFieldError('package', 'Please Select a valid plugin file. (zip/tar.gz/tgz only)');
         }
 
-        $dest = $this->getConfig()->getPluginPath() . '/' . $package->getUploadedFile()->getFilename();
+        $dest = $this->getConfig()->getPluginPath() . '/' . $package->getValue();
         if (is_dir(str_replace(array('.zip', '.tgz', '.tar.gz'), '', $dest))) {
             $form->addFieldError('package', 'A plugin with that name already exists');
         }
@@ -107,19 +106,22 @@ class PluginManager extends Iface
             return;
         }
 
-        $package->moveTo($dest);
         $cmd = '';
-
         if (\Tk\File::getExtension($dest) == 'zip') {
             $cmd  = sprintf('cd %s && unzip %s', escapeshellarg(dirname($dest)), escapeshellarg(basename($dest)));
         } else if (\Tk\File::getExtension($dest) == 'gz' || \Tk\File::getExtension($dest) == 'tgz') {
             $cmd  = sprintf('cd %s && tar zxf %s', escapeshellarg(dirname($dest)), escapeshellarg(basename($dest)));
         }
         if ($cmd) {
-            exec($cmd);
+            exec($cmd, $output);
         }
 
-        \Tk\Alert::addSuccess('Plugin successfully uploaded.');
+        // TODO: check the plugin is a valid Tk plugin, if not remove the archive and files and throw an error
+        // Look for a Plugin.php file and Class maybe????
+
+
+
+        \Tk\Alert::addSuccess('Plugin sucessfully uploaded.');
         \Tk\Uri::create()->reset()->redirect();
     }
 

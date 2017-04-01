@@ -26,11 +26,9 @@ class RoleMap extends Mapper
     {
         if (!$this->dbMap) {
             $this->dbMap = new \Tk\DataMap\DataMap();
-            $this->dbMap->addProperty(new Db\Number('id'), 'key');
-            $this->dbMap->addProperty(new Db\Text('name'));
-            $this->dbMap->addProperty(new Db\Text('description'));
-
-            $this->setPrimaryKey($this->dbMap->currentProperty('key')->getColumnName());
+            $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
+            $this->dbMap->addPropertyMap(new Db\Text('name'));
+            $this->dbMap->addPropertyMap(new Db\Text('description'));
         }
         return $this->dbMap;
     }
@@ -43,11 +41,9 @@ class RoleMap extends Mapper
     {
         if (!$this->formMap) {
             $this->formMap = new \Tk\DataMap\DataMap();
-            $this->formMap->addProperty(new Form\Number('id'), 'key');
-            $this->formMap->addProperty(new Form\Text('name'));
-            $this->formMap->addProperty(new Form\Text('description'));
-
-            $this->setPrimaryKey($this->formMap->currentProperty('key')->getColumnName());
+            $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
+            $this->formMap->addPropertyMap(new Form\Text('name'));
+            $this->formMap->addPropertyMap(new Form\Text('description'));
         }
         return $this->formMap;
     }

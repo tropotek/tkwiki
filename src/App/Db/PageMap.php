@@ -25,18 +25,16 @@ class PageMap extends Mapper
     {
         if (!$this->dbMap) {
             $this->dbMap = new \Tk\DataMap\DataMap();
-            $this->dbMap->addProperty(new Db\Number('id'), 'key');
-            $this->dbMap->addProperty(new Db\Number('userId', 'user_id'));
-            $this->dbMap->addProperty(new Db\Text('type'));
-            $this->dbMap->addProperty(new Db\Text('template'));
-            $this->dbMap->addProperty(new Db\Text('title'));
-            $this->dbMap->addProperty(new Db\Text('url'));
-            $this->dbMap->addProperty(new Db\Number('permission'));
-            $this->dbMap->addProperty(new Db\Number('views'));
-            $this->dbMap->addProperty(new Db\Date('modified'));
-            $this->dbMap->addProperty(new Db\Date('created'));
-
-            $this->setPrimaryKey($this->dbMap->currentProperty('key')->getColumnName());
+            $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
+            $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
+            $this->dbMap->addPropertyMap(new Db\Text('type'));
+            $this->dbMap->addPropertyMap(new Db\Text('template'));
+            $this->dbMap->addPropertyMap(new Db\Text('title'));
+            $this->dbMap->addPropertyMap(new Db\Text('url'));
+            $this->dbMap->addPropertyMap(new Db\Integer('permission'));
+            $this->dbMap->addPropertyMap(new Db\Integer('views'));
+            $this->dbMap->addPropertyMap(new Db\Date('modified'));
+            $this->dbMap->addPropertyMap(new Db\Date('created'));
         }
         return $this->dbMap;
     }
@@ -49,16 +47,14 @@ class PageMap extends Mapper
     {
         if (!$this->formMap) {
             $this->formMap = new \Tk\DataMap\DataMap();
-            $this->formMap->addProperty(new Form\Number('id'), 'key');
-            $this->formMap->addProperty(new Form\Number('userId'));
-            $this->formMap->addProperty(new Form\Text('type'));
-            $this->formMap->addProperty(new Form\Text('template'));
-            $this->formMap->addProperty(new Form\Text('title'));
-            $this->formMap->addProperty(new Form\Text('url'));
-            $this->formMap->addProperty(new Form\Number('permission'));
-            $this->formMap->addProperty(new Form\Number('views'));
-
-            $this->setPrimaryKey($this->formMap->currentProperty('key')->getColumnName());
+            $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
+            $this->formMap->addPropertyMap(new Form\Integer('userId'));
+            $this->formMap->addPropertyMap(new Form\Text('type'));
+            $this->formMap->addPropertyMap(new Form\Text('template'));
+            $this->formMap->addPropertyMap(new Form\Text('title'));
+            $this->formMap->addPropertyMap(new Form\Text('url'));
+            $this->formMap->addPropertyMap(new Form\Integer('permission'));
+            $this->formMap->addPropertyMap(new Form\Integer('views'));
         }
         return $this->formMap;
     }
@@ -149,7 +145,6 @@ class PageMap extends Mapper
             $where .= sprintf('a.permission = %s AND ', (int)$filter['permission']);
         }
         if (isset($filter['type'])) {
-            //$where .= sprintf('a.type = %s AND ', $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
             $where .= sprintf('a.type = %s AND ', $this->getDb()->quote($filter['type']));
         }
         

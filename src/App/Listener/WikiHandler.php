@@ -2,11 +2,7 @@
 
 namespace App\Listener;
 
-use Psr\Log\LoggerInterface;
-use Tk\EventDispatcher\SubscriberInterface;
-use Tk\Event\ControllerResultEvent;
-use Tk\Event\ControllerEvent;
-use Tk\Kernel\KernelEvents;
+use Tk\Event\Subscriber;
 
 /**
  * Class ShutdownHandler
@@ -15,7 +11,7 @@ use Tk\Kernel\KernelEvents;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class WikiHandler implements SubscriberInterface
+class WikiHandler implements Subscriber
 {
     
     /**

@@ -24,7 +24,7 @@ class AppEvents
      *     if ($event->get('controller') instanceof \App\Controller\Index) { ... }
      * </code>
      *
-     * @event \Tk\EventDispatcher\Event
+     * @event \Tk\Event\Event
      */
     const SHOW = 'controller.show';
 
@@ -32,7 +32,7 @@ class AppEvents
      * Called at the end the Page/Iface::doPageInit() method
      * Use this modify the main page template before the controller is rendered to it
      *
-     * @event \Tk\EventDispatcher\Event
+     * @event \Tk\Event\Event
      */
     const PAGE_INIT = 'page.init';
 

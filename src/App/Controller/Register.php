@@ -28,7 +28,7 @@ class Register extends Iface
     private $user = null;
 
     /**
-     * @var \Tk\EventDispatcher\EventDispatcher
+     * @var \Tk\Event\Dispatcher
      */
     private $dispatcher = null;
     
@@ -122,7 +122,7 @@ class Register extends Iface
         $this->user->save();
 
         // Fire the login event to allow developing of misc auth plugins
-        $event = new \Tk\EventDispatcher\Event();
+        $event = new \Tk\Event\Event();
         $event->set('form', $form);
         $event->set('user', $this->user);
         $event->set('templatePath', $this->getTemplatePath());

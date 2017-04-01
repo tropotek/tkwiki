@@ -26,19 +26,17 @@ class ContentMap extends Mapper
     {
         if (!$this->dbMap) {
             $this->dbMap = new \Tk\DataMap\DataMap();
-            $this->dbMap->addProperty(new Db\Number('id'), 'key');
-            $this->dbMap->addProperty(new Db\Number('pageId', 'page_id'));
-            $this->dbMap->addProperty(new Db\Number('userId', 'user_id'));
-            $this->dbMap->addProperty(new Db\Text('html'));
-            $this->dbMap->addProperty(new Db\Text('keywords'));
-            $this->dbMap->addProperty(new Db\Text('description'));
-            $this->dbMap->addProperty(new Db\Text('css'));
-            $this->dbMap->addProperty(new Db\Text('js'));
-            $this->dbMap->addProperty(new Db\Number('size'));
-            $this->dbMap->addProperty(new Db\Date('modified'));
-            $this->dbMap->addProperty(new Db\Date('created'));
-
-            $this->setPrimaryKey($this->dbMap->currentProperty('key')->getColumnName());
+            $this->dbMap->addPropertyMap(new Db\Integer('id'), 'key');
+            $this->dbMap->addPropertyMap(new Db\Integer('pageId', 'page_id'));
+            $this->dbMap->addPropertyMap(new Db\Integer('userId', 'user_id'));
+            $this->dbMap->addPropertyMap(new Db\Text('html'));
+            $this->dbMap->addPropertyMap(new Db\Text('keywords'));
+            $this->dbMap->addPropertyMap(new Db\Text('description'));
+            $this->dbMap->addPropertyMap(new Db\Text('css'));
+            $this->dbMap->addPropertyMap(new Db\Text('js'));
+            $this->dbMap->addPropertyMap(new Db\Integer('size'));
+            $this->dbMap->addPropertyMap(new Db\Date('modified'));
+            $this->dbMap->addPropertyMap(new Db\Date('created'));
         }
         return $this->dbMap;
     }
@@ -51,19 +49,15 @@ class ContentMap extends Mapper
     {
         if (!$this->formMap) {
             $this->formMap = new \Tk\DataMap\DataMap();
-            $this->formMap->addProperty(new Form\Number('id'), 'key');
-            $this->formMap->addProperty(new Form\Number('pageId'));
-            $this->formMap->addProperty(new Form\Number('userId'));
-            $this->formMap->addProperty(new Form\Text('html'));
-            $this->formMap->addProperty(new Form\Text('keywords'));
-            $this->formMap->addProperty(new Form\Text('description'));
-            $this->formMap->addProperty(new Form\Text('css'));
-            $this->formMap->addProperty(new Form\Text('js'));
-            $this->formMap->addProperty(new Form\Number('size'));
-//            $this->formMap->addProperty(new Form\Date('modified'));
-//            $this->formMap->addProperty(new Form\Date('created'));
-
-            $this->setPrimaryKey($this->formMap->currentProperty('key')->getColumnName());
+            $this->formMap->addPropertyMap(new Form\Integer('id'), 'key');
+            $this->formMap->addPropertyMap(new Form\Integer('pageId'));
+            $this->formMap->addPropertyMap(new Form\Integer('userId'));
+            $this->formMap->addPropertyMap(new Form\Text('html'));
+            $this->formMap->addPropertyMap(new Form\Text('keywords'));
+            $this->formMap->addPropertyMap(new Form\Text('description'));
+            $this->formMap->addPropertyMap(new Form\Text('css'));
+            $this->formMap->addPropertyMap(new Form\Text('js'));
+            $this->formMap->addPropertyMap(new Form\Integer('size'));
         }
         return $this->formMap;
     }

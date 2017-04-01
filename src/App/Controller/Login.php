@@ -27,7 +27,7 @@ class Login extends Iface
     protected $form = null;
 
     /**
-     * @var \Tk\EventDispatcher\EventDispatcher
+     * @var \Tk\Event\Dispatcher
      */
     private $dispatcher = null;
     

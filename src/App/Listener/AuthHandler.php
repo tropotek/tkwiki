@@ -2,7 +2,7 @@
 namespace App\Listener;
 
 
-use Tk\EventDispatcher\SubscriberInterface;
+use Tk\Event\Subscriber;
 use Tk\Kernel\KernelEvents;
 use Tk\Event\ControllerEvent;
 use Tk\Event\GetResponseEvent;
@@ -17,7 +17,7 @@ use Tk\Auth\AuthEvents;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class AuthHandler implements SubscriberInterface
+class AuthHandler implements Subscriber
 {
 
     /**
@@ -121,7 +121,7 @@ class AuthHandler implements SubscriberInterface
     }
 
 
-    public function onRegister(\Tk\EventDispatcher\Event $event)
+    public function onRegister(\Tk\Event\Event $event)
     {
         /** @var \App\Db\User $user */
         $user = $event->get('user');
@@ -139,7 +139,7 @@ class AuthHandler implements SubscriberInterface
 
     }
 
-    public function onRegisterConfirm(\Tk\EventDispatcher\Event $event)
+    public function onRegisterConfirm(\Tk\Event\Event $event)
     {
         /** @var \App\Db\User $user */
         $user = $event->get('user');
@@ -157,7 +157,7 @@ class AuthHandler implements SubscriberInterface
 
     }
 
-    public function onRecover(\Tk\EventDispatcher\Event $event)
+    public function onRecover(\Tk\Event\Event $event)
     {
         /** @var \App\Db\User $user */
         $user = $event->get('user');

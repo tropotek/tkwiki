@@ -116,12 +116,12 @@ class Factory
      * @param string $name
      * @return mixed|Pdo
      */
-    static public function getDb($name = 'default')
+    static public function getDb($name = 'db')
     {
         $config = self::getConfig();
-        if (!$config->getDb() && $config->has('db.type')) {
+        if (!$config->getDb() && $config->has($name.'.type')) {
             try {
-                $pdo = Pdo::getInstance($name, $config->getGroup('db'));
+                $pdo = Pdo::getInstance($name, $config->getGroup($name, true));
                 $logger = $config->getLog();
 //                if ($logger && $config->isDebug()) {
 //                    $pdo->setOnLogListener(function ($entry) use ($logger) {
@@ -208,12 +208,12 @@ class Factory
     /**
      * get
      *
-     * @return \Tk\EventDispatcher\EventDispatcher
+     * @return \Tk\Event\Dispatcher
      */
     static public function getEventDispatcher()
     {
         if (!self::getConfig()->getEventDispatcher()) {
-            $obj = new \Tk\EventDispatcher\EventDispatcher(self::getConfig()->getLog());
+            $obj = new \Tk\Event\Dispatcher(self::getConfig()->getLog());
             self::getConfig()->setEventDispatcher($obj);
         }
         return self::getConfig()->getEventDispatcher();

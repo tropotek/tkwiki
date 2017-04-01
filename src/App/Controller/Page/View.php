@@ -25,7 +25,7 @@ class View extends Iface
     protected $wContent= null;
 
     /**
-     * @var \Tk\EventDispatcher\EventDispatcher
+     * @var \Tk\Event\Dispatcher
      */
     protected $dispatcher = null;
 

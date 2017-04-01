@@ -1,8 +1,7 @@
 <?php
 namespace App\Event;
 
-use Tk\EventDispatcher\Event;
-use Tk\Request;
+use Tk\Event\Event;
 use App\Db\Content;
 
 /**

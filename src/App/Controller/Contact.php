@@ -40,7 +40,7 @@ class Contact extends Iface
     {
         $this->config = \Tk\Config::getInstance();
 
-        $this->form = new Form('contactForm');
+        $this->form = Form::create('contactForm');
         
         $this->form->addField(new Field\Input('name'));
         $this->form->addField(new Field\Input('email'));

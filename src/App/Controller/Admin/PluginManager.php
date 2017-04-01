@@ -48,7 +48,7 @@ class PluginManager extends Iface
         $this->setPageTitle('Plugin Manager');
 
         // Upload plugin
-        $this->form = new Form('formEdit');
+        $this->form = Form::create('formEdit');
         $this->form->addField(new Field\File('package', $request))->setRequired(true)->addCss('tkFileinput');
         $this->form->addField(new Event\Button('upload', array($this, 'doUpload')))->addCss('btn-primary');
         $this->form->execute();

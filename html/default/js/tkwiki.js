@@ -8,7 +8,7 @@ jQuery(function ($) {
 
   $('[data-toggle="tooltip"]').tooltip();
 
-  $('input[type=file].fileinput').fileinput({dataUrl: config.dataUrl});
+  $('input[type=file].fileinput, input[type=file].tk-fileinput').fileinput({dataUrl: config.dataUrl});
 
   /* -- TOC Menu -- */
   // var menu = $('.wiki-content');

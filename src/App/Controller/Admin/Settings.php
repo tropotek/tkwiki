@@ -45,20 +45,17 @@ class Settings extends Iface
      */
     public function doDefault(Request $request)
     {
-        $this->form = new Form('formEdit', $request);
+        $this->form = Form::create('formEdit');
 
         $this->form->addField(new Field\Input('site.title'))->setTabGroup('Site')->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('site.email'))->setTabGroup('Site')->setLabel('Site Email')->setRequired(true);
-        $this->form->addField(new Field\File('site.logo', $request))->setTabGroup('Site')->setLabel('Site Logo')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
-
+        $this->form->addField(new Field\File('site.logo', '/site'))->setTabGroup('Site')->setLabel('Site Logo')->addCss('tk-fileinput')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
         
         $this->form->addField(new Field\Textarea('site.meta.keywords'))->setTabGroup('Template')->setLabel('META Keywords');
         $this->form->addField(new Field\Textarea('site.meta.description'))->setTabGroup('Template')->setLabel('META Description');
         
         $this->form->addField(new Field\Textarea('site.global.js'))->setTabGroup('Template')->setLabel('Global Script');
         $this->form->addField(new Field\Textarea('site.global.css'))->setTabGroup('Template')->setLabel('Global Styles');
-        
-        
         
         $this->form->addField(new \App\Form\ButtonInput('wiki.page.default', 'glyphicon glyphicon-folder-open'))->setTabGroup('Config')->setLabel('Home Page')->setNotes('The default wiki home page URL');
 
@@ -103,18 +100,15 @@ class Settings extends Iface
         if ($this->form->hasErrors()) {
             return;
         }
-
+        
         if ($logo->hasFile()) {
-            $rel = '/site/logo.' . \Tk\File::getExtension($logo->getUploadedFile()->getFilename());
-            $fullPath = $this->getConfig()->getDataPath() . $rel;
-            $logo->moveTo($fullPath);
-            $this->data->set('site.logo', $rel);
-
+            $fullPath = $this->getConfig()->getDataPath() . $logo->getValue();
+            \Tk\Image::create($fullPath)->bestFit(256, 256)->save();
+            $this->data->set('site.logo', $logo->getValue());
+            // Create favicon
             $rel1 = '/site/favicon.' . \Tk\File::getExtension($logo->getUploadedFile()->getFilename());
-            $fullPath1 = $this->getConfig()->getDataPath() . $rel1;
+            \Tk\Image::create($fullPath)->squareCrop(16)->save($this->getConfig()->getDataPath() . $rel1);
             $this->data->set('site.favicon', $rel1);
-
-            \Tk\Image::create($fullPath)->squareCrop(16)->save($fullPath1);
         }
         $this->data->save();
 
@@ -161,8 +155,7 @@ class Settings extends Iface
   <div class="col-lg-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <i class="glyphicon glyphicon-cog"></i>
-        Site Settings
+        <i class="glyphicon glyphicon-cog"></i> Site Settings
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body">

@@ -64,7 +64,7 @@ class Edit extends Iface
             $this->user = \App\Db\UserMap::create()->find($request->get('userId'));
         }
 
-        $this->form = new Form('formEdit');
+        $this->form = Form::create('formEdit');
 
         $this->form->addField(new Field\Input('name'))->setRequired(true)->setTabGroup('Details');
         $this->form->addField(new Field\Input('username'))->setRequired(true)->setTabGroup('Details');

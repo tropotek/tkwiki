@@ -50,9 +50,11 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
         
         if ($this->getConfig()->get('site.favicon')) {
             $template->setAttr('favicon', 'href', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.favicon'));
+            $template->setChoice('favicon');
         }
         if ($this->getConfig()->get('site.logo')) {
             $template->setAttr('logo', 'src', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.logo'));
+            $template->setChoice('logo');
         }
 
         if ($this->getConfig()->get('system.authors'))
@@ -66,6 +68,9 @@ abstract class Iface extends \Dom\Renderer\Renderer implements \Dom\Renderer\Dis
         if ($this->getConfig()->get('site.title')) {
             $template->setAttr('siteName', 'title', $this->getConfig()->get('site.title'));
             $template->setTitleText(trim($template->getTitleText() . ' - ' . $this->getConfig()->get('site.title'), '- '));
+            if (!$this->getConfig()->get('site.logo')) {
+                $template->insertText('siteName', $this->getConfig()->get('site.title'));
+            }
         }
 
         if ($this->getUser()) {

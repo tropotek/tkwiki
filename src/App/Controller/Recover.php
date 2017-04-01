@@ -43,7 +43,7 @@ class Recover extends Iface
      */
     public function doDefault(Request $request)
     {
-        $this->form = new Form('loginForm', $request);
+        $this->form = Form::create('loginForm');
 
         $this->form->addField(new Field\Input('account'));
         $this->form->addField(new Event\Button('recover', array($this, 'doRecover')));

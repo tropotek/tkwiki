@@ -52,7 +52,7 @@ class Login extends Iface
             \Tk\Uri::create($this->getUser()->getHomeUrl())->redirect();
         }
 
-        $this->form = new Form('loginForm');
+        $this->form = Form::create('loginForm');
 
         $this->form->addField(new Field\Input('username'));
         $this->form->addField(new Field\Password('password'));

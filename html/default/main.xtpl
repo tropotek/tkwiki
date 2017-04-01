@@ -7,7 +7,7 @@
     
     <title></title>
     
-    <link rel="icon" href="/favicon.ico" var="favicon"/>
+    <link rel="icon" href="/favicon.ico" var="favicon" choice="favicon"/>
 
     <!-- TkWiki Theme -->
     <link href="less/tkwiki.less" rel="stylesheet"/>
@@ -32,7 +32,7 @@
               <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/" var="siteName" title="Home">
-              <img alt="Site Logo" src="/html/images/icons/logo.png" var="logo" />
+              <img alt="Site Logo" src="/html/images/icons/logo.png" var="logo" choice="logo" />
             </a>
           </div>
 

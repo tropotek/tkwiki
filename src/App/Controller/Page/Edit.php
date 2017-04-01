@@ -134,7 +134,7 @@ class Edit extends Iface
         }
         //vd($this->wContent->html);
         // Form
-        $this->form = new Form('pageEdit', $request);
+        $this->form = Form::create('pageEdit');
         $this->form->addField(new Field\Hidden('pid', $this->wPage->id));
         $this->form->addField(new Field\Input('title'))->setRequired(true);
         $this->form->addField(new Field\Textarea('html'));

@@ -5,6 +5,13 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.1.3 [2017-04-02]:
+-------------------------------
+ - Minor Code Updates
+ - Fixed tinymce isse with tidy removing ending tags for empty elements
+ - 252s-dev.vet.unimelb.edu.au
+
+
 Ver 2.1.2 [2017-03-08]:
 -------------------------------
  - Minor Code Updates

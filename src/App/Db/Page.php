@@ -142,6 +142,7 @@ class Page extends Model implements \Tk\ValidInterface
                 }
             }
         } while($comp);
+        vd($url);
         return $url;
     }
     
@@ -174,9 +175,9 @@ class Page extends Model implements \Tk\ValidInterface
      * 
      * @return \Tk\Uri
      */
-    public function getUrl()
+    public function getPageUrl()
     {
-        return \Tk\Uri::create('/'.$this->url);
+        return \Tk\Uri::create('/'.trim($this->url, '/'));
     }
     
     /**
@@ -269,31 +270,3 @@ class Page extends Model implements \Tk\ValidInterface
         return $errors;
     }
 }
-
-//class PageValidator extends \App\Helper\Validator
-//{
-//
-//    /**
-//     * Implement the validating rules to apply.
-//     *
-//     */
-//    protected function validate()
-//    {
-//        /** @var Page $obj */
-//        $obj = $this->getObject();
-//
-//        if (!$obj->userId) {
-//            $this->addError('userId', 'Invalid user ID value.');
-//        }
-//        if (!$obj->title) {
-//            $this->addError('title', 'Please enter a title for your page');
-//        }
-//        if($obj->id) {
-//            $comp = \App\Db\PageMap::create()->findByUrl($obj->url);
-//            if ($comp && $comp->id != $obj->id) {
-//                $this->addError('url', 'This url already exists, try again.');
-//            }
-//        }
-//
-//    }
-//}

@@ -118,7 +118,7 @@ class Search extends Iface
             $rpt = $template->getRepeat('row');
             $rpt->insertText('title', $page->title);
             $rpt->setAttr('title', 'title', $page->title);
-            $rpt->setAttr('title', 'href', $page->getUrl());
+            $rpt->setAttr('title', 'href', $page->getPageUrl());
 
             $rpt->insertText('description', 'No Content.');
             $rpt->insertText('date', $page->created->format(\Tk\Date::FORMAT_MED_DATE));

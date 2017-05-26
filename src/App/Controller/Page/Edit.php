@@ -64,10 +64,10 @@ class Edit extends Iface
         if (!\App\Factory::getSession()->has(self::SID_REFERRER) && $request->getReferer()) {
             \App\Factory::getSession()->set(self::SID_REFERRER, $request->getReferer());
         }
+        
         // Find requested page
-
         $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
-
+        
         // Create a new page
         if (!$this->wPage && $request->has('u') && $this->getUser()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
@@ -92,6 +92,7 @@ class Edit extends Iface
             throw new \Tk\HttpException(404, 'Page not found');
         }
         
+        
         // check if the user can edit the page
         $error = false;
         if (!$this->getUser()->getAcl()->canEdit($this->wPage)) {
@@ -103,7 +104,7 @@ class Edit extends Iface
             $error = true;
         }
         if ($error) {
-            $url = $this->wPage->getUrl();
+            $url = $this->wPage->getPageUrl();
             if (!$this->wPage->id) {
                 $url = \Tk\Uri::create('/');
             }
@@ -163,7 +164,7 @@ class Edit extends Iface
      */
     public function doCancel($form)
     {
-        $url = $this->wPage->getUrl();
+        $url = $this->wPage->getPageUrl();
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
             $url = \Tk\Uri::create('/');
         }
@@ -181,7 +182,7 @@ class Edit extends Iface
         
         $form->addFieldErrors($this->wPage->validate());
         $form->addFieldErrors($this->wContent->validate());
-
+        
         if ($this->wPage->url == \App\Db\Page::getHomeUrl()) {
             $this->wPage->url = 'Home';
             $this->wPage->permission = 0;
@@ -202,7 +203,7 @@ class Edit extends Iface
         // Remove page lock
         \App\Factory::getLockMap()->unlock($this->wPage->id);
 
-        $url = $this->wPage->getUrl();
+        $url = $this->wPage->getPageUrl();
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
             \Tk\Uri::create('/');
             if (\App\Factory::getSession()->has(self::SID_REFERRER)) {

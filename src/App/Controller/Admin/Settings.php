@@ -84,9 +84,6 @@ class Settings extends Iface
     {
         $values = $form->getValues();
         $this->data->replace($values);
-
-        /** @var \Tk\Form\Field\File $logo */
-        $logo = $form->getField('site.logo');
         
         if (!$this->form->getFieldValue('site.title')) {
             $form->addFieldError('site.title', 'Please enter your name');
@@ -95,14 +92,20 @@ class Settings extends Iface
             $form->addFieldError('site.email', 'Please enter a valid email address');
         }
 
+
+        /** @var \Tk\Form\Field\File $logo */
+        $logo = $form->getField('site.logo');
         $logo->isValid();
         
         if ($this->form->hasErrors()) {
             return;
         }
         
+        $logo->saveFile();
         if ($logo->hasFile()) {
+            vd($logo->getValue());
             $fullPath = $this->getConfig()->getDataPath() . $logo->getValue();
+            vd($fullPath);
             \Tk\Image::create($fullPath)->bestFit(256, 256)->save();
             $this->data->set('site.logo', $logo->getValue());
             // Create favicon

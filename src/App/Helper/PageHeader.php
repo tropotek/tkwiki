@@ -117,13 +117,13 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
                 $template->setChoice('canDelete');
             }
             
-            $url = $this->wPage->getUrl();
+            $url = $this->wPage->getPageUrl();
             if ($this->wPage->type == \App\Db\Page::TYPE_NAV || !$this->wPage->id) {
                 $url = \Tk\Uri::create('/');
             }
             $template->setAttr('cancel', 'href', $url);
         }
-
+        
         $url = \Tk\Uri::create('/history.html')->set('pageId', $this->wPage->id);
         $template->setAttr('history', 'href', $url);
 
@@ -230,8 +230,9 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
       <p class="wiki-meta">
         <a href="#" title="Save The Page" class="btn btn-primary btn-xs wiki-save-trigger" var="save" choice="canEdit"><i class="glyphicon glyphicon-save"></i> Save</a>
         <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view" choice="canView"><i class="glyphicon glyphicon-eye-open"></i> View</a>
+        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="glyphicon glyphicon-time"></i> History</a>
         <!--  a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="glyphicon glyphicon-remove"></i> Delete</a -->
-        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="cancel"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</a>
+        <a href="#" title="Cancel Edit Page" class="btn btn-default btn-xs" var="cancel"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</a>
       </p>
     </div>
     <div class="col-xs-6 text-right" choice="view">

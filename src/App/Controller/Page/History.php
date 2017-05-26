@@ -92,7 +92,7 @@ class History extends Iface
         $content->save();
         
         \Tk\Alert::addSuccess('Page reverted to version ' . $rev->id . ' [' . $rev->created->format(\Tk\Date::SHORT_DATETIME) . ']');
-        $content->getPage()->getUrl()->redirect();
+        $content->getPage()->getPageUrl()->redirect();
     }
 
 

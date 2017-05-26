@@ -240,14 +240,15 @@ jQuery(function ($) {
     };
 
 
+    
+    
+    
     if (document.documentElement.clientWidth < config.widthBreakpoints[3]) {
       tinymce.init(initSmall);
     } else {
       tinymce.init(initLarge);
     }
-
-
-
+    
     // Prevent Bootstrap dialog from blocking focusing
     $(document).on('focusin', function(e) {
       if ($(e.target).closest('.mce-window').length) {

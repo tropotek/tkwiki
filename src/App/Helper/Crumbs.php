@@ -94,8 +94,8 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
             return;
         }
 
-        $this->trim($page->getUrl());
-        $this->list[$page->title] = $page->getUrl();
+        $this->trim($page->getPageUrl());
+        $this->list[$page->title] = $page->getPageUrl();
         if (count($this->list) > $this->max) {
             array_shift($this->list);
         }

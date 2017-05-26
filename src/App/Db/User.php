@@ -129,20 +129,6 @@ class User extends Model implements \Tk\ValidInterface
     }
 
     /**
-     * Set the password from a plain string
-     *
-     * @param string $pwd
-     * @throws Exception
-     */
-    public function setPassword($pwd = '')
-    {
-        if (!$pwd) {
-            $pwd = self::createPassword(10);
-        }
-        $this->password = \App\Factory::hashPassword($pwd, $this);
-    }
-
-    /**
      * Helper method to generate user hash
      * 
      * @param bool $isTemp Set this to true, when generate a temporary hash used for registration
@@ -220,46 +206,3 @@ class User extends Model implements \Tk\ValidInterface
         return $errors;
     }
 }
-
-//class UserValidator extends \App\Helper\Validator
-//{
-//
-//    /**
-//     * Implement the validating rules to apply.
-//     *
-//     */
-//    protected function validate()
-//    {
-//        /** @var User $obj */
-//        $obj = $this->getObject();
-//
-//        if (!$obj->name) {
-//            $this->addError('name', 'Invalid field value.');
-//        }
-//        if (!$obj->username) {
-//            $this->addError('username', 'Invalid field value.');
-//        } else {
-//            $dup = UserMap::create()->findByUsername($obj->username);
-//            if ($dup && $dup->getId() != $obj->getId()) {
-//                $this->addError('username', 'This username is already in use.');
-//            }
-//        }
-//        if (!filter_var($obj->email, FILTER_VALIDATE_EMAIL)) {
-//            $this->addError('email', 'Please enter a valid email address');
-//        } else {
-//            $dup = UserMap::create()->findByEmail($obj->email);
-//            if ($dup && $dup->getId() != $obj->getId()) {
-//                $this->addError('email', 'This email is already in use.');
-//            }
-//        }
-//
-//        // disallow the deletion or role change of user record id 1 (admin user).
-//
-//        /*
-//         * TODO: Check the user roles
-//        if (!$obj->role) {
-//            $this->addError('role', 'The user must have a role assigned for the permission system');
-//        }
-//        */
-//    }
-//}

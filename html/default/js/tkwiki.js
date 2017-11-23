@@ -8,7 +8,17 @@ jQuery(function ($) {
 
   $('[data-toggle="tooltip"]').tooltip();
 
-  $('input[type=file].fileinput, input[type=file].tk-fileinput').fileinput({dataUrl: config.dataUrl});
+
+  // if ($.tkFileInput !== undefined) {
+  //   $('input[type=file].fileinput, input[type=file].tk-fileinput').tkFileInput({dataUrl: config.dataUrl});
+  //
+  // }
+  // Standard file input
+  if ($.fn.tkFileInput !== undefined) {
+    $('.tk-imageinput').tkImageInput({dataUrl: config.dataUrl});
+    $('.tk-multiinput').tkMultiInput({dataUrl: config.dataUrl});
+    $('.tk-fileinput:not(.tk-imageinput)').tkFileInput({});
+  }
 
   /* -- TOC Menu -- */
   // var menu = $('.wiki-content');
@@ -50,7 +60,7 @@ jQuery(function ($) {
   // elFinder integration docs
   // See: https://github.com/Studio-42/elFinder/wiki/Integration-with-TinyMCE-4.x
   
-  if (typeof(tinyMCE) != 'undefined') {
+  if (typeof(tinyMCE) !== 'undefined') {
     
     function elFinderPickerCallback (callback, value, meta) {
       tinymce.activeEditor.windowManager.open({
@@ -76,17 +86,17 @@ jQuery(function ($) {
           info = file.name + ' (' + elf.formatSize(file.size) + ')';
 
           // Provide file and text for the link dialog
-          if (meta.filetype == 'file') {
+          if (meta.filetype === 'file') {
             callback(url, {text: info, title: info});
           }
 
           // Provide image and alt text for the image dialog
-          if (meta.filetype == 'image') {
+          if (meta.filetype === 'image') {
             callback(url, {alt: info});
           }
 
           // Provide alternative source and posted for the media dialog
-          if (meta.filetype == 'media') {
+          if (meta.filetype === 'media') {
             callback(url);
           }
 
@@ -286,7 +296,6 @@ jQuery(function ($) {
   
   $('.wiki-create-url-trigger').on('click', function(e) {
     var title = $('#fid-title').val();
-    console.log(title);
     // ajax request a url, checking for duplicates.
     $(this).blur();
     

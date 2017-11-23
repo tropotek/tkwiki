@@ -67,7 +67,7 @@ class Edit extends Iface
         
         // Find requested page
         $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
-        
+        vd($this->wPage);
         // Create a new page
         if (!$this->wPage && $request->has('u') && $this->getUser()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();

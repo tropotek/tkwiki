@@ -103,9 +103,7 @@ class Settings extends Iface
         
         $logo->saveFile();
         if ($logo->hasFile()) {
-            vd($logo->getValue());
             $fullPath = $this->getConfig()->getDataPath() . $logo->getValue();
-            vd($fullPath);
             \Tk\Image::create($fullPath)->bestFit(256, 256)->save();
             $this->data->set('site.logo', $logo->getValue());
             // Create favicon
@@ -134,7 +132,7 @@ class Settings extends Iface
         
         // Render the form
         $fren = new \Tk\Form\Renderer\Dom($this->form);
-        $template->insertTemplate($this->form->getId(), $fren->show()->getTemplate());
+        $template->insertTemplate($this->form->getId(), $fren->show());
         
         // Render select page dialog
         $pageSelect = new \App\Helper\PageSelect('#fid_btn_wiki\\\\.page\\\\.default', '#fid_wiki\\\\.page\\\\.default');

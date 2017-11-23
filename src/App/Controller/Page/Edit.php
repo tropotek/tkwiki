@@ -239,6 +239,7 @@ class Edit extends Iface
     {
         \App\Db\PageMap::create()->deleteLinkByPageId($page->id);
         $nodeList = $formatter->getDocument()->getElementsByTagName('a');
+        /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             $regs = array();
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {

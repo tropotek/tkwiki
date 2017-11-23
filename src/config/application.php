@@ -11,7 +11,6 @@ $config = \Tk\Config::getInstance();
  * @see http://php.net/session.configuration
  */
 include_once(dirname(__FILE__) . '/session.php');
-include_once(dirname(__FILE__) . '/routes.php');
 
 /*
  * Change the system timezone
@@ -59,6 +58,15 @@ $config['system.auth.adapters'] = array(
     'DbTable' => '\Tk\Auth\Adapter\DbTable',
     //'LDAP' => '\Tk\Auth\Adapter\Ldap'     // TODO: Need to create a user if this method is used...
 );
+
+
+
+// ------------------------------------------------------------
+
+// Include any overriding config options
+include_once(__DIR__ . '/config.php');
+
+// ------------------------------------------------------------
 
 
 

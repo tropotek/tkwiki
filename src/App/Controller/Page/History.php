@@ -54,7 +54,7 @@ class History extends Iface
 
         if (!$this->getUser()->getAcl()->canEdit($this->wPage)) {
             \Tk\Alert::addWarning('You do not have permission to edit this page.');
-            \Tk\Url::create('/')->redirect();
+            \Tk\Uri::create('/')->redirect();
         }
         
         

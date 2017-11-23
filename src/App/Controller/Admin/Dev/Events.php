@@ -29,7 +29,6 @@ class Events extends Iface
     }
     
     /**
-     *
      * @param Request $request
      * @return \App\Page\Iface|Template|string
      */

@@ -31,7 +31,7 @@ class Factory
         if (!self::$config) {
             self::$config = \Tk\Config::getInstance($sitePath, $siteUrl);
             // Include any config overriding settings
-            include(self::$config->getSrcPath() . '/config/config.php');
+            include(self::$config->getSrcPath() . '/config/application.php');
         }
         return self::$config;
     }

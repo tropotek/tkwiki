@@ -25,7 +25,7 @@ class UrlModifierFilter extends \Dom\Modifier\Filter\Iface
             if (in_array(strtolower($attr->nodeName), array('href'))) {
                 if (preg_match('/^page:\/\/(.*)/', $attr->value, $regs)) {
                     if (isset($regs[1])) {
-                        $url = \Tk\Url::create('/'.$regs[1]);
+                        $url = \Tk\Uri::create('/'.$regs[1]);
                         $attr->value = $url->getPath();
                     }
                 }

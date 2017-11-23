@@ -1,11 +1,11 @@
 
-
+TRUNCATE `user`;
 INSERT INTO `user` (`name`, `email`, `username`, `password`, `active`, `hash`, `modified`, `created`) VALUES
   ('Administrator', 'admin@example.com', 'admin', md5('password'), 1, MD5(CONCAT('admin@example.com', NOW())), NOW(), NOW())
 --  ,('Moderator', 'modder@example.com', 'modder', md5('password'), 1, MD5(CONCAT('modder@example.com', NOW())), NOW(), NOW()),
 --  ('User', 'user@example.com', 'user', md5('password'), 1, MD5(CONCAT('user@example.com', NOW())), NOW(), NOW())
 ;
-
+TRUNCATE `role`;
 INSERT INTO `role` (`name`, `description`) VALUES
   ('admin', 'Manage site, groups, users, pages, etc no restrictions'),
   ('moderator', 'Manage assigned users and pages for assigned groups'),
@@ -15,6 +15,7 @@ INSERT INTO `role` (`name`, `description`) VALUES
   ('delete', 'Delete pages'),
   ('editExtra', 'Can edit page css, js, url and template options');
 
+TRUNCATE `user_role`;
 INSERT INTO user_role (user_id, role_id)
 VALUES
   -- Administrator
@@ -25,19 +26,23 @@ VALUES
 --  (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8)
 ;
 
-INSERT INTO `data` (`foreign_id`, `foreign_key`, `key`, `value`) VALUES
-  (0, 'system', 'site.meta.keywords', ''),
-  (0, 'system', 'site.meta.description', ''),
-  (0, 'system', 'site.global.js', ''),
-  (0, 'system', 'site.global.css', ''),
-  (0, 'system', 'wiki.page.default', 'Home'),
-  (0, 'system', 'wiki.page.home.lock', 'wiki.page.home.lock');
+# TRUNCATE `data`;
+# INSERT INTO `data` (`foreign_id`, `foreign_key`, `key`, `value`) VALUES
+#   (0, 'system', 'site.meta.keywords', ''),
+#   (0, 'system', 'site.meta.description', ''),
+#   (0, 'system', 'site.global.js', ''),
+#   (0, 'system', 'site.global.css', ''),
+#   (0, 'system', 'wiki.page.default', 'Home'),
+#   (0, 'system', 'wiki.page.home.lock', 'wiki.page.home.lock');
 
 
 -- Add the home page to the site This should be non-deletable
-INSERT INTO page (user_id, type, template, title, url, modified, created) VALUES
+TRUNCATE `page`;
+INSERT INTO `page` (user_id, type, template, title, url, modified, created) VALUES
   (1, 'page', '', 'Home', 'Home', NOW(), NOW())
 ;
+
+TRUNCATE `content`;
 INSERT INTO content (page_id, user_id, html, modified, created) VALUES
   (1, 1, '<p>This blog post shows a few different types of content that''s supported and styled with Bootstrap. Basic
          typography, images, and code are all supported.</p>
@@ -101,6 +106,7 @@ INSERT INTO content (page_id, user_id, html, modified, created) VALUES
 -- --------------------------------------
 -- Table data: version 
 -- --------------------------------------
+TRUNCATE `version`;
 INSERT INTO `version` (`version`, `changelog`,`modified`, `created`) VALUES
   ('1.0', '- Initial project release
 - Updated Calls to Pager, Limit objects

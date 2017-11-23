@@ -33,6 +33,15 @@ class FrontController extends \Tk\Kernel\HttpKernel
     {
         parent::__construct($dispatcher, $resolver);
         $this->config = $config;
+
+        // initialise Dom Loader
+        \App\Factory::getDomLoader();
+
+        // Init the plugins, has to be here so the configs are not loaded before the system config
+        \App\Factory::getPluginFactory();
+
+        // Initiate the email gateway
+        \App\Factory::getEmailGateway();
         
         $this->init();
     }
@@ -47,36 +56,26 @@ class FrontController extends \Tk\Kernel\HttpKernel
     public function init()
     {
         $logger = $this->config->getLog();
+        /** @var \Tk\Request $request */
+        $request = \App\Factory::getConfig()->getRequest();
         
 
         // (kernel.init)
-        $this->dispatcher->addSubscriber(new \Tk\Listener\StartupHandler($logger, $this->config->getRequest(), $this->config->getSession()));
-        //$this->dispatcher->addSubscriber(new Listener\BootstrapHandler($this->config));
+        $this->dispatcher->addSubscriber(new \Tk\Listener\StartupHandler($logger, $request, $this->config->getSession()));
         
         // (kernel.request)
         $matcher = new \Tk\Routing\StaticMatcher($this->config->getSitePath().$this->config->get('template.path'), '\App\Controller\StaticPage::doDefault');
         $this->dispatcher->addSubscriber(new \Tk\Listener\RouteListener($matcher));
-        
         $matcher = new \Tk\Routing\UrlMatcher($this->config['site.routes']);
         $this->dispatcher->addSubscriber(new \Tk\Listener\RouteListener($matcher));
-        
-        $this->dispatcher->addSubscriber(new \App\Listener\AuthHandler());
-        
-        // (kernel.controller)
-
-        // (wiki.view)
-        $this->dispatcher->addSubscriber(new \App\Listener\WikiHandler());
-
-        // (kernel.view)
-
-        // (kernel.response)
         $this->dispatcher->addSubscriber(new \Tk\Listener\ResponseHandler(Factory::getDomModifier()));
 
-        // (kernel.finish_request)
-        
-        // (kernel.exception)
-        $this->dispatcher->addSubscriber(new \Tk\Listener\ExceptionListener($logger));
-        //$this->dispatcher->addSubscriber(new \Tk\Listener\ExceptionEmailListener(\App\Factory::getEmailGateway(), $logger, $this->config->get('site.email'), $this->config->get('site.title')));
+        $this->getDispatcher()->addSubscriber(new \Tk\Listener\LogExceptionListener($logger, $this->getConfig()->isDebug()));
+        if (preg_match('|^/ajax/.+|', $request->getUri()->getRelativePath())) { // If ajax request
+            $this->getDispatcher()->addSubscriber(new \Tk\Listener\JsonExceptionListener($this->getConfig()->isDebug()));
+        } else {
+            $this->getDispatcher()->addSubscriber(new \Tk\Listener\ExceptionListener($this->getConfig()->isDebug()));
+        }
 
         // (kernel.terminate)
         $sh = new \Tk\Listener\ShutdownHandler($logger, $this->config->getScriptTime());
@@ -85,10 +84,22 @@ class FrontController extends \Tk\Kernel\HttpKernel
 
         // Add your own handlers here
 
+        $this->dispatcher->addSubscriber(new \App\Listener\AuthHandler());
+        $this->dispatcher->addSubscriber(new \App\Listener\WikiHandler());
 
     }
 
     
-    
+
+
+
+    /**
+     * @return \Tk\Config
+     */
+    public function getConfig()
+    {
+        return \App\Factory::getConfig();
+    }
+
     
 }

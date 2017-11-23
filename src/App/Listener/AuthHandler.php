@@ -31,10 +31,26 @@ class AuthHandler implements Subscriber
         // Only the identity details should be in the auth session not the full user object, to save space and be secure.
         $config = \App\Factory::getConfig();
         $auth = \App\Factory::getAuth();
+        /** @var \App\Db\User $user */
+        $user = null;
         if ($auth->getIdentity()) {
             $user = \App\Db\UserMap::create()->findByUsername($auth->getIdentity());
             $config->setUser($user);
         }
+
+        $role = $event->getRequest()->getAttribute('role');
+        if (!$role || empty($role)) return;
+
+        if (!$user) {
+            \Tk\Alert::addWarning('You must be logged in to access the requested page.');
+            \Tk\Uri::create('/login.html')->redirect();
+        }
+        if (!$user->hasRole($role)) {
+            \Tk\Alert::addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
+            \Tk\Uri::create($user->getHomeUrl())->redirect();
+        }
+
+
     }
 
     /**
@@ -44,23 +60,23 @@ class AuthHandler implements Subscriber
      */
     public function onControllerAccess(ControllerEvent $event)
     {
-        /** @var \App\Controller\Iface $controller */
-        $controller = $event->getController();
-        $user = $controller->getUser();
-        if ($controller instanceof \App\Controller\Iface) {
-            $role = $event->getRequest()->getAttribute('access');
-            
-            // Check the user has access to the controller in question
-            if (empty($role)) return;
-            if (!$user) {
-                \Tk\Alert::addWarning('You must be logged in to access the requested page.');
-                \Tk\Uri::create('/login.html')->redirect();
-            }
-            if (!$user->hasRole($role)) {
-                \Tk\Alert::addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
-                \Tk\Uri::create($user->getHomeUrl())->redirect();
-            }
-        }
+//        /** @var \App\Controller\Iface $controller */
+//        $controller = $event->getController();
+//        $user = $controller->getUser();
+//        if ($controller instanceof \App\Controller\Iface) {
+//            $role = $event->getRequest()->getAttribute('access');
+//
+//            // Check the user has access to the controller in question
+//            if (empty($role)) return;
+//            if (!$user) {
+//                \Tk\Alert::addWarning('You must be logged in to access the requested page.');
+//                \Tk\Uri::create('/login.html')->redirect();
+//            }
+//            if (!$user->hasRole($role)) {
+//                \Tk\Alert::addWarning('You do not have access to the requested page: ' . \Tk\Uri::create()->getRelativePath());
+//                \Tk\Uri::create($user->getHomeUrl())->redirect();
+//            }
+//        }
     }
 
     /**

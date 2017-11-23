@@ -181,7 +181,7 @@ class Edit extends Iface
         
         // Render the form
         $fren = new \Tk\Form\Renderer\Dom($this->form);
-        $template->insertTemplate($this->form->getId(), $fren->show()->getTemplate());
+        $template->insertTemplate($this->form->getId(), $fren->show());
 
         return $this->getPage()->setPageContent($this->getTemplate());
     }

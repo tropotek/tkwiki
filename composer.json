@@ -35,19 +35,20 @@
         }
     },
     "require":  {
-        "php": ">=5.0.0",
+        "php": ">=5.3.3",
         "ttek/tk-installers": "~2.0",
         "ttek/tk-framework": "~2.0",
-        "ttek/tk-domtemplate": "~2.0",
+        "ttek/tk-mail": "~2.0",
         "ttek/tk-http": "~2.0",
         "ttek/tk-routing": "~2.0",
         "ttek/tk-auth": "~2.0",
         "ttek/tk-database": "~2.0",
         "ttek/tk-mvc": "~2.0",
+        "ttek/tk-domtemplate": "~2.0",
         "ttek/tk-form": "~2.0",
         "ttek/tk-table": "~2.0",
-        "ttek/tk-mail": "~2.0",
-        "ttek/tk-plugin": "~2.0"
+        "ttek/tk-plugin": "~2.0",
+        "ttek/tk-ui": "~2.0"
     },
     "require-dev":  {
     }

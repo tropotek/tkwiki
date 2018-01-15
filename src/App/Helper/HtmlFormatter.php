@@ -5,8 +5,6 @@ use App\Db\Content;
 use App\Db\Page;
 
 /**
- * Class ContentFormatter
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
@@ -171,7 +169,7 @@ class HtmlFormatter
                 if ($page) {
                     $css = '';
                     if ($this->isView) {
-                        if (\App\Auth\Acl::create(\App\Factory::getConfig()->getUser())->canView($page)) {
+                        if (\App\Auth\Acl::create(\App\Config::getInstance()->getUser())->canView($page)) {
                             $css = ' wiki-canView';
                         } else {
                             $css = ' wiki-notView disabled';

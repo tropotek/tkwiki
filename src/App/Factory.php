@@ -107,7 +107,6 @@ class Factory2
      * getDb
      * Ways to get the db after calling this method
      *
-     *  - \App\Factory::getDb()                 // Application level call
      *  - \Tk\Config::getInstance()->getDb()    //
      *  - \Tk\Db\Pdo::getInstance()             //
      *
@@ -137,11 +136,12 @@ class Factory2
         }
         return self::getConfig()->getDb();
     }
-    
+
     /**
      * get a dom Modifier object
-     * 
+     *
      * @return \Dom\Modifier\Modifier
+     * @throws \Tk\Exception
      */
     static public function getDomModifier()
     {

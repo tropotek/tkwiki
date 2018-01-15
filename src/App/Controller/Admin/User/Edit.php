@@ -31,32 +31,17 @@ class Edit extends Iface
 
 
     /**
-     *
+     * @param Request $request
+     * @throws \Tk\Exception
      */
-    public function __construct()
+    public function doDefault(Request $request)
     {
         $title = 'User Edit';
         if ($this->isProfile()) {
             $title = 'My Profile';
         }
-        parent::__construct($title);
-    }
+        $this->setPageTitle($title);
 
-    /**
-     * @return bool
-     */
-    public function isProfile() 
-    {
-        return  (\Tk\Uri::create()->getBasename() == 'profile.html');
-    }
-
-    /**
-     *
-     * @param Request $request
-     * @return \App\Page\Iface|Template|string
-     */
-    public function doDefault(Request $request)
-    {
         $this->user = new \App\Db\User();
         if ($this->isProfile()) {
             $this->user = $this->getUser();
@@ -112,8 +97,14 @@ class Edit extends Iface
         $this->form->load(\App\Db\UserMap::create()->unmapForm($this->user));
         $this->form->execute();
 
+    }
 
-        return $this->show();
+    /**
+     * @return bool
+     */
+    protected function isProfile()
+    {
+        return  (\Tk\Uri::create()->basename() == 'profile.html');
     }
 
     /**
@@ -144,7 +135,7 @@ class Edit extends Iface
         }
         
         if ($this->form->getFieldValue('newPassword')) {
-            $this->user->password = \App\Factory::hashPassword($this->form->getFieldValue('newPassword'));
+            $this->user->password = $this->getConfig()->hashPassword($this->form->getFieldValue('newPassword'));
         }
 
         $this->user->save();
@@ -168,11 +159,11 @@ class Edit extends Iface
     }
 
     /**
-     * @return \App\Page\Iface
+     * @return Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
         
         if ($this->user->id)
             $template->insertText('username', $this->user->name . ' - [UID ' . $this->user->id . ']');
@@ -183,7 +174,7 @@ class Edit extends Iface
         $fren = new \Tk\Form\Renderer\Dom($this->form);
         $template->insertTemplate($this->form->getId(), $fren->show());
 
-        return $this->getPage()->setPageContent($this->getTemplate());
+        return $template;
     }
 
 

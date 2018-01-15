@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use Tk\Mail\Exception;
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
@@ -21,23 +22,14 @@ class Contact extends Iface
      */
     protected $form = null;
 
-    
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct('Contact');
-    }
 
     /**
-     * doDefault
-     *
      * @param Request $request
-     * @return \App\Page\Page
      */
     public function doDefault(Request $request)
     {
+        $this->setPageTitle('Contact Us');
+
         $this->config = \Tk\Config::getInstance();
 
         $this->form = Form::create('contactForm');
@@ -55,31 +47,29 @@ class Contact extends Iface
         $this->form->addField(new Event\Button('send', array($this, 'doSubmit')));
         
         // Find and Fire submit event
-        $ret = $this->form->execute();
+        $this->form->execute();
 
-        return $this->show();
     }
 
     /**
-     * show()
-     *
-     * @return \App\Page\Page
+     * @return \Dom\Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
 
         // Render the form
         $ren = new \Tk\Form\Renderer\DomStatic($this->form, $template);
         $ren->show();
 
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
 
     /**
      * doSubmit()
      *
      * @param Form $form
+     * @throws Form\Exception
      */
     public function doSubmit($form)
     {
@@ -107,7 +97,7 @@ class Contact extends Iface
             return;
         }
         if ($attach->hasFile()) {
-            $attach->moveTo($this->getConfig()->getDataPath() . '/contact/' . date('d-m-Y') . '-' . str_replace('@', '_', $values['email']));
+            $attach->moveFile($this->getConfig()->getDataPath() . '/contact/' . date('d-m-Y') . '-' . str_replace('@', '_', $values['email']));
         }
 
         if ($this->sendEmail($form)) {
@@ -151,17 +141,10 @@ Message:
 
 MSG;
         // TODO: fire an event to send the message
-        return \App\Factory::getEmailGateway()->send($message);
+        try {
+            return \App\Config::getInstance()->getEmailGateway()->send($message);
+        } catch (Exception $e) {
+        }
     }
 
-
-    /**
-     * DomTemplate magic method
-     *
-     * @return \Dom\Template
-     */
-    public function __makeTemplate()
-    {
-        return \Dom\Loader::loadFile($this->getTemplatePath().'/xtpl/contact.xtpl');
-    }
 }

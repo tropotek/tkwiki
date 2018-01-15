@@ -44,15 +44,17 @@ $routes->add('userEdit', new \Tk\Routing\Route('/userEdit.html', 'App\Controller
 $routes->add('userProfile', new \Tk\Routing\Route('/profile.html', 'App\Controller\Admin\User\Edit::doDefault'));
 
 $routes->add('pageManager', new \Tk\Routing\Route('/pageManager.html', 'App\Controller\Page\Manager::doDefault', array('role' => array('admin'))));
-$routes->add('pageEdit', new \Tk\Routing\Route('/edit.html', 'App\Controller\Page\Edit::doDefault', array('role' => array('edit', 'moderator', 'admin'))));
+$routes->add('pageEdit', new \Tk\Routing\Route('/edit.html', 'App\Controller\Page\Edit::doDefault', array('role' => array('admin', 'edit', 'moderator'))));
 $routes->add('pageView', new \Tk\Routing\Route('/view.html', 'App\Controller\Page\View::doContentView'));
 
-$routes->add('pageHistory', new \Tk\Routing\Route('/history.html', 'App\Controller\Page\History::doDefault', array('role' => array('edit', 'moderator', 'admin'))));
-$routes->add('orphaned', new \Tk\Routing\Route('/orphaned.html', 'App\Controller\Page\Orphaned::doDefault', array('role' => array('moderator', 'admin'))));
+$routes->add('pageHistory', new \Tk\Routing\Route('/history.html', 'App\Controller\Page\History::doDefault', array('role' => array('admin', 'edit', 'moderator'))));
+$routes->add('orphaned', new \Tk\Routing\Route('/orphaned.html', 'App\Controller\Page\Orphaned::doDefault', array('role' => array('admin', 'moderator'))));
 $routes->add('search', new \Tk\Routing\Route('/search.html', 'App\Controller\Search::doDefault'));
 
+// TODO: Fix to only use /plugins.html
 $routes->add('admin-plugin-manager', new \Tk\Routing\Route('/plugins.html', 'App\Controller\Admin\PluginManager::doDefault', array('role' => array('admin'))));
 $routes->add('admin-plugin-manager', new \Tk\Routing\Route('/admin/plugins.html', 'App\Controller\Admin\PluginManager::doDefault', array('role' => array('admin'))));
+
 $routes->add('dev-events', new \Tk\Routing\Route('/dev/events.html', 'App\Controller\Admin\Dev\Events::doDefault', array('role' => array('admin'))));
 
 // DO NOT MOVE.... CatchAll must be the last route.

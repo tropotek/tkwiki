@@ -8,29 +8,25 @@ namespace App\Controller;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-abstract class Iface extends \Dom\Renderer\Renderer
+abstract class Iface extends \Tk\Controller\Iface
 {
-    
     /**
-     * @var string
+     * @return string
+     * @todo: we should come up with a more solid routing naming convention
      */
-    protected $pageTitle = '';
-    
-    /**
-     * @var \App\Page\Iface
-     */
-    private $page = null;
-
-
-    /**
-     * @param string $pageTitle
-     */
-    public function __construct($pageTitle = '')
+    public function getDefaultTitle()
     {
-        $this->setPageTitle($pageTitle);
-        $this->getPage();
+        $replace = array('admin-', 'client-', 'staff-', 'student-', '-base');
+        /** @var \Tk\Request $request */
+        $request = $this->getConfig()->getRequest();
+        if ($request) {
+            $routeName = $request->getAttribute('_route');
+            $routeName = str_replace($replace, '', $routeName);
+            return ucwords(trim(str_replace('-', ' ', $routeName)));
+        }
+        return '';
     }
-    
+
     /**
      * Get a new instance of the page to display the content in.
      *
@@ -38,50 +34,10 @@ abstract class Iface extends \Dom\Renderer\Renderer
      */
     public function getPage()
     {
-        //$pageAccess = $this->getConfig()->getRequest()->getAttribute('access');
         if (!$this->page) {
-            $this->page = new \App\Page\Page($this);
+            $this->page = new \App\Page\Page();
         }
         return $this->page;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getTemplatePath()
-    {
-        return $this->getConfig()->getTemplatePath();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getPageTitle()
-    {
-        return $this->pageTitle;
-    }
-
-    /**
-     *
-     * @param string $pageTitle
-     * @return $this
-     */
-    public function setPageTitle($pageTitle)
-    {
-        $this->pageTitle = $pageTitle;
-        return $this;
-    }
-
-    /**
-     * Get the global config object.
-     *
-     * @return \Tk\Config
-     */
-    public function getConfig()
-    {
-        return \Tk\Config::getInstance();
     }
 
     /**
@@ -93,6 +49,30 @@ abstract class Iface extends \Dom\Renderer\Renderer
     {
         return $this->getConfig()->getUser();
     }
+
+    /**
+     * @return \Tk\Config|\App\Config
+     */
+    public function getConfig()
+    {
+        return parent::getConfig();
+    }
+
+    /**
+     * DomTemplate magic method example
+     *
+     * @return \Dom\Template
+     */
+    public function __makeTemplate()
+    {
+        $html = <<<HTML
+<div></div>
+HTML;
+        return \Dom\Loader::load($html);
+        // OR FOR A FILE
+        //return \Dom\Loader::loadFile($this->getTemplatePath().'/public.xtpl');
+    }
+
     
 
 }

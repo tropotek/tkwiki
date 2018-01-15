@@ -13,24 +13,14 @@ use Tk\Request;
 class Page extends Iface
 {
 
-    /**
-     * AdminPage constructor.
-     *
-     * @param \App\Controller\Iface $controller
-     * @param string $templateFile
-     */
-    public function __construct(\App\Controller\Iface $controller)
-    {
-        parent::__construct($controller);
-    }
 
     /**
-     * 
+     * @return \Dom\Template|void
+     * @throws \Exception
      */
     public function show()
     {
-        $this->initPage();
-        $template = $this->getTemplate();
+        $template = parent::show();
 
         if ($this->getUser()) {
             // User Menu Setup 

@@ -24,26 +24,10 @@ class View extends Iface
      */
     protected $wContent= null;
 
-    /**
-     * @var \Tk\Event\Dispatcher
-     */
-    protected $dispatcher = null;
-
-    
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->dispatcher = $this->getConfig()->getEventDispatcher();
-    }
 
     /**
      * @param Request $request
      * @param $pageUrl
-     * @return \App\Page\Iface
-     * @throws \Tk\Exception
      */
     public function doDefault(Request $request, $pageUrl)
     {
@@ -69,8 +53,7 @@ class View extends Iface
                 \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->redirect();
             }
         }
-        
-        return $this->show($request);
+
     }
     
     public function canView()
@@ -84,7 +67,6 @@ class View extends Iface
     /**
      * @param Request $request
      * @return \App\Page\Iface
-     * @throws \Tk\Exception
      */
     public function doContentView(Request $request)
     {
@@ -101,16 +83,11 @@ class View extends Iface
 
 
     /**
-     * Note: no longer a dependency on show() allows for many show methods for many 
-     * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
-     * 
-     * @param Request $request
-     * @return \App\Page\Iface
-     * @todo Look at implementing a cache for page views.
+     * @return \Dom\Template
      */
-    public function show(Request $request)
+    public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
         
         $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getUser());
         $template->insertTemplate('header', $header->show());
@@ -118,8 +95,7 @@ class View extends Iface
             
         if ($this->wPage) {
             $event = new \App\Event\ContentEvent($this->wContent);
-            $this->dispatcher->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
-//vd($this->wContent->html);
+            $this->getConfig()->getEventDispatcher()->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
             $template->insertHtml('content', $this->wContent->html);
 
             if ($this->wContent->css) {
@@ -139,10 +115,10 @@ class View extends Iface
             $this->getPage()->getTemplate()->setTitleText($this->getPage()->getTemplate()->getTitleText() . ' - ' . $this->wPage->title);
             
             
-            $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/assets/prism/prism.js'));
-            $template->appendCssUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/assets/prism/prism.css'));
+            $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/default/assets/prism/prism.js'));
+            $template->appendCssUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/default/assets/prism/prism.css'));
         }
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
 
 

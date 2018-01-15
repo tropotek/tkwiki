@@ -20,18 +20,9 @@ class Manager extends Iface
      * @var \Tk\Table
      */
     protected $table = null;
-    
+
 
     /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct('Page Manager');
-    }
-
-    /**
-     *
      * @param Request $request
      * @return \App\Page\Iface|Template|string
      */
@@ -61,19 +52,19 @@ class Manager extends Iface
         $list = \App\Db\PageMap::create()->findFiltered($filter, $this->table->makeDbTool('a.title'));
         $this->table->setList($list);
 
-        return $this->show();
     }
 
     /**
-     * @return \App\Page\Iface
+     * @return Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
+
         $ren =  \Tk\Table\Renderer\Dom\Table::create($this->table);
-        $ren->show();
-        $template->replaceTemplate('table', $ren->getTemplate());
-        return $this->getPage()->setPageContent($template);
+        $template->replaceTemplate('table', $ren->show());
+
+        return $template;
     }
 
     /**

@@ -45,14 +45,8 @@ class Edit extends Iface
      * @var \Tk\Form
      */    
     protected $form = null;
-    
-    /**
-     * 
-     */
-    public function __construct()
-    {
-        parent::__construct('');
-    }
+
+
 
     /**
      * @param Request $request
@@ -61,13 +55,15 @@ class Edit extends Iface
      */
     public function doDefault(Request $request)
     {
-        if (!\App\Factory::getSession()->has(self::SID_REFERRER) && $request->getReferer()) {
-            \App\Factory::getSession()->set(self::SID_REFERRER, $request->getReferer());
+        $this->setPageTitle('Edit Page');
+
+        if (!$this->getConfig()->getSession()->has(self::SID_REFERRER) && $request->getReferer()) {
+            $this->getConfig()->getSession()->set(self::SID_REFERRER, $request->getReferer());
         }
         
         // Find requested page
         $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
-        vd($this->wPage);
+
         // Create a new page
         if (!$this->wPage && $request->has('u') && $this->getUser()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
@@ -99,7 +95,7 @@ class Edit extends Iface
             \Tk\Alert::addWarning('You do not have permission to edit this page.');
             $error = true;
         }
-        if ($this->wPage->id && !\App\Factory::getLockMap()->canAccess($this->wPage->id)) {
+        if ($this->wPage->id && !$this->getConfig()->getLockMap()->canAccess($this->wPage->id)) {
             \Tk\Alert::addWarning('The page is currently being edited by another user. Try again later.');
             $error = true;
         }
@@ -112,7 +108,7 @@ class Edit extends Iface
         }
 
         // Acquire page lock.
-        \App\Factory::getLockMap()->lock($this->wPage->id);
+        $this->getConfig()->getLockMap()->lock($this->wPage->id);
 
         
         if (!$this->wContent) {
@@ -133,7 +129,7 @@ class Edit extends Iface
         if ($request->has('del')) {
             $this->doDelete($request);
         }
-        //vd($this->wContent->html);
+
         // Form
         $this->form = Form::create('pageEdit');
         $this->form->addField(new Field\Hidden('pid', $this->wPage->id));
@@ -155,12 +151,12 @@ class Edit extends Iface
         $this->form->load(\App\Db\ContentMap::create()->unmapForm($this->wContent));
 
         $this->form->execute();
-        
-        return $this->show($request);
+
     }
 
     /**
-     * @param $form
+     * @param Form $form
+     * @throws \Tk\Db\Exception
      */
     public function doCancel($form)
     {
@@ -168,12 +164,13 @@ class Edit extends Iface
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
             $url = \Tk\Uri::create('/');
         }
-        \App\Factory::getLockMap()->unlock($this->wPage->id); 
+        $this->getConfig()->getLockMap()->unlock($this->wPage->id);
         $url->redirect();
     }
-    
+
     /**
      * @param Form $form
+     * @throws \Tk\Db\Exception
      */
     public function doSubmit($form)
     {
@@ -201,13 +198,13 @@ class Edit extends Iface
             $this->indexLinks($this->wPage, new HtmlFormatter($this->wContent->html, false));
         
         // Remove page lock
-        \App\Factory::getLockMap()->unlock($this->wPage->id);
+        $this->getConfig()->getLockMap()->unlock($this->wPage->id);
 
         $url = $this->wPage->getPageUrl();
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
             \Tk\Uri::create('/');
-            if (\App\Factory::getSession()->has(self::SID_REFERRER)) {
-                $url = \App\Factory::getSession()->getOnce(self::SID_REFERRER);
+            if ($this->getConfig()->getSession()->has(self::SID_REFERRER)) {
+                $url = $this->getConfig()->getSession()->getOnce(self::SID_REFERRER);
             }
 
         }
@@ -217,9 +214,11 @@ class Edit extends Iface
 
     /**
      * @param Request $request
+     * @throws \Tk\Db\Exception
      */
     public function doDelete(Request $request)
     {
+        /** @var \App\Db\Page $page */
         $page = \App\Db\PageMap::create()->find($request->get('del'));
         if (!$page || !$this->getUser() || !$this->getUser()->getAcl()->canDelete($page)) {
             \Tk\Alert::addWarning('You do not have the permissions to delete this page.');
@@ -253,13 +252,11 @@ class Edit extends Iface
     /**
      * Note: no longer a dependency on show() allows for many show methods for many 
      * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
-     * 
-     * @param Request $request
-     * @return \App\Page\Iface
+     *
      */
-    public function show(Request $request)
+    public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
         $domForm = $template->getForm('pageEdit');
 
         if ($this->wPage->url == \App\Db\Page::getHomeUrl()) {
@@ -285,9 +282,9 @@ config.pageEdit = {
   saveEvent : '$saveEvent'
 };
 JS;
-        $template->appendJs($js, ['data-jsl-priority' => -1000]);
+        $template->appendJs($js, ['data-jsl-priority' => -999]);
         
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
     
     /**

@@ -52,20 +52,20 @@ class LockMap
     {
         if (!self::$instance) {
             if (!$db) {
-                $db = \App\Factory::getDb();
+                $db = \App\Config::getInstance()->getDb();
             }
             self::$instance = new static($user, $db);
         }
         return self::$instance;
     }
-    
-    
+
 
     /**
      * lock a wiki page if the user has access to the lock
      *
      * @param int $pageId
      * @return bool
+     * @throws \Tk\Db\Exception
      */
     public function lock($pageId)
     {
@@ -93,6 +93,7 @@ class LockMap
      *
      * @param $pageId
      * @return bool
+     * @throws \Tk\Db\Exception
      */
     function unlock($pageId)
     {
@@ -124,13 +125,12 @@ class LockMap
     }
 
 
-
-
     /**
      * Enter description here...
      *
      * @param int $pageId
      * @return boolean
+     * @throws \Tk\Db\Exception
      */
     public function isLocked($pageId)
     {
@@ -140,11 +140,13 @@ class LockMap
         $row = $res->fetch();
         return ($row->i > 0);
     }
+
     /**
      * Does the userId own the lock
      *
      * @param int $pageId
      * @return boolean
+     * @throws \Tk\Db\Exception
      */
     public function hasLock($pageId)
     {
@@ -158,6 +160,7 @@ class LockMap
      * occasionally look at clearing the expired locks
      * The default time to check is 2 * timeout
      *
+     * @throws \Tk\Db\Exception
      */
     public function clearExpired()
     {

@@ -98,7 +98,7 @@ class Content extends Model implements \Tk\ValidInterface
     static function cloneContent($src)
     {
         $dst = new static();
-        $dst->userId = \App\Factory::getConfig()->getUser()->id;
+        $dst->userId = \App\Config::getInstance()->getUser()->id;
         if ($src) {
             $dst->pageId = $src->pageId;
             $dst->html = $src->html;

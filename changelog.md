@@ -124,7 +124,7 @@ Ver 2.0.8 [2016-12-30]:
 Ver 2.0.7 [2016-12-30]:
 -------------------------------
  - Minor Code Updates
- - Added ability to create new templates just change teh config param system.template.path to your
+ - Added ability to create new templates just change the config param system.template.path to your
    templates location
  - Upgraded to use new lib cass names
  - Fixed Orphaned sort bug

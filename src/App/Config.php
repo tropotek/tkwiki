@@ -10,6 +10,17 @@ class Config extends \Tk\Config
 {
 
     /**
+     * @return Db\LockMap
+     */
+    public function getLockMap()
+    {
+        $lm = \App\Db\LockMap::getInstance($this->getUser(), $this->getDb());
+        return $lm;
+    }
+
+
+
+    /**
      * A factory method to create an instances of an Auth adapters
      *
      * @param string $class
@@ -33,7 +44,7 @@ class Config extends \Tk\Config
                 $adapter = new $class($this['db'], $this['system.auth.dbtable.tableName'],
                     $this['system.auth.dbtable.usernameColumn'], $this['system.auth.dbtable.passwordColumn'],
                     $this['system.auth.dbtable.activeColumn']);
-                $adapter->setHashCallback(array(__CLASS__, 'hashPassword'));
+                $adapter->setHashCallback(array($this, 'hashPassword'));
                 break;
             case '\Tk\Auth\Adapter\Trapdoor':
                 $adapter = new $class();
@@ -56,7 +67,7 @@ class Config extends \Tk\Config
     public function hashPassword($pwd, $user = null)
     {
         $salt = '';
-        if ($user) {    // Use salted password
+        if ($user && false) {    // TODO: Use salted password
             if (method_exists($user, 'getHash'))
                 $salt = $user->getHash();
             else if ($user->hash)
@@ -128,7 +139,7 @@ class Config extends \Tk\Config
 
 
 
-
+    /* ****************************************************************************************** */
 
 
 
@@ -141,7 +152,6 @@ class Config extends \Tk\Config
     {
         if (!parent::getRequest()) {
             $obj = \Tk\Request::create();
-            //$obj->setAttribute('config', $this);
             parent::setRequest($obj);
         }
         return parent::getRequest();
@@ -192,28 +202,17 @@ class Config extends \Tk\Config
     }
 
     /**
-     * Ways to get the db after calling this method
+     * getFrontController
      *
-     *  - \Uni\Config::getInstance()->getDb()       //
-     *  - \Tk\Db\Pdo::getInstance()                //
-     *
-     * Note: If you are creating a base lib then the DB really should be sent in via a param or method.
-     *
-     * @param string $name
-     * @return mixed|\Tk\Db\Pdo
+     * @return \App\FrontController
      */
-    public function getDb($name = 'db')
+    public function getFrontController()
     {
-        if (!$this->get('db') && $this->has($name.'.type')) {
-            try {
-                $pdo = \Tk\Db\Pdo::getInstance($name, $this->getGroup($name, true));
-                $this->set('db', $pdo);
-            } catch (\Exception $e) {
-                error_log('<p>Config::getDb(): ' . $e->getMessage() . '</p>');
-                exit;
-            }
+        if (!$this->get('front.controller')) {
+            $obj = new \App\FrontController($this->getEventDispatcher(), $this->getResolver());
+            $this->set('front.controller', $obj);
         }
-        return $this->get('db');
+        return parent::get('front.controller');
     }
 
     /**
@@ -239,9 +238,35 @@ class Config extends \Tk\Config
     {
         if (!$this->get('resolver')) {
             $obj = new \Tk\Controller\PageResolver($this->getLog());
+            //$obj = new \Tk\Controller\Resolver($this->getLog());
             $this->set('resolver', $obj);
         }
         return $this->get('resolver');
+    }
+
+    /**
+     * Ways to get the db after calling this method
+     *
+     *  - \Uni\Config::getInstance()->getDb()       //
+     *  - \Tk\Db\Pdo::getInstance()                //
+     *
+     * Note: If you are creating a base lib then the DB really should be sent in via a param or method.
+     *
+     * @param string $name
+     * @return mixed|\Tk\Db\Pdo
+     */
+    public function getDb($name = 'db')
+    {
+        if (!$this->get('db') && $this->has($name.'.type')) {
+            try {
+                $pdo = \Tk\Db\Pdo::getInstance($name, $this->getGroup($name, true));
+                $this->set('db', $pdo);
+            } catch (\Exception $e) {
+                error_log('<p>Config::getDb(): ' . $e->getMessage() . '</p>');
+                exit;
+            }
+        }
+        return $this->get('db');
     }
 
     /**

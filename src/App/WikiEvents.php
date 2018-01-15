@@ -11,7 +11,6 @@ namespace App;
 class WikiEvents
 {
 
-
     /**
      * This event is fired before the content->html is inserted into 
      * page template for rendering.
@@ -22,10 +21,6 @@ class WikiEvents
      * @var string
      */
     const WIKI_CONTENT_VIEW = 'wiki.content.view';
-    
-    
-    
-    
-    
+
 
 }

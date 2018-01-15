@@ -42,7 +42,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     {
         $this->user = $user;
         $this->init();
-        $this->dispatcher = \App\Factory::getConfig()->getEventDispatcher();
+        $this->dispatcher = \App\Config::getInstance()->getEventDispatcher();
     }
 
     /**

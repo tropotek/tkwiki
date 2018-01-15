@@ -13,4 +13,5 @@ $composer = include($sitePath . '/vendor/autoload.php');
 
 include_once $sitePath.'/src/App/Bootstrap.php';
 
-\App\Config::getInstance()->setComposer($composer);
+$config = \App\Config::getInstance();
+$config->set('composer', $composer);

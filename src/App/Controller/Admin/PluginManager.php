@@ -9,8 +9,6 @@ use Tk\Form\Event;
 use \App\Controller\Iface;
 
 /**
- *
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -29,23 +27,15 @@ class PluginManager extends Iface
     protected $form = null;
 
 
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
-     *
      * @param Request $request
-     * @return \App\Page\Iface
      */
     public function doDefault(Request $request)
     {
-        $this->pluginFactory = \App\Factory::getPluginFactory();
         $this->setPageTitle('Plugin Manager');
+
+        $this->pluginFactory = $this->getConfig()->getPluginFactory();
 
         // Upload plugin
         $this->form = Form::create('formEdit');
@@ -65,7 +55,6 @@ class PluginManager extends Iface
 
         $this->table->setList($this->getPluginList());
 
-        return $this->show();
     }
 
     /**
@@ -73,7 +62,7 @@ class PluginManager extends Iface
      */
     private function getPluginList()
     {
-        $pluginFactory = \App\Factory::getPluginFactory();
+        $pluginFactory = $this->getConfig()->getPluginFactory();
         $list = array();
         $names = $pluginFactory->getAvailablePlugins();
         foreach ($names as $pluginName) {
@@ -126,20 +115,20 @@ class PluginManager extends Iface
     }
 
     /**
-     * @return \App\Page\Iface
+     * @return Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
 
         // Render the form
         $fren = new \Tk\Form\Renderer\Dom($this->form);
-        $template->insertTemplate($this->form->getId(), $fren->show()->getTemplate());
+        $template->insertTemplate($this->form->getId(), $fren->show());
 
         // render Table
         $template->replaceTemplate('PluginList', $this->table->getParam('renderer')->show());
 
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
 
     /**
@@ -254,7 +243,7 @@ class IconCell extends \Tk\Table\Cell\Text
     {
         $template = $this->__makeTemplate();
 
-        $pluginName = \App\Factory::getPluginFactory()->cleanPluginName($info->name);
+        $pluginName = \App\Config::getInstance()->getPluginFactory()->cleanPluginName($info->name);
 
         if (is_file(\Tk\Config::getInstance()->getPluginPath().'/'.$pluginName.'/icon.png')) {
             $template->setAttr('icon', 'src', \Tk\Config::getInstance()->getPluginUrl() . '/' . $pluginName . '/icon.png');
@@ -323,7 +312,7 @@ class ActionsCell extends \Tk\Table\Cell\Text
     public function getCellHtml($info, $rowIdx = null)
     {
         $template = $this->__makeTemplate();
-        $pluginFactory = \App\Factory::getPluginFactory();
+        $pluginFactory = \App\Config::getInstance()->getPluginFactory();
 
         $pluginName = $pluginFactory->cleanPluginName($info->name);
 
@@ -396,7 +385,7 @@ HTML;
 
     protected function doActivatePlugin(Request $request)
     {
-        $pluginFactory = \App\Factory::getPluginFactory();
+        $pluginFactory = \App\Config::getinstance()->getPluginFactory();
         $pluginName = strip_tags(trim($request->get('act')));
         if (!$pluginName) {
             \Tk\Alert::addWarning('Cannot locate Plugin: ' . $pluginName);
@@ -412,6 +401,10 @@ HTML;
         \Tk\Uri::create()->reset()->redirect();
     }
 
+    /**
+     * @param Request $request
+     * @throws \Tk\Plugin\Exception
+     */
     protected function doDeactivatePlugin(Request $request)
     {
         $pluginName = strip_tags(trim($request->get('deact')));
@@ -419,7 +412,7 @@ HTML;
             \Tk\Alert::addWarning('Cannot locate Plugin: ' . $pluginName);
             return;
         }
-        \App\Factory::getPluginFactory()->deactivatePlugin($pluginName);
+        \App\Config::getInstance()->getPluginFactory()->deactivatePlugin($pluginName);
         \Tk\Alert::addSuccess('Plugin `' . $pluginName . '` deactivated successfully');
         \Tk\Uri::create()->reset()->redirect();
     }
@@ -431,7 +424,7 @@ HTML;
             \Tk\Alert::addWarning('Cannot locate Plugin: ' . $pluginName);
             return;
         }
-        $pluginPath = \App\Factory::getPluginFactory()->getPluginPath($pluginName);
+        $pluginPath = \App\Config::getInstance()->getPluginFactory()->getPluginPath($pluginName);
 
         if (!is_dir($pluginPath)) {
             \Tk\Alert::addWarning('Plugin `' . $pluginName . '` path not found');

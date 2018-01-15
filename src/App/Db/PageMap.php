@@ -166,7 +166,7 @@ class PageMap extends Mapper
     public function findOrphanedPages($tool)
     {
 
-        $homeUrl = \App\Factory::getConfig()->get('wiki.page.default');
+        $homeUrl = \App\Config::getInstance()->get('wiki.page.default');
         
         $from = sprintf('%s a LEFT JOIN %s b ON (a.%s = b.%s)', $this->getDb()->quoteParameter($this->getTable()), $this->getDb()->quoteParameter('links'),
             $this->getDb()->quoteParameter('url'), $this->getDb()->quoteParameter('page_url'));
@@ -194,7 +194,7 @@ class PageMap extends Mapper
      */
     public function isOrphan($pageId)
     {
-        $homeUrl = \App\Factory::getConfig()->get('wiki.page.default');
+        $homeUrl = \App\Config::getInstance()->get('wiki.page.default');
         $sql = sprintf('SELECT a.* FROM %s a LEFT JOIN links b ON (a.url = b.page_url)
 WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s AND a.id = %s)', $this->getDb()->quoteParameter($this->getTable()),
             $this->getDb()->quote($homeUrl), $this->getDb()->quote(Page::TYPE_NAV), (int)$pageId );

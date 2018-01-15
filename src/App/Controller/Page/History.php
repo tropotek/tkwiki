@@ -24,6 +24,10 @@ class History extends Iface
     protected $table = null;
 
 
+    // TODO: We need to remove the current content record from the list as it cannot
+    // TODO:  be reverted to itself.
+
+
     /**
      * @param Request $request
      * @throws \Tk\Exception
@@ -140,7 +144,7 @@ class DateCell extends \Tk\Table\Cell\Text
     {
         $date =  $obj->$property;
         if (!$date instanceof \DateTime) return $date;
-        return $date->format(\Tk\Date::SHORT_DATETIME) . ' - ' . \Tk\Date::toRelativeString($date);
+        return $date->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ' - ' . \Tk\Date::toRelativeString($date);
     }
 }
 

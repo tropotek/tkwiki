@@ -66,7 +66,6 @@ class View extends Iface
 
     /**
      * @param Request $request
-     * @return \App\Page\Iface
      */
     public function doContentView(Request $request)
     {
@@ -78,7 +77,7 @@ class View extends Iface
         if (!$this->wPage) {
             throw new \Tk\HttpException(404, 'Page not found');
         }
-        return $this->show($request);
+
     }
 
 

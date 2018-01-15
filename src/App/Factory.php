@@ -10,7 +10,7 @@ use Tk\Db\Pdo;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class Factory
+class Factory2
 {
 
     /**

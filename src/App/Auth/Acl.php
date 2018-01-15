@@ -4,7 +4,6 @@ namespace App\Auth;
 use App\Db\Role;
 use App\Db\RoleMap;
 use App\Db\Page;
-use App\Db\PageMap;
 
 /**
  * Class RoleAccess
@@ -98,7 +97,7 @@ class Acl
     }
 
     /**
-     * @return \App\Db\Role[]
+     * @return Role[]|\Tk\Db\Map\ArrayObject
      */
     public function getRoles()
     {

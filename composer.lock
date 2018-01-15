@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "35b48b1a38c7c4b9401aed71d830b6bd",
+    "content-hash": "9627bd63a6f9c7b339de676b2249ad20",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -941,6 +941,54 @@
                 "tropotek"
             ],
             "time": "2017-12-14T01:45:01+00:00"
+        },
+        {
+            "name": "ttek/tk-ui",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tropotek/tk-ui.git",
+                "reference": "e5bb61619449133b687f75ce87385297e1fd5eca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tropotek/tk-ui/zipball/e5bb61619449133b687f75ce87385297e1fd5eca",
+                "reference": "e5bb61619449133b687f75ce87385297e1fd5eca",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "ttek/tk-framework": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Tk\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Mifsud",
+                    "email": "info@tropotek.com.au",
+                    "homepage": "http://www.tropotek.com/"
+                }
+            ],
+            "description": "A bootstrap based UI lib for the Tk-lib framework",
+            "keywords": [
+                "bootstrap",
+                "tropotek",
+                "ui"
+            ],
+            "time": "2017-11-27T01:51:38+00:00"
         }
     ],
     "packages-dev": [],
@@ -950,7 +998,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.0.0"
+        "php": ">=5.3.3"
     },
     "platform-dev": []
 }

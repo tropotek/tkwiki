@@ -93,7 +93,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             $template->setChoice('history');
             $title .= ' (History)';
         } else {
-            if (\App\Factory::getRequest()->has('contentId')) {
+            if (\App\Config::getInstance()->getRequest()->has('contentId')) {
                 $template->setChoice('viewRevision');
                 $title .= ' <small>(Revision ' . $this->wContent->id . ')</small>';
                 $template->addCss('content', 'revision');
@@ -186,7 +186,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
      */
     public function isEdit()
     {
-        if (\Tk\Uri::create()->getBasename() == 'edit.html') {
+        if (\Tk\Uri::create()->basename() == 'edit.html') {
             return true;
         }
         return false;
@@ -199,7 +199,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
      */
     public function isHistory()
     {
-        if (\Tk\Uri::create()->getBasename() == 'history.html') {
+        if (\Tk\Uri::create()->basename() == 'history.html') {
             return true;
         }
         return false;

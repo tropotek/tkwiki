@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use Tk\Request;
-use Dom\Template;
 use Tk\Form;
 use Tk\Form\Field;
 use Tk\Form\Event;
@@ -37,14 +36,13 @@ class Login extends Iface
      */
     public function __construct()
     {
-        parent::__construct('Login');
         $this->dispatcher = $this->getConfig()->getEventDispatcher();
     }
-    
+
     /**
      *
      * @param Request $request
-     * @return Template
+     * @throws \Exception
      */
     public function doDefault(Request $request)
     {
@@ -62,19 +60,17 @@ class Login extends Iface
         // Find and Fire submit event
         $this->form->execute();
 
-        return $this->show();
     }
 
     /**
      * doLogin()
      *
      * @param \Tk\Form $form
-     * @throws \Tk\Exception
      */
     public function doLogin($form)
     {
         /** @var Auth $auth */
-        $auth = \App\Factory::getAuth();
+        $auth = $this->getConfig()->getAuth();
 
         if (!$form->getFieldValue('username') || !preg_match('/[a-z0-9_ -]{4,32}/i', $form->getFieldValue('username'))) {
             $form->addFieldError('username', 'Please enter a valid username');
@@ -109,13 +105,11 @@ class Login extends Iface
     }
 
     /**
-     * show()
-     *
-     * @return \App\Page\Iface
+     * @return \Dom\Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
         
         if ($this->getConfig()->get('site.user.registration')) {
             $template->setChoice('register');
@@ -125,19 +119,8 @@ class Login extends Iface
         $ren = new \Tk\Form\Renderer\DomStatic($this->form, $template);
         $ren->show();
         
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
 
-
-
-    /**
-     * DomTemplate magic method
-     *
-     * @return \Dom\Template
-     */
-    public function __makeTemplate()
-    {
-        return \Dom\Loader::loadFile($this->getTemplatePath().'/xtpl/login.xtpl');
-    }
 
 }

@@ -9,8 +9,6 @@ use Tk\Auth\AuthEvents;
 
 
 /**
- * Class Index
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -27,28 +25,16 @@ class Register extends Iface
      */
     private $user = null;
 
-    /**
-     * @var \Tk\Event\Dispatcher
-     */
-    private $dispatcher = null;
-    
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct('Create New Account');
-        $this->dispatcher = $this->getConfig()->getEventDispatcher();
-        
-    }
 
     /**
      * @param Request $request
-     * @return \App\Page\Iface
+     * @throws \Exception
+     * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
+        $this->setPageTitle('Create New Account');
+
         if (!$this->getConfig()->get('site.user.registration')) {
             \Tk\Alert::addError('User registration has been disabled on this site.');
             \Tk\Uri::create('/')->redirect();
@@ -77,7 +63,6 @@ class Register extends Iface
         // Find and Fire submit event
         $this->form->execute();
 
-        return $this->show();
     }
 
 
@@ -85,13 +70,11 @@ class Register extends Iface
      * doLogin()
      *
      * @param \Tk\Form $form
-     * @throws \Tk\Exception
      */
     public function doRegister($form)
     {
         \App\Db\UserMap::create()->mapForm($form->getValues(), $this->user);
 
-        
         if (!$this->form->getFieldValue('password')) {
             $form->addFieldError('password', 'Please enter a password');
             $form->addFieldError('passwordConf');
@@ -106,9 +89,9 @@ class Register extends Iface
             $form->addFieldError('password', 'Passwords do not match.');
             $form->addFieldError('passwordConf');
         }
-        
-        $form->addFieldErrors(\App\Db\UserValidator::create($this->user)->getErrors());
-        
+
+        $form->addFieldErrors($this->user->validate());
+
         if ($form->hasErrors()) {
             return;
         }
@@ -117,7 +100,7 @@ class Register extends Iface
         $hash = $this->user->generateHash(true);
         $this->user->hash = $hash;
         $this->user->active = false;
-        $this->user->password = \App\Factory::hashPassword($this->user->password);
+        $this->user->password = $this->getConfig()->hashPassword($this->user->password);
         
         $this->user->save();
 
@@ -125,8 +108,7 @@ class Register extends Iface
         $event = new \Tk\Event\Event();
         $event->set('form', $form);
         $event->set('user', $this->user);
-        $event->set('templatePath', $this->getTemplatePath());
-        $this->dispatcher->dispatch(AuthEvents::REGISTER, $event);
+        $this->getConfig()->getEventDispatcher()->dispatch(AuthEvents::REGISTER, $event);
         
         // Redirect with message to check their email
         \Tk\Alert::addSuccess('Your New Account Has Been Created. Check your email to activate the account.');
@@ -136,8 +118,7 @@ class Register extends Iface
 
     /**
      * Activate the user account if not activated already, then trash the request hash....
-     * 
-     * 
+     *
      * @param Request $request
      */
     public function doConfirmation($request)
@@ -158,18 +139,19 @@ class Register extends Iface
         
         $event = new \Tk\Event\RequestEvent($request);
         $event->set('user', $user);
-        $event->set('templatePath', $this->getTemplatePath());
-        $this->dispatcher->dispatch('auth.onRegisterConfirm', $event);
+        $this->getConfig()->getEventDispatcher()->dispatch('auth.onRegisterConfirm', $event);
         
         \Tk\Alert::addSuccess('Account Activation Successful.');
         \Tk\Uri::create('/login.html')->redirect();
         
     }
 
-
+    /**
+     * @return \Dom\Template
+     */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
 
         if ($this->getConfig()->getSession()->getOnce('h')) {
             $template->setChoice('success');
@@ -181,19 +163,7 @@ class Register extends Iface
             $ren->show();
         }
         
-        return $this->getPage()->setPageContent($template);
-    }
-
-
-    /**
-     * DomTemplate magic method
-     *
-     * @return \Dom\Template
-     */
-    public function __makeTemplate()
-    {
-        $tplFile = $this->getTemplatePath().'/xtpl/register.xtpl';
-        return \Dom\Loader::loadFile($tplFile);
+        return $template;
     }
 
 }

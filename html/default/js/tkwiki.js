@@ -64,7 +64,7 @@ jQuery(function ($) {
     
     function elFinderPickerCallback (callback, value, meta) {
       tinymce.activeEditor.windowManager.open({
-        file: config.templateUrl + '/assets/elfinder/elfinder.html', // use an absolute path!
+        file: config.templateUrl + '/default/assets/elfinder/elfinder.html', // use an absolute path!
         title: 'TkWiki File Manager',
         width: 900,
         height: 450,
@@ -174,8 +174,8 @@ jQuery(function ($) {
       file_picker_callback : elFinderPickerCallback,
 
       content_css: [
-        config.templateUrl + '/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
-        config.templateUrl + '/css/tkwiki.css'
+        config.templateUrl + '/default/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
+        config.templateUrl + '/default/css/tkwiki.css'
       ],
       body_class: 'mce-content-body wiki-content',
       content_style: 'body {padding: 10px;}',
@@ -241,8 +241,8 @@ jQuery(function ($) {
       },
       file_picker_callback : elFinderPickerCallback,
       content_css: [
-        config.templateUrl + '/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
-        config.templateUrl + '/css/tkwiki.css'
+        config.templateUrl + '/default/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
+        config.templateUrl + '/default/css/tkwiki.css'
       ],
       body_class: 'mce-content-body wiki-content',
       content_style: 'body {padding: 10px;}',

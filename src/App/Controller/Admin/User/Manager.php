@@ -7,8 +7,6 @@ use Tk\Form\Field;
 use App\Controller\Iface;
 
 /**
- *
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -20,23 +18,15 @@ class Manager extends Iface
      * @var \Tk\Table
      */
     protected $table = null;
-    
+
 
     /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct('User Manager');
-    }
-
-    /**
-     *
      * @param Request $request
-     * @return \App\Page\Iface|Template|string
      */
     public function doDefault(Request $request)
     {
+        $this->setPageTitle('User Manager');
+
         $this->table = \Tk\Table::create('userTable');
 
         $this->table->addCell(new \Tk\Table\Cell\Checkbox('id'));
@@ -61,19 +51,20 @@ class Manager extends Iface
         $users = \App\Db\UserMap::create()->findFiltered($filter, $this->table->makeDbTool('a.name'));
         $this->table->setList($users);
 
-        return $this->show();
+
     }
 
     /**
-     * @return \App\Page\Iface
+     * @return Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
+
         $ren =  \Tk\Table\Renderer\Dom\Table::create($this->table);
-        $ren->show();
-        $template->replaceTemplate('table', $ren->getTemplate());
-        return $this->getPage()->setPageContent($template);
+        $template->replaceTemplate('table', $ren->show());
+
+        return $template;
     }
 
     /**

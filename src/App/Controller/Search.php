@@ -22,6 +22,9 @@ class Search extends Iface
      */
     protected $form = null;
 
+    /**
+     * @var string
+     */
     protected $terms = '';
 
     /**
@@ -34,14 +37,7 @@ class Search extends Iface
      */
     protected $user = null;
     
-    
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct('Search Results');
-    }
+
 
     /**
      * doDefault
@@ -51,10 +47,12 @@ class Search extends Iface
      */
     public function doDefault(Request $request)
     {
+        $this->setPageTitle('Search Results');
+
         if ($request->has('search-terms')) {
             $this->terms = $request->get('search-terms');
             $this->getConfig()->getSession()->set(self::SID, $this->terms);
-            \Tk\Uri::create()->delete('search-terms')->redirect();
+            \Tk\Uri::create()->remove('search-terms')->redirect();
         }
         if ($this->getConfig()->getSession()->has(self::SID)) {
             $this->terms = $this->getConfig()->getSession()->get(self::SID);
@@ -86,22 +84,18 @@ class Search extends Iface
             // TODO
             // TODO: Need to create a real search function
             // TODO
-            
-            
-            
+
         }
-        
-        return $this->show();
+
     }
 
     /**
-     * show()
-     *
-     * @return \App\Page\Iface
+     * @return \Dom\Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
+
         $searchForm = $this->getPage()->getTemplate()->getForm('NavSearch');
         if ($searchForm) {
             $searchForm->getFormElement('search-terms')->setValue($this->terms);
@@ -153,7 +147,7 @@ class Search extends Iface
         
         $template->insertText('found', $i);
 
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
 
 

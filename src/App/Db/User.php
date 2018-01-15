@@ -13,6 +13,17 @@ use Tk\Db\Map\Model;
  */
 class User extends Model implements \Tk\ValidInterface
 {
+
+    const ROLE_ADMIN = 'admin';
+    const ROLE_MODERATOR = 'moderator';
+    const ROLE_USER = 'user';
+
+    const ROLE_CREATE = 'create';
+    const ROLE_EDIT = 'edit';
+    const ROLE_DELETE = 'delete';
+    const ROLE_EDIT_EXTRA = 'editExtra';
+
+
     
     /**
      * @var int
@@ -88,9 +99,12 @@ class User extends Model implements \Tk\ValidInterface
     {
         $this->modified = \Tk\Date::create();
         $this->created = \Tk\Date::create();
-        $this->ip = \App\Factory::getRequest()->getIp();
+        $this->ip = \App\Config::getInstance()->getRequest()->getIp();
     }
-    
+
+    /**
+     * save()
+     */
     public function save()
     {
         if (!$this->hash) {
@@ -109,23 +123,20 @@ class User extends Model implements \Tk\ValidInterface
     {
         return '/'; 
     }
-    
+
     /**
-     * Create a random password
+     * Set the password from a plain string
      *
-     * @param int $length
-     * @return string
+     * @param string $pwd
+     * @return User
      */
-    public static function createPassword($length = 8)
+    public function setNewPassword($pwd = '')
     {
-        $chars = '234567890abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
-        $i = 0;
-        $password = '';
-        while ($i <= $length) {
-            $password .= $chars[mt_rand(0, strlen($chars) - 1)];
-            $i++;
+        if (!$pwd) {
+            $pwd = \App\Config::getInstance()->generatePassword(10);
         }
-        return $password;
+        $this->password = \App\Config::getInstance()->hashPassword($pwd, $this);
+        return $this;
     }
 
     /**

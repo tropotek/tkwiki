@@ -4,6 +4,7 @@
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
+
 $config = \Tk\Config::getInstance();
 
 /**
@@ -12,21 +13,41 @@ $config = \Tk\Config::getInstance();
  */
 include_once(dirname(__FILE__) . '/session.php');
 
+
+/**************************************
+ * Default app config values
+ **************************************/
+
+$config['site.title'] = 'Tk2Base Template';
+$config['site.email'] = 'user@example.com';
+
+//$config['site.client.registration'] = false;
+//$config['site.client.activation'] = false;
+
+
+/*
+ * Template folders for pages
+ */
+$config['system.template.path'] = '/html';
+
+$config['template.admin'] = $config['system.template.path'].'/default/main.html';
+$config['template.public'] = $config['system.template.path'].'/default/main.html';
+
+/*
+ * This path is where designers can place templates that override the system default templates.
+ * Relative Path for renderer custom templates, this will reside in the above user template folders
+ * EG: $path = dirname($config['template.admin']) . $config['template.xtpl.path'];
+ * @var {templatePath} will be replaced by the path of the current user page template
+ */
+//$config['template.xtpl.path'] = $config->getSitePath() . $config['system.template.path'] . '/xtpl';
+$config['template.xtpl.path'] = '{templatePath}/xtpl';
+$config['template.xtpl.ext'] = '.xtpl';
+
 /*
  * Change the system timezone
  */
 //$config['date.timezone'] = 'Australia/Victoria';
 
-
-/*
- * If you use sub folders in your URL's you 
- * must define the site root paths manually.
- */
-//$config['site.path'] = dirname(dirname(dirname(__FILE__)));
-//$config['site.url'] = dirname($_SERVER['PHP_SELF']);
-
-
-$config['system.template.path'] = '/html/default';
 
 
 /*  
@@ -39,8 +60,6 @@ $config['system.template.path'] = '/html/default';
  * users will have to reset/recover their passwords
  */
 //$config['hash.function'] = 'md5';
-
-
 
 /*
  * Config for the \Tk\Auth\Adapter\DbTable

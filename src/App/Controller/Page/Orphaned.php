@@ -7,8 +7,6 @@ use Tk\Form\Field;
 use App\Controller\Iface;
 
 /**
- * Class Index
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -22,24 +20,14 @@ class Orphaned extends Iface
     protected $table = null;
 
     
-    
-    /**
-     *
-     */
-    public function __construct()
-    {
-        //parent::__construct('Orphaned Page Manager', ['admin', 'moderator']);
-        parent::__construct('Orphaned Page Manager');
-    }
-
 
     /**
-     *
      * @param Request $request
-     * @return \App\Page\Iface|Template|string
      */
     public function doDefault(Request $request)
     {
+        $this->setPageTitle('Orphaned Page Manager');
+
         $this->table = \Tk\Table::create('tableOne');
 
         $this->table->addCell(new \Tk\Table\Cell\Checkbox('id'));
@@ -64,19 +52,19 @@ class Orphaned extends Iface
         $list = \App\Db\PageMap::create()->findOrphanedPages($this->table->makeDbTool('title'));
         $this->table->setList($list);
 
-        return $this->show();
     }
 
     /**
-     * @return \App\Page\Iface
+     * @return Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
+
         $ren =  \Tk\Table\Renderer\Dom\Table::create($this->table);
-        $ren->show();
-        $template->replaceTemplate('table', $ren->getTemplate());
-        return $this->getPage()->setPageContent($template);
+        $template->replaceTemplate('table', $ren->show());
+
+        return $template;
     }
 
     /**

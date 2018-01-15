@@ -154,10 +154,14 @@ class Page extends Model implements \Tk\ValidInterface
         parent::save();
     }
 
+    /**
+     * @return int
+     * @throws \Tk\Db\Exception
+     */
     public function delete()
     {
         // remove page any locks (this could be redundant and left up to the expired cleanup)
-        \App\Factory::getLockMap()->unlock($this->id);
+        \App\Config::getInstance()->getLockMap()->unlock($this->id);
         
         // delete all page links referred to by this page.
         $this->getMapper()->deleteLinkByPageId($this->id);
@@ -188,7 +192,7 @@ class Page extends Model implements \Tk\ValidInterface
     static public function findPage($url)
     {
         if ($url == self::DEFAULT_TAG) {
-            $url = \App\Factory::getConfig()->get('wiki.page.default');
+            $url = \App\Config::getInstance()->get('wiki.page.default');
         }
         $page = self::getMapper()->findByUrl($url);
         return $page;
@@ -199,7 +203,7 @@ class Page extends Model implements \Tk\ValidInterface
      */
     static public function getHomeUrl()
     {
-        return \App\Factory::getConfig()->get('wiki.page.default');
+        return \App\Config::getInstance()->get('wiki.page.default');
     }
 
     /**

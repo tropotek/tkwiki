@@ -8,8 +8,6 @@ use Tk\Form\Field;
 use App\Controller\Iface;
 
 /**
- * Class Contact
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -27,24 +25,16 @@ class Settings extends Iface
      */
     protected $data = null;
 
-    
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct('WIKI Settings');
-        $this->data = \Tk\Db\Data::create();
-    }
 
     /**
-     * doDefault
-     *
      * @param Request $request
-     * @return \App\Page\Iface
+     * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
+        $this->setPageTitle('WIKI Settings');
+        $this->data = \Tk\Db\Data::create();
+
         $this->form = Form::create('formEdit');
 
         $this->form->addField(new Field\Input('site.title'))->setTabGroup('Site')->setLabel('Site Title')->setRequired(true);
@@ -72,13 +62,12 @@ class Settings extends Iface
         $this->form->load($this->data->all());
         $this->form->execute();
 
-        return $this->show();
     }
 
     /**
-     * doSubmit()
-     *
      * @param Form $form
+     * @throws Form\Exception
+     * @throws \Tk\Exception
      */
     public function doSubmit($form)
     {
@@ -122,13 +111,11 @@ class Settings extends Iface
     }
 
     /**
-     * show()
-     *
-     * @return \App\Page\Iface
+     * @return \Dom\Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
         
         // Render the form
         $fren = new \Tk\Form\Renderer\Dom($this->form);
@@ -139,7 +126,7 @@ class Settings extends Iface
         $pageSelect->show();
         $template->appendTemplate('content', $pageSelect->getTemplate());
 
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
 
 

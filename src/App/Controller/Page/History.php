@@ -1,14 +1,11 @@
 <?php
 namespace App\Controller\Page;
 
-use Tk\Request;
 use Dom\Template;
-use Tk\Form\Field;
+use Tk\Request;
 use App\Controller\Iface;
 
 /**
- * Class Index
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -25,20 +22,14 @@ class History extends Iface
      * @var \Tk\Table
      */
     protected $table = null;
-    
-    
-    
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct('');
-    }
+
+
+    // TODO: We need to remove the current content record from the list as it cannot
+    // TODO:  be reverted to itself.
+
 
     /**
      * @param Request $request
-     * @return \App\Page\Iface
      * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
@@ -74,16 +65,16 @@ class History extends Iface
         $filter['pageId'] = $this->wPage->id;
         $users = \App\Db\ContentMap::create()->findFiltered($filter, $this->table->makeDbTool('a.created DESC'));
         $this->table->setList($users);
-        
-        
-        return $this->show($request);
+
     }
 
     /**
-     * 
+     * @param Request $request
+     * @throws \Tk\Exception
      */
     protected function doRevert(Request $request)
     {
+        /** @var \App\Db\Content $rev */
         $rev = \App\Db\ContentMap::create()->find($request->get('r'));
         if (!$rev) {
             throw new \Tk\Exception('Revert content not found!');
@@ -97,25 +88,19 @@ class History extends Iface
 
 
     /**
-     * Note: no longer a dependency on show() allows for many show methods for many 
-     * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
-     * 
-     * @param Request $request
-     * @return \App\Page\Page
-     * @todo Look at implementing a cache for page views.
+     * @return Template
      */
-    public function show(Request $request)
+    public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
         
         $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getUser());
         $template->insertTemplate('header', $header->show());
         
         $ren =  \Tk\Table\Renderer\Dom\Table::create($this->table);
-        $ren->show();
-        $template->replaceTemplate('table', $ren->getTemplate());
+        $template->replaceTemplate('table', $ren->show());
         
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
 
 
@@ -131,8 +116,6 @@ class History extends Iface
   
   <div var="header" class="wiki-header"></div>
   <div var="table" class="wiki-history-table"></div>
-  
-  
   
 </div>
 HTML;
@@ -161,7 +144,7 @@ class DateCell extends \Tk\Table\Cell\Text
     {
         $date =  $obj->$property;
         if (!$date instanceof \DateTime) return $date;
-        return $date->format(\Tk\Date::SHORT_DATETIME) . ' - ' . \Tk\Date::toRelativeString($date);
+        return $date->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ' - ' . \Tk\Date::toRelativeString($date);
     }
 }
 

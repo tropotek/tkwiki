@@ -23,19 +23,7 @@ class Recover extends Iface
      */
     protected $form = null;
 
-    /**
-     * @var \Tk\Event\Dispatcher
-     */
-    private $dispatcher = null;
 
-    /**
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct('Recover Password');
-        $this->dispatcher = $this->getConfig()->getEventDispatcher();
-    }
 
     /**
      * @param Request $request
@@ -43,6 +31,8 @@ class Recover extends Iface
      */
     public function doDefault(Request $request)
     {
+        $this->setPageTitle('Recover Password');
+
         $this->form = Form::create('loginForm');
 
         $this->form->addField(new Field\Input('account'));
@@ -51,9 +41,11 @@ class Recover extends Iface
         // Find and Fire submit event
         $this->form->execute();
 
-        return $this->show();
     }
 
+    /**
+     * @param Form $form
+     */
     public function doRecover($form)
     {
         
@@ -81,7 +73,7 @@ class Recover extends Iface
         }
 
         $newPass = $user->createPassword();
-        $user->password = \App\Factory::hashPassword($newPass);
+        $user->password = $this->getConfig()->hashPassword($newPass);
         $user->save();
 
         // Fire the login event to allow developing of misc auth plugins
@@ -89,8 +81,8 @@ class Recover extends Iface
         $event->set('form', $form);
         $event->set('user', $user);
         $event->set('password', $newPass);
-        $event->set('templatePath', $this->getTemplatePath());
-        $this->dispatcher->dispatch(AuthEvents::RECOVER, $event);
+        //$event->set('templatePath', $this->getTemplatePath());
+        $this->getConfig()->getEventDispatcher()->dispatch(AuthEvents::RECOVER, $event);
         
         \Tk\Alert::addSuccess('You new access details have been sent to your email address.');
         \Tk\Uri::create()->redirect();
@@ -100,25 +92,14 @@ class Recover extends Iface
 
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
         
         if ($this->getConfig()->get('site.user.registration')) {
             $template->setChoice('register');
         }
         
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
 
-
-    /**
-     * DomTemplate magic method
-     *
-     * @return \Dom\Template
-     */
-    public function __makeTemplate()
-    {
-        $tplFile = $this->getTemplatePath().'/xtpl/recover.xtpl';
-        return \Dom\Loader::loadFile($tplFile);
-    }
 
 }

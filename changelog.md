@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.2.0 [2018-01-15]:
+-------------------------------
+ - Fixed non-working pages
+ - Minor Code Updates
+
+
 Ver 2.1.6 [2017-05-27]:
 -------------------------------
  - Minor Code Updates
@@ -124,7 +130,7 @@ Ver 2.0.8 [2016-12-30]:
 Ver 2.0.7 [2016-12-30]:
 -------------------------------
  - Minor Code Updates
- - Added ability to create new templates just change teh config param system.template.path to your
+ - Added ability to create new templates just change the config param system.template.path to your
    templates location
  - Upgraded to use new lib cass names
  - Fixed Orphaned sort bug

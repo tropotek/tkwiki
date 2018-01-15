@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.2.0 [2018-01-15]:
+-------------------------------
+ - Fixed non-working pages
+ - Minor Code Updates
+
+
 Ver 2.1.6 [2017-05-27]:
 -------------------------------
  - Minor Code Updates

@@ -24,7 +24,6 @@ class ContentEvent extends Event
      */
     public function __construct($content)
     {
-        parent::__construct();
         $this->content = $content;
     }
 

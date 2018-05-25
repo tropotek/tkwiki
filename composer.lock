@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "35b48b1a38c7c4b9401aed71d830b6bd",
+    "content-hash": "e12c5c115a27fdc6a760a46c2cbac1a0",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -309,12 +309,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+                "reference": "3490ba5925e6dcbe6de950c5c6b8dce9f6e96eda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/3490ba5925e6dcbe6de950c5c6b8dce9f6e96eda",
+                "reference": "3490ba5925e6dcbe6de950c5c6b8dce9f6e96eda",
                 "shasum": ""
             },
             "require": {
@@ -348,7 +348,322 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10T12:19:37+00:00"
+            "time": "2018-04-03T15:59:15+00:00"
+        },
+        {
+            "name": "symfony/console",
+            "version": "3.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "36f83f642443c46f3cf751d4d2ee5d047d757a27"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/36f83f642443c46f3cf751d4d2ee5d047d757a27",
+                "reference": "36f83f642443c46f3cf751d4d2ee5d047d757a27",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/debug": "~2.8|~3.0|~4.0",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "conflict": {
+                "symfony/dependency-injection": "<3.4",
+                "symfony/process": "<3.3"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/config": "~3.3|~4.0",
+                "symfony/dependency-injection": "~3.4|~4.0",
+                "symfony/event-dispatcher": "~2.8|~3.0|~4.0",
+                "symfony/lock": "~3.4|~4.0",
+                "symfony/process": "~3.3|~4.0"
+            },
+            "suggest": {
+                "psr/log-implementation": "For using the console logger",
+                "symfony/event-dispatcher": "",
+                "symfony/lock": "",
+                "symfony/process": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Console\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Console Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-05-16T08:49:21+00:00"
+        },
+        {
+            "name": "symfony/debug",
+            "version": "3.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/debug.git",
+                "reference": "b28fd73fefbac341f673f5efd707d539d6a19f68"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/b28fd73fefbac341f673f5efd707d539d6a19f68",
+                "reference": "b28fd73fefbac341f673f5efd707d539d6a19f68",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8",
+                "psr/log": "~1.0"
+            },
+            "conflict": {
+                "symfony/http-kernel": ">=2.3,<2.3.24|~2.4.0|>=2.5,<2.5.9|>=2.6,<2.6.2"
+            },
+            "require-dev": {
+                "symfony/http-kernel": "~2.8|~3.0|~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Debug\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Debug Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-05-16T14:03:39+00:00"
+        },
+        {
+            "name": "symfony/event-dispatcher",
+            "version": "3.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/event-dispatcher.git",
+                "reference": "fdd5abcebd1061ec647089c6c41a07ed60af09f8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/fdd5abcebd1061ec647089c6c41a07ed60af09f8",
+                "reference": "fdd5abcebd1061ec647089c6c41a07ed60af09f8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8"
+            },
+            "conflict": {
+                "symfony/dependency-injection": "<3.3"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/config": "~2.8|~3.0|~4.0",
+                "symfony/dependency-injection": "~3.3|~4.0",
+                "symfony/expression-language": "~2.8|~3.0|~4.0",
+                "symfony/stopwatch": "~2.8|~3.0|~4.0"
+            },
+            "suggest": {
+                "symfony/dependency-injection": "",
+                "symfony/http-kernel": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\EventDispatcher\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony EventDispatcher Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-04-06T07:35:25+00:00"
+        },
+        {
+            "name": "symfony/polyfill-mbstring",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                "reference": "3296adf6a6454a050679cde90f95350ad604b171"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/3296adf6a6454a050679cde90f95350ad604b171",
+                "reference": "3296adf6a6454a050679cde90f95350ad604b171",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for the Mbstring extension",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "mbstring",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2018-04-26T10:06:28+00:00"
+        },
+        {
+            "name": "symfony/translation",
+            "version": "3.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation.git",
+                "reference": "7047f725e35eab768137c677f8c38e4a2a8e38fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/7047f725e35eab768137c677f8c38e4a2a8e38fb",
+                "reference": "7047f725e35eab768137c677f8c38e4a2a8e38fb",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "conflict": {
+                "symfony/config": "<2.8",
+                "symfony/dependency-injection": "<3.4",
+                "symfony/yaml": "<3.4"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/config": "~2.8|~3.0|~4.0",
+                "symfony/dependency-injection": "~3.4|~4.0",
+                "symfony/finder": "~2.8|~3.0|~4.0",
+                "symfony/intl": "^2.8.18|^3.2.5|~4.0",
+                "symfony/yaml": "~3.4|~4.0"
+            },
+            "suggest": {
+                "psr/log-implementation": "To use logging capability in translator",
+                "symfony/config": "",
+                "symfony/yaml": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Translation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Translation Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-05-21T10:06:52+00:00"
         },
         {
             "name": "ttek/tk-auth",
@@ -356,16 +671,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-auth.git",
-                "reference": "d5700ff238fbed03c9df04aa648eef9ee6ed838e"
+                "reference": "9be56e44abee0a1044391b3b9e301270644f2e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-auth/zipball/d5700ff238fbed03c9df04aa648eef9ee6ed838e",
-                "reference": "d5700ff238fbed03c9df04aa648eef9ee6ed838e",
+                "url": "https://api.github.com/repos/tropotek/tk-auth/zipball/9be56e44abee0a1044391b3b9e301270644f2e99",
+                "reference": "9be56e44abee0a1044391b3b9e301270644f2e99",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0",
                 "ttek/tk-framework": "~2.0"
             },
             "type": "library",
@@ -395,7 +709,7 @@
                 "auth",
                 "tropotek"
             ],
-            "time": "2018-01-15T03:00:54+00:00"
+            "time": "2018-05-08T02:02:24+00:00"
         },
         {
             "name": "ttek/tk-database",
@@ -403,16 +717,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-database.git",
-                "reference": "710cd242816ec92b3c81ae9dfaf6c125284b070b"
+                "reference": "f2a210b01db8e5b490d0af1588754ecb73359c75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-database/zipball/710cd242816ec92b3c81ae9dfaf6c125284b070b",
-                "reference": "710cd242816ec92b3c81ae9dfaf6c125284b070b",
+                "url": "https://api.github.com/repos/tropotek/tk-database/zipball/f2a210b01db8e5b490d0af1588754ecb73359c75",
+                "reference": "f2a210b01db8e5b490d0af1588754ecb73359c75",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0",
                 "ttek/tk-framework": "~2.0"
             },
             "type": "library",
@@ -443,7 +756,7 @@
                 "database",
                 "tropotek"
             ],
-            "time": "2018-01-15T03:01:19+00:00"
+            "time": "2018-05-25T20:34:20+00:00"
         },
         {
             "name": "ttek/tk-domtemplate",
@@ -451,22 +764,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-domtemplate.git",
-                "reference": "021b2472a2323d075ac20993f4709d468b590528"
+                "reference": "d032df680bdc47765960fdd411e7dcf0a2d8804e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/021b2472a2323d075ac20993f4709d468b590528",
-                "reference": "021b2472a2323d075ac20993f4709d468b590528",
+                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/d032df680bdc47765960fdd411e7dcf0a2d8804e",
+                "reference": "d032df680bdc47765960fdd411e7dcf0a2d8804e",
                 "shasum": ""
             },
             "require": {
-                "oyejorge/less.php": "~1.5",
-                "php": ">=5.0.0"
+                "oyejorge/less.php": "~1.6",
+                "php": ">=5.3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1.x-dev"
+                    "dev-master": "2.2.x-dev"
                 }
             },
             "autoload": {
@@ -491,7 +804,7 @@
                 "dom-template",
                 "tropotek"
             ],
-            "time": "2018-01-15T03:01:46+00:00"
+            "time": "2018-05-09T21:16:26+00:00"
         },
         {
             "name": "ttek/tk-form",
@@ -499,17 +812,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "a668df4d6d9868cfecbc0e2399b2f15485d9d9b8"
+                "reference": "d5d453753d9af85d56f759eca8d842adb148ed07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/a668df4d6d9868cfecbc0e2399b2f15485d9d9b8",
-                "reference": "a668df4d6d9868cfecbc0e2399b2f15485d9d9b8",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/d5d453753d9af85d56f759eca8d842adb148ed07",
+                "reference": "d5d453753d9af85d56f759eca8d842adb148ed07",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0",
-                "ttek/tk-database": "~2.0",
                 "ttek/tk-domtemplate": "~2.0",
                 "ttek/tk-framework": "~2.0"
             },
@@ -540,7 +851,7 @@
                 "form",
                 "tropotek"
             ],
-            "time": "2018-01-15T03:02:11+00:00"
+            "time": "2018-05-24T02:14:29+00:00"
         },
         {
             "name": "ttek/tk-framework",
@@ -548,17 +859,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "cdc18b1bd9df6fa4cbd2d65427df9445c8002ccd"
+                "reference": "4302bb1208b579e677a2934c3352efc990e1cbe1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/cdc18b1bd9df6fa4cbd2d65427df9445c8002ccd",
-                "reference": "cdc18b1bd9df6fa4cbd2d65427df9445c8002ccd",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/4302bb1208b579e677a2934c3352efc990e1cbe1",
+                "reference": "4302bb1208b579e677a2934c3352efc990e1cbe1",
                 "shasum": ""
             },
             "require": {
                 "monolog/monolog": "^1.0",
-                "php": ">=5.0.0",
+                "php": ">=5.3.0",
                 "psr/log": "^1.0"
             },
             "type": "library",
@@ -594,7 +905,7 @@
                 "framework",
                 "tropotek"
             ],
-            "time": "2018-01-15T02:59:41+00:00"
+            "time": "2018-05-23T23:52:13+00:00"
         },
         {
             "name": "ttek/tk-http",
@@ -602,19 +913,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-http.git",
-                "reference": "2ac4dbf0e78c946787674fa48dfec7d161e37d14"
+                "reference": "a307bf42c697b3a295859cb20bdf9deff59b122a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-http/zipball/2ac4dbf0e78c946787674fa48dfec7d161e37d14",
-                "reference": "2ac4dbf0e78c946787674fa48dfec7d161e37d14",
+                "url": "https://api.github.com/repos/tropotek/tk-http/zipball/a307bf42c697b3a295859cb20bdf9deff59b122a",
+                "reference": "a307bf42c697b3a295859cb20bdf9deff59b122a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0",
                 "psr/cache": "^1.0",
                 "psr/http-message": "^1.0",
-                "psr/log": "^1.0"
+                "ttek/tk-framework": "~2.0"
             },
             "type": "library",
             "extra": {
@@ -644,7 +954,7 @@
                 "http",
                 "tropotek"
             ],
-            "time": "2018-01-15T03:00:30+00:00"
+            "time": "2018-05-23T23:38:26+00:00"
         },
         {
             "name": "ttek/tk-installers",
@@ -652,17 +962,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-installers.git",
-                "reference": "0a70d988a6a70e6ac719e1c58044e965031a160a"
+                "reference": "2c05dc7ba99ac325e059355d5233ed17fc1ec173"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/0a70d988a6a70e6ac719e1c58044e965031a160a",
-                "reference": "0a70d988a6a70e6ac719e1c58044e965031a160a",
+                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/2c05dc7ba99ac325e059355d5233ed17fc1ec173",
+                "reference": "2c05dc7ba99ac325e059355d5233ed17fc1ec173",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0",
-                "php": ">=5.0.0"
+                "composer-plugin-api": "^1.1",
+                "php": ">=5.2.0"
             },
             "type": "composer-plugin",
             "extra": {
@@ -697,7 +1007,7 @@
                 "tools",
                 "tropotek"
             ],
-            "time": "2018-01-15T02:59:16+00:00"
+            "time": "2018-05-25T20:23:44+00:00"
         },
         {
             "name": "ttek/tk-mail",
@@ -705,16 +1015,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-mail.git",
-                "reference": "156c25b14c6e5ca160b25ff9c43a7baeb6397565"
+                "reference": "a83203a3a14aa26aa435a007e32bea9cff85e170"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-mail/zipball/156c25b14c6e5ca160b25ff9c43a7baeb6397565",
-                "reference": "156c25b14c6e5ca160b25ff9c43a7baeb6397565",
+                "url": "https://api.github.com/repos/tropotek/tk-mail/zipball/a83203a3a14aa26aa435a007e32bea9cff85e170",
+                "reference": "a83203a3a14aa26aa435a007e32bea9cff85e170",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0",
                 "phpmailer/phpmailer": "~6.0",
                 "ttek/tk-domtemplate": "~2.0",
                 "ttek/tk-framework": "~2.0",
@@ -747,7 +1056,7 @@
                 "table",
                 "tropotek"
             ],
-            "time": "2018-01-15T03:00:05+00:00"
+            "time": "2018-05-09T03:23:17+00:00"
         },
         {
             "name": "ttek/tk-mvc",
@@ -755,17 +1064,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-mvc.git",
-                "reference": "1bacc385a75fb469ce6a18711edbac08e0c027ae"
+                "reference": "965da3ce30d08e7859650f65b96c94ce64cd390d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-mvc/zipball/1bacc385a75fb469ce6a18711edbac08e0c027ae",
-                "reference": "1bacc385a75fb469ce6a18711edbac08e0c027ae",
+                "url": "https://api.github.com/repos/tropotek/tk-mvc/zipball/965da3ce30d08e7859650f65b96c94ce64cd390d",
+                "reference": "965da3ce30d08e7859650f65b96c94ce64cd390d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0",
-                "psr/log": "^1.0"
+                "symfony/console": "~3.4",
+                "symfony/event-dispatcher": "~3.4",
+                "symfony/translation": "~3.4",
+                "ttek/tk-framework": "~2.0"
             },
             "type": "library",
             "extra": {
@@ -795,7 +1106,7 @@
                 "mvc",
                 "tropotek"
             ],
-            "time": "2018-01-15T02:51:10+00:00"
+            "time": "2018-05-15T21:05:02+00:00"
         },
         {
             "name": "ttek/tk-plugin",
@@ -803,16 +1114,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-plugin.git",
-                "reference": "048de632af48709b03d94eebc3639a8c33db8505"
+                "reference": "d7c0daea2bbdb449c8361ca00da43320c7003ffa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-plugin/zipball/048de632af48709b03d94eebc3639a8c33db8505",
-                "reference": "048de632af48709b03d94eebc3639a8c33db8505",
+                "url": "https://api.github.com/repos/tropotek/tk-plugin/zipball/d7c0daea2bbdb449c8361ca00da43320c7003ffa",
+                "reference": "d7c0daea2bbdb449c8361ca00da43320c7003ffa",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "ttek/tk-framework": "~2.0"
             },
             "type": "library",
             "extra": {
@@ -841,7 +1152,7 @@
                 "plugin",
                 "tropotek"
             ],
-            "time": "2018-01-15T03:02:59+00:00"
+            "time": "2018-05-23T23:39:46+00:00"
         },
         {
             "name": "ttek/tk-routing",
@@ -849,17 +1160,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-routing.git",
-                "reference": "b359691508bc61071b81960f4664ad225d5f6a16"
+                "reference": "aa267e0955a49c5f2223737ae8d0dcadbafd9c1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-routing/zipball/b359691508bc61071b81960f4664ad225d5f6a16",
-                "reference": "b359691508bc61071b81960f4664ad225d5f6a16",
+                "url": "https://api.github.com/repos/tropotek/tk-routing/zipball/aa267e0955a49c5f2223737ae8d0dcadbafd9c1e",
+                "reference": "aa267e0955a49c5f2223737ae8d0dcadbafd9c1e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0",
-                "psr/log": "^1.0"
+                "ttek/tk-framework": "~2.0"
             },
             "type": "library",
             "extra": {
@@ -891,7 +1201,7 @@
                 "tropotek",
                 "url"
             ],
-            "time": "2017-05-26T00:35:02+00:00"
+            "time": "2018-05-07T19:58:04+00:00"
         },
         {
             "name": "ttek/tk-table",
@@ -899,16 +1209,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-table.git",
-                "reference": "9a3b0ee95a413fdbb2a95c40c64a0ab206ab8cee"
+                "reference": "1f5e38ed09d0433baed8294e68437f8cec0662da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/9a3b0ee95a413fdbb2a95c40c64a0ab206ab8cee",
-                "reference": "9a3b0ee95a413fdbb2a95c40c64a0ab206ab8cee",
+                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/1f5e38ed09d0433baed8294e68437f8cec0662da",
+                "reference": "1f5e38ed09d0433baed8294e68437f8cec0662da",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.0.0",
                 "ttek/tk-database": "~2.0",
                 "ttek/tk-domtemplate": "~2.0",
                 "ttek/tk-framework": "~2.0"
@@ -940,7 +1249,54 @@
                 "table",
                 "tropotek"
             ],
-            "time": "2018-01-15T03:02:35+00:00"
+            "time": "2018-05-17T23:58:40+00:00"
+        },
+        {
+            "name": "ttek/tk-ui",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tropotek/tk-ui.git",
+                "reference": "5dc01ad5486966d92c49e2f64eeb83e7c70c4ca0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tropotek/tk-ui/zipball/5dc01ad5486966d92c49e2f64eeb83e7c70c4ca0",
+                "reference": "5dc01ad5486966d92c49e2f64eeb83e7c70c4ca0",
+                "shasum": ""
+            },
+            "require": {
+                "ttek/tk-framework": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Tk\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Mifsud",
+                    "email": "info@tropotek.com.au",
+                    "homepage": "http://www.tropotek.com/"
+                }
+            ],
+            "description": "A bootstrap based UI lib for the Tk-lib framework",
+            "keywords": [
+                "bootstrap",
+                "tropotek",
+                "ui"
+            ],
+            "time": "2018-05-11T02:59:17+00:00"
         }
     ],
     "packages-dev": [],
@@ -950,7 +1306,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.0.0"
+        "php": ">=5.3.3"
     },
     "platform-dev": []
 }

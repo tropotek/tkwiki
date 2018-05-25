@@ -25,6 +25,8 @@ class Manager extends Iface
     /**
      * @param Request $request
      * @return \App\Page\Iface|Template|string
+     * @throws \Tk\Exception
+     * @throws \Tk\Form\Exception
      */
     public function doDefault(Request $request)
     {
@@ -44,7 +46,7 @@ class Manager extends Iface
         $this->table->addFilter(new Field\Input('keywords'))->setLabel('')->setAttr('placeholder', 'Keywords');
         
         // Actions
-        $this->table->addAction(\Tk\Table\Action\Button::create('New Page', 'glyphicon glyphicon-plus', \Tk\Uri::create('/edit.html')));
+        $this->table->addAction(\Tk\Table\Action\Button::createButton('New Page', 'glyphicon glyphicon-plus', \Tk\Uri::create('/edit.html')));
         $this->table->addAction(new \Tk\Table\Action\Delete());
         $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
         

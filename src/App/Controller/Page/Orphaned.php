@@ -19,10 +19,10 @@ class Orphaned extends Iface
      */
     protected $table = null;
 
-    
 
     /**
      * @param Request $request
+     * @throws \Tk\Form\Exception
      */
     public function doDefault(Request $request)
     {

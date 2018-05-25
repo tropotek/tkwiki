@@ -205,6 +205,7 @@ class Config extends \Tk\Config
      * getFrontController
      *
      * @return \App\FrontController
+     * @throws \Tk\Exception
      */
     public function getFrontController()
     {

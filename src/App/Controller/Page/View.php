@@ -83,6 +83,7 @@ class View extends Iface
 
     /**
      * @return \Dom\Template
+     * @throws \Dom\Exception
      */
     public function show()
     {

@@ -19,25 +19,21 @@ class Config extends \Bs\Config
     }
 
     /**
-     * @param null $user
-     * @return \App\Auth\Acl
+     * Return the users home|dashboard relative url
+     *
+     * @param \Bs\Db\User|null $user
+     * @return \Tk\Uri
      */
-    public function getAcl($user = null)
+    public function getUserHomeUrl($user = null)
     {
-        if (!$user) $user = $this->getUser();
-        $obj = \App\Auth\Acl::create($user);
-        return $obj;
-    }
-
-    /**
-     * @return \Bs\Listener\PageTemplateHandler
-     */
-    public function getCrumbsHandler()
-    {
-        if (!$this->get('handler.crumbs')) {
-            $this->set('handler.crumbs', null);
-        }
-        return $this->get('handler.crumbs');
+//        if (!$user) $user = $this->getUser();
+//        if ($user) {
+//            if ($user->isAdmin())
+//                return \Tk\Uri::create('/admin/index.html');
+//            if ($user->isUser())
+//                return \Tk\Uri::create('/user/index.html');
+//        }
+        return \Tk\Uri::create('/');
     }
 
     /**
@@ -51,7 +47,16 @@ class Config extends \Bs\Config
         return $this->get('auth.handler');
     }
 
-
+    /**
+     * @param null $user
+     * @return \App\Auth\Acl
+     */
+    public function getAcl($user = null)
+    {
+        if (!$user) $user = $this->getUser();
+        $obj = \App\Auth\Acl::create($user);
+        return $obj;
+    }
 
     /**
      * @param \Tk\Event\Dispatcher $dispatcher
@@ -61,6 +66,17 @@ class Config extends \Bs\Config
     public function setupDispatcher($dispatcher)
     {
         \App\Dispatch::create($dispatcher);
+    }
+
+    /**
+     * @return \Bs\Listener\PageTemplateHandler
+     */
+    public function getCrumbsHandler()
+    {
+        if (!$this->get('handler.crumbs')) {
+            $this->set('handler.crumbs', null);
+        }
+        return $this->get('handler.crumbs');
     }
 
 

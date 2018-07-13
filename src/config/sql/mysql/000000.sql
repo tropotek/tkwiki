@@ -10,7 +10,8 @@
 CREATE TABLE IF NOT EXISTS `role` (
   `id` INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(128) NOT NULL DEFAULT '',
-  `description` TEXT
+  `description` TEXT,
+  `del` TINYINT DEFAULT 0 NOT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -30,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `url` VARCHAR(128) NOT NULL DEFAULT '',                 -- the base url of the page
   `permission` INT UNSIGNED NOT NULL DEFAULT 0,           -- Page permission 0 - public, 1 - protected, 2 - private
   `views` INT UNSIGNED NOT NULL DEFAULT 0,                -- Page views per (1 per session)
+  `del` TINYINT DEFAULT 0 NOT NULL,
   `modified` DATETIME NOT NULL,
   `created` DATETIME NOT NULL,
   UNIQUE KEY `url` (`url`),
@@ -49,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   `css` TEXT,
   `js` TEXT,
   `size` INT UNSIGNED NOT NULL DEFAULT 0,                 -- page size in bytes
+  `del` TINYINT DEFAULT 0 NOT NULL,
   `modified` DATETIME NOT NULL,
   `created` DATETIME NOT NULL,
   KEY `page_id` (`page_id`),

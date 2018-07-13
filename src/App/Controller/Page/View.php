@@ -116,8 +116,8 @@ class View extends Iface
             $this->getPage()->getTemplate()->setTitleText($this->getPage()->getTemplate()->getTitleText() . ' - ' . $this->wPage->title);
             
             
-            $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/default/assets/prism/prism.js'));
-            $template->appendCssUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/default/assets/prism/prism.css'));
+            $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/app/js/prism/prism.js'));
+            $template->appendCssUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/app/js/prism/prism.css'));
         }
         return $template;
     }

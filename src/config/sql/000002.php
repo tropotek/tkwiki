@@ -12,4 +12,3 @@ if (!$db->hasTable('del')) {
 }
 
 
-$data->save();

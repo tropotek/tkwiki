@@ -14,4 +14,5 @@ use Bs\DbEvents;
 abstract class Mapper extends \Bs\Db\Mapper
 {
 
+
 }

@@ -18,6 +18,16 @@ class RoleMap extends Mapper
 {
 
     /**
+     * @param \Tk\Db\Pdo|null $db
+     * @throws \Tk\Db\Exception
+     */
+    public function __construct($db = null)
+    {
+        parent::__construct($db);
+        $this->setMarkDeleted();
+    }
+
+    /**
      *
      * @return \Tk\DataMap\DataMap
      */

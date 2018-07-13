@@ -31,77 +31,81 @@
 
 
   <!-- Navigation -->
-  <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+
+  <div class="navbar-bg navbar-default">
     <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/" var="siteName" title="Home">
-          <img alt="Site Logo" src="/html/images/icons/logo.png" var="logo" choice="logo" />
-        </a>
-      </div>
-      <!-- /.navbar-header -->
+      <nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/" var="siteName" title="Home">
+            <img alt="Site Logo" src="/html/images/icons/logo.png" var="logo" choice="logo" />
+          </a>
+        </div>
+        <!-- /.navbar-header -->
 
 
-      <div id="navbar" class="collapse navbar-collapse js-navbar-collapse ">
+        <div id="navbar" class="collapse navbar-collapse js-navbar-collapse ">
 
-        <ul class="nav navbar-nav" var="wiki-menu"></ul>
+          <ul class="nav navbar-nav" var="wiki-menu"></ul>
 
-        <ul class="nav navbar-nav navbar-right" choice="logout">
-          <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Account <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li class="dropdown-header" var="username"></li>
-              <li><a href="/profile.html">My Profile</a></li>
-              <li><a href="#" var="myPages">My Pages</a></li>
-              <li><a href="/search.html">Search</a></li>
-              <!-- Admin Menu -->
-              <li choice="admin" class="divider"></li>
-              <li choice="admin" class="dropdown-header">Wiki Admin</li>
-              <li choice="admin"><a href="/settings.html">Settings</a></li>
-              <li choice="admin"><a href="/userManager.html">Users</a></li>
-              <li choice="admin"><a href="/pageManager.html">Pages</a></li>
-              <li choice="admin"><a href="/orphaned.html">Orphaned</a></li>
-              <li choice="admin"><a href="/admin/plugins.html">Plugins</a></li>
-              <li class="divider" choice="admin"></li>
-              <li choice="admin"><a href="/dev/events.html">Events</a></li>
-              <li class="divider"></li>
-              <li><a href="/logout.html">Logout</a></li>
-            </ul>
-          </li>
-        </ul>
+          <ul class="nav navbar-nav navbar-right" choice="logout">
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Account <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li class="dropdown-header" var="username"></li>
+                <li><a href="/profile.html">My Profile</a></li>
+                <li><a href="#" var="myPages">My Pages</a></li>
+                <li><a href="/search.html">Search</a></li>
+                <!-- Admin Menu -->
+                <li choice="admin" class="divider"></li>
+                <li choice="admin" class="dropdown-header">Wiki Admin</li>
+                <li choice="admin"><a href="/settings.html">Settings</a></li>
+                <li choice="admin"><a href="/admin/userManager.html">Users</a></li>
+                <li choice="admin"><a href="/pageManager.html">Pages</a></li>
+                <li choice="admin"><a href="/orphaned.html">Orphaned</a></li>
+                <li choice="admin"><a href="/admin/plugins.html">Plugins</a></li>
+                <li class="divider" choice="admin"></li>
+                <li choice="admin"><a href="/admin/dev/events.html">Events</a></li>
+                <li class="divider"></li>
+                <li><a href="/logout.html">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
 
-        <ul class="nav navbar-nav navbar-right" choice="login">
-          <li class=""><a href="/login.html" title="Login"><span class="glyphicon glyphicon-log-in"></span> login</a></li>
-        </ul>
+          <ul class="nav navbar-nav navbar-right" choice="login">
+            <li class=""><a href="/login.html" title="Login"><span class="glyphicon glyphicon-log-in"></span> login</a></li>
+          </ul>
 
-        <form class="navbar-form navbar-right" role="search" choice1="logout" method="post" action="/search.html" id="NavSearch">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" name="search-terms" id="fid-search-terms"  value="" />
-            <span class="input-group-btn">
-                    <button type="submit" class="btn btn-default" name="search" value="search">Go!</button>
-                  </span>
-          </div>
-        </form>
+          <form class="navbar-form navbar-right" role="search" choice1="logout" method="post" action="/search.html" id="NavSearch">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search" name="search-terms" id="fid-search-terms"  value="" />
+              <span class="input-group-btn">
+                      <button type="submit" class="btn btn-default" name="search" value="search">Go!</button>
+                    </span>
+            </div>
+          </form>
 
-        <!-- TODO: Make this a dropdown so it does not impact the search field??? -->
-        <form action="/login.html" method="post" class="navbar-form navbar-right" choice="login2" id="NavLogin">
-          <div class="form-group">
-            <input type="text" name="username" placeholder="Username" class="form-control"/>
-          </div>
-          <div class="form-group">
-            <input type="password" name="password" placeholder="Password" class="form-control"/>
-          </div>
-          <button type="submit" name="login" value="login" class="btn btn-success">Sign in</button>
-          <a class="btn btn-primary" href="/register.html" choice="register">Register</a>
-        </form>
+          <!-- TODO: Make this a dropdown so it does not impact the search field??? -->
+          <form action="/login.html" method="post" class="navbar-form navbar-right" choice="login2" id="NavLogin">
+            <div class="form-group">
+              <input type="text" name="username" placeholder="Username" class="form-control"/>
+            </div>
+            <div class="form-group">
+              <input type="password" name="password" placeholder="Password" class="form-control"/>
+            </div>
+            <button type="submit" name="login" value="login" class="btn btn-success">Sign in</button>
+            <a class="btn btn-primary" href="/register.html" choice="register">Register</a>
+          </form>
 
-      </div><!--/.nav-collapse -->
+        </div><!--/.nav-collapse -->
+      </nav>
+
     </div>
-  </nav>
+  </div>
 
 
 

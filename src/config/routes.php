@@ -17,6 +17,12 @@ if (!$routes) return;
 
 
 // Site Routes
+$routes->remove('public-index-php-fix');
+$routes->remove('home');
+$routes->remove('home-base');
+$routes->remove('contact');
+
+
 
 $routes->add('settings', new \Tk\Routing\Route('/settings.html', 'App\Controller\Admin\Settings::doDefault',
     array('role' => array('admin'))));
@@ -32,12 +38,14 @@ $routes->add('orphaned', new \Tk\Routing\Route('/orphaned.html', 'App\Controller
 
 $routes->add('pageView', new \Tk\Routing\Route('/view.html', 'App\Controller\Page\View::doContentView'));
 $routes->add('search', new \Tk\Routing\Route('/search.html', 'App\Controller\Search::doDefault'));
+$routes->add('contact', new \Tk\Routing\Route('/contact.html', 'App\Controller\Contact::doDefault'));
 
 
 //// TODO: Fix to only use /plugins.html
 //$routes->add('admin-plugin-manager', new \Tk\Routing\Route('/plugins.html', 'App\Controller\Admin\PluginManager::doDefault', array('role' => array('admin'))));
 //$routes->add('admin-plugin-manager', new \Tk\Routing\Route('/admin/plugins.html', 'App\Controller\Admin\PluginManager::doDefault', array('role' => array('admin'))));
 
+$routes->add('profile', new \Tk\Routing\Route('/profile.html', 'App\Controller\Admin\User\Profile::doDefault', array('role' => array('admin', 'user'))));
 //$routes->add('userManager', new \Tk\Routing\Route('/userManager.html', 'App\Controller\Admin\User\Manager::doDefault', array('role' => array('admin'))));
 //$routes->add('userEdit', new \Tk\Routing\Route('/userEdit.html', 'App\Controller\Admin\User\Edit::doDefault'));
 //$routes->add('userProfile', new \Tk\Routing\Route('/profile.html', 'App\Controller\Admin\User\Edit::doDefault'));
@@ -52,4 +60,5 @@ $routes->add('ajax-pageLock', new \Tk\Routing\Route('/ajax/lockPage', 'App\Ajax\
 
 
 // DO NOT MOVE.... CatchAll must be the last route.
-$routes->add('pageCatchAll', new \Tk\Routing\Route('/{pageUrl}', 'App\Controller\Page\View::doDefault', array('pageUrl' => \App\Db\Page::DEFAULT_TAG)));
+$routes->add('pageCatchAll', new \Tk\Routing\Route('/{pageUrl}', 'App\Controller\Page\View::doDefault',
+    array('pageUrl' => \App\Db\Page::DEFAULT_TAG)));

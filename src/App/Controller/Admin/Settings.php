@@ -12,7 +12,7 @@ use App\Controller\Iface;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Settings extends Iface
+class Settings extends \Bs\Controller\AdminIface
 {
 
     /**
@@ -28,6 +28,8 @@ class Settings extends Iface
 
     /**
      * @param Request $request
+     * @throws Form\Exception
+     * @throws \Tk\Db\Exception
      * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
@@ -39,7 +41,8 @@ class Settings extends Iface
 
         $this->form->addField(new Field\Input('site.title'))->setTabGroup('Site')->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('site.email'))->setTabGroup('Site')->setLabel('Site Email')->setRequired(true);
-        $this->form->addField(new Field\File('site.logo', '/site'))->setTabGroup('Site')->setLabel('Site Logo')->addCss('tk-fileinput')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
+        $this->form->addField(new Field\File('site.logo', '/site'))->setTabGroup('Site')->setLabel('Site Logo')
+            ->addCss('tk-imageinput')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
         
         $this->form->addField(new Field\Textarea('site.meta.keywords'))->setTabGroup('Template')->setLabel('META Keywords');
         $this->form->addField(new Field\Textarea('site.meta.description'))->setTabGroup('Template')->setLabel('META Description');
@@ -112,6 +115,7 @@ class Settings extends Iface
 
     /**
      * @return \Dom\Template
+     * @throws \Dom\Exception
      */
     public function show()
     {
@@ -139,25 +143,15 @@ class Settings extends Iface
     public function __makeTemplate()
     {
         $xhtml = <<<XHTML
-<div class="row" var="content">
-  <div class="col-lg-12">
+<div class="" var="content">
+  
     <div class="panel panel-default">
       <div class="panel-heading">
         <i class="glyphicon glyphicon-cog"></i> Site Settings
       </div>
-      <!-- /.panel-heading -->
       <div class="panel-body">
-        <div class="row">
-          <div class="col-lg-12">
-
-            <div var="formEdit"></div>
-
-          </div>
-        </div>
+        <div var="formEdit"></div>
       </div>
-      <!-- /.panel-body -->
-    </div>
-    <!-- /.panel -->
   </div>
 </div>
 XHTML;

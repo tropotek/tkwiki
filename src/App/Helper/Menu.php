@@ -64,12 +64,13 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
         }
         
     }
-    
+
     /**
      * Execute the renderer.
      * Return an object that your framework can interpret and display.
      *
      * @return Template|Renderer
+     * @throws \Dom\Exception
      */
     public function show()
     {
@@ -122,8 +123,6 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     {
         $xhtml = <<<HTML
 <ul class="nav navbar-nav">
-  <!-- li class="wiki-menu-item"><a href="javascript:;">Link 1</a></li -->
-
   <li class="dropdown mega-dropdown" repeat="row">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span var="title"></span> <span class="caret"></span></a>
     <ul class="dropdown-menu mega-dropdown-menu">

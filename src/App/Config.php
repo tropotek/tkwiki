@@ -19,15 +19,14 @@ class Config extends \Bs\Config
     }
 
     /**
-     * @return mixed
+     * @param null $user
+     * @return \App\Auth\Acl
      */
     public function getAcl($user = null)
     {
         if (!$user) $user = $this->getUser();
-        if (!$this->get('auth.acl')) {
-            $this->set('auth.acl', \App\Auth\Acl::create($user));
-        }
-        return $this->get('auth.acl');
+        $obj = \App\Auth\Acl::create($user);
+        return $obj;
     }
 
     /**
@@ -39,6 +38,17 @@ class Config extends \Bs\Config
             $this->set('handler.crumbs', null);
         }
         return $this->get('handler.crumbs');
+    }
+
+    /**
+     * @return \Bs\Listener\AuthHandler
+     */
+    public function getAuthHandler()
+    {
+        if (!$this->get('auth.handler')) {
+            $this->set('auth.handler', new \App\Listener\AuthHandler());
+        }
+        return $this->get('auth.handler');
     }
 
 

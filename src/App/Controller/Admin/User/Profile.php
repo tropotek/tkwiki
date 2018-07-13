@@ -6,7 +6,7 @@ namespace App\Controller\Admin\User;
  * @link http://www.tropotek.com/
  * @license Copyright 2017 Tropotek
  */
-class Manager extends \Bs\Controller\Admin\User\Manager
+class Profile extends \Bs\Controller\Admin\User\Profile
 {
 
 
@@ -18,7 +18,7 @@ class Manager extends \Bs\Controller\Admin\User\Manager
     public function __construct()
     {
         parent::__construct();
-        //$this->getActionPanel()->setEnabled(false);
+        $this->getActionPanel()->setEnabled(false);
     }
 
 

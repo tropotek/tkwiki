@@ -20,6 +20,7 @@ class StaticPage extends Iface
     {
         //$page = new \App\Page\Page($this, $request->getAttribute('_staticPath'));
         vd($request->getAttributes());
+
         $page = new \App\Page\Page();
         
         return $page;

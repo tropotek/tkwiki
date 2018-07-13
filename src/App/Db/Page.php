@@ -101,7 +101,7 @@ class Page extends Model implements \Tk\ValidInterface
     private $content = null;
 
     /**
-     * @var \App\Db\User
+     * @var \Bs\Db\User
      */
     private $user = null;
     
@@ -238,12 +238,12 @@ class Page extends Model implements \Tk\ValidInterface
 
     /**
      *
-     * @return User|null
+     * @return \Bs\Db\User|null
      */
     public function getUser()
     {
         if (!$this->user) {
-            $this->user = \App\Db\UserMap::create()->find($this->userId);
+            $this->user = $this->getConfig()->getUserMapper()->find($this->userId);
         }
         return $this->user;
     }

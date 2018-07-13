@@ -71,7 +71,7 @@ class Content extends Model implements \Tk\ValidInterface
     public $created = null;
 
     /**
-     * @var \App\Db\User
+     * @var \Bs\Db\User
      */
     private $user = null;
 
@@ -129,7 +129,7 @@ class Content extends Model implements \Tk\ValidInterface
     public function getUser()
     {
         if (!$this->user) {
-            $this->user = \App\Db\UserMap::create()->find($this->userId);
+            $this->user = \Bs\Db\UserMap::create()->find($this->userId);
         }
         return $this->user;
     }

@@ -18,7 +18,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
 
     /**
      * Logged in user
-     * @var \App\Db\User
+     * @var \Bs\Db\User
      */
     protected $user = null;
 
@@ -36,13 +36,13 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     /**
      * constructor.
      *
-     * @param \App\Db\User $user
+     * @param \Bs\Db\User $user
      */
     public function __construct($user)
     {
         $this->user = $user;
         $this->init();
-        $this->dispatcher = \App\Config::getInstance()->getEventDispatcher();
+        $this->dispatcher = $this->getConfig()->getEventDispatcher();
     }
 
     /**
@@ -57,7 +57,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
                 $this->list[] = $page;
                 continue;
             }
-            if ($this->user && $this->user->getAcl()->canView($page)) {
+            if ($this->user && $this->getConfig()->getAcl()->canView($page)) {
                 $this->list[] = $page;
                 continue;
             }
@@ -75,7 +75,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     {
         $template = $this->getTemplate();
         
-        if ($this->user && $this->user->getAcl()->canCreate()) {
+        if ($this->user && $this->getConfig()->getAcl()->canCreate()) {
             $template->setChoice('canCreate');
             $url = \Tk\Uri::create('/edit.html')->set('type', \App\Db\Page::TYPE_NAV);
             $template->setAttr('create', 'href', $url);
@@ -93,7 +93,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
             
             $row->insertHtml('html', $content->html);
             
-            if ($this->user && $this->user->getAcl()->canEdit($page)) {
+            if ($this->user && $this->getConfig()->getAcl()->canEdit($page)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $page->id);
                 $row->setAttr('edit', 'href', $url);
                 $row->setChoice('edit');
@@ -103,6 +103,14 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
         
         
         return $template;
+    }
+
+    /**
+     * @return \App\Config
+     */
+    public function getConfig()
+    {
+        return \App\Config::getInstance();
     }
 
     /**

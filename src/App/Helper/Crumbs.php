@@ -52,13 +52,14 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
         $arr = unserialize($data);
         $this->list = $arr['list'];
     }
-    
+
     /**
      * Get the crumbs instance from the session
      *
      * @param \Tk\Uri $requestUri
      * @param \Tk\Session $session
      * @return Crumbs
+     * @throws \Tk\Db\Exception
      */
     static public function getInstance($requestUri = null, $session = null)
     {

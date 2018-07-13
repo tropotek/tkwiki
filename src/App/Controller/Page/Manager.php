@@ -51,7 +51,7 @@ class Manager extends Iface
         $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
         
         $filter = $this->table->getFilterValues();
-        $list = \App\Db\PageMap::create()->findFiltered($filter, $this->table->makeDbTool('a.title'));
+        $list = \App\Db\PageMap::create()->findFiltered($filter, $this->table->getTool('a.title'));
         $this->table->setList($list);
 
     }

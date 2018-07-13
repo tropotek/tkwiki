@@ -301,7 +301,7 @@ class Factory2
      *
      * @link http://php.net/manual/en/function.hash.php
      * @param string $pwd
-     * @param \App\Db\User $user (optional)
+     * @param \Bs\Db\User $user (optional)
      * @return string
      * @todo: implement seeding the password.
      */

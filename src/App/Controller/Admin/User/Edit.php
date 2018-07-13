@@ -25,13 +25,16 @@ class Edit extends Iface
     protected $form = null;
 
     /**
-     * @var \App\Db\User
+     * @var \Bs\Db\User
      */
     private $user = null;
 
 
     /**
      * @param Request $request
+     * @throws Form\Exception
+     * @throws \ReflectionException
+     * @throws \Tk\Db\Exception
      * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
@@ -42,11 +45,11 @@ class Edit extends Iface
         }
         $this->setPageTitle($title);
 
-        $this->user = new \App\Db\User();
+        $this->user = new \Bs\Db\User();
         if ($this->isProfile()) {
             $this->user = $this->getUser();
         } else if ($request->get('userId')) {
-            $this->user = \App\Db\UserMap::create()->find($request->get('userId'));
+            $this->user = \Bs\Db\UserMap::create()->find($request->get('userId'));
         }
 
         $this->form = Form::create('formEdit');
@@ -83,7 +86,7 @@ class Edit extends Iface
             }
 
             $selected = array();
-            foreach($this->user->getAcl()->getRoles() as $obj) {
+            foreach($this->getConfig()->getAcl()->getRoles() as $obj) {
                 $selected[] = $obj->id;
             }
             $this->form->setFieldValue('role', $selected);
@@ -94,7 +97,7 @@ class Edit extends Iface
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\LinkButton('cancel', \Tk\Uri::create('userManager.html')));
 
-        $this->form->load(\App\Db\UserMap::create()->unmapForm($this->user));
+        $this->form->load(\Bs\Db\UserMap::create()->unmapForm($this->user));
         $this->form->execute();
 
     }
@@ -114,7 +117,7 @@ class Edit extends Iface
     {
         // Load the object with data from the form using a helper object
         //\App\Form\ModelLoader::loadObject($form, $this->user);
-        \App\Db\UserMap::create()->mapForm($form->getValues(), $this->user);
+        \Bs\Db\UserMap::create()->mapForm($form->getValues(), $this->user);
         
         // Password validation needs to be here
         if ($this->form->getFieldValue('newPassword')) {

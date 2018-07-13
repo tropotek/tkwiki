@@ -81,7 +81,7 @@ class FrontController extends \Tk\Kernel\HttpKernel
 //        $this->getDispatcher()->addSubscriber(new \App\Listener\AjaxAuthHandler());
 //        $this->getDispatcher()->addSubscriber(new \App\Listener\MasqueradeHandler());
 //        $this->getDispatcher()->addSubscriber(new \App\Listener\ActionPanelHandler());
-        $this->getDispatcher()->addSubscriber(new \App\Listener\PageTemplateHandler());
+        $this->getDispatcher()->addSubscriber(new \App\Listener\PageInitHandler());
         $this->getDispatcher()->addSubscriber(new \App\Listener\AuthHandler());
         $this->dispatcher->addSubscriber(new \App\Listener\WikiHandler());
 

@@ -1,24 +1,7 @@
 
 
--- --------------------------------------------------------
--- Table structure for table `user`
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `name` VARCHAR(255) NOT NULL DEFAULT '',
-  `email` VARCHAR(190) NOT NULL DEFAULT '',
-  `image` VARCHAR(255) NOT NULL DEFAULT '',
-  `username` VARCHAR(64) NOT NULL DEFAULT '',
-  `password` VARCHAR(64) NOT NULL DEFAULT '',
-  `active` TINYINT(1) NOT NULL DEFAULT 1,
-  `hash` VARCHAR(64) NOT NULL DEFAULT '',
-  `last_login` DATETIME,
-  `modified` DATETIME NOT NULL,
-  `created` DATETIME NOT NULL,
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `hash` (`hash`)
-) ENGINE=InnoDB;
+
+
 
 -- ---------------------------------------------------------
 -- User roles/permissions, not related to page permissions
@@ -95,18 +78,5 @@ CREATE TABLE IF NOT EXISTS `lock` (
   PRIMARY KEY `hash` (`hash`),
   KEY `page_id` (`page_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB;
-
-
--- --------------------------------------------------------
--- Table structure for table `version`
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `version` (
-  `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `version` VARCHAR(10) NOT NULL DEFAULT '1.0.0',
-  `changelog` TEXT NOT NULL,
-  `modified` DATETIME NOT NULL,
-  `created` DATETIME NOT NULL,
-  UNIQUE KEY `version` (`version`)
 ) ENGINE=InnoDB;
 

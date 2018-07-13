@@ -43,7 +43,7 @@ class History extends Iface
             throw new \Tk\HttpException(404, 'Page not found');
         }
 
-        if (!$this->getUser()->getAcl()->canEdit($this->wPage)) {
+        if (!$this->getConfig()->getAcl()->canEdit($this->wPage)) {
             \Tk\Alert::addWarning('You do not have permission to edit this page.');
             \Tk\Uri::create('/')->redirect();
         }

@@ -49,7 +49,7 @@ class Orphaned extends Iface
         $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
 
         //$filter = $this->table->getFilterValues();
-        $list = \App\Db\PageMap::create()->findOrphanedPages($this->table->makeDbTool('title'));
+        $list = \App\Db\PageMap::create()->findOrphanedPages($this->table->getTool('title'));
         $this->table->setList($list);
 
     }

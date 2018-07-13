@@ -9,8 +9,6 @@ use Tk\Form\Event;
 use App\Helper\HtmlFormatter;
 
 /**
- * Class Index
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -65,7 +63,7 @@ class Edit extends Iface
         $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
 
         // Create a new page
-        if (!$this->wPage && $request->has('u') && $this->getUser()->getAcl()->canCreate()) {
+        if (!$this->wPage && $request->has('u') && $this->getConfig()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
             $this->wPage->userId = $this->getUser()->id;
             $this->wPage->url = $request->get('u');
@@ -75,7 +73,7 @@ class Edit extends Iface
             $this->wContent->userId = $this->getUser()->id;
         }
         // Create a new Nav page
-        if ($request->has('type') && $this->getUser()->getAcl()->canCreate()) {
+        if ($request->has('type') && $this->getConfig()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
             $this->wPage->type = \App\Db\Page::TYPE_NAV;
             $this->wPage->userId = $this->getUser()->id;
@@ -91,7 +89,7 @@ class Edit extends Iface
         
         // check if the user can edit the page
         $error = false;
-        if (!$this->getUser()->getAcl()->canEdit($this->wPage)) {
+        if (!$this->getConfig()->getAcl()->canEdit($this->wPage)) {
             \Tk\Alert::addWarning('You do not have permission to edit this page.');
             $error = true;
         }
@@ -220,7 +218,7 @@ class Edit extends Iface
     {
         /** @var \App\Db\Page $page */
         $page = \App\Db\PageMap::create()->find($request->get('del'));
-        if (!$page || !$this->getUser() || !$this->getUser()->getAcl()->canDelete($page)) {
+        if (!$page || !$this->getUser() || !$this->getConfig()->getAcl()->canDelete($page)) {
             \Tk\Alert::addWarning('You do not have the permissions to delete this page.');
             return;
         }
@@ -282,7 +280,7 @@ config.pageEdit = {
   saveEvent : '$saveEvent'
 };
 JS;
-        $template->appendJs($js, ['data-jsl-priority' => -999]);
+        $template->appendJs($js, array('data-jsl-priority' => -999));
         
         return $template;
     }

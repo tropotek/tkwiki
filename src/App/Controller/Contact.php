@@ -1,15 +1,12 @@
 <?php
 namespace App\Controller;
 
-use Tk\Mail\Exception;
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
 
 /**
- * Class Contact
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -23,36 +20,46 @@ class Contact extends Iface
     protected $form = null;
 
 
+    public function __construct()
+    {
+        $this->setPageTitle('Contact Us');
+    }
+
     /**
      * @param Request $request
+     * @throws Form\Exception
+     * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
-        $this->setPageTitle('Contact Us');
 
-        $this->config = \Tk\Config::getInstance();
+        $this->form = new Form('contactForm');
 
-        $this->form = Form::create('contactForm');
-        
         $this->form->addField(new Field\Input('name'));
         $this->form->addField(new Field\Input('email'));
-        
-        //$opts = new Field\Option\ArrayIterator(array('General', 'Services', 'Orders'));
-        //$this->form->addField(new Field\Select('type[]', $opts));
-        
-        //$this->form->addField(new Field\File('attach[]', $request));
-        $this->form->addField(new Field\Textarea('message'));
-        //$this->form->addField(new Field\ReCapture('validate'));
 
-        $this->form->addField(new Event\Button('send', array($this, 'doSubmit')));
-        
-        // Find and Fire submit event
+        $opts = new Field\Option\ArrayIterator(array('General', 'Services', 'Orders'));
+        $this->form->addField(new Field\Select('type[]', $opts));
+
+        $this->form->addField(new Field\File('attach', '/contact/' . date('d-m-Y') . '-___'));
+        $this->form->addField(new Field\Textarea('message'));
+
+        if ($this->getConfig()->get('google.recaptcha.publicKey'))
+            $this->form->addField(new Field\ReCapture('capture', $this->getConfig()->get('google.recaptcha.publicKey'),
+                $this->getConfig()->get('google.recaptcha.privateKey')));
+
+        $this->form->addField(new Event\Submit('send', array($this, 'doSubmit')));
+
         $this->form->execute();
 
     }
 
     /**
+     * show()
+     *
      * @return \Dom\Template
+     * @throws Form\Exception
+     * @throws \Dom\Exception
      */
     public function show()
     {
@@ -69,12 +76,11 @@ class Contact extends Iface
      * doSubmit()
      *
      * @param Form $form
-     * @throws Form\Exception
+     * @throws \Tk\Exception
      */
     public function doSubmit($form)
     {
         $values = $form->getValues();
-
         /** @var Field\File $attach */
         $attach = $form->getField('attach');
 
@@ -88,20 +94,20 @@ class Contact extends Iface
             $form->addFieldError('message', 'Please enter some message text');
         }
 
-        //$form->addFieldError('test', 'ggggg');
-        
         // validate any files
         $attach->isValid();
 
         if ($this->form->hasErrors()) {
             return;
         }
-        if ($attach->hasFile()) {
-            $attach->moveFile($this->getConfig()->getDataPath() . '/contact/' . date('d-m-Y') . '-' . str_replace('@', '_', $values['email']));
-        }
+//        if ($attach->hasFile()) {
+//            $attach->moveFile($this->getConfig()->getDataPath() . '/contact/' . date('d-m-Y') . '-' . str_replace('@', '_', $values['email']));
+//        }
 
         if ($this->sendEmail($form)) {
             \Tk\Alert::addSuccess('<strong>Success!</strong> Your form has been sent.');
+        } else {
+            \Tk\Alert::addError('<strong>Error!</strong> Something went wrong and your message has not been sent.');
         }
 
         \Tk\Uri::create()->redirect();
@@ -113,6 +119,8 @@ class Contact extends Iface
      *
      * @param Form $form
      * @return bool
+     * @throws \Tk\Exception
+     * @throws \Exception
      */
     private function sendEmail($form)
     {
@@ -121,30 +129,43 @@ class Contact extends Iface
         $type = '';
         if (is_array($form->getFieldValue('type')))
             $type = implode(', ', $form->getFieldValue('type'));
-        $message = $form->getFieldValue('message');
+        $messageStr = $form->getFieldValue('message');
+
         $attachCount = '';
-
-//        $field = $form->getField('attach');
-//        if ($field->count()) {
-//            $attachCount = 'Attachments: ' . $field->count();
-//        }
-
-        $message = <<<MSG
-Dear $name,
-
-Email: $email
-Type: $type
-
-Message:
-  $message
-
-
-MSG;
-        // TODO: fire an event to send the message
-        try {
-            return \App\Config::getInstance()->getEmailGateway()->send($message);
-        } catch (Exception $e) {
+        /** @var Field\File $field */
+        $field = $form->getField('attach');
+        if ($field->hasFile()) {
+            $attachCount = '<br/><b>Attachments:</b> ';
+            foreach ($field->getUploadedFiles() as $file) {
+                $attachCount = $file->getFilename() . ', ';
+            }
+            $attachCount = rtrim($attachCount, ', ');
         }
+
+        $content = <<<MSG
+<p>
+Dear $name,
+</p>
+<p>
+Email: $email<br/>
+Type: $type
+</p>
+<p>Message:<br/>
+  $messageStr
+</p>
+<p>
+$attachCount
+</p>
+MSG;
+
+        $message = $this->getConfig()->createMessage();
+        $message->addTo($email);
+        $message->setSubject($this->getConfig()->get('site.title') . ':  Contact Form Submission - ' . $name);
+        $message->set('content', $content);
+        if ($field->hasFile()) {
+            $message->addAttachment($field->getUploadedFile()->getFile(), $field->getUploadedFile()->getFilename());
+        }
+        return $this->getConfig()->getEmailGateway()->send($message);
     }
 
 }

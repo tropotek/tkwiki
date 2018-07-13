@@ -28,7 +28,7 @@ class Acl
     
     
     /**
-     * @var \App\Db\User
+     * @var \Bs\Db\User
      */
     protected $user = null;
     
@@ -37,7 +37,7 @@ class Acl
     /**
      * Access constructor.
      *
-     * @param \App\Db\User $user
+     * @param \Bs\Db\User $user
      */
     public function __construct($user)
     {
@@ -49,7 +49,7 @@ class Acl
      * Eg:
      *   - Access::create($user)->isAdmin();
      * 
-     * @param \App\Db\User $user
+     * @param \Bs\Db\User $user
      * @return Acl
      */
     static function create($user)
@@ -57,9 +57,9 @@ class Acl
         $obj = new static($user);
         return $obj;
     }
-    
+
     /**
-     * 
+     *
      * @param string|array $role
      * @return boolean
      * @todo Optimise this code....
@@ -70,14 +70,18 @@ class Acl
         if (!is_array($role)) $role = array($role);
 
         foreach ($role as $r) {
-            if (!$r instanceof Role) {
-                $r = RoleMap::create()->findByName($r);
-            }
-            if ($r) {
-                $obj = RoleMap::create()->findRole($r->id, $this->user->id);
-                if ($obj && $obj->id = $r->id) {
-                    return true;
+            try {
+                if (!$r instanceof Role) {
+                    $r = RoleMap::create()->findByName($r);
                 }
+                if ($r) {
+                    $obj = RoleMap::create()->findRole($r->id, $this->user->id);
+                    if ($obj && $obj->id = $r->id) {
+                        return true;
+                    }
+                }
+            } catch (\Exception $e) {
+                \Tk\Log::warning(__FILE__ . ': ' . $e->getMessage());
             }
         }
         return false;
@@ -101,8 +105,15 @@ class Acl
      */
     public function getRoles()
     {
-        if (!$this->user) return [];
-        $arr = \App\Db\RoleMap::create()->findByUserId($this->user->id);
+        $arr = array();
+        if ($this->user) {
+            try {
+                $arr = \App\Db\RoleMap::create()->findByUserId($this->user->id);
+            } catch (\Exception $e) {
+                \Tk\Log::warning(__FILE__ . ': ' . $e->getMessage());
+                $arr = array();
+            }
+        }
         return $arr;
     }
 

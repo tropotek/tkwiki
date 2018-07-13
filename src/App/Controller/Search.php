@@ -33,17 +33,17 @@ class Search extends Iface
     protected $list = array();
 
     /**
-     * @var \App\Db\User
+     * @var \Bs\Db\User
      */
     protected $user = null;
-    
 
 
     /**
      * doDefault
      *
      * @param Request $request
-     * @return \App\Page\Page
+     * @return void
+     * @throws \Tk\Db\Exception
      */
     public function doDefault(Request $request)
     {
@@ -59,16 +59,16 @@ class Search extends Iface
         }
         $tool = \Tk\Db\Tool::create();
         if (preg_match('/user:([0-9a-f]{32})/i', $this->terms, $regs)) {
-            $this->user = \App\Db\UserMap::create()->findByHash($regs[1]);
+            $this->user = $this->getConfig()->getUserMapper()->findByHash($regs[1]);
             $this->terms = '';
             // TODO: Test this is correct for public private etc pages...
             if ($this->user) {
-                if ($this->getUser() && $this->getUser()->getAcl()->isAdmin()) {
-                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [], $tool);
-                } else if ($this->getUser() && $this->getUser()->getAcl()->isModerator()) {
-                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC], $tool);
+                if ($this->getUser() && $this->getConfig()->getAcl()->isAdmin()) {
+                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, array(), $tool);
+                } else if ($this->getUser() && $this->getConfig()->getAcl()->isModerator()) {
+                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, array(\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC), $tool);
                 } else {
-                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, [\App\Db\Page::PERMISSION_PUBLIC], $tool);
+                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, array(\App\Db\Page::PERMISSION_PUBLIC), $tool);
                 }
             }
         } else {
@@ -78,7 +78,7 @@ class Search extends Iface
             // TODO: Need to create a real search function
             // TODO
             if ($this->terms) {
-                $filter = ['keywords' => $this->terms, 'type' => \App\Db\Page::TYPE_PAGE];
+                $filter = array('keywords' => $this->terms, 'type' => \App\Db\Page::TYPE_PAGE);
                 $this->list = \App\Db\PageMap::create()->findFiltered($filter, $tool);
             }
             // TODO

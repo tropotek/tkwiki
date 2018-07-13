@@ -57,7 +57,7 @@ class Page extends \App\Controller\Iface
         $list = array();
         /** @var \App\Db\Page $page */
         foreach($pageList as $page) {
-            if (!$this->getUser()->getAcl()->canView($page)) continue;
+            if (!$this->getConfig()->getAcl()->canView($page)) continue;
             $page->modified = $page->modified->format(\Tk\Date::FORMAT_SHORT_DATETIME);
             $page->created = $page->created->format(\Tk\Date::FORMAT_SHORT_DATETIME);
             $list[] = $page;
@@ -68,7 +68,7 @@ class Page extends \App\Controller\Iface
                 'orderBy' => $tool->getOrderBy(),
                 'offset' => $tool->getOffset(),
                 'limit' => $tool->getLimit(),
-                'total' => $pageList->getFoundRows(),
+                'total' => $pageList->countAll(),
                 'keywords' => $keywords
             )
         );

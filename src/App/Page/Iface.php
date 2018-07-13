@@ -52,7 +52,7 @@ abstract class Iface extends \Tk\Controller\Page
 config.widthBreakpoints = [0, 320, 481, 641, 961, 1025, 1281];
 
 JS;
-        $template->appendJs($js, ['data-jsl-priority' => -999]);
+        $template->appendJs($js, array('data-jsl-priority' => -999));
 
         return $template;
     }
@@ -60,7 +60,7 @@ JS;
     /**
      * Get the currently logged in user
      *
-     * @return \App\Db\User
+     * @return \Bs\Db\User
      */
     public function getUser()
     {

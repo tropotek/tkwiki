@@ -5,7 +5,6 @@ use Tk\Db\Tool;
 use Tk\Db\Map\ArrayObject;
 use Tk\DataMap\Db;
 use Tk\DataMap\Form;
-use \Tk\Db\Mapper;
 
 /**
  * Class RoleMap
@@ -50,8 +49,9 @@ class RoleMap extends Mapper
 
 
     /**
-     * @param $name
-     * @return Role
+     * @param string $name
+     * @return Role|\Tk\Db\Map\Model
+     * @throws \Tk\Db\Exception
      */
     public function findByName($name)
     {
@@ -61,7 +61,8 @@ class RoleMap extends Mapper
     /**
      * @param int $userId
      * @param Tool $tool
-     * @return ArrayObject
+     * @return ArrayObject|Role[]
+     * @throws \Tk\Db\Exception
      */
     public function findByUserId($userId, $tool = null)
     {
@@ -71,9 +72,10 @@ class RoleMap extends Mapper
     }
 
     /**
-     * @param $roleId
-     * @param $userId
-     * @return \App\Db\Role
+     * @param int $roleId
+     * @param int $userId
+     * @return Role|\Tk\Db\Map\Model
+     * @throws \Tk\Db\Exception
      */
     public function findRole($roleId, $userId)
     {
@@ -84,8 +86,9 @@ class RoleMap extends Mapper
 
 
     /**
-     * @param $userId
+     * @param int $userId
      * @return \Tk\Db\PDOStatement
+     * @throws \Tk\Db\Exception
      */
     public function deleteAllUserRoles($userId)
     {
@@ -94,9 +97,10 @@ class RoleMap extends Mapper
     }
 
     /**
-     * @param $roleId
-     * @param $userId
+     * @param int $roleId
+     * @param int $userId
      * @return \Tk\Db\PDOStatement
+     * @throws \Tk\Db\Exception
      */
     public function deleteUserRole($roleId, $userId)
     {
@@ -105,9 +109,10 @@ class RoleMap extends Mapper
     }
 
     /**
-     * @param $roleId
-     * @param $userId
+     * @param int $roleId
+     * @param int $userId
      * @return \Tk\Db\PDOStatement
+     * @throws \Tk\Db\Exception
      */
     public function addUserRole($roleId, $userId)
     {

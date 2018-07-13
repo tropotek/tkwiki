@@ -5,8 +5,6 @@ namespace App\Listener;
 use Tk\Event\Subscriber;
 
 /**
- * Class ShutdownHandler
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -15,7 +13,6 @@ class WikiHandler implements Subscriber
 {
     
     /**
-     *
      * @param \App\Event\ContentEvent $event
      */
     public function contentPreRender(\App\Event\ContentEvent $event)
@@ -32,14 +29,12 @@ class WikiHandler implements Subscriber
     }
     
     /**
-     * getSubscribedEvents
-     *
      * @return array
      */
     public static function getSubscribedEvents()
     {
         return array(
-            \App\WikiEvents::WIKI_CONTENT_VIEW => ['contentPreRender', 10]
+            \App\WikiEvents::WIKI_CONTENT_VIEW => array('contentPreRender', 10)
         );
     }
 

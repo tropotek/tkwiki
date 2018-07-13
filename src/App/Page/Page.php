@@ -28,7 +28,7 @@ class Page extends Iface
             $template->setAttr('myPages', 'href', $url);
             $template->insertText('username', $this->getUser()->name);
             
-            if ($this->getUser()->getAcl()->isAdmin()) {
+            if ($this->getConfig()->getAcl()->isAdmin()) {
                 $template->setChoice('admin');
             }
         }

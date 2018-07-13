@@ -28,7 +28,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
 
     /**
      * Logged in user
-     * @var \App\Db\User
+     * @var \Bs\Db\User
      */
     protected $user = null;
 
@@ -38,7 +38,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
      *
      * @param \App\Db\Page $wPage
      * @param \App\Db\Content $wContent
-     * @param \App\Db\User $user
+     * @param \Bs\Db\User $user
      */
     public function __construct($wPage, $wContent, $user)
     {
@@ -97,7 +97,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
                 $template->setChoice('viewRevision');
                 $title .= ' <small>(Revision ' . $this->wContent->id . ')</small>';
                 $template->addCss('content', 'revision');
-                if ($this->user->getAcl()->canEdit($this->wPage)) {
+                if ($this->getConfig()->getAcl()->canEdit($this->wPage)) {
                     $template->setChoice('revert');
                 }
             } else {
@@ -106,12 +106,12 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         }
         
         if ($this->user) {
-            if ($this->user->getAcl()->canEdit($this->wPage)) {
+            if ($this->getConfig()->getAcl()->canEdit($this->wPage)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id);
                 $template->setAttr('edit', 'href', $url);
                 $template->setChoice('canEdit');
             }
-            if ($this->user->getAcl()->canDelete($this->wPage)) {
+            if ($this->getConfig()->getAcl()->canDelete($this->wPage)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->set('del', $this->wPage->id);
                 $template->setAttr('delete', 'href', $url);
                 $template->setChoice('canDelete');
@@ -157,8 +157,8 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         $html = array();
         /** @var \stdClass $c */
         foreach($contentList as $i => $c) {
-            /** @var \App\Db\User $user */
-            $user = \App\Db\UserMap::create()->find($c->user_id);
+            /** @var \Bs\Db\User $user */
+            $user = \Bs\Db\UserMap::create()->find($c->user_id);
             if (!$user) continue;
             $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->hash);
             $class = array();
@@ -203,6 +203,14 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return \App\Config
+     */
+    public function getConfig()
+    {
+        return \App\Config::getInstance();
     }
 
     /**

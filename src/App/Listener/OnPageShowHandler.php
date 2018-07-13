@@ -76,7 +76,7 @@ JS;
             
             $crumbs = \App\Helper\Crumbs::getInstance(\Tk\Uri::create());
             $crumbs->show();
-            $template->replaceTemplate('wiki-crumbs', $crumbs->getTemplate());
+            $template->replaceTemplate('breadcrumb', $crumbs->getTemplate());
             
 
 

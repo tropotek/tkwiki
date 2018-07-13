@@ -31,7 +31,7 @@
     },
     "extra":  {
         "branch-alias":  {
-            "dev-trunk": "2.2.x-dev"
+            "dev-trunk": "2.4.x-dev"
         }
     },
     "require":  {
@@ -48,7 +48,9 @@
         "ttek/tk-form": "~2.0",
         "ttek/tk-table": "~2.0",
         "ttek/tk-plugin": "~2.0",
-        "ttek/tk-ui": "~2.0"
+        "ttek/tk-ui": "~2.0",
+        "ttek/tk-base": "~1.0",
+        "ttek-plg/mailog": "~1.0"
     },
     "require-dev":  {
     }

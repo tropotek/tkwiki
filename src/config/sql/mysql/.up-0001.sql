@@ -27,7 +27,8 @@ ALTER TABLE content ADD del TINYINT DEFAULT 0 NOT NULL;
 ALTER TABLE page ADD del TINYINT DEFAULT 0 NOT NULL;
 ALTER TABLE role ADD del TINYINT DEFAULT 0 NOT NULL;
 
-UPDATE user set user.role = 'user';
+-- TODO WE need a better solution to this
+UPDATE user set user.role = 'admin';
 
 
 

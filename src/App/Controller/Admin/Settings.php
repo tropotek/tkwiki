@@ -44,8 +44,8 @@ class Settings extends \Bs\Controller\AdminIface
         $this->form->addField(new Field\File('site.logo', '/site'))->setTabGroup('Site')->setLabel('Site Logo')
             ->addCss('tk-imageinput')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
         
-        $this->form->addField(new Field\Textarea('site.meta.keywords'))->setTabGroup('Template')->setLabel('META Keywords');
-        $this->form->addField(new Field\Textarea('site.meta.description'))->setTabGroup('Template')->setLabel('META Description');
+        $this->form->addField(new Field\Input('site.meta.keywords'))->setTabGroup('Template')->setLabel('META Keywords');
+        $this->form->addField(new Field\Input('site.meta.description'))->setTabGroup('Template')->setLabel('META Description');
         
         $this->form->addField(new Field\Textarea('site.global.js'))->setTabGroup('Template')->setLabel('Global Script');
         $this->form->addField(new Field\Textarea('site.global.css'))->setTabGroup('Template')->setLabel('Global Styles');

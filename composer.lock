@@ -765,12 +765,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "8a2660e9b5791210f6b4c8cbaee5d741e921a2e8"
+                "reference": "458db6722732478c20353e192c085c30dbb0a6e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/8a2660e9b5791210f6b4c8cbaee5d741e921a2e8",
-                "reference": "8a2660e9b5791210f6b4c8cbaee5d741e921a2e8",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/458db6722732478c20353e192c085c30dbb0a6e2",
+                "reference": "458db6722732478c20353e192c085c30dbb0a6e2",
                 "shasum": ""
             },
             "require": {
@@ -804,7 +804,7 @@
                 "base",
                 "tropotek"
             ],
-            "time": "2018-07-13T22:09:38+00:00"
+            "time": "2018-07-13T22:34:21+00:00"
         },
         {
             "name": "ttek/tk-database",

@@ -8,7 +8,7 @@
     "time": "2014-10-31",
     "license": "GPL",
     "version": "master",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "authors":  [
          {
             "name": "Michael Mifsud",

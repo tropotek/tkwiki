@@ -112,7 +112,7 @@ class PageMap extends Mapper
     /**
      *
      * @param $url
-     * @return Page
+     * @return Page|\Tk\Db\Map\Model
      * @throws \Exception
      */
     public function findByUrl($url)
@@ -162,13 +162,14 @@ class PageMap extends Mapper
         $res = $this->selectFrom($from, $where, $tool);
         return $res;
     }
-    
-    
+
+
     /**
      * Return all the Orphaned Pages
      *
      * @param \Tk\Db\Tool $tool
-     * @return ArrayObject
+     * @return ArrayObject|Page[]
+     * @throws \Exception
      */
     public function findOrphanedPages($tool)
     {
@@ -198,6 +199,7 @@ class PageMap extends Mapper
      *
      * @param $pageId
      * @return bool
+     * @throws \Exception
      */
     public function isOrphan($pageId)
     {
@@ -216,6 +218,7 @@ WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s AND a.id = %s)', $this
      * @param integer $pageId   The current page ID
      * @param string $pageUrl   The link page url
      * @return boolean
+     * @throws \Exception
      */
     public function insertLink($pageId, $pageUrl)
     {
@@ -233,6 +236,7 @@ WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s AND a.id = %s)', $this
      * @param integer $pageId   The current page ID
      * @param string $pageUrl   The link page url
      * @return boolean
+     * @throws \Exception
      */
     public function linkExists($pageId, $pageUrl)
     {
@@ -249,6 +253,7 @@ WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s AND a.id = %s)', $this
      * @param integer $pageId   The current page ID
      * @param string $pageUrl   The link page url
      * @return integer
+     * @throws \Exception
      */
     public function deleteLink($pageId, $pageUrl)
     {
@@ -265,6 +270,7 @@ WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s AND a.id = %s)', $this
      *
      * @param integer $pageId
      * @return integer
+     * @throws \Exception
      */
     public function deleteLinkByPageId($pageId)
     {

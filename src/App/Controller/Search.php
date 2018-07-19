@@ -3,12 +3,8 @@ namespace App\Controller;
 
 use Tk\Request;
 use Tk\Form;
-use Tk\Form\Event;
-use Tk\Form\Field;
 
 /**
- * Class Contact
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -43,7 +39,7 @@ class Search extends Iface
      *
      * @param Request $request
      * @return void
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function doDefault(Request $request)
     {
@@ -75,7 +71,7 @@ class Search extends Iface
             
             
             // TODO
-            // TODO: Need to create a real search function
+            // TODO: Need to create a real search function to search the page content
             // TODO
             if ($this->terms) {
                 $filter = array('keywords' => $this->terms, 'type' => \App\Db\Page::TYPE_PAGE);
@@ -106,10 +102,8 @@ class Search extends Iface
         $i = 0;
         /** @var \App\Db\Page $page */
         foreach($this->list as $page) {
-            
             if (!$access->canView($page)) continue;
-            
-            
+
             $rpt = $template->getRepeat('row');
             $rpt->insertText('title', $page->title);
             $rpt->setAttr('title', 'title', $page->title);
@@ -120,14 +114,12 @@ class Search extends Iface
             $rpt->insertText('time', $page->created->format('H:i'));
             
             if ($page->getContent()) {
-
                 $description = $page->getContent()->description;
                 // This is a security risk as is can show sensitive data from the content, do not do this...
                 if (!$description)
                     $description = trim(substr(strip_tags(html_entity_decode($page->getContent()->html)), 0, 256));
 
                 $rpt->insertHtml('description', htmlentities($description));
-
                 $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));
                 $rpt->insertText('time', $page->getContent()->created->format('H:i'));
                 if (trim($page->getContent()->keywords)) {

@@ -91,6 +91,7 @@ class Search extends Iface
 
     /**
      * @return \Dom\Template
+     * @throws \Exception
      */
     public function show()
     {
@@ -124,8 +125,8 @@ class Search extends Iface
                 // This is a security risk as is can show sensitive data from the content, do not do this...
                 if (!$description)
                     $description = trim(substr(strip_tags(html_entity_decode($page->getContent()->html)), 0, 256));
-                
-                $rpt->insertHtml('description', $description);
+
+                $rpt->insertHtml('description', htmlentities($description));
 
                 $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));
                 $rpt->insertText('time', $page->getContent()->created->format('H:i'));

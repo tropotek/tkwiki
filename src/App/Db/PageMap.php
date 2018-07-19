@@ -65,7 +65,8 @@ class PageMap extends Mapper
      *
      * @param $userId
      * @param \Tk\Db\Tool $tool
-     * @return ArrayObject
+     * @return ArrayObject|Page[]
+     * @throws \Exception
      */
     public function findByUserId($userId, $tool = null)
     {
@@ -77,25 +78,30 @@ class PageMap extends Mapper
      *
      * @param $userId
      * @param \Tk\Db\Tool $tool
-     * @return ArrayObject
+     * @return ArrayObject|Page[]
+     * @throws \Exception
      */
     public function findUserPages($userId, $permissions = array(), $tool = null)
     {
-        $sql = sprintf('user_id = %s AND type = %s', (int)$userId, $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
+        $sql = sprintf('(user_id = %s AND type = %s)', (int)$userId, $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
         $perms = '';
         foreach($permissions as $p) {
             $perms .= sprintf(' permission = %s OR ', $this->getDb()->quote($p));
         }
         if ($perms) {
-            $sql .= ' AND (' . rtrim($perms, 'OR ') . ') ';
+            $sql .= ' OR (' . rtrim($perms, 'OR ') . ') ';
         }
-        return $this->select($sql, $tool);
+
+        $r = $this->select($sql, $tool);
+        vd($this->getDb()->getLastQuery());
+        return $r;
     }
 
     /**
      *
      * @param \Tk\Db\Tool $tool
-     * @return ArrayObject
+     * @return ArrayObject|Page[]
+     * @throws \Exception
      */
     public function findNavPages($tool = null)
     {
@@ -107,6 +113,7 @@ class PageMap extends Mapper
      *
      * @param $url
      * @return Page
+     * @throws \Exception
      */
     public function findByUrl($url)
     {
@@ -119,7 +126,8 @@ class PageMap extends Mapper
      *
      * @param array $filter
      * @param Tool $tool
-     * @return ArrayObject
+     * @return ArrayObject|Page[]
+     * @throws \Exception
      */
     public function findFiltered($filter = array(), $tool = null)
     {

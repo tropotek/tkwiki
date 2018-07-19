@@ -37,7 +37,12 @@ class Manager extends Iface
         $this->table->addCell(new \Tk\Table\Cell\Text('userId'))->setOrderProperty('user_id');
         $this->table->addCell(new \Tk\Table\Cell\Text('type'));
         $this->table->addCell(new \Tk\Table\Cell\Text('url'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('permission'));
+        $this->table->addCell(new \Tk\Table\Cell\Text('permission'))->setOnPropertyValue(function($cell, $obj, $value) {
+            /** @var \App\Db\Page $obj */
+            if ($obj->getPermissionLabel()) return ucwords($obj->getPermissionLabel());
+            return $value;
+
+        });
         $this->table->addCell(new \Tk\Table\Cell\Text('views'));
         $this->table->addCell(new \Tk\Table\Cell\Date('modified'));
         $this->table->addCell(new \Tk\Table\Cell\Date('created'));
@@ -46,7 +51,7 @@ class Manager extends Iface
         $this->table->addFilter(new Field\Input('keywords'))->setLabel('')->setAttr('placeholder', 'Keywords');
         
         // Actions
-        $this->table->addAction(\Tk\Table\Action\Button::createButton('New Page', 'glyphicon glyphicon-plus', \Tk\Uri::create('/edit.html')));
+        $this->table->addAction(\Tk\Table\Action\Button::createButton('New Page', 'fa fa-plus', \Tk\Uri::create('/edit.html')));
         $this->table->addAction(new \Tk\Table\Action\Delete());
         $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
         

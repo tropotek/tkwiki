@@ -11,8 +11,6 @@ use Tk\Event\GetResponseEvent;
 class AuthHandler extends \Bs\Listener\AuthHandler
 {
 
-
-
     /**
      * do any auth init setup
      *

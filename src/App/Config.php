@@ -10,6 +10,15 @@ class Config extends \Bs\Config
 {
 
     /**
+     * init the default params.
+     */
+    protected function init()
+    {
+        parent::init();
+        \Tk\Crumbs::$homeUrl = '/';
+    }
+
+    /**
      * @return Db\LockMap
      */
     public function getLockMap()

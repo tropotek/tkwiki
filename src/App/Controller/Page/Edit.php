@@ -67,7 +67,7 @@ class Edit extends Iface
             $this->wPage->userId = $this->getUser()->id;
             $this->wPage->url = $request->get('u');
             $this->wPage->title = str_replace('_', ' ', $this->wPage->url);
-            $this->wPage->permission = \App\Db\Page::PERMISSION_PUBLIC;
+            $this->wPage->permission = \App\Db\Page::PERMISSION_PRIVATE;
             $this->wContent = new \App\Db\Content();
             $this->wContent->userId = $this->getUser()->id;
         }

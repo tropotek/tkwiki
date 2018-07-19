@@ -9,9 +9,6 @@ namespace App\Controller\Admin\User;
 class Edit extends \Bs\Controller\Admin\User\Edit
 {
 
-
-
-
     /**
      * @throws \Exception
      */
@@ -38,6 +35,7 @@ class Edit extends \Bs\Controller\Admin\User\Edit
         if ($this->getUser()->isAdmin() && !$this->user->isAdmin()) {
             $roles = \App\Db\PermissionMap::create()->findAll(\Tk\Db\Tool::create('a.id'))->toArray();
             $list = new \Tk\Form\Field\Option\ArrayObjectIterator($roles);
+            /** @var \Tk\Form\Field\CheckboxGroup $f */
             $f = $this->form->addField(new \Tk\Form\Field\CheckboxGroup('permission', $list))
                 ->setNotes('Select the available permissions this user has.')->setTabGroup('Permissions');
 
@@ -49,13 +47,45 @@ class Edit extends \Bs\Controller\Admin\User\Edit
             }
 
             $selected = array();
-            foreach($this->getConfig()->getAcl()->getRoles() as $obj) {
+            $userPerms = \App\Db\PermissionMap::create()->findByUserId($this->user->id);
+            foreach($userPerms as $obj) {
                 $selected[] = $obj->id;
             }
-            $this->form->setFieldValue('role', $selected);
+            $f->setValue($selected);
+
+            /** @var \Tk\Form\Event\Submit $e */
+            $e = $this->form->getField('update');
+            $e->addCallback(array($this, 'doAppSubmit'));
+            $e = $this->form->getField('save');
+            $e->addCallback(array($this, 'doAppSubmit'));
         }
 
     }
 
+
+    /**
+     * @param \Tk\Form $form
+     * @param \Tk\Form\Event\Iface $event
+     * @throws \Exception
+     */
+    public function doAppSubmit($form, $event)
+    {
+
+
+        if ($form->hasErrors()) {
+            return;
+        }
+
+        // Update user role list if not admin
+        if ($this->user->id != 1) {
+            \App\Db\PermissionMap::create()->deleteAllUserRoles($this->user->id);
+            foreach ($form->getFieldValue('permission') as $roleId) {
+                \App\Db\PermissionMap::create()->addUserRole($roleId, $this->user->id);
+            }
+        }
+
+
+
+    }
 
 }

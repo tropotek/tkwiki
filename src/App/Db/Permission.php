@@ -7,11 +7,11 @@ namespace App\Db;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Role extends \Tk\Db\Map\Model
+class Permission extends \Tk\Db\Map\Model
 {
 
     const ROLE_ADMIN = 'admin';
-    const ROLE_MODERATOR = 'moderator';
+//    const ROLE_MODERATOR = 'moderator';
     const ROLE_USER = 'user';
 
     const ROLE_CREATE = 'create';

@@ -37,6 +37,17 @@ class Config extends \Bs\Config
     }
 
     /**
+     * @return \Bs\Listener\PageTemplateHandler
+     */
+    public function getPageTemplateHandler()
+    {
+        if (!$this->get('page.template.handler')) {
+            $this->set('page.template.handler', new \App\Listener\PageTemplateHandler());
+        }
+        return $this->get('page.template.handler');
+    }
+
+    /**
      * @return \Bs\Listener\AuthHandler
      */
     public function getAuthHandler()

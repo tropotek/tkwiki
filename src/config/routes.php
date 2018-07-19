@@ -29,11 +29,11 @@ $routes->add('settings', new \Tk\Routing\Route('/settings.html', 'App\Controller
 $routes->add('pageManager', new \Tk\Routing\Route('/pageManager.html', 'App\Controller\Page\Manager::doDefault',
     array('role' => array('admin'))));
 $routes->add('pageEdit', new \Tk\Routing\Route('/edit.html', 'App\Controller\Page\Edit::doDefault',
-    array('role' => array('admin', 'edit', 'moderator'))));
+    array('role' => array('admin'))));
 $routes->add('pageHistory', new \Tk\Routing\Route('/history.html', 'App\Controller\Page\History::doDefault',
-    array('role' => array('admin', 'edit', 'moderator'))));
+    array('role' => array('admin'))));
 $routes->add('orphaned', new \Tk\Routing\Route('/orphaned.html', 'App\Controller\Page\Orphaned::doDefault',
-    array('role' => array('admin', 'moderator'))));
+    array('role' => array('admin'))));
 
 
 $routes->add('pageView', new \Tk\Routing\Route('/view.html', 'App\Controller\Page\View::doContentView'));

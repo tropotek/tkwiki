@@ -14,7 +14,7 @@ use Tk\DataMap\Form;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class RoleMap extends Mapper
+class PermissionMap extends Mapper
 {
 
     /**
@@ -60,7 +60,7 @@ class RoleMap extends Mapper
 
     /**
      * @param string $name
-     * @return Role|\Tk\Db\Map\Model
+     * @return Permission|\Tk\Db\Map\Model
      * @throws \Tk\Db\Exception
      */
     public function findByName($name)
@@ -71,26 +71,26 @@ class RoleMap extends Mapper
     /**
      * @param int $userId
      * @param Tool $tool
-     * @return ArrayObject|Role[]
+     * @return ArrayObject|Permission[]
      * @throws \Tk\Db\Exception
      */
     public function findByUserId($userId, $tool = null)
     {
-        $from = sprintf('%s a, user_role b', $this->getDb()->quoteParameter($this->getTable()));
-        $where = sprintf('a.id = b.role_id AND b.user_id = %d', (int)$userId);
+        $from = sprintf('%s a, permission_user b', $this->getDb()->quoteParameter($this->getTable()));
+        $where = sprintf('a.id = b.permission_id AND b.user_id = %d', (int)$userId);
         return $this->selectFrom($from, $where, $tool);
     }
 
     /**
      * @param int $roleId
      * @param int $userId
-     * @return Role|\Tk\Db\Map\Model
+     * @return Permission|\Tk\Db\Map\Model
      * @throws \Tk\Db\Exception
      */
     public function findRole($roleId, $userId)
     {
-        $from = sprintf('%s a, user_role b', $this->getDb()->quoteParameter($this->getTable()));
-        $where = sprintf('a.id = %d AND a.id = b.role_id AND b.user_id = %d', (int)$roleId, (int)$userId);
+        $from = sprintf('%s a, permission_user b', $this->getDb()->quoteParameter($this->getTable()));
+        $where = sprintf('a.id = %d AND a.id = b.permission_id AND b.user_id = %d', (int)$roleId, (int)$userId);
         return $this->selectFrom($from, $where)->current();
     }
 
@@ -102,7 +102,7 @@ class RoleMap extends Mapper
      */
     public function deleteAllUserRoles($userId)
     {
-        $query = sprintf('DELETE FROM user_role WHERE user_id = %d', (int)$userId);
+        $query = sprintf('DELETE FROM permission_user WHERE user_id = %d', (int)$userId);
         return $this->getDb()->exec($query);
     }
 
@@ -114,7 +114,7 @@ class RoleMap extends Mapper
      */
     public function deleteUserRole($roleId, $userId)
     {
-        $query = sprintf('DELETE FROM user_role WHERE user_id = %d AND role_id = %d', (int)$userId, (int)$roleId);
+        $query = sprintf('DELETE FROM permission_user WHERE user_id = %d AND permission_id = %d', (int)$userId, (int)$roleId);
         return $this->getDb()->exec($query);
     }
 
@@ -126,7 +126,7 @@ class RoleMap extends Mapper
      */
     public function addUserRole($roleId, $userId)
     {
-        $query = sprintf('INSERT INTO user_role (user_id, role_id)  VALUES (%d, %d)', (int)$userId, (int)$roleId);
+        $query = sprintf('INSERT INTO permission_user (user_id, permission_id)  VALUES (%d, %d)', (int)$userId, (int)$roleId);
         return $this->getDb()->exec($query);
     }
 

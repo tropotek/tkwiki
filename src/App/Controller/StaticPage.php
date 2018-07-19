@@ -12,12 +12,19 @@ class StaticPage extends Iface
 {
 
 
+
+    public function __construct()
+    {
+        $this->setPageTitle('');
+    }
+
     /**
      * @param Request $request
      * @return mixed
      */
     public function doDefault(Request $request)
     {
+        $this->setPageTitle('');
         //$page = new \App\Page\Page($this, $request->getAttribute('_staticPath'));
         vd($request->getAttributes());
 

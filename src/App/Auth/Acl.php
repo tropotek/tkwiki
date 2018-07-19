@@ -1,8 +1,8 @@
 <?php
 namespace App\Auth;
 
-use App\Db\Role;
-use App\Db\RoleMap;
+use App\Db\Permission;
+use App\Db\PermissionMap;
 use App\Db\Page;
 
 /**
@@ -71,11 +71,11 @@ class Acl
 
         foreach ($role as $r) {
             try {
-                if (!$r instanceof Role) {
-                    $r = RoleMap::create()->findByName($r);
+                if (!$r instanceof Permission) {
+                    $r = PermissionMap::create()->findByName($r);
                 }
                 if ($r) {
-                    $obj = RoleMap::create()->findRole($r->id, $this->user->id);
+                    $obj = PermissionMap::create()->findRole($r->id, $this->user->id);
                     if ($obj && $obj->id = $r->id) {
                         return true;
                     }
@@ -101,14 +101,14 @@ class Acl
     }
 
     /**
-     * @return Role[]|\Tk\Db\Map\ArrayObject
+     * @return Permission[]|\Tk\Db\Map\ArrayObject
      */
     public function getRoles()
     {
         $arr = array();
         if ($this->user) {
             try {
-                $arr = \App\Db\RoleMap::create()->findByUserId($this->user->id);
+                $arr = \App\Db\PermissionMap::create()->findByUserId($this->user->id);
             } catch (\Exception $e) {
                 \Tk\Log::warning(__FILE__ . ': ' . $e->getMessage());
                 $arr = array();

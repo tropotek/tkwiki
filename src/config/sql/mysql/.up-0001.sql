@@ -43,9 +43,6 @@ ALTER TABLE user
   MODIFY COLUMN role varchar(128) NOT NULL DEFAULT '' AFTER password,
   MODIFY COLUMN last_login datetime AFTER active;
 
-# DELETE FROM `role` WHERE `id` = 1;
-# DELETE FROM `role` WHERE `id` = 2;
-# DELETE FROM `role` WHERE `id` = 3;
 
 rename table role to permission;
 rename table user_role to permission_user;
@@ -58,6 +55,9 @@ ALTER TABLE permission_user
   MODIFY COLUMN permission_id int(11) unsigned NOT NULL AFTER role;
 
 DELETE FROM `permission_user` WHERE `permission_id` < 4;
+
+DELETE FROM `permission` WHERE `id` = 1;
+DELETE FROM `permission` WHERE `id` = 3;
 
 -- ALTER TABLE permission_user ADD PRIMARY KEY (role, permission_id);
 

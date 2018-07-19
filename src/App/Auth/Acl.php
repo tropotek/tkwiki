@@ -6,8 +6,6 @@ use App\Db\PermissionMap;
 use App\Db\Page;
 
 /**
- * Class RoleAccess
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
@@ -16,15 +14,6 @@ use App\Db\Page;
  */
 class Acl 
 {
-
-    const ROLE_ADMIN = 'admin';
-    const ROLE_MODERATOR = 'moderator';
-    const ROLE_USER = 'user';
-
-    const ROLE_CREATE = 'create';
-    const ROLE_EDIT = 'edit';
-    const ROLE_DELETE = 'delete';
-    const ROLE_EDIT_EXTRA = 'editExtra';
     
     
     /**
@@ -122,9 +111,9 @@ class Acl
      */
     public function getGroup()
     {
-        if ($this->isAdmin()) return self::ROLE_ADMIN;
-        if ($this->isModerator()) return self::ROLE_MODERATOR;
-        if ($this->isUser()) return self::ROLE_USER;
+        if ($this->isAdmin()) return \Bs\Db\User::ROLE_ADMIN;
+        if ($this->isModerator()) return \App\Db\Permission::ROLE_MODERATOR;
+        if ($this->isUser()) return \Bs\Db\User::ROLE_USER;
         return '';
     }
     
@@ -134,6 +123,7 @@ class Acl
      */
     public function isAdmin()
     {
+        if (!$this->user) return false;
         return $this->user->isAdmin();
     }
 
@@ -143,8 +133,7 @@ class Acl
      */
     public function isModerator()
     {
-        return $this->user->isUser();
-        //return $this->hasRole(self::ROLE_MODERATOR);
+        return $this->hasRole(\App\Db\Permission::ROLE_MODERATOR);
     }
 
     /**
@@ -153,6 +142,7 @@ class Acl
      */
     public function isUser()
     {
+        if (!$this->user) return false;
         return $this->user->isUser();
     }
     
@@ -164,7 +154,7 @@ class Acl
     {
         if ($this->isAdmin() || $this->isModerator())
             return true;
-        return $this->hasRole(self::ROLE_CREATE);
+        return $this->hasRole(\App\Db\Permission::ROLE_CREATE);
     }
 
     /**
@@ -182,7 +172,7 @@ class Acl
                 if ($pa->getGroup() == $this->getGroup()) {
                     return true;
                 }
-                if ($this->isModerator() && $pa->getGroup() == self::ROLE_USER) {
+                if ($this->isModerator() && $pa->getGroup() == \Bs\Db\User::ROLE_USER) {
                     return true;
                 }
                 if ($this->isAdmin()) {
@@ -190,7 +180,7 @@ class Acl
                 }
                 break;
             case Page::PERMISSION_PRIVATE:
-                if ($this->hasRole(self::ROLE_ADMIN)) {
+                if ($this->isAdmin()) {
                     return true;
                 }
         }
@@ -206,7 +196,7 @@ class Acl
         if ($page->url == \App\Db\Page::getHomeUrl() && !$this->isAdmin()) {
             return false;
         }
-        if ($this->hasRole(self::ROLE_EDIT) && $this->canView($page)) {
+        if ($this->hasRole(\App\Db\Permission::ROLE_EDIT) && $this->canView($page)) {
             return true;
         }
         return false;
@@ -218,7 +208,7 @@ class Acl
      */
     public function canDelete($page)
     {
-        if ($page->id && $page->url != \App\Db\Page::getHomeUrl() && $this->hasRole(self::ROLE_DELETE) && $this->canView($page)) {
+        if ($page->id && $page->url != \App\Db\Page::getHomeUrl() && $this->hasRole(\App\Db\Permission::ROLE_DELETE) && $this->canView($page)) {
             return true;
         }
         return false;
@@ -230,7 +220,7 @@ class Acl
      */
     public function canEditExtra($page)
     {
-        if ($this->hasRole(self::ROLE_EDIT_EXTRA) && $this->canView($page)) {
+        if ($this->hasRole(\App\Db\Permission::ROLE_EDIT_EXTRA) && $this->canView($page)) {
             return true;
         }
         return false;

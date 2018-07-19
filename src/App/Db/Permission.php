@@ -9,11 +9,18 @@ namespace App\Db;
  */
 class Permission extends \Tk\Db\Map\Model
 {
-
+    /**
+     * @deprecated
+     */
     const ROLE_ADMIN = 'admin';
-//    const ROLE_MODERATOR = 'moderator';
+    /**
+     * @deprecated
+     */
     const ROLE_USER = 'user';
 
+
+
+    const ROLE_MODERATOR = 'moderator';
     const ROLE_CREATE = 'create';
     const ROLE_EDIT = 'edit';
     const ROLE_DELETE = 'delete';

@@ -21,6 +21,19 @@ class Edit extends \Bs\Controller\Admin\User\Edit
         //$this->getActionPanel()->setEnabled(false);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function buildForm()
+    {
+        parent::buildForm();
+        if ($this->user->getId() == 1 || !$this->getUser()->isAdmin()) {
+            $this->form->removeField('role');
+
+            $tab = 'Details';
+            $this->form->addFieldBefore('username', new \Tk\Form\Field\Html('role'))->setTabGroup($tab);
+        }
+    }
 
 
 }

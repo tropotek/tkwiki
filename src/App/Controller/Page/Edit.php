@@ -48,8 +48,7 @@ class Edit extends Iface
 
     /**
      * @param Request $request
-     * @return \App\Page\Iface
-     * @throws \Tk\Exception
+     * @throws \Exception
      */
     public function doDefault(Request $request)
     {
@@ -154,7 +153,7 @@ class Edit extends Iface
 
     /**
      * @param Form $form
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function doCancel($form)
     {
@@ -168,9 +167,10 @@ class Edit extends Iface
 
     /**
      * @param Form $form
-     * @throws \Tk\Db\Exception
+     * @param \Tk\Form\Event\Iface $event
+     * @throws \Exception
      */
-    public function doSubmit($form)
+    public function doSubmit($form, $event)
     {
         \App\Db\PageMap::create()->mapForm($form->getValues(), $this->wPage);
         \App\Db\ContentMap::create()->mapForm($form->getValues(), $this->wContent);
@@ -206,13 +206,12 @@ class Edit extends Iface
             }
 
         }
-
-        $url->redirect();
+        $event->setRedirect($url);
     }
 
     /**
      * @param Request $request
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function doDelete(Request $request)
     {
@@ -248,9 +247,8 @@ class Edit extends Iface
     }
 
     /**
-     * Note: no longer a dependency on show() allows for many show methods for many 
-     * controller methods (EG: doAction/showAction, doSubmit/showSubmit) in one Controller object
-     *
+     * @return \Dom\Template
+     * @throws \Exception
      */
     public function show()
     {

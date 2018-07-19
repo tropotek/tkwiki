@@ -18,7 +18,7 @@ class Profile extends \Bs\Controller\Admin\User\Profile
     public function __construct()
     {
         parent::__construct();
-        $this->getActionPanel()->setEnabled(false);
+        //$this->getActionPanel()->setEnabled(false);
     }
 
 

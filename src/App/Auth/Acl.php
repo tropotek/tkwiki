@@ -134,7 +134,7 @@ class Acl
      */
     public function isAdmin()
     {
-        return $this->hasRole(self::ROLE_ADMIN);
+        return $this->user->isAdmin();
     }
 
     /**
@@ -143,7 +143,8 @@ class Acl
      */
     public function isModerator()
     {
-        return $this->hasRole(self::ROLE_MODERATOR);
+        return $this->user->isUser();
+        //return $this->hasRole(self::ROLE_MODERATOR);
     }
 
     /**
@@ -152,7 +153,7 @@ class Acl
      */
     public function isUser()
     {
-        return $this->hasRole(self::ROLE_USER);
+        return $this->user->isUser();
     }
     
     /**

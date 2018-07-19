@@ -1,6 +1,8 @@
 <?php
 namespace App\Db;
 
+use Bs\Db\User;
+
 /**
  * Class LockMap
  *
@@ -65,7 +67,7 @@ class LockMap
      *
      * @param int $pageId
      * @return bool
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function lock($pageId)
     {
@@ -93,7 +95,7 @@ class LockMap
      *
      * @param $pageId
      * @return bool
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     function unlock($pageId)
     {
@@ -107,11 +109,12 @@ class LockMap
      * Can the current user
      *  - lock the requested page
      *  - access the currently locked page
-     * 
+     *
      * Call this to see if the user can access the lock for a page.
-     * 
+     *
      * @param $pageId
      * @return bool
+     * @throws \Exception
      */
     public function canAccess($pageId)
     {
@@ -130,7 +133,7 @@ class LockMap
      *
      * @param int $pageId
      * @return boolean
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function isLocked($pageId)
     {
@@ -146,7 +149,7 @@ class LockMap
      *
      * @param int $pageId
      * @return boolean
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function hasLock($pageId)
     {
@@ -160,7 +163,7 @@ class LockMap
      * occasionally look at clearing the expired locks
      * The default time to check is 2 * timeout
      *
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function clearExpired()
     {

@@ -1,9 +1,19 @@
-/data
+# System Files
+[Tt]humbs.db
+*.DS_Store
+/.idea
+.directory
+
+# Project directories
+/assets
 /vendor
+/plugin
 /_notes
+/data
+/data_*
+/docs/api
+
+# Project Files
 /src/config/config.php
 /.htaccess
-/.idea
-/.directory
-*.swp
-*.bak
+/*.bak

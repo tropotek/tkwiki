@@ -5,7 +5,6 @@ use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
-use App\Controller\Iface;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -28,35 +27,50 @@ class Settings extends \Bs\Controller\AdminIface
 
     /**
      * @param Request $request
-     * @throws Form\Exception
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
+     * @throws \Exception
      */
     public function doDefault(Request $request)
     {
         $this->setPageTitle('WIKI Settings');
         $this->data = \Tk\Db\Data::create();
 
-        $this->form = Form::create('formEdit');
+        $this->form = $this->getConfig()->createForm('site-settings');
+        $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
 
-        $this->form->addField(new Field\Input('site.title'))->setTabGroup('Site')->setLabel('Site Title')->setRequired(true);
-        $this->form->addField(new Field\Input('site.email'))->setTabGroup('Site')->setLabel('Site Email')->setRequired(true);
-        $this->form->addField(new Field\File('site.logo', '/site'))->setTabGroup('Site')->setLabel('Site Logo')
+        $tab = 'Site';
+        $this->form->addField(new Field\Input('site.title'))->setTabGroup($tab)->setLabel('Site Title')->setRequired(true);
+        $this->form->addField(new Field\Input('site.email'))->setTabGroup($tab)->setLabel('Site Email')->setRequired(true);
+        $this->form->addField(new Field\File('site.logo', '/site'))->setTabGroup($tab)->setLabel('Site Logo')
             ->addCss('tk-imageinput')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
-        
-        $this->form->addField(new Field\Input('site.meta.keywords'))->setTabGroup('Template')->setLabel('META Keywords');
-        $this->form->addField(new Field\Input('site.meta.description'))->setTabGroup('Template')->setLabel('META Description');
-        
-        $this->form->addField(new Field\Textarea('site.global.js'))->setTabGroup('Template')->setLabel('Global Script');
-        $this->form->addField(new Field\Textarea('site.global.css'))->setTabGroup('Template')->setLabel('Global Styles');
-        
-        $this->form->addField(new \App\Form\ButtonInput('wiki.page.default', 'glyphicon glyphicon-folder-open'))->setTabGroup('Config')->setLabel('Home Page')->setNotes('The default wiki home page URL');
 
-        $this->form->addField(new Field\Checkbox('wiki.page.home.lock'))->setTabGroup('Config')->setLabel('Lock Home Page')->setNotes('Only Allow Admin to edit the home page');
-        $this->form->addField(new Field\Checkbox('site.user.registration'))->setTabGroup('Config')->setLabel('User Registration')->setNotes('Allow users to create new accounts');
-        $this->form->addField(new Field\Checkbox('site.user.activation'))->setTabGroup('Config')->setLabel('User Activation')->setNotes('Allow users to activate their own accounts');
-        $this->form->addField(new Field\Checkbox('site.page.header.hide'))->setTabGroup('Config')->setLabel('Hide Header Info')->setNotes('Hide the page header info from public view.');
-        $this->form->addField(new Field\Checkbox('site.page.header.title.hide'))->setTabGroup('Config')->setLabel('Hide Header Title')->setNotes('Hide the page header title from public view.');
+        $tab = 'Template';
+        $this->form->addField(new Field\Input('site.meta.keywords'))->setTabGroup($tab)->setLabel('META Keywords');
+        $this->form->addField(new Field\Input('site.meta.description'))->setTabGroup($tab)->setLabel('META Description');
+
+        $this->form->appendField(new Field\Textarea('site.global.css'))->setAttr('id', 'site-global-css')->setTabGroup($tab)
+            ->setLabel('Custom Styles')->setNotes('You can omit the &lt;style&gt; tags here')->addCss('code')
+            ->setAttr('data-mode', 'css');
+        $this->form->appendField(new Field\Textarea('site.global.js'))->setAttr('id', 'site-global-js')->setTabGroup($tab)
+            ->setLabel('Custom JS')->setNotes('You can omit the &lt;script&gt; tags here')->addCss('code')
+            ->setAttr('data-mode', 'javascript');
+
+//        $this->form->addField(new Field\Textarea('site.global.js'))->setTabGroup($tab)->setLabel('Global Script');
+//        $this->form->addField(new Field\Textarea('site.global.css'))->setTabGroup($tab)->setLabel('Global Styles');
+
+        $tab = 'Config';
+        $this->form->addField(new \App\Form\ButtonInput('wiki.page.default', 'glyphicon glyphicon-folder-open'))->setTabGroup($tab)
+            ->setLabel('Home Page')->setNotes('The default wiki home page URL');
+
+        $this->form->addField(new Field\Checkbox('wiki.page.home.lock'))->setTabGroup($tab)->setLabel('Lock Home Page')
+            ->setNotes('Only Allow Admin to edit the home page');
+        $this->form->addField(new Field\Checkbox('site.user.registration'))->setTabGroup($tab)->setLabel('User Registration')
+            ->setNotes('Allow users to create new accounts');
+        $this->form->addField(new Field\Checkbox('site.user.activation'))->setTabGroup($tab)->setLabel('User Activation')
+            ->setNotes('Allow users to activate their own accounts');
+        $this->form->addField(new Field\Checkbox('site.page.header.hide'))->setTabGroup($tab)->setLabel('Hide Header Info')
+            ->setNotes('Hide the page header info from public view.');
+        $this->form->addField(new Field\Checkbox('site.page.header.title.hide'))->setTabGroup($tab)->setLabel('Hide Header Title')
+            ->setNotes('Hide the page header title from public view.');
 
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
@@ -122,8 +136,7 @@ class Settings extends \Bs\Controller\AdminIface
         $template = parent::show();
         
         // Render the form
-        $fren = new \Tk\Form\Renderer\Dom($this->form);
-        $template->insertTemplate($this->form->getId(), $fren->show());
+        $template->insertTemplate('form', $this->form->getRenderer()->show());
         
         // Render select page dialog
         $pageSelect = new \App\Helper\PageSelect('#fid_btn_wiki\\\\.page\\\\.default', '#fid_wiki\\\\.page\\\\.default');
@@ -150,7 +163,7 @@ class Settings extends \Bs\Controller\AdminIface
         <i class="glyphicon glyphicon-cog"></i> Site Settings
       </div>
       <div class="panel-body">
-        <div var="formEdit"></div>
+        <div var="form"></div>
       </div>
   </div>
 </div>

@@ -100,4 +100,25 @@ class Config extends \Bs\Config
 
 
 
+    /**
+     * @param $form
+     * @return \Tk\Form\Renderer\Dom
+     */
+    public function createFormRenderer($form)
+    {
+        $obj = \Tk\Form\Renderer\Dom::create($form);
+        $obj->setFieldGroupRenderer($this->getFormFieldGroupRenderer($form));
+        //$obj->getLayout()->setDefaultCol('col-sm-12');
+        return $obj;
+    }
+
+    /**
+     * @param \Tk\Form $form
+     * @return \Tk\Form\Renderer\FieldGroup
+     */
+    public function getFormFieldGroupRenderer($form)
+    {
+        return \Tk\Form\Renderer\FieldGroup::create($form);
+    }
+
 }

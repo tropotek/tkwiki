@@ -23,6 +23,10 @@ $routes->remove('home-base');
 $routes->remove('contact');
 
 
+
+// TODO: We need to refactor these pages to stop using the role param 
+
+
 // Public
 $params = array();
 

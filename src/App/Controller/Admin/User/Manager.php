@@ -19,6 +19,7 @@ class Manager extends \Bs\Controller\Admin\User\Manager
     {
         parent::__construct();
         //$this->getActionPanel()->setEnabled(false);
+        $this->editUrl = \Bs\Uri::create('/admin/userEdit.html');
     }
 
 

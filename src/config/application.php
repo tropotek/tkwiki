@@ -17,6 +17,14 @@ $config['template.admin'] = $config['template.public'] = $config['system.templat
 
 
 
+/*
+ * Setup what paths to check when migrating SQL
+ */
+$config['sql.migrate.list'] = array(
+    'App Sql' => $config->getSrcPath() . '/config',
+    'Lib Sql' => $config->getVendorPath() . '/ttek/tk-base',
+    'Plugin Sql' => $config->getPluginPath()
+);
 
 
 

@@ -1,5 +1,5 @@
 <?php
-namespace App\Page;
+namespace App;
 
 
 /**
@@ -11,15 +11,5 @@ class Page extends \Bs\Page
 {
 
 
-    /**
-     * @return \Dom\Template
-     * @throws \Exception
-     */
-    public function show()
-    {
-        $template = parent::show();
-
-        return $template;
-    }
     
 }

@@ -41,8 +41,8 @@ class Edit extends \Bs\Controller\Admin\User\Edit
 
             /** @var \Tk\Form\Field\Option $option */
             foreach($f->getOptions() as $option) {
+                /** @var \App\Db\Permission $p */
                 $p = \App\Db\PermissionMap::create()->find($option->getValue());
-                //vd($p->description);
                 $option->setAttr('title', $p->description);
             }
 

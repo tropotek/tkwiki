@@ -121,4 +121,18 @@ class Config extends \Bs\Config
         return \Tk\Form\Renderer\FieldGroup::create($form);
     }
 
+    /**
+     * @param string $templatePath (optional)
+     * @return Page
+     */
+    public function createPage($templatePath = '')
+    {
+        try {
+            return new Page($templatePath);
+        } catch (\Exception $e) {
+            \Tk\Log::error($e->__toString());
+        }
+    }
+
+
 }

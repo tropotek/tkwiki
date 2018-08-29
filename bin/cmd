@@ -18,7 +18,7 @@ $app['environment'] = $env;
 try {
 
     $config = \App\Config::getInstance();
-    $app = new Application($config->get('site.title') , $config->get('system.info.version'));
+    $app = $config->getConsoleApplication();
 
     $log = null;
     if ($config->get('event.dispatcher.log')) {
@@ -34,6 +34,9 @@ try {
     $app->add(new \App\Console\Cron());
     $app->add(new \Bs\Console\Upgrade());
     if ($config->isDebug()) {
+        $app->add(new \Bs\Console\MakeModel());
+        $app->add(new \Bs\Console\MakeTable());
+        $app->add(new \Bs\Console\MakeForm());
         $app->add(new \Bs\Console\Debug());
         $app->add(new \Bs\Console\Mirror());
         $app->add(new \App\Console\Test());

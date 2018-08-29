@@ -13,7 +13,7 @@ use Tk\Controller\Resolver;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class FrontController extends \Tk\Kernel\HttpKernel
+class _FrontController extends \Tk\Kernel\HttpKernel
 {
 
     /**

@@ -80,8 +80,7 @@ class Config extends \Bs\Config
 
     /**
      * @param \Tk\Event\Dispatcher $dispatcher
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
+     * @throws \Exception
      */
     public function setupDispatcher($dispatcher)
     {

@@ -20,8 +20,6 @@ class Dispatch extends \Bs\Dispatch
         parent::init();
         $dispatcher = $this->getDispatcher();
 
-        $dispatcher->addSubscriber(new \App\Listener\OnPageShowHandler());
-        $dispatcher->addSubscriber(new \App\Listener\PageInitHandler());
         $dispatcher->addSubscriber(new \App\Listener\WikiHandler());
 
     }

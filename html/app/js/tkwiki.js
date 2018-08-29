@@ -69,7 +69,8 @@ jQuery(function ($) {
     
     function elFinderPickerCallback (callback, value, meta) {
       tinymce.activeEditor.windowManager.open({
-        file: config.templateUrl + '/default/assets/elfinder/elfinder.html', // use an absolute path!
+        file: config.siteUrl + '/vendor/ttek/tk-base/assets/js/elFinder/elfinder.html', // use an absolute path!
+        //file: config.templateUrl + '/admin/assets/elfinder/elfinder.html', // use an absolute path!
         title: 'TkWiki File Manager',
         width: 900,
         height: 450,
@@ -179,8 +180,8 @@ jQuery(function ($) {
       file_picker_callback : elFinderPickerCallback,
 
       content_css: [
-        config.templateUrl + '/default/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
-        config.templateUrl + '/default/css/tkwiki.css'
+        config.templateUrl + '/admin/bower_components/bootstrap/dist/css/bootstrap.min.css',
+        config.templateUrl + '/app/css/tinymce.css'
       ],
       body_class: 'mce-content-body wiki-content',
       content_style: 'body {padding: 10px;}',
@@ -246,8 +247,8 @@ jQuery(function ($) {
       },
       file_picker_callback : elFinderPickerCallback,
       content_css: [
-        config.templateUrl + '/default/assets/bootstrap-3.3.6/dist/css/bootstrap.min.css',
-        config.templateUrl + '/default/css/tkwiki.css'
+        config.templateUrl + '/admin/bower_components/bootstrap/dist/css/bootstrap.min.css',
+        config.templateUrl + '/app/css/tinymce.css'
       ],
       body_class: 'mce-content-body wiki-content',
       content_style: 'body {padding: 10px;}',

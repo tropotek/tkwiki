@@ -194,7 +194,7 @@ class Page extends Model implements \Tk\ValidInterface
         if ($url == self::DEFAULT_TAG) {
             $url = \App\Config::getInstance()->get('wiki.page.default');
         }
-        $page = self::getMapper()->findByUrl($url);
+        $page = self::createMapper()->findByUrl($url);
         return $page;
     }
 

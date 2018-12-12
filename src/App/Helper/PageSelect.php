@@ -38,7 +38,7 @@ class PageSelect extends \Dom\Renderer\Renderer
     {
         $template = $this->getTemplate();
 
-        $template->appendJsUrl(\Tk\Uri::create(\Tk\Config::getInstance()->getTemplateUrl() . '/default/js/jquery-jtable.js'));
+        $template->appendJsUrl(\Tk\Uri::create(\Tk\Config::getInstance()->getTemplateUrl() . '/app/js/jquery-jtable.js'));
         
         $listUrl = \Tk\Uri::create('/ajax/getPageList');
         $js = <<<JS

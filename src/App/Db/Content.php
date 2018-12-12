@@ -109,10 +109,11 @@ class Content extends Model implements \Tk\ValidInterface
         }
         return $dst;
     }
-    
+
     /**
-     * 
+     *
      * @return Page|null
+     * @throws \Exception
      */
     public function getPage()
     {
@@ -124,7 +125,8 @@ class Content extends Model implements \Tk\ValidInterface
 
     /**
      * 
-     * @return User|null
+     * @return \Bs\Db\User|null
+     * @throws \Exception
      */
     public function getUser()
     {
@@ -133,14 +135,13 @@ class Content extends Model implements \Tk\ValidInterface
         }
         return $this->user;
     }
-    
-    
+
     public function save()
     {
         // TODO: calculate content size...
         $this->size = self::strByteSize($this->html.$this->js.$this->css);
         
-        return parent::save();
+        parent::save();
     }
 
     /**
@@ -218,36 +219,3 @@ class Content extends Model implements \Tk\ValidInterface
     }
 
 }
-
-/**
- * Class ContentValidator
- *
- * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
- * @license Copyright 2016 Michael Mifsud
- * @deprecated
- */
-//class ContentValidator extends \App\Helper\Validator
-//{
-//
-//    /**
-//     * Implement the validating rules to apply.
-//     *
-//     */
-//    protected function validate()
-//    {
-//        /** @var Content $obj */
-//        $obj = $this->getObject();
-//
-////        if (!$obj->pageId) {  // Cannot check this here as the page id is not saved
-////            $this->addError('pageId', 'Invalid page ID value.');
-////        }
-//        if (!$obj->userId) {
-//            $this->addError('userId', 'Invalid user ID value.');
-//        }
-//
-//        // TODO: ????
-//
-//
-//    }
-//}

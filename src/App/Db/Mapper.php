@@ -1,10 +1,6 @@
 <?php
 namespace App\Db;
 
-use Tk\Db\Map\Model;
-use Bs\Event\DbEvent;
-use Bs\DbEvents;
-
 
 /**
  * @author Michael Mifsud <info@tropotek.com>

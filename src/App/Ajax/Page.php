@@ -24,7 +24,7 @@ class Page extends \App\Controller\Iface
      *
      * @param Request $request
      * @return \Tk\Response
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function doRefreshLock(Request $request)
     {
@@ -42,9 +42,10 @@ class Page extends \App\Controller\Iface
 
     /**
      * doGetPageList
-     * 
+     *
      * @param Request $request
      * @return \Tk\Response
+     * @throws \Exception
      */
     public function doGetPageList(Request $request)
     {

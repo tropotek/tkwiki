@@ -58,9 +58,9 @@ class ButtonInput extends \Tk\Form\Field\Input
      *
      * @return string|\Dom\Template
      */
-    public function getHtml()
+    public function show()
     {
-        $template = parent::getHtml();
+        $template = parent::show();
         
         if ($this->icon) {
             foreach ($this->btnAttr as $k => $v) {
@@ -68,7 +68,7 @@ class ButtonInput extends \Tk\Form\Field\Input
             }
             $template->addClass('icon', $this->icon);
             $template->setAttr('btn', 'id', $this->makeId('fid_btn_'));
-            $template->setChoice('btn');
+            $template->show('btn');
             if ($this->getAttr('disabled')) {
                 $template->addClass('btn', 'disabled');
             }

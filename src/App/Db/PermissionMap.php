@@ -7,9 +7,6 @@ use Tk\DataMap\Db;
 use Tk\DataMap\Form;
 
 /**
- * Class RoleMap
- *
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -19,7 +16,7 @@ class PermissionMap extends Mapper
 
     /**
      * @param \Tk\Db\Pdo|null $db
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function __construct($db = null)
     {
@@ -61,7 +58,7 @@ class PermissionMap extends Mapper
     /**
      * @param string $name
      * @return Permission|\Tk\Db\Map\Model
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function findByName($name)
     {
@@ -72,7 +69,7 @@ class PermissionMap extends Mapper
      * @param int $userId
      * @param Tool $tool
      * @return ArrayObject|Permission[]
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function findByUserId($userId, $tool = null)
     {
@@ -85,7 +82,7 @@ class PermissionMap extends Mapper
      * @param int $roleId
      * @param int $userId
      * @return Permission|\Tk\Db\Map\Model
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function findRole($roleId, $userId)
     {
@@ -98,7 +95,7 @@ class PermissionMap extends Mapper
     /**
      * @param int $userId
      * @return \Tk\Db\PDOStatement
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function deleteAllUserRoles($userId)
     {
@@ -110,7 +107,7 @@ class PermissionMap extends Mapper
      * @param int $roleId
      * @param int $userId
      * @return \Tk\Db\PDOStatement
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function deleteUserRole($roleId, $userId)
     {
@@ -122,7 +119,7 @@ class PermissionMap extends Mapper
      * @param int $roleId
      * @param int $userId
      * @return \Tk\Db\PDOStatement
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function addUserRole($roleId, $userId)
     {

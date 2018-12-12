@@ -22,7 +22,7 @@ class Orphaned extends Iface
 
     /**
      * @param Request $request
-     * @throws \Tk\Form\Exception
+     * @throws \Exception
      */
     public function doDefault(Request $request)
     {
@@ -30,23 +30,24 @@ class Orphaned extends Iface
 
         $this->table = \Tk\Table::create('tableOne');
 
-        $this->table->addCell(new \Tk\Table\Cell\Checkbox('id'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('title'))->addCss('key')->setUrl(\Tk\Uri::create('/edit.html'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('userId'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('type'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('url'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('permission'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('views'));
-        $this->table->addCell(new \Tk\Table\Cell\Date('modified'));
-        $this->table->addCell(new \Tk\Table\Cell\Date('created'));
+        $this->table->appendCell(new \Tk\Table\Cell\Checkbox('id'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('id'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('title'))->addCss('key')->setUrl(\Tk\Uri::create('/edit.html'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('userId'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('type'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('url'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('permission'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('views'));
+        $this->table->appendCell(new \Tk\Table\Cell\Date('modified'));
+        $this->table->appendCell(new \Tk\Table\Cell\Date('created'));
 
         // Filters
-        $this->table->addFilter(new Field\Input('keywords'))->setLabel('')->setAttr('placeholder', 'Keywords');
+        $this->table->appendFilter(new Field\Input('keywords'))->setLabel('')->setAttr('placeholder', 'Keywords');
 
         // Actions
-        //$this->table->addAction(\Tk\Table\Action\Button::getInstance('New Page', 'glyphicon glyphicon-plus', \Tk\Uri::create('/edit.html')));
-        $this->table->addAction(new \Tk\Table\Action\Delete());
-        $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
+        //$this->table->appendAction(\Tk\Table\Action\Button::getInstance('New Page', 'fa fa-plus', \Tk\Uri::create('/edit.html')));
+        $this->table->appendAction(new \Tk\Table\Action\Delete());
+        $this->table->appendAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
 
         //$filter = $this->table->getFilterValues();
         $list = \App\Db\PageMap::create()->findOrphanedPages($this->table->getTool('title'));
@@ -62,7 +63,7 @@ class Orphaned extends Iface
         $template = parent::show();
 
         $ren =  \Tk\Table\Renderer\Dom\Table::create($this->table);
-        $template->replaceTemplate('table', $ren->show());
+        $template->appendTemplate('table', $ren->show());
 
         return $template;
     }
@@ -79,13 +80,8 @@ class Orphaned extends Iface
 
   <div class="col-lg-12">
     <div class="panel panel-default">
-      <div class="panel-heading">
-        <i class="glyphicon glyphicon-th-list"></i> Pages
-      </div>
-      <div class="panel-body ">
-
-        <div var="table"></div>
-
+      <div class="panel-heading"><i class="fa fa-th-list"></i> Pages</div>
+      <div class="panel-body " var="table">
       </div>
     </div>
   </div>

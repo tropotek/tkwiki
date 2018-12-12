@@ -5,8 +5,6 @@ use Tk\Request;
 use App\Controller\Iface;
 
 /**
- * Class Index
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -65,10 +63,10 @@ class View extends Iface
     }
 
     /**
-     * @param Request $request
-     * @throws \Tk\Db\Exception
+     * @param \Tk\Request $request
+     * @throws \Exception
      */
-    public function doContentView(Request $request)
+    public function doContentView(\Tk\Request $request)
     {
         $this->wContent = \App\Db\ContentMap::create()->find($request->get('contentId'));
         if (!$this->wContent) {
@@ -84,7 +82,6 @@ class View extends Iface
 
     /**
      * @return \Dom\Template
-     * @throws \Dom\Exception
      */
     public function show()
     {

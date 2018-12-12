@@ -38,6 +38,12 @@ $config['sql.migrate.list'] = array(
 );
 
 
+/*
+ * Does this html template use bootstrap4 markup
+ * Default: 'bs4'
+ */
+$config['css.framework']            = 'bs3';
+
 
 
 

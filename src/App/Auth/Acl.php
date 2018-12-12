@@ -9,8 +9,7 @@ use App\Db\Page;
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
- * @todo This does not feel like the best way to manage the page permissions,
- *       implement something else if you get a brainwave,,,,
+ * @todo Implement the new Role and Permission objects from the BS lib
  */
 class Acl 
 {

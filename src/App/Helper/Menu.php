@@ -2,9 +2,6 @@
 namespace App\Helper;
 
 
-use Dom\Renderer\Renderer;
-use Dom\Template;
-
 /**
  * An object to manage and display the wiki Page header
  * information and action buttons. 
@@ -31,12 +28,13 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
      * @var \Tk\Event\Dispatcher
      */
     protected $dispatcher = null;
-    
-    
+
+
     /**
      * constructor.
      *
      * @param \Bs\Db\User $user
+     * @throws \Exception
      */
     public function __construct($user)
     {
@@ -47,6 +45,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
 
     /**
      * init
+     * @throws \Exception
      */
     public function init()
     {
@@ -69,15 +68,14 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
      * Execute the renderer.
      * Return an object that your framework can interpret and display.
      *
-     * @return Template|Renderer
-     * @throws \Dom\Exception
+     * @return \Dom\Template
      */
     public function show()
     {
         $template = $this->getTemplate();
         
         if ($this->user && $this->getConfig()->getAcl()->canCreate()) {
-            $template->setChoice('canCreate');
+            $template->show('canCreate');
             $url = \Tk\Uri::create('/edit.html')->set('type', \App\Db\Page::TYPE_NAV);
             $template->setAttr('create', 'href', $url);
         }
@@ -97,12 +95,11 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
             if ($this->user && $this->getConfig()->getAcl()->canEdit($page)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $page->id);
                 $row->setAttr('edit', 'href', $url);
-                $row->setChoice('edit');
+                $row->show('edit');
             }
             $row->appendRepeat();
         }
-        
-        
+
         return $template;
     }
 
@@ -128,14 +125,13 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     <ul class="dropdown-menu mega-dropdown-menu">
       <li class="col-sm-12">
         <div class="wiki-menu-edit pull-right" choice="edit">
-          <a href="#" class="btn btn-primary btn-sm wiki-menu-edit-btn" var="edit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+          <a href="#" class="btn btn-primary btn-sm wiki-menu-edit-btn" var="edit"><i class="fa fa-pencil"></i> Edit</a>
         </div>
         <div class="wiki-menu-content" var="html"></div>
       </li>
     </ul>
   </li>
-  
-  <li class="wiki-menu-create" choice="canCreate"><a href="#" class="navbar-toggle" title="New Menu Tab" var="create"><span class="glyphicon glyphicon-plus"></span></a></li>
+  <li class="wiki-menu-create" choice="canCreate"><a href="#" class="navbar-toggle" title="New Menu Tab" var="create"><span class="fa fa-plus"></span></a></li>
 </ul>
 HTML;
         return \Dom\Loader::load($xhtml);

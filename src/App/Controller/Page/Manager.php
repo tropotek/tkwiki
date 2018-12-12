@@ -24,36 +24,34 @@ class Manager extends Iface
 
     /**
      * @param Request $request
-     * @return \App\Page\Iface|Template|string
-     * @throws \Tk\Exception
-     * @throws \Tk\Form\Exception
+     * @throws \Exception
      */
     public function doDefault(Request $request)
     {
         $this->table = \Tk\Table::create('pageTable');
 
-        $this->table->addCell(new \Tk\Table\Cell\Checkbox('id'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('title'))->addCss('key')->setUrl(\Tk\Uri::create('/edit.html'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('userId'))->setOrderProperty('user_id');
-        $this->table->addCell(new \Tk\Table\Cell\Text('type'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('url'));
-        $this->table->addCell(new \Tk\Table\Cell\Text('permission'))->setOnPropertyValue(function($cell, $obj, $value) {
+        $this->table->appendCell(new \Tk\Table\Cell\Checkbox('id'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('title'))->addCss('key')->setUrl(\Tk\Uri::create('/edit.html'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('userId'))->setOrderProperty('user_id');
+        $this->table->appendCell(new \Tk\Table\Cell\Text('type'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('url'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('permission'))->setOnPropertyValue(function($cell, $obj, $value) {
             /** @var \App\Db\Page $obj */
             if ($obj->getPermissionLabel()) return ucwords($obj->getPermissionLabel());
             return $value;
 
         });
-        $this->table->addCell(new \Tk\Table\Cell\Text('views'));
-        $this->table->addCell(new \Tk\Table\Cell\Date('modified'));
-        $this->table->addCell(new \Tk\Table\Cell\Date('created'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('views'));
+        $this->table->appendCell(new \Tk\Table\Cell\Date('modified'));
+        $this->table->appendCell(new \Tk\Table\Cell\Date('created'));
 
         // Filters
-        $this->table->addFilter(new Field\Input('keywords'))->setLabel('')->setAttr('placeholder', 'Keywords');
+        $this->table->appendFilter(new Field\Input('keywords'))->setLabel('')->setAttr('placeholder', 'Keywords');
         
         // Actions
-        $this->table->addAction(\Tk\Table\Action\Button::createButton('New Page', 'fa fa-plus', \Tk\Uri::create('/edit.html')));
-        $this->table->addAction(new \Tk\Table\Action\Delete());
-        $this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
+        $this->table->appendAction(\Tk\Table\Action\Button::createButton('New Page', 'fa fa-plus', \Tk\Uri::create('/edit.html')));
+        $this->table->appendAction(new \Tk\Table\Action\Delete());
+        $this->table->appendAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
         
         $filter = $this->table->getFilterValues();
         $list = \App\Db\PageMap::create()->findFiltered($filter, $this->table->getTool('a.title'));
@@ -69,7 +67,7 @@ class Manager extends Iface
         $template = parent::show();
 
         $ren =  \Tk\Table\Renderer\Dom\Table::create($this->table);
-        $template->replaceTemplate('table', $ren->show());
+        $template->appendTemplate('table', $ren->show());
 
         return $template;
     }
@@ -86,14 +84,8 @@ class Manager extends Iface
 
   <div class="col-lg-12">
     <div class="panel panel-default">
-      <div class="panel-heading">
-        <i class="glyphicon glyphicon-th-list"></i> Pages
-      </div>
-      <div class="panel-body ">
-
-        <div var="table"></div>
-
-      </div>
+      <div class="panel-heading"><i class="fa fa-th-list"></i> Pages</div>
+      <div class="panel-body" var="table"></div>
     </div>
   </div>
 

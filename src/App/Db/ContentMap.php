@@ -66,6 +66,7 @@ class ContentMap extends Mapper
      * @param $pageId
      * @param \Tk\Db\Tool $tool
      * @return ArrayObject
+     * @throws \Exception
      */
     public function findByPageId($pageId, $tool = null)
     {
@@ -77,6 +78,7 @@ class ContentMap extends Mapper
      * @param $userId
      * @param \Tk\Db\Tool $tool
      * @return ArrayObject
+     * @throws \Exception
      */
     public function findByUserId($userId, $tool = null)
     {
@@ -85,7 +87,7 @@ class ContentMap extends Mapper
 
     /**
      * returns an array of \stdClass objects with the user_id, modified, created fields:
-     * 
+     *
      * Array (
      *   [0] => stdClass Object (
      *     [user_id] => 114
@@ -93,9 +95,10 @@ class ContentMap extends Mapper
      *     [created] => 2016-06-23 08:37:27
      *   )
      * )
-     * 
+     *
      * @param $pageId
      * @return array
+     * @throws \Exception
      */
     public function findContributors($pageId) 
     {
@@ -115,15 +118,15 @@ class ContentMap extends Mapper
         }
         return $res;
     }
-    
-    
-    
+
+
     /**
      * Find filtered records
      *
      * @param array $filter
      * @param Tool $tool
      * @return ArrayObject
+     * @throws \Exception
      */
     public function findFiltered($filter = array(), $tool = null)
     {
@@ -153,6 +156,11 @@ class ContentMap extends Mapper
 //            $where .= sprintf('a.lti_context_id = %s AND ', $this->getDb()->quote($filter['lti_context_id']));
 //        }
 
+
+        if (!empty($filter['exclude'])) {
+            $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
+            if ($w) $where .= '('. $w . ') AND ';
+        }
 
         if ($where) {
             $where = substr($where, 0, -4);

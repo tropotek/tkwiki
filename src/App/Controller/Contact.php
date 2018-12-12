@@ -27,39 +27,33 @@ class Contact extends Iface
 
     /**
      * @param Request $request
-     * @throws Form\Exception
-     * @throws \Tk\Exception
+     * @throws \Exception
      */
     public function doDefault(Request $request)
     {
-
         $this->form = new Form('contactForm');
 
-        $this->form->addField(new Field\Input('name'));
-        $this->form->addField(new Field\Input('email'));
+        $this->form->appendField(new Field\Input('name'));
+        $this->form->appendField(new Field\Input('email'));
 
         $opts = new Field\Option\ArrayIterator(array('General', 'Services', 'Orders'));
-        $this->form->addField(new Field\Select('type[]', $opts));
+        $this->form->appendField(new Field\Select('type[]', $opts));
 
-        $this->form->addField(new Field\File('attach', '/contact/' . date('d-m-Y') . '-___'));
-        $this->form->addField(new Field\Textarea('message'));
+        $this->form->appendField(new Field\File('attach', '/contact/' . date('d-m-Y') . '-___'));
+        $this->form->appendField(new Field\Textarea('message'));
 
         if ($this->getConfig()->get('google.recaptcha.publicKey'))
-            $this->form->addField(new Field\ReCapture('capture', $this->getConfig()->get('google.recaptcha.publicKey'),
+            $this->form->appendField(new Field\ReCapture('capture', $this->getConfig()->get('google.recaptcha.publicKey'),
                 $this->getConfig()->get('google.recaptcha.privateKey')));
 
-        $this->form->addField(new Event\Submit('send', array($this, 'doSubmit')));
+        $this->form->appendField(new Event\Submit('send', array($this, 'doSubmit')));
 
         $this->form->execute();
-
     }
 
     /**
-     * show()
-     *
      * @return \Dom\Template
-     * @throws Form\Exception
-     * @throws \Dom\Exception
+     * @throws \Exception
      */
     public function show()
     {
@@ -73,10 +67,8 @@ class Contact extends Iface
     }
 
     /**
-     * doSubmit()
-     *
      * @param Form $form
-     * @throws \Tk\Exception
+     * @throws \Exception
      */
     public function doSubmit($form)
     {
@@ -115,8 +107,6 @@ class Contact extends Iface
 
 
     /**
-     * sendEmail()
-     *
      * @param Form $form
      * @return bool
      * @throws \Tk\Exception

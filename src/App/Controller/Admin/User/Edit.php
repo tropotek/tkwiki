@@ -15,28 +15,21 @@ class Edit extends \Bs\Controller\Admin\User\Edit
     public function __construct()
     {
         parent::__construct();
-        //$this->getActionPanel()->setEnabled(false);
     }
 
     /**
+     * @param \Tk\Request $request
      * @throws \Exception
      */
-    public function buildForm()
+    public function init($request)
     {
-        parent::buildForm();
-
-        if ($this->user->getId() == 1 || !$this->getUser()->isAdmin()) {
-            $this->form->removeField('role');
-            $tab = 'Details';
-            $this->form->addFieldBefore('username', new \Tk\Form\Field\Html('role'))->setTabGroup($tab);
-        }
-
+        parent::init($request);
 
         if ($this->getUser()->isAdmin() && !$this->user->isAdmin()) {
             $roles = \App\Db\PermissionMap::create()->findAll(\Tk\Db\Tool::create('a.id'))->toArray();
             $list = new \Tk\Form\Field\Option\ArrayObjectIterator($roles);
             /** @var \Tk\Form\Field\CheckboxGroup $f */
-            $f = $this->form->addField(new \Tk\Form\Field\CheckboxGroup('permission', $list))
+            $f = $this->form->appendField(new \Tk\Form\Field\CheckboxGroup('permission', $list))
                 ->setNotes('Select the available permissions this user has.')->setTabGroup('Permissions');
 
             /** @var \Tk\Form\Field\Option $option */
@@ -55,9 +48,9 @@ class Edit extends \Bs\Controller\Admin\User\Edit
 
             /** @var \Tk\Form\Event\Submit $e */
             $e = $this->form->getField('update');
-            $e->addCallback(array($this, 'doAppSubmit'));
+            $e->appendCallback(array($this, 'doAppSubmit'));
             $e = $this->form->getField('save');
-            $e->addCallback(array($this, 'doAppSubmit'));
+            $e->appendCallback(array($this, 'doAppSubmit'));
         }
 
     }
@@ -70,8 +63,6 @@ class Edit extends \Bs\Controller\Admin\User\Edit
      */
     public function doAppSubmit($form, $event)
     {
-
-
         if ($form->hasErrors()) {
             return;
         }
@@ -83,9 +74,6 @@ class Edit extends \Bs\Controller\Admin\User\Edit
                 \App\Db\PermissionMap::create()->addUserRole($roleId, $this->user->id);
             }
         }
-
-
-
     }
 
 }

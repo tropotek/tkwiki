@@ -1,8 +1,6 @@
 <?php
 namespace App\Listener;
 
-use Tk\Event\Subscriber;
-use Tk\Kernel\KernelEvents;
 
 /**
  * This object helps cleanup the structure of the controller code
@@ -31,15 +29,15 @@ class PageTemplateHandler extends \Bs\Listener\PageTemplateHandler
             $user = $controller->getUser();
 
             // WIKI Page Setup
-
             if ($this->getConfig()->get('site.favicon')) {
-                $template->setAttr('favicon', 'href', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.favicon'));
-                $template->setChoice('favicon');
+                //$template->setAttr('favicon', 'href', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.favicon'));
+                $template->show('favicon');
             }
             if ($this->getConfig()->get('site.logo')) {
                 $template->setAttr('logo', 'src', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.logo'));
-                $template->setChoice('logo');
+                $template->show('logo');
             }
+
 
             $js = <<<JS
 
@@ -53,9 +51,8 @@ JS;
                 $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->hash);
                 $template->setAttr('myPages', 'href', $url);
                 $template->insertText('username', $user->name);
-                
                 if ($user->isAdmin()) {
-                    $template->setChoice('admin');
+                    $template->show('admin');
                 }
             }
             

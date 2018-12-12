@@ -117,17 +117,18 @@ class Page extends Model implements \Tk\ValidInterface
     }
 
     /**
-     * create a unique url by comparing to the 
+     * create a unique url by comparing to the
      * existing urls and adding to a tail count if duplicated exist.
-     * 
-     * EG: 
+     *
+     * EG:
      *   Home
      *   Home_1
      *   Home_2
      *   ...
-     * 
+     *
      * @param $title
      * @return mixed|string
+     * @throws \Exception
      */
     static public function makeUrl($title)
     {
@@ -142,21 +143,23 @@ class Page extends Model implements \Tk\ValidInterface
                 }
             }
         } while($comp);
-        vd($url);
         return $url;
     }
-    
+
+    /**
+     * @throws \Exception
+     */
     public function save()
     {
         if (!$this->url && !$this->id) {
-            $this->url = $this->makeUrl($this->title);
+            $this->url = self::makeUrl($this->title);
         }
         parent::save();
     }
 
     /**
      * @return int
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function delete()
     {
@@ -207,8 +210,9 @@ class Page extends Model implements \Tk\ValidInterface
     }
 
     /**
-     * 
+     *
      * @return \App\Db\Content
+     * @throws \Exception
      */
     public function getContent()
     {
@@ -254,6 +258,7 @@ class Page extends Model implements \Tk\ValidInterface
      * objects for use within forms.
      *
      * @return array
+     * @throws \Exception
      */
     public function validate()
     {

@@ -154,6 +154,11 @@ class PageMap extends Mapper
         if (isset($filter['type'])) {
             $where .= sprintf('a.type = %s AND ', $this->getDb()->quote($filter['type']));
         }
+
+        if (!empty($filter['exclude'])) {
+            $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
+            if ($w) $where .= '('. $w . ') AND ';
+        }
         
         if ($where) {
             $where = substr($where, 0, -4);

@@ -129,20 +129,20 @@ class Edit extends Iface
 
         // Form
         $this->form = Form::create('pageEdit');
-        $this->form->addField(new Field\Hidden('pid', $this->wPage->id));
-        $this->form->addField(new Field\Input('title'))->setRequired(true);
-        $this->form->addField(new Field\Textarea('html'));
-        $this->form->addField(new Field\Select('permission'));
-        
-        if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
-            $this->form->addField(new Field\Input('keywords'));
-            $this->form->addField(new Field\Input('description'));
-        }
-        $this->form->addField(new Field\Textarea('css'));
-        $this->form->addField(new Field\Textarea('js'));
+        $this->form->appendField(new Field\Hidden('pid', $this->wPage->id));
+        $this->form->appendField(new Field\Input('title'))->setRequired(true);
+        $this->form->appendField(new Field\Textarea('html'));
+        $this->form->appendField(new Field\Select('permission'));
 
-        $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\Button('cancel', array($this, 'doCancel')));
+        if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
+            $this->form->appendField(new Field\Input('keywords'));
+            $this->form->appendField(new Field\Input('description'));
+        }
+        $this->form->appendField(new Field\Textarea('css'));
+        $this->form->appendField(new Field\Textarea('js'));
+
+        $this->form->appendField(new Event\Button('save', array($this, 'doSubmit')));
+        $this->form->appendField(new Event\Button('cancel', array($this, 'doCancel')));
 
         $this->form->load(\App\Db\PageMap::create()->unmapForm($this->wPage));
         $this->form->load(\App\Db\ContentMap::create()->unmapForm($this->wContent));
@@ -174,7 +174,7 @@ class Edit extends Iface
     {
         \App\Db\PageMap::create()->mapForm($form->getValues(), $this->wPage);
         \App\Db\ContentMap::create()->mapForm($form->getValues(), $this->wContent);
-        
+
         $form->addFieldErrors($this->wPage->validate());
         $form->addFieldErrors($this->wContent->validate());
         
@@ -230,6 +230,7 @@ class Edit extends Iface
      *
      * @param \App\Db\Page $page
      * @param HtmlFormatter $formatter
+     * @throws \Exception
      */
     protected function indexLinks($page, $formatter)
     {
@@ -259,7 +260,7 @@ class Edit extends Iface
             $field = $domForm->getFormElement('permission');
             $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page permissions must be public.');
         }
-        $template->setChoice($this->wPage->type);
+        $template->show($this->wPage->type);
 
         $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getUser());
         $template->insertTemplate('header', $header->show());

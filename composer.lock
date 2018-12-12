@@ -686,23 +686,23 @@
         },
         {
             "name": "ralouphie/getallheaders",
-            "version": "2.0.5",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ralouphie/getallheaders.git",
-                "reference": "5601c8a83fbba7ef674a7369456d12f1e0d0eafa"
+                "reference": "beb49b96960f0cbf17e7fbcaaddc8eb434e126eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ralouphie/getallheaders/zipball/5601c8a83fbba7ef674a7369456d12f1e0d0eafa",
-                "reference": "5601c8a83fbba7ef674a7369456d12f1e0d0eafa",
+                "url": "https://api.github.com/repos/ralouphie/getallheaders/zipball/beb49b96960f0cbf17e7fbcaaddc8eb434e126eb",
+                "reference": "beb49b96960f0cbf17e7fbcaaddc8eb434e126eb",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3"
+                "php": ">=5.6"
             },
             "require-dev": {
-                "phpunit/phpunit": "~3.7.0",
+                "phpunit/phpunit": "^5",
                 "satooshi/php-coveralls": ">=1.0"
             },
             "type": "library",
@@ -722,7 +722,7 @@
                 }
             ],
             "description": "A polyfill for getallheaders.",
-            "time": "2016-02-11T07:05:27+00:00"
+            "time": "2018-12-11T21:53:24+00:00"
         },
         {
             "name": "sensiolabs/ansi-to-html",
@@ -1183,12 +1183,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "2e0d68101dd7e09743f0b6cfecbfaf2c08904d24"
+                "reference": "69b062dc67ba3abeac9182bea68ef6ce1f15a202"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/2e0d68101dd7e09743f0b6cfecbfaf2c08904d24",
-                "reference": "2e0d68101dd7e09743f0b6cfecbfaf2c08904d24",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/69b062dc67ba3abeac9182bea68ef6ce1f15a202",
+                "reference": "69b062dc67ba3abeac9182bea68ef6ce1f15a202",
                 "shasum": ""
             },
             "require": {
@@ -1222,7 +1222,7 @@
                 "base",
                 "tropotek"
             ],
-            "time": "2018-12-11T23:42:15+00:00"
+            "time": "2018-12-12T00:19:59+00:00"
         },
         {
             "name": "ttek/tk-database",

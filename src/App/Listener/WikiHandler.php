@@ -24,6 +24,7 @@ class WikiHandler implements Subscriber
             // Format the content html
             $content->html = $formatter->getHtml();
         } catch (\Exception $e) {
+            \Tk\Log::error($e->__toString());
             $content->html = '<div role="alert" class="alert alert-danger"><strong>Error:</strong> '.$e->getMessage().'</div>';
         }
     }

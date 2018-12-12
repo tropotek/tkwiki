@@ -79,8 +79,9 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     }
 
     /**
-     * 
+     *
      * @param \Tk\Uri $url
+     * @throws \Exception
      */
     public function addCrumb($url)
     {

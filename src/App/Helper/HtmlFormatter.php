@@ -68,8 +68,50 @@ class HtmlFormatter
     }
 
     /**
-     * getParsedText
+     * Try to clean the wiki page and make it as XHTML compliant as possible.
      *
+     * @param string $html
+     * @return string
+     */
+    protected function cleanHtml($html)
+    {
+        $html = \Tk\Str::numericEntities($html);
+
+        // TODO: Tidy is disabled until we can figure out a way for tinymce and tidy to worktogether.
+        // TODO:   - IE having major issues with the ifame end tag.....
+        // TODO:   - All form input tags and any scripts cause it to produce non XHTML compliant markup
+        // TODO: For now the MCE editor seems to format the markup fine so lets just use that.
+        if (false) {
+        //if (class_exists('tidy')) {
+            $config = array(
+                //'output-xml' => true,
+                'numeric-entities' => true,                      // This option specifies if Tidy should output entities other than the built-in HTML entities (&amp;, &lt;, &gt; and &quot;) in the numeric rather than the named entity form.
+                'drop-empty-paras' => false,
+                //'hide-endtags' => false,                         // This option specifies if Tidy should omit optional end-tags when generating the pretty printed markup. This option is ignored if you are outputting to XML.
+                //'new-empty-tags' => 'iframe,i,span,div',       // This option specifies new empty inline tags. This option takes a space or comma separated list of tag names.
+                                                                 // Unless you declare new tags, Tidy will refuse to generate a tidied file if the input includes previously unknown tags.
+                                                                 // Remember to also declare empty tags as either inline or blocklevel. This option is ignored in XML mode.
+
+                'fix-backslash' => true,            // This option specifies if Tidy should replace backslash characters "\" in URLs by forward slashes "/"
+                'tab-size' => 2,
+                'indent-spaces' => 2,
+                'wrap' => 200,
+                'logical-emphasis' => true,         // This option specifies if Tidy should replace any occurrence of <I> by <EM> and any occurrence of <B> by <STRONG>
+                'vertical-space' => true,           // This option specifies if Tidy should add some empty lines for readability.
+                'char-encoding' => 'utf-8',
+                'force-output' => true,
+                'add-xml-space' => true            // This option specifies if Tidy should add xml:space="preserve" to elements such as <PRE>, <STYLE>
+            );
+            $tidy = new \tidy();
+
+            $html = $tidy->repairString($html, $config);
+            // Remove head and foot of xhtml output
+            $html = trim(substr($html, stripos($html, '<body>')+6, - (strlen($html) - strripos($html, '</body>'))));
+        }
+        return $html;
+    }
+
+    /**
      * @param string $html
      * @return \DOMDocument
      * @throws \Tk\Exception
@@ -84,7 +126,7 @@ class HtmlFormatter
                 $str .= sprintf("\n[%s:%s] %s", $error->line, $error->column, trim($error->message));
             }
             libxml_clear_errors();
-            $str .= "\n\n" . $html . "\n";
+            $str .= "\n\n" . \Tk\Str::lineNumbers($html) . "\n";
             $e = new \Tk\Exception('Error Parsing DOM Template', 0, null, $str);
             throw $e;
         }
@@ -98,49 +140,6 @@ class HtmlFormatter
     public function getDocument() 
     {
         return $this->doc;
-    }
-
-    
-    /**
-     * Try to clean the wiki page and make it as XHTML compliant as possible.
-     *
-     * @param string $html
-     * @return string
-     */
-    protected function cleanHtml($html)
-    {
-        $html = \Tk\Str::numericEntities($html);
-        
-        // Tidy is dissabled untill we can figure out a way for tinymce and tidy to worktogether.
-        // IE havin major issues with the ifame end tag.....
-        //if (false) {
-        if (class_exists('tidy')) {
-            $config = array(
-                //'output-xml' => true,
-                'numeric-entities' => true,                      // This option specifies if Tidy should output entities other than the built-in HTML entities (&amp;, &lt;, &gt; and &quot;) in the numeric rather than the named entity form.
-                'drop-empty-paras' => false,
-                //'hide-endtags' => false,                         // This option specifies if Tidy should omit optional end-tags when generating the pretty printed markup. This option is ignored if you are outputting to XML.
-                //'new-empty-tags' => 'iframe,i,span,div',       // This option specifies new empty inline tags. This option takes a space or comma separated list of tag names.
-                                                                 // Unless you declare new tags, Tidy will refuse to generate a tidied file if the input includes previously unknown tags.
-                                                                 // Remember to also declare empty tags as either inline or blocklevel. This option is ignored in XML mode. 
-
-                'fix-backslash' => true,            // This option specifies if Tidy should replace backslash characters "\" in URLs by forward slashes "/"
-                'tab-size' => 2,
-                'indent-spaces' => 2,
-                'wrap' => 200,
-                'logical-emphasis' => true,         // This option specifies if Tidy should replace any occurrence of <I> by <EM> and any occurrence of <B> by <STRONG>
-                'vertical-space' => true,           // This option specifies if Tidy should add some empty lines for readability. 
-                'char-encoding' => 'utf-8',
-                'force-output' => true,
-                'add-xml-space' => true            // This option specifies if Tidy should add xml:space="preserve" to elements such as <PRE>, <STYLE> 
-            );
-            $tidy = new \tidy();
-            
-            $html = $tidy->repairString($html, $config);
-            // Remove head and foot of xhtml output
-            $html = trim(substr($html, stripos($html, '<body>')+6, - (strlen($html) - strripos($html, '</body>'))));
-        }
-        return $html;
     }
 
     /**
@@ -159,12 +158,10 @@ class HtmlFormatter
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             $regs = array();
-
             // TODO: See the TinyMce event NodeChange() in the tkWiki.js
             //  we need to to this in the app not on the client.... 
             //$('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
-                
                 $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
                 if ($this->isView) {
                     $url = new \Tk\Uri('/' . $regs[1]);
@@ -199,8 +196,6 @@ class HtmlFormatter
     }
 
     /**
-     * addClass
-     * 
      * @param $classString
      * @param $class
      * @return string
@@ -215,8 +210,6 @@ class HtmlFormatter
     }
 
     /**
-     * removeClass
-     * 
      * @param $classString
      * @param $class
      * @return string

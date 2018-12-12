@@ -26,6 +26,7 @@ class View extends Iface
     /**
      * @param Request $request
      * @param $pageUrl
+     * @throws \Exception
      */
     public function doDefault(Request $request, $pageUrl)
     {

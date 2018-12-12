@@ -172,7 +172,6 @@ class Edit extends Iface
      */
     public function doSubmit($form, $event)
     {
-        vd();
         \App\Db\PageMap::create()->mapForm($form->getValues(), $this->wPage);
         \App\Db\ContentMap::create()->mapForm($form->getValues(), $this->wContent);
 
@@ -200,7 +199,6 @@ class Edit extends Iface
         $this->getConfig()->getLockMap()->unlock($this->wPage->id);
 
         $url = $this->wPage->getPageUrl();
-        vd($url);
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
             $url = \Tk\Uri::create('/');
             if ($this->getConfig()->getSession()->has(self::SID_REFERRER)) {

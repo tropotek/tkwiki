@@ -131,7 +131,7 @@ class Edit extends Iface
         $this->form = Form::create('pageEdit');
         $this->form->appendField(new Field\Hidden('pid', $this->wPage->id));
         $this->form->appendField(new Field\Input('title'))->setRequired(true);
-        $this->form->appendField(new Field\Textarea('html'));
+        $this->form->appendField(new Field\Textarea('html'))->addCss('mce');
         $this->form->appendField(new Field\Select('permission'));
 
         if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
@@ -141,8 +141,8 @@ class Edit extends Iface
         $this->form->appendField(new Field\Textarea('css'));
         $this->form->appendField(new Field\Textarea('js'));
 
-        $this->form->appendField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->appendField(new Event\Button('cancel', array($this, 'doCancel')));
+        $this->form->appendField(new Event\Submit('save', array($this, 'doSubmit')));
+        $this->form->appendField(new Event\Submit('cancel', array($this, 'doCancel')));
 
         $this->form->load(\App\Db\PageMap::create()->unmapForm($this->wPage));
         $this->form->load(\App\Db\ContentMap::create()->unmapForm($this->wContent));
@@ -172,6 +172,7 @@ class Edit extends Iface
      */
     public function doSubmit($form, $event)
     {
+        vd();
         \App\Db\PageMap::create()->mapForm($form->getValues(), $this->wPage);
         \App\Db\ContentMap::create()->mapForm($form->getValues(), $this->wContent);
 
@@ -182,7 +183,7 @@ class Edit extends Iface
             $this->wPage->url = 'Home';
             $this->wPage->permission = 0;
         }
-        
+
         if ($form->hasErrors()) {
             return;
         }
@@ -199,8 +200,9 @@ class Edit extends Iface
         $this->getConfig()->getLockMap()->unlock($this->wPage->id);
 
         $url = $this->wPage->getPageUrl();
+        vd($url);
         if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
-            \Tk\Uri::create('/');
+            $url = \Tk\Uri::create('/');
             if ($this->getConfig()->getSession()->has(self::SID_REFERRER)) {
                 $url = $this->getConfig()->getSession()->getOnce(self::SID_REFERRER);
             }
@@ -352,9 +354,9 @@ JS;
 
           <div class="form-group">
             <div class="col-sm-12">
-              <button type="submit" name="save" value="save" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-save"></i> Save</button>
-              <!-- button type="submit" name="delete" value="delete" class="btn btn-danger btn-sm wiki-delete-trigger"><i class="glyphicon glyphicon-remove"></i> Delete</button -->
-              <button type="submit" name="cancel" value="cancel" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</button>
+              <button type="submit" name="save" value="save" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</button>
+              <!-- button type="submit" name="delete" value="delete" class="btn btn-danger btn-sm wiki-delete-trigger"><i class="fa fa-remove"></i> Delete</button -->
+              <button type="submit" name="cancel" value="cancel" class="btn btn-default btn-sm"><i class="fa fa-ban"></i> Cancel</button>
             </div>
           </div>
 

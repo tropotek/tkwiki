@@ -1,8 +1,6 @@
 <?php
 namespace App\Helper;
 
-use App\Db\Content;
-use App\Db\Page;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -32,7 +30,7 @@ class HtmlFormatter
      *
      * @param string $html
      * @param bool $isView Set this to false when parsing in edit mode
-     * @throws \Tk\Exception
+     * @throws \Exception
      */
     public function __construct($html, $isView = true)
     {
@@ -43,7 +41,7 @@ class HtmlFormatter
     /**
      * @param $html
      * @return string
-     * @throws \Tk\Exception
+     * @throws \Exception
      */
     protected function parse($html)
     {
@@ -63,10 +61,9 @@ class HtmlFormatter
     public function getHtml()
     {
         $html = $this->doc->saveXML($this->doc->documentElement);
-        //vd($html);
         $html = trim(str_replace(array('<html><body>', '</body></html>'), '', $html));
         $html = trim(substr($html, 5, -6));
-        //vd($html);
+
         return $html;
     }
 
@@ -80,9 +77,16 @@ class HtmlFormatter
     protected function parseDomDocument($html)
     {
         $doc = new \DOMDocument('1.0', 'utf-8');
-        //vd($html);
+        libxml_use_internal_errors(true);
         if (!$doc->loadXML($html)) {
-            throw new \Tk\Exception('Cannot format page content. Contact Administrator');
+            $str = '';
+            foreach (libxml_get_errors() as $error) {
+                $str .= sprintf("\n[%s:%s] %s", $error->line, $error->column, trim($error->message));
+            }
+            libxml_clear_errors();
+            $str .= "\n\n" . $html . "\n";
+            $e = new \Tk\Exception('Error Parsing DOM Template', 0, null, $str);
+            throw $e;
         }
         return $doc;
     }
@@ -109,13 +113,13 @@ class HtmlFormatter
         
         // Tidy is dissabled untill we can figure out a way for tinymce and tidy to worktogether.
         // IE havin major issues with the ifame end tag.....
-        if (false) {
-        ///if (class_exists('tidy')) {
+        //if (false) {
+        if (class_exists('tidy')) {
             $config = array(
                 //'output-xml' => true,
                 'numeric-entities' => true,                      // This option specifies if Tidy should output entities other than the built-in HTML entities (&amp;, &lt;, &gt; and &quot;) in the numeric rather than the named entity form.
                 'drop-empty-paras' => false,
-                'hide-endtags' => false,                         // This option specifies if Tidy should omit optional end-tags when generating the pretty printed markup. This option is ignored if you are outputting to XML. 
+                //'hide-endtags' => false,                         // This option specifies if Tidy should omit optional end-tags when generating the pretty printed markup. This option is ignored if you are outputting to XML.
                 //'new-empty-tags' => 'iframe,i,span,div',       // This option specifies new empty inline tags. This option takes a space or comma separated list of tag names.
                                                                  // Unless you declare new tags, Tidy will refuse to generate a tidied file if the input includes previously unknown tags.
                                                                  // Remember to also declare empty tags as either inline or blocklevel. This option is ignored in XML mode. 
@@ -138,7 +142,7 @@ class HtmlFormatter
         }
         return $html;
     }
-    
+
     /**
      * Parse the links and add wiki classes:
      *  o dk-wikiPage - Standard wiki page link
@@ -147,6 +151,7 @@ class HtmlFormatter
      *
      * @param \DOMDocument $doc
      * @return \DOMDocument
+     * @throws \Exception
      */
     protected function parseLinks($doc)
     {

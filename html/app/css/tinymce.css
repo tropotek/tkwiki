@@ -1,7 +1,19 @@
-/**
- * @author Tropotek <info@tropotek.com>
- * @created: 30/08/18
- * @link http://www.tropotek.com/
- * @license Copyright 2018 Tropotek
- */
 
+
+
+
+a.wiki-page-new {
+  color: #F00;
+}
+
+.wiki-toc {
+  border: 1px solid #CCC;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  max-width: 30%;
+  min-width: 180px;
+  min-height: 150px;
+  background-color: #EFEFEF;
+  opacity: 0.93;
+}

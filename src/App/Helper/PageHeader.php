@@ -46,13 +46,14 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         $this->wContent = $wContent;
         $this->user = $user;
     }
-    
-    
+
+
     /**
      * Execute the renderer.
      * Return an object that your framework can interpret and display.
      *
      * @return Template|Renderer
+     * @throws \Exception
      */
     public function show()
     {
@@ -68,13 +69,13 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
 
         if (!\Tk\Db\Data::create()->get('site.page.header.title.hide') || $this->user) {
             $template->appendHtml('title', $title);
-            $template->setChoice('showTitle');
+            $template->show('showTitle');
         }
 
         
         // Throw an info style page if no page exists and public user
         if (!$this->wPage && !$this->user) {
-            $template->setChoice('noCreated');
+            $template->show('noCreated');
             return $template;
         }
 
@@ -85,23 +86,23 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         
         
         if ($this->isEdit()) {
-            $template->setChoice('edit');
+            $template->show('edit');
             if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
-                $template->setChoice('canView');
+                $template->show('canView');
             }
         } else if ($this->isHistory()) {
-            $template->setChoice('history');
+            $template->show('history');
             $title .= ' (History)';
         } else {
             if (\App\Config::getInstance()->getRequest()->has('contentId')) {
-                $template->setChoice('viewRevision');
+                $template->show('viewRevision');
                 $title .= ' <small>(Revision ' . $this->wContent->id . ')</small>';
                 $template->addCss('content', 'revision');
                 if ($this->getConfig()->getAcl()->canEdit($this->wPage)) {
-                    $template->setChoice('revert');
+                    $template->show('revert');
                 }
             } else {
-                $template->setChoice('view');
+                $template->show('view');
             }
         }
         
@@ -109,12 +110,12 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             if ($this->getConfig()->getAcl()->canEdit($this->wPage)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id);
                 $template->setAttr('edit', 'href', $url);
-                $template->setChoice('canEdit');
+                $template->show('canEdit');
             }
             if ($this->getConfig()->getAcl()->canDelete($this->wPage)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->set('del', $this->wPage->id);
                 $template->setAttr('delete', 'href', $url);
-                $template->setChoice('canDelete');
+                $template->show('canDelete');
             }
             
             $url = $this->wPage->getPageUrl();
@@ -149,7 +150,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         if ($content) {
             //$template->insertText('modified', $content->modified->format(\Tk\Date::LONG_DATETIME));
             $template->insertText('modified', \Tk\Date::toRelativeString($content->modified));
-            $template->setChoice('modified');
+            $template->show('modified');
         }
         
         // contributers
@@ -171,10 +172,10 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         }
         if (count($html)) {
             $template->insertHtml('contrib', implode(', ', $html));
-            $template->setChoice('contrib');
+            $template->show('contrib');
         }
         
-        $template->setChoice('showHeadInfo');
+        $template->show('showHeadInfo');
         
         return $template;
     }
@@ -233,35 +234,35 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     </div>
     <div class="col-xs-6 text-right edit" choice="edit">
       <p class="wiki-meta">
-        <a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="glyphicon glyphicon-remove"></i> Delete</a>
+        <a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="fa fa-remove"></i> Delete</a>
       </p>
       <p class="wiki-meta">
-        <a href="#" title="Save The Page" class="btn btn-primary btn-xs wiki-save-trigger" var="save" choice="canEdit"><i class="glyphicon glyphicon-save"></i> Save</a>
-        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view" choice="canView"><i class="glyphicon glyphicon-eye-open"></i> View</a>
-        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="glyphicon glyphicon-time"></i> History</a>
-        <!--  a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="glyphicon glyphicon-remove"></i> Delete</a -->
-        <a href="#" title="Cancel Edit Page" class="btn btn-default btn-xs" var="cancel"><i class="glyphicon glyphicon-ban-circle"></i> Cancel</a>
+        <a href="#" title="Save The Page" class="btn btn-primary btn-xs wiki-save-trigger" var="save" choice="canEdit"><i class="fa fa-save"></i> Save</a>
+        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view" choice="canView"><i class="fa fa-eye"></i> View</a>
+        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="fa fa-clock-o"></i> History</a>
+        <!--  a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="fa fa-remove"></i> Delete</a -->
+        <a href="#" title="Cancel Edit Page" class="btn btn-default btn-xs" var="cancel"><i class="fa fa-ban"></i> Cancel</a>
       </p>
     </div>
     <div class="col-xs-6 text-right" choice="view">
       <p class="wiki-meta view">
         &nbsp;
-        <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>  
-        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="glyphicon glyphicon-time"></i> History</a>
+        <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="fa fa-pencil"></i> Edit</a>  
+        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="fa fa-clock-o"></i> History</a>
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
     <div class="col-xs-6 text-right" choice="history">
       <p class="wiki-meta view">  
-        <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="glyphicon glyphicon-pencil"></i> Edit</a>  
-        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view"><i class="glyphicon glyphicon-eye-open"></i> View</a>  
+        <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="fa fa-pencil"></i> Edit</a>  
+        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view"><i class="fa fa-eye"></i> View</a>  
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
     <div class="col-xs-6 text-right" choice="viewRevision">
       <p class="wiki-meta view">
-        <a href="#" title="Page Revision History" class="btn btn-danger btn-xs wiki-revert-trigger" var="revert" choice="revert"><i class="glyphicon glyphicon-share"></i> Revert</a>
-        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="glyphicon glyphicon-time"></i> History</a>
+        <a href="#" title="Page Revision History" class="btn btn-danger btn-xs wiki-revert-trigger" var="revert" choice="revert"><i class="fa fa-share"></i> Revert</a>
+        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="fa fa-clock-o"></i> History</a>
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>

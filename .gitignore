@@ -8,6 +8,7 @@
 /assets
 /vendor
 /plugin
+/html/theme-*
 /_notes
 /data
 /data_*
@@ -17,5 +18,4 @@
 /src/config/config.php
 /.htaccess
 /*.bak
-
 

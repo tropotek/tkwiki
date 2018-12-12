@@ -72,19 +72,6 @@
 
 </IfModule>
 
-# ----------------------------------------------------------------------
-# | MVC                                                                |
-# ----------------------------------------------------------------------
-
-# Use the index.php as frontController for your site scripts.
-
- <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
- </IfModule>
-
 
 # ----------------------------------------------------------------------
 # | Forcing `https://`                                                 |
@@ -125,6 +112,19 @@
 #     RewriteRule ^ %{ENV:PROTO}://%1%{REQUEST_URI} [R=301,L]
 # </IfModule>
 
+
+# ----------------------------------------------------------------------
+# | MVC                                                                |
+# ----------------------------------------------------------------------
+
+# Use the index.php as frontController for your site scripts.
+
+ <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+ </IfModule>
 
 
 # ######################################################################

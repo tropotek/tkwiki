@@ -18,6 +18,17 @@ $config['template.admin'] = $config['template.public'] = $config['system.templat
 
 
 /*
+ * Set the error page template
+ */
+$config['template.error']           = $config['system.template.path']   . '/theme-cube/error.html';
+
+/*
+ * Set the maintenance page template
+ */
+$config['template.maintenance']     = $config['system.template.path']   . '/theme-cube/maintenance.html';
+
+
+/*
  * Setup what paths to check when migrating SQL
  */
 $config['sql.migrate.list'] = array(

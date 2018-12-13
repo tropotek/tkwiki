@@ -1,7 +1,7 @@
 
 
 -- No longer used
-drop table version;
+# drop table version;
 
 
 -- Fix up User table
@@ -62,7 +62,7 @@ DELETE FROM `permission` WHERE `id` = 3;
 -- ALTER TABLE permission_user ADD PRIMARY KEY (role, permission_id);
 
 
-UPDATE `user` t SET t.`username` = 'admin' WHERE t.`id` = 1;
-UPDATE `user` t SET t.`username` = 'spaddle' WHERE t.`id` = 3;
-UPDATE `user` t SET t.`username` = 'mifsudm' WHERE t.`id` = 2;
-UPDATE `user` t SET t.`username` = 'rzoma' WHERE t.`id` = 5;
+-- UPDATE `user` t SET t.`username` = 'admin' WHERE t.`id` = 1;
+-- UPDATE `user` t SET t.`username` = 'spaddle' WHERE t.`id` = 3;
+-- UPDATE `user` t SET t.`username` = 'mifsudm' WHERE t.`id` = 2;
+-- UPDATE `user` t SET t.`username` = 'rzoma' WHERE t.`id` = 5;

@@ -61,37 +61,6 @@ DELETE FROM `permission` WHERE `id` = 3;
 
 
 
-
-TRUNCATE `user_role`;
-INSERT INTO `user_role` (name, type, description, static, modified, created) VALUES
-  ('admin', 'admin', 'System administrator role', 1, NOW(), NOW()),
-  ('user', 'user', 'Site default user role', 1, NOW(), NOW()),
-  ('moderator', 'user', 'Site moderator user role', 1, NOW(), NOW())
-;
-
-
-
-TRUNCATE `user_permission`;
-INSERT INTO `user_permission` (`role_id`, `name`)
-VALUES
-   (1, 'type.admin'),
-   (1, 'type.moderator'),
-   (1, 'type.user'),
-   (1, 'perm.create'),
-   (1, 'perm.edit'),
-   (1, 'perm.delete'),
-   (1, 'perm.editExtra'),
-
-   (2, 'type.user'),
-
-   (3, 'type.moderator'),
-   (3, 'type.user'),
-   (3, 'perm.create'),
-   (3, 'perm.edit'),
-   (3, 'perm.delete'),
-   (3, 'perm.editExtra')
-;
-
 -- ALTER TABLE permission_user ADD PRIMARY KEY (role, permission_id);
 
 

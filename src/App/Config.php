@@ -92,6 +92,25 @@ class Config extends \Bs\Config
     }
 
 
+    /**
+     * @return Db\RoleMap
+     */
+    public function getRoleMapper()
+    {
+        if (!$this->get('obj.mapper.role')) {
+            $this->set('obj.mapper.role', Db\RoleMap::create());
+        }
+        return $this->get('obj.mapper.role');
+    }
+
+    /**
+     * @return Db\Role
+     */
+    public function createRole()
+    {
+        return new Db\Role();
+    }
+
 
     /**
      * @param $form

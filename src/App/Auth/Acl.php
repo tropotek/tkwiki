@@ -50,29 +50,31 @@ class Acl
      *
      * @param string|array $role
      * @return boolean
-     * @todo Optimise this code....
+     * @deprecated Use hasPermission
      */
     public function hasRole($role)
     {
         if (!$this->user) return false;
-        if (!is_array($role)) $role = array($role);
-
-        foreach ($role as $r) {
-            try {
-                if (!$r instanceof Permission) {
-                    $r = PermissionMap::create()->findByName($r);
-                }
-                if ($r) {
-                    $obj = PermissionMap::create()->findRole($r->id, $this->user->id);
-                    if ($obj && $obj->id = $r->id) {
-                        return true;
-                    }
-                }
-            } catch (\Exception $e) {
-                \Tk\Log::warning(__FILE__ . ': ' . $e->getMessage());
-            }
-        }
-        return false;
+        return $this->user->hasPermission($role);
+//
+//        if (!is_array($role)) $role = array($role);
+//
+//        foreach ($role as $r) {
+//            try {
+//                if (!$r instanceof Permission) {
+//                    $r = PermissionMap::create()->findByName($r);
+//                }
+//                if ($r) {
+//                    $obj = PermissionMap::create()->findRole($r->id, $this->user->id);
+//                    if ($obj && $obj->id = $r->id) {
+//                        return true;
+//                    }
+//                }
+//            } catch (\Exception $e) {
+//                \Tk\Log::warning(__FILE__ . ': ' . $e->getMessage());
+//            }
+//        }
+//        return false;
     }
 
     /**
@@ -110,9 +112,9 @@ class Acl
      */
     public function getGroup()
     {
-        if ($this->isAdmin()) return \Bs\Db\User::ROLE_ADMIN;
-        if ($this->isModerator()) return \App\Db\Permission::ROLE_MODERATOR;
-        if ($this->isUser()) return \Bs\Db\User::ROLE_USER;
+        if ($this->isAdmin()) return \App\Db\Role::TYPE_ADMIN;
+        if ($this->isModerator()) return \App\Db\Role::TYPE_MODERATOR;
+        if ($this->isUser()) return \App\Db\ROLE::TYPE_USER;
         return '';
     }
     
@@ -123,7 +125,8 @@ class Acl
     public function isAdmin()
     {
         if (!$this->user) return false;
-        return $this->user->isAdmin();
+        return $this->user->hasPermission(\App\Db\Permission::TYPE_ADMIN);
+        //return $this->user->isAdmin();
     }
 
     /**
@@ -132,7 +135,9 @@ class Acl
      */
     public function isModerator()
     {
-        return $this->hasRole(\App\Db\Permission::ROLE_MODERATOR);
+        //return $this->hasRole(\App\Db\Role::TYPE_MODERATOR);
+        if (!$this->user) return false;
+        return $this->user->hasPermission(\App\Db\Permission::TYPE_MODERATOR);
     }
 
     /**
@@ -142,7 +147,8 @@ class Acl
     public function isUser()
     {
         if (!$this->user) return false;
-        return $this->user->isUser();
+        return $this->user->hasPermission(\App\Db\Permission::TYPE_USER);
+        //return $this->user->isUser();
     }
     
     /**
@@ -153,7 +159,7 @@ class Acl
     {
         if ($this->isAdmin() || $this->isModerator())
             return true;
-        return $this->hasRole(\App\Db\Permission::ROLE_CREATE);
+        return $this->hasRole(\App\Db\Permission::PAGE_CREATE);
     }
 
     /**
@@ -171,7 +177,7 @@ class Acl
                 if ($pa->getGroup() == $this->getGroup()) {
                     return true;
                 }
-                if ($this->isModerator() && $pa->getGroup() == \Bs\Db\User::ROLE_USER) {
+                if ($this->isModerator() && $pa->getGroup() == \App\Db\ROLE::TYPE_USER) {
                     return true;
                 }
                 if ($this->isAdmin()) {
@@ -195,7 +201,7 @@ class Acl
         if ($page->url == \App\Db\Page::getHomeUrl() && !$this->isAdmin()) {
             return false;
         }
-        if ($this->hasRole(\App\Db\Permission::ROLE_EDIT) && $this->canView($page)) {
+        if ($this->hasRole(\App\Db\Permission::PAGE_EDIT) && $this->canView($page)) {
             return true;
         }
         return false;
@@ -207,7 +213,7 @@ class Acl
      */
     public function canDelete($page)
     {
-        if ($page->id && $page->url != \App\Db\Page::getHomeUrl() && $this->hasRole(\App\Db\Permission::ROLE_DELETE) && $this->canView($page)) {
+        if ($page->id && $page->url != \App\Db\Page::getHomeUrl() && $this->hasRole(\App\Db\Permission::PAGE_DELETE) && $this->canView($page)) {
             return true;
         }
         return false;
@@ -219,7 +225,7 @@ class Acl
      */
     public function canEditExtra($page)
     {
-        if ($this->hasRole(\App\Db\Permission::ROLE_EDIT_EXTRA) && $this->canView($page)) {
+        if ($this->hasRole(\App\Db\Permission::PAGE_EDIT_EXTRA) && $this->canView($page)) {
             return true;
         }
         return false;

@@ -7,24 +7,32 @@ namespace App\Db;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Permission extends \Tk\Db\Map\Model
+class Permission extends \Bs\Db\Permission
 {
+
+    const TYPE_MODERATOR = 'type.moderator';
+
     /**
-     * @deprecated
+     *
      */
-    const ROLE_ADMIN = 'admin';
+    const PAGE_CREATE = 'perm.create';
+
     /**
-     * @deprecated
+     *
      */
-    const ROLE_USER = 'user';
+    const PAGE_EDIT = 'perm.edit';
+
+    /**
+     *
+     */
+    const PAGE_DELETE = 'perm.delete';
+
+    /**
+     *
+     */
+    const PAGE_EDIT_EXTRA = 'perm.editExtra';
 
 
-
-    const ROLE_MODERATOR = 'moderator';
-    const ROLE_CREATE = 'create';
-    const ROLE_EDIT = 'edit';
-    const ROLE_DELETE = 'delete';
-    const ROLE_EDIT_EXTRA = 'editExtra';
 
 
     /**

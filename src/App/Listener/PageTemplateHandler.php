@@ -51,6 +51,7 @@ JS;
                 $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->hash);
                 $template->setAttr('myPages', 'href', $url);
                 $template->insertText('username', $user->name);
+
                 if ($user->isAdmin()) {
                     $template->show('admin');
                 }

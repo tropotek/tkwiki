@@ -61,7 +61,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
 
         
         // Page Title
-        $title = str_replace('_', ' ', \Tk\Uri::create()->getBasename()) ;
+        $title = str_replace('_', ' ', \Tk\Uri::create()->basename()) ;
         if ($this->wPage) {
             $title = $this->wPage->title;
         }

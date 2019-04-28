@@ -1,4 +1,12 @@
 
+# ##################################################
+# NOTICE: if you get an error upgrading your wiki:
+#     - Rename this file to .000003.sql
+#     - run `composer update` or `bin/cmd ug`
+#     - rename .000003.sql back to 000003.sql
+#     - run `composer update` or `bin/cmd ug` again
+#
+# ##################################################
 
 
 TRUNCATE `user_role`;
@@ -30,16 +38,6 @@ VALUES
    (3, 'perm.delete'),
    (3, 'perm.editExtra')
 ;
-
-
--- --------------------------------------------------------
---
---
---
---
---
--- --------------------------------------------------------
-
 
 -- --------------------------------------------------------
 -- Table structure for table `group`

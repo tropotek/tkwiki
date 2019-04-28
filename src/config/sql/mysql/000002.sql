@@ -66,7 +66,7 @@ DELETE FROM `permission` WHERE `id` = 3;
 
 -- Manually run for Unimelb FVAS wiki
 
--- UPDATE `user` t SET t.`username` = 'admin' WHERE t.`id` = 1;
--- UPDATE `user` t SET t.`username` = 'spaddle' WHERE t.`id` = 3;
--- UPDATE `user` t SET t.`username` = 'mifsudm' WHERE t.`id` = 2;
--- UPDATE `user` t SET t.`username` = 'rzoma' WHERE t.`id` = 5;
+UPDATE `user` t SET t.`username` = 'admin' WHERE t.`username` = 'admin@example.com';
+UPDATE `user` t SET t.`username` = 'mifsudm' WHERE t.`username` = 'mifsudm@unimelb.edu.au';
+UPDATE `user` t SET t.`username` = 'spaddle' WHERE t.`username` = 'spaddle@unimelb.edu.au';
+UPDATE `user` t SET t.`username` = 'vet-it' WHERE t.`username` = 'rzoma@unimelb.edu.au';

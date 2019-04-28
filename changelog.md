@@ -5,6 +5,15 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.4.2 [2019-04-29]:
+-------------------------------
+  - Updated teh code to use the newest libs
+  - Upgraded to handle new form updates
+  - Upgraded and updated wiki
+  - Minor Code Updates
+  - dev
+
+
 Ver 2.4.0 [2018-07-14]:
 -------------------------------
 Minor Code Updates

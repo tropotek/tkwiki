@@ -20,7 +20,7 @@ class PageTemplateHandler extends \Bs\Listener\PageTemplateHandler
     public function showPage(\Tk\Event\Event $event)
     {
         parent::showPage($event);
-        $controller = $event->get('controller');
+        $controller = \Tk\Event\Event::findControllerObject($event);
         if ($controller instanceof \Bs\Controller\Iface) {
             $page = $controller->getPage();
             if (!$page) return;

@@ -11,7 +11,7 @@ use Tk\Form\Field;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class Contact extends Iface
+class Contact extends \Bs\Controller\Iface
 {
 
     /**
@@ -31,27 +31,31 @@ class Contact extends Iface
      */
     public function doDefault(Request $request)
     {
+
         $this->form = new Form('contactForm');
 
-        $this->form->appendField(new Field\Input('name'));
-        $this->form->appendField(new Field\Input('email'));
+        $this->form->addField(new Field\Input('name'));
+        $this->form->addField(new Field\Input('email'));
 
         $opts = new Field\Option\ArrayIterator(array('General', 'Services', 'Orders'));
-        $this->form->appendField(new Field\Select('type[]', $opts));
+        $this->form->addField(new Field\Select('type[]', $opts));
 
-        $this->form->appendField(new Field\File('attach', '/contact/' . date('d-m-Y') . '-___'));
-        $this->form->appendField(new Field\Textarea('message'));
+        $this->form->addField(new Field\File('attach[]', '/contact/' . date('d-m-Y') . '-___'));
+        $this->form->addField(new Field\Textarea('message'));
 
         if ($this->getConfig()->get('google.recaptcha.publicKey'))
-            $this->form->appendField(new Field\ReCapture('capture', $this->getConfig()->get('google.recaptcha.publicKey'),
+            $this->form->addField(new Field\ReCapture('capture', $this->getConfig()->get('google.recaptcha.publicKey'),
                 $this->getConfig()->get('google.recaptcha.privateKey')));
 
-        $this->form->appendField(new Event\Submit('send', array($this, 'doSubmit')));
+        $this->form->addField(new Event\Submit('send', array($this, 'doSubmit')));
 
         $this->form->execute();
+
     }
 
     /**
+     * show()
+     *
      * @return \Dom\Template
      * @throws \Exception
      */
@@ -109,7 +113,6 @@ class Contact extends Iface
     /**
      * @param Form $form
      * @return bool
-     * @throws \Tk\Exception
      * @throws \Exception
      */
     private function sendEmail($form)
@@ -125,9 +128,10 @@ class Contact extends Iface
         /** @var Field\File $field */
         $field = $form->getField('attach');
         if ($field->hasFile()) {
+            vd($field->getUploadedFiles());
             $attachCount = '<br/><b>Attachments:</b> ';
             foreach ($field->getUploadedFiles() as $file) {
-                $attachCount = $file->getFilename() . ', ';
+                $attachCount = $file->getClientOriginalName() . ', ';
             }
             $attachCount = rtrim($attachCount, ', ');
         }
@@ -153,9 +157,96 @@ MSG;
         $message->setSubject($this->getConfig()->get('site.title') . ':  Contact Form Submission - ' . $name);
         $message->set('content', $content);
         if ($field->hasFile()) {
-            $message->addAttachment($field->getUploadedFile()->getFile(), $field->getUploadedFile()->getFilename());
+            foreach ($field->getUploadedFiles() as $file) {
+                vd($field->getUploadedFile()->getClientOriginalName());
+                $message->addAttachment($file->getPathname(), $field->getUploadedFile()->getClientOriginalName());
+            }
         }
         return $this->getConfig()->getEmailGateway()->send($message);
     }
 
+    /**
+     * @return \Dom\Template
+     */
+    public function __makeTemplate()
+    {
+        $xhtml = <<<HTML
+<section>
+
+    <div class="">
+      <!-- Contact Form -->
+      <h3>Send Us a Message</h3>
+
+      <div class="alert alert-success" role="alert" choice="sent">
+        <strong>Success!</strong> Your form has been successfully sent.
+      </div>
+
+      <div class="contact-form-wrapper">
+        <form id="contactForm" method="post" class="form-horizontal" role="form">
+
+          <div class="form-group">
+            <label for="name" class="col-sm-3 control-label">
+              <b>Name *</b>
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" name="name" id="name" placeholder=""/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fid-email" class="col-sm-3 control-label">
+              <b>Email *</b>
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" name="email" id="fid-email" placeholder=""/>
+            </div>
+          </div>
+
+          <div class="form-group" var="group-type">
+            <label for="fid-type" class="col-sm-3 control-label">
+              <b>Topic</b>
+            </label>
+            <div class="col-sm-9">
+              <select class="form-control" name="type[]" id="fid-type" multiple="true">
+                <option value="">Please select topic...</option>
+                <option value="General">General</option>
+                <option value="Services">Services</option>
+                <option value="Orders">Orders</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fid-attach" class="col-sm-3 control-label">
+              <b>Attach</b>
+            </label>
+            <div class="col-sm-9">
+              <input type="file" name="attach[]" id="fid-attach" multiple="true" />
+            </div>
+          </div>
+
+          <div class="form-group" var="group-message">
+            <label for="fid-message" class="col-sm-3 control-label">
+              <b>Message *</b>
+            </label>
+            <div class="col-sm-9">
+              <textarea class="form-control" rows="5" name="message" id="fid-message"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <button type="submit" class="btn pull-right btn-success" name="send">Send</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <!-- End Contact Info -->
+    </div>
+</section>
+HTML;
+
+        return \Dom\Loader::load($xhtml);
+    }
 }

@@ -69,7 +69,7 @@ class Settings extends \Bs\Controller\Admin\Settings
             \Tk\Image::create($fullPath)->bestFit(256, 256)->save();
             $this->data->set('site.logo', $logo->getValue());
             // Create favicon
-            $rel1 = '/site/favicon.' . \Tk\File::getExtension($logo->getUploadedFile()->getFilename());
+            $rel1 = '/site/favicon.' . $logo->getUploadedFile()->getClientOriginalExtension();
             \Tk\Image::create($fullPath)->squareCrop(16)->save($this->getConfig()->getDataPath() . $rel1);
             $this->data->set('site.favicon', $rel1);
         }

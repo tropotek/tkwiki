@@ -25,7 +25,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
     protected $list = array();
 
     /**
-     * @var \Tk\Event\Dispatcher
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $dispatcher = null;
 
@@ -69,6 +69,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
      * Return an object that your framework can interpret and display.
      *
      * @return \Dom\Template
+     * @throws \Exception
      */
     public function show()
     {
@@ -88,7 +89,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
 
             $content = $page->getContent();
             $event = new \App\Event\ContentEvent($content);
-            $this->dispatcher->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
+            $this->dispatcher->dispatch($event, \App\WikiEvents::WIKI_CONTENT_VIEW);
             
             $row->insertHtml('html', $content->html);
             

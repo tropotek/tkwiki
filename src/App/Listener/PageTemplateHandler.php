@@ -12,7 +12,6 @@ namespace App\Listener;
 class PageTemplateHandler extends \Bs\Listener\PageTemplateHandler
 {
 
-
     /**
      * @param \Tk\Event\Event $event
      * @throws \Exception

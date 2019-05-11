@@ -30,6 +30,7 @@ class View extends Iface
      */
     public function doDefault(Request $request, $pageUrl)
     {
+
         $this->wPage = \App\Db\Page::findPage($pageUrl);
         if (!$this->wPage) {
             if ($this->getUser() && $this->getConfig()->getAcl()->canCreate()) {
@@ -93,8 +94,12 @@ class View extends Iface
         
             
         if ($this->wPage) {
-            $event = new \App\Event\ContentEvent($this->wContent);
-            $this->getConfig()->getEventDispatcher()->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
+
+            if ($this->getConfig()->getEventDispatcher()) {
+                $event = new \App\Event\ContentEvent($this->wContent);
+                $this->getConfig()->getEventDispatcher()->dispatch($event, \App\WikiEvents::WIKI_CONTENT_VIEW);
+            }
+
             $template->insertHtml('content', $this->wContent->html);
 
             if ($this->wContent->css) {

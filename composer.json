@@ -6,10 +6,10 @@
         "tropotek",
         "tk004"
     ],
-    "time": "2014-10-31",
+    "time": "2019-05-12",
     "license": "GPL",
-    "version": "trunk",
-    "minimum-stability": "dev",
+    "version": "2.4.4",
+    "minimum-stability": "stable",
     "authors":  [
          {
             "name": "Michael Mifsud",

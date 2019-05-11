@@ -30,7 +30,7 @@ class View extends Iface
      */
     public function doDefault(Request $request, $pageUrl)
     {
-
+        $this->setPageTitle('');
         $this->wPage = \App\Db\Page::findPage($pageUrl);
         if (!$this->wPage) {
             if ($this->getUser() && $this->getConfig()->getAcl()->canCreate()) {

@@ -158,7 +158,6 @@ MSG;
         $message->set('content', $content);
         if ($field->hasFile()) {
             foreach ($field->getUploadedFiles() as $file) {
-                vd($field->getUploadedFile()->getClientOriginalName());
                 $message->addAttachment($file->getPathname(), $field->getUploadedFile()->getClientOriginalName());
             }
         }

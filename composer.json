@@ -1,12 +1,15 @@
 {
     "name": "ttek/tkwiki",
     "type": "project",
-    "description": "The tkWiki re-borne. V2 has a responsive HTML5 template, new base lib, php 7.0+ optimized, and uses composer to install.",
-    "keywords":  ["tropotek"],
-    "time": "2019-04-09",
-    "license": "MIT",
-    "version": "3.0.0",
-    "minimum-stability": "dev",
+    "description": "My trusty old wiki has now been composerfied",
+    "keywords":  [
+        "tropotek",
+        "tk004"
+    ],
+    "time": "2019-05-12",
+    "license": "GPL",
+    "version": "2.4.4",
+    "minimum-stability": "stable",
     "authors":  [
          {
             "name": "Michael Mifsud",

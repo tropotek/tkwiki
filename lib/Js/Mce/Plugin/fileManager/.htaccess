@@ -1,8 +1,0 @@
-<FilesMatch "\.php|inc|xml|dat|tpl$">
-  Order Deny,Allow
-  Allow from All
-</FilesMatch>
-
-<IfModule mod_rewrite.c>
-  RewriteEngine Off
-</IfModule>

@@ -1,11 +1,21 @@
-.htaccess
-.idea
+# System Files
+[Tt]humbs.db
+*.DS_Store
+/.idea
 .directory
-*.swp
-*.bak
-data
-assets
-vendor
-composer.lock
-config.ini
+
+# Project directories
+/assets
+/vendor
+/plugin
+/html/theme-*
+/_notes
+/data
+/data_*
+/docs/api
+
+# Project Files
+/src/config/config.php
+/.htaccess
+/*.bak
 

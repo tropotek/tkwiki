@@ -1,0 +1,52 @@
+<?php
+/*
+ * @author Michael Mifsud <info@tropotek.com>
+ * @link http://www.tropotek.com/
+ * @license Copyright 2015 Michael Mifsud
+ */
+$config = \Tk\Config::getInstance();
+
+// Database access
+$config['db.type'] = 'mysql';
+$config['db.host'] = 'localhost';
+$config['db.name'] = 'table';
+$config['db.user'] = 'username';
+$config['db.pass'] = 'password';
+
+/*
+ * Enable exception emails
+ */
+//$config['system.email.exception'] = array('user@example.com');
+
+/*
+ * Send copies of all system emails to these recipients (not error emails)
+ */
+//$config['mail.bcc'] = array('user1@example.edu.au');
+
+/*
+ * Enable logging of triggered events
+ * Default: false
+ */
+//$config['event.dispatcher.log'] = true;
+
+/*
+ * Debug settings
+ */
+//$config['debug'] = true;
+//$config['log.level'] = \Psr\Log\LogLevel::DEBUG;
+//$config['log.path'] = '/home/user/log/error.log';
+//$config['system.debug.email'] = 'dev@example.com';
+
+
+
+if ($config->isDebug()) {
+//Used for the Mirror command
+    $config['live.db'] = array(
+        'type' => 'mysql',
+        'host' => 'localhost',
+        'name' => 'dev_live',
+        'user' => 'dev',
+        'pass' => ''
+    );
+    $config['live.data.path'] = 'user@example.com:/home/user/public_html/data';
+}

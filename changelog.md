@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.4.4 [2019-05-12]:
+-------------------------------
+  - Minor Code Updates
+
+
 Ver 2.4.2 [2019-04-29]:
 -------------------------------
   - Updated teh code to use the newest libs
@@ -16,7 +21,7 @@ Ver 2.4.2 [2019-04-29]:
 
 Ver 2.4.0 [2018-07-14]:
 -------------------------------
-Minor Code Updates
+  - Tagging branch ver1 for release 2.4.0
 
 
 Ver 2.2.0 [2018-01-15]:

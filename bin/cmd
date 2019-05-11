@@ -1,0 +1,50 @@
+#!/usr/bin/env php
+<?php
+include(dirname(__DIR__) . '/_prepend.php');
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+set_time_limit(0);
+
+$input = new ArgvInput();
+$output = new ConsoleOutput();
+
+//Determine Environment
+$env = $input->getParameterOption(array('--env', '-e'), getenv('MYAPP_ENV') ?: 'prod');
+$app['environment'] = $env;
+
+try {
+
+    $config = \App\Config::getInstance();
+    $app = $config->getConsoleApplication();
+
+    $log = null;
+    if ($config->get('event.dispatcher.log')) {
+        $log = $config->getLog();
+    }
+    $dispatcher = new \Tk\Sym\EventDispatcher($log);
+    $config->set('event.dispatcher', $dispatcher);
+    $config->setupDispatcher($dispatcher);
+    $app->setDispatcher($dispatcher);
+
+    // Add available console commands
+
+    $app->add(new \App\Console\Cron());
+    $app->add(new \Bs\Console\Upgrade());
+    $app->add(new \Bs\Console\Maintenance());
+    if ($config->isDebug()) {
+        $app->add(new \Bs\Console\MakeModel());
+        $app->add(new \Bs\Console\MakeTable());
+        $app->add(new \Bs\Console\MakeForm());
+        $app->add(new \Bs\Console\Debug());
+        $app->add(new \Bs\Console\Mirror());
+        $app->add(new \App\Console\Test());
+    }
+
+    $app->run($input, $output);
+} catch (Exception $e) {
+    echo $e->__toString();
+}
+

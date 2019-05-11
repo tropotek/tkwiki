@@ -1,4 +1,6 @@
 User-agent: * 
-Disallow: /lib/
-Disallow: /html/
+Disallow: /bin/
 Disallow: /data/
+Disallow: /html/
+Disallow: /src/
+Disallow: /vendor/

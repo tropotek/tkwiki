@@ -34,19 +34,8 @@
     },
     "require":  {
         "php": "^7.1.3",
-        "ttek/tk-base": "dev-3beta as 3.0.x-dev",
+        "ttek/tk-base": "~3.0",
 
-        "ttek/tk-auth": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-database": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-domtemplate": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-form": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-framework": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-installers": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-mail": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-mvc": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-plugin": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-table": "dev-3beta as 3.0.x-dev",
-        "ttek/tk-ui": "dev-3beta as 3.0.x-dev"
     },
     "require-dev":  {
     }

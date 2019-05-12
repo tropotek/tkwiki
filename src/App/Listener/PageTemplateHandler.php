@@ -29,12 +29,11 @@ class PageTemplateHandler extends \Bs\Listener\PageTemplateHandler
 
             // WIKI Page Setup
             if ($this->getConfig()->get('site.favicon')) {
-                //$template->setAttr('favicon', 'href', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.favicon'));
+                $template->setAttr('favicon', 'href', \Tk\Uri::create($this->getConfig()->getDataUrl() . $this->getConfig()->get('site.favicon')));
                 $template->show('favicon');
             }
             if ($this->getConfig()->get('site.logo')) {
-                $template->setAttr('logo', 'src', $this->getConfig()->getDataUrl() . $this->getConfig()->get('site.logo'));
-                $template->show('logo');
+                $template->setAttr('logo', 'src', \Tk\Uri::create($this->getConfig()->getDataUrl() . $this->getConfig()->get('site.logo')));
             }
 
 

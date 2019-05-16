@@ -1553,17 +1553,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-domtemplate.git",
-                "reference": "fd8f697d9c3816510197d9cfdc4871349ba77bd4"
+                "reference": "a51f9bd2db93d7e780b1d2c2e50399b3018f758f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/fd8f697d9c3816510197d9cfdc4871349ba77bd4",
-                "reference": "fd8f697d9c3816510197d9cfdc4871349ba77bd4",
+                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/a51f9bd2db93d7e780b1d2c2e50399b3018f758f",
+                "reference": "a51f9bd2db93d7e780b1d2c2e50399b3018f758f",
                 "shasum": ""
             },
             "require": {
-                "leafo/scssphp": "~0.7.7",
-                "oyejorge/less.php": "~1.6",
+                "leafo/scssphp": "0.7.*",
+                "oyejorge/less.php": "1.7.*",
                 "php": ">=7.0.0"
             },
             "type": "library",
@@ -1594,7 +1594,7 @@
                 "dom-template",
                 "tropotek"
             ],
-            "time": "2019-05-14T23:59:32+00:00"
+            "time": "2019-05-16T01:52:28+00:00"
         },
         {
             "name": "ttek/tk-form",

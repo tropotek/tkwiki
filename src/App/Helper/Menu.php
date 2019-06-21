@@ -89,14 +89,14 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
 
             $content = $page->getContent();
             $event = new \App\Event\ContentEvent($content);
-            $this->dispatcher->dispatch($event, \App\WikiEvents::WIKI_CONTENT_VIEW);
+            $this->dispatcher->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
             
             $row->insertHtml('html', $content->html);
             
             if ($this->user && $this->getConfig()->getAcl()->canEdit($page)) {
                 $url = \Tk\Uri::create('/edit.html')->set('pageId', $page->id);
                 $row->setAttr('edit', 'href', $url);
-                $row->show('edit');
+                $row->setVisible('edit');
             }
             $row->appendRepeat();
         }

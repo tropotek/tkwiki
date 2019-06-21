@@ -97,7 +97,7 @@ class View extends Iface
 
             if ($this->getConfig()->getEventDispatcher()) {
                 $event = new \App\Event\ContentEvent($this->wContent);
-                $this->getConfig()->getEventDispatcher()->dispatch($event, \App\WikiEvents::WIKI_CONTENT_VIEW);
+                $this->getConfig()->getEventDispatcher()->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
             }
 
             $template->insertHtml('content', $this->wContent->html);

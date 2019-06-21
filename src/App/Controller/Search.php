@@ -124,7 +124,7 @@ class Search extends Iface
                 $rpt->insertText('time', $page->getContent()->created->format('H:i'));
                 if (trim($page->getContent()->keywords)) {
                     $rpt->insertText('keywords', $page->getContent()->keywords);
-                    $rpt->setChoice('keywords');
+                    $rpt->setVicible('keywords');
                 }
             }
             

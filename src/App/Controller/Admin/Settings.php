@@ -18,9 +18,8 @@ class Settings extends \Bs\Controller\Admin\Settings
      * init the form and other stuff before form->execute()
      * @throws Form\Exception
      */
-    public function init()
+    public function initForm(\Tk\Request $request)
     {
-        parent::init();
 
         $tab = 'Site';
 
@@ -33,10 +32,10 @@ class Settings extends \Bs\Controller\Admin\Settings
 
         $this->getForm()->appendField(new Field\Checkbox('wiki.page.home.lock'))->setTabGroup($tab)->setLabel('Lock Home Page')
             ->setNotes('Only Allow Admin to edit the home page');
-        $this->getForm()->appendField(new Field\Checkbox('site.user.registration'))->setTabGroup($tab)->setLabel('User Registration')
-            ->setNotes('Allow users to create new accounts');
-        $this->getForm()->appendField(new Field\Checkbox('site.user.activation'))->setTabGroup($tab)->setLabel('User Activation')
-            ->setNotes('Allow users to activate their own accounts');
+//        $this->getForm()->appendField(new Field\Checkbox('site.user.registration'))->setTabGroup($tab)->setLabel('User Registration')
+//            ->setNotes('Allow users to create new accounts');
+//        $this->getForm()->appendField(new Field\Checkbox('site.user.activation'))->setTabGroup($tab)->setLabel('User Activation')
+//            ->setNotes('Allow users to activate their own accounts');
         $this->getForm()->appendField(new Field\Checkbox('site.page.header.hide'))->setTabGroup($tab)->setLabel('Hide Header Info')
             ->setNotes('Hide the page header info from public view.');
         $this->getForm()->appendField(new Field\Checkbox('site.page.header.title.hide'))->setTabGroup($tab)->setLabel('Hide Header Title')
@@ -59,7 +58,7 @@ class Settings extends \Bs\Controller\Admin\Settings
         $logo = $form->getField('site.logo');
         $logo->isValid();
         
-        if ($this->form->hasErrors()) {
+        if ($form->hasErrors()) {
             return;
         }
         
@@ -67,13 +66,13 @@ class Settings extends \Bs\Controller\Admin\Settings
         if ($logo->hasFile()) {
             $fullPath = $this->getConfig()->getDataPath() . $logo->getValue();
             \Tk\Image::create($fullPath)->bestFit(256, 256)->save();
-            $this->data->set('site.logo', $logo->getValue());
+            $this->getData()->set('site.logo', $logo->getValue());
             // Create favicon
             $rel1 = '/site/favicon.' . $logo->getUploadedFile()->getClientOriginalExtension();
             \Tk\Image::create($fullPath)->squareCrop(16)->save($this->getConfig()->getDataPath() . $rel1);
-            $this->data->set('site.favicon', $rel1);
+            $this->getData()->set('site.favicon', $rel1);
         }
-        $this->data->save();
+        $this->getData()->save();
     }
 
     /**
@@ -100,8 +99,6 @@ class Settings extends \Bs\Controller\Admin\Settings
         return $template;
     }
 
-
-
     /**
      * DomTemplate magic method
      *
@@ -110,14 +107,7 @@ class Settings extends \Bs\Controller\Admin\Settings
     public function __makeTemplate()
     {
         $xhtml = <<<XHTML
-<div class="" var="content">
-  
-    <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cog"></i> Site Settings</div>
-      <div class="panel-body" var="form">
-      </div>
-  </div>
-</div>
+<div class="tk-panel" data-panel-title="Settings" data-panel-icon="fa fa-cogs" var="form"></div>
 XHTML;
 
         return \Dom\Loader::load($xhtml);

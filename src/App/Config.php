@@ -72,7 +72,7 @@ class Config extends \Bs\Config
     }
 
     /**
-     * @param \Tk\Event\Dispatcher $dispatcher
+     * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
      * @throws \Exception
      */
     public function setupDispatcher($dispatcher)
@@ -89,26 +89,6 @@ class Config extends \Bs\Config
             $this->set('handler.crumbs', null);
         }
         return $this->get('handler.crumbs');
-    }
-
-
-    /**
-     * @return Db\RoleMap
-     */
-    public function getRoleMapper()
-    {
-        if (!$this->get('obj.mapper.role')) {
-            $this->set('obj.mapper.role', Db\RoleMap::create());
-        }
-        return $this->get('obj.mapper.role');
-    }
-
-    /**
-     * @return Db\Role
-     */
-    public function createRole()
-    {
-        return new Db\Role();
     }
 
 

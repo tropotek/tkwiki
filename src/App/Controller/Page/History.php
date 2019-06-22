@@ -49,7 +49,7 @@ class History extends Iface
 
         $actions = new \Tk\Table\Cell\Actions();
 
-        $actions->addButton(\Tk\Table\Cell\ActionButton::create('Revert', \Tk\Uri::create('/history.html'), 'fa fa-share'))
+        $actions->addButton(\Tk\Table\Cell\ActionButton::create('Revert', \Tk\Uri::create('/user/history.html'), 'fa fa-share'))
             ->setOnShow(function ($cell, $obj, $btn) {
                 /** @var \App\Db\Content $obj **/
                 /** @var \Tk\Table\Cell\ActionButton $btn **/

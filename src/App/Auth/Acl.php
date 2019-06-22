@@ -2,7 +2,6 @@
 namespace App\Auth;
 
 use App\Db\Permission;
-use App\Db\PermissionMap;
 use App\Db\Page;
 
 /**
@@ -80,42 +79,46 @@ class Acl
     /**
      * @return array
      */
-    public function getRolesArray()
-    {
-        $roles = $this->getRoles();
-        $arr = array();
-        foreach ($roles as $role) {
-            $arr[] = $role->name;
-        }
-        return $arr;
-    }
+//    public function getRolesArray()
+//    {
+//        $roles = $this->getRoles();
+//        $arr = array();
+//        foreach ($roles as $role) {
+//            $arr[] = $role->name;
+//        }
+//        return $arr;
+//    }
 
     /**
      * @return Permission[]|\Tk\Db\Map\ArrayObject
      */
-    public function getRoles()
-    {
-        $arr = array();
-        if ($this->user) {
-            try {
-                $arr = \App\Db\PermissionMap::create()->findByUserId($this->user->id);
-            } catch (\Exception $e) {
-                \Tk\Log::warning(__FILE__ . ': ' . $e->getMessage());
-                $arr = array();
-            }
-        }
-        return $arr;
-    }
+//    public function getRoles()
+//    {
+//        $arr = array();
+//        if ($this->user) {
+//            try {
+//                $arr = \App\Db\PermissionMap::create()->findByUserId($this->user->id);
+//            } catch (\Exception $e) {
+//                \Tk\Log::warning(__FILE__ . ': ' . $e->getMessage());
+//                $arr = array();
+//            }
+//        }
+//        return $arr;
+//    }
 
     /**
      * @return string
+     * @todo Find a better way to handle this
      */
     public function getGroup()
     {
-        if ($this->isAdmin()) return \App\Db\Role::TYPE_ADMIN;
-        if ($this->isModerator()) return \App\Db\Role::TYPE_MODERATOR;
-        if ($this->isUser()) return \App\Db\ROLE::TYPE_USER;
-        return '';
+        if ($this->isAdmin()) return \App\Db\Permission::TYPE_ADMIN;
+        if ($this->isModerator()) return \App\Db\Permission::TYPE_MODERATOR;
+        return \App\Db\Permission::TYPE_USER;
+//        if ($this->isAdmin()) return \App\Db\Role::TYPE_ADMIN;
+//        if ($this->isModerator()) return \App\Db\Role::TYPE_MODERATOR;
+//        if ($this->isUser()) return \App\Db\ROLE::TYPE_USER;
+//        return 'type.user';
     }
     
     /**
@@ -126,7 +129,6 @@ class Acl
     {
         if (!$this->user) return false;
         return $this->user->hasPermission(\App\Db\Permission::TYPE_ADMIN);
-        //return $this->user->isAdmin();
     }
 
     /**
@@ -135,7 +137,6 @@ class Acl
      */
     public function isModerator()
     {
-        //return $this->hasRole(\App\Db\Role::TYPE_MODERATOR);
         if (!$this->user) return false;
         return $this->user->hasPermission(\App\Db\Permission::TYPE_MODERATOR);
     }
@@ -148,7 +149,6 @@ class Acl
     {
         if (!$this->user) return false;
         return $this->user->hasPermission(\App\Db\Permission::TYPE_USER);
-        //return $this->user->isUser();
     }
     
     /**
@@ -159,7 +159,7 @@ class Acl
     {
         if ($this->isAdmin() || $this->isModerator())
             return true;
-        return $this->hasRole(\App\Db\Permission::PAGE_CREATE);
+        return $this->user->hasPermission(\App\Db\Permission::PAGE_CREATE);
     }
 
     /**
@@ -170,14 +170,15 @@ class Acl
     {
         if ($this->isAuthor($page)) return true;
         $pa = self::create($page->getUser());
+
         switch($page->permission) {
             case Page::PERMISSION_PUBLIC:
                 return true;
             case Page::PERMISSION_PROTECTED:
-                if ($pa->getGroup() == $this->getGroup()) {
+                if ($this->user->hasPermission($pa->getGroup())) {
                     return true;
                 }
-                if ($this->isModerator() && $pa->getGroup() == \App\Db\ROLE::TYPE_USER) {
+                if ($this->isModerator() && $pa->getGroup() == \App\Db\Permission::TYPE_USER) {
                     return true;
                 }
                 if ($this->isAdmin()) {
@@ -201,7 +202,7 @@ class Acl
         if ($page->url == \App\Db\Page::getHomeUrl() && !$this->isAdmin()) {
             return false;
         }
-        if ($this->hasRole(\App\Db\Permission::PAGE_EDIT) && $this->canView($page)) {
+        if ($this->user->hasPermission(\App\Db\Permission::PAGE_EDIT) && $this->canView($page)) {
             return true;
         }
         return false;
@@ -213,7 +214,7 @@ class Acl
      */
     public function canDelete($page)
     {
-        if ($page->id && $page->url != \App\Db\Page::getHomeUrl() && $this->hasRole(\App\Db\Permission::PAGE_DELETE) && $this->canView($page)) {
+        if ($page->id && $page->url != \App\Db\Page::getHomeUrl() && $this->user->hasPermission(\App\Db\Permission::PAGE_DELETE) && $this->canView($page)) {
             return true;
         }
         return false;
@@ -225,7 +226,7 @@ class Acl
      */
     public function canEditExtra($page)
     {
-        if ($this->hasRole(\App\Db\Permission::PAGE_EDIT_EXTRA) && $this->canView($page)) {
+        if ($this->user->hasPermission(\App\Db\Permission::PAGE_EDIT_EXTRA) && $this->canView($page)) {
             return true;
         }
         return false;

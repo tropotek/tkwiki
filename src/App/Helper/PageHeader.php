@@ -69,13 +69,13 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
 
         if (!\Tk\Db\Data::create()->get('site.page.header.title.hide') || $this->user) {
             $template->appendHtml('title', $title);
-            $template->show('showTitle');
+            $template->setVisible('showTitle');
         }
 
         
         // Throw an info style page if no page exists and public user
         if (!$this->wPage && !$this->user) {
-            $template->show('noCreated');
+            $template->setVisible('noCreated');
             return $template;
         }
 
@@ -86,36 +86,36 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         
         
         if ($this->isEdit()) {
-            $template->show('edit');
+            $template->setVisible('edit');
             if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
-                $template->show('canView');
+                $template->setVisible('canView');
             }
         } else if ($this->isHistory()) {
-            $template->show('history');
+            $template->setVisible('history');
             $title .= ' (History)';
         } else {
             if (\App\Config::getInstance()->getRequest()->has('contentId')) {
-                $template->show('viewRevision');
+                $template->setVisible('viewRevision');
                 $title .= ' <small>(Revision ' . $this->wContent->id . ')</small>';
                 $template->addCss('content', 'revision');
                 if ($this->getConfig()->getAcl()->canEdit($this->wPage)) {
-                    $template->show('revert');
+                    $template->setVisible('revert');
                 }
             } else {
-                $template->show('view');
+                $template->setVisible('view');
             }
         }
         
         if ($this->user) {
             if ($this->getConfig()->getAcl()->canEdit($this->wPage)) {
-                $url = \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id);
+                $url = \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->id);
                 $template->setAttr('edit', 'href', $url);
-                $template->show('canEdit');
+                $template->setVisible('canEdit');
             }
             if ($this->getConfig()->getAcl()->canDelete($this->wPage)) {
-                $url = \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->set('del', $this->wPage->id);
+                $url = \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->id)->set('del', $this->wPage->id);
                 $template->setAttr('delete', 'href', $url);
-                $template->show('canDelete');
+                $template->setVisible('canDelete');
             }
             
             $url = $this->wPage->getPageUrl();
@@ -125,11 +125,11 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             $template->setAttr('cancel', 'href', $url);
         }
         
-        $url = \Tk\Uri::create('/history.html')->set('pageId', $this->wPage->id);
+        $url = \Tk\Uri::create('/user/history.html')->set('pageId', $this->wPage->id);
         $template->setAttr('history', 'href', $url);
 
         if ($this->wContent) {
-            $url = \Tk\Uri::create('/history.html')->set('r', $this->wContent->id);
+            $url = \Tk\Uri::create('/user/history.html')->set('r', $this->wContent->id);
             $template->setAttr('revert', 'href', $url);
             
             $template->insertText('contentId', $this->wContent->id);
@@ -150,7 +150,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         if ($content) {
             //$template->insertText('modified', $content->modified->format(\Tk\Date::LONG_DATETIME));
             $template->insertText('modified', \Tk\Date::toRelativeString($content->modified));
-            $template->show('modified');
+            $template->setVisible('modified');
         }
         
         // contributers
@@ -172,10 +172,10 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         }
         if (count($html)) {
             $template->insertHtml('contrib', implode(', ', $html));
-            $template->show('contrib');
+            $template->setVisible('contrib');
         }
         
-        $template->show('showHeadInfo');
+        $template->setVisible('showHeadInfo');
         
         return $template;
     }

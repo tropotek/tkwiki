@@ -76,7 +76,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
         $template = $this->getTemplate();
         
         if ($this->user && $this->getConfig()->getAcl()->canCreate()) {
-            $template->show('canCreate');
+            $template->setVisible('canCreate');
             $url = \Tk\Uri::create('/edit.html')->set('type', \App\Db\Page::TYPE_NAV);
             $template->setAttr('create', 'href', $url);
         }
@@ -94,7 +94,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
             $row->insertHtml('html', $content->html);
             
             if ($this->user && $this->getConfig()->getAcl()->canEdit($page)) {
-                $url = \Tk\Uri::create('/edit.html')->set('pageId', $page->id);
+                $url = \Tk\Uri::create('/user/edit.html')->set('pageId', $page->id);
                 $row->setAttr('edit', 'href', $url);
                 $row->setVisible('edit');
             }

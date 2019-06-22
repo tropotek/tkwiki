@@ -31,7 +31,7 @@ class Manager extends Iface
         $this->table = \Tk\Table::create('pageTable');
 
         $this->table->appendCell(new \Tk\Table\Cell\Checkbox('id'));
-        $this->table->appendCell(new \Tk\Table\Cell\Text('title'))->addCss('key')->setUrl(\Tk\Uri::create('/edit.html'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('title'))->addCss('key')->setUrl(\Tk\Uri::create('/user/edit.html'));
         $this->table->appendCell(new \Tk\Table\Cell\Text('userId'))->setOrderProperty('user_id');
         $this->table->appendCell(new \Tk\Table\Cell\Text('type'));
         $this->table->appendCell(new \Tk\Table\Cell\Text('url'));

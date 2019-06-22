@@ -30,7 +30,7 @@ class PageTemplateHandler extends \Bs\Listener\PageTemplateHandler
             // WIKI Page Setup
             if ($this->getConfig()->get('site.favicon')) {
                 $template->setAttr('favicon', 'href', \Tk\Uri::create($this->getConfig()->getDataUrl() . $this->getConfig()->get('site.favicon')));
-                $template->show('favicon');
+                $template->setVisible('favicon');
             }
             if ($this->getConfig()->get('site.logo')) {
                 $template->setAttr('logo', 'src', \Tk\Uri::create($this->getConfig()->getDataUrl() . $this->getConfig()->get('site.logo')));
@@ -51,7 +51,7 @@ JS;
                 $template->insertText('username', $user->name);
 
                 if ($user->isAdmin()) {
-                    $template->show('admin');
+                    $template->setVisible('admin');
                 }
             }
             

@@ -34,30 +34,4 @@ class Permission extends \Bs\Db\Permission
 
 
 
-
-    /**
-     * @var int
-     */
-    public $id = 0;
-
-    /**
-     * @var string
-     */
-    public $name = '';
-
-    /**
-     * @var string
-     */
-    public $description = '';
-
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-
-    }
-
-
 }

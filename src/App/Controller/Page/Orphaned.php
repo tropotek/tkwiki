@@ -32,7 +32,7 @@ class Orphaned extends Iface
 
         $this->table->appendCell(new \Tk\Table\Cell\Checkbox('id'));
         $this->table->appendCell(new \Tk\Table\Cell\Text('id'));
-        $this->table->appendCell(new \Tk\Table\Cell\Text('title'))->addCss('key')->setUrl(\Tk\Uri::create('/edit.html'));
+        $this->table->appendCell(new \Tk\Table\Cell\Text('title'))->addCss('key')->setUrl(\Tk\Uri::create('/user/edit.html'));
         $this->table->appendCell(new \Tk\Table\Cell\Text('userId'));
         $this->table->appendCell(new \Tk\Table\Cell\Text('type'));
         $this->table->appendCell(new \Tk\Table\Cell\Text('url'));

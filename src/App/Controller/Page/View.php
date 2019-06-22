@@ -35,7 +35,7 @@ class View extends Iface
         if (!$this->wPage) {
             if ($this->getUser() && $this->getConfig()->getAcl()->canCreate()) {
                 // Create a redirect to the page edit controller
-                \Tk\Uri::create('/edit.html')->set('u', $pageUrl)->redirect();
+                \Tk\Uri::create('/user/edit.html')->set('u', $pageUrl)->redirect();
             }
             //throw new \Tk\HttpException(404, 'Page not found');
         } else {
@@ -50,7 +50,7 @@ class View extends Iface
                 // May redirect to the edit page if the user has edit privileges or send alert if not.
                 //throw new \Tk\Exception('Page content not found');
                 \Tk\Alert::addWarning('Page content lost, please create new content.');
-                \Tk\Uri::create('/edit.html')->set('pageId', $this->wPage->id)->redirect();
+                \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->id)->redirect();
             }
         }
 

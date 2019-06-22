@@ -12,8 +12,7 @@ class Dispatch extends \Bs\Dispatch
 
 
     /**
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
+     * @throws \Exception
      */
     public function init()
     {

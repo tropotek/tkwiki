@@ -57,11 +57,11 @@ class Settings extends \Bs\Controller\Admin\Settings
         /** @var \Tk\Form\Field\File $logo */
         $logo = $form->getField('site.logo');
         $logo->isValid();
-        
+
         if ($form->hasErrors()) {
             return;
         }
-        
+
         $logo->saveFile();
         if ($logo->hasFile()) {
             $fullPath = $this->getConfig()->getDataPath() . $logo->getValue();
@@ -90,7 +90,7 @@ class Settings extends \Bs\Controller\Admin\Settings
     public function show()
     {
         $template = parent::show();
-        
+
         // Render select page dialog
         $pageSelect = new \App\Helper\PageSelect('#fid_btn_settings-wiki\\\\.page\\\\.default', '#settings-wiki\\\\.page\\\\.default');
         $pageSelect->show();

@@ -1,7 +1,7 @@
 <?php
-/* 
+/*
  * NOTE: Be sure to add routes in correct order as the first match will win
- * 
+ *
  * Route Structure
  * $route = new Route(
  *     '/archive/{month}',              // path
@@ -24,7 +24,7 @@ $routes->remove('contact');
 
 
 // Admin
-$routes->add('settings', new \Tk\Routing\Route('/admin/settings.html', 'App\Controller\Admin\Settings::doDefault'));
+$routes->add('admin-settings', new \Tk\Routing\Route('/admin/settings.html', 'App\Controller\Admin\Settings::doDefault'));
 
 
 // Public
@@ -41,8 +41,6 @@ $routes->add('pageManager', new \Tk\Routing\Route('/user/pageManager.html', 'App
 $routes->add('orphaned', new \Tk\Routing\Route('/user/orphaned.html', 'App\Controller\Page\Orphaned::doDefault'));
 
 
-
-
 // AJAX Routes
 $routes->add('ajax-pageList', new \Tk\Routing\Route('/ajax/getPageList', 'App\Ajax\Page::doGetPageList'));
 $routes->add('ajax-pageLock', new \Tk\Routing\Route('/ajax/lockPage', 'App\Ajax\Page::doRefreshLock'));
@@ -50,3 +48,5 @@ $routes->add('ajax-pageLock', new \Tk\Routing\Route('/ajax/lockPage', 'App\Ajax\
 // DO NOT MOVE.... CatchAll must be the last route.
 $routes->add('pageCatchAll', new \Tk\Routing\Route('/{pageUrl}', 'App\Controller\Page\View::doDefault',
     array('pageUrl' => \App\Db\Page::DEFAULT_TAG)));
+
+

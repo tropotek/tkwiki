@@ -25,7 +25,7 @@ class PageTemplateHandler extends \Bs\Listener\PageTemplateHandler
             if (!$page) return;
             $template = $page->getTemplate();
             /** @var \Bs\Db\User $user */
-            $user = $controller->getUser();
+            $user = $controller->getAuthUser();
 
             // WIKI Page Setup
             if ($this->getConfig()->get('site.favicon')) {
@@ -45,7 +45,7 @@ JS;
             $template->appendJs($js, array('data-jsl-priority' => -999));
 
             if ($user) {
-                // User Menu Setup 
+                // User Menu Setup
                 $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->hash);
                 $template->setAttr('myPages', 'href', $url);
                 $template->insertText('username', $user->name);
@@ -54,15 +54,15 @@ JS;
                     $template->setVisible('admin');
                 }
             }
-            
+
             $menu = new \App\Helper\Menu($user);
             $menu->show();
             $template->replaceTemplate('wiki-menu', $menu->getTemplate());
-            
+
             $crumbs = \App\Helper\Crumbs::getInstance(\Tk\Uri::create());
             $crumbs->show();
             $template->replaceTemplate('breadcrumb', $crumbs->getTemplate());
-            
+
 
 
         }

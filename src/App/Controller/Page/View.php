@@ -16,7 +16,7 @@ class View extends Iface
      * @var \App\Db\Page
      */
     protected $wPage = null;
-    
+
     /**
      * @var \App\Db\Content
      */
@@ -33,7 +33,7 @@ class View extends Iface
         $this->setPageTitle('');
         $this->wPage = \App\Db\Page::findPage($pageUrl);
         if (!$this->wPage) {
-            if ($this->getUser() && $this->getConfig()->getAcl()->canCreate()) {
+            if ($this->getAuthUser() && $this->getConfig()->getAcl()->canCreate()) {
                 // Create a redirect to the page edit controller
                 \Tk\Uri::create('/user/edit.html')->set('u', $pageUrl)->redirect();
             }
@@ -55,10 +55,10 @@ class View extends Iface
         }
 
     }
-    
+
     public function canView()
     {
-        if (!$this->getUser()) {
+        if (!$this->getAuthUser()) {
             return ($this->wPage->permission == \App\Db\Page::PERMISSION_PUBLIC);
         }
         return $this->getConfig()->getAcl()->canView($this->wPage);
@@ -88,11 +88,11 @@ class View extends Iface
     public function show()
     {
         $template = parent::show();
-        
-        $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getUser());
+
+        $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getAuthUser());
         $template->insertTemplate('header', $header->show());
-        
-            
+
+
         if ($this->wPage) {
 
             if ($this->getConfig()->getEventDispatcher()) {
@@ -117,8 +117,8 @@ class View extends Iface
                 $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->description, $this->getPage()->getTemplate()->getTitleElement());
             }
             $this->getPage()->getTemplate()->setTitleText($this->getPage()->getTemplate()->getTitleText() . ' - ' . $this->wPage->title);
-            
-            
+
+
             $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/app/js/prism/prism.js'));
             $template->appendCssUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/app/js/prism/prism.css'));
         }
@@ -128,7 +128,7 @@ class View extends Iface
 
     /**
      * DomTemplate magic method
-     * 
+     *
      * @return \Dom\Template
      */
     public function __makeTemplate()

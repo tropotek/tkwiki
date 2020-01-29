@@ -23,7 +23,7 @@ class Config extends \Bs\Config
      */
     public function getLockMap()
     {
-        $lm = \App\Db\LockMap::getInstance($this->getUser(), $this->getDb());
+        $lm = \App\Db\LockMap::getInstance($this->getAuthUser(), $this->getDb());
         return $lm;
     }
 
@@ -66,7 +66,7 @@ class Config extends \Bs\Config
      */
     public function getAcl($user = null)
     {
-        if (!$user) $user = $this->getUser();
+        if (!$user) $user = $this->getAuthUser();
         $obj = \App\Auth\Acl::create($user);
         return $obj;
     }

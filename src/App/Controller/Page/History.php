@@ -17,7 +17,7 @@ class History extends Iface
      * @var \App\Db\Page
      */
     protected $wPage = null;
-    
+
     /**
      * @var \Tk\Table
      */
@@ -33,7 +33,7 @@ class History extends Iface
         if ($request->has('r')) {
             $this->doRevert($request);
         }
-        
+
         $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
         if (!$this->wPage) {
             throw new \Tk\HttpException(404, 'Page not found');
@@ -43,8 +43,8 @@ class History extends Iface
             \Tk\Alert::addWarning('You do not have permission to edit this page.');
             \Tk\Uri::create('/')->redirect();
         }
-        
-        
+
+
         $this->table = \Tk\Table::create('historyTable');
 
         $actions = new \Tk\Table\Cell\Actions();
@@ -95,7 +95,7 @@ class History extends Iface
         }
         $content = \App\Db\Content::cloneContent($rev);
         $content->save();
-        
+
         \Tk\Alert::addSuccess('Page reverted to version ' . $rev->id . ' [' . $rev->created->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
         $content->getPage()->getPageUrl()->redirect();
     }
@@ -107,30 +107,30 @@ class History extends Iface
     public function show()
     {
         $template = parent::show();
-        
-        $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getUser());
+
+        $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getAuthUser());
         $template->insertTemplate('header', $header->show());
-        
+
         $ren =  \Tk\Table\Renderer\Dom\Table::create($this->table);
         $template->replaceTemplate('table', $ren->show());
-        
+
         return $template;
     }
 
 
     /**
      * DomTemplate magic method
-     * 
+     *
      * @return \Dom\Template
      */
     public function __makeTemplate()
     {
         $xhtml = <<<HTML
 <div class="wiki-page-history">
-  
+
   <div var="header" class="wiki-header"></div>
   <div var="table" class="wiki-history-table"></div>
-  
+
 </div>
 HTML;
 

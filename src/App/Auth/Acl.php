@@ -10,16 +10,16 @@ use App\Db\Page;
  * @license Copyright 2016 Michael Mifsud
  * @todo Implement the new Role and Permission objects from the BS lib
  */
-class Acl 
+class Acl
 {
-    
-    
+
+
     /**
      * @var \Bs\Db\User
      */
     protected $user = null;
-    
-    
+
+
 
     /**
      * Access constructor.
@@ -35,7 +35,7 @@ class Acl
      * A static constructor so we can call this method inline:
      * Eg:
      *   - Access::create($user)->isAdmin();
-     * 
+     *
      * @param \Bs\Db\User $user
      * @return Acl
      */
@@ -120,7 +120,7 @@ class Acl
 //        if ($this->isUser()) return \App\Db\ROLE::TYPE_USER;
 //        return 'type.user';
     }
-    
+
     /**
      *
      * @return boolean
@@ -150,9 +150,9 @@ class Acl
         if (!$this->user) return false;
         return $this->user->hasPermission(\App\Db\Permission::TYPE_USER);
     }
-    
+
     /**
-     * 
+     *
      * @return bool
      */
     public function canCreate()
@@ -207,7 +207,7 @@ class Acl
         }
         return false;
     }
-    
+
     /**
      * @param Page $page
      * @return bool
@@ -219,7 +219,7 @@ class Acl
         }
         return false;
     }
-    
+
     /**
      * @param Page $page
      * @return bool
@@ -231,7 +231,7 @@ class Acl
         }
         return false;
     }
-    
+
     /**
      * @param Page $page
      * @return bool

@@ -13,12 +13,12 @@ class HtmlFormatter
      * @var boolean
      */
     protected $isView = true;
-    
+
     /**
      * @var string
      */
     protected $html = null;
-    
+
     /**
      * @var \DOMDocument
      */
@@ -54,8 +54,8 @@ class HtmlFormatter
     }
 
     /**
-     * return the formatted DOM HTML 
-     * 
+     * return the formatted DOM HTML
+     *
      * @return string
      */
     public function getHtml()
@@ -134,10 +134,10 @@ class HtmlFormatter
     }
 
     /**
-     * 
+     *
      * @return \DOMDocument
      */
-    public function getDocument() 
+    public function getDocument()
     {
         return $this->doc;
     }
@@ -159,7 +159,7 @@ class HtmlFormatter
         foreach ($nodeList as $node) {
             $regs = array();
             // TODO: See the TinyMce event NodeChange() in the tkWiki.js
-            //  we need to to this in the app not on the client.... 
+            //  we need to to this in the app not on the client....
             //$('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                 $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
@@ -167,11 +167,11 @@ class HtmlFormatter
                     $url = new \Tk\Uri('/' . $regs[1]);
                     $node->setAttribute('href', $url->getRelativePath());
                 }
-                
+
                 if ($page) {
                     $css = '';
                     if ($this->isView) {
-                        if (\App\Auth\Acl::create(\App\Config::getInstance()->getUser())->canView($page)) {
+                        if (\App\Auth\Acl::create(\App\Config::getInstance()->getAuthUser())->canView($page)) {
                             $css = ' wiki-canView';
                         } else {
                             $css = ' wiki-notView disabled';
@@ -222,6 +222,6 @@ class HtmlFormatter
         $arr = array_flip($arr);
         return trim(implode(' ', $arr));
     }
-    
-    
+
+
 }

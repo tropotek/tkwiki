@@ -59,17 +59,17 @@ class Search extends Iface
             $this->terms = '';
             // TODO: Test this is correct for public private etc pages...
             if ($this->user) {
-                if ($this->getUser() && $this->getConfig()->getAcl()->isAdmin()) {
+                if ($this->getAuthUser() && $this->getConfig()->getAcl()->isAdmin()) {
                     $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, array(), $tool);
-                } else if ($this->getUser() && $this->getConfig()->getAcl()->isModerator()) {
+                } else if ($this->getAuthUser() && $this->getConfig()->getAcl()->isModerator()) {
                     $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, array(\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC), $tool);
                 } else {
                     $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, array(\App\Db\Page::PERMISSION_PUBLIC), $tool);
                 }
             }
         } else {
-            
-            
+
+
             // TODO
             // TODO: Need to create a real search function to search the page content
             // TODO
@@ -97,8 +97,8 @@ class Search extends Iface
         if ($searchForm) {
             $searchForm->getFormElement('search-terms')->setValue($this->terms);
         }
-        
-        $access = \App\Auth\Acl::create($this->getUser());
+
+        $access = \App\Auth\Acl::create($this->getAuthUser());
         $i = 0;
         /** @var \App\Db\Page $page */
         foreach($this->list as $page) {
@@ -112,7 +112,7 @@ class Search extends Iface
             $rpt->insertText('description', 'No Content.');
             $rpt->insertText('date', $page->created->format(\Tk\Date::FORMAT_MED_DATE));
             $rpt->insertText('time', $page->created->format('H:i'));
-            
+
             if ($page->getContent()) {
                 $description = $page->getContent()->description;
                 // This is a security risk as is can show sensitive data from the content, do not do this...
@@ -127,17 +127,17 @@ class Search extends Iface
                     $rpt->setVisible('keywords');
                 }
             }
-            
+
             $rpt->appendRepeat();
             $i++;
         }
-        
+
         $terms = '"'.$this->terms.'"';
         if ($this->user) {
             $terms = '"User: '.$this->user->name.'"';
         }
         $template->insertText('terms', $terms);
-        
+
         $template->insertText('found', $i);
 
         return $template;
@@ -153,11 +153,11 @@ class Search extends Iface
     {
         $xhtml = <<<HTML
 <div class="wiki-search">
-  
+
   <div class="search-head">
-    <h2 class="lead"><strong class="text-danger" var="found">0</strong> results were found for the search for <strong class="text-danger" var="terms"></strong></h2>								
+    <h2 class="lead"><strong class="text-danger" var="found">0</strong> results were found for the search for <strong class="text-danger" var="terms"></strong></h2>
   </div>
-  
+
   <article class="search-result row" repeat="row">
     <div class="col-xs-12 col-sm-12 col-md-2">
       <ul class="meta-search">
@@ -169,7 +169,7 @@ class Search extends Iface
     <div class="col-xs-12 col-sm-12 col-md-10 excerpet">
       <h3><a href="#" title="" var="title">Voluptatem, exercitationem, suscipit, distinctio</a></h3>
       <p var="description" class="search-description">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, 
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio,
         qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.
       </p>
     </div>

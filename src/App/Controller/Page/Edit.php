@@ -12,7 +12,7 @@ use App\Helper\HtmlFormatter;
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
- * 
+ *
  * @todo One issue here is that a page can be created from any random URL even if it does not exist on a page.
  * @todo We would have to change the page urls to include a flag to indicate it came from a page and we should create
  *       a new one, if none present then we can use the page not found error. Not urgent but a nice to have feature.
@@ -28,7 +28,7 @@ class Edit extends Iface
      * @var \App\Db\Page
      */
     protected $wPage = null;
-    
+
     /**
      * @var \App\Db\Content
      */
@@ -41,7 +41,7 @@ class Edit extends Iface
 
     /**
      * @var \Tk\Form
-     */    
+     */
     protected $form = null;
 
 
@@ -57,35 +57,35 @@ class Edit extends Iface
         if (!$this->getConfig()->getSession()->has(self::SID_REFERRER) && $request->getReferer()) {
             $this->getConfig()->getSession()->set(self::SID_REFERRER, $request->getReferer());
         }
-        
+
         // Find requested page
         $this->wPage = \App\Db\PageMap::create()->find($request->get('pageId'));
 
         // Create a new page
         if (!$this->wPage && $request->has('u') && $this->getConfig()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
-            $this->wPage->userId = $this->getUser()->id;
+            $this->wPage->userId = $this->getAuthUser()->id;
             $this->wPage->url = $request->get('u');
             $this->wPage->title = str_replace('_', ' ', $this->wPage->url);
             $this->wPage->permission = \App\Db\Page::PERMISSION_PRIVATE;
             $this->wContent = new \App\Db\Content();
-            $this->wContent->userId = $this->getUser()->id;
+            $this->wContent->userId = $this->getAuthUser()->id;
         }
         // Create a new Nav page
         if ($request->has('type') && $this->getConfig()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
             $this->wPage->type = \App\Db\Page::TYPE_NAV;
-            $this->wPage->userId = $this->getUser()->id;
+            $this->wPage->userId = $this->getAuthUser()->id;
             $this->wPage->title = 'Menu Item';
             $this->wPage->permission = \App\Db\Page::PERMISSION_PUBLIC;
             $this->wContent = new \App\Db\Content();
-            $this->wContent->userId = $this->getUser()->id;
+            $this->wContent->userId = $this->getAuthUser()->id;
         }
         if (!$this->wPage) {
             throw new \Tk\HttpException(404, 'Page not found');
         }
-        
-        
+
+
         // check if the user can edit the page
         $error = false;
         if (!$this->getConfig()->getAcl()->canEdit($this->wPage)) {
@@ -107,7 +107,7 @@ class Edit extends Iface
         // Acquire page lock.
         $this->getConfig()->getLockMap()->lock($this->wPage->id);
 
-        
+
         if (!$this->wContent) {
             $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
             // Execute the pre-formatter (TODO: This could be an event)
@@ -122,7 +122,7 @@ class Edit extends Iface
                 \Tk\Alert::addInfo($e->getMessage());
             }
         }
-        
+
         if ($request->has('del')) {
             $this->doDelete($request);
         }
@@ -177,7 +177,7 @@ class Edit extends Iface
 
         $form->addFieldErrors($this->wPage->validate());
         $form->addFieldErrors($this->wContent->validate());
-        
+
         if ($this->wPage->url == \App\Db\Page::getHomeUrl()) {
             $this->wPage->url = 'Home';
             $this->wPage->permission = 0;
@@ -186,15 +186,15 @@ class Edit extends Iface
         if ($form->hasErrors()) {
             return;
         }
-        
+
         $this->wPage->save();
         $this->wContent->pageId = $this->wPage->id;
         $this->wContent->save();
-        
+
         // Index page links
         if ($this->wContent->html)
             $this->indexLinks($this->wPage, new HtmlFormatter($this->wContent->html, false));
-        
+
         // Remove page lock
         $this->getConfig()->getLockMap()->unlock($this->wPage->id);
 
@@ -217,7 +217,7 @@ class Edit extends Iface
     {
         /** @var \App\Db\Page $page */
         $page = \App\Db\PageMap::create()->find($request->get('del'));
-        if (!$page || !$this->getUser() || !$this->getConfig()->getAcl()->canDelete($page)) {
+        if (!$page || !$this->getAuthUser() || !$this->getConfig()->getAcl()->canDelete($page)) {
             \Tk\Alert::addWarning('You do not have the permissions to delete this page.');
             return;
         }
@@ -262,7 +262,7 @@ class Edit extends Iface
         }
         $template->show($this->wPage->type);
 
-        $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getUser());
+        $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getAuthUser());
         $template->insertTemplate('header', $header->show());
 
         // Render the form
@@ -280,13 +280,13 @@ config.pageEdit = {
 };
 JS;
         $template->appendJs($js, array('data-jsl-priority' => -999));
-        
+
         return $template;
     }
-    
+
     /**
      * DomTemplate magic method
-     * 
+     *
      * @return \Dom\Template
      */
     public function __makeTemplate()
@@ -294,7 +294,7 @@ JS;
         $xhtml = <<<HTML
 <div>
   <div var="header" class="wiki-header"></div>
-    
+
     <div class="row wiki-edit" var="wiki-edit">
       <form class="form-horizontal" id="pageEdit" method="post">
 
@@ -312,7 +312,7 @@ JS;
             </div>
           </div>
         </div>
-        
+
         <div class="col-md-3 well">
           <div class="col-md-12">
             <div class="form-group">

@@ -7,7 +7,7 @@ use Dom\Template;
 
 /**
  * An object to manage and display the wiki Page header
- * information and action buttons. 
+ * information and action buttons.
  *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
@@ -15,12 +15,12 @@ use Dom\Template;
  */
 class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
 {
-    
+
     /**
      * @var \App\Db\Page
      */
     protected $wPage = null;
-    
+
     /**
      * @var \App\Db\Content
      */
@@ -59,20 +59,20 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     {
         $template = $this->getTemplate();
 
-        
+
         // Page Title
         $title = str_replace('_', ' ', \Tk\Uri::create()->basename()) ;
         if ($this->wPage) {
             $title = $this->wPage->title;
         }
-        
+
 
         if (!\Tk\Db\Data::create()->get('site.page.header.title.hide') || $this->user) {
             $template->appendHtml('title', $title);
             $template->setVisible('showTitle');
         }
 
-        
+
         // Throw an info style page if no page exists and public user
         if (!$this->wPage && !$this->user) {
             $template->setVisible('noCreated');
@@ -82,9 +82,9 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         if (\Tk\Db\Data::create()->get('site.page.header.hide') && !$this->user) {
             return $template;
         }
-        
-        
-        
+
+
+
         if ($this->isEdit()) {
             $template->setVisible('edit');
             if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
@@ -105,7 +105,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
                 $template->setVisible('view');
             }
         }
-        
+
         if ($this->user) {
             if ($this->getConfig()->getAcl()->canEdit($this->wPage)) {
                 $url = \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->id);
@@ -117,42 +117,42 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
                 $template->setAttr('delete', 'href', $url);
                 $template->setVisible('canDelete');
             }
-            
+
             $url = $this->wPage->getPageUrl();
             if ($this->wPage->type == \App\Db\Page::TYPE_NAV || !$this->wPage->id) {
                 $url = \Tk\Uri::create('/');
             }
             $template->setAttr('cancel', 'href', $url);
         }
-        
+
         $url = \Tk\Uri::create('/user/history.html')->set('pageId', $this->wPage->id);
         $template->setAttr('history', 'href', $url);
 
         if ($this->wContent) {
             $url = \Tk\Uri::create('/user/history.html')->set('r', $this->wContent->id);
             $template->setAttr('revert', 'href', $url);
-            
+
             $template->insertText('contentId', $this->wContent->id);
         }
 
         $url = \Tk\Uri::create($this->wPage->url);
         $template->setAttr('view', 'href', $url);
-        
+
         $template->insertText('permission', ucfirst($this->wPage->getPermissionLabel()));
         $template->addCss('permission', $this->wPage->getPermissionLabel());
-        
-        
-        
+
+
+
         // TODO: Implement show() method.
         $content = $this->wPage->getContent();
-        
+
         // modified
         if ($content) {
             //$template->insertText('modified', $content->modified->format(\Tk\Date::LONG_DATETIME));
             $template->insertText('modified', \Tk\Date::toRelativeString($content->modified));
             $template->setVisible('modified');
         }
-        
+
         // contributers
         $contentList = \App\Db\ContentMap::create()->findContributors($this->wPage->id);
         $html = array();
@@ -174,9 +174,9 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             $template->insertHtml('contrib', implode(', ', $html));
             $template->setVisible('contrib');
         }
-        
+
         $template->setVisible('showHeadInfo');
-        
+
         return $template;
     }
 
@@ -247,15 +247,15 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     <div class="col-xs-6 text-right" choice="view">
       <p class="wiki-meta view">
         &nbsp;
-        <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="fa fa-pencil"></i> Edit</a>  
+        <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="fa fa-pencil"></i> Edit</a>
         <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="fa fa-clock-o"></i> History</a>
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
     <div class="col-xs-6 text-right" choice="history">
-      <p class="wiki-meta view">  
-        <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="fa fa-pencil"></i> Edit</a>  
-        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view"><i class="fa fa-eye"></i> View</a>  
+      <p class="wiki-meta view">
+        <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="fa fa-pencil"></i> Edit</a>
+        <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view"><i class="fa fa-eye"></i> View</a>
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
@@ -273,6 +273,6 @@ HTML;
 
         return \Dom\Loader::load($xhtml);
     }
-    
-    
+
+
 }

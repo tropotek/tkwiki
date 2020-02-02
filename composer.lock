@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6dc00d3827931b4cad9c776a22325c5",
+    "content-hash": "861c3d13e482af6373c8479c3b804fec",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "c54ea426638a0d70a0b90fd05e8631575ec3695f"
+                "reference": "ce6ae067e74df6be68b0b672d790b62bd48910fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/c54ea426638a0d70a0b90fd05e8631575ec3695f",
-                "reference": "c54ea426638a0d70a0b90fd05e8631575ec3695f",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/ce6ae067e74df6be68b0b672d790b62bd48910fb",
+                "reference": "ce6ae067e74df6be68b0b672d790b62bd48910fb",
                 "shasum": ""
             },
             "require": {
@@ -75,7 +75,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2020-01-29T13:47:55+00:00"
+            "time": "2020-01-31T17:23:47+00:00"
         },
         {
             "name": "intervention/image",
@@ -289,59 +289,6 @@
             "time": "2017-10-02T18:34:33+00:00"
         },
         {
-            "name": "leafo/scssphp",
-            "version": "v0.7.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/leafo/scssphp.git",
-                "reference": "a384906af3d078e98b089d7d36f6ceab8703f7ff"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/a384906af3d078e98b089d7d36f6ceab8703f7ff",
-                "reference": "a384906af3d078e98b089d7d36f6ceab8703f7ff",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.6",
-                "squizlabs/php_codesniffer": "~2.5"
-            },
-            "bin": [
-                "bin/pscss"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Leafo\\ScssPhp\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Leaf Corcoran",
-                    "email": "leafot@gmail.com",
-                    "homepage": "http://leafo.net"
-                }
-            ],
-            "description": "scssphp is a compiler for SCSS written in PHP.",
-            "homepage": "http://leafo.github.io/scssphp/",
-            "keywords": [
-                "css",
-                "less",
-                "sass",
-                "scss",
-                "stylesheet"
-            ],
-            "abandoned": "scssphp/scssphp",
-            "time": "2019-04-24T18:10:10+00:00"
-        },
-        {
             "name": "monolog/monolog",
             "version": "1.x-dev",
             "source": {
@@ -418,66 +365,6 @@
                 "psr-3"
             ],
             "time": "2019-12-20T14:15:16+00:00"
-        },
-        {
-            "name": "oyejorge/less.php",
-            "version": "1.7.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/oyejorge/less.php.git",
-                "reference": "8f77f13bbc4d5997c76322523e1fb28376acf080"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/oyejorge/less.php/zipball/8f77f13bbc4d5997c76322523e1fb28376acf080",
-                "reference": "8f77f13bbc4d5997c76322523e1fb28376acf080",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2"
-            },
-            "bin": [
-                "bin/lessc"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Less": "lib/"
-                },
-                "classmap": [
-                    "lessc.inc.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Matt Agar",
-                    "homepage": "https://github.com/agar"
-                },
-                {
-                    "name": "Martin Jantošovič",
-                    "homepage": "https://github.com/Mordred"
-                },
-                {
-                    "name": "Josh Schmidt",
-                    "homepage": "https://github.com/oyejorge"
-                }
-            ],
-            "description": "PHP port of the Javascript version of LESS http://lesscss.org",
-            "homepage": "http://lessphp.gpeasy.com",
-            "keywords": [
-                "css",
-                "less",
-                "less.js",
-                "lesscss",
-                "php",
-                "stylesheet"
-            ],
-            "abandoned": true,
-            "time": "2014-03-04T18:49:54+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -821,16 +708,16 @@
         },
         {
             "name": "scssphp/scssphp",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/scssphp/scssphp.git",
-                "reference": "5b3c9d704950d8f9637f5110c36c281ec47dc13c"
+                "reference": "e2dadd21ef6188f038aaf72cd2d55d0e1b522741"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scssphp/scssphp/zipball/5b3c9d704950d8f9637f5110c36c281ec47dc13c",
-                "reference": "5b3c9d704950d8f9637f5110c36c281ec47dc13c",
+                "url": "https://api.github.com/repos/scssphp/scssphp/zipball/e2dadd21ef6188f038aaf72cd2d55d0e1b522741",
+                "reference": "e2dadd21ef6188f038aaf72cd2d55d0e1b522741",
                 "shasum": ""
             },
             "require": {
@@ -878,7 +765,7 @@
                 "scss",
                 "stylesheet"
             ],
-            "time": "2019-12-12T05:00:52+00:00"
+            "time": "2020-01-31T16:45:58+00:00"
         },
         {
             "name": "sensiolabs/ansi-to-html",
@@ -1002,12 +889,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "aaf8b45d284f07b96eb9053df538c4e01a8bb35c"
+                "reference": "3f3f796d5f24a098a9da62828b8daa1b11494c1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/aaf8b45d284f07b96eb9053df538c4e01a8bb35c",
-                "reference": "aaf8b45d284f07b96eb9053df538c4e01a8bb35c",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/3f3f796d5f24a098a9da62828b8daa1b11494c1b",
+                "reference": "3f3f796d5f24a098a9da62828b8daa1b11494c1b",
                 "shasum": ""
             },
             "require": {
@@ -1072,20 +959,20 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2019-10-15T12:38:35+00:00"
+            "time": "2019-06-20T06:46:26+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "dev-master",
+            "version": "4.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "2f80f506102f32129d0bb64a743687c2a9020410"
+                "reference": "20236471058bbaa9907382500fc14005c84601f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/2f80f506102f32129d0bb64a743687c2a9020410",
-                "reference": "2f80f506102f32129d0bb64a743687c2a9020410",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/20236471058bbaa9907382500fc14005c84601f0",
+                "reference": "20236471058bbaa9907382500fc14005c84601f0",
                 "shasum": ""
             },
             "require": {
@@ -1096,7 +983,7 @@
                 "symfony/http-kernel": "<3.4"
             },
             "require-dev": {
-                "symfony/http-kernel": "~3.4|~4.0"
+                "symfony/http-kernel": "^3.4|^4.0|^5.0"
             },
             "type": "library",
             "extra": {
@@ -1128,7 +1015,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-05-09T07:23:25+00:00"
+            "time": "2020-01-25T12:44:29+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1766,12 +1653,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "38eb282a5d2cfcc76f54a1d105fb9329b45f22f0"
+                "reference": "a6242b2fe286d7c28b10b2ac52ae13f3bee824fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/38eb282a5d2cfcc76f54a1d105fb9329b45f22f0",
-                "reference": "38eb282a5d2cfcc76f54a1d105fb9329b45f22f0",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/a6242b2fe286d7c28b10b2ac52ae13f3bee824fa",
+                "reference": "a6242b2fe286d7c28b10b2ac52ae13f3bee824fa",
                 "shasum": ""
             },
             "require": {
@@ -1816,7 +1703,7 @@
                 "tkbase",
                 "tropotek"
             ],
-            "time": "2020-01-29T22:47:11+00:00"
+            "time": "2020-01-30T01:24:33+00:00"
         },
         {
             "name": "ttek/tk-database",
@@ -1969,12 +1856,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "5f424c35d65e71e96beb6979a56c751d401fb327"
+                "reference": "551251fb15779dfb6622561c2bfd69f59473e7ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/5f424c35d65e71e96beb6979a56c751d401fb327",
-                "reference": "5f424c35d65e71e96beb6979a56c751d401fb327",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/551251fb15779dfb6622561c2bfd69f59473e7ab",
+                "reference": "551251fb15779dfb6622561c2bfd69f59473e7ab",
                 "shasum": ""
             },
             "require": {
@@ -2019,7 +1906,7 @@
                 "framework",
                 "tropotek"
             ],
-            "time": "2020-01-29T22:47:27+00:00"
+            "time": "2020-01-30T01:25:03+00:00"
         },
         {
             "name": "ttek/tk-installers",
@@ -2224,12 +2111,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-table.git",
-                "reference": "49002a4fb29ffb4e7358f1d0adaa7bb226bb97f9"
+                "reference": "8246b70e6e51db48aca3e0f84b57ed61847c4152"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/49002a4fb29ffb4e7358f1d0adaa7bb226bb97f9",
-                "reference": "49002a4fb29ffb4e7358f1d0adaa7bb226bb97f9",
+                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/8246b70e6e51db48aca3e0f84b57ed61847c4152",
+                "reference": "8246b70e6e51db48aca3e0f84b57ed61847c4152",
                 "shasum": ""
             },
             "require": {
@@ -2262,7 +2149,7 @@
                 "table",
                 "tropotek"
             ],
-            "time": "2020-01-29T00:06:30+00:00"
+            "time": "2019-06-19T03:38:33+00:00"
         },
         {
             "name": "ttek/tk-ui",
@@ -2270,12 +2157,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-ui.git",
-                "reference": "d97b3481f23a4bb0ebcbad07c0e3cc3855272e88"
+                "reference": "b1e6b7fedaf3c2d21017ef1816de715d89a04c80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-ui/zipball/d97b3481f23a4bb0ebcbad07c0e3cc3855272e88",
-                "reference": "d97b3481f23a4bb0ebcbad07c0e3cc3855272e88",
+                "url": "https://api.github.com/repos/tropotek/tk-ui/zipball/b1e6b7fedaf3c2d21017ef1816de715d89a04c80",
+                "reference": "b1e6b7fedaf3c2d21017ef1816de715d89a04c80",
                 "shasum": ""
             },
             "require": {
@@ -2309,7 +2196,7 @@
                 "tropotek",
                 "ui"
             ],
-            "time": "2020-01-28T22:39:45+00:00"
+            "time": "2020-01-30T01:42:37+00:00"
         },
         {
             "name": "wikimedia/less.php",

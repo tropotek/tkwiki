@@ -5,6 +5,19 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 2.4.4 [2020-02-04]:
+-------------------------------
+  - commiting
+  - comitting
+  - Upgraded to new symfony libs
+  - Merge pull request #6 from tropotek/ver2
+  - Merge branch 'master' into ver2
+  - Merge pull request #5 from tropotek/ver1
+  - Merge branch 'master' into ver1
+  - Tagging branch ver2 for release 2.4.4
+  - Tagging branch ver1 for release 2.4.4
+
+
 Ver 2.4.4 [2019-05-12]:
 -------------------------------
   - Minor Code Updates

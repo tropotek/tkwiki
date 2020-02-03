@@ -61,7 +61,7 @@ class Config extends \Bs\Config
     }
 
     /**
-     * @param null $user
+     * @param null|\Bs\Db\User $user
      * @return \App\Auth\Acl
      */
     public function getAcl($user = null)
@@ -91,7 +91,6 @@ class Config extends \Bs\Config
         return $this->get('handler.crumbs');
     }
 
-
     /**
      * @param $form
      * @return \Tk\Form\Renderer\Dom
@@ -115,12 +114,12 @@ class Config extends \Bs\Config
 
     /**
      * @param string $templatePath (optional)
-     * @return Page
+     * @return \App\Page
      */
     public function createPage($templatePath = '')
     {
         try {
-            return new Page($templatePath);
+            return new \App\Page($templatePath);
         } catch (\Exception $e) {
             \Tk\Log::error($e->__toString());
         }

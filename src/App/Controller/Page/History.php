@@ -50,13 +50,13 @@ class History extends Iface
         $actions = new \Tk\Table\Cell\Actions();
 
         $actions->addButton(\Tk\Table\Cell\ActionButton::create('Revert', \Tk\Uri::create('/user/history.html'), 'fa fa-share'))
-            ->setOnShow(function ($cell, $obj, $btn) {
+            ->addOnShow(function ($cell, $obj, $btn) {
                 /** @var \App\Db\Content $obj **/
                 /** @var \Tk\Table\Cell\ActionButton $btn **/
                 $btn->getUrl()->set('r', $obj->getId());
             });
         $actions->addButton(\Tk\Table\Cell\ActionButton::create('Preview', \Tk\Uri::create('/view.html'), 'fa fa-eye'))
-            ->setOnShow(function ($cell, $obj, $btn) {
+            ->addOnShow(function ($cell, $obj, $btn) {
                 /** @var \App\Db\Content $obj **/
                 /** @var \Tk\Table\Cell\ActionButton $btn **/
                 $btn->getUrl()->set('contentId', $obj->getId());
@@ -67,15 +67,16 @@ class History extends Iface
         $this->table->appendCell(\Tk\Table\Cell\Date::createDate('created',\Tk\Date::FORMAT_SHORT_DATETIME))->addCss('key')->setUrl(\Tk\Uri::create('/view.html'));
         $this->table->appendCell(new \Tk\Table\Cell\Text('userId'))->setOrderProperty('user_id');
         $this->table->appendCell(new \Tk\Table\Cell\Text('id'));
-        $this->table->appendCell(new \Tk\Table\Cell\Text('size'))->setLabel('Bytes')->setOnPropertyValue(function ($cell, $obj, $value) {
-            return \Tk\File::bytes2String($value);
-        });
+        $this->table->appendCell(new \Tk\Table\Cell\Text('size'))->setLabel('Bytes')->
+            addOnPropertyValue(function ($cell, $obj, $value) {
+                return \Tk\File::bytes2String($value);
+            });
 
         // Actions
         //$this->table->addAction(new \Tk\Table\Action\Csv($this->getConfig()->getDb()));
 
         $filter = $this->table->getFilterValues();
-        $filter['pageId'] = $this->wPage->id;
+        $filter['pageId'] = $this->wPage->getId();
         $filter['exclude'] = $this->wPage->getContent()->getId();
         $users = \App\Db\ContentMap::create()->findFiltered($filter, $this->table->getTool('a.created DESC'));
         $this->table->setList($users);

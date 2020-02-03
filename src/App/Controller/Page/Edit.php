@@ -64,22 +64,22 @@ class Edit extends Iface
         // Create a new page
         if (!$this->wPage && $request->has('u') && $this->getConfig()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
-            $this->wPage->userId = $this->getAuthUser()->id;
-            $this->wPage->url = $request->get('u');
-            $this->wPage->title = str_replace('_', ' ', $this->wPage->url);
-            $this->wPage->permission = \App\Db\Page::PERMISSION_PRIVATE;
+            $this->wPage->setUserId($this->getAuthUser()->getId());
+            $this->wPage->setUrl($request->get('u'));
+            $this->wPage->setTitle(str_replace('_', ' ', $this->wPage->getUrl()));
+            $this->wPage->setPermission(\App\Db\Page::PERMISSION_PRIVATE);
             $this->wContent = new \App\Db\Content();
-            $this->wContent->userId = $this->getAuthUser()->id;
+            $this->wContent->setUserId($this->getAuthUser()->getId());
         }
         // Create a new Nav page
         if ($request->has('type') && $this->getConfig()->getAcl()->canCreate()) {
             $this->wPage = new \App\Db\Page();
-            $this->wPage->type = \App\Db\Page::TYPE_NAV;
-            $this->wPage->userId = $this->getAuthUser()->id;
-            $this->wPage->title = 'Menu Item';
-            $this->wPage->permission = \App\Db\Page::PERMISSION_PUBLIC;
+            $this->wPage->setType(\App\Db\Page::TYPE_NAV);
+            $this->wPage->setUserId($this->getAuthUser()->getId());
+            $this->wPage->setTitle('Menu Item');
+            $this->wPage->setPermission(\App\Db\Page::PERMISSION_PUBLIC);
             $this->wContent = new \App\Db\Content();
-            $this->wContent->userId = $this->getAuthUser()->id;
+            $this->wContent->setUserId($this->getAuthUser()->getId());
         }
         if (!$this->wPage) {
             throw new \Tk\HttpException(404, 'Page not found');
@@ -92,30 +92,30 @@ class Edit extends Iface
             \Tk\Alert::addWarning('You do not have permission to edit this page.');
             $error = true;
         }
-        if ($this->wPage->id && !$this->getConfig()->getLockMap()->canAccess($this->wPage->id)) {
+        if ($this->wPage->getId() && !$this->getConfig()->getLockMap()->canAccess($this->wPage->getId())) {
             \Tk\Alert::addWarning('The page is currently being edited by another user. Try again later.');
             $error = true;
         }
         if ($error) {
             $url = $this->wPage->getPageUrl();
-            if (!$this->wPage->id) {
+            if (!$this->wPage->getId()) {
                 $url = \Tk\Uri::create('/');
             }
             $url->redirect();
         }
 
         // Acquire page lock.
-        $this->getConfig()->getLockMap()->lock($this->wPage->id);
+        $this->getConfig()->getLockMap()->lock($this->wPage->getId());
 
 
         if (!$this->wContent) {
             $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
             // Execute the pre-formatter (TODO: This could be an event)
             try {
-                if ($this->wContent->html) {
-                    $this->formatter = new HtmlFormatter($this->wContent->html, false);
+                if ($this->wContent->getHtml()) {
+                    $this->formatter = new HtmlFormatter($this->wContent->getHtml(), false);
                     //vd($this->wContent->html);
-                    $this->wContent->html = $this->formatter->getHtml();
+                    $this->wContent->setHtml($this->formatter->getHtml());
                     //vd($this->wContent->html);
                 }
             } catch(\Exception $e) {
@@ -129,12 +129,12 @@ class Edit extends Iface
 
         // Form
         $this->form = Form::create('pageEdit');
-        $this->form->appendField(new Field\Hidden('pid', $this->wPage->id));
+        $this->form->appendField(new Field\Hidden('pid', $this->wPage->getId()));
         $this->form->appendField(new Field\Input('title'))->setRequired(true);
         $this->form->appendField(new Field\Textarea('html'))->addCss('mce');
         $this->form->appendField(new Field\Select('permission'));
 
-        if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
+        if ($this->wPage->getType() == \App\Db\Page::TYPE_PAGE) {
             $this->form->appendField(new Field\Input('keywords'));
             $this->form->appendField(new Field\Input('description'));
         }
@@ -158,10 +158,10 @@ class Edit extends Iface
     public function doCancel($form)
     {
         $url = $this->wPage->getPageUrl();
-        if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
+        if ($this->wPage->getType() == \App\Db\Page::TYPE_NAV) {
             $url = \Tk\Uri::create('/');
         }
-        $this->getConfig()->getLockMap()->unlock($this->wPage->id);
+        $this->getConfig()->getLockMap()->unlock($this->wPage->getId());
         $url->redirect();
     }
 
@@ -178,9 +178,9 @@ class Edit extends Iface
         $form->addFieldErrors($this->wPage->validate());
         $form->addFieldErrors($this->wContent->validate());
 
-        if ($this->wPage->url == \App\Db\Page::getHomeUrl()) {
-            $this->wPage->url = 'Home';
-            $this->wPage->permission = 0;
+        if ($this->wPage->getUrl() == \App\Db\Page::getHomeUrl()) {
+            $this->wPage->setUrl('Home');
+            $this->wPage->setPermission(0);
         }
 
         if ($form->hasErrors()) {
@@ -188,18 +188,18 @@ class Edit extends Iface
         }
 
         $this->wPage->save();
-        $this->wContent->pageId = $this->wPage->id;
+        $this->wContent->setPageId($this->wPage->getId());
         $this->wContent->save();
 
         // Index page links
-        if ($this->wContent->html)
-            $this->indexLinks($this->wPage, new HtmlFormatter($this->wContent->html, false));
+        if ($this->wContent->getHtml())
+            $this->indexLinks($this->wPage, new HtmlFormatter($this->wContent->getHtml(), false));
 
         // Remove page lock
-        $this->getConfig()->getLockMap()->unlock($this->wPage->id);
+        $this->getConfig()->getLockMap()->unlock($this->wPage->getId());
 
         $url = $this->wPage->getPageUrl();
-        if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
+        if ($this->wPage->getType() == \App\Db\Page::TYPE_NAV) {
             $url = \Tk\Uri::create('/');
             if ($this->getConfig()->getSession()->has(self::SID_REFERRER)) {
                 $url = $this->getConfig()->getSession()->getOnce(self::SID_REFERRER);
@@ -234,14 +234,14 @@ class Edit extends Iface
      */
     protected function indexLinks($page, $formatter)
     {
-        \App\Db\PageMap::create()->deleteLinkByPageId($page->id);
+        \App\Db\PageMap::create()->deleteLinkByPageId($page->getId());
         $nodeList = $formatter->getDocument()->getElementsByTagName('a');
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             $regs = array();
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                 if (isset ($regs[1])) {
-                    \App\Db\PageMap::create()->insertLink($page->id, $regs[1]);
+                    \App\Db\PageMap::create()->insertLink($page->getId(), $regs[1]);
                 }
             }
         }
@@ -260,7 +260,7 @@ class Edit extends Iface
             $field = $domForm->getFormElement('permission');
             $field->setAttribute('disabled', 'true')->setAttribute('title', 'Home page permissions must be public.');
         }
-        $template->show($this->wPage->type);
+        $template->setVisible($this->wPage->getType());
 
         $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getAuthUser());
         $template->insertTemplate('header', $header->show());

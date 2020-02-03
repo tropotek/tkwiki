@@ -7,7 +7,7 @@ use Tk\DataMap\Db;
 use Tk\DataMap\Form;
 
 /**
- * 
+ *
  *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
@@ -59,10 +59,7 @@ class PageMap extends Mapper
     }
 
 
-
-
     /**
-     *
      * @param $userId
      * @param \Tk\Db\Tool $tool
      * @return ArrayObject|Page[]
@@ -117,7 +114,8 @@ class PageMap extends Mapper
      */
     public function findByUrl($url)
     {
-        $sql = sprintf('url = %s AND type = %s', $this->getDb()->quote($url), $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
+        $sql = sprintf('url = %s AND type = %s', $this->getDb()->quote($url),
+            $this->getDb()->quote(\App\Db\Page::TYPE_PAGE));
         return $this->select($sql)->current();
     }
 
@@ -159,7 +157,7 @@ class PageMap extends Mapper
             $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
             if ($w) $where .= '('. $w . ') AND ';
         }
-        
+
         if ($where) {
             $where = substr($where, 0, -4);
         }
@@ -180,17 +178,17 @@ class PageMap extends Mapper
     {
 
         $homeUrl = \App\Config::getInstance()->get('wiki.page.default');
-        
+
         $from = sprintf('%s a LEFT JOIN %s b ON (a.%s = b.%s)', $this->getDb()->quoteParameter($this->getTable()), $this->getDb()->quoteParameter('links'),
             $this->getDb()->quoteParameter('url'), $this->getDb()->quoteParameter('page_url'));
-        $where = sprintf('b.%s IS NULL AND (a.%s != %s AND a.%s != %s)', $this->getDb()->quoteParameter('page_id'), 
-            $this->getDb()->quoteParameter('url'), $this->getDb()->quote($homeUrl), 
+        $where = sprintf('b.%s IS NULL AND (a.%s != %s AND a.%s != %s)', $this->getDb()->quoteParameter('page_id'),
+            $this->getDb()->quoteParameter('url'), $this->getDb()->quote($homeUrl),
             $this->getDb()->quoteParameter('type'), $this->getDb()->quote(Page::TYPE_NAV));
 
         $res = $this->selectFrom($from, $where, $tool);
         return $res;
-        
-        
+
+
 //        $sql = sprintf('SELECT a.* FROM %s a LEFT JOIN links b ON (a.url = b.page_url)
 //WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s)', $this->getDb()->quoteParameter($this->getTable()),
 //            $this->getDb()->quote($homeUrl), $this->getDb()->quote(Page::TYPE_NAV) );
@@ -216,7 +214,7 @@ WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s AND a.id = %s)', $this
         if ($res->rowCount() > 0) return true;
         return false;
     }
-    
+
     /**
      * insert a page link record
      *
@@ -245,7 +243,8 @@ WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s AND a.id = %s)', $this
      */
     public function linkExists($pageId, $pageUrl)
     {
-        $sql = sprintf('SELECT COUNT(*) as i FROM links WHERE page_id = %d AND page_url = %s', (int)$pageId, $this->getDb()->quote($pageUrl));
+        $sql = sprintf('SELECT COUNT(*) as i FROM links WHERE page_id = %d AND page_url = %s',
+            (int)$pageId, $this->getDb()->quote($pageUrl));
         $res = $this->getDb()->query($sql);
         $value = $res->fetch();
         if (!$value) return false;
@@ -265,7 +264,8 @@ WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s AND a.id = %s)', $this
         if (!$this->linkExists($pageId, $pageUrl)) {
             return false;
         }
-        $sql = sprintf('DELETE FROM links WHERE page_id = %s AND page_url = %s LIMIT 1', (int)$pageId, $this->getDb()->quote($pageUrl));
+        $sql = sprintf('DELETE FROM links WHERE page_id = %s AND page_url = %s LIMIT 1',
+            (int)$pageId, $this->getDb()->quote($pageUrl));
         $this->getDb()->exec($sql);
         return true;
     }

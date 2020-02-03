@@ -24,7 +24,7 @@ class Acl
     /**
      * Access constructor.
      *
-     * @param \Bs\Db\User $user
+     * @param \Bs\Db\User|\Bs\Db\UserIface $user
      */
     public function __construct($user)
     {
@@ -36,7 +36,7 @@ class Acl
      * Eg:
      *   - Access::create($user)->isAdmin();
      *
-     * @param \Bs\Db\User $user
+     * @param \Bs\Db\User|\Bs\Db\UserIface $user
      * @return Acl
      */
     static function create($user)

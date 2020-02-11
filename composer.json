@@ -2,10 +2,12 @@
     "name": "ttek/tkwiki",
     "type": "project",
     "description": "A basic wiki for documentations",
-    "keywords":  ["tropotek"],
-    "time": "2019-05-12",
+    "keywords":  [
+        "tropotek"
+    ],
+    "time": "2020-02-12",
     "license": "GPL",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "authors":  [
          {
             "name": "Michael Mifsud",
@@ -35,7 +37,7 @@
         "php": "^7.1.3",
         "ext-json": "*",
         "ttek/tk-base": "~3.0",
-      "ext-tidy": "*",
+        "ext-tidy": "*",
         "ext-dom": "*",
         "ext-libxml": "*"
     },

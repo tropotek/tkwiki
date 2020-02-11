@@ -110,8 +110,8 @@ class Search extends Iface
             $rpt->setAttr('title', 'href', $page->getPageUrl());
 
             $rpt->insertText('description', 'No Content.');
-            $rpt->insertText('date', $page->created->format(\Tk\Date::FORMAT_MED_DATE));
-            $rpt->insertText('time', $page->created->format('H:i'));
+            $rpt->insertText('date', $page->getCreated(\Tk\Date::FORMAT_MED_DATE));
+            $rpt->insertText('time', $page->getCreated('H:i'));
 
             if ($page->getContent()) {
                 $description = $page->getContent()->getDescription();
@@ -120,8 +120,8 @@ class Search extends Iface
                     $description = trim(substr(strip_tags(html_entity_decode($page->getContent()->getHtml())), 0, 256));
 
                 $rpt->insertHtml('description', htmlentities($description));
-                $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));
-                $rpt->insertText('time', $page->getContent()->created->format('H:i'));
+                $rpt->insertText('date', $page->getContent()->getCreated(\Tk\Date::FORMAT_MED_DATE));
+                $rpt->insertText('time', $page->getContent()->getCreated('H:i'));
                 if (trim($page->getContent()->getKeywords())) {
                     $rpt->insertText('keywords', $page->getContent()->getKeywords());
                     $rpt->setVisible('keywords');

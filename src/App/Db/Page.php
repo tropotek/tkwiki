@@ -238,6 +238,19 @@ class Page extends Model implements \Tk\ValidInterface
     }
 
     /**
+     * @param string $type
+     * @return bool
+     */
+    public function hasType($type)
+    {
+        if (!is_array($type)) $type = array($type);
+        foreach ($type as $r) {
+            if ($r == $this->getType()) return true;
+        }
+        return false;
+    }
+
+    /**
      * @return string
      */
     public function getTemplate(): string

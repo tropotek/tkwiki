@@ -97,13 +97,14 @@ class History extends Iface
         $content = \App\Db\Content::cloneContent($rev);
         $content->save();
 
-        \Tk\Alert::addSuccess('Page reverted to version ' . $rev->id . ' [' . $rev->created->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
+        \Tk\Alert::addSuccess('Page reverted to version ' . $rev->getId() . ' [' . $rev->getCreated(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
         $content->getPage()->getPageUrl()->redirect();
     }
 
 
     /**
      * @return Template
+     * @throws \Exception
      */
     public function show()
     {

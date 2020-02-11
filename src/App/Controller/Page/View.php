@@ -56,6 +56,10 @@ class View extends Iface
 
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public function canView()
     {
         if (!$this->getAuthUser()) {
@@ -84,6 +88,7 @@ class View extends Iface
 
     /**
      * @return \Dom\Template
+     * @throws \Exception
      */
     public function show()
     {

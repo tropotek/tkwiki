@@ -165,6 +165,7 @@ class Acl
     /**
      * @param Page $page
      * @return bool
+     * @throws \Exception
      */
     public function canView($page)
     {
@@ -196,10 +197,11 @@ class Acl
     /**
      * @param Page $page
      * @return bool
+     * @throws \Exception
      */
     public function canEdit($page)
     {
-        if ($page->url == \App\Db\Page::getHomeUrl() && !$this->isAdmin()) {
+        if ($page->getUrl() == \App\Db\Page::getHomeUrl() && !$this->isAdmin()) {
             return false;
         }
         if ($this->user->hasPermission(\App\Db\Permission::PAGE_EDIT) && $this->canView($page)) {
@@ -211,10 +213,11 @@ class Acl
     /**
      * @param Page $page
      * @return bool
+     * @throws \Exception
      */
     public function canDelete($page)
     {
-        if ($page->id && $page->url != \App\Db\Page::getHomeUrl() && $this->user->hasPermission(\App\Db\Permission::PAGE_DELETE) && $this->canView($page)) {
+        if ($page->getId() && $page->getUrl() != \App\Db\Page::getHomeUrl() && $this->user->hasPermission(\App\Db\Permission::PAGE_DELETE) && $this->canView($page)) {
             return true;
         }
         return false;
@@ -223,6 +226,7 @@ class Acl
     /**
      * @param Page $page
      * @return bool
+     * @throws \Exception
      */
     public function canEditExtra($page)
     {
@@ -239,6 +243,6 @@ class Acl
     public function isAuthor($page)
     {
         if (!$this->user) return false;
-        return ($this->user->id == $page->userId);
+        return ($this->user->getId() == $page->getUserId());
     }
 }

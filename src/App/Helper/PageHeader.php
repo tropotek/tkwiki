@@ -87,7 +87,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
 
         if ($this->isEdit()) {
             $template->setVisible('edit');
-            if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
+            if ($this->wPage->hasType(\App\Db\Page::TYPE_PAGE)) {
                 $template->setVisible('canView');
             }
         } else if ($this->isHistory()) {
@@ -119,7 +119,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             }
 
             $url = $this->wPage->getPageUrl();
-            if ($this->wPage->type == \App\Db\Page::TYPE_NAV || !$this->wPage->getId()) {
+            if ($this->wPage->hasType(\App\Db\Page::TYPE_NAV) || !$this->wPage->getId()) {
                 $url = \Tk\Uri::create('/');
             }
             $template->setAttr('cancel', 'href', $url);
@@ -149,7 +149,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         // modified
         if ($content) {
             //$template->insertText('modified', $content->modified->format(\Tk\Date::LONG_DATETIME));
-            $template->insertText('modified', \Tk\Date::toRelativeString($content->modified));
+            $template->insertText('modified', \Tk\Date::toRelativeString($content->getModified()));
             $template->setVisible('modified');
         }
 

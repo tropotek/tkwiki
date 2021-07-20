@@ -62,6 +62,30 @@ class Config extends \Bs\Config
     }
 
     /**
+     * Return the back URI if available, otherwise it will return the home URI
+     *
+     * @return \Tk\Uri
+     */
+    public function getBackUrl()
+    {
+        if ($this->getCrumbs())
+            return $this->getCrumbs()->getBackUrl();
+
+        return $this->getSession()->getBackUrl();
+    }
+    /**
+     * @return \Tk\Crumbs
+     */
+    public function getCrumbs($requestUri = null, $session = null)
+    {
+        if (!$this->get('crumbs')) {
+            $obj = \App\Helper\Crumbs::getInstance($requestUri, $session);
+            $this->set('crumbs', $obj);
+        }
+        return $this->get('crumbs');
+    }
+
+    /**
      * @return \Bs\Listener\PageTemplateHandler
      */
     public function getCrumbsHandler()

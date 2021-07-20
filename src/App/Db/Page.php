@@ -390,23 +390,25 @@ class Page extends Model implements \Tk\ValidInterface
      */
     public function canView($user)
     {
-        if ($this->getUserId() == $user->getId()) return true;
-        //$pa = self::create($page->getUser());
-
+        if ($user && $this->getUserId() == $user->getId()) return true;
         switch($this->getPermission()) {
             case Page::PERMISSION_PUBLIC:
                 return true;
             case Page::PERMISSION_PROTECTED:
-                if ($user->hasPermission($this->getGroup($this->getUser())))
-                    return true;
-                if ($user->hasPermission(\App\Db\Permission::TYPE_MODERATOR) && $this->getGroup($this->getUser()) == \Bs\Db\User::TYPE_MEMBER)
-                    return true;
-                if ($user->isAdmin())
-                    return true;
+                if ($user) {
+                    if ($user->hasPermission($this->getGroup($this->getUser())))
+                        return true;
+                    if ($user->hasPermission(\App\Db\Permission::TYPE_MODERATOR) && $this->getGroup($this->getUser()) == \Bs\Db\User::TYPE_MEMBER)
+                        return true;
+                    if ($user->isAdmin())
+                        return true;
+                }
                 break;
             case Page::PERMISSION_PRIVATE:
-                if ($user->isAdmin())
-                    return true;
+                if ($user) {
+                    if ($user->isAdmin())
+                        return true;
+                }
         }
         return false;
     }

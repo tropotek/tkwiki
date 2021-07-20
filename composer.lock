@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0049d20ad0f13f44d20cb7e4d9dcba4a",
+    "content-hash": "f44e6f9c8ff793f7dcb3f675882f1095",
     "packages": [
         {
             "name": "guzzlehttp/psr7",
@@ -2098,12 +2098,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-database.git",
-                "reference": "294de1cf472d79026330f6f1e6db504b20c0690c"
+                "reference": "74079eb7c3359b9395d0777820397033964dcbf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-database/zipball/294de1cf472d79026330f6f1e6db504b20c0690c",
-                "reference": "294de1cf472d79026330f6f1e6db504b20c0690c",
+                "url": "https://api.github.com/repos/tropotek/tk-database/zipball/74079eb7c3359b9395d0777820397033964dcbf0",
+                "reference": "74079eb7c3359b9395d0777820397033964dcbf0",
                 "shasum": ""
             },
             "require": {
@@ -2524,12 +2524,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-plugin.git",
-                "reference": "af44f0aa37719f631f6bdc6c8ece44ef49dd643b"
+                "reference": "d68c361088e5573c39e44892a476472e01d6acc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-plugin/zipball/af44f0aa37719f631f6bdc6c8ece44ef49dd643b",
-                "reference": "af44f0aa37719f631f6bdc6c8ece44ef49dd643b",
+                "url": "https://api.github.com/repos/tropotek/tk-plugin/zipball/d68c361088e5573c39e44892a476472e01d6acc1",
+                "reference": "d68c361088e5573c39e44892a476472e01d6acc1",
                 "shasum": ""
             },
             "require": {
@@ -2762,7 +2762,10 @@
     "platform": {
         "php": "^7.3.0",
         "ext-pdo": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-libxml": "*",
+        "ext-tidy": "*",
+        "ext-dom": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"

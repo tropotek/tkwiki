@@ -11,7 +11,9 @@ use Bs\Db\User;
  */
 class Permission extends \Bs\Db\Permission
 {
-
+    /**
+     * @deprecated Deprecate this as moderators can be created by the permission sequince now
+     */
     const TYPE_MODERATOR = 'type.moderator';
 
     /**
@@ -84,7 +86,9 @@ class Permission extends \Bs\Db\Permission
             $list = array(
                 'Manage Site Config' => self::MANAGE_SITE,
                 'Manage Site Plugins' => self::MANAGE_PLUGINS,
-                'Can Masquerade' => self::CAN_MASQUERADE
+                'Can Masquerade' => self::CAN_MASQUERADE,
+                'Create Page' => self::PAGE_CREATE,
+                'Edit Page' => self::PAGE_EDIT,
             );
         }
         return $list;

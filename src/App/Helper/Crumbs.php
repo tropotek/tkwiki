@@ -7,7 +7,7 @@ use Dom\Template;
 
 /**
  * An object to manage and display the wiki Page header
- * information and action buttons. 
+ * information and action buttons.
  *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
@@ -22,7 +22,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      * @var Crumbs
      */
     static public $instance = null;
-    
+
     /**
      * @var null
      */
@@ -32,8 +32,8 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      * @var int
      */
     protected $max = 5;
-    
-    
+
+
     /**
      * constructor.
      *
@@ -41,7 +41,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     private function __construct()
     {
     }
-    
+
     public function serialize()
     {
         return serialize(array('list' => $this->list));
@@ -79,6 +79,36 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     }
 
     /**
+     * @return \Tk\Uri
+     */
+    public function getBackUrl()
+    {
+        $url = '';
+        if (count($this->list) == 1) {
+            $url = end($this->list);
+        }
+        if (count($this->list) > 1) {
+            end($this->list);
+            $url = prev($this->list);
+        }
+        return \Tk\Uri::create($url);
+    }
+
+    /**
+     * @return $this
+     */
+    public function reset()
+    {
+//        if (!$this->getRequest()->has(self::CRUMB_IGNORE)) {
+//            $this->getSession()->remove($this->getSid());
+//            $this->setList();
+//            $this->addCrumb($this->getHomeTitle(), $this->getHomeUrl());
+//            $this->save();
+//        }
+        return $this;
+    }
+
+    /**
      *
      * @param \Tk\Uri $url
      * @throws \Exception
@@ -109,7 +139,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      * @param \Tk\Uri $url
      * @return array
      */
-    public function trim($url) 
+    public function trim($url)
     {
         $arr = array();
         if (!$url) return $arr;
@@ -124,7 +154,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
         $this->list = $arr;
         return $arr;
     }
-    
+
     /**
      * Execute the renderer.
      * Return an object that your framework can interpret and display.
@@ -166,6 +196,6 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
 HTML;
         return \Dom\Loader::load($xhtml);
     }
-    
-    
+
+
 }

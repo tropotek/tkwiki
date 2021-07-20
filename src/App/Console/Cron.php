@@ -42,9 +42,7 @@ class Cron extends \Bs\Console\Iface
 
         $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
 
-
         $this->write('Cron Script Executed...', OutputInterface::VERBOSITY_VERBOSE);
-
 
     }
 

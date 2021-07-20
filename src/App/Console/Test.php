@@ -40,38 +40,6 @@ class Test extends \Bs\Console\Iface
             return;
         }
 
-
-        $sqlMigrateList = array('App Sql' => $config->getSrcPath() . '/config');
-        if ($config->get('sql.migrate.list')) {
-            $sqlMigrateList = $config->get('sql.migrate.list');
-        }
-        foreach ($sqlMigrateList as $searchPath) {
-            $dirItr = new \RecursiveDirectoryIterator($searchPath, \RecursiveIteratorIterator::CHILD_FIRST);
-            $itr = new \RecursiveIteratorIterator($dirItr);
-            $regItr = new \RegexIterator($itr, '/\/sql\/\.$/');
-            foreach ($regItr as $d) {
-                $this->writeComment($d->getPath());
-            }
-        }
-
-//        foreach ($sqlMigrateList as $searchPath) {
-//            $this->write('Search Path: ' . $searchPath);
-//            if (is_dir($searchPath)) {
-//                $list = scandir($searchPath);
-//                foreach ($list as $migratePath) {
-//                    if (preg_match('/^(_|\.)/', $migratePath)) continue;
-//                    $sqlPath = $config->getPluginPath() . '/' . $migratePath . '/sql';
-//                    if (!is_dir($sqlPath)) continue;
-//                    $this->writeComment('  Migrate Path: ' . $migratePath);
-//                    $this->writeComment('    SQL Path: ' . $sqlPath);
-////                    foreach ($migrate->migrate($sqlPath) as $f) {
-////                        $io->write(self::green('  .' . $f));
-////                    }
-//                }
-//            }
-//        }
-
-
         $output->writeln('Complete!!!');
 
     }

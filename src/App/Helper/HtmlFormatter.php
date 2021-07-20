@@ -64,7 +64,6 @@ class HtmlFormatter
      */
     public function getHtml()
     {
-        vd($this->doc);
         $html = $this->doc->saveXML($this->doc->documentElement);
         $html = trim(str_replace(array('<html><body>', '</body></html>'), '', $html));
         $html = trim(substr($html, 5, -6));

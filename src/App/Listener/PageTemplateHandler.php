@@ -60,6 +60,7 @@ JS;
             $template->replaceTemplate('wiki-menu', $menu->getTemplate());
 
             $crumbs = \App\Helper\Crumbs::getInstance(\Tk\Uri::create());
+            $crumbs = $this->getConfig()->getCrumbs(\Tk\Uri::create());
             $crumbs->show();
             $template->replaceTemplate('breadcrumb', $crumbs->getTemplate());
 

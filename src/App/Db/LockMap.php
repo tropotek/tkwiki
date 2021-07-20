@@ -64,13 +64,18 @@ class LockMap
         return self::$instance;
     }
 
+    /**
+     * @param $pageId
+     * @return string
+     */
     public function getPageHash($pageId)
     {
         //$sessionId = $this->getConfig()->getSession()->getName();
         $sessionId = $this->getConfig()->getSession()->getId();
-        vd($this->getConfig()->getSession()->getName(), $this->getConfig()->getSession()->getId());
+        //vd($this->user->getId(), $this->getConfig()->getSession()->getName(), $this->getConfig()->getSession()->getId());
         //return md5($pageId . $this->user->getId() . $this->user->getIp());
-        return md5($pageId . $sessionId);
+        //vd($pageId  . $this->user->getId() . $sessionId);
+        return md5($pageId  . $this->user->getId() . $sessionId);
     }
 
 
@@ -87,14 +92,14 @@ class LockMap
 
         $expire = \Tk\Date::create(time()+$this->timeout);
         if ($this->isLocked($pageId)) {
-            if ($this->hasLock($pageId)) {
+            if ($this->ownLock($pageId)) {
                 $sql = sprintf('UPDATE %s SET expire = %s WHERE hash = %s', $this->db->quoteParameter('lock'),
                     $this->db->quote($expire->format(\Tk\Date::FORMAT_ISO_DATE)), $this->db->quote($this->getPageHash($pageId)));
                 $this->db->exec($sql);
             }
         } else {
             $sql = sprintf('INSERT INTO %s VALUES (%s, %d, %d, %s, %s)', $this->db->quoteParameter('lock'),
-                $this->db->quote(md5($pageId . $this->user->getId() . $this->user->getIp())),
+                $this->db->quote($this->getPageHash($pageId)),
                 $pageId, $this->user->getId(), $this->db->quote($this->user->getIp()),
                 $this->db->quote($expire->format(\Tk\Date::FORMAT_ISO_DATE)) );
             $this->db->exec($sql);
@@ -134,15 +139,14 @@ class LockMap
         if ($pageId <= 0) return false;
         if (!$this->isLocked($pageId)) {
             return true;
-        } else if ($this->hasLock($pageId)) {
+        }else if ($this->ownLock($pageId)) {
             return true;
         }
         return false;
     }
 
-
     /**
-     * Enter description here...
+     * Is the page locked
      *
      * @param int $pageId
      * @return boolean
@@ -164,7 +168,7 @@ class LockMap
      * @return boolean
      * @throws \Exception
      */
-    public function hasLock($pageId)
+    public function ownLock($pageId)
     {
         $sql = sprintf('SELECT COUNT(*) as i FROM %s WHERE hash = %s',
             $this->db->quoteParameter('lock'), $this->db->quote($this->getPageHash($pageId)));

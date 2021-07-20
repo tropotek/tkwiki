@@ -35,9 +35,12 @@
     },
     "require": {
         "php": "^7.3.0",
+        "ttek/tk-base": "~3.2",
         "ext-pdo": "*",
         "ext-json": "*",
-        "ttek/tk-base": "~3.2"
+        "ext-libxml": "*",
+        "ext-tidy": "*",
+        "ext-dom": "*"
     },
     "require-dev": {
     }

@@ -2,6 +2,8 @@
 namespace App\Helper;
 
 
+use Tk\ConfigTrait;
+
 /**
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
@@ -9,6 +11,8 @@ namespace App\Helper;
  */
 class HtmlFormatter
 {
+    use ConfigTrait;
+
     /**
      * @var boolean
      */
@@ -60,6 +64,7 @@ class HtmlFormatter
      */
     public function getHtml()
     {
+        vd($this->doc);
         $html = $this->doc->saveXML($this->doc->documentElement);
         $html = trim(str_replace(array('<html><body>', '</body></html>'), '', $html));
         $html = trim(substr($html, 5, -6));
@@ -171,7 +176,7 @@ class HtmlFormatter
                 if ($page) {
                     $css = '';
                     if ($this->isView) {
-                        if (\App\Auth\Acl::create(\App\Config::getInstance()->getAuthUser())->canView($page)) {
+                        if ($page->canView($this->getAuthUser())) {
                             $css = ' wiki-canView';
                         } else {
                             $css = ' wiki-notView disabled';

@@ -34,7 +34,7 @@ $routes->add('contact', new \Tk\Routing\Route('/contact.html', 'App\Controller\C
 
 
 // Users
-$routes->add('profile', new \Tk\Routing\Route('/user/profile.html', 'Bs\Controller\Admin\User\Profile::doDefault'));
+$routes->add('profile', new \Tk\Routing\Route('/user/profile.html', 'Bs\Controller\User\Profile::doDefault'));
 $routes->add('pageEdit', new \Tk\Routing\Route('/user/edit.html', 'App\Controller\Page\Edit::doDefault'));
 $routes->add('pageHistory', new \Tk\Routing\Route('/user/history.html', 'App\Controller\Page\History::doDefault'));
 $routes->add('pageManager', new \Tk\Routing\Route('/user/pageManager.html', 'App\Controller\Page\Manager::doDefault'));

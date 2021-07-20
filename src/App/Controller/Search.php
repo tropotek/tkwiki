@@ -59,12 +59,12 @@ class Search extends Iface
             $this->terms = '';
             // TODO: Test this is correct for public private etc pages...
             if ($this->user) {
-                if ($this->getAuthUser() && $this->getConfig()->getAcl()->isAdmin()) {
-                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, array(), $tool);
-                } else if ($this->getAuthUser() && $this->getConfig()->getAcl()->isModerator()) {
-                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, array(\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC), $tool);
+                if ($this->getAuthUser() && $this->getAuthUser()->isAdmin()) {
+                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->getId(), array(), $tool);
+                } else if ($this->getAuthUser() && $this->getAuthUser()->hasPermission(\App\Db\Permission::TYPE_MODERATOR)) {
+                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->getId(), array(\App\Db\Page::PERMISSION_PROTECTED, \App\Db\Page::PERMISSION_PUBLIC), $tool);
                 } else {
-                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->id, array(\App\Db\Page::PERMISSION_PUBLIC), $tool);
+                    $this->list = \App\Db\PageMap::create()->findUserPages($this->user->getId(), array(\App\Db\Page::PERMISSION_PUBLIC), $tool);
                 }
             }
         } else {
@@ -98,32 +98,31 @@ class Search extends Iface
             $searchForm->getFormElement('search-terms')->setValue($this->terms);
         }
 
-        $access = \App\Auth\Acl::create($this->getAuthUser());
         $i = 0;
         /** @var \App\Db\Page $page */
         foreach($this->list as $page) {
-            if (!$access->canView($page)) continue;
+            if (!$page->canView($this->getAuthUser())) continue;
 
             $rpt = $template->getRepeat('row');
-            $rpt->insertText('title', $page->title);
-            $rpt->setAttr('title', 'title', $page->title);
+            $rpt->insertText('title', $page->getTitle());
+            $rpt->setAttr('title', 'title', $page->getTitle());
             $rpt->setAttr('title', 'href', $page->getPageUrl());
 
             $rpt->insertText('description', 'No Content.');
-            $rpt->insertText('date', $page->created->format(\Tk\Date::FORMAT_MED_DATE));
-            $rpt->insertText('time', $page->created->format('H:i'));
+            $rpt->insertText('date', $page->getCreated()->format(\Tk\Date::FORMAT_MED_DATE));
+            $rpt->insertText('time', $page->getCreated()->format('H:i'));
 
             if ($page->getContent()) {
-                $description = $page->getContent()->description;
+                $description = $page->getContent()->getDescription();
                 // This is a security risk as is can show sensitive data from the content, do not do this...
                 if (!$description)
-                    $description = trim(substr(strip_tags(html_entity_decode($page->getContent()->html)), 0, 256));
+                    $description = trim(substr(strip_tags(html_entity_decode($page->getContent()->getHtml())), 0, 256));
 
                 $rpt->insertHtml('description', htmlentities($description));
-                $rpt->insertText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));
-                $rpt->insertText('time', $page->getContent()->created->format('H:i'));
-                if (trim($page->getContent()->keywords)) {
-                    $rpt->insertText('keywords', $page->getContent()->keywords);
+                $rpt->insertText('date', $page->getContent()->getCreated()->format(\Tk\Date::FORMAT_MED_DATE));
+                $rpt->insertText('time', $page->getContent()->getCreated()->format('H:i'));
+                if (trim($page->getContent()->getKeywords())) {
+                    $rpt->insertText('keywords', $page->getContent()->getKeywords());
                     $rpt->setVisible('keywords');
                 }
             }
@@ -134,7 +133,7 @@ class Search extends Iface
 
         $terms = '"'.$this->terms.'"';
         if ($this->user) {
-            $terms = '"User: '.$this->user->name.'"';
+            $terms = '"User: '.$this->user->getName().'"';
         }
         $template->insertText('terms', $terms);
 

@@ -51,16 +51,16 @@ class Page extends \App\Controller\Iface
     {
         $keywords = trim(strip_tags($request->get('keywords')));
         $tool = \Tk\Db\Tool::createFromArray($request->all(), 'title', 5);
-        
+
         $filter = array('keywords' => $keywords, 'type' => \App\Db\Page::TYPE_PAGE);
         /** @var \Tk\Db\Map\ArrayObject $pageList */
         $pageList = \App\Db\PageMap::create()->findFiltered($filter, $tool);
         $list = array();
         /** @var \App\Db\Page $page */
         foreach($pageList as $page) {
-            if (!$this->getConfig()->getAcl()->canView($page)) continue;
-            $page->modified = $page->modified->format(\Tk\Date::FORMAT_SHORT_DATETIME);
-            $page->created = $page->created->format(\Tk\Date::FORMAT_SHORT_DATETIME);
+            if (!$page->canView($this->getAuthUser())) continue;
+            $page->modified = $page->getModified()->format(\Tk\Date::FORMAT_SHORT_DATETIME);
+            $page->created = $page->getCreated()->format(\Tk\Date::FORMAT_SHORT_DATETIME);
             $list[] = $page;
         }
         $data = array(
@@ -73,7 +73,7 @@ class Page extends \App\Controller\Iface
                 'keywords' => $keywords
             )
         );
-        
+
         $json = json_encode($data);
         $response = new \Tk\Response($json);
         return $response;

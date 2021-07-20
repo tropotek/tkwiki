@@ -7,7 +7,7 @@ use Tk\DataMap\Db;
 use Tk\DataMap\Form;
 
 /**
- * 
+ *
  *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
@@ -93,7 +93,7 @@ class PageMap extends Mapper
         }
 
         $r = $this->select($sql, $tool);
-        vd($this->getDb()->getLastQuery());
+        //vd($this->getDb()->getLastQuery());
         return $r;
     }
 
@@ -159,7 +159,7 @@ class PageMap extends Mapper
             $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
             if ($w) $where .= '('. $w . ') AND ';
         }
-        
+
         if ($where) {
             $where = substr($where, 0, -4);
         }
@@ -180,17 +180,17 @@ class PageMap extends Mapper
     {
 
         $homeUrl = \App\Config::getInstance()->get('wiki.page.default');
-        
+
         $from = sprintf('%s a LEFT JOIN %s b ON (a.%s = b.%s)', $this->getDb()->quoteParameter($this->getTable()), $this->getDb()->quoteParameter('links'),
             $this->getDb()->quoteParameter('url'), $this->getDb()->quoteParameter('page_url'));
-        $where = sprintf('b.%s IS NULL AND (a.%s != %s AND a.%s != %s)', $this->getDb()->quoteParameter('page_id'), 
-            $this->getDb()->quoteParameter('url'), $this->getDb()->quote($homeUrl), 
+        $where = sprintf('b.%s IS NULL AND (a.%s != %s AND a.%s != %s)', $this->getDb()->quoteParameter('page_id'),
+            $this->getDb()->quoteParameter('url'), $this->getDb()->quote($homeUrl),
             $this->getDb()->quoteParameter('type'), $this->getDb()->quote(Page::TYPE_NAV));
 
         $res = $this->selectFrom($from, $where, $tool);
         return $res;
-        
-        
+
+
 //        $sql = sprintf('SELECT a.* FROM %s a LEFT JOIN links b ON (a.url = b.page_url)
 //WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s)', $this->getDb()->quoteParameter($this->getTable()),
 //            $this->getDb()->quote($homeUrl), $this->getDb()->quote(Page::TYPE_NAV) );
@@ -216,7 +216,7 @@ WHERE b.page_id IS NULL AND (a.url != %s AND a.type != %s AND a.id = %s)', $this
         if ($res->rowCount() > 0) return true;
         return false;
     }
-    
+
     /**
      * insert a page link record
      *

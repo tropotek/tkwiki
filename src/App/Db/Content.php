@@ -1,6 +1,9 @@
 <?php
 namespace App\Db;
 
+use App\Db\Traits\PageTrait;
+use Bs\Db\Traits\TimestampTrait;
+use Bs\Db\Traits\UserTrait;
 use Tk\Db\Map\Model;
 
 
@@ -13,6 +16,9 @@ use Tk\Db\Map\Model;
  */
 class Content extends Model implements \Tk\ValidInterface
 {
+    use PageTrait;
+    use UserTrait;
+    use TimestampTrait;
 
     /**
      * @var int
@@ -70,16 +76,6 @@ class Content extends Model implements \Tk\ValidInterface
      */
     public $created = null;
 
-    /**
-     * @var \Bs\Db\User
-     */
-    private $user = null;
-
-    /**
-     * @var \App\Db\Page
-     */
-    private $page = null;
-
 
     /**
      * User constructor.
@@ -87,8 +83,7 @@ class Content extends Model implements \Tk\ValidInterface
      */
     public function __construct()
     {
-        $this->modified = \Tk\Date::create();
-        $this->created = \Tk\Date::create();
+        $this->_TimestampTrait();
     }
 
     /**
@@ -110,39 +105,120 @@ class Content extends Model implements \Tk\ValidInterface
         return $dst;
     }
 
-    /**
-     *
-     * @return Page|null
-     * @throws \Exception
-     */
-    public function getPage()
-    {
-        if (!$this->page) {
-            $this->page = \App\Db\PageMap::create()->find($this->pageId);
-        }
-        return $this->page;
-    }
-
-    /**
-     *
-     * @return \Bs\Db\User|null
-     * @throws \Exception
-     */
-    public function getUser()
-    {
-        if (!$this->user) {
-            $this->user = \Bs\Db\UserMap::create()->find($this->userId);
-        }
-        return $this->user;
-    }
-
     public function save()
     {
-        // TODO: calculate content size...
         $this->size = \Tk\Str::strByteSize($this->html.$this->js.$this->css);
-
         parent::save();
     }
+
+    /**
+     * @return string
+     */
+    public function getHtml(): string
+    {
+        return $this->html;
+    }
+
+    /**
+     * @param string $html
+     * @return Content
+     */
+    public function setHtml(string $html): Content
+    {
+        $this->html = $html;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeywords(): string
+    {
+        return $this->keywords;
+    }
+
+    /**
+     * @param string $keywords
+     * @return Content
+     */
+    public function setKeywords(string $keywords): Content
+    {
+        $this->keywords = $keywords;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return Content
+     */
+    public function setDescription(string $description): Content
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCss(): string
+    {
+        return $this->css;
+    }
+
+    /**
+     * @param string $css
+     * @return Content
+     */
+    public function setCss(string $css): Content
+    {
+        $this->css = $css;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJs(): string
+    {
+        return $this->js;
+    }
+
+    /**
+     * @param string $js
+     * @return Content
+     */
+    public function setJs(string $js): Content
+    {
+        $this->js = $js;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param int $size
+     * @return Content
+     */
+    public function setSize(int $size): Content
+    {
+        $this->size = $size;
+        return $this;
+    }
+
 
     /**
      * Implement the validating rules to apply.
@@ -151,9 +227,7 @@ class Content extends Model implements \Tk\ValidInterface
     public function validate()
     {
         $errors = array();
-//        if (!$this->pageId) {  // Cannot check this here as the page id is not saved
-//            $errors['pageId'] = 'Invalid page ID value.';
-//        }
+
         if (!$this->userId) {
             $errors['userId'] = 'Invalid user ID value.';
         }

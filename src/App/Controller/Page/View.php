@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Page;
 
+use App\Db\Page;
 use Tk\Request;
 use App\Controller\Iface;
 
@@ -33,14 +34,14 @@ class View extends Iface
         $this->setPageTitle('');
         $this->wPage = \App\Db\Page::findPage($pageUrl);
         if (!$this->wPage) {
-            if ($this->getAuthUser() && $this->getConfig()->getAcl()->canCreate()) {
+            if ($this->getAuthUser() && Page::canCreate($this->getAuthUser())) {
                 // Create a redirect to the page edit controller
                 \Tk\Uri::create('/user/edit.html')->set('u', $pageUrl)->redirect();
             }
             //throw new \Tk\HttpException(404, 'Page not found');
         } else {
             if (!$this->canView()) {
-                \Tk\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
+                \Tk\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->getTitle() . '`');
                 \Tk\Uri::create('/')->redirect();
             }
 
@@ -50,7 +51,7 @@ class View extends Iface
                 // May redirect to the edit page if the user has edit privileges or send alert if not.
                 //throw new \Tk\Exception('Page content not found');
                 \Tk\Alert::addWarning('Page content lost, please create new content.');
-                \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->id)->redirect();
+                \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->getId())->redirect();
             }
         }
 
@@ -59,9 +60,9 @@ class View extends Iface
     public function canView()
     {
         if (!$this->getAuthUser()) {
-            return ($this->wPage->permission == \App\Db\Page::PERMISSION_PUBLIC);
+            return ($this->wPage->getPermission() == \App\Db\Page::PERMISSION_PUBLIC);
         }
-        return $this->getConfig()->getAcl()->canView($this->wPage);
+        return $this->wPage->canView($this->getAuthUser());
     }
 
     /**
@@ -100,23 +101,23 @@ class View extends Iface
                 $this->getConfig()->getEventDispatcher()->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
             }
 
-            $template->insertHtml('content', $this->wContent->html);
+            $template->insertHtml('content', $this->wContent->getHtml());
 
-            if ($this->wContent->css) {
-                $template->appendCss($this->wContent->css);
+            if ($this->wContent->getCss()) {
+                $template->appendCss($this->wContent->getCss());
             }
-            if ($this->wContent->js) {
-                $template->appendJs($this->wContent->js);
-            }
-
-            if ($this->wContent->keywords) {
-                $this->getPage()->getTemplate()->appendMetaTag('keywords', $this->wContent->keywords, $this->getPage()->getTemplate()->getTitleElement());
+            if ($this->wContent->getJs()) {
+                $template->appendJs($this->wContent->getJs());
             }
 
-            if ($this->wContent->description) {
-                $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->description, $this->getPage()->getTemplate()->getTitleElement());
+            if ($this->wContent->getKeywords()) {
+                $this->getPage()->getTemplate()->appendMetaTag('keywords', $this->wContent->getKeywords(), $this->getPage()->getTemplate()->getTitleElement());
             }
-            $this->getPage()->getTemplate()->setTitleText($this->getPage()->getTemplate()->getTitleText() . ' - ' . $this->wPage->title);
+
+            if ($this->wContent->getDescription()) {
+                $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->getDescription(), $this->getPage()->getTemplate()->getTitleElement());
+            }
+            $this->getPage()->getTemplate()->setTitleText($this->getPage()->getTemplate()->getTitleText() . ' - ' . $this->wPage->getTitle());
 
 
             $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/app/js/prism/prism.js'));

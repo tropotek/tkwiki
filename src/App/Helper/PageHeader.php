@@ -96,9 +96,9 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         } else {
             if (\App\Config::getInstance()->getRequest()->has('contentId')) {
                 $template->setVisible('viewRevision');
-                $title .= ' <small>(Revision ' . $this->wContent->id . ')</small>';
+                $title .= ' <small>(Revision ' . $this->wContent->getId() . ')</small>';
                 $template->addCss('content', 'revision');
-                if ($this->getConfig()->getAcl()->canEdit($this->wPage)) {
+                if ($this->wPage->canEdit($this->user)) {
                     $template->setVisible('revert');
                 }
             } else {
@@ -107,32 +107,32 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         }
 
         if ($this->user) {
-            if ($this->getConfig()->getAcl()->canEdit($this->wPage)) {
-                $url = \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->id);
+            if ($this->wPage->canEdit($this->user)) {
+                $url = \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->getId());
                 $template->setAttr('edit', 'href', $url);
                 $template->setVisible('canEdit');
             }
-            if ($this->getConfig()->getAcl()->canDelete($this->wPage)) {
-                $url = \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->id)->set('del', $this->wPage->id);
+            if ($this->wPage->canDelete($this->user)) {
+                $url = \Tk\Uri::create('/user/edit.html')->set('pageId', $this->wPage->getId())->set('del', $this->wPage->getId());
                 $template->setAttr('delete', 'href', $url);
                 $template->setVisible('canDelete');
             }
 
             $url = $this->wPage->getPageUrl();
-            if ($this->wPage->type == \App\Db\Page::TYPE_NAV || !$this->wPage->id) {
+            if ($this->wPage->type == \App\Db\Page::TYPE_NAV || !$this->wPage->getId()) {
                 $url = \Tk\Uri::create('/');
             }
             $template->setAttr('cancel', 'href', $url);
         }
 
-        $url = \Tk\Uri::create('/user/history.html')->set('pageId', $this->wPage->id);
+        $url = \Tk\Uri::create('/user/history.html')->set('pageId', $this->wPage->getId());
         $template->setAttr('history', 'href', $url);
 
         if ($this->wContent) {
-            $url = \Tk\Uri::create('/user/history.html')->set('r', $this->wContent->id);
+            $url = \Tk\Uri::create('/user/history.html')->set('r', $this->wContent->getId());
             $template->setAttr('revert', 'href', $url);
 
-            $template->insertText('contentId', $this->wContent->id);
+            $template->insertText('contentId', $this->wContent->getId());
         }
 
         $url = \Tk\Uri::create($this->wPage->url);
@@ -154,21 +154,21 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
         }
 
         // contributers
-        $contentList = \App\Db\ContentMap::create()->findContributors($this->wPage->id);
+        $contentList = \App\Db\ContentMap::create()->findContributors($this->wPage->getId());
         $html = array();
         /** @var \stdClass $c */
         foreach($contentList as $i => $c) {
             /** @var \Bs\Db\User $user */
             $user = \Bs\Db\UserMap::create()->find($c->user_id);
             if (!$user) continue;
-            $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->hash);
+            $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->getHash());
             $class = array();
             $title = \Tk\Date::toRelativeString(\Tk\Date::create($c->created));
-            if ($this->wPage->getUser()->id = $user->id) {
+            if ($this->wPage->getUser()->getId() == $user->getId()) {
                 $class[] = 'author';
                 $title = 'Contributed: ' . $title;
             }
-            $html[] = sprintf('<a href="%s" class="%s" title="%s">%s</a>', $url, implode(' ', $class), $title, $user->name);
+            $html[] = sprintf('<a href="%s" class="%s" title="%s">%s</a>', $url, implode(' ', $class), $title, $user->getName());
         }
         if (count($html)) {
             $template->insertHtml('contrib', implode(', ', $html));

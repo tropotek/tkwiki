@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `data` (
   UNIQUE KEY `foreign_fields` (`foreign_id`, `foreign_key`, `key`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `data` (`foreign_id`, `foreign_key`, `key`, `value`) VALUES
+INSERT INTO _data (`foreign_id`, `foreign_key`, `key`, `value`) VALUES
   (0, 'system', 'site.title', 'TkWiki II'),
   (0, 'system', 'site.email', 'tkwiki@example.com'),
   (0, 'system', 'site.meta.keywords', ''),
@@ -179,17 +179,17 @@ INSERT INTO `data` (`foreign_id`, `foreign_key`, `key`, `value`) VALUES
   (0, 'system', 'wiki.page.default', 'Home'),
   (0, 'system', 'wiki.page.home.lock', 'wiki.page.home.lock');
 
-UPDATE `data` a, `settings` b
+UPDATE _data a, `settings` b
 set a.`value` = b.`title` WHERE a.`key` = 'site.title';
-UPDATE `data` a, `settings` b
+UPDATE _data a, `settings` b
 set a.`value` = b.`siteEmail` WHERE a.`key` = 'site.email';
-UPDATE `data` a, `settings` b
+UPDATE _data a, `settings` b
 set a.`value` = b.`title` WHERE a.`key` = 'site.title';
-UPDATE `data` a, `settings` b
+UPDATE _data a, `settings` b
 set a.`value` = b.`metaDescription` WHERE a.`key` = 'site.meta.description';
-UPDATE `data` a, `settings` b
+UPDATE _data a, `settings` b
 set a.`value` = b.`metaKeywords` WHERE a.`key` = 'site.meta.keywords';
-UPDATE `data` a, `settings` b
+UPDATE _data a, `settings` b
 set a.`value` = b.`footerScript` WHERE a.`key` = 'site.global.js';
 
 
@@ -208,13 +208,13 @@ DROP TABLE settings;
 
 -- Setup the migration table
 
-DROP TABLE IF EXISTS `migration`;
+DROP TABLE IF EXISTS _migration;
 CREATE TABLE IF NOT EXISTS `migration` (
   `path` varchar(255) NOT NULL DEFAULT '',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`path`)
 ) ENGINE=InnoDB;
-INSERT INTO `migration` (`path`, `created`) VALUES
+INSERT INTO _migration (`path`, `created`) VALUES
   ('/src/config/sql/mysql/000000.sql', '2016-08-31 02:46:36'),
   ('/src/config/sql/mysql/000001.sql', '2016-08-31 02:46:36'),
   ('/vendor/ttek/tk-site/config/sql/mysql/000000.sql', '2016-08-31 02:46:36');

@@ -1,6 +1,9 @@
 <?php
 namespace App;
 
+
+use App\Db\Permission;
+
 /**
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
@@ -50,28 +53,6 @@ class Config extends \Bs\Config
     }
 
     /**
-     * @return \Bs\Listener\AuthHandler
-     */
-    public function getAuthHandler()
-    {
-        if (!$this->get('auth.handler')) {
-            $this->set('auth.handler', new \App\Listener\AuthHandler());
-        }
-        return $this->get('auth.handler');
-    }
-
-    /**
-     * @param null $user
-     * @return \App\Auth\Acl
-     */
-    public function getAcl($user = null)
-    {
-        if (!$user) $user = $this->getAuthUser();
-        $obj = \App\Auth\Acl::create($user);
-        return $obj;
-    }
-
-    /**
      * @param \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
      * @throws \Exception
      */
@@ -90,7 +71,6 @@ class Config extends \Bs\Config
         }
         return $this->get('handler.crumbs');
     }
-
 
     /**
      * @param $form
@@ -124,6 +104,14 @@ class Config extends \Bs\Config
         } catch (\Exception $e) {
             \Tk\Log::error($e->__toString());
         }
+    }
+
+    /**
+     * @return Permission|null
+     */
+    public function getPermission()
+    {
+        return Permission::getInstance();
     }
 
 

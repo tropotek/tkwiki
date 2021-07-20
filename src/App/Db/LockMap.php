@@ -2,6 +2,7 @@
 namespace App\Db;
 
 use Bs\Db\User;
+use Tk\ConfigTrait;
 
 /**
  * Class LockMap
@@ -12,6 +13,8 @@ use Bs\Db\User;
  */
 class LockMap
 {
+    use ConfigTrait;
+
     /**
      * @var LockMap
      */
@@ -31,10 +34,10 @@ class LockMap
      * @var int
      */
     protected $timeout = 120;
-    
-    
+
+
     /**
-     * 
+     *
      * @param User $user
      * @param \Tk\Db\Pdo $db
      */
@@ -61,6 +64,15 @@ class LockMap
         return self::$instance;
     }
 
+    public function getPageHash($pageId)
+    {
+        //$sessionId = $this->getConfig()->getSession()->getName();
+        $sessionId = $this->getConfig()->getSession()->getId();
+        vd($this->getConfig()->getSession()->getName(), $this->getConfig()->getSession()->getId());
+        //return md5($pageId . $this->user->getId() . $this->user->getIp());
+        return md5($pageId . $sessionId);
+    }
+
 
     /**
      * lock a wiki page if the user has access to the lock
@@ -72,19 +84,19 @@ class LockMap
     public function lock($pageId)
     {
         if (!$this->canAccess($pageId)) return false;
-        
+
         $expire = \Tk\Date::create(time()+$this->timeout);
         if ($this->isLocked($pageId)) {
             if ($this->hasLock($pageId)) {
                 $sql = sprintf('UPDATE %s SET expire = %s WHERE hash = %s', $this->db->quoteParameter('lock'),
-                    $this->db->quote($expire->format(\Tk\Date::ISO_DATE)), $this->db->quote(md5($pageId . $this->user->id . $this->user->ip)));
+                    $this->db->quote($expire->format(\Tk\Date::FORMAT_ISO_DATE)), $this->db->quote($this->getPageHash($pageId)));
                 $this->db->exec($sql);
             }
         } else {
             $sql = sprintf('INSERT INTO %s VALUES (%s, %d, %d, %s, %s)', $this->db->quoteParameter('lock'),
-                $this->db->quote(md5($pageId . $this->user->id . $this->user->ip)),
-                $pageId, $this->user->id, $this->db->quote($this->user->ip),
-                $this->db->quote($expire->format(\Tk\Date::ISO_DATE)) );
+                $this->db->quote(md5($pageId . $this->user->getId() . $this->user->getIp())),
+                $pageId, $this->user->getId(), $this->db->quote($this->user->getIp()),
+                $this->db->quote($expire->format(\Tk\Date::FORMAT_ISO_DATE)) );
             $this->db->exec($sql);
         }
         return true;
@@ -101,7 +113,8 @@ class LockMap
     {
         if (!$this->canAccess($pageId)) return true;
 
-        $sql = sprintf('DELETE FROM %s WHERE hash = %s', $this->db->quoteParameter('lock'), $this->db->quote(md5($pageId . $this->user->id . $this->user->ip)));
+        $sql = sprintf('DELETE FROM %s WHERE hash = %s',
+            $this->db->quoteParameter('lock'), $this->db->quote($this->getPageHash($pageId)));
         $this->db->exec($sql);
     }
 
@@ -153,7 +166,8 @@ class LockMap
      */
     public function hasLock($pageId)
     {
-        $sql = sprintf('SELECT COUNT(*) as i FROM %s WHERE hash = %s', $this->db->quoteParameter('lock'), $this->db->quote(md5($pageId . $this->user->id . $this->user->ip)));
+        $sql = sprintf('SELECT COUNT(*) as i FROM %s WHERE hash = %s',
+            $this->db->quoteParameter('lock'), $this->db->quote($this->getPageHash($pageId)));
         $res = $this->db->query($sql);
         $row = $res->fetch();
         return ($row->i > 0);
@@ -170,7 +184,8 @@ class LockMap
         static $last = null;
         $now = time();
         if ( !$last || ($now - $last) > ($this->timeout*2) ) {
-            $sql = sprintf('DELETE FROM %s WHERE expire < %s ', $this->db->quoteParameter('lock'), $this->db->quote(\Tk\Date::create()->format(\Tk\Date::ISO_DATE)));
+            $sql = sprintf('DELETE FROM %s WHERE expire < %s ',
+                $this->db->quoteParameter('lock'), $this->db->quote(\Tk\Date::create()->format(\Tk\Date::FORMAT_ISO_DATE)));
             $this->db->exec($sql);
         }
     }

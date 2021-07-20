@@ -15,7 +15,7 @@ class Config extends \Bs\Config
     protected function init()
     {
         parent::init();
-        \Tk\Crumbs::$homeUrl = '/';
+        //\Tk\Crumbs::$homeUrl = '/';
     }
 
     /**

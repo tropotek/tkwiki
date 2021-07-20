@@ -30,7 +30,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-trunk": "3.1.x-dev"
+            "dev-trunk": "3.0.x-dev"
         }
     },
     "require": {

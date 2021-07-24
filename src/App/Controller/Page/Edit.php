@@ -191,10 +191,12 @@ class Edit extends Iface
             $this->wPage->setUrl('Home');
             $this->wPage->setPermission(0);
         }
+        if (!$this->wContent->getHtml()) return;
 
         if ($form->hasErrors()) {
             return;
         }
+
 
         $this->wPage->save();
         $this->wContent->setPageId($this->wPage->getId());

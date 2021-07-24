@@ -83,12 +83,17 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             return $template;
         }
 
-
+        $list = [];
+        if ($this->wPage->getId())
+            $list = \App\Db\ContentMap::create()->findFiltered(['pageId' => $this->wPage->getId()]);
 
         if ($this->isEdit()) {
             $template->setVisible('edit');
             if ($this->wPage->type == \App\Db\Page::TYPE_PAGE) {
                 $template->setVisible('canView');
+            }
+            if ($this->wPage->getId() && count($list)) {
+                $template->setVisible('historyBtn');
             }
         } else if ($this->isHistory()) {
             $template->setVisible('history');
@@ -239,7 +244,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
       <p class="wiki-meta">
         <a href="#" title="Save The Page" class="btn btn-primary btn-xs wiki-save-trigger" var="save" choice="canEdit"><i class="fa fa-save"></i> Save</a>
         <a href="#" title="View The Page" class="btn btn-default btn-xs" var="view" choice="canView"><i class="fa fa-eye"></i> View</a>
-        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="fa fa-clock-o"></i> History</a>
+        <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="historyBtn"><i class="fa fa-clock-o"></i> History</a>
         <!--  a href="#" title="Delete The Page" class="btn btn-danger btn-xs wiki-delete-trigger" var="delete" choice="canDelete"><i class="fa fa-remove"></i> Delete</a -->
         <a href="#" title="Cancel Edit Page" class="btn btn-default btn-xs" var="cancel"><i class="fa fa-ban"></i> Cancel</a>
       </p>

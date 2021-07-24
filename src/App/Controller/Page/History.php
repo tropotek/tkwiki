@@ -77,8 +77,8 @@ class History extends Iface
         $filter = $this->table->getFilterValues();
         $filter['pageId'] = $this->wPage->id;
         $filter['exclude'] = $this->wPage->getContent()->getId();
-        $users = \App\Db\ContentMap::create()->findFiltered($filter, $this->table->getTool('a.created DESC'));
-        $this->table->setList($users);
+        $content = \App\Db\ContentMap::create()->findFiltered($filter, $this->table->getTool('a.created DESC'));
+        $this->table->setList($content);
 
     }
 

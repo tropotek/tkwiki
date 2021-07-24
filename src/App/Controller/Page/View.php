@@ -93,7 +93,6 @@ class View extends Iface
         $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getAuthUser());
         $template->insertTemplate('header', $header->show());
 
-
         if ($this->wPage) {
 
             if ($this->getConfig()->getEventDispatcher()) {

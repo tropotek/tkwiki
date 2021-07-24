@@ -2,6 +2,7 @@
 namespace App\Controller\Page;
 
 use App\Db\Page;
+use App\Helper\Crumbs;
 use Tk\Request;
 use App\Controller\Iface;
 use Tk\Form;
@@ -108,7 +109,7 @@ class Edit extends Iface
         // Acquire page lock.
         $this->getConfig()->getLockMap()->lock($this->wPage->getId());
 
-
+//vd($this->getBackUrl());
         if (!$this->wContent) {
             $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
             // Execute the pre-formatter (TODO: This could be an event)
@@ -158,11 +159,18 @@ class Edit extends Iface
      */
     public function doCancel($form)
     {
+        $this->getConfig()->getLockMap()->unlock($this->wPage->getId());
+
         $url = $this->wPage->getPageUrl();
-        if ($this->wPage->type == \App\Db\Page::TYPE_NAV) {
+
+        if (!$this->wPage->getId()) {
+            $url = Crumbs::getInstance()->getLast();
+            if (!$url)
+                $url = $this->getBackUrl();
+        }
+        if ($this->wPage->type == \App\Db\Page::TYPE_NAV || !$url) {
             $url = \Tk\Uri::create('/');
         }
-        $this->getConfig()->getLockMap()->unlock($this->wPage->getId());
         $url->redirect();
     }
 

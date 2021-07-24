@@ -95,6 +95,37 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     }
 
     /**
+     * @param int $i
+     * @return array|mixed|null
+     */
+    public function get($i)
+    {
+        $vals = array_values($this->list);
+        if (isset($vals[$i]))
+            return $vals[$i];
+        return null;
+    }
+
+    public function getFirst()
+    {
+        if (count($this->list)) {
+            reset($this->list);
+            return current($this->list);
+        }
+        return null;
+    }
+
+    public function getLast()
+    {
+        $cnt = count($this->list);
+        if ($cnt) {
+            $vals = array_keys($this->list);
+            return $this->list[$vals[$cnt-1]];
+        }
+        return null;
+    }
+
+    /**
      * @return $this
      */
     public function reset()

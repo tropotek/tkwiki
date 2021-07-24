@@ -2,38 +2,38 @@
     "name": "ttek/tkwiki",
     "type": "project",
     "description": "A basic wiki for documentations",
-    "keywords":  [
+    "keywords": [
         "tropotek"
     ],
-    "time": "2021-07-24",
+    "time": "2021-07-12",
     "license": "GPL",
-    "minimum-stability": "stable",
-    "authors":  [
-         {
+    "minimum-stability": "dev",
+    "authors": [
+        {
             "name": "Michael Mifsud",
             "email": "info@tropotek.com.au",
             "homepage": "http://www.tropotek.com/"
         }
     ],
-    "autoload":  {
-        "psr-0":  {
+    "autoload": {
+        "psr-0": {
             "": "src/"
         }
     },
-    "scripts":  {
-        "post-install-cmd":  [
+    "scripts": {
+        "post-install-cmd": [
             "Tk\\Composer\\SetupEvent::postInstall"
         ],
-        "post-update-cmd":  [
+        "post-update-cmd": [
             "Tk\\Composer\\SetupEvent::postUpdate"
         ]
     },
-    "extra":  {
-        "branch-alias":  {
+    "extra": {
+        "branch-alias": {
             "dev-trunk": "3.0.x-dev"
         }
     },
-    "require":  {
+    "require": {
         "php": "^7.3.0",
         "ttek/tk-base": "~3.2",
         "ext-pdo": "*",
@@ -42,6 +42,6 @@
         "ext-tidy": "*",
         "ext-dom": "*"
     },
-    "require-dev":  {
+    "require-dev": {
     }
 }

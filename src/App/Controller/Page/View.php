@@ -60,7 +60,7 @@ class View extends Iface
             return $this->doPdf($request);
         }
     }
-    
+
     /**
      * @param Request $request
      * @throws \Exception

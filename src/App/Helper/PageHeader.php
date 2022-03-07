@@ -126,6 +126,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
             if ($this->wContent) {
                 $url = \Tk\Uri::create()->set('pdf', 'pdf');
                 $template->setAttr('pdf', 'href', $url);
+                $template->setAttr('pdf', 'target', '_blank');
                 $template->setVisible('pdfBtn');
             }
 

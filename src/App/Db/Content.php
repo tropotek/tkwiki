@@ -168,7 +168,7 @@ class Content extends Model implements \Tk\ValidInterface
     /**
      * @return string
      */
-    public function getCss(): string
+    public function getCss()
     {
         return $this->css;
     }
@@ -186,7 +186,7 @@ class Content extends Model implements \Tk\ValidInterface
     /**
      * @return string
      */
-    public function getJs(): string
+    public function getJs()
     {
         return $this->js;
     }

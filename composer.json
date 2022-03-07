@@ -35,7 +35,7 @@
     },
     "require": {
         "php": "^7.3.0",
-        "ttek/tk-base": "~3.2",,
+        "ttek/tk-base": "~3.2",
         "mpdf/mpdf": "~8.0.0",
         "ext-pdo": "*",
         "ext-json": "*",

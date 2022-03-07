@@ -77,6 +77,7 @@ class View extends Iface
         $filename = $this->wPage->getTitle().$rev.'.pdf';
         if (!$request->has('isHtml'))
             $pdf->output($filename);     // comment this to see html version
+
         return $pdf->show();
     }
 

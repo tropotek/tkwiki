@@ -61,7 +61,7 @@ class View extends Iface
         }
     }
 
-    
+
     /**
      * @param Request $request
      * @throws \Exception

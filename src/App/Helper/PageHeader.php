@@ -123,6 +123,12 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
                 $template->setVisible('canDelete');
             }
 
+            if ($this->wContent) {
+                $url = \Tk\Uri::create()->set('pdf', 'pdf');
+                $template->setAttr('pdf', 'href', $url);
+                $template->setVisible('pdfBtn');
+            }
+
             $url = $this->wPage->getPageUrl();
             if ($this->wPage->type == \App\Db\Page::TYPE_NAV || !$this->wPage->getId()) {
                 $url = \Tk\Uri::create('/');
@@ -251,9 +257,9 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
     </div>
     <div class="col-xs-6 text-right" choice="view">
       <p class="wiki-meta view">
-        &nbsp;
         <a href="#" title="Edit The Page" class="btn btn-default btn-xs" var="edit" choice="canEdit"><i class="fa fa-pencil"></i> Edit</a>
         <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="fa fa-clock-o"></i> History</a>
+        <a href="#" title="Download PDF" class="btn btn-default btn-xs" var="pdf" choice="pdfBtn"><i class="fa fa-file-pdf-o"></i> Download</a>
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>
@@ -268,6 +274,7 @@ class PageHeader extends \Dom\Renderer\Renderer implements \Dom\Renderer\Display
       <p class="wiki-meta view">
         <a href="#" title="Page Revision History" class="btn btn-danger btn-xs wiki-revert-trigger" var="revert" choice="revert"><i class="fa fa-share"></i> Revert</a>
         <a href="#" title="Page Revision History" class="btn btn-default btn-xs" var="history" choice="canEdit"><i class="fa fa-clock-o"></i> History</a>
+        <a href="#" title="Download PDF" class="btn btn-default btn-xs" var="pdf" choice="pdfBtn"><i class="fa fa-file-pdf-o"></i> Download</a>
       </p>
       <p class="wiki-meta permission"><strong>Page Permission:</strong> <span var="permission">Public</span> - <strong>Revision:</strong> <span var="contentId">0</span></p>
     </div>

@@ -55,6 +55,29 @@ class View extends Iface
             }
         }
 
+
+        if ($request->has('pdf')) {
+            return $this->doPdf($request);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @throws \Exception
+     */
+    public function doPdf(Request $request)
+    {
+
+        $rev = '';
+        if ($request->get('contentId')) {
+            $rev = '-' . $request->get('contentId');
+        }
+
+        $pdf = \App\Ui\Pdf::create($this->wContent->getHtml(), $this->wPage->getTitle());
+        $filename = $this->wPage->getTitle().$rev.'.pdf';
+        if (!$request->has('isHtml'))
+            $pdf->output($filename);     // comment this to see html version
+        return $pdf->show();
     }
 
     public function canView()
@@ -80,6 +103,9 @@ class View extends Iface
             throw new \Tk\HttpException(404, 'Page not found');
         }
 
+        if ($request->has('pdf')) {
+            return $this->doPdf($request);
+        }
     }
 
 

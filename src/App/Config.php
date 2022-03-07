@@ -139,4 +139,48 @@ class Config extends \Bs\Config
     }
 
 
+    /**
+     * get a dom Modifier object
+     *
+     * @return \Dom\Modifier\Modifier
+     */
+    public function getDomModifier()
+    {
+        if (!$this->get('dom.modifier')) {
+            $dm = new \Dom\Modifier\Modifier();
+            $dm->add(new \Dom\Modifier\Filter\UrlPath($this->getSiteUrl()));
+            $dm->add(new \Dom\Modifier\Filter\JsLast());
+
+            // Deprecated no longer using less
+            if (class_exists('Dom\Modifier\Filter\Less')) {
+                /** @var \Dom\Modifier\Filter\Less $less */
+                $vars = array(
+                    'siteUrl' => rtrim(\Tk\Uri::create($this->getSiteUrl())->getPath(), '/'),
+                    'dataUrl' => rtrim(\Tk\Uri::create($this->getDataUrl())->getPath(), '/'),
+                    'templateUrl' => rtrim(\Tk\Uri::create($this->getTemplateUrl())->getPath(), '/') );
+                $less = $dm->add(new \Dom\Modifier\Filter\Less($this->getSitePath(), $this->getSiteUrl(), $this->getCachePath(), $vars ));
+                $less->setCompress(true);
+                $less->setCacheEnabled(!$this->isRefreshCacheRequest());
+            }
+
+            if (class_exists('Dom\Modifier\Filter\Scss')) {
+                /** @var \Dom\Modifier\Filter\Scss $scss */
+                $vars = array(
+                    'siteUrl' => rtrim(\Tk\Uri::create($this->getSiteUrl())->getPath(), '/'),
+                    'dataUrl' => rtrim(\Tk\Uri::create($this->getDataUrl())->getPath(), '/'),
+                    'templateUrl' => rtrim(\Tk\Uri::create($this->getTemplateUrl())->getPath(), '/') );
+                $scss = $dm->add(new \Dom\Modifier\Filter\Scss($this->getSitePath(), $this->getSiteUrl(), $this->getCachePath(), $vars));
+                $scss->setCompress(true);
+                $scss->setCacheEnabled(!$this->isRefreshCacheRequest());
+                $scss->setTimeout(\Tk\Date::DAY*14);
+            }
+
+            if ($this->isDebug()) {
+                $dm->add($this->getDomFilterPageBytes());
+            }
+            $this->set('dom.modifier', $dm);
+        }
+        return $this->get('dom.modifier');
+    }
+
 }

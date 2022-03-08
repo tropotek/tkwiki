@@ -1,6 +1,7 @@
 <?php
 namespace App\Ui;
 
+use Bs\Uri;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\ConfigTrait;
@@ -176,6 +177,9 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
         $template->setTitleText($this->getTitle());
         if ($this->rendered) return $template;
         $this->rendered = true;
+
+        $template->appendCssUrl(Uri::create('/html/admin/bower_components/bootstrap/dist/css/bootstrap.css'));
+
 
         $template->insertText('title', $this->getTitle());
         $template->appendHtml('content', $this->getHtml());

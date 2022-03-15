@@ -2,6 +2,10 @@
 namespace App\Listener;
 
 
+use App\Db\LockMap;
+use Tk\Alert;
+use Tk\Uri;
+
 /**
  * This object helps cleanup the structure of the controller code
  *
@@ -49,6 +53,15 @@ JS;
                 $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->getHash());
                 $template->setAttr('myPages', 'href', $url);
                 $template->insertText('username', $user->getName());
+
+                $url = Uri::create()->set('clrl');
+                $template->setAttr('clearLocks', 'href', $url);
+                $template->setAttr('clearLocks', 'data-confirm', 'Are you sure you want to clear all your page locks.');
+                if ($this->getConfig()->getRequest()->has('clrl')) {
+                    LockMap::getInstance()->clearUserLocks($user->getId());
+                    Alert::addSuccess('User page locks cleared.');
+                    Uri::create()->remove('clrl')->redirect();
+                }
 
                 if ($user->isAdmin()) {
                     $template->setVisible('admin');

@@ -124,6 +124,20 @@ class LockMap
     }
 
     /**
+     * remove the lock
+     *
+     * @param $pageId
+     * @return bool
+     * @throws \Exception
+     */
+    function clearUserLocks($userId)
+    {
+        $sql = sprintf('DELETE FROM %s WHERE user_id = %s',
+            $this->db->quoteParameter('lock'), (int)$userId);
+        $this->db->exec($sql);
+    }
+
+    /**
      * Can the current user
      *  - lock the requested page
      *  - access the currently locked page

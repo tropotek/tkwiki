@@ -1,52 +1,52 @@
 {
-  "name": "ttek/tkwiki",
-  "type": "project",
-  "description": "A basic wiki for documentations",
-  "keywords": [
-    "tropotek"
-  ],
-  "time": "2021-07-12",
-  "license": "GPL",
-  "minimum-stability": "dev",
-  "authors": [
-    {
-      "name": "Michael Mifsud",
-      "homepage": "http://www.tropotek.com/"
-    }
-  ],
-  "autoload": {
-    "psr-0": {
-      "": "src/"
-    }
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "Tk\\Composer\\SetupEvent::postInstall"
+    "name": "ttek/tkwiki",
+    "type": "project",
+    "description": "A basic wiki for documentations",
+    "keywords":  [
+        "tropotek"
     ],
-    "post-update-cmd": [
-      "Tk\\Composer\\SetupEvent::postUpdate"
-    ]
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "3.0.x-dev"
+    "time": "2023-04-25",
+    "license": "GPL",
+    "minimum-stability": "stable",
+    "authors":  [
+         {
+            "name": "Michael Mifsud",
+            "homepage": "http://www.tropotek.com/"
+        }
+    ],
+    "autoload":  {
+        "psr-0":  {
+            "": "src/"
+        }
+    },
+    "scripts":  {
+        "post-install-cmd":  [
+            "Tk\\Composer\\SetupEvent::postInstall"
+        ],
+        "post-update-cmd":  [
+            "Tk\\Composer\\SetupEvent::postUpdate"
+        ]
+    },
+    "extra":  {
+        "branch-alias":  {
+            "dev-master": "3.0.x-dev"
+        }
+    },
+    "require":  {
+        "php": "^7.3.0",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "ext-libxml": "*",
+        "ext-tidy": "*",
+        "ext-dom": "*",
+        "ttek/tk-base": "~3.4",
+        "mpdf/mpdf": "~8.0.0"
+    },
+    "require-dev":  {
+    },
+    "config":  {
+        "allow-plugins":  {
+            "ttek/tk-installers": true
+        }
     }
-  },
-  "require": {
-    "php": "^7.3.0",
-    "ext-pdo": "*",
-    "ext-json": "*",
-    "ext-libxml": "*",
-    "ext-tidy": "*",
-    "ext-dom": "*",
-    "ttek/tk-base": "~3.4",
-    "mpdf/mpdf": "~8.0.0"
-  },
-  "require-dev": {
-  },
-  "config": {
-    "allow-plugins": {
-      "ttek/tk-installers": true
-    }
-  }
 }

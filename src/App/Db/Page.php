@@ -419,7 +419,9 @@ class Page extends Model implements \Tk\ValidInterface
      */
     public function canEdit($user)
     {
-        if (!$user) return false;
+        // TODO: Sometime when the login times out this is where we end-up when trying to save a page edit
+        if (!$user) return false;       // TODO: we need a way to store any text updates and recover them on login?
+
         if ($this->getUrl() == self::getHomeUrl() && !$user->isAdmin())
             return false;
         if ($user->hasPermission(\App\Db\Permission::PAGE_EDIT) && $this->canView($user))

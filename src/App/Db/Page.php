@@ -419,6 +419,7 @@ class Page extends Model implements \Tk\ValidInterface
      */
     public function canEdit($user)
     {
+        if (!$user) return false;
         if ($this->getUrl() == self::getHomeUrl() && !$user->isAdmin())
             return false;
         if ($user->hasPermission(\App\Db\Permission::PAGE_EDIT) && $this->canView($user))

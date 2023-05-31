@@ -117,17 +117,12 @@ HTML;
     public function __makeTemplate()
     {
         $html = <<<HTML
-<div>
+<div class="container">
 
     <div class="card">
         <h3 class="card-header" var="title">Contact Us</h3>
         <div class="card-body row">
-            <div class="col-6">
-                <p>This is the left side</p>
-                <p>Location</p>
-                <div>{Map Here!}</div>
-            </div>
-            <div class="col-6">
+            <div class="col-12">
                 <div var="content"></div>
             </div>
         </div>

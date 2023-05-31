@@ -2,7 +2,6 @@
 namespace App\Form;
 
 use App\Db\User;
-use App\Db\UserMap;
 use App\Util\Masquerade;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +35,7 @@ class Login
         $user = User::retrieveMe();
         if ($user) {    // remembered user already logged in
             Alert::addSuccess('Logged in successfully');
-            Uri::create('/dashboard')->redirect();
+            Uri::create('/')->redirect();
         }
 
         $this->getForm()->appendField(new Field\Input('username'))->setRequired()
@@ -98,7 +97,7 @@ class Login
             $user->removeMe();
         }
 
-        Uri::create('/dashboard')->redirect();
+        Uri::create('/')->redirect();
     }
 
     public function show(): ?Template

@@ -39,7 +39,7 @@
 <header>
   <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">Tropotek</a>
+      <a class="navbar-brand" href="/" var="site-brand">Wiki</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
               aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -53,99 +53,24 @@
             <a class="nav-link" href="/contact">Contact Us</a>
           </li>
 
-
-          <li class="nav-item dropdown has-megamenu">
-            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"> Mega menu 1 </a>
+          <li class="nav-item dropdown has-megamenu" repeat="menu-item">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" var="menu-dropdown"> Item 1 </a>
             <div class="dropdown-menu megamenu shadow" role="menu">
               <div class="wiki-menu-edit float-end">
-                <a href="/wiki/edit?pageId=0" class="btn btn-outline-primary wiki-menu-edit-btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"><i class="fa fa-pencil"></i> Edit</a>
+                <a href="/wiki/edit?pageId=0" class="btn btn-outline-primary wiki-menu-edit-btn"
+                   style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;" var="menu-edit">
+                  <i class="fa fa-pencil"></i> Edit
+                </a>
               </div>
-              <div class="wiki-menu-content row">
-                <div class="col-sm-4">
-                  <h3>Menu 1</h3>
-                  <ul>
-                    <li><a class="wikiPage wiki-page wiki-canView" href="/Mick" title="Link To Page: Mick">Mick's Wiki Page</a></li>
-                    <li><a class="wiki-page wiki-canView" href="/Tropotek" title="Tropotek">Tropotek</a></li>
-                    <li><a href="/OUM" class="wiki-page wiki-canView" title="OUM">OUM</a></li>
-                    <li><a href="/Misc_Links" class="wiki-page wiki-canView" title="Misc Links">Misc Links</a></li>
-                  </ul>
-                </div>
-                <div class="col-sm-4">
-                  <h3>Development</h3>
-                  <ul>
-                    <li><a class="wikiPage wiki-page wiki-canView" href="/Web_Dev" title="Link To Page: Web_Dev">Web Dev</a></li>
-                    <li><a href="/GIT_Notes" class="wiki-page wiki-canView" title="GIT Notes">GIT Notes</a></li>
-                    <li><a href="/MySQL" class="wiki-page wiki-canView" title="MySQL">Mysql</a></li>
-                    <li><a class="wiki-page wiki-canView" href="/Linux" title="Link To Page: Linux">Linux</a></li>
-                    <li><a href="/Scratchpad" class="wiki-page wiki-canView" title="Scratchpad">Scratchpad</a></li>
-                  </ul>
-                </div>
-                <div class="col-sm-4">
-                  <h3>Public</h3>
-                  <ul>
-                    <li><a href="/Links" class="wiki-page wiki-canView" title="Links">Links</a></li>
-                    <li><a href="/Recipes" class="wiki-page wiki-canView" title="Recipes">Recipes</a></li>
-                    <li><a href="/Bottle_Top_Counter" class="wiki-page wiki-canView" title="Bottle Top Counter">CaronaStar Game</a></li>
-                    <li><a href="/terms_and_conditions" class="wiki-page wiki-canView" title="terms and conditions">terms and conditions </a></li>
-                  </ul>
-                </div>
-
-
-              </div>
-            </div> <!-- dropdown-mega-menu.// -->
-          </li>
-
-          <li class="nav-item dropdown has-megamenu">
-            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"> Mega menu 2 </a>
-            <div class="dropdown-menu megamenu shadow" role="menu">
-              <div class="wiki-menu-edit float-end">
-                <a href="/wiki/edit?pageId=0" class="btn btn-outline-primary wiki-menu-edit-btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"><i class="fa fa-pencil"></i> Edit</a>
-              </div>
-              <div class="wiki-menu-content row">
-                <div class="col-sm-4">
-                  <h3>Menu 2</h3>
-                  <ul>
-                    <li><a class="wikiPage wiki-page wiki-canView" href="/Mick" title="Link To Page: Mick">Mick's Wiki Page</a></li>
-                    <li><a class="wiki-page wiki-canView" href="/Tropotek" title="Tropotek">Tropotek</a></li>
-                    <li><a href="/OUM" class="wiki-page wiki-canView" title="OUM">OUM</a></li>
-                    <li><a href="/Misc_Links" class="wiki-page wiki-canView" title="Misc Links">Misc Links</a></li>
-                  </ul>
-                </div>
-                <div class="col-sm-4">
-                  <h3>Development</h3>
-                  <ul>
-                    <li><a class="wikiPage wiki-page wiki-canView" href="/Web_Dev" title="Link To Page: Web_Dev">Web Dev</a></li>
-                    <li><a href="/GIT_Notes" class="wiki-page wiki-canView" title="GIT Notes">GIT Notes</a></li>
-                    <li><a href="/MySQL" class="wiki-page wiki-canView" title="MySQL">Mysql</a></li>
-                    <li><a class="wiki-page wiki-canView" href="/Linux" title="Link To Page: Linux">Linux</a></li>
-                    <li><a href="/Scratchpad" class="wiki-page wiki-canView" title="Scratchpad">Scratchpad</a></li>
-                  </ul>
-                </div>
-                <div class="col-sm-4">
-                  <h3>Public</h3>
-                  <ul>
-                    <li><a href="/Links" class="wiki-page wiki-canView" title="Links">Links</a></li>
-                    <li><a href="/Recipes" class="wiki-page wiki-canView" title="Recipes">Recipes</a></li>
-                    <li><a href="/Bottle_Top_Counter" class="wiki-page wiki-canView" title="Bottle Top Counter">CaronaStar Game</a></li>
-                    <li><a href="/terms_and_conditions" class="wiki-page wiki-canView" title="terms and conditions">terms and conditions </a></li>
-                  </ul>
-                </div>
-
-
+              <div class="wiki-menu-content row" var="menu-content">
               </div>
             </div> <!-- dropdown-mega-menu.// -->
           </li>
 
           <li class="nav-item" app-is-user="true">
-            <a class="btn btn-sm btn-outline-secondary " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .35rem; margin-top: 2em;" href="javascript:;"><i class="fa fa-plus fa-fw"></i></a>
+            <a class="btn btn-sm btn-outline-secondary btn-add-menu" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .35rem; margin-top: 2em;"
+               href="javascript:;" var="add-menu-item" app-has-perm="PERM_EDITOR"><i class="fa fa-plus fa-fw"></i></a>
           </li>
-
-<!--          <li class="nav-item" app-is-user="true">-->
-<!--            <a class="nav-link" href="/logout">Logout</a>-->
-<!--          </li>-->
-<!--          <li class="nav-item" app-is-user="false">-->
-<!--            <a class="nav-link" href="/login">Login</a>-->
-<!--          </li>-->
 
         </ul>
 

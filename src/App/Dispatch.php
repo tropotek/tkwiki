@@ -1,25 +1,42 @@
 <?php
 namespace App;
 
+use App\Listener\AlertHandler;
+use App\Listener\RequestHandler;
+use Bs\Listener\CrumbsHandler;
 
-/**
- * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
- * @license Copyright 2016 Michael Mifsud
- */
 class Dispatch extends \Bs\Dispatch
 {
 
+    /**
+     * Any Common listeners that are used in both HTTPS or CLI requests
+     */
+    protected function commonInit()
+    {
+        parent::commonInit();
+
+
+    }
 
     /**
-     * @throws \Exception
+     * Called this when executing http requests
      */
-    public function init()
+    protected function httpInit()
     {
-        parent::init();
-        $dispatcher = $this->getDispatcher();
+        parent::httpInit();
 
-        $dispatcher->addSubscriber(new \App\Listener\WikiHandler());
+        $this->getDispatcher()->addSubscriber(new RequestHandler());
+        $this->getDispatcher()->addSubscriber(new CrumbsHandler());
+
+    }
+
+    /**
+     * Called this when executing Console/CLI requests
+     */
+    protected function cliInit()
+    {
+        parent::cliInit();
+
 
     }
 

@@ -1,18 +1,19 @@
 <?php
-/*
- * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
- * @license Copyright 2007 Michael Mifsud
+/**
+ * Bootstrap System.
+ *
+ * Load this file when running any script to
+ * set up and bootstrap the system environment
  */
 
-if (!isset($sitePath)) $sitePath = dirname(__FILE__);
-if (!isset($siteUrl)) $siteUrl = null;
+$composer = include __DIR__ . '/vendor/autoload.php';
 
-/** @var \Composer\Autoload\ClassLoader $composer */
-$composer = include($sitePath . '/vendor/autoload.php');
+// Init Tk System Objects
+// Update these calls here if you want to override them...
+//$config  = \Tk\Config::instance();
+$factory = \App\Factory::instance();
+$factory->set('classLoader', $composer);
+//$system  = \App\System::instance();
+//$registry  = \App\Registry::instance();
 
-$config = \App\Config::getInstance($siteUrl, $sitePath);
-\App\Bootstrap::execute();
-
-$config->set('composer', $composer);
-
+\Tk\Factory::instance()->getBootstrap()->init();

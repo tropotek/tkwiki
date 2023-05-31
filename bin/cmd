@@ -2,27 +2,25 @@
 <?php
 include(dirname(__DIR__) . '/_prepend.php');
 
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-set_time_limit(0);
-
-$input = new ArgvInput();
-$output = new ConsoleOutput();
-
-//Determine Environment
-$env = $input->getParameterOption(array('--env', '-e'), getenv('MYAPP_ENV') ?: 'prod');
-$app['environment'] = $env;
-
 try {
-    $config = \App\Config::getInstance();
-    $app = $config->getConsoleApplication();
+    set_time_limit(0);
+
+    $input = new ArgvInput();
+    $output = new ConsoleOutput();
+
+    $app = \App\Factory::instance()->getConsole();
+    //Determine Environment
+    $env = $input->getParameterOption(array('--env', '-e'), getenv('MYAPP_ENV') ?: 'prod');
+    //$app->environment = $env;
 
     // Setup Local Console Commands
     $app->add(new \App\Console\Cron());
-    if ($config->isDebug()) {
-        //$app->add(new \App\Console\TestData());
+    $app->add(new \App\Console\Password());
+    if (\Tk\Config::instance()->isDebug()) {
+        $app->add(new \App\Console\TestData());
         //$app->add(new \App\Console\Test());
     }
 
@@ -30,4 +28,3 @@ try {
 } catch (Exception $e) {
     echo $e->__toString();
 }
-

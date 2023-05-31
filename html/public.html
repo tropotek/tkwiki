@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Tropotek" />
+
+  <title>Bootstrap v5.2 TkLib Template</title>
+
+  <link rel="stylesheet" href="/vendor/twbs/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="/vendor/components/font-awesome/css/all.min.css" />
+  <link rel="stylesheet" href="/vendor/components/jqueryui/themes/smoothness/jquery-ui.min.css" />
+  <link rel="stylesheet" href="/vendor/studio-42/elfinder/css/elfinder.full.css" />
+  <link rel="stylesheet" href="/html/assets/app.css" />
+<style>
+  body {
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+    color: #5a5a5a;
+    background-color: #FFF;
+  }
+</style>
+  <script src="/vendor/components/jquery/jquery.min.js"></script>
+  <script src="/vendor/components/jqueryui/jquery-ui.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/include/jquery.tkInputLock.js"></script>
+  <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/components/htmx.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/components/sugar.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/include/jquery.bsConfirm.js"></script>
+
+  <script src="/vendor/tinymce/tinymce/tinymce.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/components/jquery.tinymce.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/elfinder/tinymceElfinder.js"></script>
+  <script src="/vendor/studio-42/elfinder/js/elfinder.min.js"></script>
+
+  <script src="/vendor/ttek/tk-base/assets/js/tkbase.js"></script>
+  <script src="/html/assets/jquery.tktabs.js"></script>
+  <script src="/html/assets/app.js"></script>
+<script>
+jQuery(function ($) {
+  // Init page javascript functions
+  tkbase.initSugar();
+  tkbase.initDialogConfirm();
+  tkbase.initTkInputLock();
+  tkbase.initDataToggle();
+  tkbase.initTinymce();
+  app.initHtmxToasts();
+  app.initTkFormTabs();
+  app.initDatepicker();
+});
+</script>
+
+</head>
+<body class="bg-white">
+
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Tropotek</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+              aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0" style="--bs-scroll-height: 100px;">
+          <li class="nav-item">
+            <a class="nav-link" href="/home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact Us</a>
+          </li>
+          <li class="nav-item" choice="loggedIn" app-is-user="true">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Examples
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/domTest">DomTest</a></li>
+              <li><a class="dropdown-item" href="/htmx">HTMX</a></li>
+              <li><a class="dropdown-item" href="/ui/form">Form</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/info">Info</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown" app-is-type="TYPE_STAFF">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Admin
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
+              <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
+              <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
+              <li><a class="dropdown-item" href="/fileManager" app-has-perm="PERM_ADMIN">File Manager</a></li>
+              <li><a class="dropdown-item" href="/exampleManager" app-has-perm="PERM_ADMIN">Example Manager</a></li>
+              <li><a class="dropdown-item" href="/tailLog" app-has-perm="PERM_ADMIN">Tail Log</a></li>
+              <li><a class="dropdown-item" href="/listEvents" app-has-perm="PERM_ADMIN">List Events</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown" app-is-type="TYPE_STAFF">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Wiki
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/wiki/view">View Page</a></li>
+              <li><a class="dropdown-item" href="/wiki/edit">Edit Page</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item" app-is-user="true">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+          <li class="nav-item" app-is-user="false">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+
+        </ul>
+        <form id="site-search" class="d-flex" role="search" name="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+          <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>
+
+
+<main class="container" var="container">
+  <div class="shadow p-3 mb-5 bg-body rounded" var="content"></div>
+</main>
+
+
+</body>
+</html>

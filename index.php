@@ -1,22 +1,17 @@
 <?php
 /*
- * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
- * @license Copyright 2007 Michael Mifsud
+ * @author Tropotek <http://www.tropotek.com/>
  */
 
 try {
-    include(dirname(__FILE__) . '/_prepend.php');
 
-    $config = \App\Config::getInstance();
-    $request = $config->getRequest();
-    $frontController = $config->getFrontController();
-    $response = $frontController->handle($request)->send();
-    $frontController->terminate($request, $response);
+    require_once __DIR__ . '/_prepend.php';
 
-} catch (Exception $e) {
-    // TODO:
-    \Tk\Log::error($e->__toString());
+    $factory  = \Tk\System::instance()->getFactory();
+    $response = $factory->getFrontController()->handle($factory->getRequest());
+    $response->send();
+    $factory->getFrontController()->terminate($factory->getRequest(), $response);
+
+} catch (\Exception $e) {
+    error_log($e->__toString());
 }
-
-

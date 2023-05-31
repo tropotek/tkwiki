@@ -1,49 +1,56 @@
 <?php
 namespace App\Console;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Tk\Console\Console;
+
 
 /**
  * Cron job to be run nightly
  *
  * # run Nightly site cron job
- *   0  4,16  *   *   *      php /home/user/public_html/bin/cmd cron > /dev/null 2>&1
+ *   * /5  *  *   *   *      php /home/user/public_html/bin/cmd cron > /dev/null 2>&1
  *
  *
- * @author Michael Mifsud <info@tropotek.com>
- * @see http://www.tropotek.com/
- * @license Copyright 2017 Michael Mifsud
+ * @author tropotek <https://www.tropotek.com/>
  */
-class Cron extends \Bs\Console\Iface
+class Cron extends Console
 {
+    use LockableTrait;
+
 
     /**
      *
      */
     protected function configure()
     {
+        $path = getcwd();
         $this->setName('cron')
-            ->setDescription('The site cron script. crontab line: 0 4  * * *   {path-to-site}/bin/cmd cron > /dev/null 2>&1');
+            ->setDescription('The site cron script. crontab line: */1 *  * * *   ' . $path . '/bin/cmd cron > /dev/null 2>&1');
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int|null|void
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
+        if (!$this->lock()) {
+            $output->writeln('The command is already running in another process.');
+            return Command::SUCCESS;
+        }
 
-        $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
 
-        $this->write('Cron Script Executed...', OutputInterface::VERBOSITY_VERBOSE);
+//        for($i = 0; $i < 599999999; $i++) {
+//            echo '';
+//        }
+        $this->writeComment('Completed!!!');
 
+
+        $this->release();
+        return Command::SUCCESS;
     }
 
 }

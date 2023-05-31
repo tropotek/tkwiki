@@ -1,251 +1,143 @@
 <?php
 namespace App\Controller;
 
-use Tk\Request;
+use Dom\Mvc\PageController;
+use Dom\Template;
+use Symfony\Component\HttpFoundation\Request;
+use Tk\Alert;
 use Tk\Form;
-use Tk\Form\Event;
 use Tk\Form\Field;
+use Tk\Form\Action;
+use Tk\Form\FormTrait;
+use Tk\FormRenderer;
+use Tk\Traits\SystemTrait;
+use Tk\Uri;
 
 /**
- * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
- * @license Copyright 2015 Michael Mifsud
+ * This is only an example contact form.
+ *
+ * For commercial sites you should redirect to a "thank you" page or new thank you content template
+ * showing a message rather than only an alert message.
+ * Most clients prefer this type of
+ *
  */
-class Contact extends \Bs\Controller\Iface
+class Contact extends PageController
 {
-
-    /**
-     * @var Form
-     */
-    protected $form = null;
-
+    use SystemTrait;
+    use FormTrait;
 
     public function __construct()
     {
-        $this->setPageTitle('Contact Us');
+        parent::__construct($this->getFactory()->getPublicPage());
+        $this->getPage()->setTitle('Contact Us');
+        $this->setForm(Form::create('contact'));
     }
 
-    /**
-     * @param Request $request
-     * @throws \Exception
-     */
     public function doDefault(Request $request)
     {
+        $hash = $this->getSession()->get($this->getForm()->getId() . '-nc');
+        if (!$hash) {
+            $hash = md5(time());
+            $this->getSession()->set($this->getForm()->getId() . '-nc', $hash);
+        }
+        $this->getForm()->appendField(new Field\Hidden('nc'))->setValue($hash);
+        $this->getForm()->appendField(new Field\Input('name'));
+        $this->getForm()->appendField(new Field\Input('email'))->setType('email');
+        $this->getForm()->appendField(new Field\Input('phone'));
+        $this->getForm()->appendField(new Field\Textarea('message'));
 
-        $this->form = new Form('contactForm');
 
-        $this->form->prependField(new Field\Input('name'));
-        $this->form->prependField(new Field\Input('email'));
+        $this->getForm()->appendField(new Action\Submit('send', [$this, 'onSubmit']));
+        $this->getForm()->appendField(new Action\Link('cancel', Uri::create()));
 
-        $opts = new Field\Option\ArrayIterator(array('General', 'Services', 'Orders'));
-        $this->form->prependField(new Field\Select('type[]', $opts));
+        $this->getForm()->setFieldValues($this->getRegistry()->all()); // Use form data mapper if loading objects
 
-        $this->form->prependField(new Field\File('attach[]', '/contact/' . date('d-m-Y') . '-___'));
-        $this->form->prependField(new Field\Textarea('message'));
+        $this->getForm()->execute($request->request->all());
 
-        if ($this->getConfig()->get('google.recaptcha.publicKey'))
-            $this->form->prependField(new Field\ReCapture('capture', $this->getConfig()->get('google.recaptcha.publicKey'),
-                $this->getConfig()->get('google.recaptcha.privateKey')));
+        $this->setFormRenderer(new FormRenderer($this->getForm()));
 
-        $this->form->prependField(new Event\Submit('send', array($this, 'doSubmit')));
 
-        $this->form->execute();
-
+        return $this->getPage();
     }
 
-    /**
-     * show()
-     *
-     * @return \Dom\Template
-     * @throws \Exception
-     */
-    public function show()
+    public function onSubmit(Form $form, Form\Action\ActionInterface $action)
     {
-        $template = parent::show();
+        $hash = $this->getSession()->get($this->getForm()->getId() . '-nc');
+        if ($form->getFieldValue('nc') != $hash) {
+            $form->addError('Form system error, please try again.');
+        }
+        if (!$form->getFieldValue('name')) {
+            $form->addFieldError('name', 'Please enter a valid name.');
+        }
+        if (!filter_var($form->getFieldValue('email'), FILTER_VALIDATE_EMAIL)) {
+            $form->addFieldError('email', 'Please enter a valid email.');
+        }
+        if (!$form->getFieldValue('message')) {
+            $form->addFieldError('message', 'Please enter a valid message.');
+        }
 
-        // Render the form
-        $ren = new \Tk\Form\Renderer\DomStatic($this->form, $template);
-        $ren->show();
+        if ($form->hasErrors()) return;
+        $this->getSession()->remove($this->getForm()->getId() . '-nc');
+
+        $message = $this->getFactory()->createMessage();
+        $message->addTo($form->getFieldValue('email'));
+        $message->setSubject($this->getRegistry()->get('system.site.name') . ' Contact Request');
+        $content = <<<HTML
+<p>
+Dear {name},
+</p>
+<p>
+Email: {email}<br/>
+Phone: {phone}<br/>
+</p>
+<p>Message:<br/>
+  {message}
+</p>
+HTML;
+        $message->setContent($content);
+        $message->replace($form->getFieldValues());
+        $this->getFactory()->getMailGateway()->send($message);
+
+        Alert::addSuccess('Message Sent successfully');
+        $action->setRedirect(Uri::create());
+    }
+
+    public function show(): ?Template
+    {
+        $template = $this->getTemplate();
+        $template->setText('title', $this->getPage()->getTitle());
+
+        $renderer = $this->getFormRenderer();
+        $renderer->addFieldCss('mb-3');
+        $template->appendTemplate('content', $renderer->show());
 
         return $template;
     }
 
-    /**
-     * @param Form $form
-     * @throws \Exception
-     */
-    public function doSubmit($form)
-    {
-        $values = $form->getValues();
-        /** @var Field\File $attach */
-        $attach = $form->getField('attach');
-
-        if (empty($values['name'])) {
-            $form->addFieldError('name', 'Please enter your name');
-        }
-        if (empty($values['email']) || !filter_var($values['email'], \FILTER_VALIDATE_EMAIL)) {
-            $form->addFieldError('email', 'Please enter a valid email address');
-        }
-        if (empty($values['message'])) {
-            $form->addFieldError('message', 'Please enter some message text');
-        }
-
-        // validate any files
-        $attach->isValid();
-
-        if ($this->form->hasErrors()) {
-            return;
-        }
-//        if ($attach->hasFile()) {
-//            $attach->moveFile($this->getConfig()->getDataPath() . '/contact/' . date('d-m-Y') . '-' . str_replace('@', '_', $values['email']));
-//        }
-
-        if ($this->sendEmail($form)) {
-            \Tk\Alert::addSuccess('<strong>Success!</strong> Your form has been sent.');
-        } else {
-            \Tk\Alert::addError('<strong>Error!</strong> Something went wrong and your message has not been sent.');
-        }
-
-        \Tk\Uri::create()->redirect();
-    }
-
-
-    /**
-     * @param Form $form
-     * @return bool
-     * @throws \Exception
-     */
-    private function sendEmail($form)
-    {
-        $name = $form->getFieldValue('name');
-        $email = $form->getFieldValue('email');
-        $type = '';
-        if (is_array($form->getFieldValue('type')))
-            $type = implode(', ', $form->getFieldValue('type'));
-        $messageStr = $form->getFieldValue('message');
-
-        $attachCount = '';
-        /** @var Field\File $field */
-        $field = $form->getField('attach');
-        if ($field->hasFile()) {
-            vd($field->getUploadedFiles());
-            $attachCount = '<br/><b>Attachments:</b> ';
-            foreach ($field->getUploadedFiles() as $file) {
-                $attachCount = $file->getClientOriginalName() . ', ';
-            }
-            $attachCount = rtrim($attachCount, ', ');
-        }
-
-        $content = <<<MSG
-<p>
-Dear $name,
-</p>
-<p>
-Email: $email<br/>
-Type: $type
-</p>
-<p>Message:<br/>
-  $messageStr
-</p>
-<p>
-$attachCount
-</p>
-MSG;
-
-        $message = $this->getConfig()->createMessage();
-        $message->addTo($email);
-        $message->setSubject($this->getConfig()->get('site.title') . ':  Contact Form Submission - ' . $name);
-        $message->set('content', $content);
-        if ($field->hasFile()) {
-            foreach ($field->getUploadedFiles() as $file) {
-                $message->addAttachment($file->getPathname(), $field->getUploadedFile()->getClientOriginalName());
-            }
-        }
-        return $this->getConfig()->getEmailGateway()->send($message);
-    }
-
-    /**
-     * @return \Dom\Template
-     */
     public function __makeTemplate()
     {
-        $xhtml = <<<HTML
-<section>
+        $html = <<<HTML
+<div>
 
-    <div class="">
-      <!-- Contact Form -->
-      <h3>Send Us a Message</h3>
-
-      <div class="alert alert-success" role="alert" choice="sent">
-        <strong>Success!</strong> Your form has been successfully sent.
-      </div>
-
-      <div class="contact-form-wrapper">
-        <form id="contactForm" method="post" class="form-horizontal" role="form">
-
-          <div class="form-group">
-            <label for="name" class="col-sm-3 control-label">
-              <b>Name *</b>
-            </label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" name="name" id="name" placeholder=""/>
+    <div class="card">
+        <h3 class="card-header" var="title">Contact Us</h3>
+        <div class="card-body row">
+            <div class="col-6">
+                <p>This is the left side</p>
+                <p>Location</p>
+                <div>{Map Here!}</div>
             </div>
-          </div>
-
-          <div class="form-group">
-            <label for="fid-email" class="col-sm-3 control-label">
-              <b>Email *</b>
-            </label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" name="email" id="fid-email" placeholder=""/>
+            <div class="col-6">
+                <div var="content"></div>
             </div>
-          </div>
-
-          <div class="form-group" var="group-type">
-            <label for="fid-type" class="col-sm-3 control-label">
-              <b>Topic</b>
-            </label>
-            <div class="col-sm-9">
-              <select class="form-control" name="type[]" id="fid-type" multiple="true">
-                <option value="">Please select topic...</option>
-                <option value="General">General</option>
-                <option value="Services">Services</option>
-                <option value="Orders">Orders</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="fid-attach" class="col-sm-3 control-label">
-              <b>Attach</b>
-            </label>
-            <div class="col-sm-9">
-              <input type="file" name="attach[]" id="fid-attach" multiple="true" />
-            </div>
-          </div>
-
-          <div class="form-group" var="group-message">
-            <label for="fid-message" class="col-sm-3 control-label">
-              <b>Message *</b>
-            </label>
-            <div class="col-sm-9">
-              <textarea class="form-control" rows="5" name="message" id="fid-message"></textarea>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <div class="col-sm-12">
-              <button type="submit" class="btn pull-right btn-success" name="send">Send</button>
-            </div>
-          </div>
-
-        </form>
-      </div>
-      <!-- End Contact Info -->
+        </div>
     </div>
-</section>
-HTML;
 
-        return \Dom\Loader::load($xhtml);
+</div>
+HTML;
+        return $this->loadTemplate($html);
     }
+
 }
+
+

@@ -89,6 +89,7 @@ class Login
         // Login successful
         $user = $this->getFactory()->getAuthUser();
         $user->setLastLogin(Date::create('now', $user->getTimezone() ?: null));
+        $user->setSessionId($this->getSession()->getId());
         $user->save();
 
         if (!empty($values['remember'] ?? '')) {

@@ -22,6 +22,7 @@ class AppAttributes extends FilterInterface
     const APP_IS_USER   = 'app-is-user';
     const APP_IS_TYPE   = 'app-is-type';
     const APP_HAS_PERM  = 'app-has-perm';
+    const APP_IS_DEBUG  = 'app-is-debug';
 
 
     public function __construct() { }
@@ -37,10 +38,19 @@ class AppAttributes extends FilterInterface
     public function executeNode(\DOMElement $node)
     {
         $isUser = is_object($this->getFactory()->getAuthUser()) && !$this->getFactory()->getAuthUser()->isType(User::TYPE_GUEST);
+        $isDebug = $this->getConfig()->isDebug();
         $user = $this->getFactory()->getAuthUser();
         $reflect = new \ReflectionClass('App\Db\User');
         $userConsts = $reflect->getConstants();
         try {
+
+            if ($node->hasAttribute(self::APP_IS_DEBUG)) {
+                $val = trim($node->getAttribute(self::APP_IS_DEBUG));
+                $showNode = preg_match('/(yes|true|1)/i', $val);
+                if (($isDebug && !$showNode) || (!$isDebug && $showNode)) {
+                    $this->getDomModifier()->removeNode($node);
+                }
+            }
 
             if ($node->hasAttribute(self::APP_IS_USER)) {
                 $val = trim($node->getAttribute(self::APP_IS_USER));
@@ -65,6 +75,7 @@ class AppAttributes extends FilterInterface
                     $this->getDomModifier()->removeNode($node);
                 }
             }
+
         } catch (\Exception $e) {}
     }
 

@@ -26,9 +26,11 @@ class UserMap extends Mapper
             $map->addDataType(new Db\Text('password'));
             $map->addDataType(new Db\Text('email'));
             $map->addDataType(new Db\Text('name'));
+            $map->addDataType(new Db\Text('image'));
             $map->addDataType(new Db\Text('notes'));
             $map->addDataType(new Db\Text('timezone'))->setNullable(true);
             $map->addDataType(new Db\Boolean('active'));
+            $map->addDataType(new Db\Text('session_id'));
             $map->addDataType(new Db\Text('hash'));
             $map->addDataType(new Db\Date('lastLogin', 'last_login'))->setNullable(true);
             //$map->addDataType(new Db\Boolean('del'));
@@ -49,6 +51,7 @@ class UserMap extends Mapper
             $map->addDataType(new Form\Text('password'));
             $map->addDataType(new Form\Text('email'));
             $map->addDataType(new Form\Text('name'));
+            $map->addDataType(new Form\Text('image'));
             $map->addDataType(new Form\Boolean('active'));
             $map->addDataType(new Form\Text('notes'));
             $map->addDataType(new Form\Text('timezone'))->setNullable(true);
@@ -65,6 +68,7 @@ class UserMap extends Mapper
             $map->addDataType(new Form\Text('password'));
             $map->addDataType(new Form\Text('email'));
             $map->addDataType(new Form\Text('name'));
+            $map->addDataType(new Form\Text('image'));
             $map->addDataType(new Form\Text('timezone'));
             $map->addDataType(new Table\Boolean('active'));
             $map->addDataType(new Form\Date('modified'))->setDateFormat('d/m/Y h:i:s');

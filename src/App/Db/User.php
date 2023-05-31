@@ -10,6 +10,7 @@ use Bs\Db\UserInterface;
 use Tk\Date;
 use Tk\Db\Mapper\Model;
 use Tk\Db\Mapper\Result;
+use Tk\Uri;
 
 class User extends Model implements UserInterface, FileInterface
 {
@@ -24,20 +25,22 @@ class User extends Model implements UserInterface, FileInterface
      *
      * high-level permissions for specific roles
      */
-	const PERM_ADMIN            = 0x00000001; // All permissions
-	const PERM_SYSADMIN         = 0x00000002; // Change system settings
-	const PERM_MANAGE_STAFF     = 0x00000004; // Manage staff users
-    const PERM_MANAGE_USER      = 0x00000008; // Manage base users
+	const PERM_ADMIN              = 0x00000001; // All permissions
+	const PERM_SYSADMIN           = 0x00000002; // Change system settings
+	const PERM_MANAGE_STAFF       = 0x00000004; // Manage staff users
+    const PERM_MANAGE_USER        = 0x00000008; // Manage base users
+    const PERM_EDITOR             = 0x00000010; // Ability to edit/audit all site pages
 	//                            0x00000010; // available
 
 	/**
      * permission groups and descriptions
      */
 	const PERMISSION_LIST = [
-        self::PERM_ADMIN            => "Admin Full Access",
-        self::PERM_SYSADMIN         => "Change Site Settings",
-        self::PERM_MANAGE_STAFF     => "Manage Staff",
-        self::PERM_MANAGE_USER      => "Manage Users",
+        self::PERM_ADMIN          => "Admin Full Access",
+        self::PERM_SYSADMIN       => "Change Site Settings",
+        self::PERM_MANAGE_STAFF   => "Manage Staff",
+        self::PERM_MANAGE_USER    => "Manage Users",
+        self::PERM_EDITOR         => "Content Editor",
     ];
 
     /**
@@ -74,11 +77,15 @@ class User extends Model implements UserInterface, FileInterface
 
     public string $name = '';
 
+    public string $image = '';
+
     public string $notes = '';
 
     public ?string $timezone = null;
 
     public bool $active = true;
+
+    public string $sessionId = '';
 
     public string $hash = '';
 
@@ -213,6 +220,11 @@ class User extends Model implements UserInterface, FileInterface
         return $this;
     }
 
+    public static function hashPassword(string $password): string
+    {
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
+
     public function getEmail(): string
     {
         return $this->email;
@@ -232,6 +244,22 @@ class User extends Model implements UserInterface, FileInterface
     public function setName(?string $name): static
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function getImageUrl(): Uri
+    {
+        return Uri::create($this->image);
+    }
+
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
         return $this;
     }
 
@@ -265,6 +293,17 @@ class User extends Model implements UserInterface, FileInterface
     public function setActive(bool $active): static
     {
         $this->active = $active;
+        return $this;
+    }
+
+    public function getSessionId(): string
+    {
+        return $this->sessionId;
+    }
+
+    public function setSessionId(string $sessionId): static
+    {
+        $this->sessionId = $sessionId;
         return $this;
     }
 

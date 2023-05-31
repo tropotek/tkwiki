@@ -1,10 +1,18 @@
-# tk8base
+# tkwiki
 
-__Project:__ tk8base    
-__Web:__ <http://www.tropotek.com/>  
+__Project:__ tkwiki    
+__Web:__ <https://github.com/tropotek/tkwiki>  
 __Authors:__ Tropotek <http://www.tropotek.com/>
 
-A base site using the Tk framework, use this as a starting point for your own site.
+A WIKI/CMS that is easy to use for people that want a website to store info fast.
+Great for projects that need documentation, can be edited live using WYSIWYG editors within the site.
+
+__Features:__
+- The ability to add CSS and Javascript within each page.
+- Create/link pages within the WYSIWYG editor.
+- Edit the top nav menu
+- All templates are based on Bootstrap 5+
+- 
 
 ## Contents
 
@@ -13,38 +21,30 @@ A base site using the Tk framework, use this as a starting point for your own si
 
 ## Installation
 
-1. First setup a database for the site and keep the login details handy.
+1. First setup a database for the site and keep the DB name and login details handy.
 2. Make sure you have the latest version of composer [https://getcomposer.org/download/] installed.
 3. Use the following commands:
 ~~~bash
-# git clone https://github.com/tropotek/tk8base.git
-# cd tk8base
-# composer install
+$ git clone https://github.com/tropotek/tkwiki.git
+$ cd tkwiki
+$ composer install
 ~~~
 4. Edit the `/src/App/config/config.php` file to your required settings.
-5. You may have to change the permissions of the `/data/` folder so apache can read and write to it.
+5. You may have to change the permissions of the `/data/` folder so PHP can read and write to it.
 6. To enable debug mode and logging edit the `/src/config/config.php` file to suit your server.
-   tail the log for more info on any errors.
+   (tail the log for more info on any errors.)
 
 
 ## Upgrading
 
-~~~bash
-# git reset --hard
-# git checkout master
-# git pull
-# composer update
-~~~
-
-__Warning:__ This could potentially break the site. Be sure to back up any DB and
-site files before running these commands
-
+__Warning:__ Ver 8.0+ is based on a completely re-written base library. So there is no upgrade scripts from
+previous versions. There is a page import system, but you will need to have both the old and new sites live
+and add a secret key to both sites, only admins will be able to import pages.
 
 ## Introduction
 
-### Editing The HTML
 
-In the folder `/html` you will find all the content templates for the site.
+
 
 
 

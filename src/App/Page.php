@@ -25,6 +25,10 @@ class Page extends \Bs\Page
         $this->showAlert();
         //$this->showMaintenanceRibbon();
 
+        if ($this->getFactory()->getAuthUser()) {
+            $template->setText('username', $this->getFactory()->getAuthUser()->getUsername());
+        }
+
         return $template;
     }
 

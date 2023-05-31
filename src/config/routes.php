@@ -47,55 +47,6 @@ return function (CollectionConfigurator $routes) {
 
 
 
-    $routes->add('wiki-view', '/wiki/view')
-        ->controller([\App\Controller\Wiki\View::class, 'doDefault']);
-    $routes->add('wiki-edit', '/wiki/edit')
-        ->controller([\App\Controller\Wiki\Edit::class, 'doDefault']);
 
-    // API Endpoints
-
-
-
-
-
-
-    // TODO: Examples - remove for productions sites...
-
-    // Test routes (Remove for production sites and delete /src/Controller/Examples folder)
-    $routes->add('example-manager', '/exampleManager')
-        ->controller([\App\Controller\Example\Manager::class, 'doDefault']);
-    $routes->add('example-edit', '/exampleEdit')
-        ->controller([\App\Controller\Example\Edit::class, 'doDefault']);
-
-    // Htmx Examples
-    $routes->add('ui-form', '/ui/form')
-        ->controller([\App\Controller\Examples\FormEg::class, 'doDefault']);
-    $routes->add('phpinfo', '/info')
-        ->controller([\App\Controller\Examples\Info::class, 'doDefault']);
-    $routes->add('test-dom', '/domTest')
-        ->controller([\App\Controller\Examples\DomTest::class, 'doDefault']);
-    $routes->add('test-htmx', '/htmx')
-        ->controller([\App\Controller\Examples\Htmx::class, 'doDefault']);
-
-    $routes->add('api-htmx-test', '/api/htmx/test')
-        ->controller([\App\Api\HtmxExamples::class, 'doTest'])
-    ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_POST]);
-    $routes->add('api-htmx-users', '/api/htmx/users')
-        ->controller([\App\Api\HtmxExamples::class, 'doFindUsers'])
-        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
-    $routes->add('api-htmx-button', '/api/htmx/button')
-        ->controller([\App\Api\HtmxExamples::class, 'doButton'])
-        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
-    $routes->add('api-htmx-tabs', '/api/htmx/tabs')
-        ->controller([\App\Api\HtmxExamples::class, 'doGetTabs'])
-        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
-
-    $routes->add('api-htmx-upload', '/api/htmx/upload')
-        ->controller([\App\Api\HtmxExamples::class, 'doUpload'])
-        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_POST]);
-
-    $routes->add('api-htmx-toast', '/api/htmx/toast')
-        ->controller([\App\Api\HtmxExamples::class, 'doToast'])
-        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
 
 };

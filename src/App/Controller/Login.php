@@ -36,6 +36,7 @@ class Login extends PageController
         }
         if ($this->getFactory()->getAuthUser()) {
             $this->getFactory()->getAuthController()->clearIdentity();
+            $this->getFactory()->getAuthUser()->setSessionId('')->save();
             UserMap::create()->deleteToken($this->getFactory()->getAuthUser()->getId());
             setcookie(UserMap::REMEMBER_CID, '', -1);
         }

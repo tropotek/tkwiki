@@ -7,9 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Tk\Console\Console;
 
-/**
- * @author Tropotek <http://www.tropotek.com/>
- */
 class Password extends Console
 {
 
@@ -27,6 +24,11 @@ class Password extends Console
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (!$this->getConfig()->isDebug()) {
+            $this->writeError('Error: Only run this command in a debug environment.');
+            return self::FAILURE;
+        }
+
         $username = $input->getArgument('username');
         $password = $input->getArgument('password');
 
@@ -36,7 +38,7 @@ class Password extends Console
             return self::FAILURE;
         }
 
-        $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+        $user->setPassword(\App\Db\User::hashPassword($password));
         $user->save();
 
         return self::SUCCESS;

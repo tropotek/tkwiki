@@ -5,21 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="author" content="Tropotek" />
 
-  <title>Bootstrap v5.2 TkLib Template</title>
+  <title>WIKI Test - Bootstrap v5</title>
 
   <link rel="stylesheet" href="/vendor/twbs/bootstrap/dist/css/bootstrap.css" />
   <link rel="stylesheet" href="/vendor/components/font-awesome/css/all.min.css" />
   <link rel="stylesheet" href="/vendor/components/jqueryui/themes/smoothness/jquery-ui.min.css" />
   <link rel="stylesheet" href="/vendor/studio-42/elfinder/css/elfinder.full.css" />
   <link rel="stylesheet" href="/html/assets/app.css" />
-<style>
-  body {
-    padding-top: 5rem;
-    padding-bottom: 3rem;
-    color: #5a5a5a;
-    background-color: #FFF;
-  }
-</style>
+
   <script src="/vendor/components/jquery/jquery.min.js"></script>
   <script src="/vendor/components/jqueryui/jquery-ui.min.js"></script>
   <script src="/vendor/ttek/tk-base/assets/js/include/jquery.tkInputLock.js"></script>
@@ -36,25 +29,15 @@
   <script src="/vendor/ttek/tk-base/assets/js/tkbase.js"></script>
   <script src="/html/assets/jquery.tktabs.js"></script>
   <script src="/html/assets/app.js"></script>
+
 <script>
-jQuery(function ($) {
-  // Init page javascript functions
-  tkbase.initSugar();
-  tkbase.initDialogConfirm();
-  tkbase.initTkInputLock();
-  tkbase.initDataToggle();
-  tkbase.initTinymce();
-  app.initHtmxToasts();
-  app.initTkFormTabs();
-  app.initDatepicker();
-});
 </script>
 
 </head>
 <body class="bg-white">
 
 <header>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">Tropotek</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
@@ -69,66 +52,139 @@ jQuery(function ($) {
           <li class="nav-item">
             <a class="nav-link" href="/contact">Contact Us</a>
           </li>
-          <li class="nav-item" choice="loggedIn" app-is-user="true">
-            <a class="nav-link" href="/dashboard">Dashboard</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Examples
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/domTest">DomTest</a></li>
-              <li><a class="dropdown-item" href="/htmx">HTMX</a></li>
-              <li><a class="dropdown-item" href="/ui/form">Form</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/info">Info</a></li>
-            </ul>
+
+
+          <li class="nav-item dropdown has-megamenu">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"> Mega menu 1 </a>
+            <div class="dropdown-menu megamenu shadow" role="menu">
+              <div class="wiki-menu-edit float-end">
+                <a href="/wiki/edit?pageId=0" class="btn btn-outline-primary wiki-menu-edit-btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"><i class="fa fa-pencil"></i> Edit</a>
+              </div>
+              <div class="wiki-menu-content row">
+                <div class="col-sm-4">
+                  <h3>Menu 1</h3>
+                  <ul>
+                    <li><a class="wikiPage wiki-page wiki-canView" href="/Mick" title="Link To Page: Mick">Mick's Wiki Page</a></li>
+                    <li><a class="wiki-page wiki-canView" href="/Tropotek" title="Tropotek">Tropotek</a></li>
+                    <li><a href="/OUM" class="wiki-page wiki-canView" title="OUM">OUM</a></li>
+                    <li><a href="/Misc_Links" class="wiki-page wiki-canView" title="Misc Links">Misc Links</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-4">
+                  <h3>Development</h3>
+                  <ul>
+                    <li><a class="wikiPage wiki-page wiki-canView" href="/Web_Dev" title="Link To Page: Web_Dev">Web Dev</a></li>
+                    <li><a href="/GIT_Notes" class="wiki-page wiki-canView" title="GIT Notes">GIT Notes</a></li>
+                    <li><a href="/MySQL" class="wiki-page wiki-canView" title="MySQL">Mysql</a></li>
+                    <li><a class="wiki-page wiki-canView" href="/Linux" title="Link To Page: Linux">Linux</a></li>
+                    <li><a href="/Scratchpad" class="wiki-page wiki-canView" title="Scratchpad">Scratchpad</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-4">
+                  <h3>Public</h3>
+                  <ul>
+                    <li><a href="/Links" class="wiki-page wiki-canView" title="Links">Links</a></li>
+                    <li><a href="/Recipes" class="wiki-page wiki-canView" title="Recipes">Recipes</a></li>
+                    <li><a href="/Bottle_Top_Counter" class="wiki-page wiki-canView" title="Bottle Top Counter">CaronaStar Game</a></li>
+                    <li><a href="/terms_and_conditions" class="wiki-page wiki-canView" title="terms and conditions">terms and conditions </a></li>
+                  </ul>
+                </div>
+
+
+              </div>
+            </div> <!-- dropdown-mega-menu.// -->
           </li>
 
-          <li class="nav-item dropdown" app-is-type="TYPE_STAFF">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Admin
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
-              <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
-              <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
-              <li><a class="dropdown-item" href="/fileManager" app-has-perm="PERM_ADMIN">File Manager</a></li>
-              <li><a class="dropdown-item" href="/exampleManager" app-has-perm="PERM_ADMIN">Example Manager</a></li>
-              <li><a class="dropdown-item" href="/tailLog" app-has-perm="PERM_ADMIN">Tail Log</a></li>
-              <li><a class="dropdown-item" href="/listEvents" app-has-perm="PERM_ADMIN">List Events</a></li>
-            </ul>
-          </li>
+          <li class="nav-item dropdown has-megamenu">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"> Mega menu 2 </a>
+            <div class="dropdown-menu megamenu shadow" role="menu">
+              <div class="wiki-menu-edit float-end">
+                <a href="/wiki/edit?pageId=0" class="btn btn-outline-primary wiki-menu-edit-btn" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"><i class="fa fa-pencil"></i> Edit</a>
+              </div>
+              <div class="wiki-menu-content row">
+                <div class="col-sm-4">
+                  <h3>Menu 2</h3>
+                  <ul>
+                    <li><a class="wikiPage wiki-page wiki-canView" href="/Mick" title="Link To Page: Mick">Mick's Wiki Page</a></li>
+                    <li><a class="wiki-page wiki-canView" href="/Tropotek" title="Tropotek">Tropotek</a></li>
+                    <li><a href="/OUM" class="wiki-page wiki-canView" title="OUM">OUM</a></li>
+                    <li><a href="/Misc_Links" class="wiki-page wiki-canView" title="Misc Links">Misc Links</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-4">
+                  <h3>Development</h3>
+                  <ul>
+                    <li><a class="wikiPage wiki-page wiki-canView" href="/Web_Dev" title="Link To Page: Web_Dev">Web Dev</a></li>
+                    <li><a href="/GIT_Notes" class="wiki-page wiki-canView" title="GIT Notes">GIT Notes</a></li>
+                    <li><a href="/MySQL" class="wiki-page wiki-canView" title="MySQL">Mysql</a></li>
+                    <li><a class="wiki-page wiki-canView" href="/Linux" title="Link To Page: Linux">Linux</a></li>
+                    <li><a href="/Scratchpad" class="wiki-page wiki-canView" title="Scratchpad">Scratchpad</a></li>
+                  </ul>
+                </div>
+                <div class="col-sm-4">
+                  <h3>Public</h3>
+                  <ul>
+                    <li><a href="/Links" class="wiki-page wiki-canView" title="Links">Links</a></li>
+                    <li><a href="/Recipes" class="wiki-page wiki-canView" title="Recipes">Recipes</a></li>
+                    <li><a href="/Bottle_Top_Counter" class="wiki-page wiki-canView" title="Bottle Top Counter">CaronaStar Game</a></li>
+                    <li><a href="/terms_and_conditions" class="wiki-page wiki-canView" title="terms and conditions">terms and conditions </a></li>
+                  </ul>
+                </div>
 
-          <li class="nav-item dropdown" app-is-type="TYPE_STAFF">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Wiki
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/wiki/view">View Page</a></li>
-              <li><a class="dropdown-item" href="/wiki/edit">Edit Page</a></li>
-            </ul>
+
+              </div>
+            </div> <!-- dropdown-mega-menu.// -->
           </li>
 
           <li class="nav-item" app-is-user="true">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
-          <li class="nav-item" app-is-user="false">
-            <a class="nav-link" href="/login">Login</a>
+            <a class="btn btn-sm btn-outline-secondary " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .35rem; margin-top: 2em;" href="javascript:;"><i class="fa fa-plus fa-fw"></i></a>
           </li>
 
+<!--          <li class="nav-item" app-is-user="true">-->
+<!--            <a class="nav-link" href="/logout">Logout</a>-->
+<!--          </li>-->
+<!--          <li class="nav-item" app-is-user="false">-->
+<!--            <a class="nav-link" href="/login">Login</a>-->
+<!--          </li>-->
+
         </ul>
-        <form id="site-search" class="d-flex" role="search" name="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-          <button class="btn btn-primary" type="submit">Search</button>
+
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
         </form>
+
+        <div class="dropdown text-end" app-is-user="true">
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+<!--            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle" />-->
+            <span var="username">username</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end text-small" app-is-user="true">
+            <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+            <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
+            <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
+            <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
+
+            <li><hr class="dropdown-divider" app-is-debug="true"></li>
+            <li><a class="dropdown-item" href="/tailLog" app-is-debug="true">Tail Log</a></li>
+            <li><a class="dropdown-item" href="/listEvents" app-is-debug="true">List Events</a></li>
+
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+          </ul>
+        </div>
+        <div class="dropdown text-end" app-is-user="false">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </nav>
 </header>
 
 
-<main class="container" var="container">
+<main class="container-fluid" var="container">
   <div class="shadow p-3 mb-5 bg-body rounded" var="content"></div>
 </main>
 

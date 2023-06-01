@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Profile extends PageController
 {
-    protected \App\Form\User $form;
+    protected \App\Form\Profile $form;
 
 
     public function __construct()
@@ -21,11 +21,11 @@ class Profile extends PageController
         $this->setAccess(User::PERM_MANAGE_USER | User::PERM_MANAGE_STAFF);
     }
 
-    public function doDefault(Request $request, $id)
+    public function doDefault(Request $request)
     {
         // Get the form template
-        $this->form = new \App\Form\User();
-        $this->form->doDefault($request, $id);
+        $this->form = new \App\Form\Profile();
+        $this->form->doDefault($request);
 
         return $this->getPage();
     }

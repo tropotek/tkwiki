@@ -11,12 +11,18 @@
 -- ------------------------------------------------------
 
 -- Show only active users
-# CREATE OR REPLACE ALGORITHM=MERGE VIEW v_user AS
-# SELECT *
-# FROM
-#   user u
-# WHERE
-#   u.active
+# CREATE OR REPLACE ALGORITHM=MERGE VIEW v_links AS
+# SELECT page_id, url
+# FROM page
+# WHERE 1
+# ;
+
+
+-- TODO Find all orphaned pages
+# CREATE OR REPLACE ALGORITHM=MERGE VIEW v_orphans AS
+# SELECT page_id, url
+# FROM page
+# WHERE 1  // TODO:
 # ;
 
 

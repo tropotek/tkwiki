@@ -37,7 +37,7 @@
 <body class="bg-white">
 
 <header>
-  <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+  <nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="/" var="site-brand">Wiki</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
@@ -45,58 +45,76 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav me-auto mb-2 mb-md-0" style="--bs-scroll-height: 100px;">
-          <li class="nav-item">
-            <a class="nav-link" href="/home">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/contact">Contact Us</a>
-          </li>
+        <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link" href="/home">Home</a>-->
+<!--          </li>-->
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link" href="/contact">Contact Us</a>-->
+<!--          </li>-->
 
-          <li class="nav-item dropdown has-megamenu" repeat="menu-item">
-            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" var="menu-dropdown"> Item 1 </a>
-            <div class="dropdown-menu megamenu shadow" role="menu">
-              <div class="wiki-menu-edit float-end">
-                <a href="/wiki/edit?pageId=0" class="btn btn-outline-primary wiki-menu-edit-btn"
-                   style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;" var="menu-edit">
-                  <i class="fa fa-pencil"></i> Edit
-                </a>
-              </div>
-              <div class="wiki-menu-content row" var="menu-content">
-              </div>
-            </div> <!-- dropdown-mega-menu.// -->
-          </li>
+<!--          <li class="nav-item dropdown has-megamenu" repeat="menu-item">-->
+<!--            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" var="menu-dropdown"> Item 1 </a>-->
+<!--            <div class="dropdown-menu megamenu shadow" role="menu">-->
+<!--              <div class="wiki-menu-edit float-end">-->
+<!--                <a href="/wiki/edit?pageId=0" class="btn btn-outline-primary wiki-menu-edit-btn"-->
+<!--                   style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .55rem;" var="menu-edit">-->
+<!--                  <i class="fa fa-pencil"></i> Edit-->
+<!--                </a>-->
+<!--              </div>-->
+<!--              <div class="wiki-menu-content row" var="menu-content">-->
+<!--              </div>-->
+<!--            </div> &lt;!&ndash; dropdown-mega-menu.// &ndash;&gt;-->
+<!--          </li>-->
 
-          <li class="nav-item" app-is-user="true">
-            <a class="btn btn-sm btn-outline-secondary btn-add-menu" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .35rem; margin-top: 2em;"
-               href="javascript:;" var="add-menu-item" app-has-perm="PERM_EDITOR"><i class="fa fa-plus fa-fw"></i></a>
-          </li>
+<!--          <li class="nav-item" app-is-user="true">-->
+<!--            <a class="btn btn-sm btn-outline-secondary btn-add-menu" style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .35rem;"-->
+<!--               href="javascript:;" var="add-menu-item" app-has-perm="PERM_EDITOR"><i class="fa fa-plus fa-fw"></i></a>-->
+<!--          </li>-->
 
+            <li class="nav-item dropdown d-block d-sm-none" app-is-user="true">
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span var="username">username</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+                <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
+                <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
+                <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
+                <li><hr class="dropdown-divider" app-is-debug="true"></li>
+                <li><a class="dropdown-item" href="/tailLog" app-is-debug="true">Tail Log</a></li>
+                <li><a class="dropdown-item" href="/listEvents" app-is-debug="true">List Events</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+              </ul>
+            </li>
         </ul>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        <form class="d-flex me-md-3" role="search">
+          <div class="input-group input-group-sm">
+            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-secondary border-light-subtle" type="button" id="btn-search"><i class="fa fa-search"></i></button>
+          </div>
         </form>
 
-        <div class="dropdown text-end" app-is-user="true">
-          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="dropdown text-end d-none d-sm-block" app-is-user="true">
+          <a href="#" class="link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 <!--            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle" />-->
             <span var="username">username</span>
           </a>
-          <ul class="dropdown-menu dropdown-menu-end text-small" app-is-user="true">
+          <ul class="dropdown-menu dropdown-menu-end text-small">
             <li><a class="dropdown-item" href="/profile">My Profile</a></li>
             <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
             <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
             <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
-
             <li><hr class="dropdown-divider" app-is-debug="true"></li>
             <li><a class="dropdown-item" href="/tailLog" app-is-debug="true">Tail Log</a></li>
             <li><a class="dropdown-item" href="/listEvents" app-is-debug="true">List Events</a></li>
-
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/logout">Sign out</a></li>
           </ul>
         </div>
+
         <div class="dropdown text-end" app-is-user="false">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
             <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>

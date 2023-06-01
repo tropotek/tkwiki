@@ -6,9 +6,19 @@ body {
   color: #5a5a5a;
   background-color: #FFF;
 }
+.nav-bar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 
+}
 
-
+/* Boostrap 5 hack for nav dropdown disappearing */
+@media (max-width: 991px) {
+  .navbar.fixed-top .navbar-collapse, .navbar.sticky-top .navbar-collapse {
+    overflow-y: inherit !important;
+  }
+}
 
 /* @see: https://bootstrap-menu.com/detail-megamenu.html */
 .navbar .megamenu {

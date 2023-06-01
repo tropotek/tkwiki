@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Db\PageMap;
 use Dom\Mvc\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,9 @@ class Home extends PageController
     {
         $reg = $this->getFactory()->getRegistry();
         $reg->save();
+
+        $pg = PageMap::create()->find(1);
+        vd($pg->getTitle());
 
 
         return $this->getPage();

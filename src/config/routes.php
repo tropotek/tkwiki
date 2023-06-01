@@ -10,7 +10,6 @@ use Symfony\Component\Routing\Loader\Configurator\CollectionConfigurator;
 // @see https://symfony.com/doc/current/routing.html
 return function (CollectionConfigurator $routes) {
 
-
     // Site public pages
     $routes->add('home-base', '/')
         ->controller([\App\Controller\Home::class, 'doDefault']);

@@ -7,7 +7,6 @@ use Bs\Db\FileMap;
 use Bs\Db\Traits\HashTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\UserInterface;
-use Tk\Date;
 use Tk\Db\Mapper\Model;
 use Tk\Db\Mapper\Result;
 use Tk\Uri;

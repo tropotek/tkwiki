@@ -59,6 +59,7 @@ class Page extends Model
 
     public \DateTime $created;
 
+    private ?Content $_content = null;
 
 
     public function __construct()
@@ -133,6 +134,14 @@ class Page extends Model
 //        }
 
         return parent::delete();
+    }
+
+    public function getContent(): Content
+    {
+        if (!$this->_content) {
+            $this->_content = ContentMap::create()->findByPageId($this->id, \Tk\Db\Tool::create('created DESC', 1))->current();
+        }
+        return $this->_content;
     }
 
 

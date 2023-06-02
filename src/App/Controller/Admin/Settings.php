@@ -33,7 +33,7 @@ class Settings extends PageController
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        $template->setText('title', $this->getPage()->getTitle());
+        $template->appendText('title', $this->getPage()->getTitle());
 
         $template->appendTemplate('content', $this->form->show());
 
@@ -44,8 +44,16 @@ class Settings extends PageController
     {
         $html = <<<HTML
 <div>
-  <h2 var="title"></h2>
-  <div var="content"></div>
+  <div class="card mb-3">
+    <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
+    <div class="card-body" var="actions">
+      <a href="/home" title="Back" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Back</a>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-header" var="title"><i class="fa fa-cogs"></i> </div>
+    <div class="card-body" var="content"></div>
+  </div>
 </div>
 HTML;
         return $this->loadTemplate($html);

@@ -4,6 +4,7 @@ namespace App;
 use App\Db\User;
 use App\Db\UserMap;
 use App\Dom\Modifier\AppAttributes;
+use App\Dom\Modifier\WikiUrl;
 use Bs\Db\UserInterface;
 use Dom\Mvc\Modifier;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -36,6 +37,7 @@ class Factory extends \Bs\Factory implements FactoryInterface
         if (!$this->get('templateModifier')) {
             $dm = parent::getTemplateModifier();
             $dm->addFilter('appAttributes', new AppAttributes());
+            $dm->addFilter('appWikiUrl', new WikiUrl());
         }
         return $this->get('templateModifier');
     }

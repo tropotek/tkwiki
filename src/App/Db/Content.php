@@ -1,10 +1,17 @@
 <?php
 namespace App\Db;
 
+use App\Db\Traits\PageTrait;
+use App\Db\Traits\UserTrait;
+use App\Factory;
+use Bs\Db\Traits\TimestampTrait;
 use Tk\Db\Mapper\Model;
 
 class Content extends Model
 {
+    use TimestampTrait;
+    use UserTrait;
+    use PageTrait;
 
     public int $id = 0;
 
@@ -30,31 +37,23 @@ class Content extends Model
 
     public function __construct()
     {
-        $this->modified = new \DateTime();
-        $this->created = new \DateTime();
-
-    }
-    
-    public function setPageId(int $pageId): Content
-    {
-        $this->pageId = $pageId;
-        return $this;
+        $this->_TimestampTrait();
+        $this->userId = Factory::instance()->getAuthUser()?->getId() ?? 0;
     }
 
-    public function getPageId(): int
+    public static function cloneContent(Content $src): Content
     {
-        return $this->pageId;
-    }
+        $dst = new static();
+        $dst->userId = Factory::instance()->getAuthUser()?->getId() ?? 0;
 
-    public function setUserId(int $userId): Content
-    {
-        $this->userId = $userId;
-        return $this;
-    }
+        $dst->pageId = $src->pageId;
+        $dst->html = $src->html;
+        $dst->keywords = $src->keywords;
+        $dst->description = $src->description;
+        $dst->css = $src->css;
+        $dst->js = $src->js;
 
-    public function getUserId(): int
-    {
-        return $this->userId;
+        return $dst;
     }
 
     public function setHtml(string $html): Content
@@ -112,47 +111,17 @@ class Content extends Model
         return $this->js;
     }
 
-    public function setModified(\DateTime $modified): Content
-    {
-        $this->modified = $modified;
-        return $this;
-    }
-
-    public function getModified(): \DateTime
-    {
-        return $this->modified;
-    }
-
-    public function setCreated(\DateTime $created): Content
-    {
-        $this->created = $created;
-        return $this;
-    }
-
-    public function getCreated(): \DateTime
-    {
-        return $this->created;
-    }
-
 
     public function validate(): array
     {
         $errors = [];
 
-        if (!$this->pageId) {
+        if (!$this->getUserId()) {
+            $errors['userId'] = 'Invalid value: userId';
+        }
+
+        if (!$this->getPageId()) {
             $errors['pageId'] = 'Invalid value: pageId';
-        }
-
-        if (!$this->html) {
-            $errors['html'] = 'Invalid value: html';
-        }
-
-        if (!$this->keywords) {
-            $errors['keywords'] = 'Invalid value: keywords';
-        }
-
-        if (!$this->description) {
-            $errors['description'] = 'Invalid value: description';
         }
 
         return $errors;

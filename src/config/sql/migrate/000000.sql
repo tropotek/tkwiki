@@ -89,8 +89,10 @@ CREATE TABLE IF NOT EXISTS `lock` (
     hash VARCHAR(64) NOT NULL DEFAULT '',
     page_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
     user_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
-    ip VARCHAR(32) NOT NULL DEFAULT '',
+    ip VARCHAR(64) NOT NULL DEFAULT '',
     expire TIMESTAMP NOT NULL,
+    CONSTRAINT fk_lock__page_id FOREIGN KEY (page_id) REFERENCES page (id) ON DELETE CASCADE,
+    CONSTRAINT fk_lock__user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
     UNIQUE KEY uk_hash (hash),
     KEY k_pageId (page_id),
     KEY k_userId (user_id)

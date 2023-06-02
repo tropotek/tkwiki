@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Db\PageMap;
+use App\Factory;
 use Dom\Mvc\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +22,10 @@ class Home extends PageController
         $reg->save();
 
         $pg = PageMap::create()->find(1);
-        vd($pg);
+        vd($pg->getContent());
 
+//        $userId = Factory::instance()->getAuthUser()?->getId() ?? 0;
+//        vd($userId);
 
         return $this->getPage();
     }

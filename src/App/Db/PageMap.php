@@ -17,7 +17,7 @@ class PageMap extends Mapper
     { 
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
             $map = new DataMap();
-            $map->addDataType(new Db\Integer('id'), 'key');
+            $map->addDataType(new Db\Integer('id'));
             $map->addDataType(new Db\Integer('userId', 'user_id'));
             $map->addDataType(new Db\Text('type'));
             $map->addDataType(new Db\Text('title'));
@@ -33,7 +33,7 @@ class PageMap extends Mapper
         
         if (!$this->getDataMappers()->has(self::DATA_MAP_FORM)) {
             $map = new DataMap();
-            $map->addDataType(new Form\Integer('id'), 'key');
+            $map->addDataType(new Form\Integer('id'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Text('type'));
             $map->addDataType(new Form\Text('title'));
@@ -47,7 +47,7 @@ class PageMap extends Mapper
         
         if (!$this->getDataMappers()->has(self::DATA_MAP_TABLE)) {
             $map = new DataMap();
-            $map->addDataType(new Form\Integer('id'), 'key');
+            $map->addDataType(new Form\Integer('id'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Text('type'));
             $map->addDataType(new Form\Text('title'));
@@ -96,8 +96,7 @@ class PageMap extends Mapper
 
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
-            $w = '';
-            $w .= sprintf('a.title LIKE %s OR ', $this->quote($kw));
+            $w = sprintf('a.title LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);

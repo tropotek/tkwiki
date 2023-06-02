@@ -43,19 +43,28 @@ class User
         }
 
         $group = 'left';
-        $this->getForm()->appendField(new Hidden('id'))->setGroup($group);
-        $this->getForm()->appendField(new Input('name'))->setGroup($group)->setRequired();
+        $this->getForm()->appendField(new Hidden('id'))
+            ->setGroup($group);
 
-        $this->getForm()->appendField(new Input('username'))->addCss('tk-input-lock')->setGroup($group)->setRequired();
-        $this->getForm()->appendField(new Input('email'))->addCss('tk-input-lock')->setGroup($group)->setRequired();
+        $this->getForm()->appendField(new Input('name'))
+            ->setRequired()->setGroup($group);
+
+        $this->getForm()->appendField(new Input('username'))->addCss('tk-input-lock')
+            ->setRequired()->setGroup($group);
+
+        $this->getForm()->appendField(new Input('email'))->addCss('tk-input-lock')
+            ->setRequired()->setGroup($group);
 
         if ($this->user->isType(\App\Db\User::TYPE_STAFF)) {
-            $this->getForm()->appendField(new Checkbox('perm', array_flip(\App\Db\User::PERMISSION_LIST)))->setGroup($group);
+            $this->getForm()->appendField(new Checkbox('perm', array_flip(\App\Db\User::PERMISSION_LIST)))
+                ->setGroup($group);
         }
 
         $this->getForm()->appendField(new Checkbox('active', ['Enable User Login' => 'active']))->setGroup($group);
+
         $this->getForm()->appendField(new Form\Field\Textarea('notes'))->setGroup($group);
 
+        
         $this->getForm()->appendField(new Form\Action\SubmitExit('save', [$this, 'onSubmit']));
         $this->getForm()->appendField(new Form\Action\Link('back', Uri::create('/'.$this->getUser()->getType().'Manager')));
 

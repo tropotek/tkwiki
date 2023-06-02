@@ -27,8 +27,9 @@ class User extends Model implements UserInterface, FileInterface
 	const PERM_ADMIN              = 0x00000001; // All permissions
 	const PERM_SYSADMIN           = 0x00000002; // Change system settings
 	const PERM_MANAGE_STAFF       = 0x00000004; // Manage staff users
+    // NOTE: Users should only have read access in the WIKI at this time...
     const PERM_MANAGE_USER        = 0x00000008; // Manage base users
-    const PERM_EDITOR             = 0x00000010; // Ability to edit/audit all site pages
+    const PERM_EDITOR             = 0x00000010; // Ability to edit/audit all site pages except private pages
 	//                            0x00000010; // available
 
 	/**
@@ -414,7 +415,7 @@ class User extends Model implements UserInterface, FileInterface
         if ($token) {
             [$selector, $validator] = UserMap::create()->parseToken($token);
             $tokens = UserMap::create()->findTokenBySelector($selector);
-            if (password_verify($validator, $tokens['hashed_validator'])) {
+            if (password_verify($validator, $tokens['hashed_validator'] ?? '')) {
                 $user = UserMap::create()->findBySelector($selector);
                 if ($user) {
                     Factory::instance()->getAuthController()->getStorage()->write($user->getUsername());

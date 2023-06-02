@@ -24,6 +24,7 @@ class PageMap extends Mapper
             $map->addDataType(new Db\Text('url'));
             $map->addDataType(new Db\Integer('views'));
             $map->addDataType(new Db\Integer('permission'));
+            $map->addDataType(new Db\Boolean('published'));
             $map->addDataType(new Db\Date('modified'));
             $map->addDataType(new Db\Date('created'));
 
@@ -39,6 +40,7 @@ class PageMap extends Mapper
             $map->addDataType(new Form\Text('url'));
             $map->addDataType(new Form\Integer('views'));
             $map->addDataType(new Form\Integer('permission'));
+            $map->addDataType(new Form\Boolean('published'));
 
             $this->addDataMap(self::DATA_MAP_FORM, $map);
         }
@@ -52,17 +54,18 @@ class PageMap extends Mapper
             $map->addDataType(new Form\Text('url'));
             $map->addDataType(new Form\Integer('views'));
             $map->addDataType(new Form\Integer('permission'));
+            $map->addDataType(new Table\Boolean('published'));
 
             $this->addDataMap(self::DATA_MAP_TABLE, $map);
         }
     }
 
-    public function find(mixed $id): \Tk\Db\Mapper\Model|Page
+    public function find(mixed $id): null|\Tk\Db\Mapper\Model|Page
     {
         return parent::find($id);
     }
 
-    public function findByUrl($url): \Tk\Db\Mapper\Model|Page
+    public function findByUrl($url): null|\Tk\Db\Mapper\Model|Page
     {
         $filter = [
             'url' => $url,
@@ -94,7 +97,7 @@ class PageMap extends Mapper
         if (!empty($filter['keywords'])) {
             $kw = '%' . $this->escapeString($filter['keywords']) . '%';
             $w = '';
-            //$w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.title LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['keywords'])) {
                 $id = (int)$filter['keywords'];
                 $w .= sprintf('a.id = %d OR ', $id);
@@ -113,22 +116,29 @@ class PageMap extends Mapper
         }
 
         if (!empty($filter['userId'])) {
-            $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
+            $w = $this->makeMultiQuery($filter['userId'], 'a.userId');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
+
         if (!empty($filter['type'])) {
             $filter->appendWhere('a.type = %s AND ', $this->quote($filter['type']));
         }
+
         if (!empty($filter['title'])) {
             $filter->appendWhere('a.title = %s AND ', $this->quote($filter['title']));
         }
+
         if (!empty($filter['url'])) {
             $filter->appendWhere('a.url = %s AND ', $this->quote($filter['url']));
         }
-        if (!empty($filter['views'])) {
-            $filter->appendWhere('a.views = %s AND ', (int)$filter['views']);
+
+        if (is_bool($filter['published'] ?? '')) {
+            $filter->appendWhere('a.published = %s AND ', (int)$filter['published']);
         }
+
         if (!empty($filter['permission'])) {
-            $filter->appendWhere('a.permission = %s AND ', (int)$filter['permission']);
+            $w = $this->makeMultiQuery($filter['permission'], 'a.permission');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
         return $filter;

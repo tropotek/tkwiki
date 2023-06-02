@@ -20,24 +20,19 @@ class Page extends Model
     const DEFAULT_TAG = '__default';
 
     /**
-     * All users can read page
-     * Only registered users with edit roles can edit
+     * Page permission values
      */
-    const PERMISSION_PUBLIC = 0;
-    /**
-     * All registered users can read page
-     * Only registered users with edit roles can edit
-     */
-    const PERMISSION_PROTECTED = 1;
-    /**
-     * Only the author can edit and read the page
-     */
-    const PERMISSION_PRIVATE = 2;
+	const PERM_PUBLIC             = 0; // Public Pages (public can view, User::PERM_EDITOR can edit)
+    const PERM_USER               = 1; // User Pages (User::TYPE_USER can view, User::PERM_EDITOR can edit)
+	const PERM_STAFF              = 2; // Protected (User::TYPE_STAFF can view, User::PERM_EDITOR can edit)
+    const PERM_PRIVATE            = 999; // Private (User::TYPE_STAFF, only author can view/edit)
+
 
     /**
      * This type is a standard content page
      */
     const TYPE_PAGE = 'page';
+
     /**
      * This type means that the page is to be used with the menu/nav only
      */
@@ -57,6 +52,8 @@ class Page extends Model
     public int $views = 0;
 
     public int $permission = 0;
+
+    public bool $published = true;
 
     public \DateTime $modified;
 
@@ -95,6 +92,19 @@ class Page extends Model
         return $url;
     }
 
+    public static function findPage(string $url): ?Page
+    {
+        if ($url == self::DEFAULT_TAG) {
+            $url = Config::instance()->get('wiki.page.default');
+        }
+        return PageMap::create()->findByUrl($url);
+    }
+
+    public static function getHomeUrl(): string
+    {
+        return Config::instance()->get('wiki.page.default');
+    }
+
     public function update(): int
     {
         if (!$this->getUrl()) {
@@ -123,19 +133,6 @@ class Page extends Model
 //        }
 
         return parent::delete();
-    }
-
-    static public function findPage(string $url): ?Page
-    {
-        if ($url == self::DEFAULT_TAG) {
-            $url = Config::instance()->get('wiki.page.default');
-        }
-        return PageMap::create()->findByUrl($url);
-    }
-
-    static public function getHomeUrl(): string
-    {
-        return \App\Config::getInstance()->get('wiki.page.default');
     }
 
 
@@ -199,14 +196,26 @@ class Page extends Model
         return $this->permission;
     }
 
+    public function isPublished(): bool
+    {
+        return $this->published;
+    }
+
+    public function setPublished(bool $published): Page
+    {
+        $this->published = $published;
+        return $this;
+    }
+
     /**
      * Get the page permission level as a string
      */
     public function getPermissionLabel(): string
     {
         return match ($this->permission) {
-            self::PERMISSION_PRIVATE => 'private',
-            self::PERMISSION_PROTECTED => 'protected',
+            self::PERM_PRIVATE => 'private',
+            self::PERM_STAFF => 'staff',
+            self::PERM_USER => 'users',
             default => 'public',
         };
     }
@@ -216,19 +225,108 @@ class Page extends Model
     {
         $errors = [];
 
-        if (!$this->type) {
-            $errors['type'] = 'Invalid value: type';
+        if (!$this->getUserId()) {
+            $errors['userId'] = 'Invalid user ID value';
         }
-
-        if (!$this->title) {
-            $errors['title'] = 'Invalid value: title';
+        if (!$this->getTitle()) {
+            $errors['title'] = 'Please enter a title for your page';
         }
-
-//        if (!$this->permission) {
-//            $errors['permission'] = 'Invalid value: permission';
-//        }
+        if($this->getId()) {
+            $comp = PageMap::create()->findByUrl($this->getUrl());
+            if ($comp && $comp->getId() != $this->getId()) {
+                $errors['url'] = 'This url already exists, try again';
+            }
+        }
 
         return $errors;
+    }
+
+    // ------------------- PAGE PERMISSION METHODS -----------------------
+
+    public static function canCreate(?User $user): bool
+    {
+        if (!$user) return false;
+        if ($user->isAdmin()) return true;
+        return $user->hasPermission(User::PERM_EDITOR);
+    }
+
+    public function canView(?User $user): bool
+    {
+        if ($this->getPermission() == self::PERM_PUBLIC) return true;
+        if (!$user) return false;
+        // Page authors always have view permissions
+        if ($this->getUserId() == $user->getId()) return true;
+        if ($user->isAdmin()) return true;
+
+        if (
+            $this->getPermission() == self::PERM_USER &&
+            $user->getType() == User::TYPE_USER &&
+            $user->getType() == User::TYPE_STAFF
+        ) {
+            return true;
+        }
+
+        if (
+            $this->getPermission() == self::PERM_STAFF &&
+            $user->getType() == User::TYPE_STAFF
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function canEdit(?User $user): bool
+    {
+        if (!$user) return false;
+        if ($user->isAdmin()) return true;
+
+        // Only allow Editors to edit home page regardless of permissions
+        if ($this->getUrl() == self::getHomeUrl()) {
+            return $user->hasPermission(User::PERM_EDITOR);
+        }
+
+        // Allow any staff to edit public or user pages
+        if (
+            $this->getPermission() == self::PERM_PUBLIC ||
+            $this->getPermission() == self::PERM_USER
+        ) {
+            return $user->getType() == User::TYPE_STAFF;
+        }
+
+        // Only Editors can edit staff pages
+        if ($this->getPermission() == self::PERM_STAFF) {
+            return $user->hasPermission(User::PERM_EDITOR);
+        }
+        return false;
+    }
+
+    public function canDelete(?User $user): bool
+    {
+        if (!$user) return false;
+        if ($user->isAdmin()) return true;
+        // Page authors can always delete there pages
+        if ($this->getUserId() == $user->getId()) return true;
+
+        // Do not allow deletion of currently assigned home page
+        if ($this->getUrl() == self::getHomeUrl()) {
+            return false;
+        }
+
+        // Allow any staff to delete public or user pages
+        if (
+            $this->getPermission() == self::PERM_PUBLIC ||
+            $this->getPermission() == self::PERM_USER
+        ) {
+            return $user->getType() == User::TYPE_STAFF;
+        }
+
+        // Only Editors can delete staff pages
+        if ($this->getPermission() == self::PERM_STAFF) {
+            return $user->hasPermission(User::PERM_EDITOR);
+        }
+
+        return false;
     }
 
 }

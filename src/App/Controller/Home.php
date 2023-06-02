@@ -21,7 +21,7 @@ class Home extends PageController
         $reg->save();
 
         $pg = PageMap::create()->find(1);
-        vd($pg->getTitle());
+        vd($pg);
 
 
         return $this->getPage();

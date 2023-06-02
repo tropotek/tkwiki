@@ -17,8 +17,8 @@ class Profile extends PageController
     public function __construct()
     {
         parent::__construct($this->getFactory()->getPublicPage());
-        $this->getPage()->setTitle('Edit User');
-        $this->setAccess(User::PERM_MANAGE_USER | User::PERM_MANAGE_STAFF);
+        $this->getPage()->setTitle('My Profile');
+
     }
 
     public function doDefault(Request $request)

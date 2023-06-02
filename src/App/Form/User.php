@@ -64,7 +64,7 @@ class User
 
         $this->getForm()->appendField(new Form\Field\Textarea('notes'))->setGroup($group);
 
-        
+
         $this->getForm()->appendField(new Form\Action\SubmitExit('save', [$this, 'onSubmit']));
         $this->getForm()->appendField(new Form\Action\Link('back', Uri::create('/'.$this->getUser()->getType().'Manager')));
 

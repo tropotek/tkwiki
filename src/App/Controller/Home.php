@@ -33,7 +33,7 @@ class Home extends PageController
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        $template->setText('title', $this->getPage()->getTitle());
+        $template->appendText('title', $this->getPage()->getTitle());
 
 
         return $template;
@@ -42,6 +42,18 @@ class Home extends PageController
     public function __makeTemplate()
     {
         $html = <<<HTML
+<div>
+  <div class="card mb-3">
+    <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
+    <div class="card-body" var="actions">
+      <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-header" var="title"><i class="fa fa-users"></i> Home</div>
+    <div class="card-body" var="content"></div>
+  </div>
+</div>
 <div>
     <h3 var="title">Welcome Home</h3>
     <p var="content"></p>

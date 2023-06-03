@@ -2,6 +2,7 @@
 namespace App\Db;
 
 use App\Db\Traits\UserTrait;
+use App\Factory;
 use Bs\Db\Traits\TimestampTrait;
 use Tk\Config;
 use Tk\Db\Mapper\Model;
@@ -27,6 +28,12 @@ class Page extends Model
 	const PERM_STAFF              = 2; // Protected (User::TYPE_STAFF can view, User::PERM_EDITOR can edit)
     const PERM_PRIVATE            = 999; // Private (User::TYPE_STAFF, only author can view/edit)
 
+    const PERM_LIST = [
+        'Public' => self::PERM_PUBLIC,
+        'User' => self::PERM_USER,
+        'Staff' => self::PERM_STAFF,
+        'Private' => self::PERM_PRIVATE,
+    ];
 
     /**
      * This type is a standard content page
@@ -98,14 +105,14 @@ class Page extends Model
     public static function findPage(string $url): ?Page
     {
         if ($url == self::DEFAULT_TAG) {
-            $url = Config::instance()->get('wiki.page.default');
+            $url = Factory::instance()->getRegistry()->get('wiki.page.default');
         }
         return PageMap::create()->findByUrl($url);
     }
 
     public static function getHomeUrl(): string
     {
-        return Config::instance()->get('wiki.page.default');
+        return Factory::instance()->getRegistry()->get('wiki.page.default');
     }
 
     public function update(): int
@@ -126,7 +133,7 @@ class Page extends Model
 //        LockMap::create()->unlock($this->getId());
 
         // delete all page links referred to by this page.
-//        $this->getMapper()->deleteLinkByPageId($this->getId());
+        $this->getMapper()->deleteLinkByPageId($this->getId());
 
         // TODO: This may be redundant with new MYSQL foreign keys, test to see    ;-)
         // Remove all content
@@ -138,7 +145,7 @@ class Page extends Model
         return parent::delete();
     }
 
-    public function getContent(): Content
+    public function getContent(): ?Content
     {
         if (!$this->_content) {
             $this->_content = ContentMap::create()->findByPageId($this->id, \Tk\Db\Tool::create('created DESC', 1))->current();

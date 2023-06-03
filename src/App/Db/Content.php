@@ -56,6 +56,31 @@ class Content extends Model
         return $dst;
     }
 
+    /**
+     * compare this content to the supplied content and return true if they differ
+     * Use this to check if a new content should be saved on edit
+     */
+    public function diff(Content $content): bool
+    {
+        if ($this->getHtml() != $content->getHtml()) {
+            return true;
+        }
+        if ($this->getKeywords() != $content->getKeywords()) {
+            return true;
+        }
+        if ($this->getDescription() != $content->getDescription()) {
+            return true;
+        }
+        if ($this->getCss() != $content->getCss()) {
+            return true;
+        }
+        if ($this->getJs() != $content->getJs()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function setHtml(string $html): Content
     {
         $this->html = $html;

@@ -41,7 +41,7 @@ class HtmlFormatter
         $html = $this->getDocument()->saveHTML($this->getDocument()->documentElement);
         //$html = trim(str_replace(array('<html><body>', '</body></html>'), '', $html));
         //$html = trim(substr($html, 5, -6));
-vd($html);
+//vd($html);
         return $html;
     }
 

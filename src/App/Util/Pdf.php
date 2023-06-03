@@ -1,15 +1,13 @@
 <?php
 namespace App\Util;
 
-use Dom\Renderer\Renderer;
 use Dom\Template;
+use JetBrains\PhpStorm\NoReturn;
+use Mpdf\Mpdf;
 use Tk\Traits\SystemTrait;
+use Tk\Uri;
 
 /**
- * @author Michael Mifsud <info@tropotek.com>
- * @link http://www.tropotek.com/
- * @license Copyright 2018 Michael Mifsud
- *
  * @note This file uses the mpdf lib
  * @link https://mpdf.github.io/
  */
@@ -17,40 +15,18 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
 {
     use SystemTrait;
 
-    /**
-     * @var \Mpdf\Mpdf
-     */
-    protected $mpdf = null;
+    protected ?Mpdf $mpdf = null;
 
-    /**
-     * @var string
-     */
-    protected $watermark = '';
+    protected string $watermark = '';
 
-    /**
-     * @var bool
-     */
-    protected $rendered = false;
+    protected bool $rendered = false;
 
-    /**
-     * @var string
-     */
-    protected $html = '';
+    protected string $html = '';
 
-    /**
-     * @var string
-     */
-    protected $title = '';
+    protected string $title = '';
 
 
-    /**
-     * HtmlInvoice constructor.
-     * @param string $html
-     * @param string $title
-     * @param string $watermark
-     * @throws \Exception
-     */
-    public function __construct($html, $title = 'PDF DOCUMENT', $watermark = '')
+    public function __construct(string $html, string $title = 'PDF DOCUMENT', string $watermark = '')
     {
         $this->html = $html;
         $this->title = $title;
@@ -59,39 +35,22 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
         $this->initPdf();
     }
 
-    /**
-     * @param string $html
-     * @param string $title
-     * @param string $watermark
-     * @return Pdf
-     * @throws \Exception
-     */
-    public static function create($html, $title = 'PDF DOCUMENT', $watermark = '')
+    public static function create(string $html, string $title = 'PDF DOCUMENT', string $watermark = ''): static
     {
-        $obj = new self($html, $title, $watermark);
-        return $obj;
+        return new self($html, $title, $watermark);
     }
 
-    /**
-     * @return string
-     */
-    public function getHtml()
+    public function getHtml(): string
     {
         return $this->html;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @throws \Exception
-     */
-    protected function initPdf()
+    protected function initPdf(): void
     {
         $html = $this->show()->toString();
         $tpl = \Tk\CurlyTemplate::create($html);
@@ -132,11 +91,8 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
 
     /**
      * Output the pdf to the browser
-     *
-     * @param string $filename
-     * @throws \Mpdf\MpdfException
      */
-    public function output($filename = '')
+    #[NoReturn] public function output(string $filename = ''): void
     {
         $this->show();
         if (!$filename)
@@ -150,37 +106,25 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
     }
 
     /**
-     * Return the PDF as a string to attache to an email message
-     *
-     * @param string $filename
-     * @return string
-     * @throws \Mpdf\MpdfException
+     * Return the PDF as a string to attach to an email message
      */
-    public function getPdfAttachment($filename = '')
+    public function getPdfAttachment(string $filename = ''): string
     {
         if (!$filename)
             $filename = \Tk\Uri::create()->basename() . '.pdf';
         return $this->mpdf->Output($filename, \Mpdf\Output\Destination::STRING_RETURN);
     }
 
-    /**
-     * Execute the renderer.
-     * Return an object that your framework can interpret and display.
-     *
-     * @return null|Template|Renderer
-     * @throws \Exception
-     */
-    public function show()
+    public function show(): ?Template
     {
         $template = $this->getTemplate();
         $template->setTitleText($this->getTitle());
         if ($this->rendered) return $template;
         $this->rendered = true;
 
-        $template->appendCssUrl(Uri::create('/html/admin/bower_components/bootstrap/dist/css/bootstrap.css'));
+        $template->appendCssUrl(Uri::create('/vendor/twbs/bootstrap/dist/css/bootstrap.min.css'));
 
-
-        $template->insertText('title', $this->getTitle());
+        $template->appendText('title', $this->getTitle());
         $template->appendHtml('content', $this->getHtml());
 
 //        if ($this->getCoa()->getBackgroundUrl()) {
@@ -190,18 +134,13 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
         return $template;
     }
 
-    /**
-     * DomTemplate magic method
-     *
-     * @return \Dom\Template
-     */
-    public function __makeTemplate()
+    public function __makeTemplate(): ?Template
     {
-        $xhtml = <<<HTML
+        $html = <<<HTML
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title></title>
 </head>
 <body class="" style="" var="body">
@@ -211,7 +150,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
 </html>
 HTML;
 
-        return \Dom\Loader::load($xhtml);
+        return $this->loadTemplate($html);
     }
 
 }

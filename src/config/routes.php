@@ -16,10 +16,10 @@ return function (CollectionConfigurator $routes) {
 //    $routes->add('home', '/home')
 //        ->controller([\App\Controller\Home::class, 'doDefault']);
 
-    $routes->add('wiki-view', '/view')
-        ->controller([\App\Controller\Page\View::class, 'doDefault']);
-//    $routes->add('wiki-edit', '/edit')
-//        ->controller([\App\Controller\Page\Edit::class, 'doDefault']);
+    $routes->add('wiki-page-view', '/view')
+        ->controller([\App\Controller\Page\View::class, 'doContentView']);
+    $routes->add('wiki-page-edit', '/edit')
+        ->controller([\App\Controller\Page\Edit::class, 'doDefault']);
 
 //    $routes->add('wiki-search', '/search')
 //        ->controller([\App\Controller\Search::class, 'doDefault']);

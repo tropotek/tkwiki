@@ -115,14 +115,14 @@ UPDATE `user` SET `hash` = MD5(CONCAT(username, id)) WHERE 1;
 
 INSERT INTO page (user_id, type, title, url, permission) VALUES
     (1, 'page', 'Home', 'home', 0),
-    (1, 'nav', 'Menu', NULL, 0)
-    (1, 'page', 'Orphan', 'home', 0),
+    (1, 'nav', 'Menu', NULL, 0),
+    (1, 'page', 'Orphan', 'orphan', 0)
 ;
 INSERT INTO content (page_id, user_id, html) VALUES
     (1, 1, '<h2>Welcome to the WIKI</h2>
 <p>This is the default homepage of you new WIKI. Start adding content and building your own content.</p>
 <p>&nbsp;</p>
-<p><small>TODO: Add some sturtup content howto`s, introduction etc....</small></p>
+<p><small>TODO: Add some start up content howto`s, introduction etc....</small></p>
 <p>&nbsp;</p>'),
     (2, 1, '<ul>
 <li><a href="#">Item 1</a></li>
@@ -130,10 +130,11 @@ INSERT INTO content (page_id, user_id, html) VALUES
 <li><a href="#">Item 3</a></li>
 <li><a href="#">Item 4</a></li>
 </ul>'),
+
     (3, 1, '<h2>Orphan Test WIKI Page</h2>
 <p>This is the default homepage of you new WIKI. Start adding content and building your own content.</p>
 <p>&nbsp;</p>
-<p><small>TODO: Add some sturtup content howto`s, introduction etc....</small></p>
+<p><small>TODO: Add some start up content howto`s, introduction etc....</small></p>
 <p>&nbsp;</p>')
 ;
 

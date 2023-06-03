@@ -15,6 +15,7 @@ $registry->set('site.account.registration', '');
 
 $registry->set('site.page.header.hide', '');
 $registry->set('wiki.page.default', 'home');
+
 $registry->save();
 
 

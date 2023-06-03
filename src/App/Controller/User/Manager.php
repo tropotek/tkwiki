@@ -30,7 +30,7 @@ class Manager extends PageController
 
         // Get the form template
         $this->table = new \App\Table\User($this->type);
-        $this->table->doDefault($request);
+        $this->table->doDefault($request, $this->type);
 
         return $this->getPage();
     }

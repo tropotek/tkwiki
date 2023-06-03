@@ -28,11 +28,10 @@ class User
     protected string $type = \App\Db\User::TYPE_USER;
 
 
-    public function __construct(string $type)
+    public function __construct()
     {
-        $this->table = new Table($type);
+        $this->table = new Table('users');
         $this->filter = new Form($this->table->getId() . '-filters');
-        $this->type = $type;
     }
 
     private function doDelete($user_id)
@@ -58,8 +57,9 @@ class User
         Uri::create()->remove(Masquerade::QUERY_MSQ)->redirect();
     }
 
-    public function doDefault(Request $request)
+    public function doDefault(Request $request, string $type)
     {
+        $this->type = $type;
         if ($request->query->has('del')) {
             $this->doDelete($request->query->get('del'));
         }
@@ -68,7 +68,8 @@ class User
         }
 
         $this->getTable()->appendCell(new Cell\Checkbox('id'));
-        $this->getTable()->appendCell(new Cell\Text('actions'))->addOnShow(function (Cell\Text $cell) {
+        $this->getTable()->appendCell(new Cell\Text('actions'))
+            ->addOnShow(function (Cell\Text $cell) {
             $cell->addCss('text-nowrap text-center');
             $obj = $cell->getRow()->getData();
 
@@ -100,7 +101,8 @@ class User
 
         });
         $this->getTable()->appendCell(new Cell\Text('username'))
-            ->setUrl(Uri::create('/userEdit'))->setAttr('style', 'width: 100%;');
+            ->setUrl(Uri::create('/userEdit'))
+            ->setAttr('style', 'width: 100%;');
         $this->getTable()->appendCell(new Cell\Text('name'));
 
         if ($this->type == \App\Db\User::TYPE_STAFF) {
@@ -129,7 +131,8 @@ class User
 
 
         // Table filters
-        $this->getFilter()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
+        $this->getFilter()->appendField(new Field\Input('search'))
+            ->setAttr('placeholder', 'Search');
 
 
         // Load filter values

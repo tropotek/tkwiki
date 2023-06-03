@@ -54,7 +54,20 @@ return function (CollectionConfigurator $routes) {
 
 
 
-    // API calls
+    // Content View API (Returns HTML|text response)
+//    $routes->add('v-table-user', '/vapi/table/user/{type}')
+//        ->controller([\App\Table\User::class, 'doDefault'])
+//    ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET])
+//        ->defaults(['type' => \App\Db\User::TYPE_USER]);
+
+
+
+    // API calls (Returns JSON response)
+
+    // get all public pages
+    $routes->add('api-pages-public', '/api/pages/public')
+        ->controller([\App\Api\Page::class, 'doGetPublic'])
+        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
 
 
 

@@ -14,6 +14,7 @@ class Home extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Home');
+        $this->getFactory()->getCrumbs()->reset();
     }
 
     public function doDefault(Request $request)
@@ -33,30 +34,18 @@ class Home extends PageController
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        //$template->appendText('title', $this->getPage()->getTitle());
+        $template->appendText('title', $this->getPage()->getTitle());
 
 
         return $template;
     }
 
-    public function __makeTemplate()
+    public function __makeTemplate(): ?Template
     {
         $html = <<<HTML
 <div>
-<!--  <div class="card mb-3">-->
-<!--    <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>-->
-<!--    <div class="card-body" var="actions">-->
-<!--      <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>-->
-<!--    </div>-->
-<!--  </div>-->
-  <div class="card mb-3">
-    <div class="card-header" var="title"><i class="fa fa-home"></i> Home</div>
-    <div class="card-body" var="content">
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
-    </div>
-  </div>
+    <h1 class="" var="title"></h1>
+    <div class="" var="content"></div>
 </div>
 HTML;
         return $this->loadTemplate($html);

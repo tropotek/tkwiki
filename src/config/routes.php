@@ -64,10 +64,6 @@ return function (CollectionConfigurator $routes) {
 
     // API calls (Returns JSON response)
 
-    // get all public pages
-    $routes->add('api-pages-public', '/api/pages/public')
-        ->controller([\App\Api\Page::class, 'doGetPublic'])
-        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
 
 
 

@@ -74,7 +74,7 @@
         $(this).append(container);
 
         $(this).parent()
-          .addClass('col-12 m-0 p-0')
+          .addClass('col-12 m-0')
           .removeClass('row');
         // END CSS FIX
 

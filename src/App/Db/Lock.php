@@ -15,7 +15,8 @@ class Lock
 {
     use SystemTrait;
 
-    const TIMEOUT_SEC = 60*60*2;    // Default 2 hours
+    //const TIMEOUT_SEC = 60*60*2;    // Default 2 hours
+    const TIMEOUT_SEC = 60*2;    // Default 2 hours
 
     protected User $user;
 

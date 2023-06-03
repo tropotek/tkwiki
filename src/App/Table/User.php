@@ -69,7 +69,7 @@ class User
 
         $this->getTable()->appendCell(new Cell\Checkbox('id'));
         $this->getTable()->appendCell(new Cell\Text('actions'))
-            ->addOnShow(function (Cell\Text $cell) {
+            ->addOnShow(function (Cell\Text $cell, string $html) {
             $cell->addCss('text-nowrap text-center');
             $obj = $cell->getRow()->getData();
 
@@ -99,10 +99,13 @@ class User
             $btn->setAttr('data-confirm', 'Are you sure you want to delete \''.$obj->getName().'\'');
             $template->appendTemplate('td', $btn->show());
 
+            return '';
         });
+
         $this->getTable()->appendCell(new Cell\Text('username'))
             ->setUrl(Uri::create('/userEdit'))
             ->setAttr('style', 'width: 100%;');
+
         $this->getTable()->appendCell(new Cell\Text('name'));
 
         if ($this->type == \App\Db\User::TYPE_STAFF) {
@@ -124,6 +127,7 @@ class User
                 /** @var \App\Db\User $user */
                 $user = $cell->getRow()->getData();
                 $cell->setUrl('mailto:'.$user->getEmail());
+                $cell->setValue('====');
             });
         $this->getTable()->appendCell(new Cell\Text('active'));
         //$this->getTable()->appendCell(new Cell\Text('modified'));

@@ -103,6 +103,9 @@ th
 {
   text-align: center;
 }
+td.key {
+  width: 100%;
+}
 th a,
 td a {
   display: block;

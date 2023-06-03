@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller\Page;
 
+use App\Db\Page;
+use App\Db\PageMap;
 use App\Db\User;
 use Bs\PageController;
 use Dom\Template;
@@ -37,6 +39,74 @@ class Manager extends PageController
 
     public function doDefault(Request $request)
     {
+        $this->getTable()->appendCell(new Cell\Checkbox('id'));
+        $this->getTable()->appendCell(new Cell\Text('title'))->addCss('key');
+        $this->getTable()->appendCell(new Cell\Text('userId'))
+            ->addOnValue(function (Cell\Text $cell) {
+                /** @var Page $page */
+                $page = $cell->getRow()->getData();
+                $cell->setValue($page->getUser()->getName());
+                vd($cell->getValue());
+                // TODO: add the edit URL
+
+            });
+        $this->getTable()->appendCell(new Cell\Text('type'));
+        $this->getTable()->appendCell(new Cell\Text('url'));
+        $this->getTable()->appendCell(new Cell\Boolean('published'));
+        $this->getTable()->appendCell(new Cell\Text('permission'))
+            ->addOnValue(function (Cell\Text $cell) {
+                /** @var Page $page */
+                $page = $cell->getRow()->getData();
+                $cell->setValue($page->getPermissionLabel());
+            });;
+        $this->getTable()->appendCell(new Cell\Text('modified'));
+        $this->getTable()->appendCell(new Cell\Text('created'));
+
+
+        // Table filters
+        $this->getFilter()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
+        $list = [
+            '-- Type --' => '',
+            Page::TYPE_PAGE => Page::TYPE_PAGE,
+            Page::TYPE_NAV => Page::TYPE_NAV,
+        ];
+        $this->getFilter()->appendField(new Field\Select('type', $list));
+
+        // Load filter values
+        $this->getFilter()->setFieldValues($this->getTable()->getTableSession()->get($this->getFilter()->getId(), []));
+
+        $this->getFilter()->appendField(new Form\Action\Submit('Search', function (Form $form, Form\Action\ActionInterface $action) {
+            $this->getTable()->getTableSession()->set($this->getFilter()->getId(), $form->getFieldValues());
+            Uri::create()->redirect();
+        }))->setGroup('');
+        $this->getFilter()->appendField(new Form\Action\Submit('Clear', function (Form $form, Form\Action\ActionInterface $action) {
+            $this->getTable()->getTableSession()->set($this->getFilter()->getId(), []);
+            Uri::create()->redirect();
+        }))->setGroup('')->addCss('btn-outline-secondary');
+
+        $this->getFilter()->execute($request->request->all());
+
+
+        // Table Actions
+        if ($this->getConfig()->isDebug()) {
+            $this->getTable()->appendAction(new Action\Link('reset', Uri::create()->set(Table::RESET_TABLE, $this->getTable()->getId()), 'fa fa-retweet'))
+                ->setLabel('')
+                ->setAttr('data-confirm', 'Are you sure you want to reset the Table`s session?')
+                ->setAttr('title', 'Reset table filters and order to default.');
+        }
+        $this->getTable()->appendAction(new Action\Button('Create'))->setUrl(Uri::create('/pageEdit'));
+        $this->getTable()->appendAction(new Action\Delete());
+        $this->getTable()->appendAction(new Action\Csv())->addExcluded('actions');
+
+
+        // Query
+        $tool = $this->getTable()->getTool();
+        $filter = $this->getFilter()->getFieldValues();
+        $list = PageMap::create()->findFiltered($filter, $tool);
+        $this->getTable()->setList($list, $tool->getFoundRows());
+
+        $this->getTable()->execute($request);
+
 
         return $this->getPage();
     }

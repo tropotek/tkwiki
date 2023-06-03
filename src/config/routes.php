@@ -49,6 +49,8 @@ return function (CollectionConfigurator $routes) {
 
 
     // Wiki pages
+    $routes->add('wiki-page', '/pageManager')
+        ->controller([\App\Controller\Page\Manager::class, 'doDefault']);
 
 
 

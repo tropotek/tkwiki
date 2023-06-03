@@ -14,7 +14,7 @@ class PageMap extends Mapper
 {
 
     public function makeDataMaps(): void
-    { 
+    {
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
             $map = new DataMap();
             $map->addDataType(new Db\Integer('id'));
@@ -30,7 +30,7 @@ class PageMap extends Mapper
 
             $this->addDataMap(self::DATA_MAP_DB, $map);
         }
-        
+
         if (!$this->getDataMappers()->has(self::DATA_MAP_FORM)) {
             $map = new DataMap();
             $map->addDataType(new Form\Integer('id'));
@@ -44,7 +44,7 @@ class PageMap extends Mapper
 
             $this->addDataMap(self::DATA_MAP_FORM, $map);
         }
-        
+
         if (!$this->getDataMappers()->has(self::DATA_MAP_TABLE)) {
             $map = new DataMap();
             $map->addDataType(new Form\Integer('id'));
@@ -55,6 +55,8 @@ class PageMap extends Mapper
             $map->addDataType(new Form\Integer('views'));
             $map->addDataType(new Form\Integer('permission'));
             $map->addDataType(new Table\Boolean('published'));
+            $map->addDataType(new Form\Date('modified'))->setDateFormat('d/m/Y h:i:s');
+            $map->addDataType(new Form\Date('created'))->setDateFormat('d/m/Y h:i:s');
 
             $this->addDataMap(self::DATA_MAP_TABLE, $map);
         }

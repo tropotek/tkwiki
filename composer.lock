@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2698c12507ae3c92e379f5fee2ac0fc5",
+    "content-hash": "019de12863f3a32a30d39eb5000c193e",
     "packages": [
         {
             "name": "components/font-awesome",
@@ -286,6 +286,238 @@
             "time": "2023-02-06T13:44:46+00:00"
         },
         {
+            "name": "mpdf/mpdf",
+            "version": "v8.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mpdf/mpdf.git",
+                "reference": "146c7c1dfd21c826b9d5bbfe3c15e52fd933c90f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/146c7c1dfd21c826b9d5bbfe3c15e52fd933c90f",
+                "reference": "146c7c1dfd21c826b9d5bbfe3c15e52fd933c90f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "ext-mbstring": "*",
+                "mpdf/psr-log-aware-trait": "^2.0 || ^3.0",
+                "myclabs/deep-copy": "^1.7",
+                "paragonie/random_compat": "^1.4|^2.0|^9.99.99",
+                "php": "^5.6 || ^7.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
+                "psr/http-message": "^1.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
+                "setasign/fpdi": "^2.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3.0",
+                "mpdf/qrcode": "^1.1.0",
+                "squizlabs/php_codesniffer": "^3.5.0",
+                "tracy/tracy": "~2.5",
+                "yoast/phpunit-polyfills": "^1.0"
+            },
+            "suggest": {
+                "ext-bcmath": "Needed for generation of some types of barcodes",
+                "ext-xml": "Needed mainly for SVG manipulation",
+                "ext-zlib": "Needed for compression of embedded resources, such as fonts"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mpdf\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Matěj Humpál",
+                    "role": "Developer, maintainer"
+                },
+                {
+                    "name": "Ian Back",
+                    "role": "Developer (retired)"
+                }
+            ],
+            "description": "PHP library generating PDF files from UTF-8 encoded HTML",
+            "homepage": "https://mpdf.github.io",
+            "keywords": [
+                "pdf",
+                "php",
+                "utf-8"
+            ],
+            "support": {
+                "docs": "http://mpdf.github.io",
+                "issues": "https://github.com/mpdf/mpdf/issues",
+                "source": "https://github.com/mpdf/mpdf"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/mpdf",
+                    "type": "custom"
+                }
+            ],
+            "time": "2023-05-03T19:36:43+00:00"
+        },
+        {
+            "name": "mpdf/psr-log-aware-trait",
+            "version": "2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mpdf/psr-log-aware-trait.git",
+                "reference": "7a077416e8f39eb626dee4246e0af99dd9ace275"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mpdf/psr-log-aware-trait/zipball/7a077416e8f39eb626dee4246e0af99dd9ace275",
+                "reference": "7a077416e8f39eb626dee4246e0af99dd9ace275",
+                "shasum": ""
+            },
+            "require": {
+                "psr/log": "^1.0 || ^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mpdf\\PsrLogAwareTrait\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Dorison",
+                    "email": "mark@chromatichq.com"
+                },
+                {
+                    "name": "Kristofer Widholm",
+                    "email": "kristofer@chromatichq.com"
+                }
+            ],
+            "description": "Trait to allow support of different psr/log versions.",
+            "support": {
+                "issues": "https://github.com/mpdf/psr-log-aware-trait/issues",
+                "source": "https://github.com/mpdf/psr-log-aware-trait/tree/2.x"
+            },
+            "time": "2023-05-03T06:18:28+00:00"
+        },
+        {
+            "name": "myclabs/deep-copy",
+            "version": "1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/myclabs/DeepCopy.git",
+                "reference": "928a96f585b86224ebc78f8f09d0482cf15b04f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/928a96f585b86224ebc78f8f09d0482cf15b04f5",
+                "reference": "928a96f585b86224ebc78f8f09d0482cf15b04f5",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "conflict": {
+                "doctrine/collections": "<1.6.8",
+                "doctrine/common": "<2.13.3 || >=3 <3.2.2"
+            },
+            "require-dev": {
+                "doctrine/collections": "^1.6.8",
+                "doctrine/common": "^2.13.3 || ^3.2.2",
+                "phpspec/prophecy": "^1.10",
+                "phpunit/phpunit": "^7.5.20 || ^8.5.23 || ^9.5.13"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/DeepCopy/deep_copy.php"
+                ],
+                "psr-4": {
+                    "DeepCopy\\": "src/DeepCopy/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Create deep copies (clones) of your objects",
+            "keywords": [
+                "clone",
+                "copy",
+                "duplicate",
+                "object",
+                "object graph"
+            ],
+            "support": {
+                "issues": "https://github.com/myclabs/DeepCopy/issues",
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.x"
+            },
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/myclabs/deep-copy",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-03-08T17:24:01+00:00"
+        },
+        {
+            "name": "paragonie/random_compat",
+            "version": "v9.99.100",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*",
+                "vimeo/psalm": "^1"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "keywords": [
+                "csprng",
+                "polyfill",
+                "pseudorandom",
+                "random"
+            ],
+            "support": {
+                "email": "info@paragonie.com",
+                "issues": "https://github.com/paragonie/random_compat/issues",
+                "source": "https://github.com/paragonie/random_compat"
+            },
+            "time": "2020-10-15T08:29:30+00:00"
+        },
+        {
             "name": "phpmailer/phpmailer",
             "version": "v6.8.0",
             "source": {
@@ -471,6 +703,59 @@
                 "source": "https://github.com/php-fig/event-dispatcher/tree/master"
             },
             "time": "2022-06-29T17:22:39+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/1.1"
+            },
+            "time": "2023-04-04T09:50:52+00:00"
         },
         {
             "name": "psr/log",
@@ -694,6 +979,78 @@
                 "source": "https://github.com/sensiolabs/ansi-to-html/tree/master"
             },
             "time": "2022-09-30T07:50:44+00:00"
+        },
+        {
+            "name": "setasign/fpdi",
+            "version": "v2.3.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Setasign/FPDI.git",
+                "reference": "bccc892d5fa1f48c43f8ba7db5ed4ba6f30c8c05"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/bccc892d5fa1f48c43f8ba7db5ed4ba6f30c8c05",
+                "reference": "bccc892d5fa1f48c43f8ba7db5ed4ba6f30c8c05",
+                "shasum": ""
+            },
+            "require": {
+                "ext-zlib": "*",
+                "php": "^5.6 || ^7.0 || ^8.0"
+            },
+            "conflict": {
+                "setasign/tfpdf": "<1.31"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5.7",
+                "setasign/fpdf": "~1.8",
+                "setasign/tfpdf": "1.31",
+                "squizlabs/php_codesniffer": "^3.5",
+                "tecnickcom/tcpdf": "~6.2"
+            },
+            "suggest": {
+                "setasign/fpdf": "FPDI will extend this class but as it is also possible to use TCPDF or tFPDF as an alternative. There's no fixed dependency configured."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "setasign\\Fpdi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Slabon",
+                    "email": "jan.slabon@setasign.com",
+                    "homepage": "https://www.setasign.com"
+                },
+                {
+                    "name": "Maximilian Kresse",
+                    "email": "maximilian.kresse@setasign.com",
+                    "homepage": "https://www.setasign.com"
+                }
+            ],
+            "description": "FPDI is a collection of PHP classes facilitating developers to read pages from existing PDF documents and use them as templates in FPDF. Because it is also possible to use FPDI with TCPDF, there are no fixed dependencies defined. Please see suggestions for packages which evaluates the dependencies automatically.",
+            "homepage": "https://www.setasign.com/fpdi",
+            "keywords": [
+                "fpdf",
+                "fpdi",
+                "pdf"
+            ],
+            "support": {
+                "issues": "https://github.com/Setasign/FPDI/issues",
+                "source": "https://github.com/Setasign/FPDI/tree/v2.3.7"
+            },
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/setasign/fpdi",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-02-09T10:38:43+00:00"
         },
         {
             "name": "studio-42/elfinder",
@@ -1158,12 +1515,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "86c012b4cc8dca1b03003ede87a44ffa2a15387b"
+                "reference": "295de66c3171df2bd0a3bb30e08e151df01ccccb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/86c012b4cc8dca1b03003ede87a44ffa2a15387b",
-                "reference": "86c012b4cc8dca1b03003ede87a44ffa2a15387b",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/295de66c3171df2bd0a3bb30e08e151df01ccccb",
+                "reference": "295de66c3171df2bd0a3bb30e08e151df01ccccb",
                 "shasum": ""
             },
             "require": {
@@ -1227,7 +1584,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-23T16:34:37+00:00"
+            "time": "2023-06-01T08:31:05+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -2174,12 +2531,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "7f627c03202804a9182b94c649697afb70083799"
+                "reference": "7070673585b52fd843c5e4dfd3133bdaf35e62dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/7f627c03202804a9182b94c649697afb70083799",
-                "reference": "7f627c03202804a9182b94c649697afb70083799",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/7070673585b52fd843c5e4dfd3133bdaf35e62dc",
+                "reference": "7070673585b52fd843c5e4dfd3133bdaf35e62dc",
                 "shasum": ""
             },
             "require": {
@@ -2248,7 +2605,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-25T13:10:31+00:00"
+            "time": "2023-06-01T08:31:10+00:00"
         },
         {
             "name": "tinymce/tinymce",
@@ -2361,12 +2718,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "532f47daece4190dcc4d6fadae83476a568cb1d2"
+                "reference": "2361ca10c54f13982512a5bf9c2d8a0f56bac05d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/532f47daece4190dcc4d6fadae83476a568cb1d2",
-                "reference": "532f47daece4190dcc4d6fadae83476a568cb1d2",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/2361ca10c54f13982512a5bf9c2d8a0f56bac05d",
+                "reference": "2361ca10c54f13982512a5bf9c2d8a0f56bac05d",
                 "shasum": ""
             },
             "require": {
@@ -2475,12 +2832,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "4d9ff38cc6baab7eb8cb78998a715a859328195d"
+                "reference": "e07d15461b2e235480f38edb331331afc0a89a24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/4d9ff38cc6baab7eb8cb78998a715a859328195d",
-                "reference": "4d9ff38cc6baab7eb8cb78998a715a859328195d",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/e07d15461b2e235480f38edb331331afc0a89a24",
+                "reference": "e07d15461b2e235480f38edb331331afc0a89a24",
                 "shasum": ""
             },
             "require": {
@@ -2524,12 +2881,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "2e2c0e6dcdf793f16975f3a98d98e55aefeed733"
+                "reference": "068be0b10287b474e283c238144837df33712651"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/2e2c0e6dcdf793f16975f3a98d98e55aefeed733",
-                "reference": "2e2c0e6dcdf793f16975f3a98d98e55aefeed733",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/068be0b10287b474e283c238144837df33712651",
+                "reference": "068be0b10287b474e283c238144837df33712651",
                 "shasum": ""
             },
             "require": {
@@ -2597,12 +2954,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-installers.git",
-                "reference": "74bd99635fe93d70492e86ca47a97c87914c915f"
+                "reference": "a69fb293cfbb5dfe15e2d6e49bf4c0e93daed7c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/74bd99635fe93d70492e86ca47a97c87914c915f",
-                "reference": "74bd99635fe93d70492e86ca47a97c87914c915f",
+                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/a69fb293cfbb5dfe15e2d6e49bf4c0e93daed7c9",
+                "reference": "a69fb293cfbb5dfe15e2d6e49bf4c0e93daed7c9",
                 "shasum": ""
             },
             "require": {
@@ -2705,12 +3062,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-table.git",
-                "reference": "b67aa801b79c4a7cdcb25dcee2799fc4ea704e7a"
+                "reference": "ad8ced0e30a28069d70bc8fa14eed24e0f91f626"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/b67aa801b79c4a7cdcb25dcee2799fc4ea704e7a",
-                "reference": "b67aa801b79c4a7cdcb25dcee2799fc4ea704e7a",
+                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/ad8ced0e30a28069d70bc8fa14eed24e0f91f626",
+                "reference": "ad8ced0e30a28069d70bc8fa14eed24e0f91f626",
                 "shasum": ""
             },
             "require": {
@@ -3759,12 +4116,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "4524b2959654ef2c3c11b53fd6715936484df984"
+                "reference": "47a1b2fea0dc9a8c7574bafb6aa053641e5de839"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/4524b2959654ef2c3c11b53fd6715936484df984",
-                "reference": "4524b2959654ef2c3c11b53fd6715936484df984",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/47a1b2fea0dc9a8c7574bafb6aa053641e5de839",
+                "reference": "47a1b2fea0dc9a8c7574bafb6aa053641e5de839",
                 "shasum": ""
             },
             "require": {
@@ -3814,7 +4171,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-30T17:18:34+00:00"
+            "time": "2023-06-01T08:31:10+00:00"
         },
         {
             "name": "symfony/finder",

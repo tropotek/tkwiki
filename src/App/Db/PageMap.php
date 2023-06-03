@@ -142,6 +142,15 @@ class PageMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
+        if (isset($filter['orphaned'])) {
+            $homeUrl = $this->getRegistry()->get('wiki.page.default');
+            $filter->appendFrom(' LEFT JOIN links b USING (url)');
+            $filter->appendWhere('b.page_id IS NULL AND (a.url != %s AND a.type != %s)',
+                $this->quote($homeUrl),
+                $this->quote(Page::TYPE_NAV)
+            );
+        }
+
         return $filter;
     }
 

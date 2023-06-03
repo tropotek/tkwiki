@@ -51,6 +51,8 @@ return function (CollectionConfigurator $routes) {
     // Wiki pages
     $routes->add('wiki-page', '/pageManager')
         ->controller([\App\Controller\Page\Manager::class, 'doDefault']);
+    $routes->add('wiki-orphaned', '/orphanManager')
+        ->controller([\App\Controller\Page\Orphaned::class, 'doDefault']);
 
 
 

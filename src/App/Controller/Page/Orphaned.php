@@ -1,12 +1,13 @@
 <?php
 namespace App\Controller\Page;
 
+use App\Db\PageMap;
 use App\Db\User;
 use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 
-class Manager extends PageController
+class Orphaned extends PageController
 {
 
     protected \App\Table\Page $table;
@@ -15,7 +16,7 @@ class Manager extends PageController
     public function __construct()
     {
         parent::__construct($this->getFactory()->getPublicPage());
-        $this->getPage()->setTitle('Page Manager');
+        $this->getPage()->setTitle('Orphaned Pages');
         $this->setAccess(User::PERM_SYSADMIN);
     }
 
@@ -24,7 +25,12 @@ class Manager extends PageController
         // Get the form template
         $this->table = new \App\Table\Page();
         $this->table->doDefault($request);
-        $this->table->execute($request);
+
+        $tool = $this->table->getTable()->getTool();
+        $filter = $this->table->getFilter()->getFieldValues();
+        $filter['orphaned'] = true;
+        $list = PageMap::create()->findFiltered($filter, $tool);
+        $this->table->execute($request, $list);
 
         return $this->getPage();
     }

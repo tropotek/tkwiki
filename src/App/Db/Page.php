@@ -81,6 +81,8 @@ class Page extends Model
     {
         $url = preg_replace('/[^a-z0-9_-]/i', '_', $title);
         do {
+            // TODO: find a way to see if the url matches any in the routing table as well.
+
             $comp = \App\Db\PageMap::create()->findByUrl($url);
             if ($comp) {
                 if (preg_match('/(.+)(_([0-9]+))$/', $url, $regs)) {
@@ -246,6 +248,10 @@ class Page extends Model
                 $errors['url'] = 'This url already exists, try again';
             }
         }
+
+        // TODO: find a way to see if the url matches any in the routing table as well.
+
+        // ...
 
         return $errors;
     }

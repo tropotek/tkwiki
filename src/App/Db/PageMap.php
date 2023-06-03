@@ -154,4 +154,82 @@ class PageMap extends Mapper
         return $filter;
     }
 
+    /**
+     * Test if the supplied pageId is an orphaned page
+     */
+    public function isOrphan(int $pageId): bool
+    {
+        $homeUrl = $this->getRegistry()->get('wiki.page.default');
+        $sql = <<<SQL
+SELECT a.id
+FROM page a LEFT JOIN links b USING (url)
+WHERE b.page_id IS NULL AND (a.url != ? AND a.type != ? AND a.id = ?)
+SQL;
+        $stm = $this->getDb()->prepare($sql);
+        $stm->execute([
+            $homeUrl,
+            Page::TYPE_NAV,
+            $pageId
+        ]);
+
+        if ($stm->rowCount() > 0) return true;
+        return false;
+    }
+
+    public function linkExists(int $pageId, string $pageUrl): bool
+    {
+        $sql = <<<SQL
+SELECT COUNT(*) as i FROM links WHERE page_id = ? AND url = ?
+SQL;
+        $stm = $this->getDb()->prepare($sql);
+        $stm->execute([
+            $pageId,
+            $pageUrl
+        ]);
+        $value = $stm->fetch();
+
+        if (!$value) return false;
+        return ($value->i > 0);
+    }
+
+
+    public function insertLink(int $pageId, string $pageUrl): int
+    {
+        if ($this->linkExists($pageId, $pageUrl)) {
+            return false;
+        }
+        $sql = <<<SQL
+INSERT INTO links VALUES (?, ?)
+SQL;
+        $stm = $this->getDb()->prepare($sql);
+        return $stm->execute([
+            $pageId,
+            $pageUrl
+        ]);
+    }
+
+    public function deleteLink($pageId, $pageUrl): bool
+    {
+        if (!$this->linkExists($pageId, $pageUrl)) {
+            return false;
+        }
+        $sql = <<<SQL
+DELETE FROM links WHERE page_id = ? AND url = ? LIMIT 1
+SQL;
+        $stm = $this->getDb()->prepare($sql);
+        return $stm->execute([
+            $pageId,
+            $pageUrl
+        ]);
+    }
+
+    public function deleteLinkByPageId(int $pageId): bool
+    {
+        $sql = <<<SQL
+DELETE FROM links WHERE page_id = ?
+SQL;
+        $stm = $this->getDb()->prepare($sql);
+        return $stm->execute([$pageId]);
+    }
+
 }

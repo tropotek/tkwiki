@@ -11,13 +11,28 @@ use Symfony\Component\Routing\Loader\Configurator\CollectionConfigurator;
 return function (CollectionConfigurator $routes) {
 
     // Site public pages
-    $routes->add('home-base', '/')
-        ->controller([\App\Controller\Home::class, 'doDefault']);
-    $routes->add('home', '/home')
-        ->controller([\App\Controller\Home::class, 'doDefault']);
-    $routes->add('user-dashboard', '/dashboard')
-        ->controller([\App\Controller\Dashboard::class, 'doDefault']);
-    $routes->add('contact', '/contact')
+//    $routes->add('home-base', '/')
+//        ->controller([\App\Controller\Home::class, 'doDefault']);
+//    $routes->add('home', '/home')
+//        ->controller([\App\Controller\Home::class, 'doDefault']);
+
+    $routes->add('wiki-view', '/view')
+        ->controller([\App\Controller\Page\View::class, 'doDefault']);
+//    $routes->add('wiki-edit', '/edit')
+//        ->controller([\App\Controller\Page\Edit::class, 'doDefault']);
+
+//    $routes->add('wiki-search', '/search')
+//        ->controller([\App\Controller\Search::class, 'doDefault']);
+//    $routes->add('wiki-history', '/historyManager')
+//        ->controller([\App\Controller\Page\History::class, 'doDefault']);
+
+
+    $routes->add('wiki-page', '/pageManager')
+        ->controller([\App\Controller\Page\Manager::class, 'doDefault']);
+    $routes->add('wiki-orphaned', '/orphanManager')
+        ->controller([\App\Controller\Page\Orphaned::class, 'doDefault']);
+
+    $routes->add('wiki-contact', '/contact')
         ->controller([\App\Controller\Contact::class, 'doDefault']);
 
 
@@ -48,29 +63,14 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Controller\User\Profile::class, 'doDefault']);
 
 
-    // Wiki pages
-    $routes->add('wiki-page', '/pageManager')
-        ->controller([\App\Controller\Page\Manager::class, 'doDefault']);
-    $routes->add('wiki-orphaned', '/orphanManager')
-        ->controller([\App\Controller\Page\Orphaned::class, 'doDefault']);
-
-
-
-
-
-    // Content View API (Returns HTML|text response)
-//    $routes->add('v-table-user', '/vapi/table/user/{type}')
-//        ->controller([\App\Table\User::class, 'doDefault'])
-//    ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET])
-//        ->defaults(['type' => \App\Db\User::TYPE_USER]);
-
-
-
     // API calls (Returns JSON response)
+    $routes->add('api-lock-refresh', '/api/lock/refresh')
+        ->controller([\App\Api\Page::class, 'doRefreshLock'])
+        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
 
 
-
-
-
-
+    // DO NOT MOVE.... CatchAll must be the last route.
+    $routes->add('wiki-catch-all', '/{pageUrl}')
+        ->controller([\App\Controller\Page\View::class, 'doDefault'])
+        ->defaults(['pageUrl' => \App\Db\Page::DEFAULT_TAG]);
 };

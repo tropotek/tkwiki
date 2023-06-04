@@ -37,7 +37,7 @@ class Page
     public function doDefault(Request $request)
     {
         $this->getTable()->appendCell(new Cell\Checkbox('id'));
-        $this->getTable()->appendCell(new Cell\Text('title'))->addCss('key');
+        $this->getTable()->appendCell(new Cell\Text('title'))->setUrl(Uri::create('/edit'))->addCss('key');
         $this->getTable()->appendCell(new Cell\Text('userId'))
             ->addOnValue(function (Cell\Text $cell) {
                 /** @var \App\Db\Page $page */

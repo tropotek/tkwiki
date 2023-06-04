@@ -55,7 +55,7 @@ class Edit extends PageController
         }
 
         // Find requested page
-        $this->wPage = PageMap::create()->find($request->query->get('pageId') ?? 0);
+        $this->wPage = PageMap::create()->find($request->query->get('id') ?? 0);
 
         // Create a new page
         if (!$this->wPage && $request->query->has('u') && Page::canCreate($this->getAuthUser())) {
@@ -88,6 +88,7 @@ class Edit extends PageController
             Alert::addWarning('You do not have permission to edit this page.');
             $error = true;
         }
+        // TODO: this lock should give up access if the user is the same as the user that is currently locked....
         if ($this->wPage->id && !$this->lock->canAccess($this->wPage->getId())) {
             Alert::addWarning('The page is currently being edited by another user. Try again later.');
             $error = true;
@@ -274,6 +275,7 @@ class Edit extends PageController
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
+        $template->setAttr('back', 'href', $this->wPage->getPageUrl());
 
         $template->setVisible($this->wPage->getType());
 

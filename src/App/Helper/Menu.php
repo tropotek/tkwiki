@@ -63,7 +63,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
             $row->insertHtml('html', $content->getHtml());
 
             if ($this->user && $page->canEdit($this->user)) {
-                $url = \Tk\Uri::create('/user/edit.html')->set('pageId', $page->getId());
+                $url = \Tk\Uri::create('/edit')->set('id', $page->getId());
                 $row->setAttr('edit', 'href', $url);
                 $row->setVisible('edit');
             }

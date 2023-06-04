@@ -5,6 +5,7 @@ use App\Db\Content;
 use App\Db\ContentMap;
 use App\Db\Page;
 use App\Db\User;
+use App\Helper\ViewToolbar;
 use App\Util\Pdf;
 use Bs\PageController;
 use Dom\Template;
@@ -19,6 +20,8 @@ class View extends PageController
     protected ?Page $wPage = null;
 
     protected ?Content $wContent = null;
+
+    protected ?ViewToolbar $toolbar = null;
 
 
     public function __construct()
@@ -46,12 +49,13 @@ class View extends PageController
         }
 
         $this->wContent = $this->wPage->getContent();
+        $this->toolbar = new ViewToolbar($this->wPage);
 
         // TODO: Note this should never happen (if it does then we need to look at the forign key in the DB)
 //        if (!$this->wContent) {
 //            // May redirect to the edit page if the user has edit privileges or send alert if not.
 //            \Tk\Alert::addWarning('Page content lost, please create new content.');
-//            \Tk\Uri::create('/edit')->set('pageId', $this->wPage->getId())->redirect();
+//            \Tk\Uri::create('/edit')->set('id', $this->wPage->getId())->redirect();
 //        }
 
 
@@ -100,12 +104,14 @@ class View extends PageController
         // TODO:
 //        $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getAuthUser());
 //        $template->insertTemplate('header', $header->show());
+        $template->appendTemplate('toolbar', $this->toolbar->show());
 
         if ($this->getFactory()->getEventDispatcher()) {
             $event = new \App\Event\ContentEvent($this->wContent);
             $this->getFactory()->getEventDispatcher()->dispatch($event, \App\WikiEvents::WIKI_CONTENT_VIEW);
         }
 
+        $template->setText('title', $this->wPage->getTitle());
         $template->insertHtml('content', $this->wContent->getHtml());
 
         if ($this->wContent->getCss()) {
@@ -122,13 +128,11 @@ class View extends PageController
         if ($this->wContent->getDescription()) {
             $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->getDescription(), $this->getPage()->getTemplate()->getTitleElement());
         }
-        $this->getPage()->getTemplate()->setTitleText($this->getPage()->getTemplate()->getTitleText() . ' - ' . $this->wPage->getTitle());
-
-
-//        $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/app/js/prism/prism.js'));
-//        $template->appendCssUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/app/js/prism/prism.css'));
-
-
+        $title = trim($this->getPage()->getTemplate()->getTitleText());
+        if ($title) {
+            $title .= ' - ';
+        }
+        $this->getPage()->getTemplate()->setTitleText($title . $this->wPage->getTitle());
 
         return $template;
     }
@@ -137,8 +141,9 @@ class View extends PageController
     {
         $html = <<<HTML
 <div>
-    <h1 class="" var="title"></h1>
-    <div class="" var="content"></div>
+    <div var="toolbar"></div>
+    <h1 var="title"></h1>
+    <div var="content"></div>
 </div>
 HTML;
         return $this->loadTemplate($html);

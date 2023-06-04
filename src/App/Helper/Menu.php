@@ -46,7 +46,7 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
 
         if ($this->user && Page::canCreate($this->getFactory()->getAuthUser())) {
             $template->setVisible('canCreate');
-            $url = \Tk\Uri::create('/edit.html')->set('type', Page::TYPE_NAV);
+            $url = \Tk\Uri::create('/edit')->set('type', Page::TYPE_NAV);
             $template->setAttr('create', 'href', $url);
         }
 

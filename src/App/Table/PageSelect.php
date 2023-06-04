@@ -14,7 +14,7 @@ use Tk\Table;
 use Tk\Table\Cell;
 use Tk\TableRenderer;
 
-class PageMin
+class PageSelect
 {
     use SystemTrait;
 
@@ -39,8 +39,8 @@ class PageMin
                 $cell->setUrlProperty('');
                 $cell->setUrl(Uri::create('javascript:;'));
                 $cell->getLink()->addCss('wiki-insert');
-                $cell->getLink()->setAttr('data-title', $page->getTitle());
-                $cell->getLink()->setAttr('data-url', $page->getUrl());
+                $cell->getLink()->setAttr('data-wiki-title', $page->getTitle());
+                $cell->getLink()->setAttr('data-wiki-url', $page->getUrl());
             });
         $this->getTable()->appendCell(new Cell\Text('userId'))->setOrderByName('')
             ->addOnValue(function (Cell\Text $cell) {

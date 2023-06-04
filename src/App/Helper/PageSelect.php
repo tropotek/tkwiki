@@ -11,11 +11,11 @@ class PageSelect extends \Dom\Renderer\Renderer implements DisplayInterface
 {
     use SystemTrait;
 
-    protected \App\Table\PageMin $table;
+    protected \App\Table\PageSelect $table;
 
     public function __construct()
     {
-        $this->table = new \App\Table\PageMin();
+        $this->table = new \App\Table\PageSelect();
         $this->table->doDefault($this->getRequest());
         //$this->table->getTable()->resetTableSession();
         $tool = $this->table->getTable()->getTool('title', 25);
@@ -53,7 +53,7 @@ jQuery(function($) {
         const editor = tinymce.activeEditor;
         let linkAttrs = {
           href: 'page://' + url,
-          'class': isNew ? 'wiki-page-new' : 'wiki-page',
+          'class': isNew ? 'wk-page-new' : 'wk-page',
           title: title
         };
         if (editor.selection.getContent()) {
@@ -69,8 +69,8 @@ jQuery(function($) {
     })
     .on('click', '.wiki-insert', function() {
         // On insert existing page event
-        let title = $(this).data('title');
-        let url = $(this).data('url');
+        let title = $(this).data('wiki-title');
+        let url = $(this).data('wiki-url');
         insertWikiUrl(title, url, false);
         $('#page-select-dialog').modal('hide');
         return false;
@@ -78,7 +78,7 @@ jQuery(function($) {
     .on('click', '.btn-create-page', function() {
         // On insert new page event
         let title = $(this).parent().find('input').val();
-        let url = title.replace(/[^a-zA-Z0-9_-]/g, '_');
+        let url = title.trim().replace(/[^a-zA-Z0-9_-]/g, '_');
         // TODO: should we check for existing url (ajax) here???
         //       Or we could check on a keyup event (with delay 250ms) and disable btn if exists
         insertWikiUrl(title, url, true);

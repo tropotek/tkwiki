@@ -110,9 +110,7 @@ class Edit extends PageController
             try {
                 if ($this->wContent->html) {
                     $this->formatter = new HtmlFormatter($this->wContent->getHtml(), false);
-                    //vd($this->wContent->html);
                     $this->wContent->html = $this->formatter->getHtml();
-                    //vd($this->wContent->html);
                 }
             } catch(\Exception $e) {
                 Alert::addInfo($e->getMessage());
@@ -196,7 +194,6 @@ class Edit extends PageController
         if ($this->wPage && $this->wPage->type != \App\Db\Page::TYPE_NAV) {
             $url = $this->wPage->getPageUrl();
         }
-        vd($url);
         $action->setRedirect($url);
     }
 
@@ -264,6 +261,7 @@ class Edit extends PageController
         foreach ($nodeList as $node) {
             $regs = array();
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
+                //vd($node->getAttribute('href'), $regs);
                 if (isset ($regs[1])) {
                     PageMap::create()->insertLink($page->getId(), $regs[1]);
                 }

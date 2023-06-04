@@ -122,7 +122,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
         if ($this->rendered) return $template;
         $this->rendered = true;
 
-        $template->appendCssUrl(Uri::create('/vendor/twbs/bootstrap/dist/css/bootstrap.min.css'));
+//        $template->appendCssUrl(Uri::create('/vendor/twbs/bootstrap/dist/css/bootstrap.css'));
 
         $template->appendText('title', $this->getTitle());
         $template->appendHtml('content', $this->getHtml());

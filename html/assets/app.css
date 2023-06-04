@@ -13,6 +13,27 @@ body {
 
 }
 
+/* ==================  WIKI Styles  ================== */
+a.wk-page {
+  /* color: var(--bs-secondary-color) !important;*/
+}
+a.wk-page-new {
+  /* color: var(--bs-secondary-color) !important;*/
+  color: #FF0000;
+}
+a.wk-page-disable {
+  /* color: var(--bs-secondary-color) !important; */
+  color: #CCCCCC !important;
+}
+a.wk-link-external {
+  /*color: var(--bs-success-color) !important;*/
+  color: #009900;
+}
+
+/* ==================  WIKI End  ================== */
+
+
+
 /* Boostrap 5 hack for nav dropdown disappearing */
 @media (max-width: 991px) {
   .navbar.fixed-top .navbar-collapse, .navbar.sticky-top .navbar-collapse {

@@ -73,7 +73,9 @@ class HtmlFormatter
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             $regs = array();
-            if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
+            $class = $node->getAttribute('class');
+            $href = $node->getAttribute('href');
+            if (preg_match('/^page:\/\/(.+)/i', $href, $regs)) {
                 $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
                 if ($this->isView) {
                     $url = new \Tk\Uri('/' . $regs[1]);
@@ -83,22 +85,20 @@ class HtmlFormatter
                 if ($page) {
                     $css = '';
                     if ($this->isView) {
-                        if ($page->canView($this->getFactory()->getAuthUser())) {
-                            $css = ' wiki-canView';
-                        } else {
-                            $css = ' wiki-notView disabled';
+                        if (!$page->canView($this->getFactory()->getAuthUser())) {
+                            $css = ' wk-page-disable';
                         }
                     }
-                    $node->setAttribute('class', $this->addClass($node->getAttribute('class'), 'wiki-page').$css);
-                    $node->setAttribute('class', $this->removeClass($node->getAttribute('class'), 'wiki-page-new'));
+                    $node->setAttribute('class', $this->addClass($class, 'wk-page').$css);
+                    $node->setAttribute('class', $this->removeClass($class, 'wk-page-new'));
                 } else {
-                    $node->setAttribute('class', $this->addClass($node->getAttribute('class'), 'wiki-page-new'));
-                    $node->setAttribute('class', $this->removeClass($node->getAttribute('class'), 'wiki-page'));
+                    $node->setAttribute('class', $this->addClass($class, 'wk-page-new'));
+                    $node->setAttribute('class', $this->removeClass($class, 'wk-page'));
                 }
-            } else if ($this->isView && preg_match('/^http|https|ftp|telnet|gopher|news/i', $node->getAttribute('href'), $regs)) {
+            } else if ($this->isView && preg_match('/^http|https|ftp|telnet|gopher|news/i', $href, $regs)) {
                 $url = new \Tk\Uri($node->getAttribute('href'));
                 if (strtolower(str_replace('www.', '', $url->getHost())) != strtolower(str_replace('www.', '',$_SERVER['HTTP_HOST'])) ) {
-                    $node->setAttribute('class', $this->addClass($node->getAttribute('class'), 'wiki-link-external'));
+                    $node->setAttribute('class', $this->addClass($class, 'wk-link-external'));
                     $node->setAttribute('target', '_blank');
                 }
             }

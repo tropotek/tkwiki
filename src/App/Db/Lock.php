@@ -43,8 +43,7 @@ class Lock
 
     public function getPageHash(int $pageId): string
     {
-        $sessionId = $this->getSession()->getId();
-        return md5($pageId  . $this->getUser()->getId() . $sessionId);
+        return md5($pageId  . $this->getUser()->getId());
     }
 
 
@@ -112,7 +111,8 @@ class Lock
         if ($pageId <= 0) return false;
         if (!$this->isLocked($pageId)) {
             return true;
-        }else if ($this->ownLock($pageId)) {
+        }
+        if ($this->ownLock($pageId)) {
             return true;
         }
         return false;

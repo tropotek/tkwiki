@@ -2,11 +2,10 @@
 namespace App\Helper;
 
 use App\Db\Content;
-use App\Db\ContentMap;
 use App\Db\Page;
 use App\Db\User;
-use App\Db\UserMap;
 use Bs\Ui\Dialog;
+use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
@@ -15,7 +14,7 @@ use Tk\Uri;
 /**
  * The view page toolbar button group and its actions
  */
-class ViewToolbar extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
+class ViewToolbar extends Renderer implements DisplayInterface
 {
     use SystemTrait;
 
@@ -71,14 +70,6 @@ class ViewToolbar extends \Dom\Renderer\Renderer implements \Dom\Renderer\Displa
   <a href="/?pdf=pdf" title="Download PDF" class="btn btn-outline-secondary" target="_blank" var="pdf-url"><i class="fa fa-fw fa-file-pdf"></i></a>
   <a href="javascript:window.print();" title="Print Document" class="btn btn-outline-secondary"><i class="fa fa-fw fa-print"></i></a>
   <a href="javascript:alert('TODO: Implement a dialog with page info....');" title="Page Info" class="btn btn-outline-secondary"><i class="fa fa-fw fa-circle-info"></i></a>
-
-<!--  <div class="btn-group btn-group-sm" role="group">-->
-<!--    <a href="javascript:;" title="Page Actions" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-fw fa-circle-info"></i></a>-->
-<!--    <ul class="dropdown-menu">-->
-<!--      <li><a href="/user/history.html?pageId=1" class="dropdown-item">Revisions</a></li>-->
-<!--      <li><a href="javascript:;" class="dropdown-item">Page Info</a></li>-->
-<!--    </ul>-->
-<!--  </div>-->
 </div>
 HTML;
 

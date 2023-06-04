@@ -103,7 +103,8 @@ let app = function () {
         'wikiPage | bold italic strikethrough | blocks | alignleft aligncenter ' +
         'alignright alignjustify | bullist numlist outdent indent | link image media | removeformat code fullscreen',
       content_css: [
-        '//cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'
+        '//cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
+        config.baseUrl + '/html/assets/app.css'
       ],
       content_style: 'body {padding: 15px;}',
       urlconverter_callback : function (url, node, on_save) {

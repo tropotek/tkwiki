@@ -2,24 +2,19 @@
 namespace App\Table;
 
 use App\Db\PageMap;
-use App\Db\UserMap;
-use App\Util\Masquerade;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Tk\Alert;
 use Tk\Db\Mapper\Result;
 use Tk\Traits\SystemTrait;
-use Tk\Ui\Link;
 use Tk\Uri;
 use Tk\Form;
 use Tk\Form\Field;
 use Tk\FormRenderer;
 use Tk\Table;
 use Tk\Table\Cell;
-use Tk\Table\Action;
 use Tk\TableRenderer;
 
-class Page
+class PageMin
 {
     use SystemTrait;
 
@@ -30,41 +25,33 @@ class Page
 
     public function __construct()
     {
-        $this->table = new Table('pages');
+        $this->table = new Table('pages-min');
         $this->filter = new Form($this->table->getId() . '-filters');
     }
 
     public function doDefault(Request $request)
     {
-        $this->getTable()->appendCell(new Cell\Checkbox('id'));
-        $this->getTable()->appendCell(new Cell\Text('title'))->addCss('key');
-        $this->getTable()->appendCell(new Cell\Text('userId'))
+        //$this->getTable()->appendCell(new Cell\Checkbox('id'));
+        $this->getTable()->appendCell(new Cell\Text('title'))->setOrderByName('')->addCss('key')
+            ->addOnValue(function (Cell\Text $cell) {
+                /** @var \App\Db\Page $page */
+                $page = $cell->getRow()->getData();
+                $cell->setUrlProperty('');
+                $cell->setUrl(Uri::create('javascript:;'));
+                $cell->getLink()->addCss('wiki-insert');
+                $cell->getLink()->setAttr('data-title', $page->getTitle());
+                $cell->getLink()->setAttr('data-url', $page->getUrl());
+            });
+        $this->getTable()->appendCell(new Cell\Text('userId'))->setOrderByName('')
             ->addOnValue(function (Cell\Text $cell) {
                 /** @var \App\Db\Page $page */
                 $page = $cell->getRow()->getData();
                 $cell->setValue($page->getUser()->getName());
             });
-        $this->getTable()->appendCell(new Cell\Text('type'));
-        $this->getTable()->appendCell(new Cell\Text('url'));
-        $this->getTable()->appendCell(new Cell\Boolean('published'));
-        $this->getTable()->appendCell(new Cell\Text('permission'))
-            ->addOnValue(function (Cell\Text $cell) {
-                /** @var \App\Db\Page $page */
-                $page = $cell->getRow()->getData();
-                $cell->setValue($page->getPermissionLabel());
-            });
-        $this->getTable()->appendCell(new Cell\Text('modified'));
-        $this->getTable()->appendCell(new Cell\Text('created'));
 
 
         // Table filters
         $this->getFilter()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
-        $list = [
-            '-- Type --' => '',
-            \App\Db\Page::TYPE_PAGE => \App\Db\Page::TYPE_PAGE,
-            \App\Db\Page::TYPE_NAV => \App\Db\Page::TYPE_NAV,
-        ];
-        $this->getFilter()->appendField(new Field\Select('type', $list));
 
         // Load filter values
         $this->getFilter()->setFieldValues($this->getTable()->getTableSession()->get($this->getFilter()->getId(), []));
@@ -79,18 +66,6 @@ class Page
         }))->setGroup('')->addCss('btn-outline-secondary');
 
         $this->getFilter()->execute($request->request->all());
-
-
-        // Table Actions
-        if ($this->getConfig()->isDebug()) {
-            $this->getTable()->appendAction(new Action\Link('reset', Uri::create()->set(Table::RESET_TABLE, $this->getTable()->getId()), 'fa fa-retweet'))
-                ->setLabel('')
-                ->setAttr('data-confirm', 'Are you sure you want to reset the Table`s session?')
-                ->setAttr('title', 'Reset table filters and order to default.');
-        }
-        $this->getTable()->appendAction(new Action\Button('Create'))->setUrl(Uri::create('/pageEdit'));
-        $this->getTable()->appendAction(new Action\Delete());
-        $this->getTable()->appendAction(new Action\Csv())->addExcluded('actions');
 
     }
 
@@ -110,9 +85,8 @@ class Page
     public function show(): ?Template
     {
         $renderer = new TableRenderer($this->getTable());
-        //$renderer->setFooterEnabled(false);
         $this->getTable()->getRow()->addCss('text-nowrap');
-        $this->getTable()->addCss('table-hover');
+        $renderer->getFooterList()->remove('limit');
 
         if ($this->getFilter()) {
             $this->getFilter()->addCss('row gy-2 gx-3 align-items-center');

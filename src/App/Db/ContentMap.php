@@ -14,7 +14,7 @@ class ContentMap extends Mapper
 {
 
     public function makeDataMaps(): void
-    { 
+    {
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
             $map = new DataMap();
             $map->addDataType(new Db\Integer('id'));
@@ -30,7 +30,7 @@ class ContentMap extends Mapper
 
             $this->addDataMap(self::DATA_MAP_DB, $map);
         }
-        
+
         if (!$this->getDataMappers()->has(self::DATA_MAP_FORM)) {
             $map = new DataMap();
             $map->addDataType(new Form\Integer('id'));
@@ -44,7 +44,7 @@ class ContentMap extends Mapper
 
             $this->addDataMap(self::DATA_MAP_FORM, $map);
         }
-        
+
         if (!$this->getDataMappers()->has(self::DATA_MAP_TABLE)) {
             $map = new DataMap();
             $map->addDataType(new Form\Integer('id'));
@@ -90,12 +90,12 @@ class ContentMap extends Mapper
     {
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
 
-        if (!empty($filter['keywords'])) {
-            $kw = '%' . $this->escapeString($filter['keywords']) . '%';
+        if (!empty($filter['search'])) {
+            $kw = '%' . $this->escapeString($filter['search']) . '%';
             $w = '';
             //$w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
-            if (is_numeric($filter['keywords'])) {
-                $id = (int)$filter['keywords'];
+            if (is_numeric($filter['search'])) {
+                $id = (int)$filter['search'];
                 $w .= sprintf('a.id = %d OR ', $id);
             }
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));

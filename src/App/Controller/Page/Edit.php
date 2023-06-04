@@ -7,10 +7,10 @@ use App\Db\Lock;
 use App\Db\Page;
 use App\Db\PageMap;
 use App\Helper\HtmlFormatter;
+use App\Helper\PageSelect;
 use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tk\Alert;
 use Tk\Form;
 use Tk\Form\Field;
@@ -78,7 +78,8 @@ class Edit extends PageController
             $this->wContent->setUser($this->getAuthUser()->getId());
         }
         if (!$this->wPage) {
-            throw new HttpException(404, 'Page not found');
+            Alert::addWarning('The page you are attempting to edit cannot be found.');
+            Uri::create(Page::getHomeUrl())->redirect();
         }
 
         // check if the user can edit the page
@@ -211,6 +212,7 @@ class Edit extends PageController
             return;
         }
 
+        $this->wContent->setHtml(mb_convert_encoding($this->wContent->getHtml(), 'UTF-8'));
         $this->wPage->save();
 
         // only save content if it changes
@@ -275,11 +277,14 @@ class Edit extends PageController
 
         $template->setVisible($this->wPage->getType());
 
-        $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getAuthUser());
-        $template->insertTemplate('header', $header->show());
+//        $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getAuthUser());
+//        $template->insertTemplate('header', $header->show());
 
         //$template->appendTemplate('content', $this->form->getRenderer()->getTemplate());
         $template->appendTemplate('content', $this->getFormRenderer()->show());
+
+        $dialog = new PageSelect();
+        $template->appendBodyTemplate($dialog->show());
 
         return $template;
     }

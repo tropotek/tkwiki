@@ -95,12 +95,11 @@ class PageMap extends Mapper
     public function makeQuery(Filter $filter): Filter
     {
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
-
-        if (!empty($filter['keywords'])) {
-            $kw = '%' . $this->escapeString($filter['keywords']) . '%';
+        if (!empty($filter['search'])) {
+            $kw = '%' . $this->escapeString($filter['search']) . '%';
             $w = sprintf('a.title LIKE %s OR ', $this->quote($kw));
-            if (is_numeric($filter['keywords'])) {
-                $id = (int)$filter['keywords'];
+            if (is_numeric($filter['search'])) {
+                $id = (int)$filter['search'];
                 $w .= sprintf('a.id = %d OR ', $id);
             }
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));

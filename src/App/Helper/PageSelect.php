@@ -1,80 +1,159 @@
 <?php
 namespace App\Helper;
 
+use App\Db\Page;
+use App\Db\PageMap;
+use Dom\Renderer\DisplayInterface;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
 
-class PageSelect extends \Dom\Renderer\Renderer
+class PageSelect extends \Dom\Renderer\Renderer implements DisplayInterface
 {
     use SystemTrait;
 
-    protected string $buttonSelector = '';
+    protected \App\Table\PageMin $table;
 
-    protected string $inputSelector = '';
-
-
-    public function __construct(string $buttonSelector, string $inputSelector)
+    public function __construct()
     {
-        $this->buttonSelector = $buttonSelector;
-        $this->inputSelector = $inputSelector;
+        $this->table = new \App\Table\PageMin();
+        $this->table->doDefault($this->getRequest());
+        //$this->table->getTable()->resetTableSession();
+        $tool = $this->table->getTable()->getTool('title', 25);
+        $filter = [
+            'type' => Page::TYPE_PAGE,
+            'published' => true,
+            'permission' => Page::PERM_PUBLIC
+        ];
+        if ($this->getFactory()->getAuthUser()->isUser()) {
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER];
+        }
+        if ($this->getFactory()->getAuthUser()->isStaff()) {
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER, Page::PERM_STAFF];
+        }
+        if ($this->getFactory()->getAuthUser()->isAdmin()) {
+            unset($filter['permission']);
+        }
+
+        $filter = array_merge($this->table->getFilter()->getFieldValues(), $filter);
+
+        $list = PageMap::create()->findFiltered($filter, $tool);
+        $this->table->execute($this->getRequest(), $list);
+
     }
 
     public function show(): ?Template
     {
         $template = $this->getTemplate();
 
-        // TODO: Get the correct URL
-        //$template->appendJsUrl(\Tk\Uri::create(\Tk\Config::getInstance()->getTemplateUrl() . '/app/js/jquery-jtable.js'));
-        
-        $listUrl = \Tk\Uri::create('/ajax/getPageList');        // TODO: Could this be handled in here???
+        // Add a select wiki page button to the tinyMCE editor.
         $js = <<<JS
 jQuery(function($) {
-
-  // required for the pageSelect renderer
-  config.pageSelect = {
-    button : $('{$this->buttonSelector}'),
-    input : $('{$this->inputSelector}')
-  };
-
-  
-  $('.jtable').jtable({
-    properties : ['title', 'modified'],
-    dataUrl : '$listUrl',
-    onSelect : function (object) {
-      config.pageSelect.input.val(object.url);
-      $('#pageSelectModal').modal('hide');
+    function insertWikiUrl(title, url, isNew)
+    {
+        const editor = tinymce.activeEditor;
+        let linkAttrs = {
+          href: 'page://' + url,
+          'class': isNew ? 'wiki-page-new' : 'wiki-page',
+          title: title
+        };
+        if (editor.selection.getContent()) {
+          editor.execCommand('CreateLink', false, linkAttrs);
+        } else {
+          editor.insertContent(editor.dom.createHTML('a', linkAttrs, editor.dom.encode(title)));
+        }
     }
-  });
-  
-  // show dialog trigger
-  config.pageSelect.button.on('click', function(e) {
-    $('#pageSelectModal').modal('show');
-  });
-  
+
+    $('#page-select-dialog').on('show.bs.modal', function() {
+        // Init dialog elements
+        $('input', this).val('');
+    })
+    .on('click', '.wiki-insert', function() {
+        // On insert existing page event
+        let title = $(this).data('title');
+        let url = $(this).data('url');
+        insertWikiUrl(title, url, false);
+        $('#page-select-dialog').modal('hide');
+        return false;
+    })
+    .on('click', '.btn-create-page', function() {
+        // On insert new page event
+        let title = $(this).parent().find('input').val();
+        let url = title.replace(/[^a-zA-Z0-9_-]/g, '_');
+        // TODO: should we check for existing url (ajax) here???
+        //       Or we could check on a keyup event (with delay 250ms) and disable btn if exists
+        insertWikiUrl(title, url, true);
+        $('#page-select-dialog').modal('hide');
+        return false;
+    });
+
 });
 JS;
         $template->appendJs($js);
-        
+
+        // setup the table to be refreshed by javascript on all links/events except cell links
+        $js = <<<JS
+jQuery(function($) {
+    let dialog = $('#page-select-dialog');
+
+    function init() {
+        let links = $('th a, .tk-foot a', this).not('[href="javascript:;"], [href="#"]');
+        // Handle table links
+        links.on('click', function(e) {
+            e.stopPropagation();
+            let url = $(this).attr('href');
+            $('#page-select-table', dialog).load(url + ' #page-select-table', function (response, status, xhr) {
+                $('#page-select-table', dialog).trigger(EVENT_INIT);
+            });
+            return false;
+        });
+        // Handle table filters
+        $('form.tk-form', this).on('submit', function (e) {
+            e.stopPropagation();
+            let url = $(this).attr('action');
+            let data = $(this).serializeArray();
+            let submit = $(e.originalEvent.submitter);
+            data.push({name: submit.attr('name'), value: submit.attr('value')});
+            $('#page-select-table', dialog).load(url + ' #page-select-table', data, function (response, status, xhr) {
+                $('#page-select-table', dialog).trigger(EVENT_INIT);
+            });
+            return false;
+        });
+    }
+    $('#page-select-table', '#page-select-dialog').on(EVENT_INIT, document, init).each(init);
+});
+JS;
+        $template->appendJs($js);
+        $template->appendTemplate('table', $this->table->show());
+
+
         return $template;
     }
 
     public function __makeTemplate(): ?Template
     {
         $html = <<<HTML
-<div class="modal fade" id="pageSelectModal" tabindex="-1" role="dialog" aria-labelledby="pageSelectModalLabel">
-  <div class="modal-dialog" role="document">
+<div class="modal modal-xl fade" id="page-select-dialog" tabindex="-1" aria-labelledby="page-select-label">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="pageSelectModalLabel">Select A Page</h4>
+        <h1 class="modal-title fs-5" id="page-select-label">Select A Page</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
-        
-        <div class="jtable"></div>
-        
+        <div id="page-select-table" var="table"></div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+      <div class="modal-footer" style="justify-content: space-between;">
+        <div>
+            <div class="input-group input-group-sm">
+              <input type="text" class="form-control" placeholder="New Page Title" >
+              <button class="btn btn-outline-primary btn-create-page" type="button">Create</button>
+            </div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>

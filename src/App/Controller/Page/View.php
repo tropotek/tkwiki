@@ -101,12 +101,11 @@ class View extends PageController
 //        $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getAuthUser());
 //        $template->insertTemplate('header', $header->show());
 
-
         if ($this->getFactory()->getEventDispatcher()) {
             $event = new \App\Event\ContentEvent($this->wContent);
             $this->getFactory()->getEventDispatcher()->dispatch($event, \App\WikiEvents::WIKI_CONTENT_VIEW);
         }
-vd($this->wContent->getHtml());
+
         $template->insertHtml('content', $this->wContent->getHtml());
 
         if ($this->wContent->getCss()) {

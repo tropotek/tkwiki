@@ -25,6 +25,7 @@ class HtmlFormatter
         if (!$html) return $html;
         // Tidy HTML if available
         $html = '<div>' . $html . '</div>';
+        $html = mb_convert_encoding($html, 'UTF-8');
         //$html = $this->cleanHtml($html);
         $this->doc = $this->parseDomDocument($html);
         $this->parseLinks($this->getDocument());
@@ -36,12 +37,9 @@ class HtmlFormatter
      */
     public function getHtml(): string
     {
-        //if (!$this->doc) return '';
-
         $html = $this->getDocument()->saveHTML($this->getDocument()->documentElement);
-        //$html = trim(str_replace(array('<html><body>', '</body></html>'), '', $html));
-        //$html = trim(substr($html, 5, -6));
-//vd($html);
+        $html = trim(str_replace(['<html><body><div>', '</div></body></html>'], '', $html));
+        $html = htmlspecialchars_decode(htmlentities($html, ENT_COMPAT, 'utf-8', false));
         return $html;
     }
 
@@ -75,9 +73,6 @@ class HtmlFormatter
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             $regs = array();
-            // TODO: See the TinyMce event NodeChange() in the tkWiki.js
-            //  we need to to this in the app not on the client....
-            //$('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                 $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
                 if ($this->isView) {
@@ -101,7 +96,6 @@ class HtmlFormatter
                     $node->setAttribute('class', $this->removeClass($node->getAttribute('class'), 'wiki-page'));
                 }
             } else if ($this->isView && preg_match('/^http|https|ftp|telnet|gopher|news/i', $node->getAttribute('href'), $regs)) {
-                //TODO: should this be a config option to open external links in new window???
                 $url = new \Tk\Uri($node->getAttribute('href'));
                 if (strtolower(str_replace('www.', '', $url->getHost())) != strtolower(str_replace('www.', '',$_SERVER['HTTP_HOST'])) ) {
                     $node->setAttribute('class', $this->addClass($node->getAttribute('class'), 'wiki-link-external'));

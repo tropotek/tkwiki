@@ -8,10 +8,11 @@ jQuery(function ($) {
   tkbase.initDialogConfirm();
   tkbase.initTkInputLock();
   tkbase.initDataToggle();
-  tkbase.initTinymce();
+  //tkbase.initTinymce();
   app.initHtmxToasts();
   app.initTkFormTabs();
   app.initDatepicker();
+  app.initTinymce();
 });
 
 
@@ -66,10 +67,94 @@ let app = function () {
     $('form').on(EVENT_INIT, document, init).each(init);
   };
 
+  /**
+   * Tiny MCE setup
+   *   See this article for how to create plugins in custom paths and see if it works
+   *   Custom plugins: https://stackoverflow.com/questions/21779730/custom-plugin-in-custom-directory-for-tinymce-jquery-plugin
+   */
+  let initTinymce = function () {
+    if (tinymce === undefined) {
+      console.warn('Plugin not loaded: jquery.tinymce');
+      return;
+    }
+
+    function getMceElf(data) {
+      let path = data.elfinderPath ?? '/media';
+      return new tinymceElfinder({
+        // connector URL (Use elFinder Demo site's connector for this demo)
+        url: config.vendorOrgUrl + '/tk-base/assets/js/elfinder/connector.minimal.php?path='+ path,
+        // upload target folder hash for this tinyMCE
+        uploadTargetHash: 'l1_lw',
+        // elFinder dialog node id
+        nodeId: 'elfinder'
+      });
+    }
+
+    // Default base tinymce options
+    let mceDefaults = {
+      entity_encoding : 'named',
+      height: 500,
+      plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'image', 'media', 'charmap', 'preview',
+        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'media', 'table', 'help', 'wordcount'
+      ],
+      toolbar1:
+        'wikiPage | bold italic strikethrough | blocks | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | link image media | removeformat code fullscreen',
+      content_css: [
+        '//cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'
+      ],
+      content_style: 'body {padding: 15px;}',
+      urlconverter_callback : function (url, node, on_save) {
+        let parts = url.split(config.baseUrl);
+        if (parts.length > 1) {
+          url = config.baseUrl + parts[1];
+        }
+        return url;
+      },
+      statusbar: false,
+
+      setup: (editor) => {
+
+        // Button to create/insert a page into the wiki
+        // See \App\Helper\PageSelect object for more info
+        editor.ui.registry.addButton('wikiPage', {
+          icon: 'addtag',
+          tooltip: 'Add/Insert Wiki Page',
+          onAction: function(_) {
+            $('#page-select-dialog').modal('show');
+          }
+        });
+
+      }
+
+    };
+
+    function init () {
+      let form = $(this);
+
+      // Tiny MCE with only the default editing no upload
+      //   functionality with elfinder
+      $('textarea.mce-min', form).tinymce({});
+
+      // Full tinymce with elfinder file manager
+      $('textarea.mce', form).each(function () {
+        let el = $(this);
+        el.tinymce($.extend(mceDefaults, {
+          file_picker_callback : getMceElf(el.data()).browser,
+        }));
+      });
+    };
+
+    $('form').on(EVENT_INIT, document, init).each(init);
+  };  // end initTinymce()
+
   return {
     initHtmxToasts: initHtmxToasts,
     initTkFormTabs: initTkFormTabs,
-    initDatepicker: initDatepicker
+    initDatepicker: initDatepicker,
+    initTinymce: initTinymce
   }
 
 }();

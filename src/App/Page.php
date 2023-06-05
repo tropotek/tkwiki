@@ -33,15 +33,11 @@ class Page extends \Bs\Page
     }
 
 
-    protected function showCrumbs()
+    protected function showCrumbs(): void
     {
         $crumbs = $this->getFactory()->getCrumbs();
-        if (!($crumbs && $crumbs->isVisible() && count($crumbs->getCrumbList()))) return;
-
-        if (!$template = $crumbs->show()) {
-            return;
-        }
-
+        if (!($crumbs && $crumbs->isVisible())) return;
+        $template = $crumbs->show();
         if ($this->getTemplate()->hasVar('crumbs')) {
             $this->getTemplate()->insertTemplate('crumbs', $template);
         } else {
@@ -50,7 +46,7 @@ class Page extends \Bs\Page
     }
 
 
-    protected function showAlert()
+    protected function showAlert(): void
     {
         if (!count($this->getFactory()->getSession()->getFlashBag()->peekAll())) return;
 

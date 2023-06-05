@@ -27,7 +27,6 @@ class View extends PageController
     public function __construct()
     {
         parent::__construct($this->getFactory()->getPublicPage());
-        $this->getPage()->setTitle('');
     }
 
     public function doDefault(Request $request, string $pageUrl)
@@ -48,8 +47,10 @@ class View extends PageController
             }
         }
 
+        $this->getPage()->setTitle($this->wPage->getTitle());
         $this->wContent = $this->wPage->getContent();
         $this->toolbar = new ViewToolbar($this->wPage);
+        //$this->getFactory()->getCrumbs()->addCrumb($this->wPage->getUrl(), $this->wPage->getTitle());
 
         // TODO: Note this should never happen (if it does then we need to look at the forign key in the DB)
 //        if (!$this->wContent) {

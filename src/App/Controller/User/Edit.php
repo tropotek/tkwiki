@@ -5,10 +5,13 @@ use App\Db\User;
 use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Tk\Uri;
 
 class Edit extends PageController
 {
     protected \App\Form\User $form;
+
+    protected string $type = \App\Db\User::TYPE_USER;
 
 
     public function __construct()
@@ -20,6 +23,10 @@ class Edit extends PageController
 
     public function doDefault(Request $request)
     {
+        if ($request->query->get('type') == \App\Db\User::TYPE_STAFF) {
+            $this->type = \App\Db\User::TYPE_STAFF;
+        }
+
         // Get the form template
         $this->form = new \App\Form\User();
         $this->form->doDefault($request, $request->query->get('id'));
@@ -34,6 +41,7 @@ class Edit extends PageController
 
         //$template->appendTemplate('content', $this->form->getRenderer()->getTemplate());
         $template->appendTemplate('content', $this->form->show());
+        $template->setAttr('back', 'href', Uri::create($this->type.'Manager'));
 
         return $template;
     }
@@ -45,7 +53,7 @@ class Edit extends PageController
   <div class="card mb-3">
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
-      <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
+      <a href="/userManager" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
     </div>
   </div>
   <div class="card mb-3">

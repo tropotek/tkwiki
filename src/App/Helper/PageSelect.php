@@ -64,8 +64,10 @@ jQuery(function($) {
     }
 
     $('#page-select-dialog').on('show.bs.modal', function() {
-        // Init dialog elements
         $('input', this).val('');
+    })
+    .on('shown.bs.modal', function() {
+        $('input', this).last().focus();
     })
     .on('click', '.wiki-insert', function() {
         // On insert existing page event

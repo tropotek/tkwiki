@@ -1,16 +1,19 @@
 <?php
 namespace App;
 
+use App\Db\PageMap;
 use App\Db\User;
 use App\Db\UserMap;
 use App\Dom\Modifier\AppAttributes;
 use App\Dom\Modifier\WikiUrl;
 use Bs\Db\UserInterface;
+use Bs\Ui\Crumbs;
 use Dom\Mvc\Modifier;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tk\Auth\Adapter\AdapterInterface;
 use Tk\Auth\Adapter\AuthUser;
 use Tk\Auth\FactoryInterface;
+use Tk\Uri;
 
 class Factory extends \Bs\Factory implements FactoryInterface
 {
@@ -65,10 +68,35 @@ class Factory extends \Bs\Factory implements FactoryInterface
     public function getAuthAdapter(): AdapterInterface
     {
         if (!$this->has('authAdapter')) {
-            //$adapter = new DbTable($this->getDb(), 'user', 'username', 'password');
             $adapter = new AuthUser(UserMap::create());
             $this->set('authAdapter', $adapter);
         }
         return $this->get('authAdapter');
+    }
+
+    /**
+     * get the breadcrumb storage object
+     */
+    public function getCrumbs(): ?Crumbs
+    {
+        //$this->getSession()->set('breadcrumbs', null);
+        if (!$this->has('breadcrumbs')) {
+            $crumbs = $this->getSession()->get('breadcrumbs');
+            if ($crumbs && Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath() != $crumbs->getHomeUrl()) {
+                $crumbs = null;
+            }
+            if (!$crumbs instanceof Crumbs) {
+                $crumbs = Crumbs::create();
+                $crumbs->setTrim(5);
+                if (\App\Db\Page::getHomeUrl()) {
+                    $crumbs->setHomeTitle('<i class="fa fa-home"></i>');
+                    $crumbs->setHomeUrl(\App\Db\Page::getHomeUrl());
+                }
+                $crumbs->reset();
+                $this->getSession()->set('breadcrumbs', $crumbs);
+            }
+            $this->set('breadcrumbs', $crumbs);
+        }
+        return $this->get('breadcrumbs');
     }
 }

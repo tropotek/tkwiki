@@ -37,11 +37,9 @@ class Edit extends PageController
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
 
-        //$template->appendTemplate('content', $this->form->getRenderer()->getTemplate());
         $template->appendTemplate('content', $this->form->show());
 
         $template->setAttr('back', 'href', Uri::create('/' . $this->type.'Manager'));
-vd(Uri::create('/' . $this->type.'Manager'), $template->getAttr('back', 'href'));
         return $template;
     }
 

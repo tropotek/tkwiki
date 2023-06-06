@@ -1,10 +1,9 @@
 <?php
 namespace App\Helper;
 
-use App\Db\Page;
-use App\Db\PageMap;
-use App\Db\User;
+use App\Db\MenuItemMap;
 use Dom\Template;
+use Tk\Db\Tool;
 use Tk\Traits\SystemTrait;
 
 /**
@@ -15,83 +14,40 @@ class Menu extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
 {
     use SystemTrait;
 
-    protected ?User $user = null;
 
-    protected array $list = [];
-
-
-    public function __construct(User $user)
+    public function __construct(Template $template)
     {
-        $this->user = $user;
-        $this->init();
+        $this->setTemplate($template);
     }
 
-    public function init(): void
-    {
-        $list = PageMap::create()->findNavPages();
-        foreach($list as $page) {
-            if ($page->getPermission() == Page::PERM_PUBLIC) {
-                $this->list[] = $page;
-                continue;
-            }
-            if ($this->user && $page->canView($this->user)) {
-                $this->list[] = $page;
-            }
-        }
-    }
 
     public function show(): ?Template
     {
         $template = $this->getTemplate();
 
-        if ($this->user && Page::canCreate($this->getFactory()->getAuthUser())) {
-            $template->setVisible('canCreate');
-            $url = \Tk\Uri::create('/edit')->set('type', Page::TYPE_NAV);
-            $template->setAttr('create', 'href', $url);
-        }
-
-        /** @var Page $page */
-        foreach($this->list as $page) {
-            if (!$page->canView($this->user)) return $template;
-            $row = $template->getRepeat('row');
-            $row->setText('title', $page->getTitle());
-
-            $content = $page->getContent();
-            $event = new \App\Event\ContentEvent($content);
-            $this->getFactory()->getEventDispatcher()->dispatch($event, \App\WikiEvents::WIKI_CONTENT_VIEW);
-
-            $row->insertHtml('html', $content->getHtml());
-
-            if ($this->user && $page->canEdit($this->user)) {
-                $url = \Tk\Uri::create('/edit')->set('id', $page->getId());
-                $row->setAttr('edit', 'href', $url);
-                $row->setVisible('edit');
+        $items = MenuItemMap::create()->findByParentId(0, Tool::create('order_id DESC'));
+        foreach ($items as $item) {
+            if ($item->hasChildren()) {
+                $children = MenuItemMap::create()->findByParentId($item->getId());
+                $dropdown = $template->getRepeat('dropdown');
+                $dropdown->setText('name', $item->getName());
+                foreach ($children as $child) {
+                    $row = $dropdown->getRepeat('dropdown-item');
+                    $row->setText('name', $child->getName());
+                    $row->setAttr('name', 'href', $child->getPage()->getPageUrl());
+                    $row->appendRepeat();
+                }
+                $dropdown->prependRepeat('navbar');
+            } else {
+                $row = $template->getRepeat('nav-item');
+                $row->setText('name', $item->getName());
+                $row->setAttr('name', 'href', $item->getPage()->getPageUrl());
+                $row->prependRepeat('navbar');
             }
-            $row->appendRepeat();
         }
+
 
         return $template;
-    }
-
-    public function __makeTemplate(): ?Template
-    {
-        $html = <<<HTML
-<ul class="nav navbar-nav">
-  <li class="dropdown mega-dropdown" repeat="row">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span var="title"></span> <span class="caret"></span></a>
-    <ul class="dropdown-menu mega-dropdown-menu">
-      <li class="col-sm-12">
-        <div class="wiki-menu-edit pull-right" choice="edit">
-          <a href="#" class="btn btn-primary btn-sm wiki-menu-edit-btn" var="edit"><i class="fa fa-pencil"></i> Edit</a>
-        </div>
-        <div class="wiki-menu-content" var="html"></div>
-      </li>
-    </ul>
-  </li>
-  <li class="wiki-menu-create" choice="canCreate"><a href="#" class="navbar-toggle" title="New Menu Tab" var="create"><span class="fa fa-plus"></span></a></li>
-</ul>
-HTML;
-        return $this->loadTemplate($html);
     }
 
 }

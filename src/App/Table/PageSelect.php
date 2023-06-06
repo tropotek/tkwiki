@@ -39,8 +39,9 @@ class PageSelect
                 $cell->setUrlProperty('');
                 $cell->setUrl(Uri::create('javascript:;'));
                 $cell->getLink()->addCss('wiki-insert');
-                $cell->getLink()->setAttr('data-wiki-title', $page->getTitle());
-                $cell->getLink()->setAttr('data-wiki-url', $page->getUrl());
+                $cell->getLink()->setAttr('data-page-id', $page->getId());
+                $cell->getLink()->setAttr('data-page-title', $page->getTitle());
+                $cell->getLink()->setAttr('data-page-url', $page->getUrl());
             });
         $this->getTable()->appendCell(new Cell\Text('userId'))->setOrderByName('')
             ->addOnValue(function (Cell\Text $cell) {

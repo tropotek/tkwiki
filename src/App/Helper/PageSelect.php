@@ -71,8 +71,8 @@ jQuery(function($) {
     })
     .on('click', '.wiki-insert', function() {
         // On insert existing page event
-        let title = $(this).data('wiki-title');
-        let url = $(this).data('wiki-url');
+        let title = $(this).data('page-title');
+        let url = $(this).data('page-url');
         insertWikiUrl(title, url, false);
         $('#page-select-dialog').modal('hide');
         return false;

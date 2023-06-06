@@ -11,29 +11,24 @@ use Symfony\Component\Routing\Loader\Configurator\CollectionConfigurator;
 return function (CollectionConfigurator $routes) {
 
     // Site public pages
-//    $routes->add('home-base', '/')
-//        ->controller([\App\Controller\Home::class, 'doDefault']);
-//    $routes->add('home', '/home')
-//        ->controller([\App\Controller\Home::class, 'doDefault']);
-
+    $routes->add('wiki-contact', '/contact')
+        ->controller([\App\Controller\Contact::class, 'doDefault']);
     $routes->add('wiki-page-view', '/view')
         ->controller([\App\Controller\Page\View::class, 'doContentView']);
-    $routes->add('wiki-page-edit', '/edit')
-        ->controller([\App\Controller\Page\Edit::class, 'doDefault']);
-
 //    $routes->add('wiki-search', '/search')
 //        ->controller([\App\Controller\Search::class, 'doDefault']);
-//    $routes->add('wiki-history', '/historyManager')
-//        ->controller([\App\Controller\Page\History::class, 'doDefault']);
 
 
+    $routes->add('wiki-page-edit', '/edit')
+        ->controller([\App\Controller\Page\Edit::class, 'doDefault']);
+    $routes->add('wiki-menu-edit', '/menuEdit')
+        ->controller([\App\Controller\Menu\Edit::class, 'doDefault']);
     $routes->add('wiki-page', '/pageManager')
         ->controller([\App\Controller\Page\Manager::class, 'doDefault']);
     $routes->add('wiki-orphaned', '/orphanManager')
         ->controller([\App\Controller\Page\Orphaned::class, 'doDefault']);
-
-    $routes->add('wiki-contact', '/contact')
-        ->controller([\App\Controller\Contact::class, 'doDefault']);
+//    $routes->add('wiki-history', '/historyManager')
+//        ->controller([\App\Controller\Page\History::class, 'doDefault']);
 
 
     // Auth pages

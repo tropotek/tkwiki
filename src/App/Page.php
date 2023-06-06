@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\Helper\Menu;
 use Dom\Template;
 use Tk\Uri;
 
@@ -21,6 +22,7 @@ class Page extends \Bs\Page
         $template->appendJs($this->getRegistry()->get('system.global.js', ''));
         $template->appendCss($this->getRegistry()->get('system.global.css', ''));
 
+        $this->showMenu();
         $this->showCrumbs();
         $this->showAlert();
         //$this->showMaintenanceRibbon();
@@ -32,6 +34,12 @@ class Page extends \Bs\Page
         return $template;
     }
 
+
+    protected function showMenu(): void
+    {
+        $menu = new Menu($this->getTemplate());
+        $menu->show();
+    }
 
     protected function showCrumbs(): void
     {

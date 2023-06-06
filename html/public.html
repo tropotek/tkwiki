@@ -45,7 +45,23 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+        <ul class="navbar-nav me-auto mb-2 mb-sm-0" var="navbar">
+
+
+          <!-- Single menu item -->
+          <li class="nav-item" repeat="nav-item"><a class="nav-link" href="javascript:;" var="name"></a></li>
+          <!-- With Children -->
+          <li class="nav-item dropdown" repeat="dropdown">
+            <a class="nav-link dropdown-toggle" href="javascript:;" data-bs-toggle="dropdown" aria-expanded="false" var="name"></a>
+            <ul class="dropdown-menu" var="dropdown-menu">
+              <li repeat="divider"><hr class="dropdown-divider"></li>
+              <li repeat="dropdown-item"><a class="dropdown-item" href="" var="name"></a></li>
+            </ul>
+          </li>
+
+
+
+
 <!--          <li class="nav-item">-->
 <!--            <a class="nav-link" href="/home">Home</a>-->
 <!--          </li>-->
@@ -81,6 +97,9 @@
                 <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
                 <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
                 <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
+                <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Wiki Pages</a></li>
+                <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Orphaned Pages</a></li>
+                <li><a class="dropdown-item" href="/menuEdit" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Menu Edit</a></li>
                 <li><hr class="dropdown-divider" app-is-debug="true"></li>
                 <li><a class="dropdown-item" href="/tailLog" app-is-debug="true">Tail Log</a></li>
                 <li><a class="dropdown-item" href="/listEvents" app-is-debug="true">List Events</a></li>
@@ -107,8 +126,9 @@
             <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
             <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
             <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
-            <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_SYSADMIN">Wiki Pages</a></li>
-            <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_SYSADMIN">Orphaned Pages</a></li>
+            <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Wiki Pages</a></li>
+            <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Orphaned Pages</a></li>
+            <li><a class="dropdown-item" href="/menuEdit" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Menu Edit</a></li>
             <li><hr class="dropdown-divider" app-is-debug="true"></li>
             <li><a class="dropdown-item" href="/tailLog" app-is-debug="true">Tail Log</a></li>
             <li><a class="dropdown-item" href="/listEvents" app-is-debug="true">List Events</a></li>

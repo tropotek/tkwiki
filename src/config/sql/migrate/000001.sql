@@ -98,6 +98,20 @@ CREATE TABLE IF NOT EXISTS `lock` (
     KEY k_userId (user_id)
 );
 
+-- Menu
+CREATE TABLE IF NOT EXISTS menu_item
+(
+  id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  parent_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
+  page_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
+  order_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
+  name VARCHAR(255) NOT NULL DEFAULT '',
+  KEY page_id (page_id),
+  CONSTRAINT fk_menu_item__page_id FOREIGN KEY (page_id) REFERENCES page (id) ON DELETE CASCADE
+);
+
+
+
 
 -- Site default content
 

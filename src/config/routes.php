@@ -48,12 +48,20 @@ return function (CollectionConfigurator $routes) {
     // System pages
     $routes->add('settings-edit', '/settings')
         ->controller([\App\Controller\Admin\Settings::class, 'doDefault']);
-    $routes->add('staff-manager', '/staffManager')
-        ->controller([\App\Controller\User\Manager::class, 'doDefault']);
-    $routes->add('user-manager', '/userManager')
-        ->controller([\App\Controller\User\Manager::class, 'doDefault']);
-    $routes->add('user-edit', '/userEdit')
-        ->controller([\App\Controller\User\Edit::class, 'doDefault']);
+
+    $routes->add('user-manager', '/{type}Manager')
+        ->controller([\App\Controller\User\Manager::class, 'doDefault'])
+        ->defaults(['type' => \App\Db\User::TYPE_USER]);
+    $routes->add('user-edit', '/{type}Edit')
+        ->controller([\App\Controller\User\Edit::class, 'doDefault'])
+        ->defaults(['type' => \App\Db\User::TYPE_USER]);
+
+//    $routes->add('staff-manager', '/staffManager')
+//        ->controller([\App\Controller\User\Manager::class, 'doDefault']);
+//    $routes->add('user-manager', '/userManager')
+//        ->controller([\App\Controller\User\Manager::class, 'doDefault']);
+//    $routes->add('user-edit', '/userEdit')
+//        ->controller([\App\Controller\User\Edit::class, 'doDefault']);
     $routes->add('user-profile', '/profile')
         ->controller([\App\Controller\User\Profile::class, 'doDefault']);
 

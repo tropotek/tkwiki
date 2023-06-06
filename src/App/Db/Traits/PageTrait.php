@@ -10,12 +10,12 @@ trait PageTrait
     private ?Page $_page = null;
 
 
-    public function getPageId(): int
+    public function getPageId(): ?int
     {
         return $this->pageId;
     }
 
-    public function setPageId(int $pageId): static
+    public function setPageId(?int $pageId): static
     {
         $this->pageId = $pageId;
         return $this;

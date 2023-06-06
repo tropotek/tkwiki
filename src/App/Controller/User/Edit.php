@@ -21,15 +21,13 @@ class Edit extends PageController
         $this->setAccess(User::PERM_MANAGE_USER | User::PERM_MANAGE_STAFF);
     }
 
-    public function doDefault(Request $request)
+    public function doDefault(Request $request, string $type)
     {
-        if ($request->query->get('type') == \App\Db\User::TYPE_STAFF) {
-            $this->type = \App\Db\User::TYPE_STAFF;
-        }
+        $this->type = $type;
 
         // Get the form template
         $this->form = new \App\Form\User();
-        $this->form->doDefault($request, $request->query->get('id'));
+        $this->form->doDefault($request,  $request->query->get('id'), $type);
 
         return $this->getPage();
     }
@@ -41,8 +39,9 @@ class Edit extends PageController
 
         //$template->appendTemplate('content', $this->form->getRenderer()->getTemplate());
         $template->appendTemplate('content', $this->form->show());
-        $template->setAttr('back', 'href', Uri::create($this->type.'Manager'));
 
+        $template->setAttr('back', 'href', Uri::create('/' . $this->type.'Manager'));
+vd(Uri::create('/' . $this->type.'Manager'), $template->getAttr('back', 'href'));
         return $template;
     }
 
@@ -53,7 +52,7 @@ class Edit extends PageController
   <div class="card mb-3">
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
-      <a href="/userManager" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
+      <a href="" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
     </div>
   </div>
   <div class="card mb-3">

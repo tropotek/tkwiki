@@ -12,6 +12,10 @@ body {
   padding: 0;
 
 }
+.navbar .nav-link.dropdown-toggle {
+  text-shadow: #CCC 2px 2px 2px;
+
+}
 
 /* ==================  WIKI Styles  ================== */
 a.wk-page {

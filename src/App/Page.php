@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-use App\Helper\Menu;
+use App\Controller\Menu\View;
 use Bs\Ui\Dialog;
 use Dom\Template;
 use Tk\Uri;
@@ -23,11 +23,15 @@ class Page extends \Bs\Page
         $template->appendJs($this->getRegistry()->get('system.global.js', ''));
         $template->appendCss($this->getRegistry()->get('system.global.css', ''));
 
-        $this->showMenu();
-        $this->showCrumbs();
+        // all pages
         $this->showAlert();
-        $this->showCreatePageDialog();
-        //$this->showMaintenanceRibbon();
+
+        // public page
+        if ($this->getTemplatePath() == $this->getFactory()->getPublicPage()->getTemplatePath()) {
+            $this->showMenu();
+            $this->showCrumbs();
+            $this->showCreatePageDialog();
+        }
 
         if ($this->getFactory()->getAuthUser()) {
             $template->setText('username', $this->getFactory()->getAuthUser()->getUsername());
@@ -71,7 +75,7 @@ JS;
 
     protected function showMenu(): void
     {
-        $menu = new Menu($this->getTemplate());
+        $menu = new View($this->getTemplate());
         $menu->show();
     }
 
@@ -129,26 +133,5 @@ HTML;
             $this->getTemplate()->prependTemplate('content', $template);
         }
     }
-
-
-    // TODO: Show a maintenance ribbon on the site???
-    protected function showMaintenanceRibbon()
-    {
-
-//        if (!$this->getConfig()->get('system.maintenance.enabled')) return;
-//        $controller = \Tk\Event\Event::findControllerObject($event);
-//        if ($controller instanceof \Bs\Controller\Iface && !$controller instanceof \Bs\Controller\Maintenance) {
-//            $page = $controller->getPage();
-//            if (!$page) return;
-//            $template = $page->getTemplate();
-//
-//            $html = <<<HTML
-//<div class="tk-ribbon tk-ribbon-danger" style="z-index: 99999"><span>Maintenance</span></div>
-//HTML;
-//            $template->prependHtml($template->getBodyElement(), $html);
-//            $template->addCss($template->getBodyElement() ,'tk-ribbon-box');
-//        }
-    }
-
 
 }

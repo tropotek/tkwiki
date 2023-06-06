@@ -29,10 +29,10 @@ class Page extends Model
     const PERM_PRIVATE            = 999; // Private (User::TYPE_STAFF, only author can view/edit)
 
     const PERM_LIST = [
-        'Public' => self::PERM_PUBLIC,
-        'User' => self::PERM_USER,
-        'Staff' => self::PERM_STAFF,
-        'Private' => self::PERM_PRIVATE,
+        self::PERM_PUBLIC   => 'Public',
+        self::PERM_USER     => 'User',
+        self::PERM_STAFF    => 'Staff',
+        self::PERM_PRIVATE  => 'Private',
     ];
 
     /**

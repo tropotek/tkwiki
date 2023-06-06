@@ -66,10 +66,11 @@ class User
         if ($request->query->has(Masquerade::QUERY_MSQ)) {
             $this->doMsq($request->query->get(Masquerade::QUERY_MSQ));
         }
+        $editUrl = sprintf('/%sEdit', $this->type);
 
         $this->getTable()->appendCell(new Cell\Checkbox('id'));
         $this->getTable()->appendCell(new Cell\Text('actions'))
-            ->addOnShow(function (Cell\Text $cell, string $html) {
+            ->addOnShow(function (Cell\Text $cell, string $html) use ($editUrl) {
             $cell->addCss('text-nowrap text-center');
             $obj = $cell->getRow()->getData();
 
@@ -78,7 +79,7 @@ class User
             $btn->setText('');
             $btn->setIcon('fa fa-edit');
             $btn->addCss('btn btn-primary');
-            $btn->setUrl(Uri::create('/userEdit')->set('id', $obj->getId()));
+            $btn->setUrl(Uri::create($editUrl)->set('id', $obj->getId()));
             $template->appendTemplate('td', $btn->show());
             $template->appendHtml('td', '&nbsp;');
 
@@ -103,7 +104,7 @@ class User
         });
 
         $this->getTable()->appendCell(new Cell\Text('username'))
-            ->setUrl(Uri::create('/userEdit'))
+            ->setUrl(Uri::create($editUrl))
             ->setAttr('style', 'width: 100%;');
 
         $this->getTable()->appendCell(new Cell\Text('name'));
@@ -127,7 +128,7 @@ class User
                 /** @var \App\Db\User $user */
                 $user = $cell->getRow()->getData();
                 $cell->setUrl('mailto:'.$user->getEmail());
-                $cell->setValue('====');
+                //$cell->setValue('====');
             });
         $this->getTable()->appendCell(new Cell\Text('active'));
         //$this->getTable()->appendCell(new Cell\Text('modified'));

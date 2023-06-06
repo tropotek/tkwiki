@@ -49,7 +49,12 @@ class PageSelect
                 $page = $cell->getRow()->getData();
                 $cell->setValue($page->getUser()->getName());
             });
-
+        $this->getTable()->appendCell(new Cell\Text('permission'))
+            ->addOnValue(function (Cell\Text $cell, mixed $value) {
+                /** @var \App\Db\Page $page */
+                $page = $cell->getRow()->getData();
+                return \App\Db\Page::PERM_LIST[$value] ?? '';
+            });
 
         // Table filters
         $this->getFilter()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');

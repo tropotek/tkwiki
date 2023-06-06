@@ -18,18 +18,21 @@ class Manager extends PageController
         $this->getPage()->setTitle('User Manager');
     }
 
-    public function doDefault(Request $request)
+    public function doDefault(Request $request, string $type)
     {
-        if (str_ends_with($request->getRequestUri(), 'staffManager')) {
-            $this->type = User::TYPE_STAFF;
+        $this->type = $type;
+        if ($this->type == User::TYPE_USER) {
+            $this->setAccess(User::PERM_MANAGE_USER);
+        } else if ($this->type == User::TYPE_STAFF) {
             $this->setAccess(User::PERM_MANAGE_STAFF);
         } else {
-            $this->setAccess(User::PERM_MANAGE_USER);
+            $this->setAccess(User::PERM_ADMIN);
         }
-        $this->getPage()->setTitle(ucfirst($this->type ) . ' Manager');
+
+        $this->getPage()->setTitle(ucfirst($this->type) . ' Manager');
 
         // Get the form template
-        $this->table = new \App\Table\User($this->type);
+        $this->table = new \App\Table\User();
         $this->table->doDefault($request, $this->type);
 
         return $this->getPage();

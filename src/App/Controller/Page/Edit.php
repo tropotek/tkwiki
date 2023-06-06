@@ -135,7 +135,7 @@ class Edit extends PageController
             ->setGroup($group);
 
         /** @var Field\Select $permission */
-        $permission = $this->getForm()->appendField(new Field\Select('permission', Page::PERM_LIST))
+        $permission = $this->getForm()->appendField(new Field\Select('permission', array_flip(Page::PERM_LIST)))
             ->appendOption('-- Select --', '')
             ->setRequired()
             ->setGroup($group);

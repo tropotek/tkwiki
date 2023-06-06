@@ -21,19 +21,19 @@ class User
 
     protected ?\App\Db\User $user = null;
 
+    protected string $type = \App\Db\User::TYPE_USER;
+
 
     public function __construct()
     {
         $this->setForm(Form::create('user'));
     }
 
-    public function doDefault(Request $request, $id)
+    public function doDefault(Request $request, string $id, string $type = \App\Db\User::TYPE_USER)
     {
+        $this->type = $type;
         $this->user = new \App\Db\User();
-        $this->getUser()->setType(\App\Db\User::TYPE_USER);
-        if ($request->query->get('type') == \App\Db\User::TYPE_STAFF) {
-            $this->getUser()->setType(\App\Db\User::TYPE_STAFF);
-        }
+        $this->getUser()->setType($type);
 
         if ($id) {
             $this->user = UserMap::create()->find($id);
@@ -93,9 +93,9 @@ class User
         $this->getUser()->save();
 
         Alert::addSuccess('Form save successfully.');
-        $action->setRedirect(Uri::create('/userEdit')->set('id', $this->getUser()->getId()));
+        $action->setRedirect(Uri::create('/'.$this->type.'Edit')->set('id', $this->getUser()->getId()));
         if ($form->getTriggeredAction()->isExit()) {
-            $action->setRedirect(Uri::create('/userManager'));
+            $action->setRedirect(Uri::create('/'.$this->type.'Manager'));
         }
     }
 

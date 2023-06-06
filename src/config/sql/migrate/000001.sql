@@ -102,14 +102,15 @@ CREATE TABLE IF NOT EXISTS `lock` (
 CREATE TABLE IF NOT EXISTS menu_item
 (
   id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  parent_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
-  page_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
+  parent_id INT(11) UNSIGNED NULL,
+  page_id INT(11) UNSIGNED NULL,
   order_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
+  type enum('item','dropdown','divider') NOT NULL DEFAULT 'item',
   name VARCHAR(255) NOT NULL DEFAULT '',
   KEY page_id (page_id),
+  CONSTRAINT fk_menu_item__parent_id FOREIGN KEY (parent_id) REFERENCES menu_item (id) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT fk_menu_item__page_id FOREIGN KEY (page_id) REFERENCES page (id) ON DELETE CASCADE
 );
-
 
 
 

@@ -132,7 +132,7 @@ class PageMap extends Mapper
             $filter->appendWhere('a.url = %s AND ', $this->quote($filter['url']));
         }
 
-        if (is_bool($filter['published'] ?? '')) {
+        if (is_bool($filter['published'])) {
             $filter->appendWhere('a.published = %s AND ', (int)$filter['published']);
         }
 

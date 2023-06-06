@@ -47,10 +47,10 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav me-auto mb-2 mb-sm-0" var="navbar">
 
-
-          <!-- Single menu item -->
+          <!-- MENU ITEM TEMPLATES -->
+          <!-- single menu item -->
           <li class="nav-item" repeat="nav-item"><a class="nav-link" href="javascript:;" var="name"></a></li>
-          <!-- With Children -->
+          <!-- items with Children -->
           <li class="nav-item dropdown" repeat="dropdown">
             <a class="nav-link dropdown-toggle" href="javascript:;" data-bs-toggle="dropdown" aria-expanded="false" var="name"></a>
             <ul class="dropdown-menu" var="dropdown-menu">
@@ -58,61 +58,34 @@
               <li repeat="dropdown-item"><a class="dropdown-item" href="" var="name"></a></li>
             </ul>
           </li>
+          <!-- MENU ITEM TEMPLATES : END -->
 
-
-
-
-<!--          <li class="nav-item">-->
-<!--            <a class="nav-link" href="/home">Home</a>-->
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<!--            <a class="nav-link" href="/contact">Contact Us</a>-->
-<!--          </li>-->
-
-<!--          <li class="nav-item dropdown has-megamenu" repeat="menu-item">-->
-<!--            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" var="menu-dropdown"> Item 1 </a>-->
-<!--            <div class="dropdown-menu megamenu shadow" role="menu">-->
-<!--              <div class="wiki-menu-edit float-end">-->
-<!--                <a href="/wiki/edit?pageId=0" class="btn btn-outline-primary wiki-menu-edit-btn"-->
-<!--                   style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .55rem;" var="menu-edit">-->
-<!--                  <i class="fa fa-pencil"></i> Edit-->
-<!--                </a>-->
-<!--              </div>-->
-<!--              <div class="wiki-menu-content row" var="menu-content">-->
-<!--              </div>-->
-<!--            </div> &lt;!&ndash; dropdown-mega-menu.// &ndash;&gt;-->
-<!--          </li>-->
-
-<!--          <li class="nav-item" app-is-user="true">-->
-<!--            <a class="btn btn-sm btn-outline-secondary btn-add-menu" style="&#45;&#45;bs-btn-padding-y: .25rem; &#45;&#45;bs-btn-padding-x: .5rem; &#45;&#45;bs-btn-font-size: .35rem;"-->
-<!--               href="javascript:;" var="add-menu-item" app-has-perm="PERM_EDITOR"><i class="fa fa-plus fa-fw"></i></a>-->
-<!--          </li>-->
-
-            <li class="nav-item dropdown d-block d-sm-none" app-is-user="true">
-              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                  <span var="username">username</span>
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/profile">My Profile</a></li>
-                <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
-                <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
-                <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
-                <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Wiki Pages</a></li>
-                <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Orphaned Pages</a></li>
-                <li><a class="dropdown-item" href="/menuEdit" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Menu Edit</a></li>
-                <li><hr class="dropdown-divider" app-is-debug="true"></li>
-                <li><a class="dropdown-item" href="/tailLog" app-is-debug="true">Tail Log</a></li>
-                <li><a class="dropdown-item" href="/listEvents" app-is-debug="true">List Events</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/logout">Sign out</a></li>
-              </ul>
-            </li>
+          <li class="nav-item dropdown d-block d-sm-none" app-is-user="true">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <span var="username">username</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+              <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
+              <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
+              <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
+              <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Wiki Pages</a></li>
+              <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Orphaned Pages</a></li>
+              <li><a class="dropdown-item" href="/menuEdit" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Menu Edit</a></li>
+              <li><hr class="dropdown-divider" app-is-debug="true"></li>
+              <li><a class="dropdown-item" href="/tailLog" app-is-debug="true">Tail Log</a></li>
+              <li><a class="dropdown-item" href="/listEvents" app-is-debug="true">List Events</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+            </ul>
+          </li>
         </ul>
 
         <form class="d-flex me-md-3" role="search">
           <div class="input-group input-group-sm">
             <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-secondary border-light-subtle" type="button" id="btn-search"><i class="fa fa-search"></i></button>
+            <button class="btn btn-outline-secondary border-light-subtle" type="button" title="Find a page" id="btn-search"><i class="fa fa-search"></i></button>
+            <button class="btn btn-outline-secondary border-light-subtle" type="button" title="Create a page" id="btn-new-page" data-bs-toggle="modal" data-bs-target="#create-page-dialog"><i class="fa fa-plus"></i></button>
           </div>
         </form>
 

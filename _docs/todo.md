@@ -1,5 +1,10 @@
 # TODO 
 
+
+- We may need to store the crumbs in the  query string after all, when using the back button we loose 
+the string and that make it useless, it also will happen for every page that relies on the query string...
+BUGGER!!!!!!!!!!!
+
 - Standard registered users should only be allowed to view pages, all edit controls should be hidden.
 This will allow us to create public websites with registered users. Just need to change the templates.
 - Update breadcrumbs, would be nice to have it work as default for system pages, 

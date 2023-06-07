@@ -13,10 +13,11 @@ return function (CollectionConfigurator $routes) {
     // Site public pages
     $routes->add('wiki-contact', '/contact')
         ->controller([\App\Controller\Contact::class, 'doDefault']);
-    $routes->add('wiki-page-view', '/view')
-        ->controller([\App\Controller\Page\View::class, 'doContentView']);
-//    $routes->add('wiki-search', '/search')
-//        ->controller([\App\Controller\Search::class, 'doDefault']);
+    $routes->add('wiki-search', '/search')
+        ->controller([\App\Controller\Page\Search::class, 'doDefault']);
+
+//    $routes->add('wiki-page-view', '/view')
+//        ->controller([\App\Controller\Page\View::class, 'doContentView']);
 
 
     $routes->add('wiki-page-edit', '/edit')
@@ -27,8 +28,8 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Controller\Page\Manager::class, 'doDefault']);
     $routes->add('wiki-orphaned', '/orphanManager')
         ->controller([\App\Controller\Page\Orphaned::class, 'doDefault']);
-//    $routes->add('wiki-history', '/historyManager')
-//        ->controller([\App\Controller\Page\History::class, 'doDefault']);
+    $routes->add('wiki-history', '/historyManager')
+        ->controller([\App\Controller\Page\History::class, 'doDefault']);
 
 
     // Auth pages

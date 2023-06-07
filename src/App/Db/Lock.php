@@ -43,7 +43,7 @@ class Lock
 
     public function getPageHash(int $pageId): string
     {
-        return md5($pageId  . $this->getUser()->getId());
+        return md5($pageId . $this->getUser()->getId());
     }
 
 

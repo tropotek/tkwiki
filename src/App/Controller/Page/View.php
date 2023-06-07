@@ -4,7 +4,6 @@ namespace App\Controller\Page;
 use App\Db\Content;
 use App\Db\ContentMap;
 use App\Db\Page;
-use App\Db\User;
 use App\Helper\ViewToolbar;
 use App\Util\Pdf;
 use Bs\PageController;
@@ -39,26 +38,20 @@ class View extends PageController
             if (Page::canCreate($this->getFactory()->getAuthUser())) {
                 // Create a redirect to the page edit controller
                 Uri::create('/edit')->set('u', $pageUrl)->redirect();
+            } else {
+                // Must be a public non-logged in user
+                throw new HttpException(404, 'Page not found');
             }
         } else {
             if (!$this->wPage->canView($this->getFactory()->getAuthUser())) {
                 Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->getTitle() . '`');
-                Uri::create('/')->redirect();
+                Uri::create(Page::getHomeUrl())->redirect();
             }
         }
 
         $this->getPage()->setTitle($this->wPage->getTitle());
         $this->wContent = $this->wPage->getContent();
         $this->toolbar = new ViewToolbar($this->wPage);
-        //$this->getFactory()->getCrumbs()->addCrumb($this->wPage->getUrl(), $this->wPage->getTitle());
-
-        // TODO: Note this should never happen (if it does then we need to look at the forign key in the DB)
-//        if (!$this->wContent) {
-//            // May redirect to the edit page if the user has edit privileges or send alert if not.
-//            \Tk\Alert::addWarning('Page content lost, please create new content.');
-//            \Tk\Uri::create('/edit')->set('id', $this->wPage->getId())->redirect();
-//        }
-
 
         if ($request->query->has('pdf')) {
             return $this->doPdf($request);
@@ -102,9 +95,6 @@ class View extends PageController
     {
         $template = $this->getTemplate();
 
-        // TODO:
-//        $header = new \App\Helper\PageHeader($this->wPage, $this->wContent, $this->getAuthUser());
-//        $template->insertTemplate('header', $header->show());
         $template->appendTemplate('toolbar', $this->toolbar->show());
 
         if ($this->getFactory()->getEventDispatcher()) {

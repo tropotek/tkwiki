@@ -41,7 +41,10 @@ class Edit extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Edit Page');
-        $this->lock = new Lock($this->getAuthUser());
+        if (!$this->getFactory()->getAuthUser()) {
+            Alert::addWarning('You are not logged in.');
+            Uri::create(Page::getHomeUrl())->redirect();
+        }
     }
 
     public function doDefault(Request $request)
@@ -50,6 +53,7 @@ class Edit extends PageController
         if (!$this->getSession()->has(self::SID_REFERRER) && $referer) {
             $this->getSession()->set(self::SID_REFERRER, $referer);
         }
+        $this->lock = new Lock($this->getAuthUser());
 
         // Find requested page
         $this->wPage = PageMap::create()->find($request->query->get('id') ?? 0);

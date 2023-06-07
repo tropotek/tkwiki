@@ -144,10 +144,21 @@ class PageMap extends Mapper
         if (isset($filter['orphaned'])) {
             $homeUrl = $this->getRegistry()->get('wiki.page.default');
             $filter->appendFrom(' LEFT JOIN links b USING (url)');
-            $filter->appendWhere('b.page_id IS NULL AND (a.url != %s AND a.type != %s)',
+            $filter->appendWhere('b.page_id IS NULL AND (a.url != %s AND a.type != %s) ',
                 $this->quote($homeUrl),
                 $this->quote(Page::TYPE_NAV)
             );
+        }
+
+        // Do a full text search on the content
+        if (isset($filter['fullSearch'])) {
+            $filter->appendFrom('  JOIN (
+                SELECT MAX(modified), id, page_id, html
+                FROM content
+                WHERE MATCH (html) AGAINST (%s IN NATURAL LANGUAGE MODE)
+                GROUP BY page_id
+            ) c ON (a.id = c.page_id)', $this->quote($filter['fullSearch']));
+            $filter->appendWhere('c.id IS NOT NULL');
         }
 
         return $filter;

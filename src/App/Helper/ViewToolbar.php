@@ -8,6 +8,7 @@ use Bs\Ui\Dialog;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
+use Tk\Date;
 use Tk\Traits\SystemTrait;
 use Tk\Uri;
 
@@ -23,8 +24,6 @@ class ViewToolbar extends Renderer implements DisplayInterface
     protected Content $content;
 
     protected ?User $user = null;
-
-    //protected ?Dialog $dialog = null;
 
 
     public function __construct(Page $page)
@@ -55,21 +54,56 @@ class ViewToolbar extends Renderer implements DisplayInterface
 
         if ($this->getPage()->canEdit($this->getUser())) {
             $template->setAttr('edit-url', 'href', Uri::create('/edit')->set('id', $this->getPage()->getId()));
-            $template->setVisible('edit-url');
+            $template->setAttr('history', 'href', Uri::create('/historyManager')->set('id', $this->getPage()->getId()));
+            $template->setVisible('can-edit');
+        }
+        if ($this->getFactory()->getAuthUser()?->isStaff()) {
+            $template->setVisible('info-url');
+            $dialog = $this->showInfoDialog();
+            $template->appendBodyTemplate($dialog->show());
+            $template->setAttr('info-url', 'data-bs-toggle', 'modal');
+            $template->setAttr('info-url', 'data-bs-target', '#'.$dialog->getId());
         }
         $template->setAttr('pdf-url', 'href', Uri::create()->set('pdf'));
 
         return $template;
     }
 
+    protected function showInfoDialog(): Dialog
+    {
+        $dialog = new Dialog('Page Information', 'page-info-dialog');
+        $html = <<<HTML
+<ul class="list-unstyled">
+  <li>Author: <span var="author"></span></li>
+  <li>Title: <span var="title"></span></li>
+  <li>Permission: <span var="permission"></span></li>
+  <li>Revision: <span var="revision"></span></li>
+  <li>Modified: <span var="modified"></span></li>
+  <li>Created: <span var="created"></span></li>
+</ul>
+HTML;
+        $t = $this->loadTemplate($html);
+
+        $t->setText('author', $this->page->getUser()->getName());
+        $t->setText('title', $this->page->getTitle());
+        $t->setText('permission', $this->page->getPermissionLabel());
+        $t->setText('revision', $this->content->getId());
+        $t->setText('modified', $this->page->getModified(Date::FORMAT_LONG_DATETIME));
+        $t->setText('created', $this->page->getCreated(Date::FORMAT_LONG_DATETIME));
+
+        $dialog->setContent($t);
+        return $dialog;
+    }
+
     public function __makeTemplate(): ?Template
     {
         $html = <<<HTML
 <div class="btn-group btn-group-sm float-end" role="group" aria-label="Small button group">
-  <a href="/edit?pageId=1" title="Edit The Page" class="btn btn-outline-secondary" choice="edit-url"><i class="fa fa-fw fa-pencil"></i></a>
+  <a href="/edit?pageId=1" title="Edit The Page" class="btn btn-outline-secondary" choice="can-edit" var="edit-url"><i class="fa fa-fw fa-pencil"></i></a>
   <a href="/?pdf=pdf" title="Download PDF" class="btn btn-outline-secondary" target="_blank" var="pdf-url"><i class="fa fa-fw fa-file-pdf"></i></a>
   <a href="javascript:window.print();" title="Print Document" class="btn btn-outline-secondary"><i class="fa fa-fw fa-print"></i></a>
-  <a href="javascript:alert('TODO: Implement a dialog with page info....');" title="Page Info" class="btn btn-outline-secondary"><i class="fa fa-fw fa-circle-info"></i></a>
+  <a href="javascript:;" title="Page History" class="btn btn-outline-secondary" choice="can-edit" var="history"><i class="fa fa-fw fa-clock-rotate-left"></i></a>
+  <a href="javascript:;" title="Page Info" class="btn btn-outline-secondary" choice="info-url"><i class="fa fa-fw fa-circle-info"></i></a>
 </div>
 HTML;
 

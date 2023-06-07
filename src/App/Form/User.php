@@ -55,12 +55,11 @@ class User
         $this->getForm()->appendField(new Input('email'))->addCss('tk-input-lock')
             ->setRequired()->setGroup($group);
 
-        if ($this->user->isType(\App\Db\User::TYPE_STAFF)) {
+        if ($this->user->isType(\App\Db\User::TYPE_STAFF) && $this->getFactory()->getAuthUser()->hasPermission(\App\Db\User::PERM_SYSADMIN)) {
             $this->getForm()->appendField(new Checkbox('perm', array_flip(\App\Db\User::PERMISSION_LIST)))
                 ->setGroup($group);
+            $this->getForm()->appendField(new Checkbox('active', ['Enable User Login' => 'active']))->setGroup($group);
         }
-
-        $this->getForm()->appendField(new Checkbox('active', ['Enable User Login' => 'active']))->setGroup($group);
 
         $this->getForm()->appendField(new Form\Field\Textarea('notes'))->setGroup($group);
 
@@ -82,7 +81,9 @@ class User
     public function onSubmit(Form $form, Form\Action\ActionInterface $action)
     {
         $this->getUser()->getMapper()->getFormMap()->loadObject($this->user, $form->getFieldValues());
-        $this->getUser()->setPermissions(array_sum($form->getFieldValue('perm') ?? []));
+        if ($form->getField('perm')) {
+            $this->getUser()->setPermissions(array_sum($form->getFieldValue('perm') ?? []));
+        }
 
         $form->addFieldErrors($this->user->validate());
         if ($form->hasErrors()) {

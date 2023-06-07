@@ -89,7 +89,13 @@ class Page
                 ->setAttr('title', 'Reset table filters and order to default.');
         }
         $this->getTable()->appendAction(new Action\Button('Create'))->setUrl(Uri::create('/pageEdit'));
-        $this->getTable()->appendAction(new Action\Delete());
+        $this->getTable()->appendAction(new Action\Delete())
+            ->addOnDelete(function (Action\Delete $action, \App\Db\Page $obj) {
+                if (!$obj->canDelete($this->getFactory()->getAuthUser())) {
+                    Alert::addWarning('You do not have permission to delete this page.');
+                    return false;
+                }
+            });
         $this->getTable()->appendAction(new Action\Csv())->addExcluded('actions');
 
     }

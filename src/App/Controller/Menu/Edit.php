@@ -187,6 +187,7 @@ jQuery(function($) {
 		opacity: .6,
 		relocate: function (a, b) {
             $('button.btn-save-menu').prop('disabled', false);
+            $('button.btn-save-menu').trigger('click');
 		}
     });
     // Store menu item name into data attr
@@ -239,6 +240,7 @@ jQuery(function($) {
             $('a', li).html(data.name);
             $('a', li).attr('contentEditable', 'true');
             sortable.append(li);
+            $('button.btn-save-menu').prop('disabled', false);
 
             $('#page-select-dialog').modal('hide');
         });
@@ -258,6 +260,7 @@ jQuery(function($) {
             $('a', li).html(data.name);
             $('a', li).attr('contentEditable', 'true');
             sortable.append(li);
+            $('button.btn-save-menu').prop('disabled', false);
         });
     });
 
@@ -274,6 +277,7 @@ jQuery(function($) {
             li.data('type', data.type);
             $('a', li).html(data.name);
             sortable.append(li);
+            $('button.btn-save-menu').prop('disabled', false);
         });
     });
 

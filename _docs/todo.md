@@ -1,9 +1,6 @@
 # TODO 
 
 
-- We may need to store the crumbs in the  query string after all, when using the back button we loose 
-the string and that make it useless, it also will happen for every page that relies on the query string...
-BUGGER!!!!!!!!!!!
 
 - Standard registered users should only be allowed to view pages, all edit controls should be hidden.
 This will allow us to create public websites with registered users. Just need to change the templates.
@@ -18,6 +15,9 @@ as the wiki is used primarily to save external account info, ensure they have ca
 Maybe they can be attached to pages as well so the can be listed in related pages. Could have a widget that shows the
 passcode and details inline to avoid password data being show accidentally???
 
+- We may need to store the crumbs in the  query string after all, when using the back button we loose 
+the string and that make it useless, it also will happen for every page that relies on the query string...
+BUGGER!!!!!!!!!!!
 
 ## DONE
 

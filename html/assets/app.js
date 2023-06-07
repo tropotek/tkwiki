@@ -9,6 +9,8 @@ jQuery(function ($) {
   tkbase.initTkInputLock();
   tkbase.initDataToggle();
   //tkbase.initTinymce();
+
+  app.initWikiScripts();
   app.initHtmxToasts();
   app.initTkFormTabs();
   app.initDatepicker();
@@ -18,6 +20,17 @@ jQuery(function ($) {
 
 let app = function () {
   "use strict";
+
+  /**
+   * Init all wiki base level functions
+   */
+  let initWikiScripts = function () {
+    $('a.wk-page-disable').on('click', function(e) {
+      e.preventDefault();
+      return false;
+    });
+
+  };
 
   /**
    * remove focus on menu links
@@ -152,6 +165,7 @@ let app = function () {
   };  // end initTinymce()
 
   return {
+    initWikiScripts: initWikiScripts,
     initHtmxToasts: initHtmxToasts,
     initTkFormTabs: initTkFormTabs,
     initDatepicker: initDatepicker,

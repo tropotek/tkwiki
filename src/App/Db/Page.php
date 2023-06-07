@@ -268,31 +268,27 @@ class Page extends Model
     public static function canCreate(?User $user): bool
     {
         if (!$user) return false;
-        if ($user->isAdmin()) return true;
-        return $user->hasPermission(User::PERM_EDITOR);
+        if ($user->isAdmin() || $user->isStaff()) return true;
+        return false;
     }
 
     public function canView(?User $user): bool
     {
         if ($this->getPermission() == self::PERM_PUBLIC) return true;
         if (!$user) return false;
+        // Admins can view all
+        if ($user->isAdmin()) return true;
         // Page authors always have view permissions
         if ($this->getUserId() == $user->getId()) return true;
-        if ($user->isAdmin()) return true;
 
-        if (
-            $this->getPermission() == self::PERM_USER &&
-            $user->getType() == User::TYPE_USER &&
-            $user->getType() == User::TYPE_STAFF
-        ) {
-            return true;
+        // Staff and users can view USER pages
+        if ($this->getPermission() == self::PERM_USER) {
+            return ($user->isUser() || $user->isStaff());
         }
 
-        if (
-            $this->getPermission() == self::PERM_STAFF &&
-            $user->getType() == User::TYPE_STAFF
-        ) {
-            return true;
+        // Staff can view STAFF pages
+        if ($this->getPermission() == self::PERM_STAFF) {
+            return $user->isStaff();
         }
 
         return false;
@@ -303,6 +299,8 @@ class Page extends Model
         if (!$user) return false;
         if ($user->isAdmin()) return true;
 
+        // Page authors can always edit their own pages
+        if ($this->getUserId() == $user->getId()) return true;
         // Only allow Editors to edit home page regardless of permissions
         if ($this->getUrl() == self::getHomeUrl()) {
             return $user->hasPermission(User::PERM_EDITOR);
@@ -313,13 +311,14 @@ class Page extends Model
             $this->getPermission() == self::PERM_PUBLIC ||
             $this->getPermission() == self::PERM_USER
         ) {
-            return $user->getType() == User::TYPE_STAFF;
+            return $user->isStaff();
         }
 
         // Only Editors can edit staff pages
         if ($this->getPermission() == self::PERM_STAFF) {
             return $user->hasPermission(User::PERM_EDITOR);
         }
+
         return false;
     }
 
@@ -327,7 +326,7 @@ class Page extends Model
     {
         if (!$user) return false;
         if ($user->isAdmin()) return true;
-        // Page authors can always delete there pages
+        // Page authors can always delete their own pages
         if ($this->getUserId() == $user->getId()) return true;
 
         // Do not allow deletion of currently assigned home page
@@ -340,7 +339,7 @@ class Page extends Model
             $this->getPermission() == self::PERM_PUBLIC ||
             $this->getPermission() == self::PERM_USER
         ) {
-            return $user->getType() == User::TYPE_STAFF;
+            return $user->isStaff();
         }
 
         // Only Editors can delete staff pages

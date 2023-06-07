@@ -23,15 +23,17 @@ a.wk-page {
 }
 a.wk-page-new {
   /* color: var(--bs-secondary-color) !important;*/
-  color: #FF0000;
+  color: rgba(255, 0, 0, 0.70);
 }
 a.wk-page-disable {
   /* color: var(--bs-secondary-color) !important; */
   color: #CCCCCC !important;
+  cursor: not-allowed;
 }
 a.wk-link-external {
   /*color: var(--bs-success-color) !important;*/
-  color: #009900;
+  color: #007700;
+  cursor: alias;
 }
 
 /* ==================  WIKI End  ================== */

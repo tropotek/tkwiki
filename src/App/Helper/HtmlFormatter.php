@@ -73,7 +73,7 @@ class HtmlFormatter
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             $regs = array();
-            $class = $node->getAttribute('class');
+            $css = $node->getAttribute('class');
             $href = $node->getAttribute('href');
             if (preg_match('/^page:\/\/(.+)/i', $href, $regs)) {
                 $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
@@ -83,32 +83,33 @@ class HtmlFormatter
                 }
 
                 if ($page) {
-                    $css = '';
+                    $css = $this->addClass($css, 'wk-page');
+                    $css = $this->removeClass($css, 'wk-page-new');
                     if ($this->isView) {
                         if (!$page->canView($this->getFactory()->getAuthUser())) {
-                            $css = ' wk-page-disable';
+                            $css = $this->addClass($css, 'wk-page-disable');
+                            $node->setAttribute('title', 'Invalid Permission');
                         }
                     }
-                    $node->setAttribute('class', $this->addClass($class, 'wk-page').$css);
-                    $node->setAttribute('class', $this->removeClass($class, 'wk-page-new'));
                 } else {
-                    $node->setAttribute('class', $this->addClass($class, 'wk-page-new'));
-                    $node->setAttribute('class', $this->removeClass($class, 'wk-page'));
+                    $css = $this->addClass($css, 'wk-page-new');
+                    $css = $this->removeClass($css, 'wk-page');
                 }
             } else if ($this->isView && preg_match('/^http|https|ftp|telnet|gopher|news/i', $href, $regs)) {
                 $url = new \Tk\Uri($node->getAttribute('href'));
                 if (strtolower(str_replace('www.', '', $url->getHost())) != strtolower(str_replace('www.', '',$_SERVER['HTTP_HOST'])) ) {
-                    $node->setAttribute('class', $this->addClass($class, 'wk-link-external'));
+                    $css = $this->addClass($css, 'wk-link-external');
                     $node->setAttribute('target', '_blank');
                 }
             }
+            $node->setAttribute('class', $css);
         }
         return $doc;
     }
 
     protected function addClass(string $classString, string $class): string
     {
-        $arr = explode(' ', $classString);
+        $arr = explode(' ', trim($classString));
         $arr = array_flip($arr);
         $arr[$class] = $class;
         $arr = array_flip($arr);
@@ -117,7 +118,7 @@ class HtmlFormatter
 
     protected function removeClass(string $classString, string $class): string
     {
-        $arr = explode(' ', $classString);
+        $arr = explode(' ', trim($classString));
         $arr = array_flip($arr);
         unset($arr[$class]);
         $arr = array_flip($arr);

@@ -46,6 +46,7 @@ class AppAttributes extends FilterInterface
 
             if ($node->hasAttribute(self::APP_IS_DEBUG)) {
                 $val = trim($node->getAttribute(self::APP_IS_DEBUG));
+                $node->removeAttribute(self::APP_IS_DEBUG);
                 $showNode = preg_match('/(yes|true|1)/i', $val);
                 if (($isDebug && !$showNode) || (!$isDebug && $showNode)) {
                     $this->getDomModifier()->removeNode($node);
@@ -54,6 +55,7 @@ class AppAttributes extends FilterInterface
 
             if ($node->hasAttribute(self::APP_IS_USER)) {
                 $val = trim($node->getAttribute(self::APP_IS_USER));
+                $node->removeAttribute(self::APP_IS_USER);
                 $showNode = preg_match('/(yes|true|1)/i', $val);
                 if (($isUser && !$showNode) || (!$isUser && $showNode)) {
                     $this->getDomModifier()->removeNode($node);
@@ -62,6 +64,7 @@ class AppAttributes extends FilterInterface
 
             if ($node->hasAttribute(self::APP_IS_TYPE)) {
                 $type = $node->getAttribute(self::APP_IS_TYPE);
+                $node->removeAttribute(self::APP_IS_TYPE);
                 if (!$user || !$user->isType($userConsts[$type])) {
                     $this->getDomModifier()->removeNode($node);
                 }
@@ -69,6 +72,8 @@ class AppAttributes extends FilterInterface
 
             if ($node->hasAttribute(self::APP_HAS_PERM)) {
                 $perms = explode('|', $node->getAttribute(self::APP_HAS_PERM));
+                $node->removeAttribute(self::APP_HAS_PERM);
+
                 $perms = array_map('trim', $perms);
                 $perm = array_sum(array_filter($userConsts, function($k) use($perms) { return in_array($k, $perms); }, ARRAY_FILTER_USE_KEY));
                 if (!$user || !$user->hasPermission($perm)) {

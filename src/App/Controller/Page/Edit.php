@@ -42,9 +42,6 @@ class Edit extends PageController
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Edit Page');
         $this->lock = new Lock($this->getAuthUser());
-
-        // TODO:
-        //$this->setAccess(User::PERM_MANAGE_USER | User::PERM_MANAGE_STAFF);
     }
 
     public function doDefault(Request $request)
@@ -56,6 +53,14 @@ class Edit extends PageController
 
         // Find requested page
         $this->wPage = PageMap::create()->find($request->query->get('id') ?? 0);
+
+        if ($this->wPage && !$this->wPage->canEdit($this->getAuthUser())) {
+            Alert::addWarning('You do not have permissions to edit `' . $this->wPage->getTitle() . '`');
+            if ($this->wPage->canView($this->getAuthUser())) {
+                $this->wPage->getPageUrl()->redirect();
+            }
+            Uri::create(Page::getHomeUrl())->redirect();
+        }
 
         // Create a new page
         if (!$this->wPage && $request->query->has('u') && Page::canCreate($this->getAuthUser())) {

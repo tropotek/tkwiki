@@ -58,8 +58,6 @@ return function (Config $config) {
         $config['php.display_errors'] = 'On';
         $config['php.error_log']      = '/home/user/log/error.log';
         $config['log.logLevel']       = \Psr\Log\LogLevel::DEBUG;
-        // Used for the Mirror command
-        //$config['db.mirror.url']    = 'https://example.com/util/mirror';
     }
 
 };

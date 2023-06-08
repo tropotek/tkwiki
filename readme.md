@@ -29,10 +29,12 @@ $ git clone https://github.com/tropotek/tkwiki.git
 $ cd tkwiki
 $ composer install
 ~~~
+5. You will be asked a number of questions to setup the environment settings.
 4. Edit the `/src/App/config/config.php` file to your required settings.
 5. You may have to change the permissions of the `/data/` folder so PHP can read and write to it.
 6. To enable debug mode and logging edit the `/src/config/config.php` file to suit your server.
    (tail the log for more info on any errors.)
+7. Browse to the location you installed the site
 
 
 ## Upgrading

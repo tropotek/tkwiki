@@ -75,7 +75,7 @@ class Content extends Model
         if ($this->getJs() != $content->getJs()) {
             return true;
         }
-        
+
         return false;
     }
 

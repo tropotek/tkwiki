@@ -120,24 +120,18 @@ SET SQL_SAFE_UPDATES = 0;
 
 TRUNCATE TABLE user;
 INSERT INTO user (type, username, email, name, timezone, permissions) VALUES
-  ('staff', 'admin', 'admin@example.com', 'Administrator', NULL, 1),
-  ('staff', 'editor', 'dev@example.com', 'Developer', 'Australia/Melbourne', 1),
-  ('user', 'user', 'user@example.com', 'User', 'Australia/Brisbane', 0)
+  ('staff', 'admin', 'admin@example.com', 'Administrator', NULL, 1)
+#  , ('staff', 'editor', 'dev@example.com', 'Developer', 'Australia/Melbourne', 1)
+#  , ('user', 'user', 'user@example.com', 'User', 'Australia/Brisbane', 0)
 ;
 
 UPDATE `user` SET `hash` = MD5(CONCAT(username, id)) WHERE 1;
 
 INSERT INTO page (user_id, title, url, permission) VALUES
-    (1, 'Home', 'home', 0),
-    (1, 'Orphan', 'orphan', 0)
+    (1, 'Home', 'home', 0)
 ;
 INSERT INTO content (page_id, user_id, html) VALUES
     (1, 1, '<h2>Welcome to the WIKI</h2>
-<p>This is the default homepage of you new WIKI. Start adding content and building your own content.</p>
-<p>&nbsp;</p>
-<p><small>TODO: Add some start up content howto`s, introduction etc....</small></p>
-<p>&nbsp;</p>'),
-    (3, 1, '<h2>Orphan Test WIKI Page</h2>
 <p>This is the default homepage of you new WIKI. Start adding content and building your own content.</p>
 <p>&nbsp;</p>
 <p><small>TODO: Add some start up content howto`s, introduction etc....</small></p>

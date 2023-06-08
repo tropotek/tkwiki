@@ -22,14 +22,15 @@ body {
 a.wk-page {
   /* color: var(--bs-secondary-color) !important;*/
 }
-a.wk-page-new {
-  /* color: var(--bs-secondary-color) !important;*/
-  color: rgba(255, 0, 0, 0.70);
-}
 a.wk-page-disable {
   /* color: var(--bs-secondary-color) !important; */
-  color: #CCCCCC !important;
+  color: #CCCCCC;
   cursor: not-allowed;
+}
+a.wk-page-new,
+a.wk-page-new.wk-page-disable {
+  /* color: var(--bs-secondary-color) !important;*/
+  color: rgba(255, 0, 0, 0.70);
 }
 a.wk-link-external {
   /*color: var(--bs-success-color) !important;*/

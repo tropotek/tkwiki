@@ -69,6 +69,7 @@ class HtmlFormatter
      */
     protected function parseLinks(\DOMDocument $doc): \DOMDocument
     {
+        $user = $this->getFactory()->getAuthUser();
         // Add CSS classes to content images
         $nodeList = $doc->getElementsByTagName('img');
         /** @var \DOMElement $node */
@@ -97,13 +98,16 @@ class HtmlFormatter
                     $css = $this->addClass($css, 'wk-page');
                     $css = $this->removeClass($css, 'wk-page-new');
                     if ($this->isView) {
-                        if (!$page->canView($this->getFactory()->getAuthUser())) {
+                        if (!$page->canView($user)) {
                             $css = $this->addClass($css, 'wk-page-disable');
                             $node->setAttribute('title', 'Invalid Permission');
                         }
                     }
                 } else {
                     $css = $this->addClass($css, 'wk-page-new');
+                    if (!$user || $user->isUser()) {
+                        $css = $this->addClass($css, 'wk-page-disable');
+                    }
                     $css = $this->removeClass($css, 'wk-page');
                 }
             } else if ($this->isView && preg_match('/^http|https|ftp|telnet|gopher|news/i', $href, $regs)) {

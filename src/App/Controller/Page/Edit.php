@@ -23,11 +23,6 @@ class Edit extends PageController
 {
     use FormTrait;
 
-    /**
-     * the session ID for the referring page
-     */
-    const SID_REFERRER = 'edit_ref';
-
     protected ?Page $wPage = null;
 
     protected ?Content $wContent = null;
@@ -49,10 +44,6 @@ class Edit extends PageController
 
     public function doDefault(Request $request)
     {
-        $referer = $this->getRequest()->server->get('HTTP_REFERER', '');
-        if (!$this->getSession()->has(self::SID_REFERRER) && $referer) {
-            $this->getSession()->set(self::SID_REFERRER, $referer);
-        }
         $this->lock = new Lock($this->getAuthUser());
 
         // Find requested page
@@ -76,15 +67,7 @@ class Edit extends PageController
             $this->wContent = new Content();
             $this->wContent->setUserId($this->getAuthUser()->getId());
         }
-        // Create a new Nav page
-        if ($request->query->has('type') && Page::canCreate($this->getAuthUser())) {
-            $this->wPage = new Page();
-            $this->wPage->setUserId($this->getAuthUser()->getId());
-            $this->wPage->setTitle('Menu Item');
-            $this->wPage->setPermission(\App\Db\Page::PERM_PUBLIC);
-            $this->wContent = new Content();
-            $this->wContent->setUser($this->getAuthUser()->getId());
-        }
+
         if (!$this->wPage) {
             Alert::addWarning('The page you are attempting to edit cannot be found.');
             Uri::create(Page::getHomeUrl())->redirect();
@@ -109,30 +92,20 @@ class Edit extends PageController
             $url->redirect();
         }
 
-        // Acquire page lock.
-        $this->lock->lock($this->wPage->getId());
-
-        if (!$this->wContent) {
-            $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
-            // Execute the pre-formatter
-            try {
-                if ($this->wContent->html) {
-                    $this->formatter = new HtmlFormatter($this->wContent->getHtml(), false);
-                    $this->wContent->html = $this->formatter->getHtml();
-                }
-            } catch(\Exception $e) {
-                Alert::addInfo($e->getMessage());
-            }
-        }
-
         if ($request->query->has('del')) {
             $this->doDelete($request);
         }
 
+        // Acquire page lock.
+        $this->lock->lock($this->wPage->getId());
 
-        // Get the form template
+        // If not a new page with new content
+        if (!$this->wContent) {
+            $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
+        }
+
+        // Set the form
         $this->setForm(Form::create('page'));
-
 
         $group = 'Details';
         $this->getForm()->appendField(new Field\Hidden('pid'))

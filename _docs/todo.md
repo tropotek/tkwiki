@@ -1,8 +1,6 @@
 # TODO 
 
 
-- get a bootstrap 5 jquery image/file viewer (lightbox style)
-
 - Also I think it`s time to create some sort of account record implementing the Authtool (See BTC site), This would be handy
 as the wiki is used primarily to save external account info, ensure they have categories and permissions.
 Maybe they can be attached to pages as well so the can be listed in related pages. Could have a widget that shows the
@@ -27,4 +25,5 @@ BUGGER!!!!!!!!!!!
 - Standard registered users should only be allowed to view pages, all edit controls should be hidden.
   This will allow us to create public websites with registered users. Just need to change the templates.
 - Get history page finished
+- get a bootstrap 5 jquery image/file viewer (lightbox style)
 - 

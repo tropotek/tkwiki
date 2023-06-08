@@ -126,6 +126,7 @@ class Edit extends PageController
 
         $this->getForm()->appendField(new Field\Textarea('html'))
             ->addCss('mce')
+            ->removeCss('form-control')
             ->setGroup($group);
 
         $group = 'Extra';

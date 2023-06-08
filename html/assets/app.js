@@ -8,7 +8,6 @@ jQuery(function ($) {
   tkbase.initDialogConfirm();
   tkbase.initTkInputLock();
   tkbase.initDataToggle();
-  //tkbase.initTinymce();
 
   app.initWikiScripts();
   app.initHtmxToasts();
@@ -127,13 +126,13 @@ let app = function () {
       entity_encoding : 'named',
       height: 500,
       plugins: [
-        'advlist', 'autolink', 'lists', 'link', 'image', 'media', 'charmap', 'preview',
+        'advlist', 'autolink', 'lists', 'link', 'anchor', 'image', 'media', 'charmap', 'preview',
         'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-        'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        'insertdatetime', 'media', 'table', 'help', 'wordcount', 'codesample'
       ],
       toolbar1:
         'wikiPage | bold italic strikethrough | blocks | alignleft aligncenter ' +
-        'alignright alignjustify | bullist numlist outdent indent | link image media | removeformat code fullscreen',
+        'alignright alignjustify | bullist numlist outdent indent | codesample link image media | removeformat code fullscreen',
       content_css: [
         '//cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
         config.baseUrl + '/html/assets/app.css'
@@ -160,6 +159,7 @@ let app = function () {
           }
         });
 
+
       }
 
     };
@@ -181,6 +181,22 @@ let app = function () {
     };
 
     $('form').on(EVENT_INIT, document, init).each(init);
+
+    // $(window).on('scroll', function (e) {
+    //   console.log(arguments);
+    //   e.stopPropagation();
+    //   return false;
+    // });
+
+    // mceDefaults = {
+    //   plugins: [
+    //     'advlist'
+    //   ],
+    //   toolbar1:
+    //     'bold italic strikethrough | blocks | alignleft aligncenter ' ,
+    //
+    // };
+    // $('textarea.mce').tinymce(mceDefaults);
   };  // end initTinymce()
 
   return {

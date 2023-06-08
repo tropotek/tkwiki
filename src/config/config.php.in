@@ -52,7 +52,6 @@ return function (Config $config) {
 
     // Setup dev environment
     $config['debug'] = true;
-    $config['log.logLevel']       = \Psr\Log\LogLevel::DEBUG;
     if ($config->isDebug()) {
         error_reporting(-1);
         $config['php.display_errors'] = 'On';

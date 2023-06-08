@@ -24,15 +24,9 @@ return function (Config $config) {
     /*
      * Encrypt function secret seed
      * Change this on your production systems
+     * TODO: YOU should change this for your own install
      */
     $config['system.encrypt'] = '3c57a0c2acdd6f3bc0b180c709746d1b';
-
-    /*
-     * DB secret API key
-     * Use this  key for the mirror command in a dev environment.
-     * Keep this key secret. Access to the sites DB can be gained with it.
-     */
-    //$config['db.mirror.secret'] = '';
 
     /**
      * Enable DB sessions
@@ -44,8 +38,14 @@ return function (Config $config) {
      */
     //$config['php.date.timezone']    = 'Australia/Melbourne';
 
+    /**
+     * The default log level
+     */
+    $config['log.logLevel'] = \Psr\Log\LogLevel::ERROR;
+
     // Setup dev environment
     $config['debug'] = true;
+    $config['log.logLevel']       = \Psr\Log\LogLevel::DEBUG;
     if ($config->isDebug()) {
         error_reporting(-1);
         $config['php.display_errors'] = 'On';

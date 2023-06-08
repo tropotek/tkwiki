@@ -19,7 +19,7 @@ class PageMap extends Mapper
             $map = new DataMap();
             $map->addDataType(new Db\Integer('id'));
             $map->addDataType(new Db\Integer('userId', 'user_id'));
-            $map->addDataType(new Db\Text('type'));
+            $map->addDataType(new Db\Text('template'));
             $map->addDataType(new Db\Text('title'));
             $map->addDataType(new Db\Text('url'));
             $map->addDataType(new Db\Integer('views'));
@@ -35,7 +35,7 @@ class PageMap extends Mapper
             $map = new DataMap();
             $map->addDataType(new Form\Integer('id'));
             $map->addDataType(new Form\Integer('userId'));
-            $map->addDataType(new Form\Text('type'));
+            $map->addDataType(new Form\Text('template'));
             $map->addDataType(new Form\Text('title'));
             $map->addDataType(new Form\Text('url'));
             $map->addDataType(new Form\Integer('views'));
@@ -49,7 +49,7 @@ class PageMap extends Mapper
             $map = new DataMap();
             $map->addDataType(new Form\Integer('id'));
             $map->addDataType(new Form\Integer('userId'));
-            $map->addDataType(new Form\Text('type'));
+            $map->addDataType(new Form\Text('template'));
             $map->addDataType(new Form\Text('title'));
             $map->addDataType(new Form\Text('url'));
             $map->addDataType(new Form\Integer('views'));
@@ -70,18 +70,9 @@ class PageMap extends Mapper
     public function findByUrl($url): null|\Tk\Db\Mapper\Model|Page
     {
         $filter = [
-            'url' => $url,
-            'type' => Page::TYPE_PAGE
+            'url' => $url
         ];
         return $this->findFiltered($filter)->current();
-    }
-
-    public function findNavPages(Tool $tool = null): Result
-    {
-        $filter = [
-            'type' => Page::TYPE_NAV
-        ];
-        return $this->findFiltered($filter, $tool);
     }
 
     /**
@@ -120,8 +111,8 @@ class PageMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (!empty($filter['type'])) {
-            $filter->appendWhere('a.type = %s AND ', $this->quote($filter['type']));
+        if (!empty($filter['template'])) {
+            $filter->appendWhere('a.template = %s AND ', $this->quote($filter['template']));
         }
 
         if (!empty($filter['title'])) {
@@ -144,9 +135,8 @@ class PageMap extends Mapper
         if (isset($filter['orphaned'])) {
             $homeUrl = $this->getRegistry()->get('wiki.page.default');
             $filter->appendFrom(' LEFT JOIN links b USING (url)');
-            $filter->appendWhere('b.page_id IS NULL AND (a.url != %s AND a.type != %s) ',
-                $this->quote($homeUrl),
-                $this->quote(Page::TYPE_NAV)
+            $filter->appendWhere('b.page_id IS NULL AND (a.url != %s) ',
+                $this->quote($homeUrl)
             );
         }
 
@@ -157,7 +147,7 @@ class PageMap extends Mapper
                 FROM content
                 WHERE MATCH (html) AGAINST (%s IN NATURAL LANGUAGE MODE)
                 GROUP BY page_id
-            ) c ON (a.id = c.page_id)', $this->quote($filter['fullSearch']));
+            ) c ON (a.id = c.page_id)', $this->quote($filter['fullSearch'] ?? ''));
             $filter->appendWhere('c.id IS NOT NULL');
         }
 
@@ -173,12 +163,11 @@ class PageMap extends Mapper
         $sql = <<<SQL
 SELECT a.id
 FROM page a LEFT JOIN links b USING (url)
-WHERE b.page_id IS NULL AND (a.url != ? AND a.type != ? AND a.id = ?)
+WHERE b.page_id IS NULL AND (a.url != ? AND a.id = ?)
 SQL;
         $stm = $this->getDb()->prepare($sql);
         $stm->execute([
             $homeUrl,
-            Page::TYPE_NAV,
             $pageId
         ]);
 

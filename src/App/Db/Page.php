@@ -35,22 +35,12 @@ class Page extends Model
         self::PERM_PRIVATE  => 'Private',
     ];
 
-    /**
-     * This type is a standard content page
-     */
-    const TYPE_PAGE = 'page';
-
-    /**
-     * This type means that the page is to be used with the menu/nav only
-     */
-    const TYPE_NAV = 'nav';
-
 
     public int $id = 0;
 
     public int $userId = 0;
 
-    public string $type = self::TYPE_PAGE;
+    public string $template = '';
 
     public string $title = '';
 
@@ -88,17 +78,15 @@ class Page extends Model
     {
         $url = preg_replace('/[^a-z0-9_-]/i', '_', $title);
         do {
-            // TODO: find a way to see if the url matches any in the routing table as well.
-
             $comp = \App\Db\PageMap::create()->findByUrl($url);
-            if ($comp) {
+            if ($comp || self::routeExists($url)) {
                 if (preg_match('/(.+)(_([0-9]+))$/', $url, $regs)) {
                     $url = $regs[1] . '_' . ((int)$regs[3]+1);
                 } else {
                     $url = $url.'_1';
                 }
             }
-        } while($comp);
+        } while($comp || self::routeExists($url));
         return $url;
     }
 
@@ -115,6 +103,11 @@ class Page extends Model
         return Factory::instance()->getRegistry()->get('wiki.page.default');
     }
 
+    public static function homeUrl(): Uri
+    {
+        return Uri::create(Factory::instance()->getRegistry()->get('wiki.page.default'));
+    }
+
     public function update(): int
     {
         if (!$this->getUrl()) {
@@ -125,22 +118,13 @@ class Page extends Model
 
     public function delete(): int
     {
-        // Cannot delete first page adn first menu item
-        $exclude = [1, 2];
-        if (in_array($this->getId(), $exclude)) return 0;
-
-        // remove page any locks (this could be redundant and left up to the expired cleanup)
-//        LockMap::create()->unlock($this->getId());
+        // Cannot delete first page and first menu item
+        if ($this->getUrl() == self::getHomeUrl()) {
+            return false;
+        }
 
         // delete all page links referred to by this page.
         $this->getMapper()->deleteLinkByPageId($this->getId());
-
-        // TODO: This may be redundant with new MYSQL foreign keys, test to see    ;-)
-        // Remove all content
-//        $contentList = \App\Db\ContentMap::create()->findByPageId($this->getId());
-//        foreach ($contentList as $c) {
-//            $c->delete();
-//        }
 
         return parent::delete();
     }
@@ -154,15 +138,15 @@ class Page extends Model
     }
 
 
-    public function setType(string $type): Page
+    public function setTemplate(string $template): Page
     {
-        $this->type = $type;
+        $this->template = $template;
         return $this;
     }
 
-    public function getType(): string
+    public function getTemplate(): string
     {
-        return $this->type;
+        return $this->template;
     }
 
     public function setTitle(string $title): Page
@@ -249,18 +233,32 @@ class Page extends Model
         if (!$this->getTitle()) {
             $errors['title'] = 'Please enter a title for your page';
         }
-        if($this->getId()) {
+        //if  ($this->getId()) {
             $comp = PageMap::create()->findByUrl($this->getUrl());
             if ($comp && $comp->getId() != $this->getId()) {
                 $errors['url'] = 'This url already exists, try again';
             }
-        }
-
-        // TODO: find a way to see if the url matches any in the routing table as well.
-
-        // ...
+            // Match any existing system routes
+            if (self::routeExists($this->getUrl())) {
+                $errors['url'] = 'This url already exists, try again';
+            }
+        //}
 
         return $errors;
+    }
+
+    /**
+     * If not matched to the wiki-catch-all route,
+     * then the page exists in the routing table already
+     */
+    public static function routeExists(string $url): bool
+    {
+        try {
+            $match = Factory::instance()->getRouteMatcher()->match($url);
+            $route = $match['_route'];
+            return ($route != 'routeswiki-catch-all');
+        } catch (\Exception $e) {  }
+        return false;
     }
 
     // ------------------- PAGE PERMISSION METHODS -----------------------
@@ -276,9 +274,7 @@ class Page extends Model
     {
         if ($this->getPermission() == self::PERM_PUBLIC) return true;
         if (!$user) return false;
-        // Admins can view all
         if ($user->isAdmin()) return true;
-        // Page authors always have view permissions
         if ($this->getUserId() == $user->getId()) return true;
 
         // Staff and users can view USER pages
@@ -297,10 +293,10 @@ class Page extends Model
     public function canEdit(?User $user): bool
     {
         if (!$user) return false;
+        if ($user->isUser()) return false;
         if ($user->isAdmin()) return true;
-
-        // Page authors can always edit their own pages
         if ($this->getUserId() == $user->getId()) return true;
+
         // Only allow Editors to edit home page regardless of permissions
         if ($this->getUrl() == self::getHomeUrl()) {
             return $user->hasPermission(User::PERM_EDITOR);
@@ -324,15 +320,15 @@ class Page extends Model
 
     public function canDelete(?User $user): bool
     {
-        if (!$user) return false;
-        if ($user->isAdmin()) return true;
-        // Page authors can always delete their own pages
-        if ($this->getUserId() == $user->getId()) return true;
-
         // Do not allow deletion of currently assigned home page
         if ($this->getUrl() == self::getHomeUrl()) {
             return false;
         }
+
+        if (!$user) return false;
+        if ($user->isUser()) return false;
+        if ($user->isAdmin()) return true;
+        if ($this->getUserId() == $user->getId()) return true;
 
         // Allow any staff to delete public or user pages
         if (

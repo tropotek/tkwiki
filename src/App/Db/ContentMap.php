@@ -25,7 +25,6 @@ class ContentMap extends Mapper
             $map->addDataType(new Db\Text('description'));
             $map->addDataType(new Db\Text('css'));
             $map->addDataType(new Db\Text('js'));
-            $map->addDataType(new Db\Date('modified'));
             $map->addDataType(new Db\Date('created'));
 
             $this->addDataMap(self::DATA_MAP_DB, $map);
@@ -55,6 +54,7 @@ class ContentMap extends Mapper
             $map->addDataType(new Form\Text('description'));
             $map->addDataType(new Form\Text('css'));
             $map->addDataType(new Form\Text('js'));
+            $map->addDataType(new Form\Date('created'))->setDateFormat('d/m/Y h:i:s');
 
             $this->addDataMap(self::DATA_MAP_TABLE, $map);
         }
@@ -134,7 +134,7 @@ class ContentMap extends Mapper
      *     [created] => 2016-06-23 08:37:27
      *   )
      * )
-     * TODO: Test this query works as expected
+     * TODO: rewrite this query me thinks////
      */
     public function findContributors(int $pageId): array
     {

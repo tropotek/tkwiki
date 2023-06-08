@@ -20,7 +20,6 @@ class PageSelect extends \Dom\Renderer\Renderer implements DisplayInterface
         //$this->table->getTable()->resetTableSession();
         $tool = $this->table->getTable()->getTool('title', 25);
         $filter = [
-            'type' => Page::TYPE_PAGE,
             'published' => true,
             'permission' => Page::PERM_PUBLIC
         ];

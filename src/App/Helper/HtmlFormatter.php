@@ -69,12 +69,23 @@ class HtmlFormatter
      */
     protected function parseLinks(\DOMDocument $doc): \DOMDocument
     {
+        // Add CSS classes to content images
+        $nodeList = $doc->getElementsByTagName('img');
+        /** @var \DOMElement $node */
+        foreach ($nodeList as $node) {
+            $css = $node->getAttribute('class');
+            $css = $this->addClass($css, 'wk-image');
+            $node->setAttribute('class', $css);
+        }
+
+        // Add CSS classes to wiki page links
         $nodeList = $doc->getElementsByTagName('a');
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             $regs = array();
             $css = $node->getAttribute('class');
             $href = $node->getAttribute('href');
+
             if (preg_match('/^page:\/\/(.+)/i', $href, $regs)) {
                 $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
                 if ($this->isView) {

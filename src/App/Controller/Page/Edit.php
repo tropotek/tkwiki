@@ -79,7 +79,6 @@ class Edit extends PageController
         // Create a new Nav page
         if ($request->query->has('type') && Page::canCreate($this->getAuthUser())) {
             $this->wPage = new Page();
-            $this->wPage->setType(Page::TYPE_NAV);
             $this->wPage->setUserId($this->getAuthUser()->getId());
             $this->wPage->setTitle('Menu Item');
             $this->wPage->setPermission(\App\Db\Page::PERM_PUBLIC);
@@ -97,7 +96,7 @@ class Edit extends PageController
             Alert::addWarning('You do not have permission to edit this page.');
             $error = true;
         }
-        // TODO: this lock should give up access if the user is the same as the user that is currently locked....
+
         if ($this->wPage->id && !$this->lock->canAccess($this->wPage->getId())) {
             Alert::addWarning('The page is currently being edited by another user. Try again later.');
             $error = true;
@@ -156,16 +155,14 @@ class Edit extends PageController
             ->addCss('mce')
             ->setGroup($group);
 
-        if ($this->wPage->getType() == Page::TYPE_PAGE) {
-            $group = 'Extra';
-            $this->getForm()->appendField(new Field\Input('keywords'))
-                ->setRequired()
-                ->setGroup($group);
+        $group = 'Extra';
+        $this->getForm()->appendField(new Field\Input('keywords'))
+            ->setRequired()
+            ->setGroup($group);
 
-            $this->getForm()->appendField(new Field\Input('description'))
-                ->setRequired()
-                ->setGroup($group);
-        }
+        $this->getForm()->appendField(new Field\Input('description'))
+            ->setRequired()
+            ->setGroup($group);
 
         $this->getForm()->appendField(new Field\Textarea('css'))
             ->addCss('css-edit')
@@ -200,7 +197,7 @@ class Edit extends PageController
         if ($this->getFactory()->getCrumbs()->getBackUrl()) {
             $url = $this->getFactory()->getCrumbs()->getBackUrl();
         }
-        if ($this->wPage && $this->wPage->type != \App\Db\Page::TYPE_NAV) {
+        if ($this->wPage) {
             $url = $this->wPage->getPageUrl();
         }
         $action->setRedirect($url);
@@ -238,14 +235,6 @@ class Edit extends PageController
 
         Alert::addSuccess('Page save successfully.');
         $url = $this->wPage->getPageUrl();
-        if ($this->wPage->getType() == \App\Db\Page::TYPE_NAV) {
-            $homeUrl = $this->wPage->getHomeUrl();
-            $url = \Tk\Uri::create($homeUrl);
-            if ($this->getSession()->has(self::SID_REFERRER)) {
-                $url = $this->getSession()->get(self::SID_REFERRER);
-                $this->getSession()->remove(self::SID_REFERRER);
-            }
-        }
         $action->setRedirect($url);
     }
 
@@ -270,7 +259,6 @@ class Edit extends PageController
         foreach ($nodeList as $node) {
             $regs = array();
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
-                //vd($node->getAttribute('href'), $regs);
                 if (isset ($regs[1])) {
                     PageMap::create()->insertLink($page->getId(), $regs[1]);
                 }
@@ -284,12 +272,6 @@ class Edit extends PageController
         $template->appendText('title', $this->getPage()->getTitle());
         $template->setAttr('back', 'href', $this->wPage->getPageUrl());
 
-        $template->setVisible($this->wPage->getType());
-
-//        $header = new \App\Helper\PageHeader($this->wPage, $this->wPage->getContent(), $this->getAuthUser());
-//        $template->insertTemplate('header', $header->show());
-
-        //$template->appendTemplate('content', $this->form->getRenderer()->getTemplate());
         $template->appendTemplate('content', $this->getFormRenderer()->show());
 
         $dialog = new PageSelect();

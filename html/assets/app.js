@@ -30,6 +30,25 @@ let app = function () {
       return false;
     });
 
+    // see: https://trvswgnr.github.io/bs5-lightbox/#image-gallery
+    $('img.wk-image', '.wk-content').each(function () {
+      if ($(this).parents('a').length) return;
+      let link = $('<a href="#" data-toggle="lightbox" data-gallery="wk-gallery" data-caption=""></a>');
+      link.attr('href', $(this).attr('src'));
+      $(this).before(link);
+      link.append($(this).detach());
+    });
+    const options = {
+      keyboard: true,
+      //size: 'fullscreen',
+      size: 'xl',
+    };
+    document.querySelectorAll('[data-toggle="lightbox"]').forEach((el) => el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const lightbox = new Lightbox(el, options);
+      lightbox.show();
+    }));
+
   };
 
   /**

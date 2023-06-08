@@ -98,11 +98,11 @@ HTML;
     public function __makeTemplate(): ?Template
     {
         $html = <<<HTML
-<div class="btn-group btn-group-sm float-end" role="group" aria-label="Small button group">
+<div class="wk-toolbar btn-group btn-group-sm float-end" role="group" aria-label="Small button group">
   <a href="/edit?pageId=1" title="Edit The Page" class="btn btn-outline-secondary" choice="can-edit" var="edit-url"><i class="fa fa-fw fa-pencil"></i></a>
+  <a href="javascript:;" title="Page History" class="btn btn-outline-secondary" choice="can-edit" var="history"><i class="fa fa-fw fa-clock-rotate-left"></i></a>
   <a href="/?pdf=pdf" title="Download PDF" class="btn btn-outline-secondary" target="_blank" var="pdf-url"><i class="fa fa-fw fa-file-pdf"></i></a>
   <a href="javascript:window.print();" title="Print Document" class="btn btn-outline-secondary"><i class="fa fa-fw fa-print"></i></a>
-  <a href="javascript:;" title="Page History" class="btn btn-outline-secondary" choice="can-edit" var="history"><i class="fa fa-fw fa-clock-rotate-left"></i></a>
   <a href="javascript:;" title="Page Info" class="btn btn-outline-secondary" choice="info-url"><i class="fa fa-fw fa-circle-info"></i></a>
 </div>
 HTML;

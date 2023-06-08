@@ -4,12 +4,12 @@ namespace App\Db;
 use App\Db\Traits\PageTrait;
 use App\Db\Traits\UserTrait;
 use App\Factory;
-use Bs\Db\Traits\TimestampTrait;
+use Bs\Db\Traits\CreatedTrait;
 use Tk\Db\Mapper\Model;
 
 class Content extends Model
 {
-    use TimestampTrait;
+    use CreatedTrait;
     use UserTrait;
     use PageTrait;
 
@@ -29,15 +29,13 @@ class Content extends Model
 
     public string $js = '';
 
-    public \DateTime $modified;
-
     public \DateTime $created;
 
 
 
     public function __construct()
     {
-        $this->_TimestampTrait();
+        $this->_CreatedTrait();
         $this->userId = Factory::instance()->getAuthUser()?->getId() ?? 0;
     }
 

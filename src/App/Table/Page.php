@@ -44,7 +44,6 @@ class Page
                 $page = $cell->getRow()->getData();
                 $cell->setValue($page->getUser()->getName());
             });
-        $this->getTable()->appendCell(new Cell\Text('type'));
         $this->getTable()->appendCell(new Cell\Text('url'));
         $this->getTable()->appendCell(new Cell\Boolean('published'));
         $this->getTable()->appendCell(new Cell\Text('permission'))
@@ -59,12 +58,6 @@ class Page
 
         // Table filters
         $this->getFilter()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
-        $list = [
-            '-- Type --' => '',
-            \App\Db\Page::TYPE_PAGE => \App\Db\Page::TYPE_PAGE,
-            \App\Db\Page::TYPE_NAV => \App\Db\Page::TYPE_NAV,
-        ];
-        $this->getFilter()->appendField(new Field\Select('type', $list));
 
         // Load filter values
         $this->getFilter()->setFieldValues($this->getTable()->getTableSession()->get($this->getFilter()->getId(), []));
@@ -88,14 +81,15 @@ class Page
                 ->setAttr('data-confirm', 'Are you sure you want to reset the Table`s session?')
                 ->setAttr('title', 'Reset table filters and order to default.');
         }
-        $this->getTable()->appendAction(new Action\Button('Create'))->setUrl(Uri::create('/pageEdit'));
-        $this->getTable()->appendAction(new Action\Delete())
-            ->addOnDelete(function (Action\Delete $action, \App\Db\Page $obj) {
-                if (!$obj->canDelete($this->getFactory()->getAuthUser())) {
-                    Alert::addWarning('You do not have permission to delete this page.');
-                    return false;
-                }
-            });
+        if ($this->getFactory()->getAuthUser()->hasPermission(\App\Db\User::PERM_SYSADMIN)) {
+            $this->getTable()->appendAction(new Action\Delete())
+                ->addOnDelete(function (Action\Delete $action, \App\Db\Page $obj) {
+                    if (!$obj->canDelete($this->getFactory()->getAuthUser())) {
+                        Alert::addWarning('You do not have permission to delete this page.');
+                        return false;
+                    }
+                });
+        }
         $this->getTable()->appendAction(new Action\Csv())->addExcluded('actions');
 
     }

@@ -9,6 +9,7 @@ use App\Util\Pdf;
 use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tk\Alert;
 use Tk\Uri;
@@ -60,20 +61,30 @@ class View extends PageController
         return $this->getPage();
     }
 
+    /**
+     * This method is used for system users viewing wiki pages
+     * thus they should have edit access or this link should fail
+     */
     public function doContentView(Request $request)
     {
         $this->wContent = ContentMap::create()->find($request->get('contentId'));
         if (!$this->wContent) {
-            throw new HttpException(404, 'Page not found');
+            throw new HttpException(404, 'page not found');
         }
         $this->wPage = $this->wContent->getPage();
         if (!$this->wPage) {
-            throw new HttpException(404, 'Page not found');
+            throw new HttpException(404, 'page not found');
         }
+        if (!$this->wPage->canEdit($this->getFactory()->getAuthUser())) {
+            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'page cannot be rendered');
+        }
+        $this->toolbar = new ViewToolbar($this->wPage);
 
         if ($request->query->has('pdf')) {
             return $this->doPdf($request);
         }
+
+        return $this->getPage();
     }
 
     public function doPdf(Request $request)
@@ -131,7 +142,7 @@ class View extends PageController
     public function __makeTemplate(): ?Template
     {
         $html = <<<HTML
-<div>
+<div class="wk-content">
     <div var="toolbar"></div>
     <h1 var="title"></h1>
     <div var="content"></div>

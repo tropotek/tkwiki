@@ -105,6 +105,10 @@ class Lock
      *  - access the currently locked page
      *
      * Call this to see if the user can access the lock for a page.
+     *
+     * NOTE: This lock system does not handle same user accounts logged into different browsers.
+     *       They would both be able to use the same lock and potentially edit the same content.
+     *       This system does not assume that multiple users are using the same account.
      */
     public function canAccess(int $pageId): bool
     {

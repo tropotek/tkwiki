@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller\Page;
 
+use App\Db\ContentMap;
+use App\Db\Page;
 use App\Db\PageMap;
 use App\Db\User;
 use Bs\PageController;
@@ -10,7 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 class History extends PageController
 {
 
-    protected \App\Table\Page $table;
+    protected \App\Table\Content $table;
+
+    protected ?Page $wPage = null;
 
 
     public function __construct()
@@ -22,18 +26,18 @@ class History extends PageController
 
     public function doDefault(Request $request)
     {
+        $this->wPage = PageMap::create()->find($request->query->getInt('id'));
+        $this->getPage()->setTitle('History for `' . $this->wPage->getTitle() . '`');
+
         // Get the form template
-        $this->table = new \App\Table\Page();
-        $this->table->doDefault($request);
+        $this->table = new \App\Table\Content();
+        $this->table->doDefault($request, $this->wPage->getId());
 
-        $tool = $this->table->getTable()->getTool();
+        $tool = $this->table->getTable()->getTool('created DESC');
         $filter = $this->table->getFilter()->getFieldValues();
-        $filter['orphaned'] = true;
-        $list = PageMap::create()->findFiltered($filter, $tool);
+        $filter['pageId'] = $this->wPage->getId();
+        $list = ContentMap::create()->findFiltered($filter, $tool);
         $this->table->execute($request, $list);
-
-        vd('TODO: Need to find all the content records for this page...Implement revert function....');
-
 
         return $this->getPage();
     }
@@ -42,6 +46,7 @@ class History extends PageController
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
+        $template->setAttr('back', 'href', $this->wPage->getPageUrl());
 
         $template->appendTemplate('content', $this->table->show());
 

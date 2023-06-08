@@ -15,11 +15,6 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Controller\Contact::class, 'doDefault']);
     $routes->add('wiki-search', '/search')
         ->controller([\App\Controller\Page\Search::class, 'doDefault']);
-
-//    $routes->add('wiki-page-view', '/view')
-//        ->controller([\App\Controller\Page\View::class, 'doContentView']);
-
-
     $routes->add('wiki-page-edit', '/edit')
         ->controller([\App\Controller\Page\Edit::class, 'doDefault']);
     $routes->add('wiki-menu-edit', '/menuEdit')
@@ -30,6 +25,8 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Controller\Page\Orphaned::class, 'doDefault']);
     $routes->add('wiki-history', '/historyManager')
         ->controller([\App\Controller\Page\History::class, 'doDefault']);
+    $routes->add('wiki-page-view', '/view')
+        ->controller([\App\Controller\Page\View::class, 'doContentView']);
 
 
     // Auth pages
@@ -49,20 +46,12 @@ return function (CollectionConfigurator $routes) {
     // System pages
     $routes->add('settings-edit', '/settings')
         ->controller([\App\Controller\Admin\Settings::class, 'doDefault']);
-
     $routes->add('user-manager', '/{type}Manager')
         ->controller([\App\Controller\User\Manager::class, 'doDefault'])
         ->defaults(['type' => \App\Db\User::TYPE_USER]);
     $routes->add('user-edit', '/{type}Edit')
         ->controller([\App\Controller\User\Edit::class, 'doDefault'])
         ->defaults(['type' => \App\Db\User::TYPE_USER]);
-
-//    $routes->add('staff-manager', '/staffManager')
-//        ->controller([\App\Controller\User\Manager::class, 'doDefault']);
-//    $routes->add('user-manager', '/userManager')
-//        ->controller([\App\Controller\User\Manager::class, 'doDefault']);
-//    $routes->add('user-edit', '/userEdit')
-//        ->controller([\App\Controller\User\Edit::class, 'doDefault']);
     $routes->add('user-profile', '/profile')
         ->controller([\App\Controller\User\Profile::class, 'doDefault']);
 

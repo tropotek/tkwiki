@@ -44,7 +44,6 @@ class Settings
 
         // TODO: should we use the page ID here instead??
         $list = PageMap::create()->findFiltered([
-            'type'       => \App\Db\Page::TYPE_PAGE,
             'permission' => \App\Db\Page::PERM_PUBLIC,
             'published'  => true], Tool::create('created', 25));
         $list = Field\Option\ArrayObjectIterator::create($list, 'title', 'url');

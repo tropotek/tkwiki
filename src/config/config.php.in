@@ -8,7 +8,14 @@ use Tk\Config;
 
 return function (Config $config) {
 
-    // Default System DB
+    /*
+     * Site hostname
+     */
+    $config['hostname'] = 'localhost';
+
+    /*
+     * Default DB connection
+     */
     $config['db.default.type'] = 'mysql';
     $config['db.default.host'] = 'localhost';
     $config['db.default.port'] = '3306';

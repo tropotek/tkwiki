@@ -92,7 +92,6 @@ class Recover
     public function doRecover(Request $request)
     {
         User::logout();
-        vd($this->getFactory()->getAuthUser());
 
         //$token = $request->get('t');        // Bug in here that replaces + with a space on POSTS
         $token = $_REQUEST['t'] ?? '';

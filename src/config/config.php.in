@@ -33,7 +33,7 @@ return function (Config $config) {
     /*
      * Set the site timezone for PHP and MySQL
      */
-    $config['php.date.timezone']    = 'Australia/Melbourne';
+    //$config['php.date.timezone']    = 'Australia/Melbourne';
 
 
     /*
@@ -51,6 +51,8 @@ return function (Config $config) {
      * The default log level
      */
     $config['log.logLevel'] = \Psr\Log\LogLevel::ERROR;
+
+
 
     // Setup dev environment
     $config['debug'] = true;

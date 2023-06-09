@@ -17,33 +17,45 @@ __Features:__
 ## Contents
 
 - [Installation](#installation)
-- [Introduction](#introduction)
+- [Upgrading](#upgrading)
 
 ## Installation
 
-1. First setup a database for the site and keep the DB name and login details handy.
-2. Make sure you have the latest version of composer [https://getcomposer.org/download/] installed.
+1. Befor installing, setup a database for the site and keep the DB name and login details handy.
+2. Make sure you have the latest version of composer [https://getcomposer.org/download/].
 3. Use the following commands:
-~~~bash
+```bash
 $ git clone https://github.com/tropotek/tkwiki.git
 $ cd tkwiki
 $ composer install
-~~~
-5. You will be asked a number of questions to setup the environment settings.
-4. Edit the `/src/App/config/config.php` file to your required settings.
-5. You may have to change the permissions of the `/data/` folder so PHP can read and write to it.
-6. To enable debug mode and logging edit the `/src/config/config.php` file to suit your server.
-   (tail the log for more info on any errors.)
-7. Browse to the location that was shown at the end of install to see if it all worked.
+```
+4. You will be asked a number of questions to setup the environment settings.
+5. Edit the `/src/App/config/config.php` file to your required settings.
+6. You may have to change the permissions of the `/data/` folder so PHP can read and write to it.
+7. To enable debug mode and logging edit the `/src/config/config.php` file to suit your server.
+8. Browse to the location that was shown at the end of install to see if it all worked.
+9. You should be able to login with the default admin (P: password) account. Be sure to change 
+that before release. From the command line in the site base path you can call, or in the user account profile page in the site:
+```bash
+$ ./bin/cmd password admin <password>
+```
 
 
 ## Upgrading
 
-__Warning:__ Ver 8.0+ is based on a completely re-written base library. So there is no upgrade scripts from
-previous versions. There is a page import system, but you will need to have both the old and new sites live
-and add a secret key to both sites, only admins will be able to import pages.
+__NOTICE:__ Wiki Ver 8.0+ is based on a completely re-written base library. So there is no upgrade scripts from
+previous major versions. You will have to manually copy content and media.
 
-## Introduction
+```bash
+$ git reset --hard
+$ git checkout master
+$ git pull
+$ composer update
+```
+
+__Warning:__ Upgrading could potentially break the site change the database. Back up any DB and
+site files before running these commands.
+
 
 
 

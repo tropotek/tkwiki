@@ -24,27 +24,28 @@ return function (Config $config) {
     $config['db.default.pass'] = '';
 
     /*
+     * Encrypt function secret seed
+     * Do not change this after your site is installed
+     *
+     */
+    $config['system.encrypt'] = '';
+
+    /*
+     * Set the site timezone for PHP and MySQL
+     */
+    $config['php.date.timezone']    = 'Australia/Melbourne';
+
+
+    /*
      * Email template relative path
      */
     $config['system.mail.template'] = '/html/templates/mail.default.xtpl';
-
-    /*
-     * Encrypt function secret seed
-     * Change this on your production systems
-     8 Once your site is installed, do not change this again.
-     */
-    $config['system.encrypt'] = '3c57a0c2acdd6f3bc0b180c709746d1b';
 
     /*
      * Enable DB sessions
      * Used for the tail log page, store the current page load log in a single file
      */
     //$config['session.db_enable']    = true;
-
-    /*
-     * Set the site timezone for PHP and MySQL
-     */
-    //$config['php.date.timezone']    = 'Australia/Melbourne';
 
     /*
      * The default log level

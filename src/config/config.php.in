@@ -31,12 +31,13 @@ return function (Config $config) {
     /*
      * Encrypt function secret seed
      * Change this on your production systems
-     * TODO: YOU should change this for your own install
+     8 Once your site is installed, do not change this again.
      */
     $config['system.encrypt'] = '3c57a0c2acdd6f3bc0b180c709746d1b';
 
     /**
      * Enable DB sessions
+     * Used for the tail log page, store the current page load log in a single file
      */
     //$config['session.db_enable']    = true;
 

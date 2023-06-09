@@ -9,11 +9,10 @@ jQuery(function ($) {
   tkbase.initTkInputLock();
   tkbase.initDataToggle();
 
-  app.initWikiScripts();
-  app.initHtmxToasts();
   app.initTkFormTabs();
   app.initDatepicker();
   app.initTinymce();
+  app.initWikiScripts();
 });
 
 
@@ -48,18 +47,6 @@ let app = function () {
       lightbox.show();
     }));
 
-  };
-
-  /**
-   * remove focus on menu links
-   */
-  let initHtmxToasts = function () {
-    // Enable HTMX logging in the console
-    //htmx.logAll();
-    // Trigger on finished request loads (ie: after a form submits)
-    $(document).on('htmx:afterSettle', '.toastPanel', function () {
-      $('.toast', this).toast('show');
-    });
   };
 
   /**
@@ -124,7 +111,7 @@ let app = function () {
     // Default base tinymce options
     let mceDefaults = {
       entity_encoding : 'named',
-      height: 500,
+      height: 700,
       plugins: [
         'advlist', 'autolink', 'lists', 'link', 'anchor', 'image', 'media', 'charmap', 'preview',
         'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
@@ -182,8 +169,19 @@ let app = function () {
 
     $('form').on(EVENT_INIT, document, init).each(init);
 
+    // TODO: Tinymce Bug: The page scrolls up/down when the cursur reaches the
+    //       bottom of the editor window, we need to find out a way to stop this
+    //       can we intercept this event and cancel it?????
+
+    // $(window).off('scroll');
     // $(window).on('scroll', function (e) {
-    //   console.log(arguments);
+    //   //console.log(arguments);
+    //   e.stopPropagation();
+    //   return false;
+    // });
+    // $('body').off('scroll');
+    // $('body').on('scroll', function (e) {
+    //   //console.log(arguments);
     //   e.stopPropagation();
     //   return false;
     // });
@@ -199,9 +197,9 @@ let app = function () {
     // $('textarea.mce').tinymce(mceDefaults);
   };  // end initTinymce()
 
+
   return {
     initWikiScripts: initWikiScripts,
-    initHtmxToasts: initHtmxToasts,
     initTkFormTabs: initTkFormTabs,
     initDatepicker: initDatepicker,
     initTinymce: initTinymce

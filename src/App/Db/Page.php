@@ -22,17 +22,25 @@ class Page extends Model
 
     /**
      * Page permission values
+     * NOTE: Admin users have all permissions at all times
      */
-	const PERM_PUBLIC             = 0; // Public Pages (public can view, User::PERM_EDITOR can edit)
-    const PERM_USER               = 1; // User Pages (User::TYPE_USER can view, User::PERM_EDITOR can edit)
-	const PERM_STAFF              = 2; // Protected (User::TYPE_STAFF can view, User::PERM_EDITOR can edit)
-    const PERM_PRIVATE            = 999; // Private (User::TYPE_STAFF, only author can view/edit)
+	const PERM_PUBLIC             = 0;
+    const PERM_USER               = 1;
+	const PERM_STAFF              = 2;
+    const PERM_PRIVATE            = 9;
 
     const PERM_LIST = [
-        self::PERM_PUBLIC   => 'Public',
-        self::PERM_USER     => 'User',
-        self::PERM_STAFF    => 'Staff',
-        self::PERM_PRIVATE  => 'Private',
+        self::PERM_PUBLIC    => 'Public',
+        self::PERM_USER      => 'User',
+        self::PERM_STAFF     => 'Staff',
+        self::PERM_PRIVATE   => 'Private',
+    ];
+
+    const PERM_HELP = [
+        self::PERM_PUBLIC    => 'VIEW: anyone, EDIT: staff, DELETE: staff',
+        self::PERM_USER      => 'VIEW: registered users, EDIT: staff, DELETE: staff',
+        self::PERM_STAFF     => 'VIEW: staff users, EDIT: staff editors, DELETE: staff editors',
+        self::PERM_PRIVATE   => 'VIEW: author, EDIT: author, DELETE: author',
     ];
 
 

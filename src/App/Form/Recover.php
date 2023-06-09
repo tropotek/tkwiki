@@ -96,7 +96,6 @@ class Recover
 
         $hashToken = Encrypt::create($this->getConfig()->get('system.encrypt'))->encrypt(serialize(['h' => $user->getHash(), 't' => time()]));
         $url = Uri::create('/recoverUpdate')->set('t', $hashToken);
-        //$url = Uri::create('/recoverUpdate/'.urlencode($hashToken));
         $message->set('activate-url', $url->toString());
 
         $this->getFactory()->getMailGateway()->send($message);

@@ -116,7 +116,7 @@ HTML;
                 $css = strtolower($type);
                 if ($css == 'error') $css = 'danger';
                 $r->addCss('alert', 'alert-' . $css);
-                $r->setText('title', ucfirst(strtolower($type)));
+                //$r->setText('title', ucfirst(strtolower($type)));
                 $r->insertHtml('message', $a->message);
                 if ($a->icon) {
                     $r->addCss('icon', $a->icon);

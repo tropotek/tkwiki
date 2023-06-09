@@ -27,7 +27,7 @@ class Edit extends PageController
 
         // Get the form template
         $this->form = new \App\Form\User();
-        $this->form->doDefault($request,  $request->query->get('id'), $type);
+        $this->form->doDefault($request,  $request->query->getInt('id', 0), $type);
 
         return $this->getPage();
     }
@@ -35,11 +35,15 @@ class Edit extends PageController
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        $template->appendText('title', $this->getPage()->getTitle());
+        $template->setAttr('back', 'href', Uri::create('/' . $this->type.'Manager'));
 
+        $template->appendText('title', $this->getPage()->getTitle());
         $template->appendTemplate('content', $this->form->show());
 
-        $template->setAttr('back', 'href', Uri::create('/' . $this->type.'Manager'));
+        if (!$this->form->getUser()->getId()) {
+            $template->setVisible('new-user');
+        }
+
         return $template;
     }
 
@@ -55,7 +59,10 @@ class Edit extends PageController
   </div>
   <div class="card mb-3">
     <div class="card-header" var="title"><i class="fa fa-users"></i> </div>
-    <div class="card-body" var="content"></div>
+    <div class="card-body" var="content">
+        <p choice="new-user"><b>NOTE:</b> New users will be sent an email requesting them to activate their account and create a new password.</p>
+
+    </div>
   </div>
 </div>
 HTML;

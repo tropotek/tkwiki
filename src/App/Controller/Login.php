@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Db\User;
 use App\Db\UserMap;
 use App\Util\Masquerade;
 use Dom\Mvc\PageController;
@@ -31,15 +32,7 @@ class Login extends PageController
 
     public function doLogout(Request $request)
     {
-        if (Masquerade::isMasquerading()) {
-            Masquerade::masqueradeLogout();
-        }
-        if ($this->getFactory()->getAuthUser()) {
-            $this->getFactory()->getAuthController()->clearIdentity();
-            $this->getFactory()->getAuthUser()->setSessionId('')->save();
-            UserMap::create()->deleteToken($this->getFactory()->getAuthUser()->getId());
-            setcookie(UserMap::REMEMBER_CID, '', -1);
-        }
+        User::logout(true);
         Alert::addSuccess('Logged out successfully');
         Uri::create('/')->redirect();
     }

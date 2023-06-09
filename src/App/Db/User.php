@@ -2,6 +2,7 @@
 namespace App\Db;
 
 use App\Factory;
+use App\Util\Masquerade;
 use Bs\Db\FileInterface;
 use Bs\Db\FileMap;
 use Bs\Db\Traits\HashTrait;
@@ -9,6 +10,7 @@ use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\UserInterface;
 use Tk\Db\Mapper\Model;
 use Tk\Db\Mapper\Result;
+use Tk\Encrypt;
 use Tk\Uri;
 
 class User extends Model implements UserInterface, FileInterface
@@ -44,13 +46,6 @@ class User extends Model implements UserInterface, FileInterface
     ];
 
     /**
-     * Default Guest user This type should never be saved to storage/DB or be an option to select.
-     * It is intended to be the default system user that has not logged in
-     * (Access to public pages only)
-     */
-    const TYPE_GUEST = 'guest';
-
-    /**
      * Site staff user
      */
     const TYPE_STAFF = 'staff';
@@ -65,15 +60,15 @@ class User extends Model implements UserInterface, FileInterface
 
     public string $uid = '';
 
-    public string $type = self::TYPE_GUEST;
+    public string $type = self::TYPE_USER;
 
     public int $permissions = 0;
 
-    public string $username = 'guest';
+    public string $username = '';
 
     public string $password = '';
 
-    public string $email = 'guest@null.com';
+    public string $email = '';
 
     public string $name = '';
 
@@ -100,6 +95,26 @@ class User extends Model implements UserInterface, FileInterface
     {
         $this->_TimestampTrait();
         $this->timezone = $this->getConfig()->get('php.date.timezone');
+    }
+
+    /**
+     * @param bool $cookie If true any stored login cookies will also be removed
+     */
+    public static function logout(bool $cookie = true): void
+    {
+        $user = Factory::instance()->getAuthUser();
+        if ($user) {
+            Factory::instance()->getAuthController()->clearIdentity();
+            if ($cookie) {
+                $user->forgetMe();
+            }
+            if (Masquerade::isMasquerading()) {
+                Masquerade::clearAll();
+            }
+            $user->setSessionId('');
+            $user->save();
+            Uri::create()->redirect();
+        }
     }
 
     public function getFileList(array $filter = [], ?\Tk\Db\Tool $tool = null): Result
@@ -372,6 +387,35 @@ class User extends Model implements UserInterface, FileInterface
         return $errors;
     }
 
+    public function sendRecoverEmail(bool $isNewAccount = false): bool
+    {
+        // send email to user
+        $content = <<<HTML
+            <h2>Account Recovery.</h2>
+            <p>
+              Welcome {name}
+            </p>
+            <p>
+              Please follow the link to finish recovering your account password.<br/>
+              <a href="{activate-url}" target="_blank">{activate-url}</a>
+            </p>
+            <p><small>Note: If you did not initiate this email, you can safely disregard this message.</small></p>
+        HTML;
+
+        $message = $this->getFactory()->createMessage();
+        $message->set('content', $content);
+        $message->setSubject($this->getConfig()->get('site.title') . ' Password Recovery');
+        $message->addTo($this->getEmail());
+        $message->set('name', $this->getName());
+
+        $hashToken = Encrypt::create($this->getConfig()->get('system.encrypt'))->encrypt(serialize(['h' => $this->getHash(), 't' => time()]));
+        $url = Uri::create('/recoverUpdate')->set('t', $hashToken);
+        $message->set('activate-url', $url->toString());
+
+        return $this->getFactory()->getMailGateway()->send($message);
+    }
+
+
     public function rememberMe(int $day = 30): void
     {
         [$selector, $validator, $token] = UserMap::create()->generateToken();
@@ -397,7 +441,7 @@ class User extends Model implements UserInterface, FileInterface
     /**
      * Remove the `remember me` cookie
      */
-    public function removeMe(): void
+    public function forgetMe(): void
     {
         $this->getMapper()->deleteToken($this->getId());
         setcookie(UserMap::REMEMBER_CID, '', -1);

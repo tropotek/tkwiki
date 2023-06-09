@@ -99,7 +99,7 @@ class Profile
                 }
             }
         }
-        
+
         $form->addFieldErrors($this->user->validate());
         if ($form->hasErrors()) {
             Alert::addError('Form contains errors.');

@@ -29,13 +29,13 @@ class User
         $this->setForm(Form::create('user'));
     }
 
-    public function doDefault(Request $request, string $id, string $type = \App\Db\User::TYPE_USER)
+    public function doDefault(Request $request, int $id, string $type = \App\Db\User::TYPE_USER)
     {
         $this->type = $type;
         $this->user = new \App\Db\User();
         $this->getUser()->setType($type);
 
-        if ($id) {
+        if ($id > 0) {
             $this->user = UserMap::create()->find($id);
             if (!$this->getUser()) {
                 throw new Exception('Invalid User ID: ' . $id);
@@ -43,25 +43,32 @@ class User
         }
 
         $group = 'left';
-        $this->getForm()->appendField(new Hidden('id'))
-            ->setGroup($group);
+        $this->getForm()->appendField(new Hidden('id'))->setGroup($group);
 
-        $this->getForm()->appendField(new Input('name'))
-            ->setRequired()->setGroup($group);
+        $this->getForm()->appendField(new Input('name'))->setGroup($group)
+            ->setRequired();
 
-        $this->getForm()->appendField(new Input('username'))->addCss('tk-input-lock')
-            ->setRequired()->setGroup($group);
+        $l1 = $this->getForm()->appendField(new Input('username'))->setGroup($group)
+            ->setRequired();
 
-        $this->getForm()->appendField(new Input('email'))->addCss('tk-input-lock')
-            ->setRequired()->setGroup($group);
+        $l2 = $this->getForm()->appendField(new Input('email'))->setGroup($group)
+            ->setRequired();
 
-        if ($this->user->isType(\App\Db\User::TYPE_STAFF) && $this->getFactory()->getAuthUser()->hasPermission(\App\Db\User::PERM_SYSADMIN)) {
-            $this->getForm()->appendField(new Checkbox('perm', array_flip(\App\Db\User::PERMISSION_LIST)))
-                ->setGroup($group);
-            $this->getForm()->appendField(new Checkbox('active', ['Enable User Login' => 'active']))->setGroup($group);
+        // Only input lock existing user
+        if ($this->getUser()->getId()) {
+            $l1->addCss('tk-input-lock');
+            $l2->addCss('tk-input-lock');
         }
 
-        $this->getForm()->appendField(new Form\Field\Textarea('notes'))->setGroup($group);
+        if ($this->getUser()->isType(\App\Db\User::TYPE_STAFF) && $this->getFactory()->getAuthUser()->hasPermission(\App\Db\User::PERM_SYSADMIN)) {
+            $this->getForm()->appendField(new Checkbox('perm', array_flip(\App\Db\User::PERMISSION_LIST)))
+                ->setGroup($group);
+            $this->getForm()->appendField(new Checkbox('active', ['Enable User Login' => 'active']))
+                ->setGroup($group);
+        }
+
+        $this->getForm()->appendField(new Form\Field\Textarea('notes'))
+            ->setGroup($group);
 
 
         $this->getForm()->appendField(new Form\Action\SubmitExit('save', [$this, 'onSubmit']));
@@ -80,18 +87,25 @@ class User
 
     public function onSubmit(Form $form, Form\Action\ActionInterface $action)
     {
-        $this->getUser()->getMapper()->getFormMap()->loadObject($this->user, $form->getFieldValues());
+        $this->getUser()->getMapper()->getFormMap()->loadObject($this->getUser(), $form->getFieldValues());
         if ($form->getField('perm')) {
             $this->getUser()->setPermissions(array_sum($form->getFieldValue('perm') ?? []));
         }
 
-        $form->addFieldErrors($this->user->validate());
+        $form->addFieldErrors($this->getUser()->validate());
         if ($form->hasErrors()) {
             Alert::addError('Form contains errors.');
             return;
         }
 
+        $isNew = $this->getUser()->getId() == 0;
         $this->getUser()->save();
+
+        // Send email to update password
+        if ($isNew) {
+            $this->getUser()->sendRecoverEmail(true);
+            Alert::addSuccess('An email has been sent to ' . $this->getUser()->getEmail() . ' to create their password.');
+        }
 
         Alert::addSuccess('Form save successfully.');
         $action->setRedirect(Uri::create('/'.$this->type.'Edit')->set('id', $this->getUser()->getId()));

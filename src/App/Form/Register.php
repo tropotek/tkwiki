@@ -1,6 +1,7 @@
 <?php
 namespace App\Form;
 
+use App\Db\User;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Tk\Alert;
@@ -28,6 +29,8 @@ class Register
 
     public function doDefault(Request $request)
     {
+        User::logout(true);
+
         $this->form->appendField(new Field\Input('name'))
             ->setRequired()
             ->setAttr('placeholder', 'Name');

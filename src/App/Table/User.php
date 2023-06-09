@@ -162,7 +162,7 @@ class User
                 ->setAttr('data-confirm', 'Are you sure you want to reset the Table`s session?')
                 ->setAttr('title', 'Reset table filters and order to default.');
         }
-        $this->getTable()->appendAction(new Action\Button('Create'))->setUrl(Uri::create('/userEdit')->set('type', $this->type));
+        //$this->getTable()->appendAction(new Action\Button('Create'))->setUrl(Uri::create('/'.$this->type.'Edit'));
         $this->getTable()->appendAction(new Action\Delete());
         $this->getTable()->appendAction(new Action\Csv())->addExcluded('actions');
 

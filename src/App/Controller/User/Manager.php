@@ -5,6 +5,7 @@ use App\Db\User;
 use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Tk\Uri;
 
 class Manager extends PageController
 {
@@ -42,6 +43,7 @@ class Manager extends PageController
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
+        $template->setAttr('create', 'href', Uri::create('/'.$this->type.'Edit'));
 
         $template->appendTemplate('content', $this->table->show());
 
@@ -56,6 +58,7 @@ class Manager extends PageController
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
       <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
+      <a href="/" title="Create User" class="btn btn-outline-secondary" var="create"><i class="fa fa-user"></i> Create User</a>
     </div>
   </div>
   <div class="card mb-3">

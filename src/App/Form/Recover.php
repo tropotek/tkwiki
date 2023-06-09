@@ -1,7 +1,9 @@
 <?php
 namespace App\Form;
 
+use App\Db\User;
 use App\Db\UserMap;
+use App\Util\Masquerade;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Tk\Alert;
@@ -29,6 +31,9 @@ class Recover
 
     public function doDefault(Request $request)
     {
+        // logout any existing user
+        User::logout();
+
         $this->getForm()->appendField(new Field\Input('username'))
             ->setAttr('autocomplete', 'off')
             ->setAttr('placeholder', 'Username')
@@ -75,37 +80,20 @@ class Recover
             return;
         }
 
-        // send email to user
-        $content = <<<HTML
-            <h2>Account Recovery.</h2>
-            <p>
-              Welcome {name}
-            </p>
-            <p>
-              Please follow the link to finish recovering your account.<br/>
-              <a href="{activate-url}" target="_blank">{activate-url}</a>
-            </p>
-            <p><small>Note: If you did not initiate your account recovery you can safely disregard this message.</small></p>
-        HTML;
+        if ($user->sendRecoverEmail()) {
+            Alert::addSuccess('Please check your email for instructions to recover your account.');
+        } else {
+            Alert::addWarning('Recovery email failed to send. Please <a href="/contact">contact us.</a>');
+        }
 
-        $message = $this->getFactory()->createMessage();
-        $message->set('content', $content);
-        $message->setSubject($this->getConfig()->get('site.title') . ' Password Recovery');
-        $message->addTo($user->getEmail());
-        $message->set('name', $user->getName());
-
-        $hashToken = Encrypt::create($this->getConfig()->get('system.encrypt'))->encrypt(serialize(['h' => $user->getHash(), 't' => time()]));
-        $url = Uri::create('/recoverUpdate')->set('t', $hashToken);
-        $message->set('activate-url', $url->toString());
-
-        $this->getFactory()->getMailGateway()->send($message);
-
-        Alert::addSuccess('Please check your email for instructions to recover your account.');
         Uri::create('/home')->redirect();
     }
 
     public function doRecover(Request $request)
     {
+        User::logout();
+        vd($this->getFactory()->getAuthUser());
+
         //$token = $request->get('t');        // Bug in here that replaces + with a space on POSTS
         $token = $_REQUEST['t'] ?? '';
         $arr = Encrypt::create($this->getConfig()->get('system.encrypt'))->decrypt($token);
@@ -143,6 +131,8 @@ class Recover
         $this->getForm()->setFieldValues($load);
 
         $this->getForm()->execute($request->request->all());
+
+        $this->setFormRenderer(new FormRenderer($this->getForm()));
     }
 
     public function onRecover(Form $form, Action\ActionInterface $action)

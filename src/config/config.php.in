@@ -35,18 +35,18 @@ return function (Config $config) {
      */
     $config['system.encrypt'] = '3c57a0c2acdd6f3bc0b180c709746d1b';
 
-    /**
+    /*
      * Enable DB sessions
      * Used for the tail log page, store the current page load log in a single file
      */
     //$config['session.db_enable']    = true;
 
-    /**
+    /*
      * Set the site timezone for PHP and MySQL
      */
     //$config['php.date.timezone']    = 'Australia/Melbourne';
 
-    /**
+    /*
      * The default log level
      */
     $config['log.logLevel'] = \Psr\Log\LogLevel::ERROR;
@@ -58,6 +58,11 @@ return function (Config $config) {
         $config['php.display_errors'] = 'On';
         $config['php.error_log']      = '/home/user/log/error.log';
         $config['log.logLevel']       = \Psr\Log\LogLevel::DEBUG;
+        /*
+         * This must be set for emails to be sent to a debug account in debug mode
+         */
+        $config['system.debug.email'] = 'admin@email.com';
+
     }
 
 };

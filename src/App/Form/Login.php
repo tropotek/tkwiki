@@ -72,10 +72,6 @@ class Login
     {
         $values = $form->getFieldValues();
 
-        if (Masquerade::isMasquerading()) {
-            Masquerade::clearAll();
-        }
-
         $token = $this->getSession()->get('login', 0);
         $this->getSession()->remove('login');
         if (($token + 60*2) < time()) { // login before form token times out
@@ -83,7 +79,7 @@ class Login
             return;
         }
 
-        $result = $this->getFactory()->getAuthController()->clearIdentity()->authenticate($this->getFactory()->getAuthAdapter());
+        $result = $this->getFactory()->getAuthController()->authenticate($this->getFactory()->getAuthAdapter());
         if ($result->getCode() != Result::SUCCESS) {
             Log::error($result->getMessage());
             $form->addError('Invalid login details.');
@@ -99,7 +95,7 @@ class Login
         if (!empty($values['remember'] ?? '')) {
             $user->rememberMe();
         } else {
-            $user->removeMe();
+            $user->forgetMe();
         }
 
         Uri::create('/')->redirect();

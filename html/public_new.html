@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Tropotek" />
+
+  <title>Wiki</title>
+
+  <link rel="stylesheet" href="/vendor/twbs/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="/vendor/components/font-awesome/css/all.min.css" />
+  <link rel="stylesheet" href="/vendor/components/jqueryui/themes/smoothness/jquery-ui.min.css" />
+  <link rel="stylesheet" href="/vendor/studio-42/elfinder/css/elfinder.full.css" />
+  <link rel="stylesheet" href="/vendor/select2/select2/dist/css/select2.min.css" />
+  <link rel="stylesheet" href="/html/assets/css/select2-bootstrap-5-theme.min.css" />
+  <link rel="stylesheet" href="/html/assets/js/prism/prism.css" />
+  <link rel="stylesheet" href="/html/assets/app.css" />
+
+  <script src="/vendor/components/jquery/jquery.min.js"></script>
+  <script src="/vendor/components/jqueryui/jquery-ui.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/include/jquery.tkInputLock.js"></script>
+  <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!--  <script src="/vendor/ttek/tk-base/assets/js/components/htmx.min.js"></script>-->
+  <script src="/vendor/ttek/tk-base/assets/js/components/sugar.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/include/jquery.bsConfirm.js"></script>
+  <script src="/vendor/select2/select2/dist/js/select2.min.js"></script>
+
+  <script src="/vendor/tinymce/tinymce/tinymce.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/components/jquery.tinymce.min.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/elfinder/tinymceElfinder.js"></script>
+  <script src="/vendor/studio-42/elfinder/js/elfinder.min.js"></script>
+
+  <script src="/html/assets/js/bs5-lightbox.min.js"></script>
+  <script src="/html/assets/js/prism/prism.js"></script>
+  <script src="/vendor/ttek/tk-base/assets/js/tkbase.js"></script>
+  <script src="/html/assets/jquery.tktabs.js"></script>
+  <script src="/html/assets/app.js"></script>
+
+</head>
+<body class="bg-white">
+
+<header>
+  <nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="/" var="site-brand">Wiki</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+              aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-sm-0" var="navbar">
+
+          <!-- MENU ITEM TEMPLATES -->
+          <!-- single menu item -->
+          <li class="nav-item" repeat="nav-item"><a class="nav-link" href="javascript:;" var="name"></a></li>
+          <!-- items with Children -->
+          <li class="nav-item dropdown" repeat="dropdown">
+            <a class="nav-link dropdown-toggle" href="javascript:;" data-bs-toggle="dropdown" aria-expanded="false" var="name"></a>
+            <ul class="dropdown-menu" var="dropdown-menu">
+              <li repeat="divider"><hr class="dropdown-divider"></li>
+              <li repeat="dropdown-item"><a class="dropdown-item" href="" var="name"></a></li>
+            </ul>
+          </li>
+          <!-- MENU ITEM TEMPLATES : END -->
+
+          <li class="nav-item dropdown d-block d-sm-none" app-is-user="true">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <span var="username">username</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+              <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
+              <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
+              <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
+              <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Wiki Pages</a></li>
+              <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Orphaned Pages</a></li>
+              <li><a class="dropdown-item" href="/menuEdit" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Menu Edit</a></li>
+              <li><hr class="dropdown-divider" app-is-debug="true"></li>
+              <li><a class="dropdown-item" href="/tailLog" app-has-perm="PERM_ADMIN">Tail Log</a></li>
+              <li><a class="dropdown-item" href="/listEvents" app-has-perm="PERM_ADMIN">List Events</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        <form class="d-flex me-md-3" role="search" action="/search" method="POST">
+          <div class="input-group input-group-sm">
+            <input class="form-control" type="search" name="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-secondary border-light-subtle" type="submit" name="action" value="search" title="Find a page" id="btn-search"><i class="fa fa-search"></i></button>
+<!--            <button class="btn btn-outline-secondary border-light-subtle" type="button" title="Create a page" id="btn-new-page" data-bs-toggle="modal" data-bs-target="#create-page-dialog"><i class="fa fa-plus"></i></button>-->
+          </div>
+        </form>
+
+        <div class="dropdown text-end d-none d-sm-block" app-is-user="true">
+          <a href="#" class="link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+<!--            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle" />-->
+            <span var="username">username</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end text-small">
+            <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+            <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
+            <li><a class="dropdown-item" href="/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>
+            <li><a class="dropdown-item" href="/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>
+            <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Wiki Pages</a></li>
+            <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Orphaned Pages</a></li>
+            <li><a class="dropdown-item" href="/menuEdit" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Menu Edit</a></li>
+            <li><hr class="dropdown-divider" app-is-debug="true"></li>
+            <li><a class="dropdown-item" href="/tailLog" app-has-perm="PERM_ADMIN">Tail Log</a></li>
+            <li><a class="dropdown-item" href="/listEvents" app-has-perm="PERM_ADMIN">List Events</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+          </ul>
+        </div>
+
+        <div class="dropdown text-end" app-is-user="false">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+</header>
+
+
+<main class="container" var="container">
+  <div class="p-3 mb-5" var="content"></div>
+</main>
+
+
+</body>
+</html>

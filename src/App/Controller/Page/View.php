@@ -143,7 +143,7 @@ class View extends PageController
     {
         $html = <<<HTML
 <div class="wk-content">
-    <div var="toolbar"></div>
+    <div class="sticky-top" style="" var="toolbar"></div>
     <h1 var="title"></h1>
     <div var="content"></div>
 </div>

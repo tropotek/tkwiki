@@ -143,7 +143,7 @@ class PageMap extends Mapper
         // Do a full text search on the content
         if (isset($filter['fullSearch'])) {
             $filter->appendFrom('  JOIN (
-                SELECT MAX(modified), id, page_id, html
+                SELECT MAX(created), id, page_id, html
                 FROM content
                 WHERE MATCH (html) AGAINST (%s IN NATURAL LANGUAGE MODE)
                 GROUP BY page_id

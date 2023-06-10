@@ -41,11 +41,10 @@ a.wk-link-external {
   position: relative;
 }
 .wk-content .wk-toolbar {
-  position: fixed;
-  top: 90px;
-  right: 30px;
+  top: 60px;
   background-color: #FFF;
   opacity: 0.80;
+  z-index: 9999;
 }
 /* ==================  WIKI End  ================== */
 

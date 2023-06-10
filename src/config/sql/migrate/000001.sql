@@ -126,6 +126,8 @@ INSERT INTO user (type, username, email, name, timezone, permissions) VALUES
 
 UPDATE `user` SET `hash` = MD5(CONCAT(username, id)) WHERE 1;
 
+TRUNCATE TABLE page;
+TRUNCATE TABLE content;
 INSERT INTO page (user_id, title, url, permission) VALUES
   (1, 'Home', 'home', 0),
   (1,'Wiki How To', 'Wiki_How_To', 0),
@@ -170,8 +172,7 @@ INSERT INTO content (page_id, user_id, html, css, js) VALUES
 </ul>
 <p>&nbsp;</p>
 <h3>Getting Started<a name="#getting_started"></a></h3>
-<p>Once installed, you can log in as the default admin user (U: <strong>admin</strong> P: <strong>password</strong>). You should first change the <a href="#user_management">admin password</a> in your profile settings.</p>
-<p>Next it would be a good idea to create a new&nbsp;<strong>staff</strong> account, so that the pages you create have your name as the author. See the menu (top right) in the drop-down select ''Staff'' option, make sure to use a valid email so that you can activate the account and setup the new password. Also give yourself ADMIN permissions so you can manage the site.</p>
+<p>Once installed and working it is a good idea to create yourself a new <strong>staff</strong> account, so that the pages you create have your name as the author. See the menu (top right) in the drop-down select ''Staff'' option, make sure to use a valid email so that you can activate the account and setup the new password. Also give yourself ADMIN permissions so you can manage the site.</p>
 <p>&nbsp;</p>
 <h3>Page and user permissions<a name="page_and_user_permissions"></a></h3>
 <p>Before getting into creating any content, its important to understand how this wiki''s permission system works. It has been kept as simple as possible to be flexible yet easy to use.</p>
@@ -292,6 +293,7 @@ jQuery(function ($) {
 });')
 ;
 
+TRUNCATE menu_item;
 INSERT INTO menu_item (parent_id, page_id, order_id, type, name) VALUES
   (null, 1, 1, 'item', 'Home'),
   (null, 2, 2, 'item', 'How To')

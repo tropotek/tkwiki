@@ -45,7 +45,6 @@ class Settings
                 $option->setName('Enable');
             });
 
-        // TODO: should we use the page ID here instead??
         $list = PageMap::create()->findFiltered([
             'permission' => \App\Db\Page::PERM_PUBLIC,
             'published'  => true], Tool::create('created', 25));
@@ -56,6 +55,15 @@ class Settings
             ->setRequired(true)
             ->addCss('select-home')
             ->setGroup($tab);
+
+        $this->getForm()->appendField(new Field\Checkbox('wiki.enable.credential.mod'))
+            ->setGroup($tab)
+            ->setLabel('Enable Secure Credential Module')
+            ->setNotes('Store passwords and secret keys and configure what users can view them in a page')
+            ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+                $option->setName('Enable');
+            });
+
 
         $tab = 'Email';
         $this->getForm()->appendField(new Field\Input('site.email'))

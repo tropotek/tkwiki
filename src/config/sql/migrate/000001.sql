@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `lock` (
     KEY k_userId (user_id)
 );
 
--- Menu
+
 CREATE TABLE IF NOT EXISTS menu_item
 (
   id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -107,10 +107,31 @@ CREATE TABLE IF NOT EXISTS menu_item
   order_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
   type enum('item','dropdown','divider') NOT NULL DEFAULT 'item',
   name VARCHAR(255) NOT NULL DEFAULT '',
-  KEY page_id (page_id),
+  KEY k_page_id (page_id),
   CONSTRAINT fk_menu_item__parent_id FOREIGN KEY (parent_id) REFERENCES menu_item (id) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT fk_menu_item__page_id FOREIGN KEY (page_id) REFERENCES page (id) ON DELETE CASCADE
 );
+
+
+CREATE TABLE IF NOT EXISTS secret (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL DEFAULT 0,                      -- Author of the key
+    permission INT NOT NULL DEFAULT 0,                            -- Same as page permissions (no public permission)
+    name VARCHAR(64) NOT NULL DEFAULT '',                         --
+    url VARCHAR(128) NOT NULL DEFAULT '',                         -- The url to the website that this auth record is for
+    username VARCHAR(128) NOT NULL DEFAULT '',                    -- (encode)
+    password VARCHAR(128) NOT NULL DEFAULT '',                    -- (encode)
+    private_key VARCHAR(512) NOT NULL DEFAULT '',                 -- (encode) key gen for authtool EG: "oathtool --totp -b 7GJXAAAGKTRRF412"
+    public_key VARCHAR(512) NOT NULL DEFAULT '',                  -- (encode) key gen for authtool EG: "oathtool --totp -b 7GJXAAAGKTRRF412"
+    `keys` TEXT,                                                  -- (encode) could be a wallet key, or API key, etc
+    notes TEXT,                                                   --
+    `modified` TIMESTAMP NOT NULL,
+    `created` TIMESTAMP NOT NULL,
+    KEY k_user_id (user_id),
+    CONSTRAINT fk_secret__user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
+);
+
+
 
 
 

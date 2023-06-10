@@ -40,7 +40,7 @@ class View extends Iface
             //throw new \Tk\HttpException(404, 'Page not found');
         } else {
             if (!$this->canView()) {
-                \Tk\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
+                \Tk\Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->getTitle() . '`');
                 \Tk\Uri::create('/')->redirect();
             }
 
@@ -56,6 +56,10 @@ class View extends Iface
 
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public function canView()
     {
         if (!$this->getAuthUser()) {
@@ -84,6 +88,7 @@ class View extends Iface
 
     /**
      * @return \Dom\Template
+     * @throws \Exception
      */
     public function show()
     {
@@ -100,23 +105,26 @@ class View extends Iface
                 $this->getConfig()->getEventDispatcher()->dispatch(\App\WikiEvents::WIKI_CONTENT_VIEW, $event);
             }
 
-            $template->insertHtml('content', $this->wContent->html);
+            $template->insertHtml('content', $this->wContent->getHtml());
 
-            if ($this->wContent->css) {
-                $template->appendCss($this->wContent->css);
+            if ($this->wContent->getCss()) {
+                $template->appendCss($this->wContent->getCss());
             }
-            if ($this->wContent->js) {
-                $template->appendJs($this->wContent->js);
+            if ($this->wContent->getJs()) {
+                $template->appendJs($this->wContent->getJs());
             }
 
             if ($this->wContent->keywords) {
-                $this->getPage()->getTemplate()->appendMetaTag('keywords', $this->wContent->keywords, $this->getPage()->getTemplate()->getTitleElement());
+                $this->getPage()->getTemplate()->appendMetaTag('keywords', $this->wContent->getKeywords(),
+                    $this->getPage()->getTemplate()->getTitleElement());
             }
 
             if ($this->wContent->description) {
-                $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->description, $this->getPage()->getTemplate()->getTitleElement());
+                $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->getDescription(),
+                    $this->getPage()->getTemplate()->getTitleElement());
             }
-            $this->getPage()->getTemplate()->setTitleText($this->getPage()->getTemplate()->getTitleText() . ' - ' . $this->wPage->title);
+            $this->getPage()->getTemplate()->setTitleText($this->getPage()->getTemplate()->getTitleText() . ' - ' .
+                $this->wPage->getTitle());
 
 
             $template->appendJsUrl(\Tk\Uri::create($this->getConfig()->getTemplateUrl() . '/app/js/prism/prism.js'));

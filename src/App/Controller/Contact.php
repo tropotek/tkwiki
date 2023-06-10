@@ -34,20 +34,20 @@ class Contact extends \Bs\Controller\Iface
 
         $this->form = new Form('contactForm');
 
-        $this->form->addField(new Field\Input('name'));
-        $this->form->addField(new Field\Input('email'));
+        $this->form->appendField(new Field\Input('name'));
+        $this->form->appendField(new Field\Input('email'));
 
         $opts = new Field\Option\ArrayIterator(array('General', 'Services', 'Orders'));
-        $this->form->addField(new Field\Select('type[]', $opts));
+        $this->form->appendField(new Field\Select('type[]', $opts));
 
-        $this->form->addField(new Field\File('attach[]', '/contact/' . date('d-m-Y') . '-___'));
-        $this->form->addField(new Field\Textarea('message'));
+        $this->form->appendField(new Field\File('attach[]', '/contact/' . date('d-m-Y') . '-___'));
+        $this->form->appendField(new Field\Textarea('message'));
 
         if ($this->getConfig()->get('google.recaptcha.publicKey'))
-            $this->form->addField(new Field\ReCapture('capture', $this->getConfig()->get('google.recaptcha.publicKey'),
+            $this->form->appendField(new Field\ReCapture('capture', $this->getConfig()->get('google.recaptcha.publicKey'),
                 $this->getConfig()->get('google.recaptcha.privateKey')));
 
-        $this->form->addField(new Event\Submit('send', array($this, 'doSubmit')));
+        $this->form->appendField(new Event\Submit('send', array($this, 'doSubmit')));
 
         $this->form->execute();
 
@@ -128,7 +128,6 @@ class Contact extends \Bs\Controller\Iface
         /** @var Field\File $field */
         $field = $form->getField('attach');
         if ($field->hasFile()) {
-            vd($field->getUploadedFiles());
             $attachCount = '<br/><b>Attachments:</b> ';
             foreach ($field->getUploadedFiles() as $file) {
                 $attachCount = $file->getClientOriginalName() . ', ';

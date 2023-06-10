@@ -7,9 +7,6 @@ use Tk\DataMap\Db;
 use Tk\DataMap\Form;
 
 /**
- * Class ContentMap
- *
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -62,7 +59,7 @@ class ContentMap extends Mapper
     }
 
     /**
-     * 
+     *
      * @param $pageId
      * @param \Tk\Db\Tool $tool
      * @return ArrayObject
@@ -74,7 +71,7 @@ class ContentMap extends Mapper
     }
 
     /**
-     * 
+     *
      * @param $userId
      * @param \Tk\Db\Tool $tool
      * @return ArrayObject
@@ -100,7 +97,7 @@ class ContentMap extends Mapper
      * @return array
      * @throws \Exception
      */
-    public function findContributors($pageId) 
+    public function findContributors($pageId)
     {
         // pgsql
         $sql = sprintf('SELECT DISTINCT ON (user_id) user_id, created FROM %s WHERE page_id = %s ORDER BY user_id, created DESC ',
@@ -110,7 +107,7 @@ class ContentMap extends Mapper
             $sql = sprintf('SELECT DISTINCT user_id, created FROM %s WHERE page_id = %s GROUP BY user_id ORDER BY user_id, created DESC ',
                 $this->getDb()->quoteParameter($this->getTable()), (int)$pageId);
         }
-        
+
         $stmt = $this->getDb()->query($sql);
         $res = array();
         foreach($stmt as $row) {
@@ -121,8 +118,6 @@ class ContentMap extends Mapper
 
 
     /**
-     * Find filtered records
-     *
      * @param array $filter
      * @param Tool $tool
      * @return ArrayObject

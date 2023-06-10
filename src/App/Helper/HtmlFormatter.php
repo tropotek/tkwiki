@@ -12,7 +12,7 @@ class HtmlFormatter
     /**
      * @var boolean
      */
-    protected $isView = true;
+    protected $viewMode = true;
 
     /**
      * @var string
@@ -29,12 +29,12 @@ class HtmlFormatter
      * __construct
      *
      * @param string $html
-     * @param bool $isView Set this to false when parsing in edit mode
+     * @param bool $viewMode Set this to false when editing a page.
      * @throws \Exception
      */
-    public function __construct($html, $isView = true)
+    public function __construct($html, $viewMode = true)
     {
-        $this->isView = $isView;
+        $this->setViewMode($viewMode);
         $this->html = $this->parse($html);
     }
 
@@ -163,14 +163,14 @@ class HtmlFormatter
             //$('script', ed.getDoc()).attr('data-jsl-static', 'data-jsl-static');
             if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                 $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
-                if ($this->isView) {
+                if ($this->isViewMode()) {
                     $url = new \Tk\Uri('/' . $regs[1]);
                     $node->setAttribute('href', $url->getRelativePath());
                 }
 
                 if ($page) {
                     $css = '';
-                    if ($this->isView) {
+                    if ($this->isViewMode()) {
                         if (\App\Auth\Acl::create(\App\Config::getInstance()->getAuthUser())->canView($page)) {
                             $css = ' wiki-canView';
                         } else {
@@ -183,7 +183,7 @@ class HtmlFormatter
                     $node->setAttribute('class', $this->addClass($node->getAttribute('class'), 'wiki-page-new'));
                     $node->setAttribute('class', $this->removeClass($node->getAttribute('class'), 'wiki-page'));
                 }
-            } else if ($this->isView && preg_match('/^http|https|ftp|telnet|gopher|news/i', $node->getAttribute('href'), $regs)) {
+            } else if ($this->isViewMode() && preg_match('/^http|https|ftp|telnet|gopher|news/i', $node->getAttribute('href'), $regs)) {
                 //TODO: should this be a config option to open external links in new window???
                 $url = new \Tk\Uri($node->getAttribute('href'));
                 if (strtolower(str_replace('www.', '', $url->getHost())) != strtolower(str_replace('www.', '',$_SERVER['HTTP_HOST'])) ) {
@@ -221,6 +221,42 @@ class HtmlFormatter
         unset($arr[$class]);
         $arr = array_flip($arr);
         return trim(implode(' ', $arr));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isViewMode()
+    {
+        return $this->viewMode;
+    }
+
+    /**
+     * @param bool $viewMode
+     * @return HtmlFormatter
+     */
+    public function setViewMode(bool $viewMode)
+    {
+        $this->viewMode = $viewMode;
+        return $this;
+    }
+
+    /**
+     * @return \DOMDocument
+     */
+    public function getDoc()
+    {
+        return $this->doc;
+    }
+
+    /**
+     * @param \DOMDocument $doc
+     * @return HtmlFormatter
+     */
+    public function setDoc(\DOMDocument $doc)
+    {
+        $this->doc = $doc;
+        return $this;
     }
 
 

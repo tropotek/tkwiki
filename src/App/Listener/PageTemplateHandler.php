@@ -46,9 +46,9 @@ JS;
 
             if ($user) {
                 // User Menu Setup
-                $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->hash);
+                $url = \Tk\Uri::create('/search.html')->set('search-terms', 'user:'.$user->getHash());
                 $template->setAttr('myPages', 'href', $url);
-                $template->insertText('username', $user->name);
+                $template->insertText('username', $user->getName());
 
                 if ($user->isAdmin()) {
                     $template->setVisible('admin');

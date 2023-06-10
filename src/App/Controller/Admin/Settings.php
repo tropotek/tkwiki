@@ -1,10 +1,12 @@
 <?php
 namespace App\Controller\Admin;
 
+use Bs\Uri;
 use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
+use Tk\Ui\Dialog\AjaxSelect;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -15,11 +17,18 @@ class Settings extends \Bs\Controller\Admin\Settings
 {
 
     /**
+     * @var null|AjaxSelect
+     */
+    protected $pageSelect = null;
+
+    /**
      * init the form and other stuff before form->execute()
      * @throws Form\Exception
      */
     public function initForm(\Tk\Request $request)
     {
+
+
 
         $tab = 'Site';
 
@@ -27,8 +36,10 @@ class Settings extends \Bs\Controller\Admin\Settings
             ->addCss('tk-imageinput')->setAttr('accept', '.png,.jpg,.jpeg,.gif');
 
         $tab = 'Wiki Config';
-        $this->getForm()->appendField(new \App\Form\ButtonInput('wiki.page.default', 'fa fa-folder-open'))->setTabGroup($tab)
+        $this->getForm()->appendField(new \App\Form\Field\PageSelect('wiki.page.default'))->setTabGroup($tab)
             ->setLabel('Home Page')->setNotes('The default wiki home page URL');
+//        $this->getForm()->appendField(new \App\Form\ButtonInput('wiki.page.default', 'fa fa-folder-open'))->setTabGroup($tab)
+//            ->setLabel('Home Page')->setNotes('The default wiki home page URL');
 
         $this->getForm()->appendField(new Field\Checkbox('wiki.page.home.lock'))->setTabGroup($tab)->setLabel('Lock Home Page')
             ->setNotes('Only Allow Admin to edit the home page');
@@ -92,9 +103,9 @@ class Settings extends \Bs\Controller\Admin\Settings
         $template = parent::show();
 
         // Render select page dialog
-        $pageSelect = new \App\Helper\PageSelect('#fid_btn_settings-wiki\\\\.page\\\\.default', '#settings-wiki\\\\.page\\\\.default');
-        $pageSelect->show();
-        $template->appendTemplate('content', $pageSelect->getTemplate());
+//        $pageSelect = new \App\Helper\PageSelect('#fid_btn_settings-wiki\\\\.page\\\\.default', '#settings-wiki\\\\.page\\\\.default');
+//        $pageSelect->show();
+//        $template->appendTemplate('content', $pageSelect->getTemplate());
 
         return $template;
     }

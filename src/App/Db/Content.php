@@ -1,18 +1,22 @@
 <?php
 namespace App\Db;
 
+use App\Db\Traits\PageTrait;
+use Bs\Db\Traits\TimestampTrait;
+use Bs\Db\Traits\UserTrait;
 use Tk\Db\Map\Model;
 
 
 /**
- * Class User
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
 class Content extends Model implements \Tk\ValidInterface
 {
+    use TimestampTrait;
+    use UserTrait;
+    use PageTrait;
 
     /**
      * @var int
@@ -70,25 +74,13 @@ class Content extends Model implements \Tk\ValidInterface
      */
     public $created = null;
 
-    /**
-     * @var \Bs\Db\User
-     */
-    private $user = null;
-
-    /**
-     * @var \App\Db\Page
-     */
-    private $page = null;
-
 
     /**
      * User constructor.
-     *
      */
     public function __construct()
     {
-        $this->modified = \Tk\Date::create();
-        $this->created = \Tk\Date::create();
+        $this->_TimestampTrait();
     }
 
     /**
@@ -98,50 +90,131 @@ class Content extends Model implements \Tk\ValidInterface
     static function cloneContent($src)
     {
         $dst = new static();
-        $dst->userId = \App\Config::getInstance()->getAuthUser()->id;
+        $dst->setUserId(\App\Config::getInstance()->getAuthUser()->getId());
         if ($src) {
-            $dst->pageId = $src->pageId;
-            $dst->html = $src->html;
-            $dst->keywords = $src->keywords;
-            $dst->description = $src->description;
-            $dst->css = $src->css;
-            $dst->js = $src->js;
+            $dst->setPageId($src->getPageId());
+            $dst->setHtml($src->getHtml());
+            $dst->setKeywords($src->getKeywords());
+            $dst->setDescription($src->getDescription());
+            $dst->setCss($src->getCss());
+            $dst->setJs($src->getJs());
         }
         return $dst;
     }
 
-    /**
-     *
-     * @return Page|null
-     * @throws \Exception
-     */
-    public function getPage()
-    {
-        if (!$this->page) {
-            $this->page = \App\Db\PageMap::create()->find($this->pageId);
-        }
-        return $this->page;
-    }
-
-    /**
-     *
-     * @return \Bs\Db\User|null
-     * @throws \Exception
-     */
-    public function getUser()
-    {
-        if (!$this->user) {
-            $this->user = \Bs\Db\UserMap::create()->find($this->userId);
-        }
-        return $this->user;
-    }
 
     public function save()
     {
-        // TODO: calculate content size...
-        $this->size = \Tk\Str::strByteSize($this->html.$this->js.$this->css);
-
+        $this->setSize(\Tk\Str::strByteSize($this->getHtml() . $this->getJs() . $this->getCss()));
         parent::save();
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtml(): string
+    {
+        return $this->html;
+    }
+
+    /**
+     * @param string $html
+     * @return Content
+     */
+    public function setHtml(string $html): Content
+    {
+        $this->html = $html;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeywords(): string
+    {
+        return $this->keywords;
+    }
+
+    /**
+     * @param string $keywords
+     * @return Content
+     */
+    public function setKeywords(string $keywords): Content
+    {
+        $this->keywords = $keywords;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return Content
+     */
+    public function setDescription(string $description): Content
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCss(): string
+    {
+        return $this->css;
+    }
+
+    /**
+     * @param string $css
+     * @return Content
+     */
+    public function setCss(string $css): Content
+    {
+        $this->css = $css;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJs(): string
+    {
+        return $this->js;
+    }
+
+    /**
+     * @param string $js
+     * @return Content
+     */
+    public function setJs(string $js): Content
+    {
+        $this->js = $js;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param int $size
+     * @return Content
+     */
+    public function setSize(int $size): Content
+    {
+        $this->size = $size;
+        return $this;
     }
 
     /**
@@ -154,7 +227,7 @@ class Content extends Model implements \Tk\ValidInterface
 //        if (!$this->pageId) {  // Cannot check this here as the page id is not saved
 //            $errors['pageId'] = 'Invalid page ID value.';
 //        }
-        if (!$this->userId) {
+        if (!$this->getUserId()) {
             $errors['userId'] = 'Invalid user ID value.';
         }
         return $errors;

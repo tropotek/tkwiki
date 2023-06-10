@@ -7,7 +7,7 @@ use Dom\Template;
 
 /**
  * An object to manage and display the wiki Page header
- * information and action buttons. 
+ * information and action buttons.
  *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
@@ -22,7 +22,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      * @var Crumbs
      */
     static public $instance = null;
-    
+
     /**
      * @var null
      */
@@ -32,8 +32,8 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      * @var int
      */
     protected $max = 5;
-    
-    
+
+
     /**
      * constructor.
      *
@@ -41,7 +41,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
     private function __construct()
     {
     }
-    
+
     public function serialize()
     {
         return serialize(array('list' => $this->list));
@@ -59,7 +59,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      * @param \Tk\Uri $requestUri
      * @param \Tk\Session $session
      * @return Crumbs
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     static public function getInstance($requestUri = null, $session = null)
     {
@@ -97,7 +97,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
         }
 
         $this->trim($page->getPageUrl());
-        $this->list[$page->title] = $page->getPageUrl();
+        $this->list[$page->getTitle()] = $page->getPageUrl();
         if (count($this->list) > $this->max) {
             array_shift($this->list);
         }
@@ -109,7 +109,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
      * @param \Tk\Uri $url
      * @return array
      */
-    public function trim($url) 
+    public function trim($url)
     {
         $arr = array();
         if (!$url) return $arr;
@@ -124,7 +124,7 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
         $this->list = $arr;
         return $arr;
     }
-    
+
     /**
      * Execute the renderer.
      * Return an object that your framework can interpret and display.
@@ -166,6 +166,6 @@ class Crumbs extends \Dom\Renderer\Renderer implements \Serializable, \Dom\Rende
 HTML;
         return \Dom\Loader::load($xhtml);
     }
-    
-    
+
+
 }

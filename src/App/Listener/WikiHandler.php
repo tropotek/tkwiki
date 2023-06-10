@@ -11,7 +11,7 @@ use Tk\Event\Subscriber;
  */
 class WikiHandler implements Subscriber
 {
-    
+
     /**
      * @param \App\Event\ContentEvent $event
      */
@@ -19,16 +19,16 @@ class WikiHandler implements Subscriber
     {
         $content = $event->getContent();
         try {
-            $formatter = new \App\Helper\HtmlFormatter($content->html);
+            $formatter = new \App\Helper\HtmlFormatter($content->getHtml());
             $event->set('htmlFormatter', $formatter);
             // Format the content html
-            $content->html = $formatter->getHtml();
+            $content->setHtml($formatter->getHtml());
         } catch (\Exception $e) {
             \Tk\Log::error($e->__toString());
-            $content->html = '<div role="alert" class="alert alert-danger"><strong>Error:</strong> '.$e->getMessage().'</div>';
+            $content->setHtml('<div role="alert" class="alert alert-danger"><strong>Error:</strong> '.$e->getMessage().'</div>');
         }
     }
-    
+
     /**
      * @return array
      */

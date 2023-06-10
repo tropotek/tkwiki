@@ -2,6 +2,7 @@
 namespace App\Controller\User;
 
 use App\Db\User;
+use App\Db\UserMap;
 use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,13 @@ class Edit extends PageController
     {
         $this->type = $type;
 
+        /** @var User $user */
+        $user = UserMap::create()->find($request->query->getInt('id', 0));
+        if ($user && $request->query->get('action') == 'reset') {
+            $user->sendRecoverEmail();
+            Uri::create()->remove('action')->redirect();
+        }
+
         // Get the form template
         $this->form = new \App\Form\User();
         $this->form->doDefault($request,  $request->query->getInt('id', 0), $type);
@@ -36,6 +44,7 @@ class Edit extends PageController
     {
         $template = $this->getTemplate();
         $template->setAttr('back', 'href', Uri::create('/' . $this->type.'Manager'));
+        $template->setAttr('resend', 'href', Uri::create()->set('action', 'reset'));
 
         $template->appendText('title', $this->getPage()->getTitle());
         $template->appendTemplate('content', $this->form->show());
@@ -55,6 +64,7 @@ class Edit extends PageController
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
       <a href="" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
+      <a href="" title="Resend password request email" class="btn btn-outline-secondary" var="resend"><i class="fa fa-envelope"></i> Reset Password Email</a>
     </div>
   </div>
   <div class="card mb-3">

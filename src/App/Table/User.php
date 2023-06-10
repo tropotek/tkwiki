@@ -128,7 +128,6 @@ class User
                 /** @var \App\Db\User $user */
                 $user = $cell->getRow()->getData();
                 $cell->setUrl('mailto:'.$user->getEmail());
-                //$cell->setValue('====');
             });
         $this->getTable()->appendCell(new Cell\Text('active'));
         //$this->getTable()->appendCell(new Cell\Text('modified'));

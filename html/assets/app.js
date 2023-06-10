@@ -110,7 +110,7 @@ let app = function () {
 
     // Default base tinymce options
     let mceDefaults = {
-      entity_encoding : 'named',
+      //entity_encoding : 'raw',
       height: 700,
       plugins: [
         'advlist', 'autolink', 'lists', 'link', 'anchor', 'image', 'media', 'charmap', 'preview',
@@ -132,7 +132,10 @@ let app = function () {
         }
         return url;
       },
+      //image_prepend_url: config.baseUrl,
+      //a11y_advanced_options: true,
       statusbar: false,
+      extended_valid_elements: 'i[*],em[*],b[*],a[*]',
 
       setup: (editor) => {
 

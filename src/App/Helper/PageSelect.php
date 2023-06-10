@@ -52,7 +52,6 @@ jQuery(function($) {
         const editor = tinymce.activeEditor;
         let linkAttrs = {
           href: 'page://' + url,
-          'class': isNew ? 'wk-page-new' : 'wk-page',
           title: title
         };
         if (editor.selection.getContent()) {

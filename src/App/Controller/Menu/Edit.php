@@ -186,8 +186,9 @@ jQuery(function($) {
 		maxLevels: 2,
 		opacity: .6,
 		relocate: function (a, b) {
-            $('button.btn-save-menu').prop('disabled', false);
-            $('button.btn-save-menu').trigger('click');
+            //$('button.btn-save-menu').prop('disabled', false);
+            //$('button.btn-save-menu').trigger('click');
+            saveItem();
 		}
     });
     // Store menu item name into data attr
@@ -197,7 +198,7 @@ jQuery(function($) {
 
     $('li a', sortable).on('keyup', function (e) {
         if (e.which === 13) $(this).blur();
-        $('button.btn-save-menu').prop('disabled', false);
+        //$('button.btn-save-menu').prop('disabled', false);
     }).on('blur', function () {
         $(this).parent().data('name', $(this).html());
     });
@@ -211,7 +212,7 @@ jQuery(function($) {
     });
 
     // Save menu items
-    $('button.btn-save-menu').on('click', function() {
+    function saveItem() {
         let result = sortable.nestedSortable('toArray', {startDepthCount: 0});
 		for (item of result) {
             if (!item.id) continue;
@@ -221,8 +222,10 @@ jQuery(function($) {
         result.shift();
         $.post(location.href, {action: 'update', list: result}, function(data) { });
 
-        $('button.btn-save-menu').prop('disabled', true);
-    });
+        //$('button.btn-save-menu').prop('disabled', true);
+
+    }
+    //$('button.btn-save-menu').on('click', saveItem);
 
     // Add page dialog
     $('td a.wiki-insert', '#page-select-dialog').on('click', function (e) {
@@ -260,7 +263,7 @@ jQuery(function($) {
             $('a', li).html(data.name);
             $('a', li).attr('contentEditable', 'true');
             sortable.append(li);
-            $('button.btn-save-menu').prop('disabled', false);
+            //$('button.btn-save-menu').prop('disabled', false);
         });
     });
 
@@ -277,7 +280,7 @@ jQuery(function($) {
             li.data('type', data.type);
             $('a', li).html(data.name);
             sortable.append(li);
-            $('button.btn-save-menu').prop('disabled', false);
+            //$('button.btn-save-menu').prop('disabled', false);
         });
     });
 
@@ -408,7 +411,7 @@ JS;
           </ul>
         </div>
         &nbsp;
-        <button class="btn btn-outline-success btn-sm btn-save-menu" disabled>Save Menu</button>
+<!--        <button class="btn btn-outline-success btn-sm btn-save-menu" disabled>Save Menu</button>-->
       </div>
 
       <div class="menu-box" choice="menu-box"></div>

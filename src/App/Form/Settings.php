@@ -32,15 +32,18 @@ class Settings
             ->setGroup($tab);
 
         $this->getForm()->appendField(new Field\Input('site.name.short'))
+            ->setGroup($tab)
             ->setLabel('Site Short Title')
             ->setNotes('Site short title. Used for nav bars and title where space is limited.')
-            ->setRequired(true)
-            ->setGroup($tab);
+            ->setRequired(true);
 
         $this->getForm()->appendField(new Field\Checkbox('site.account.registration'))
+            ->setGroup($tab)
             ->setLabel('Account Registration')
             ->setNotes('Enable public user registrations for this site. (Default user type is `user`)')
-            ->setGroup($tab);
+            ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+                $option->setName('Enable');
+            });
 
         // TODO: should we use the page ID here instead??
         $list = PageMap::create()->findFiltered([
@@ -52,11 +55,6 @@ class Settings
             ->setNotes('Select the default wiki page home content.<br/>Note you cannot delete a home page, you must reassign it first.')
             ->setRequired(true)
             ->addCss('select-home')
-            ->setGroup($tab);
-
-        $this->getForm()->appendField(new Field\Checkbox('site.page.header.hide'))
-            ->setLabel('Account Registration')
-            ->setNotes('Enable public user registrations for this site. (Default user type is `user`)')
             ->setGroup($tab);
 
         $tab = 'Email';
@@ -108,7 +106,10 @@ class Settings
             ->addCss('check-enable')
             ->setLabel('Maintenance Mode Enabled')
             ->setNotes('Enable maintenance mode. Admin users will still have access to the site.')
-            ->setGroup($tab);
+            ->setGroup($tab)
+            ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+                $option->setName('Enable');
+            });
 
         $this->getForm()->appendField(new Field\Textarea('system.maintenance.message'))
             ->addCss('mce-min')

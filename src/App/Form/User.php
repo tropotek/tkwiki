@@ -35,7 +35,7 @@ class User
         $this->user = new \App\Db\User();
         $this->getUser()->setType($type);
 
-        if ($id > 0) {
+        if ($id) {
             $this->user = UserMap::create()->find($id);
             if (!$this->getUser()) {
                 throw new Exception('Invalid User ID: ' . $id);

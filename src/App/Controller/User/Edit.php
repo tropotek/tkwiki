@@ -63,15 +63,14 @@ class Edit extends PageController
   <div class="card mb-3">
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
-      <a href="" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
-      <a href="" title="Resend password request email" class="btn btn-outline-secondary" var="resend"><i class="fa fa-envelope"></i> Reset Password Email</a>
+      <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
+      <a href="#" title="Resend password request email" class="btn btn-outline-secondary" var="resend"><i class="fa fa-envelope"></i> Reset Password Email</a>
     </div>
   </div>
   <div class="card mb-3">
     <div class="card-header" var="title"><i class="fa fa-users"></i> </div>
     <div class="card-body" var="content">
         <p choice="new-user"><b>NOTE:</b> New users will be sent an email requesting them to activate their account and create a new password.</p>
-
     </div>
   </div>
 </div>

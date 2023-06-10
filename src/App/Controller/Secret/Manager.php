@@ -1,40 +1,37 @@
 <?php
-namespace App\Controller\User;
+namespace App\Controller\Secret;
 
-use App\Db\User;
+use Symfony\Component\HttpFoundation\Request;
 use Bs\PageController;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
+use App\Db\User;
 use Tk\Uri;
 
+/**
+ * Add Route to /src/config/routes.php:
+ * ```php
+ *   $routes->add('secret-manager', '/secretManager')
+ *       ->controller([App\Controller\Secret\Manager::class, 'doDefault']);
+ * ```
+ */
 class Manager extends PageController
 {
-    protected \App\Table\User $table;
-
-    protected string $type = User::TYPE_USER;
+    protected \App\Table\Secret $table;
 
     public function __construct()
     {
         parent::__construct($this->getFactory()->getPublicPage());
-        $this->getPage()->setTitle('User Manager');
+        $this->getPage()->setTitle('Secret Manager');
     }
 
-    public function doDefault(Request $request, string $type)
+    public function doDefault(Request $request)
     {
-        $this->type = $type;
-        if ($this->type == User::TYPE_USER) {
-            $this->setAccess(User::PERM_MANAGE_USER);
-        } else if ($this->type == User::TYPE_STAFF) {
-            $this->setAccess(User::PERM_MANAGE_STAFF);
-        } else {
-            $this->setAccess(User::PERM_ADMIN);
-        }
-
-        $this->getPage()->setTitle(ucfirst($this->type) . ' Manager');
+        $this->setAccess(User::PERM_MANAGE_STAFF);
 
         // Get the form template
-        $this->table = new \App\Table\User();
-        $this->table->doDefault($request, $this->type);
+        $this->table = new \App\Table\Secret();
+        $this->table->doDefault($request);
+        $this->table->execute($request);
 
         return $this->getPage();
     }
@@ -42,8 +39,8 @@ class Manager extends PageController
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        $template->appendText('title', $this->getPage()->getTitle());
-        $template->setAttr('create', 'href', Uri::create('/'.$this->type.'Edit'));
+        $template->setText('title', $this->getPage()->getTitle());
+        $template->setAttr('create', 'href', Uri::create('/secretEdit'));
 
         $template->appendTemplate('content', $this->table->show());
 
@@ -58,7 +55,7 @@ class Manager extends PageController
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
       <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
-      <a href="#" title="Create User" class="btn btn-outline-secondary" var="create"><i class="fa fa-user"></i> Create User</a>
+      <a href="/" title="Create Secret" class="btn btn-outline-secondary" var="create"><i class="fa fa-plus"></i> Create Secret</a>
     </div>
   </div>
   <div class="card mb-3">

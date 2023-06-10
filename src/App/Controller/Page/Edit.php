@@ -117,9 +117,9 @@ class Edit extends PageController
 
         /** @var Field\Select $permission */
         $permission = $this->getForm()->appendField(new Field\Select('permission', array_flip(Page::PERM_LIST)))
-            ->appendOption('-- Select --', '')
             ->setRequired()
-            ->setGroup($group);
+            ->setGroup($group)
+            ->prependOption('-- Select --', '');
         if ($this->wPage && $this->wPage->getUrl() == Page::getHomeUrl()) {
             $permission->setDisabled();
         }

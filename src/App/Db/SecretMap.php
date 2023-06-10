@@ -8,7 +8,6 @@ use Tk\Db\Mapper\Result;
 use Tk\Db\Tool;
 use Tk\DataMap\Db;
 use Tk\DataMap\Form;
-use Tk\DataMap\Table;
 
 class SecretMap extends Mapper
 {
@@ -16,17 +15,18 @@ class SecretMap extends Mapper
     public function makeDataMaps(): void
     {
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
+
             $map = new DataMap();
-            $map->addDataType(new Db\Integer('id'), 'key');
+            $map->addDataType(new Db\Integer('id'));
             $map->addDataType(new Db\Integer('userId', 'user_id'));
             $map->addDataType(new Db\Integer('permission'));
             $map->addDataType(new Db\Text('name'));
             $map->addDataType(new Db\Text('url'));
-            $map->addDataType(new Db\Text('username'));
-            $map->addDataType(new Db\Text('password'));
-            $map->addDataType(new Db\Text('otp'));
-            $map->addDataType(new Db\Text('keys'));
-            $map->addDataType(new Db\Text('notes'));
+            $map->addDataType(new Db\TextEncrypt('username'));
+            $map->addDataType(new Db\TextEncrypt('password'));
+            $map->addDataType(new Db\TextEncrypt('otp'));
+            $map->addDataType(new Db\TextEncrypt('keys'));
+            $map->addDataType(new Db\TextEncrypt('notes'));
             $map->addDataType(new Db\Date('modified'));
             $map->addDataType(new Db\Date('created'));
 
@@ -35,7 +35,7 @@ class SecretMap extends Mapper
 
         if (!$this->getDataMappers()->has(self::DATA_MAP_FORM)) {
             $map = new DataMap();
-            $map->addDataType(new Form\Integer('id'), 'key');
+            $map->addDataType(new Form\Integer('id'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Integer('permission'));
             $map->addDataType(new Form\Text('name'));
@@ -79,7 +79,7 @@ class SecretMap extends Mapper
         if (!empty($filter['search'])) {
             $kw = '%' . $this->escapeString($filter['search']) . '%';
             $w = '';
-            //$w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['search'])) {
                 $id = (int)$filter['search'];
                 $w .= sprintf('a.id = %d OR ', $id);
@@ -108,15 +108,6 @@ class SecretMap extends Mapper
         }
         if (!empty($filter['url'])) {
             $filter->appendWhere('a.url = %s AND ', $this->quote($filter['url']));
-        }
-        if (!empty($filter['username'])) {
-            $filter->appendWhere('a.username = %s AND ', $this->quote($filter['username']));
-        }
-        if (!empty($filter['password'])) {
-            $filter->appendWhere('a.password = %s AND ', $this->quote($filter['password']));
-        }
-        if (!empty($filter['otp'])) {
-            $filter->appendWhere('a.otp = %s AND ', $this->quote($filter['otp']));
         }
 
 

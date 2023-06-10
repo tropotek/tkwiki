@@ -5,6 +5,8 @@ use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 use App\Db\User;
+use Tk\Alert;
+use Tk\Uri;
 
 /**
  * Add Route to /src/config/routes.php:
@@ -25,7 +27,10 @@ class Edit extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Edit Secret');
-        $this->setAccess(User::PERM_ADMIN);
+        if (!$this->getAuthUser()?->isType(User::TYPE_STAFF)) {
+            Alert::addWarning('You do not have permission to access the page: <b>' . Uri::create()->getRelativePath() . '</b>');
+            Uri::create('/')->redirect();
+        }
     }
 
     public function doDefault(Request $request)
@@ -58,7 +63,7 @@ class Edit extends PageController
   <div class="card mb-3">
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
-      <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
+      <a href="/secretManager" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
     </div>
   </div>
   <div class="card mb-3">

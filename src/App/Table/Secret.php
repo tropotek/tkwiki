@@ -1,8 +1,11 @@
 <?php
 namespace App\Table;
 
+use App\Db\SecretMap;
 use Dom\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Tk\Alert;
 use Tk\Traits\SystemTrait;
 use Tk\Uri;
@@ -29,19 +32,44 @@ class Secret
         $this->filter = new Form($this->table->getId() . '-filters');
     }
 
+    public function doOtp(Request $request)
+    {
+        $response = new JsonResponse(['msg' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        /** @var \App\Db\Secret $secret */
+        $secret = SecretMap::create()->find($request->query->getInt('o', 0));
+        if ($secret) {
+            $response = new JsonResponse(['otp' => $secret->genOtpCode()]);
+        }
+        $response->send();
+        exit;
+    }
+
     public function doDefault(Request $request)
     {
         $editUrl = Uri::create('/secretEdit');
 
+        if ($request->query->getInt('o')) {
+            $this->doOtp($request);
+        }
+
         $this->getTable()->appendCell(new Cell\Checkbox('id'));
+        $this->getTable()->appendCell(new Cell\Text('otp'))
+            ->addOnValue(function (Cell\Text $cell, mixed $value) {
+                return '';
+            })
+            ->addOnShow(function (Cell\Text $cell, string $html) {
+                /** @var \App\Db\Secret $obj */
+                $obj = $cell->getRow()->getData();
+                if ($obj->getOtp()) {
+                    $html = sprintf('<button class="btn btn-sm btn-outline-success otp" data-auth-id="%s"><i class="fa fa-refresh"></i></button> <strong class="otp2">------</strong>',
+                        $obj->getId());
+                }
+                return $html;
+            });
+
         $this->getTable()->appendCell(new Cell\Text('userId'));
         $this->getTable()->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($editUrl);
         $this->getTable()->appendCell(new Cell\Text('permission'));
-        //$this->getTable()->appendCell(new Cell\Text('url'));
-        //$this->getTable()->appendCell(new Cell\Text('username'));
-        //$this->getTable()->appendCell(new Cell\Text('password'));
-        //$this->getTable()->appendCell(new Cell\Text('otp'));
-        //$this->getTable()->appendCell(new Cell\Text('modified'));
         $this->getTable()->appendCell(new Cell\Text('created'));
 
 

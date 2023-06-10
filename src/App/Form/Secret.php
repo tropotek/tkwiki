@@ -31,6 +31,7 @@ class Secret
     public function doDefault(Request $request, int $id)
     {
         $this->secret = new \App\Db\Secret();
+        $this->secret->setUserId($this->getFactory()->getAuthUser()->getId());
 
         if ($id) {
             $this->secret = \App\Db\SecretMap::create()->find($id);
@@ -81,7 +82,7 @@ class Secret
         $this->secret->save();
 
         Alert::addSuccess('Form save successfully.');
-        $action->setRedirect(Uri::create());
+        $action->setRedirect(Uri::create()->set('id', $this->secret->getId()));
         if ($form->getTriggeredAction()->isExit()) {
             $action->setRedirect(Uri::create('/secretManager'));
         }

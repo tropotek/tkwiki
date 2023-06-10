@@ -5,7 +5,6 @@ use App\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
 use OTPHP\TOTP;
 use Tk\Db\Mapper\Model;
-use Tk\Response;
 
 class Secret extends Model
 {
@@ -16,7 +15,7 @@ class Secret extends Model
 
     public int $userId = 0;
 
-    public int $permission = 0;
+    public int $permission = Page::PERM_PRIVATE;
 
     public string $name = '';
 
@@ -41,7 +40,6 @@ class Secret extends Model
     public function __construct()
     {
         $this->_TimestampTrait();
-
     }
 
     /**
@@ -153,28 +151,6 @@ class Secret extends Model
     public function setNotes(string $notes): Secret
     {
         $this->notes = $notes;
-        return $this;
-    }
-
-    public function getModified(): \DateTime
-    {
-        return $this->modified;
-    }
-
-    public function setModified(\DateTime $modified): Secret
-    {
-        $this->modified = $modified;
-        return $this;
-    }
-
-    public function getCreated(): \DateTime
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTime $created): Secret
-    {
-        $this->created = $created;
         return $this;
     }
 

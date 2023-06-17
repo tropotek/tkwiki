@@ -14,6 +14,12 @@ class Page extends \Bs\Page
     {
         $template = parent::show();
 
+        $secretEnabled = json_encode(boolval($this->getRegistry()->get('wiki.enable.secret.mod')));
+        $js = <<<JS
+config.enableSecretMod = {$secretEnabled};
+JS;
+        $template->appendJs($js, array('data-jsl-priority' => -1000));
+
         if ($this->getRegistry()->get('system.meta.keywords')) {
             $template->appendMetaTag('keywords', $this->getRegistry()->get('system.meta.keywords', ''));
         }

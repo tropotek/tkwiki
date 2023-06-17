@@ -264,8 +264,10 @@ class Edit extends PageController
         $dialog = new PageSelect();
         $template->appendBodyTemplate($dialog->show());
 
-        $dialog = new SecretSelect();
-        $template->appendBodyTemplate($dialog->show());
+        if ($this->getRegistry()->get('wiki.enable.secret.mod', false)) {
+            $dialog = new SecretSelect();
+            $template->appendBodyTemplate($dialog->show());
+        }
 
         return $template;
     }

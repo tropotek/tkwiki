@@ -132,14 +132,14 @@ class HtmlFormatter
             }
             $node->setAttribute('class', $css);
         }
-
+        $secretEnabled = $this->getRegistry()->get('wiki.enable.secret.mod', false);
         // remove/replace node as the last action
         foreach ($wkSecretNodes as  $node) {
             /** @var Secret $secret */
             $secret = SecretMap::create()->find($node->getAttribute('wk-secret'));
             if (!$secret) continue;
 
-            if ($secret->canView($this->getFactory()->getAuthUser())) {
+            if ($secretEnabled && $secret->canView($this->getFactory()->getAuthUser())) {
                 $renderer = new ViewSecret($secret);
                 $template = $renderer->show();
                 $newNode = $node->ownerDocument->importNode($template->getDocument()->documentElement, true);

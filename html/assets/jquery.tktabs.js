@@ -50,7 +50,6 @@
 
       navTabs = $(plugin.settings.navTabsTpl);
       $(plugin.settings.tabGroup, element).each(function (i) {
-        if (i > 1) $(this).hide();
         let name = $(this).data('name');
         let id = $(this).attr('id');
         let li = $(plugin.settings.tabItemTpl);

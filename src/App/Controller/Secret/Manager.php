@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Bs\PageController;
 use Dom\Template;
 use App\Db\User;
+use Tk\Alert;
 use Tk\Uri;
 
 /**
@@ -22,7 +23,13 @@ class Manager extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Secret Manager');
-        $this->setAccess(User::PERM_MANAGE_STAFF);
+        if (
+            !$this->getAuthUser()?->isType(User::TYPE_STAFF) ||
+            !$this->getRegistry()->get('wiki.enable.secret.mod', false)
+        ) {
+            Alert::addWarning('You do not have permission to access the page: <b>' . Uri::create()->getRelativePath() . '</b>');
+            Uri::create('/')->redirect();
+        }
     }
 
     public function doDefault(Request $request)

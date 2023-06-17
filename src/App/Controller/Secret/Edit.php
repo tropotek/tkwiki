@@ -27,7 +27,10 @@ class Edit extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Edit Secret');
-        if (!$this->getAuthUser()?->isType(User::TYPE_STAFF)) {
+        if (
+            !$this->getAuthUser()?->isType(User::TYPE_STAFF) ||
+            !$this->getRegistry()->get('wiki.enable.secret.mod', false)
+        ) {
             Alert::addWarning('You do not have permission to access the page: <b>' . Uri::create()->getRelativePath() . '</b>');
             Uri::create('/')->redirect();
         }

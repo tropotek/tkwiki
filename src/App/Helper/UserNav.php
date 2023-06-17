@@ -28,6 +28,7 @@ class UserNav extends Renderer implements DisplayInterface
     {
         $template = $this->getTemplate();
 
+        $template->setVisible('secret', $this->getRegistry()->get('wiki.enable.secret.mod', false));
 
         return $template;
     }
@@ -43,7 +44,7 @@ class UserNav extends Renderer implements DisplayInterface
   <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_EDITOR">Wiki Pages</a></li>
   <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_EDITOR">Orphaned Pages</a></li>
   <li><a class="dropdown-item" href="/menuEdit" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Menu Edit</a></li>
-  <li><a class="dropdown-item" href="/secretManager" app-is-type="TYPE_STAFF">Secret Manager</a></li>
+  <li><a class="dropdown-item" href="/secretManager" app-is-type="TYPE_STAFF" var="secret">Secret Manager</a></li>
   <li><hr class="dropdown-divider" app-has-perm="PERM_ADMIN"></li>
   <li><a class="dropdown-item" href="/tailLog" app-has-perm="PERM_ADMIN">Tail Log</a></li>
   <li><a class="dropdown-item" href="/listEvents" app-has-perm="PERM_ADMIN">List Events</a></li>

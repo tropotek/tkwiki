@@ -55,10 +55,10 @@ class Settings
             ->addCss('select-home')
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Checkbox('wiki.enable.credential.mod'))
+        $this->getForm()->appendField(new Field\Checkbox('wiki.enable.secret.mod'))
             ->setGroup($tab)
             ->setLabel('Enable Secure Credential Module')
-            ->setNotes('Store passwords and secret keys and configure what users can view them in a page')
+            ->setNotes('Store passwords and secret keys securely and with view/edit permissions')
             ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
                 $option->setName('Enable');
             });

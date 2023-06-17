@@ -32,6 +32,9 @@ class ViewSecretList extends Renderer implements DisplayInterface
     public function show(): ?Template
     {
         $template = $this->getTemplate();
+        if (!$this->getRegistry()->get('wiki.enable.secret.mod', false)) {
+            return $template;
+        }
 
         $filter = [
             'author' => $this->user->getId()
@@ -39,7 +42,7 @@ class ViewSecretList extends Renderer implements DisplayInterface
         $list = SecretMap::create()->findFiltered($filter, Tool::create('created DESC'));
 
         foreach ($list as $secret) {
-            if (!$secret->canView($this->user)) continue;
+            if (!$secret->canView($this->getFactory()->getAuthUser())) continue;
             $row = $template->getRepeat('col');
             $ren = new ViewSecret($secret);
             $row->appendTemplate('col', $ren->show());

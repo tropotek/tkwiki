@@ -207,13 +207,15 @@ let app = function () {
 
         // Button to create/insert a secret record
         // See \App\Helper\SecretSelect object for more info
-        editor.ui.registry.addButton('wikiSecret', {
-          icon: 'lock',
-          tooltip: 'Add/Insert Secret Content',
-          onAction: function(_) {
-            $('#secret-select-dialog').modal('show');
-          }
-        });
+        if (config.enableSecretMod) {
+          editor.ui.registry.addButton('wikiSecret', {
+            icon: 'lock',
+            tooltip: 'Add/Insert Secret Content',
+            onAction: function (_) {
+              $('#secret-select-dialog').modal('show');
+            }
+          });
+        }
 
       }
 

@@ -121,8 +121,6 @@ jQuery(function($) {
         $('#secret-create-dialog').modal('hide');
     });
 
-
-
 });
 JS;
         $template->appendJs($js);

@@ -79,12 +79,10 @@ jQuery(function($) {
             });
         });
     }
-
     init();
     $('body').on(EVENT_INIT_FORM, init);
 
     $('#{$dialogId}').on('show.bs.modal', function () {
-        console.log('reset form');
         clearForm(this);
     });
 

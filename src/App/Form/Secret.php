@@ -1,7 +1,6 @@
 <?php
 namespace App\Form;
 
-use App\Db\Page;
 use App\Db\UserMap;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,19 +54,19 @@ class Secret
         $tab = 'Details';
         $this->getForm()->appendField(new Field\Hidden('secret_id'));
 
-        $list = UserMap::create()->findFiltered(['type' => \App\Db\User::TYPE_STAFF], Tool::create('name'));
-        $this->getForm()->appendField(new Field\Select('userId', $list))
-            ->setGroup($tab)
-            ->prependOption('-- Select --', '');
+//        $list = UserMap::create()->findFiltered(['type' => \App\Db\User::TYPE_STAFF], Tool::create('name'));
+//        $this->getForm()->appendField(new Field\Select('userId', $list))
+//            ->setGroup($tab)
+//            ->prependOption('-- Select --', '');
+
+        $this->getForm()->appendField(new Field\Input('name'))
+            ->setGroup($tab);
 
         /** @var Field\Select $permission */
         $this->getForm()->appendField(new Field\Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
             ->setGroup($tab)
             ->setRequired()
             ->prependOption('-- Select --', '');
-
-        $this->getForm()->appendField(new Field\Input('name'))
-            ->setGroup($tab);
 
         $this->getForm()->appendField(new Field\Input('url'))
             ->setGroup($tab);
@@ -121,7 +120,8 @@ class Secret
         Alert::addSuccess('Form save successfully.');
         $action->setRedirect(Uri::create()->set('id', $this->secret->getId()));
         if ($form->getTriggeredAction()->isExit()) {
-            $action->setRedirect(Uri::create('/secretManager'));
+            $action->setRedirect($this->getFactory()->getBackUrl());
+            //$action->setRedirect(Uri::create('/secretManager'));
         }
 
         if ($this->isHtmx()) {
@@ -134,10 +134,10 @@ class Secret
     public function show(): ?Template
     {
         // Setup field group widths with bootstrap classes
-        $this->getForm()->getField('userId')->addFieldCss('col-sm-6');
+        //$this->getForm()->getField('userId')->addFieldCss('col-sm-6');
         $this->getForm()->getField('permission')->addFieldCss('col-sm-6');
         $this->getForm()->getField('name')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('url')->addFieldCss('col-sm-6');
+        //$this->getForm()->getField('url')->addFieldCss('col-sm-6');
         $this->getForm()->getField('username')->addFieldCss('col-sm-6');
         $this->getForm()->getField('password')->addFieldCss('col-sm-6');
 

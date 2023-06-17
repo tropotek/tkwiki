@@ -14,11 +14,56 @@ jQuery(function ($) {
   app.initDatepicker();
   app.initTinymce();
   app.initWikiScripts();
+  app.initWkSecret();
 });
 
+function copyToClipboard(el) {
+  if(navigator.clipboard) {
+    let text = $(el).text();
+    navigator.clipboard.writeText(text)
+  } else {
+    let range = document.createRange();
+    range.selectNode(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
+
+    // Select the text
+    range = document.createRange();
+    range.selectNodeContents(el);
+    let sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
 
 let app = function () {
   "use strict";
+
+  /**
+   * Init all wk-secret module functions
+   */
+  let initWkSecret = function () {
+
+    $('.wk-secret .userpass .fa').on('click', function () {
+      copyToClipboard($(this).prev('span')[0]);
+    });
+
+    $('.wk-secret  .userpass .cp-otp').on('click', function (e) {
+      let btn = $(this);
+      //var params = {'o': btn.data('id'), 'nolog': 'nolog'};
+      var params = {'o': btn.parent().data('id')};
+      $.post(document.location, params, function (data) {
+        btn.next().text(data.otp);
+        copyToClipboard(btn.next().get(0));
+      });
+      return false;
+    });
+
+
+
+  };
 
   /**
    * Init all wiki base level functions
@@ -134,8 +179,9 @@ let app = function () {
       content_style: 'body {padding: 15px;}',
       //image_prepend_url: config.baseUrl,
       //a11y_advanced_options: true,
+      image_advtab: true,
       statusbar: false,
-      extended_valid_elements: 'i[*],em[*],b[*],a[*],div[*]',
+      extended_valid_elements: 'i[*],em[*],b[*],a[*],div[*],span[*],img[*]',
 
       save_onsavecallback: () => {
         $('#page-save', tinymce.activeEditor.formElement).trigger('click');
@@ -203,7 +249,8 @@ let app = function () {
     initWikiScripts: initWikiScripts,
     initTkFormTabs: initTkFormTabs,
     initDatepicker: initDatepicker,
-    initTinymce: initTinymce
+    initTinymce: initTinymce,
+    initWkSecret: initWkSecret
   }
 
 }();

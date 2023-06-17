@@ -15,13 +15,12 @@ class SecretMap extends Mapper
     public function makeDataMaps(): void
     {
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
-
             $map = new DataMap();
             $map->addDataType(new Db\Integer('id'));
             $map->addDataType(new Db\Integer('userId', 'user_id'));
             $map->addDataType(new Db\Integer('permission'));
             $map->addDataType(new Db\Text('name'));
-            $map->addDataType(new Db\Text('url'));
+            $map->addDataType(new Db\TextEncrypt('url'));
             $map->addDataType(new Db\TextEncrypt('username'));
             $map->addDataType(new Db\TextEncrypt('password'));
             $map->addDataType(new Db\TextEncrypt('otp'));

@@ -120,6 +120,7 @@ class Edit extends PageController
         $permission = $this->getForm()->appendField(new Field\Select('permission', array_flip(Page::PERM_LIST)))
             ->setRequired()
             ->setGroup($group)
+            ->setStrict(true)
             ->prependOption('-- Select --', '');
         if ($this->wPage && $this->wPage->getUrl() == Page::getHomeUrl()) {
             $permission->setDisabled();
@@ -204,8 +205,9 @@ class Edit extends PageController
         }
 
         // Index page links
-        if ($this->wContent->getHtml())
-            $this->indexLinks($this->wPage, new HtmlFormatter($this->wContent->getHtml(), false));
+        if ($this->wContent->getHtml()) {
+            $this->indexLinks($this->wPage, $this->wContent->getHtml());
+        }
 
         // Remove page lock
         $this->lock->unlock($this->wPage->getId());
@@ -228,19 +230,22 @@ class Edit extends PageController
         \Tk\Alert::addWarning('You do not have the permissions to delete this page.');
     }
 
-    protected function indexLinks(Page $page, HtmlFormatter $formatter): void
+    protected function indexLinks(Page $page, string $html): void
     {
-        PageMap::create()->deleteLinkByPageId($page->getId());
-        $nodeList = $formatter->getDocument()->getElementsByTagName('a');
-        /** @var \DOMElement $node */
-        foreach ($nodeList as $node) {
-            $regs = array();
-            if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
-                if (isset ($regs[1])) {
-                    PageMap::create()->insertLink($page->getId(), $regs[1]);
+        try {
+            $doc = HtmlFormatter::parseDomDocument($html);
+            PageMap::create()->deleteLinkByPageId($page->getId());
+            $nodeList = $doc->getElementsByTagName('a');
+            /** @var \DOMElement $node */
+            foreach ($nodeList as $node) {
+                $regs = [];
+                if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
+                    if (isset ($regs[1])) {
+                        PageMap::create()->insertLink($page->getId(), $regs[1]);
+                    }
                 }
             }
-        }
+        } catch (\Exception $e) { }
     }
 
     public function show(): ?Template

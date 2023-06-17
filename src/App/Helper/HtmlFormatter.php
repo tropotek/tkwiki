@@ -1,22 +1,21 @@
 <?php
 namespace App\Helper;
 
+use App\Db\Secret;
+use App\Db\SecretMap;
 use Tk\Traits\SystemTrait;
 
 class HtmlFormatter
 {
     use SystemTrait;
 
-    protected bool $isView = true;
-
     protected string $html = '';
 
     protected ?\DOMDocument $doc = null;
 
 
-    public function __construct(string $html, bool $isView = true)
+    public function __construct(string $html)
     {
-        $this->isView = $isView;
         $this->html = $this->parse($html);
     }
 
@@ -26,8 +25,8 @@ class HtmlFormatter
         // Tidy HTML if available
         $html = '<div>' . $html . '</div>';
         $html = mb_convert_encoding($html, 'UTF-8');
-        //$html = $this->cleanHtml($html);
-        $this->doc = $this->parseDomDocument($html);
+
+        $this->doc = self::parseDomDocument($html);
         $this->parseLinks($this->getDocument());
         return $html;
     }
@@ -43,7 +42,7 @@ class HtmlFormatter
         return $html;
     }
 
-    protected function parseDomDocument(string $html): \DOMDocument
+    public static function parseDomDocument(string $html): \DOMDocument
     {
         $doc = new \DOMDocument('1.0', 'utf-8');
         libxml_use_internal_errors(true);
@@ -72,11 +71,17 @@ class HtmlFormatter
         $user = $this->getFactory()->getAuthUser();
         // Add CSS classes to content images
         $nodeList = $doc->getElementsByTagName('img');
+        $wkSecretNodes = [];
+
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
-            $css = $node->getAttribute('class');
-            $css = $this->addClass($css, 'wk-image');
-            $node->setAttribute('class', $css);
+            if ($node->getAttribute('wk-secret')) {
+                $wkSecretNodes[] = $node;
+            } else {
+                $css = $node->getAttribute('class');
+                $css = $this->addClass($css, 'wk-image');
+                $node->setAttribute('class', $css);
+            }
         }
 
         // Add CSS classes to wiki page links
@@ -89,19 +94,15 @@ class HtmlFormatter
 
             if (preg_match('/^page:\/\/(.+)/i', $href, $regs)) {
                 $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
-                if ($this->isView) {
-                    $url = new \Tk\Uri('/' . $regs[1]);
-                    $node->setAttribute('href', $url->getRelativePath());
-                }
+                $url = new \Tk\Uri('/' . $regs[1]);
+                $node->setAttribute('href', $url->getRelativePath());
 
                 if ($page) {
                     $css = $this->addClass($css, 'wk-page');
                     $css = $this->removeClass($css, 'wk-page-new');
-                    if ($this->isView) {
-                        if (!$page->canView($user)) {
-                            $css = $this->addClass($css, 'wk-page-disable');
-                            $node->setAttribute('title', 'Invalid Permission');
-                        }
+                    if (!$page->canView($user)) {
+                        $css = $this->addClass($css, 'wk-page-disable');
+                        $node->setAttribute('title', 'Invalid Permission');
                     }
                 } else {
                     $css = $this->addClass($css, 'wk-page-new');
@@ -110,15 +111,35 @@ class HtmlFormatter
                     }
                     $css = $this->removeClass($css, 'wk-page');
                 }
-            } else if ($this->isView && preg_match('/^http|https|ftp|telnet|gopher|news/i', $href, $regs)) {
+            } else if (preg_match('/^http|https|ftp|telnet|gopher|news/i', $href, $regs)) {
                 $url = new \Tk\Uri($node->getAttribute('href'));
-                if (strtolower(str_replace('www.', '', $url->getHost())) != strtolower(str_replace('www.', '',$_SERVER['HTTP_HOST'])) ) {
+                if (strtolower(str_replace('www.', '', $url->getHost())) != strtolower(str_replace('www.', '', $_SERVER['HTTP_HOST'])) ) {
                     $css = $this->addClass($css, 'wk-link-external');
                     $node->setAttribute('target', '_blank');
                 }
             }
             $node->setAttribute('class', $css);
         }
+
+        // remove/replace node as the last action
+        foreach ($wkSecretNodes as  $node) {
+            /** @var Secret $secret */
+            $secret = SecretMap::create()->find($node->getAttribute('wk-secret'));
+            if (!$secret) continue;
+
+            if ($secret->canView($this->getFactory()->getAuthUser())) {
+                $renderer = new ViewSecret($secret);
+                $template = $renderer->show();
+                $newNode = $node->ownerDocument->importNode($template->getDocument()->documentElement, true);
+                $node->parentNode->replaceChild($newNode, $node);
+            } else {
+                $node->parentNode->removeChild($node);
+//                $newNode = $doc->createElement('p', '&nbsp;');
+//                $node->parentNode->replaceChild($newNode, $node);
+            }
+
+        }
+
         return $doc;
     }
 

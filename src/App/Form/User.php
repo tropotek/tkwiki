@@ -64,13 +64,15 @@ class User
             $this->getUser()->isStaff() &&
             $this->getFactory()->getAuthUser()->hasPermission(\App\Db\User::PERM_SYSADMIN)
         ) {
-            $field = $this->getForm()->appendField(new Checkbox('perm', array_flip(\App\Db\User::PERMISSION_LIST)))
+            $list = \App\Db\User::PERMISSION_LIST;
+            $field = $this->getForm()->appendField(new Checkbox('perm', array_flip($list)))
                 ->setLabel('Permissions')
                 ->setGroup($group);
 
-            if ($this->getUser()->getUsername() == 'admin') {
+            if ($this->getUser()->getUsername() == 'admin' || !$this->getFactory()->getAuthUser()->hasPermission(\App\Db\User::PERM_ADMIN)) {
                 $field->setDisabled();
             }
+
             $this->getForm()->appendField(new Checkbox('active', ['Enable User Login' => 'active']))
                 ->setGroup($group);
         }

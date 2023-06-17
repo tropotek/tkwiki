@@ -53,17 +53,17 @@ class Profile
         }
 
         $tab = 'Password';
-
-        $this->getForm()->appendField(new Form\Field\Password('currentPass'))->setGroup($tab)
-            ->setLabel('Current Password')
-            ->setAttr('autocomplete', 'off');
-        $this->getForm()->appendField(new Form\Field\Password('newPass'))->setGroup($tab)
-            ->setLabel('New Password')
-            ->setAttr('autocomplete', 'off');
-        $this->getForm()->appendField(new Form\Field\Password('confPass'))->setGroup($tab)
-            ->setLabel('Confirm Password')
-            ->setAttr('autocomplete', 'off');
-
+        if ($this->getConfig()->get('wiki.profile.password', false)) {
+            $this->getForm()->appendField(new Form\Field\Password('currentPass'))->setGroup($tab)
+                ->setLabel('Current Password')
+                ->setAttr('autocomplete', 'off');
+            $this->getForm()->appendField(new Form\Field\Password('newPass'))->setGroup($tab)
+                ->setLabel('New Password')
+                ->setAttr('autocomplete', 'off');
+            $this->getForm()->appendField(new Form\Field\Password('confPass'))->setGroup($tab)
+                ->setLabel('Confirm Password')
+                ->setAttr('autocomplete', 'off');
+        }
 
         //$this->getForm()->appendField(new Checkbox('active', ['Enable User Login' => 'active']))->setDisabled();
         //$this->getForm()->appendField(new Form\Field\Textarea('notes'))->setGroup($group);

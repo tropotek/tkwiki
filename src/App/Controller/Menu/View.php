@@ -23,7 +23,6 @@ class View extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
         $this->setTemplate($template);
     }
 
-
     public function show(): ?Template
     {
         $template = $this->getTemplate();
@@ -37,6 +36,7 @@ class View extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
                 $children = MenuItemMap::create()->findByParentId($item->getId(), Tool::create('order_id'));
                 $dropdown = $template->getRepeat('dropdown');
                 $this->showItem($dropdown, $item);
+                $count = 0;
                 foreach ($children as $child) {
                     if ($child->isType(MenuItem::TYPE_DIVIDER)) {
                         $row = $dropdown->getRepeat('divider');
@@ -44,21 +44,29 @@ class View extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
                         continue;
                     }
                     $row = $dropdown->getRepeat('dropdown-item');
-                    $this->showItem($row, $child);
-                    $row->appendRepeat('dropdown-menu');
+                    if ($this->showItem($row, $child)) {
+                        $row->appendRepeat('dropdown-menu');
+                        $count++;
+                    }
                 }
-                $dropdown->prependRepeat('navbar');
+                if ($count) {
+                    $dropdown->prependRepeat('navbar');
+                }
             } elseif ($item->isType(MenuItem::TYPE_ITEM) || $item->isType(MenuItem::TYPE_DROPDOWN)) {
                 $row = $template->getRepeat('nav-item');
-                $this->showItem($row, $item);
-                $row->prependRepeat('navbar');
+                if ($this->showItem($row, $item)) {
+                    $row->prependRepeat('navbar');
+                }
             }
         }
 
         return $template;
     }
 
-    private function showItem(Template $t, MenuItem $item): void
+    /**
+     * @return bool Returns true if the user can view the page
+     */
+    private function showItem(Template $t, MenuItem $item): bool
     {
         $user = $this->getFactory()->getAuthUser();
         $page = $item->getPage();
@@ -68,9 +76,10 @@ class View extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
             if (!$page->canView($user)) {
                 $t->setAttr('name', 'href', Uri::create(Page::getHomeUrl()));
                 $t->addCss('name', 'disabled');
+                return false;
             }
         }
-
+        return true;
     }
 
 }

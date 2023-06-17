@@ -2,6 +2,7 @@
 namespace App;
 
 use App\Controller\Menu\View;
+use App\Helper\UserNav;
 use Bs\Ui\Dialog;
 use Dom\Template;
 use Tk\Uri;
@@ -36,6 +37,9 @@ class Page extends \Bs\Page
         if ($this->getFactory()->getAuthUser()) {
             $template->setText('username', $this->getFactory()->getAuthUser()->getUsername());
         }
+
+        $userNav = new UserNav();
+        $template->replaceTemplate('user-nav', $userNav->show());
 
         return $template;
     }

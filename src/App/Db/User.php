@@ -197,9 +197,9 @@ class User extends Model implements UserInterface, FileInterface
     }
 
     /**
-     * return a list of individual permission values
-     * Use for select lists or anywhere you need to list
-     * the permissions and lookup their names
+     * Return a list of individual permission values
+     * Use for select lists, or anywhere you need to list
+     * permissions and lookup their names
      */
     public function getPermissionList(): array
     {

@@ -6,6 +6,7 @@ use Dom\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tk\Db\Mapper\Result;
 use Tk\Traits\SystemTrait;
 use Tk\Ui\Link;
 use Tk\Uri;
@@ -37,7 +38,7 @@ class Secret
         $response = new JsonResponse(['msg' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         /** @var \App\Db\Secret $secret */
         $secret = SecretMap::create()->find($request->request->getInt('o', 0));
-        if ($secret) {
+        if ($secret && $secret->canView($this->getFactory()->getAuthUser())) {
             $response = new JsonResponse(['otp' => $secret->genOtpCode()]);
         }
         $response->send();
@@ -68,12 +69,9 @@ class Secret
 
             if ($obj->getUrl()) {
                 $btn->setUrl($obj->getUrl());
-            } else {
-                $btn->addCss('disabled');
+                $template->appendTemplate('td', $btn->show());
+                $template->appendHtml('td', '&nbsp;');
             }
-
-            $template->appendTemplate('td', $btn->show());
-            $template->appendHtml('td', '&nbsp;');
 
             return '';
         });
@@ -172,40 +170,16 @@ class Secret
         }
         $js = <<<JS
 jQuery(function($) {
-  function copyToClipboard(el) {
-    if(navigator.clipboard) {
-        let text = $(el).text();
-        console.log(text);
-        navigator.clipboard.writeText(text)
-    } else {
-        var range = document.createRange();
-        range.selectNode(el);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        document.execCommand("copy");
-        window.getSelection().removeAllRanges();
 
-        // Select the text
-        range = document.createRange();
-        range.selectNodeContents(el);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-    }
-  }
-
-  $('.tk-table table .otp').each(function () {
-    var btn = $(this);
-    btn.on('click', function (e) {
-      //var params = {'o': btn.data('id'), 'nolog': 'nolog'};
-      var params = {'o': btn.data('id')};
-      $.post(document.location, params, function (data) {
-        btn.next().text(data.otp);
-        var txt = btn.next().get(0);
-        copyToClipboard(txt);
-      });
-      return false;
+  $('.tk-table table .otp').on('click', function (e) {
+    let btn = $(this);
+    //var params = {'o': btn.data('id'), 'nolog': 'nolog'};
+    var params = {'o': btn.data('id')};
+    $.post(document.location, params, function (data) {
+      btn.next().text(data.otp);
+      copyToClipboard(btn.next().get(0));
     });
+    return false;
   });
 
 });

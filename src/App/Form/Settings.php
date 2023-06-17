@@ -48,8 +48,7 @@ class Settings
         $list = PageMap::create()->findFiltered([
             'permission' => \App\Db\Page::PERM_PUBLIC,
             'published'  => true], Tool::create('created', 25));
-        $list = Field\Option\ArrayObjectIterator::create($list, 'title', 'url');
-        $this->getForm()->appendField(new Field\Select('wiki.page.default', $list))
+        $this->getForm()->appendField(new Field\Select('wiki.page.default', $list, 'title', 'url'))
             ->setLabel('Home Page')
             ->setNotes('Select the default wiki page home content.<br/>Note you cannot delete a home page, you must reassign it first.')
             ->setRequired(true)

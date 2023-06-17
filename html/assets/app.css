@@ -17,6 +17,36 @@ body {
 
 }
 
+/* MEGA MENU */
+/* Boostrap 5 hack for nav dropdown disappearing */
+@media (max-width: 991px) {
+  .navbar.fixed-top .navbar-collapse, .navbar.sticky-top .navbar-collapse {
+    overflow-y: inherit !important;
+  }
+}
+
+/* @see: https://bootstrap-menu.com/detail-megamenu.html */
+.navbar .megamenu {
+  padding: 1rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+/* mega-menu desktop view */
+@media all and (min-width: 992px) {
+  .navbar .has-megamenu{position:static!important;}
+  .navbar .megamenu{left:0; right:0; width:100%; margin-top:0;  }
+}
+
+/* mega-menu mobile view */
+@media(max-width: 991px){
+  .navbar.fixed-top .navbar-collapse, .navbar.sticky-top .navbar-collapse{
+    overflow-y: auto;
+    max-height: 90vh;
+    margin-top:10px;
+  }
+}
+/* ============ MEGA MENU .end ============ */
+
 
 /* ==================  WIKI Styles  ================== */
 a.wk-page {
@@ -52,42 +82,7 @@ a.wk-link-external {
   background-color: #FFF;
   opacity: 0.80;
 }
-/* ==================  WIKI End  ================== */
-
-
-
-/* Boostrap 5 hack for nav dropdown disappearing */
-@media (max-width: 991px) {
-  .navbar.fixed-top .navbar-collapse, .navbar.sticky-top .navbar-collapse {
-    overflow-y: inherit !important;
-  }
-}
-
-/* @see: https://bootstrap-menu.com/detail-megamenu.html */
-.navbar .megamenu {
-  padding: 1rem;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-/* ============ desktop view ============ */
-@media all and (min-width: 992px) {
-
-  .navbar .has-megamenu{position:static!important;}
-  .navbar .megamenu{left:0; right:0; width:100%; margin-top:0;  }
-
-}
-/* ============ desktop view .end// ============ */
-
-/* ============ mobile view ============ */
-@media(max-width: 991px){
-  .navbar.fixed-top .navbar-collapse, .navbar.sticky-top .navbar-collapse{
-    overflow-y: auto;
-    max-height: 90vh;
-    margin-top:10px;
-  }
-}
-/* ============ mobile view .end// ============ */
-
+/* ==================  WIKI .end  ================== */
 
 
 /* TINY-MCE */
@@ -101,10 +96,51 @@ a.wk-link-external {
   background-color: #E9ECEF;
 }
 
+/* style the wk-secret boxes inside of the WYSIWYG editor */
+.mce-content-body .wk-secret {
+  display: inline-block;
+  /*font-size: 0.8em;*/
+  height: 5em;
+  width: auto;
+  /*height: 3em;*/
+  /*padding: 0.4em;*/
+  /*background-color: #EEF;*/
+}
+.mce-content-body .wk-secret::after {
+  content: "Secret: " attr(title);
+  font-style: italic;
+  color: #666;
+  background-color: #009900;
+}
+
+
+.wk-content .wk-secret {
+  display: inline-block;
+  font-size: 0.8em;
+  padding: 0.5em;
+  /*border: 1px solid #EFEFEF;*/
+}
+.wk-content .wk-secret .strong {
+  font-weight: bold;
+}
+.wk-content .wk-secret .userpass .fa {
+  opacity: 0.7;
+}
+.wk-content .wk-secret .userpass .fa:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.wk-content img.wk-secret {
+  height: 5em;
+  width: auto;
+}
+
+
+
 
 
 /* \Tk\Form */
-
 form textarea {
   height: 150px;
 }
@@ -115,9 +151,8 @@ form .form-check-label {
   font-weight: normal;
 }
 
+
 /* \Tk\Table */
-
-
 .tk-form-inline {
   margin-bottom: .5rem;
 }

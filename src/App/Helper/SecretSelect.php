@@ -54,7 +54,6 @@ class SecretSelect extends \Dom\Renderer\Renderer implements DisplayInterface
     {
         $template = $this->getTemplate();
 
-
         $template->appendTemplate('dialogs', $this->createDialog->show());
 
         // Add a select wiki page button to the tinyMCE editor.
@@ -62,31 +61,17 @@ class SecretSelect extends \Dom\Renderer\Renderer implements DisplayInterface
 jQuery(function($) {
     function insertSecretHtml(id, name) {
         const editor = tinymce.activeEditor;
-
-        // TODO: Aim to make this element an inline-block element then
-        //       the author can position it within block elements like a P, DIV element themselves
-
         let linkAttrs = {
           class: 'wk-secret',
-          'wk-module': 'wk-secret',
-          'data-secret-id': id,
-          'data-name': name
+          'wk-secret': id,
+          'title': name,
+          src: config.baseUrl + '/html/assets/img/secretbg.png'
         };
 
-        // TODO:
-        // If selected text, select end for insertion
-        // if (editor.selection.getContent()) {
-        //   editor.execCommand('CreateLink', false, linkAttrs);
-        // }
-        //editor.getSel().collapseToEnd();
-
-        // TODO: Check if we are inside an already set wk-module element
-        //       if so append after not inside this element.
-        //       These elements cannot be nested as they will be removed on rendering
-
-        // TODO: Test to see if this appends the element at the end of the selection
         //editor.insertContent(editor.dom.createHTML('span', linkAttrs, editor.dom.encode(name)));
-        editor.insertContent(editor.dom.createHTML('span', linkAttrs, editor.dom.encode(name)));
+        //editor.insertContent(editor.dom.createHTML('div', linkAttrs, editor.dom.encode(name)));
+        //editor.insertContent(editor.dom.createHTML('span', linkAttrs, '&nbsp;'));
+        editor.insertContent(editor.dom.createHTML('img', linkAttrs));
 
     }
 
@@ -112,8 +97,9 @@ jQuery(function($) {
 
     // On create secret
     $('body').on(EVENT_INIT_FORM, function() {
-        console.log(arguments);
-        console.log($('#secret-secret_id', 'form#secret').val());
+        // exit if there are errors in the form
+        if ($('#secret-create-dialog form .is-invalid').length) return;
+
         let id = $('#secret-secret_id', 'form#secret').val();
         let name = $('#secret-name', 'form#secret').val();
         insertSecretHtml(id, name);

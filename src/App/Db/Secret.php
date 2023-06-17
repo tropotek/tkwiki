@@ -31,29 +31,29 @@ class Secret extends Model
         self::PERM_USER      => 'VIEW: registered users, EDIT: staff, DELETE: staff',
     ];
 
-    public int $id = 0;
+    protected int $id = 0;
 
-    public int $userId = 0;
+    protected int $userId = 0;
 
-    public int $permission = self::PERM_PRIVATE;
+    protected int $permission = self::PERM_PRIVATE;
 
-    public string $name = '';
+    protected string $name = '';
 
-    public string $url = '';
+    protected string $url = '';
 
-    public string $username = '';
+    protected string $username = '';
 
-    public string $password = '';
+    protected string $password = '';
 
-    public string $otp = '';
+    protected string $otp = '';
 
-    public string $keys = '';
+    protected string $keys = '';
 
-    public string $notes = '';
+    protected string $notes = '';
 
-    public \DateTime $modified;
+    protected \DateTime $modified;
 
-    public \DateTime $created;
+    protected \DateTime $created;
 
 
 
@@ -216,7 +216,6 @@ class Secret extends Model
     public function canView(?User $user): bool
     {
         if (!$user) return false;
-        if ($user->isUser()) return false;
         if ($user->isAdmin()) return true;
         if ($this->getUserId() == $user->getId()) return true;
 

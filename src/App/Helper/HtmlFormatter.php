@@ -71,10 +71,8 @@ class HtmlFormatter
     protected function parseLinks(\DOMDocument $doc): \DOMDocument
     {
         $user = $this->getFactory()->getAuthUser();
-
         $wkSecretNodes = [];
         $wkSecretTableNodes = [];
-
 
         // Add CSS classes to content images
         $nodeList = $doc->getElementsByTagName('div');
@@ -84,7 +82,6 @@ class HtmlFormatter
                 $wkSecretTableNodes[] = $node;
             }
         }
-
 
         // Add CSS classes to content images
         $nodeList = $doc->getElementsByTagName('img');
@@ -135,7 +132,6 @@ class HtmlFormatter
             }
             $node->setAttribute('class', $css);
         }
-
 
         // remove/replace node as the last action
         foreach ($wkSecretNodes as  $node) {

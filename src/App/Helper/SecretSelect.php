@@ -3,12 +3,14 @@ namespace App\Helper;
 
 use App\Db\Page;
 use App\Db\SecretMap;
+use App\Form\Secret;
 use App\Ui\FormDialog;
 use Dom\Renderer\DisplayInterface;
+use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
 
-class SecretSelect extends \Dom\Renderer\Renderer implements DisplayInterface
+class SecretSelect extends Renderer implements DisplayInterface
 {
     use SystemTrait;
 
@@ -43,7 +45,7 @@ class SecretSelect extends \Dom\Renderer\Renderer implements DisplayInterface
 
 
         // Create form dialog
-        $form = new \App\Form\Secret(true);
+        $form = new Secret(true);
         $this->createDialog = new FormDialog($form, 'Create Secret', 'secret-create-dialog');
         $this->createDialog->init();
         $this->createDialog->execute($this->getRequest());
@@ -76,7 +78,6 @@ jQuery(function($) {
         };
         editor.insertContent(editor.dom.createHTML('img', linkAttrs));
     }
-
 
     selectDialog.on('show.bs.modal', function() {
         $('input', this).val('');
@@ -160,31 +161,30 @@ JS;
     {
         $html = <<<HTML
 <div var="dialogs">
-    <div class="modal modal-lg fade" id="secret-select-dialog" tabindex="-1" aria-labelledby="secret-select-label">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="secret-select-label">Select A Secret</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
+  <div class="modal modal-lg fade" id="secret-select-dialog" tabindex="-1" aria-labelledby="secret-select-label">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="secret-select-label">Select A Secret</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-          <div class="modal-body">
-            <div id="secret-select-table" var="table"></div>
-          </div>
+        <div class="modal-body">
+          <div id="secret-select-table" var="table"></div>
+        </div>
 
-          <div class="modal-footer" style="justify-content: space-between;">
-            <div>
-              <button class="btn btn-sm btn-outline-primary btn-create-secret" type="button">Create</button>
-              <button class="btn btn-sm btn-outline-success btn-insert-list" type="button" var="user-id">Insert My List</button>
-            </div>
-            <div class="actions">
-              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+        <div class="modal-footer" style="justify-content: space-between;">
+          <div>
+            <button class="btn btn-sm btn-outline-primary btn-create-secret" type="button">Create</button>
+            <button class="btn btn-sm btn-outline-success btn-insert-list" type="button" var="user-id">Insert My List</button>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
-
+  </div>
 </div>
 HTML;
         return $this->loadTemplate($html);

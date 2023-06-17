@@ -15,7 +15,7 @@ use Tk\Traits\SystemTrait;
 use Tk\Uri;
 
 /**
- * Render the secret output
+ * Render the secret output table list
  */
 class ViewSecretList extends Renderer implements DisplayInterface
 {
@@ -36,10 +36,6 @@ class ViewSecretList extends Renderer implements DisplayInterface
         $filter = [
             'author' => $this->user->getId()
         ];
-//        if ($this->user?->isStaff()) {
-//            $filter['permission'] = [\App\Db\Secret::PERM_USER, \App\Db\Secret::PERM_STAFF];
-//            $filter['author'] = $this->user->getId();
-//        }
         $list = SecretMap::create()->findFiltered($filter, Tool::create('created DESC'));
 
         foreach ($list as $secret) {
@@ -49,7 +45,6 @@ class ViewSecretList extends Renderer implements DisplayInterface
             $row->appendTemplate('col', $ren->show());
             $row->appendRepeat();
         }
-
 
         return $template;
     }

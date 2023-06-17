@@ -22,11 +22,11 @@ class Manager extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Secret Manager');
+        $this->setAccess(User::PERM_MANAGE_STAFF);
     }
 
     public function doDefault(Request $request)
     {
-        $this->setAccess(User::PERM_MANAGE_STAFF);
 
         // Get the form template
         $this->table = new \App\Table\Secret();

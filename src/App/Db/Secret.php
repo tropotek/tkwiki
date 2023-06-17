@@ -11,11 +11,31 @@ class Secret extends Model
     use UserTrait;
     Use TimestampTrait;
 
+    /**
+     * Page permission values
+     * NOTE: Admin users have all permissions at all times
+     */
+    const PERM_PRIVATE            = 9;
+    const PERM_STAFF              = 2;
+    const PERM_USER               = 1;
+
+    const PERM_LIST = [
+        self::PERM_PRIVATE   => 'Private',
+        self::PERM_STAFF     => 'Staff',
+        self::PERM_USER      => 'User',
+    ];
+
+    const PERM_HELP = [
+        self::PERM_PRIVATE   => 'VIEW: author, EDIT: author, DELETE: author',
+        self::PERM_STAFF     => 'VIEW: staff users, EDIT: staff editors, DELETE: staff editors',
+        self::PERM_USER      => 'VIEW: registered users, EDIT: staff, DELETE: staff',
+    ];
+
     public int $id = 0;
 
     public int $userId = 0;
 
-    public int $permission = Page::PERM_PRIVATE;
+    public int $permission = self::PERM_PRIVATE;
 
     public string $name = '';
 
@@ -75,6 +95,14 @@ class Secret extends Model
     {
         $this->permission = $permission;
         return $this;
+    }
+
+    /**
+     * Get the page permission level as a string
+     */
+    public function getPermissionLabel(): string
+    {
+        return self::PERM_LIST[$this->getPermission()] ?? '';
     }
 
     public function getName(): string
@@ -159,19 +187,89 @@ class Secret extends Model
     {
         $errors = [];
 
-        if (!$this->userId) {
+        if (!$this->getUserId()) {
             $errors['userId'] = 'Invalid value: userId';
         }
 
-        if (!$this->permission) {
+        if (!$this->getPermission()) {
             $errors['permission'] = 'Invalid value: permission';
         }
 
-        if (!$this->name) {
+        if (!$this->getName()) {
             $errors['name'] = 'Invalid value: name';
+        }
+
+        if ($this->getUrl() && !filter_var($this->getUrl(), FILTER_VALIDATE_URL)) {
+            $errors['url'] = 'Invalid value: url';
         }
 
         return $errors;
     }
 
+    public static function canCreate(?User $user): bool
+    {
+        if (!$user) return false;
+        if ($user->isAdmin() || $user->isStaff()) return true;
+        return false;
+    }
+
+    public function canView(?User $user): bool
+    {
+        if (!$user) return false;
+        if ($user->isUser()) return false;
+        if ($user->isAdmin()) return true;
+        if ($this->getUserId() == $user->getId()) return true;
+
+        // Staff and users can view USER secrets
+        if ($this->getPermission() == self::PERM_USER) {
+            return ($user->isUser() || $user->isStaff());
+        }
+
+        // Staff can view STAFF secrets
+        if ($this->getPermission() == self::PERM_STAFF) {
+            return $user->isStaff();
+        }
+
+        return false;
+    }
+
+    public function canEdit(?User $user): bool
+    {
+        if (!$user) return false;
+        if ($user->isUser()) return false;
+        if ($user->isAdmin()) return true;
+        if ($this->getUserId() == $user->getId()) return true;
+
+        // Allow any staff to edit public or user secrets
+        if ($this->getPermission() == self::PERM_USER) {
+            return $user->isStaff();
+        }
+
+        // Only Editors can edit staff secrets
+        if ($this->getPermission() == self::PERM_STAFF) {
+            return $user->hasPermission(User::PERM_EDITOR);
+        }
+
+        return false;
+    }
+
+    public function canDelete(?User $user): bool
+    {
+        if (!$user) return false;
+        if ($user->isUser()) return false;
+        if ($user->isAdmin()) return true;
+        if ($this->getUserId() == $user->getId()) return true;
+
+        // Allow any staff to delete public or user secrets
+        if ($this->getPermission() == self::PERM_USER) {
+            return $user->isStaff();
+        }
+
+        // Only Editors can delete staff secrets
+        if ($this->getPermission() == self::PERM_STAFF) {
+            return $user->hasPermission(User::PERM_EDITOR);
+        }
+
+        return false;
+    }
 }

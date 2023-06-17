@@ -24,6 +24,8 @@ let app = function () {
    * Init all wiki base level functions
    */
   let initWikiScripts = function () {
+
+    // Disable links
     $('a.wk-page-disable').on('click', function(e) {
       e.preventDefault();
       return false;
@@ -50,6 +52,7 @@ let app = function () {
 
   };
 
+
   /**
    * Creates bootstrap 5 tabs around the \Tk\Form renderer groups (.tk-form-group) output
    */
@@ -60,11 +63,12 @@ let app = function () {
     }
 
     function init() {
-      $(this).tktabs({});
+      $('form.tk-form').tktabs({});
     }
-
-    $('form').on(EVENT_INIT, document, init).each(init);
+    init();
+    $('body').on(EVENT_INIT_FORM, init);
   };
+
 
   /**
    * Setup the jquery datepicker UI
@@ -83,8 +87,10 @@ let app = function () {
       });
     }
 
-    $('form').on(EVENT_INIT, document, init).each(init);
+    init();
+    $('body').on(EVENT_INIT_FORM, init);
   };
+
 
   /**
    * Tiny MCE setup
@@ -114,18 +120,26 @@ let app = function () {
       //entity_encoding : 'raw',
       height: 700,
       plugins: [
-        'advlist', 'autolink', 'lists', 'link', 'anchor', 'image', 'media', 'charmap', 'preview',
+        'advlist', 'save', 'autolink', 'lists', 'link', 'anchor', 'image', 'media', 'charmap', 'preview',
         'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
         'insertdatetime', 'media', 'table', 'help', 'wordcount', 'codesample'
       ],
       toolbar1:
-        'wikiPage | bold italic strikethrough | blocks | alignleft aligncenter ' +
+        'save wikiPage wikiSecret | bold italic strikethrough | blocks | alignleft aligncenter ' +
         'alignright alignjustify | bullist numlist outdent indent | codesample link image media | removeformat code fullscreen',
       content_css: [
         '//cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
         config.baseUrl + '/html/assets/app.css'
       ],
       content_style: 'body {padding: 15px;}',
+      //image_prepend_url: config.baseUrl,
+      //a11y_advanced_options: true,
+      statusbar: false,
+      extended_valid_elements: 'i[*],em[*],b[*],a[*],div[*]',
+
+      save_onsavecallback: () => {
+        $('#page-save', tinymce.activeEditor.formElement).trigger('click');
+      },
       urlconverter_callback : function (url, node, on_save) {
         let parts = url.split(config.baseUrl);
         if (parts.length > 1) {
@@ -133,11 +147,6 @@ let app = function () {
         }
         return url;
       },
-      //image_prepend_url: config.baseUrl,
-      //a11y_advanced_options: true,
-      statusbar: false,
-      extended_valid_elements: 'i[*],em[*],b[*],a[*]',
-
       setup: (editor) => {
 
         // Button to create/insert a page into the wiki
@@ -150,13 +159,22 @@ let app = function () {
           }
         });
 
+        // Button to create/insert a secret record
+        // See \App\Helper\SecretSelect object for more info
+        editor.ui.registry.addButton('wikiSecret', {
+          icon: 'lock',
+          tooltip: 'Add/Insert Secret Content',
+          onAction: function(_) {
+            $('#secret-select-dialog').modal('show');
+          }
+        });
 
       }
 
     };
 
     function init () {
-      let form = $(this);
+      let form = 'form.tk-form';
 
       // Tiny MCE with only the default editing no upload
       //   functionality with elfinder
@@ -171,34 +189,13 @@ let app = function () {
       });
     };
 
-    $('form').on(EVENT_INIT, document, init).each(init);
+    init();
+    $('body').on(EVENT_INIT_FORM, init);
 
-    // TODO: Tinymce Bug: The page scrolls up/down when the cursur reaches the
+    // TODO: Tinymce Bug: The page scrolls up/down when the cursor reaches the
     //       bottom of the editor window, we need to find out a way to stop this
     //       can we intercept this event and cancel it?????
 
-    // $(window).off('scroll');
-    // $(window).on('scroll', function (e) {
-    //   //console.log(arguments);
-    //   e.stopPropagation();
-    //   return false;
-    // });
-    // $('body').off('scroll');
-    // $('body').on('scroll', function (e) {
-    //   //console.log(arguments);
-    //   e.stopPropagation();
-    //   return false;
-    // });
-
-    // mceDefaults = {
-    //   plugins: [
-    //     'advlist'
-    //   ],
-    //   toolbar1:
-    //     'bold italic strikethrough | blocks | alignleft aligncenter ' ,
-    //
-    // };
-    // $('textarea.mce').tinymce(mceDefaults);
   };  // end initTinymce()
 
 

@@ -47,8 +47,7 @@ class PageSelect extends \Dom\Renderer\Renderer implements DisplayInterface
         // Add a select wiki page button to the tinyMCE editor.
         $js = <<<JS
 jQuery(function($) {
-    function insertWikiUrl(title, url, isNew)
-    {
+    function insertWikiUrl(title, url, isNew) {
         const editor = tinymce.activeEditor;
         let linkAttrs = {
           href: 'page://' + url,
@@ -119,7 +118,7 @@ jQuery(function($) {
             return false;
         });
     }
-    $('#page-select-table', '#page-select-dialog').on(EVENT_INIT, document, init).each(init);
+    $('#page-select-dialog #page-select-table').on(EVENT_INIT, document, init).each(init);
 });
 JS;
         $template->appendJs($js);
@@ -132,7 +131,7 @@ JS;
     public function __makeTemplate(): ?Template
     {
         $html = <<<HTML
-<div class="modal modal-xl fade" id="page-select-dialog" tabindex="-1" aria-labelledby="page-select-label">
+<div class="modal modal-lg fade" id="page-select-dialog" tabindex="-1" aria-labelledby="page-select-label">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

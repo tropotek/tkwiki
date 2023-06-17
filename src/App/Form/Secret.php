@@ -22,9 +22,11 @@ class Secret
 
     protected ?\App\Db\Secret $secret = null;
 
+    protected bool $htmx = false;
 
-    public function __construct()
+    public function __construct(bool $htmx = false)
     {
+        $this->htmx = $htmx;
         $this->setForm(Form::create('secret'));
     }
 
@@ -40,28 +42,63 @@ class Secret
             }
         }
 
+        // Enable HTMX
+        if ($this->isHtmx()) {
+            $this->getForm()->setAttr('hx-post', Uri::create());
+            $this->getForm()->setAttr('hx-target', 'this');
+            $this->getForm()->setAttr('hx-swap', 'outerHTML');
+            $this->getForm()->setAttr('hx-select', '#'.$this->form->getId());
+            // trigger JS init event on settle
+            header('HX-Trigger-After-Settle: tk-init-form');
+        }
+
+        $tab = 'Details';
+        $this->getForm()->appendField(new Field\Hidden('secret_id'));
+
         $list = UserMap::create()->findFiltered(['type' => \App\Db\User::TYPE_STAFF], Tool::create('name'));
-        $this->getForm()->appendField(new Field\Select('userId', $list))->prependOption('-- Select --', '');
+        $this->getForm()->appendField(new Field\Select('userId', $list))
+            ->setGroup($tab)
+            ->prependOption('-- Select --', '');
 
         /** @var Field\Select $permission */
-        $this->getForm()->appendField(new Field\Select('permission', array_flip(Page::PERM_LIST)))
+        $this->getForm()->appendField(new Field\Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
+            ->setGroup($tab)
             ->setRequired()
             ->prependOption('-- Select --', '');
 
-        $this->getForm()->appendField(new Field\Input('name'));
-        $this->getForm()->appendField(new Field\Input('url'));
-        $this->getForm()->appendField(new Field\Input('username'));
-        $this->getForm()->appendField(new Field\Password('password'));
-        $this->getForm()->appendField(new Field\Input('otp'));
-        $this->getForm()->appendField(new Field\Textarea('keys'));
-        $this->getForm()->appendField(new Field\Textarea('notes'));
+        $this->getForm()->appendField(new Field\Input('name'))
+            ->setGroup($tab);
+
+        $this->getForm()->appendField(new Field\Input('url'))
+            ->setGroup($tab);
+
+        $this->getForm()->appendField(new Field\Input('username'))
+            ->setGroup($tab);
+
+        $this->getForm()->appendField(new Field\Password('password'))
+            ->setGroup($tab);
+
+        $this->getForm()->appendField(new Field\Input('otp'))
+            ->setGroup($tab)
+            ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
+
+        $tab = 'Extra';
+        $this->getForm()->appendField(new Field\Textarea('keys'))
+            ->setGroup($tab);
+
+        $this->getForm()->appendField(new Field\Textarea('notes'))
+            ->setGroup($tab);
 
 
-        $this->getForm()->appendField(new Action\SubmitExit('save', [$this, 'onSubmit']));
+        if ($this->isHtmx()) {
+            $this->getForm()->appendField(new Action\Submit('insert', [$this, 'onSubmit']));
+        } else {
+            $this->getForm()->appendField(new Action\SubmitExit('save', [$this, 'onSubmit']));
+        }
         $this->getForm()->appendField(new Action\Link('cancel', Uri::create('/secretManager')));
 
         $load = $this->secret->getMapper()->getFormMap()->getArray($this->secret);
-        $load['id'] = $this->secret->getId();
+        $load['secret_id'] = $this->secret->getId();
         $this->getForm()->setFieldValues($load); // Use form data mapper if loading objects
 
         $this->getForm()->execute($request->request->all());
@@ -85,6 +122,12 @@ class Secret
         $action->setRedirect(Uri::create()->set('id', $this->secret->getId()));
         if ($form->getTriggeredAction()->isExit()) {
             $action->setRedirect(Uri::create('/secretManager'));
+        }
+
+        if ($this->isHtmx()) {
+            $form->setFieldValue('secret_id', $this->getSecret()->getId());
+            $action->setRedirect(null);
+            //$this->getForm()->setAttr('hx-post', Uri::create()->set('secret_id', $this->secret->getId()));
         }
     }
 
@@ -110,9 +153,9 @@ class Secret
         return $this->secret;
     }
 
-    public function setSecret($secret)
+    public function isHtmx(): bool
     {
-        return $this->secret = $secret;
+        return $this->htmx;
     }
 
 }

@@ -24,23 +24,23 @@ class Page extends Model
      * Page permission values
      * NOTE: Admin users have all permissions at all times
      */
-	const PERM_PUBLIC             = 0;
-    const PERM_USER               = 1;
-	const PERM_STAFF              = 2;
     const PERM_PRIVATE            = 9;
+    const PERM_STAFF              = 2;
+    const PERM_USER               = 1;
+	const PERM_PUBLIC             = 0;
 
     const PERM_LIST = [
-        self::PERM_PUBLIC    => 'Public',
-        self::PERM_USER      => 'User',
-        self::PERM_STAFF     => 'Staff',
         self::PERM_PRIVATE   => 'Private',
+        self::PERM_STAFF     => 'Staff',
+        self::PERM_USER      => 'User',
+        self::PERM_PUBLIC    => 'Public',
     ];
 
     const PERM_HELP = [
-        self::PERM_PUBLIC    => 'VIEW: anyone, EDIT: staff, DELETE: staff',
-        self::PERM_USER      => 'VIEW: registered users, EDIT: staff, DELETE: staff',
-        self::PERM_STAFF     => 'VIEW: staff users, EDIT: staff editors, DELETE: staff editors',
         self::PERM_PRIVATE   => 'VIEW: author, EDIT: author, DELETE: author',
+        self::PERM_STAFF     => 'VIEW: staff users, EDIT: staff editors, DELETE: staff editors',
+        self::PERM_USER      => 'VIEW: registered users, EDIT: staff, DELETE: staff',
+        self::PERM_PUBLIC    => 'VIEW: anyone, EDIT: staff, DELETE: staff',
     ];
 
 
@@ -206,6 +206,14 @@ class Page extends Model
         return $this->permission;
     }
 
+    /**
+     * Get the page permission level as a string
+     */
+    public function getPermissionLabel(): string
+    {
+        return self::PERM_LIST[$this->getPermission()] ?? '';
+    }
+
     public function isPublished(): bool
     {
         return $this->published;
@@ -215,19 +223,6 @@ class Page extends Model
     {
         $this->published = $published;
         return $this;
-    }
-
-    /**
-     * Get the page permission level as a string
-     */
-    public function getPermissionLabel(): string
-    {
-        return match ($this->permission) {
-            self::PERM_PRIVATE => 'private',
-            self::PERM_STAFF => 'staff',
-            self::PERM_USER => 'users',
-            default => 'public',
-        };
     }
 
 

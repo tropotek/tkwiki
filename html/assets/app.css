@@ -40,6 +40,13 @@ a.wk-link-external {
 .wk-content {
   position: relative;
 }
+
+.wk-content .wk-toolbar {
+  top: 1px;
+  /*margin-top: 60px;*/
+  background-color: #FFF;
+  opacity: 0.80;
+}
 .wk-content .wk-toolbar {
   top: 60px;
   background-color: #FFF;

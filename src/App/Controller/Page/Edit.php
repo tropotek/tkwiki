@@ -8,6 +8,7 @@ use App\Db\Page;
 use App\Db\PageMap;
 use App\Helper\HtmlFormatter;
 use App\Helper\PageSelect;
+use App\Helper\SecretSelect;
 use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -171,7 +172,9 @@ class Edit extends PageController
         if ($this->getFactory()->getCrumbs()->getBackUrl()) {
             $url = $this->getFactory()->getCrumbs()->getBackUrl();
         }
-        if ($this->wPage) {
+
+        $url = $this->getFactory()->getBackUrl();
+        if ($this->wPage->getId()) {
             $url = $this->wPage->getPageUrl();
         }
         $action->setRedirect($url);
@@ -244,11 +247,19 @@ class Edit extends PageController
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
-        $template->setAttr('back', 'href', $this->wPage->getPageUrl());
+
+        $url = $this->getFactory()->getBackUrl();
+        if ($this->wPage->getId()) {
+            $url = $this->wPage->getPageUrl();
+        }
+        $template->setAttr('back', 'href', $url);
 
         $template->appendTemplate('content', $this->getFormRenderer()->show());
 
         $dialog = new PageSelect();
+        $template->appendBodyTemplate($dialog->show());
+
+        $dialog = new SecretSelect();
         $template->appendBodyTemplate($dialog->show());
 
         return $template;

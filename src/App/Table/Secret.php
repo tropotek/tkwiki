@@ -6,8 +6,8 @@ use Dom\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tk\Alert;
 use Tk\Traits\SystemTrait;
+use Tk\Ui\Link;
 use Tk\Uri;
 use Tk\Form;
 use Tk\Form\Field;
@@ -36,7 +36,7 @@ class Secret
     {
         $response = new JsonResponse(['msg' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         /** @var \App\Db\Secret $secret */
-        $secret = SecretMap::create()->find($request->query->getInt('o', 0));
+        $secret = SecretMap::create()->find($request->request->getInt('o', 0));
         if ($secret) {
             $response = new JsonResponse(['otp' => $secret->genOtpCode()]);
         }
@@ -48,11 +48,35 @@ class Secret
     {
         $editUrl = Uri::create('/secretEdit');
 
-        if ($request->query->getInt('o')) {
+        if ($request->request->getInt('o')) {
             $this->doOtp($request);
         }
 
         $this->getTable()->appendCell(new Cell\Checkbox('id'));
+        $this->getTable()->appendCell(new Cell\Text('actions'))
+            ->addOnShow(function (Cell\Text $cell, string $html) use ($editUrl) {
+            $cell->addCss('text-nowrap text-center');
+            $obj = $cell->getRow()->getData();
+
+            $template = $cell->getTemplate();
+            $btn = new Link('View');
+            $btn->setText('');
+            $btn->setAttr('title', 'Open in new tab');
+            $btn->setAttr('target', '_blank');
+            $btn->setIcon('fa fa-globe');
+            $btn->addCss('btn btn-sm btn-outline-primary');
+
+            if ($obj->getUrl()) {
+                $btn->setUrl($obj->getUrl());
+            } else {
+                $btn->addCss('disabled');
+            }
+
+            $template->appendTemplate('td', $btn->show());
+            $template->appendHtml('td', '&nbsp;');
+
+            return '';
+        });
         $this->getTable()->appendCell(new Cell\Text('otp'))
             ->addOnValue(function (Cell\Text $cell, mixed $value) {
                 return '';
@@ -61,15 +85,26 @@ class Secret
                 /** @var \App\Db\Secret $obj */
                 $obj = $cell->getRow()->getData();
                 if ($obj->getOtp()) {
-                    $html = sprintf('<button class="btn btn-sm btn-outline-success otp" data-auth-id="%s"><i class="fa fa-refresh"></i></button> <strong class="otp2">------</strong>',
+                    $html = sprintf('<a href="javascript:;" class="btn btn-sm btn-outline-success otp" data-id="%s"><i class="fa fa-refresh"></i></a> <em>------</em>',
                         $obj->getId());
                 }
                 return $html;
             });
 
-        $this->getTable()->appendCell(new Cell\Text('userId'));
         $this->getTable()->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($editUrl);
-        $this->getTable()->appendCell(new Cell\Text('permission'));
+
+        $this->getTable()->appendCell(new Cell\Text('userId'))
+            ->addOnValue(function (Cell\Text $cell, mixed $value) {
+                /** @var \App\Db\Secret $obj */
+                $obj = $cell->getRow()->getData();
+                return $obj->getUser()?->getName() ?? $value;
+            });
+        $this->getTable()->appendCell(new Cell\Text('permission'))
+            ->addOnValue(function (Cell\Text $cell, mixed $value) {
+                /** @var \App\Db\Secret $obj */
+                $obj = $cell->getRow()->getData();
+                return $obj->getPermissionLabel();
+            });
         $this->getTable()->appendCell(new Cell\Text('created'));
 
 
@@ -109,6 +144,13 @@ class Secret
         if (!$list) {
             $tool = $this->getTable()->getTool();
             $filter = $this->getFilter()->getFieldValues();
+            $user = $this->getFactory()->getAuthUser();
+            if ($user?->isAdmin()) {
+                ; // Search all
+            } elseif ($user?->isStaff()) {
+                $filter['permission'] = [\App\Db\Secret::PERM_USER, \App\Db\Secret::PERM_STAFF];
+                $filter['author'] = $user->getId();
+            }
             $list = \App\Db\SecretMap::create()->findFiltered($filter, $tool);
         }
         $this->getTable()->setList($list);
@@ -128,6 +170,47 @@ class Secret
             $renderer->getTemplate()->appendTemplate('filters', $filterRenderer->show());
             $renderer->getTemplate()->setVisible('filters');
         }
+        $js = <<<JS
+jQuery(function($) {
+  function copyToClipboard(el) {
+    if(navigator.clipboard) {
+        let text = $(el).text();
+        console.log(text);
+        navigator.clipboard.writeText(text)
+    } else {
+        var range = document.createRange();
+        range.selectNode(el);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+
+        // Select the text
+        range = document.createRange();
+        range.selectNodeContents(el);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+  }
+
+  $('.tk-table table .otp').each(function () {
+    var btn = $(this);
+    btn.on('click', function (e) {
+      //var params = {'o': btn.data('id'), 'nolog': 'nolog'};
+      var params = {'o': btn.data('id')};
+      $.post(document.location, params, function (data) {
+        btn.next().text(data.otp);
+        var txt = btn.next().get(0);
+        copyToClipboard(txt);
+      });
+      return false;
+    });
+  });
+
+});
+JS;
+        $renderer->getTemplate()->appendJs($js);
 
         return $renderer->show();
     }

@@ -21,6 +21,7 @@ class SecretSelect extends \Dom\Renderer\Renderer implements DisplayInterface
         $this->table = new \App\Table\SecretSelect();
         $this->table->doDefault($this->getRequest());
         //$this->table->getTable()->resetTableSession();
+
         $tool = $this->table->getTable()->getTool('name', 10);
         $filter = [
             'published' => true,
@@ -35,10 +36,9 @@ class SecretSelect extends \Dom\Renderer\Renderer implements DisplayInterface
         if ($this->getFactory()->getAuthUser()->isAdmin()) {
             unset($filter['permission']);
         }
-
         $filter = array_merge($this->table->getFilter()->getFieldValues(), $filter);
-
         $list = SecretMap::create()->findFiltered($filter, $tool);
+
         $this->table->execute($this->getRequest(), $list);
 
 
@@ -55,10 +55,17 @@ class SecretSelect extends \Dom\Renderer\Renderer implements DisplayInterface
         $template = $this->getTemplate();
 
         $template->appendTemplate('dialogs', $this->createDialog->show());
+        $template->appendTemplate('table', $this->table->show());
+
+        $template->setAttr('user-id', 'data-user-id', $this->getFactory()->getAuthUser()->getId());
 
         // Add a select wiki page button to the tinyMCE editor.
         $js = <<<JS
 jQuery(function($) {
+
+    let selectDialog = $('#secret-select-dialog');
+    let createDialog = $('#secret-create-dialog');
+
     function insertSecretHtml(id, name) {
         const editor = tinymce.activeEditor;
         let linkAttrs = {
@@ -67,15 +74,11 @@ jQuery(function($) {
           'title': name,
           src: config.baseUrl + '/html/assets/img/secretbg.png'
         };
-
-        //editor.insertContent(editor.dom.createHTML('span', linkAttrs, editor.dom.encode(name)));
-        //editor.insertContent(editor.dom.createHTML('div', linkAttrs, editor.dom.encode(name)));
-        //editor.insertContent(editor.dom.createHTML('span', linkAttrs, '&nbsp;'));
         editor.insertContent(editor.dom.createHTML('img', linkAttrs));
-
     }
 
-    $('#secret-select-dialog').on('show.bs.modal', function() {
+
+    selectDialog.on('show.bs.modal', function() {
         $('input', this).val('');
     })
     .on('shown.bs.modal', function() {
@@ -90,31 +93,32 @@ jQuery(function($) {
         return false;
     })
     .on('click', '.btn-create-secret', function() {
-        $('#secret-select-dialog').modal('hide');
-        $('#secret-create-dialog').modal('show');
+        selectDialog.modal('hide');
+        createDialog.modal('show');
         return false;
+    });
+
+    $('.btn-insert-list', selectDialog).on('click', function() {
+        const editor = tinymce.activeEditor;
+        let linkAttrs = {
+          class: 'wk-secret-list',
+          'wk-secret-list': $(this).data('user-id')
+        };
+        editor.insertContent(editor.dom.createHTML('div', linkAttrs, editor.dom.encode('{Secret Table Listing}')));
+        selectDialog.modal('hide');
     });
 
     // On create secret
     $('body').on(EVENT_INIT_FORM, function() {
         // exit if there are errors in the form
-        if ($('#secret-create-dialog form .is-invalid').length) return;
+        if ($('form .is-invalid', createDialog).length) return;
 
         let id = $('#secret-secret_id', 'form#secret').val();
         let name = $('#secret-name', 'form#secret').val();
         insertSecretHtml(id, name);
-        $('#secret-select-dialog').modal('hide');
-        $('#secret-create-dialog').modal('hide');
+        selectDialog.modal('hide');
+        createDialog.modal('hide');
     });
-
-});
-JS;
-        $template->appendJs($js);
-
-        // setup the table to be refreshed by javascript on all links/events except cell links
-        $js = <<<JS
-jQuery(function($) {
-    let dialog = $('#secret-select-dialog');
 
     function init() {
         $('.tk-table.secret-table').each(function() {
@@ -123,7 +127,7 @@ jQuery(function($) {
             links.on('click', function(e) {
                 e.stopPropagation();
                 let url = $(this).attr('href');
-                $('#secret-select-table', dialog).load(url + ' #secret-select-table', function (response, status, xhr) {
+                $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', function (response, status, xhr) {
                     $('body').trigger(EVENT_INIT_TABLE);
                 });
                 return false;
@@ -135,7 +139,7 @@ jQuery(function($) {
                 let data = $(this).serializeArray();
                 let submit = $(e.originalEvent.submitter);
                 data.push({name: submit.attr('name'), value: submit.attr('value')});
-                $('#secret-select-table', dialog).load(url + ' #secret-select-table', data, function (response, status, xhr) {
+                $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', data, function (response, status, xhr) {
                     $('body').trigger(EVENT_INIT_TABLE);
                 });
                 return false;
@@ -148,8 +152,6 @@ jQuery(function($) {
 });
 JS;
         $template->appendJs($js);
-        $template->appendTemplate('table', $this->table->show());
-
 
         return $template;
     }
@@ -173,6 +175,7 @@ JS;
           <div class="modal-footer" style="justify-content: space-between;">
             <div>
               <button class="btn btn-sm btn-outline-primary btn-create-secret" type="button">Create</button>
+              <button class="btn btn-sm btn-outline-success btn-insert-list" type="button" var="user-id">Insert My List</button>
             </div>
             <div class="actions">
               <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>

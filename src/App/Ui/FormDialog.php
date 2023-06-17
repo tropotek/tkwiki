@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\Request;
  *    $template->setAttr('modelBtn', 'data-bs-toggle', 'modal');
  *    $template->setAttr('modelBtn', 'data-bs-target', '#'.$this->dialog->getId());
  *
+ * @todo We need to make this re-usable for any form if possible....?????
  */
 class FormDialog extends Dialog
 {

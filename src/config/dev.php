@@ -15,7 +15,6 @@ if (!$config->isDebug()) {
     error_log(__FILE__ . ': Do not execute this file in a production environment!');
     return;
 }
-//vd('running dev script');
 
 /** @var \App\Db\User $user */
 foreach (\App\Db\UserMap::create()->findAll() as $user) {

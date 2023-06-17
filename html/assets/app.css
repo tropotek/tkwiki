@@ -119,6 +119,7 @@ a.wk-link-external {
   font-size: 0.8em;
   padding: 0.5em;
   /*border: 1px solid #EFEFEF;*/
+  background-color: #FFF;
 }
 .wk-content .wk-secret .strong {
   font-weight: bold;
@@ -129,6 +130,13 @@ a.wk-link-external {
 .wk-content .wk-secret .userpass .fa:hover {
   opacity: 1;
   cursor: pointer;
+}
+
+.wk-content .wk-secret-list {
+
+}
+.wk-content .wk-secret-list .wk-secret {
+  overflow: hidden;
 }
 
 .wk-content img.wk-secret {

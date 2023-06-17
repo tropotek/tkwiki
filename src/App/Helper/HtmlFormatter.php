@@ -3,6 +3,8 @@ namespace App\Helper;
 
 use App\Db\Secret;
 use App\Db\SecretMap;
+use App\Db\User;
+use App\Db\UserMap;
 use Tk\Traits\SystemTrait;
 
 class HtmlFormatter
@@ -69,10 +71,23 @@ class HtmlFormatter
     protected function parseLinks(\DOMDocument $doc): \DOMDocument
     {
         $user = $this->getFactory()->getAuthUser();
+
+        $wkSecretNodes = [];
+        $wkSecretTableNodes = [];
+
+
+        // Add CSS classes to content images
+        $nodeList = $doc->getElementsByTagName('div');
+        /** @var \DOMElement $node */
+        foreach ($nodeList as $node) {
+            if ($node->getAttribute('wk-secret-list')) {
+                $wkSecretTableNodes[] = $node;
+            }
+        }
+
+
         // Add CSS classes to content images
         $nodeList = $doc->getElementsByTagName('img');
-        $wkSecretNodes = [];
-
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             if ($node->getAttribute('wk-secret')) {
@@ -121,6 +136,7 @@ class HtmlFormatter
             $node->setAttribute('class', $css);
         }
 
+
         // remove/replace node as the last action
         foreach ($wkSecretNodes as  $node) {
             /** @var Secret $secret */
@@ -138,6 +154,16 @@ class HtmlFormatter
 //                $node->parentNode->replaceChild($newNode, $node);
             }
 
+        }
+        foreach ($wkSecretTableNodes as  $node) {
+            /** @var User $user */
+            $user = UserMap::create()->find((int)$node->getAttribute('wk-secret-list'));
+            if (!$user) continue;
+
+            $renderer = new ViewSecretList($user);
+            $template = $renderer->show();
+            $newNode = $node->ownerDocument->importNode($template->getDocument()->documentElement, true);
+            $node->parentNode->replaceChild($newNode, $node);
         }
 
         return $doc;

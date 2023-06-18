@@ -1,16 +1,10 @@
 <?php
 namespace App\Helper;
 
-use App\Db\Secret;
-use App\Db\SecretMap;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Tk\Traits\SystemTrait;
-use Tk\Uri;
 
 /**
  * Render the secret output

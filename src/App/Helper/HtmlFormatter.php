@@ -72,14 +72,24 @@ class HtmlFormatter
     {
         $user = $this->getFactory()->getAuthUser();
         $wkSecretNodes = [];
-        $wkSecretTableNodes = [];
+        $wkSecretListNodes = [];
+        $wkCategoryListNodes = [];
 
         // Add CSS classes to content images
         $nodeList = $doc->getElementsByTagName('div');
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
             if ($node->getAttribute('wk-secret-list')) {
-                $wkSecretTableNodes[] = $node;
+                $wkSecretListNodes[] = $node;
+            }
+        }
+
+        // Add CSS classes to content images
+        $nodeList = $doc->getElementsByTagName('div');
+        /** @var \DOMElement $node */
+        foreach ($nodeList as $node) {
+            if ($node->getAttribute('wk-category-list')) {
+                $wkCategoryListNodes[] = $node;
             }
         }
 
@@ -133,6 +143,7 @@ class HtmlFormatter
             $node->setAttribute('class', $css);
         }
         $secretEnabled = $this->getRegistry()->get('wiki.enable.secret.mod', false);
+
         // remove/replace node as the last action
         foreach ($wkSecretNodes as  $node) {
             /** @var Secret $secret */
@@ -149,14 +160,21 @@ class HtmlFormatter
 //                $newNode = $doc->createElement('p', '&nbsp;');
 //                $node->parentNode->replaceChild($newNode, $node);
             }
-
         }
-        foreach ($wkSecretTableNodes as  $node) {
+
+        foreach ($wkSecretListNodes as  $node) {
             /** @var User $user */
             $user = UserMap::create()->find((int)$node->getAttribute('wk-secret-list'));
             if (!$user) continue;
 
             $renderer = new ViewSecretList($user);
+            $template = $renderer->show();
+            $newNode = $node->ownerDocument->importNode($template->getDocument()->documentElement, true);
+            $node->parentNode->replaceChild($newNode, $node);
+        }
+
+        foreach ($wkCategoryListNodes as  $node) {
+            $renderer = new ViewCategoryList($node->getAttribute('wk-category-list'), (bool)$node->getAttribute('data-table'));
             $template = $renderer->show();
             $newNode = $node->ownerDocument->importNode($template->getDocument()->documentElement, true);
             $node->parentNode->replaceChild($newNode, $node);

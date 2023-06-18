@@ -47,23 +47,29 @@ class PageSelect extends \Dom\Renderer\Renderer implements DisplayInterface
         // Add a select wiki page button to the tinyMCE editor.
         $js = <<<JS
 jQuery(function($) {
+    let dialog = $('#page-select-dialog');
+
     function insertWikiUrl(title, url, isNew) {
         const editor = tinymce.activeEditor;
-        let linkAttrs = {
+        let attrs = {
           href: 'page://' + url,
           title: title
         };
         if (editor.selection.getContent()) {
-          editor.execCommand('CreateLink', false, linkAttrs);
+          editor.execCommand('CreateLink', false, attrs);
         } else {
-          editor.insertContent(editor.dom.createHTML('a', linkAttrs, editor.dom.encode(title)));
+          editor.insertContent(editor.dom.createHTML('a', attrs, editor.dom.encode(title)));
         }
     }
 
-    $('#page-select-dialog').on('show.bs.modal', function() {
+    dialog.on('show.bs.modal', function() {
         $('input', this).val('');
     })
     .on('shown.bs.modal', function() {
+        let title = tinymce.activeEditor.selection.getContent({ format: 'text' });
+        if (title !== '') {
+            $('input', this).last().val(title);
+        }
         $('input', this).last().focus();
     })
     .on('click', '.wiki-insert', function() {
@@ -71,28 +77,33 @@ jQuery(function($) {
         let title = $(this).data('page-title');
         let url = $(this).data('page-url');
         insertWikiUrl(title, url, false);
-        $('#page-select-dialog').modal('hide');
+        dialog.modal('hide');
         return false;
     })
     .on('click', '.btn-create-page', function() {
         // On insert new page event
         let title = $(this).parent().find('input').val();
         let url = title.trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-        // TODO: should we check for existing url (ajax) here???
-        //       Or we could check on a keyup event (with delay 250ms) and disable btn if exists
+        // TODO: we could check for existing url (using ajax)?
+        //       Check on a keyup event (with delay 250ms), disable btn if exists
         insertWikiUrl(title, url, true);
-        $('#page-select-dialog').modal('hide');
+        dialog.modal('hide');
+        return false;
+    })
+    .on('click', '.wiki-cat-list', function() {
+        const editor = tinymce.activeEditor;
+        // On insert new page event
+        let category = $(this).data('category');
+        let attrs = {
+          'wk-category-list': category
+        };
+        editor.insertContent(editor.dom.createHTML('div', attrs,
+            editor.dom.encode('{Category List: ' + category + '}'))
+        );
+        dialog.modal('hide');
         return false;
     });
 
-});
-JS;
-        $template->appendJs($js);
-
-        // setup the table to be refreshed by javascript on all links/events except cell links
-        $js = <<<JS
-jQuery(function($) {
-    let dialog = $('#page-select-dialog');
 
     function init() {
         let links = $('th a, .tk-foot a', this).not('[href="javascript:;"], [href="#"]');
@@ -101,7 +112,7 @@ jQuery(function($) {
             e.stopPropagation();
             let url = $(this).attr('href');
             $('#page-select-table', dialog).load(url + ' #page-select-table', function (response, status, xhr) {
-                $('#page-select-table', dialog).trigger(EVENT_INIT);
+                $('body').trigger(EVENT_INIT_TABLE);
             });
             return false;
         });
@@ -113,12 +124,13 @@ jQuery(function($) {
             let submit = $(e.originalEvent.submitter);
             data.push({name: submit.attr('name'), value: submit.attr('value')});
             $('#page-select-table', dialog).load(url + ' #page-select-table', data, function (response, status, xhr) {
-                $('#page-select-table', dialog).trigger(EVENT_INIT);
+                $('body').trigger(EVENT_INIT_TABLE);
             });
             return false;
         });
     }
-    $('#page-select-dialog #page-select-table').on(EVENT_INIT, document, init).each(init);
+    init();
+    $('body').on(EVENT_INIT_TABLE, init);
 });
 JS;
         $template->appendJs($js);

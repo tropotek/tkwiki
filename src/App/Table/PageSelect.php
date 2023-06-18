@@ -43,6 +43,15 @@ class PageSelect
                 $cell->getLink()->setAttr('data-page-title', $page->getTitle());
                 $cell->getLink()->setAttr('data-page-url', $page->getUrl());
             });
+        $this->getTable()->appendCell(new Cell\Text('category'))
+            ->addOnValue(function (Cell\Text $cell) {
+                /** @var \App\Db\Page $page */
+                $page = $cell->getRow()->getData();
+                $cell->setUrl(Uri::create('javascript:;'));
+                $cell->getLink()->addCss('wiki-cat-list');
+                $cell->getLink()->setAttr('title', 'Insert a category table');
+                $cell->getLink()->setAttr('data-category', $page->getCategory());
+            });
         $this->getTable()->appendCell(new Cell\Text('userId'))->setOrderByName('')
             ->addOnValue(function (Cell\Text $cell) {
                 /** @var \App\Db\Page $page */

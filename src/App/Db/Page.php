@@ -103,19 +103,19 @@ class Page extends Model
     public static function findPage(string $url): ?Page
     {
         if ($url == self::DEFAULT_TAG) {
-            $url = Factory::instance()->getRegistry()->get('wiki.page.default');
+            $url = self::getHomeUrl();
         }
         return PageMap::create()->findByUrl($url);
     }
 
     public static function getHomeUrl(): string
     {
-        return Factory::instance()->getRegistry()->get('wiki.page.default');
+        return Factory::instance()->getRegistry()->get('wiki.page.default', '');
     }
 
     public static function homeUrl(): Uri
     {
-        return Uri::create(Factory::instance()->getRegistry()->get('wiki.page.default'));
+        return Uri::create(self::getHomeUrl());
     }
 
     public function update(): int

@@ -34,10 +34,9 @@ $ composer install
 6. You may have to change the permissions of the `/data/` folder so PHP can read and write to it.
 7. To enable debug mode and logging edit the `/src/config/config.php` file to suit your server.
 8. Browse to the location that was shown at the end of install to see if it all worked.
-9. You should be able to login with the default admin (P: password) account. Be sure to change 
-that before release. From the command line in the site base path you can call, or in the user account profile page in the site:
+9. To login with the default admin account, you will need to create a password. To create the admin user password:
 ```bash
-$ ./bin/cmd password admin <password>
+$ ./bin/cmd password admin
 ```
 
 

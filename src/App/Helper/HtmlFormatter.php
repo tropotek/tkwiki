@@ -112,7 +112,7 @@ class HtmlFormatter
                 if ($page) {
                     $css = $this->addClass($css, 'wk-page');
                     $css = $this->removeClass($css, 'wk-page-new');
-                    if (!$page->canView($user)) {
+                    if (!($page->canView($user) && $page->isPublished())) {
                         $css = $this->addClass($css, 'wk-page-disable');
                         $node->setAttribute('title', 'Invalid Permission');
                     }

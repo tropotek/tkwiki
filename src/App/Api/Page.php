@@ -38,13 +38,7 @@ class Page
      */
     public function doCategorySearch(Request $request): Response
     {
-        $data = ['status' => 'ok', 'lock' => false];
-
-        vd($request->request->all());
-
-        $list = PageMap::create()->getCategoryList('');
-        vd($list);
-
+        $data = PageMap::create()->getCategoryList(trim($request->query->getString('term', '')));
         return new JsonResponse($data, Response::HTTP_OK);
     }
 

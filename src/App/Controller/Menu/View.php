@@ -73,7 +73,7 @@ class View extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
         $t->setText('name', $item->getName());
         if ($page) {
             $t->setAttr('name', 'href', $page->getPageUrl());
-            if (!$page->canView($user)) {
+            if (!($page->canView($user) && $page->isPublished())) {
                 $t->setAttr('name', 'href', Uri::create(Page::getHomeUrl()));
                 $t->addCss('name', 'disabled');
                 return false;

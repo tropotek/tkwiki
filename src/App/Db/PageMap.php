@@ -180,7 +180,7 @@ class PageMap extends Mapper
         $stm->execute([
             '%' . $search . '%'
         ]);
-        return $stm->fetchAll(\PDO::FETCH_ASSOC);
+        return $stm->fetchAll(\PDO::FETCH_COLUMN);
     }
 
 

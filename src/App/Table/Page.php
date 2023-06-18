@@ -37,13 +37,39 @@ class Page
     public function doDefault(Request $request)
     {
         $this->getTable()->appendCell(new Cell\Checkbox('id'));
-        $this->getTable()->appendCell(new Cell\Text('title'))->setUrl(Uri::create('/edit'))->addCss('key');
-        $this->getTable()->appendCell(new Cell\Text('userId'))
-            ->addOnValue(function (Cell\Text $cell) {
-                /** @var \App\Db\Page $page */
-                $page = $cell->getRow()->getData();
-                $cell->setValue($page->getUser()->getName());
+        $this->getTable()->appendCell(new Cell\Text('actions'))
+            ->addOnShow(function (Cell\Text $cell, string $html) {
+                $cell->addCss('text-nowrap text-center');
+                $obj = $cell->getRow()->getData();
+
+                $template = $cell->getTemplate();
+                $btn = new Link('WikiLink');
+                $btn->setText('');
+                $btn->setIcon('fa fa-fw fa-code');
+                $btn->addCss('btn btn-outline-secondary btn-copy-code');
+                $btn->setAttr('title', 'Click to copy wiki link');
+                $btn->setAttr('data-page-id', $obj->getId());
+                $template->appendTemplate('td', $btn->show());
+                //$template->appendHtml('td', '&nbsp;');
+                $js = <<<JS
+jQuery(function($) {
+
+    $('.btn-copy-code').on('click', function () {
+        let tr = $(this).closest('tr');
+        let url = $('.mUrl', tr).text();
+        let title = $('.mTitle a', tr).text();
+        let code = `<p>&lt;a href="page://\${url}" title="\${title}"&gt;\${title}&lt;/a&gt;</p>`;
+        copyToClipboard($(code)[0]);
+    });
+
+});
+JS;
+                $template->appendJs($js);
+
+                return '';
             });
+        $this->getTable()->appendCell(new Cell\Text('title'))->setUrl(Uri::create('/edit'))->addCss('key');
+        $this->getTable()->appendCell(new Cell\Text('category'));
         $this->getTable()->appendCell(new Cell\Text('url'));
         $this->getTable()->appendCell(new Cell\Boolean('published'));
         $this->getTable()->appendCell(new Cell\Text('permission'))
@@ -52,12 +78,22 @@ class Page
                 $page = $cell->getRow()->getData();
                 $cell->setValue($page->getPermissionLabel());
             });
+        $this->getTable()->appendCell(new Cell\Text('userId'))
+            ->addOnValue(function (Cell\Text $cell) {
+                /** @var \App\Db\Page $page */
+                $page = $cell->getRow()->getData();
+                $cell->setValue($page->getUser()->getName());
+            });
         $this->getTable()->appendCell(new Cell\Text('modified'));
         $this->getTable()->appendCell(new Cell\Text('created'));
 
 
         // Table filters
         $this->getFilter()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
+
+        $list = PageMap::create()->getCategoryList();
+        $this->getFilter()->appendField(new Field\Select('category', $list))->prependOption('-- Category -- ', '');
+
 
         // Load filter values
         $this->getFilter()->setFieldValues($this->getTable()->getTableSession()->get($this->getFilter()->getId(), []));

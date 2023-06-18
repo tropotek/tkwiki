@@ -295,6 +295,9 @@ class Page extends Model
         if ($user->isAdmin()) return true;
         if ($this->getUserId() == $user->getId()) return true;
 
+        // Try this see if it works as expected
+        if (!$this->isPublished()) return false;
+
         // Staff and users can view USER pages
         if ($this->getPermission() == self::PERM_USER) {
             return ($user->isUser() || $user->isStaff());

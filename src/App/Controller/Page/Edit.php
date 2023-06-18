@@ -133,6 +133,10 @@ class Edit extends PageController
             $permission->setDisabled();
         }
 
+        $this->getForm()->appendField(new Field\Checkbox('published'))
+            ->setLabel('')
+            ->setGroup($group);
+
         $this->getForm()->appendField(new Field\Textarea('html'))
             ->addCss('mce')
             ->removeCss('form-control')
@@ -168,21 +172,18 @@ class Edit extends PageController
 
         $this->setFormRenderer(new FormRenderer($this->getForm()));
 
+        //vd($this->getFactory()->getCrumbs()->getBackUrl());
         return $this->getPage();
     }
 
     public function onCancel(Form $form, Action\ActionInterface $action): void
     {
-        $homeUrl = $this->wPage->getHomeUrl();
-
         $this->lock->unlock($this->wPage->getId());
-        $url = \Tk\Uri::create($homeUrl);
-        if ($this->getFactory()->getCrumbs()->getBackUrl()) {
-            $url = $this->getFactory()->getCrumbs()->getBackUrl();
-        }
 
-        $url = $this->getFactory()->getBackUrl();
-        if ($this->wPage->getId()) {
+        $url = \Tk\Uri::create($this->wPage->getHomeUrl());
+        if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
+            $url = $this->getFactory()->getBackUrl();
+        } else if ($this->wPage->getId()) {
             $url = $this->wPage->getPageUrl();
         }
         $action->setRedirect($url);
@@ -220,7 +221,13 @@ class Edit extends PageController
         $this->lock->unlock($this->wPage->getId());
 
         Alert::addSuccess('Page save successfully.');
-        $url = $this->wPage->getPageUrl();
+
+        $url = \Tk\Uri::create($this->wPage->getHomeUrl());
+        if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
+            $url = $this->getFactory()->getBackUrl();
+        } else if ($this->wPage->getId()) {
+            $url = $this->wPage->getPageUrl();
+        }
         $action->setRedirect($url);
     }
 
@@ -279,36 +286,9 @@ class Edit extends PageController
         // Autocomplete js
         $js = <<<JS
 jQuery(function($) {
-
-    var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-
     let cache = {};
-    $('[name=category]').autocomplete({
-      //source: availableTags,
-      //source: '/api/page/category',
+    let input = $('[name=category]');
+    input.autocomplete({
       source: function(request, response) {
         let term = request.term;
         if (term in cache) {
@@ -325,7 +305,7 @@ jQuery(function($) {
 
     // Show the dropdown on click
     $('.fld-category button').on('click', function () {
-        $('[name=category]').autocomplete('search', $('[name=category]').val());
+        input.autocomplete('search', input.val());
     });
 
 });

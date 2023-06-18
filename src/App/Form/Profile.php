@@ -94,7 +94,7 @@ class Profile
             if ($form->getFieldValue('newPass') != $form->getFieldValue('confPass')) {
                 $form->addFieldError('newPass', 'Passwords do not match');
             } else {
-                if (!$e = \App\Db\User::checkPassword($form->getFieldValue('newPass'))) {
+                if (!$e = \App\Db\User::validatePassword($form->getFieldValue('newPass'))) {
                     $form->addFieldError('newPass', 'Week password: ' . implode(', ' , $e));
                 }
             }

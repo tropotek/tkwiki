@@ -1,10 +1,12 @@
 <?php
 namespace App\Console;
 
+use App\Db\User;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Question\Question;
 use Tk\Console\Console;
 
 class Password extends Console
@@ -15,22 +17,18 @@ class Password extends Console
         $this->setName('password')
             ->setAliases(array('pwd'))
             ->addArgument('username', InputArgument::REQUIRED, 'A valid username.')
-            ->addArgument('password', InputArgument::REQUIRED, 'A valid password for the user.')
-            ->addArgument('institutionId', InputArgument::OPTIONAL, 'A valid institutionId if username is not unique.', null)
-            //->addArgument('roleId', InputArgument::OPTIONAL, 'A valid institutionId if username is not unique.', 5)
             ->setDescription('Set a users new password')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!$this->getConfig()->isDebug()) {
-            $this->writeError('Error: Only run this command in a debug environment.');
-            return self::FAILURE;
-        }
+//        if (!$this->getConfig()->isDebug()) {
+//            $this->writeError('Error: Only run this command in a debug environment.');
+//            return self::FAILURE;
+//        }
 
         $username = $input->getArgument('username');
-        $password = $input->getArgument('password');
 
         $user = \App\Db\UserMap::create()->findByUsername($username);
         if (!$user) {
@@ -38,7 +36,25 @@ class Password extends Console
             return self::FAILURE;
         }
 
-        $user->setPassword(\App\Db\User::hashPassword($password));
+        $errors = [];
+        do {
+            if (count($errors)) {
+                $this->writeError("Invalid Password: \n  - " . implode("\n  - ", $errors));
+            }
+            $q = new Question('Enter the new password: ', '');
+            $pass = $this->getHelper('question')->ask($input, $output, $q);
+        } while($errors = User::validatePassword($pass));
+
+        do {
+            if (count($errors)) {
+                $this->writeError("Passwords do not match.\n");
+            }
+            $q = new Question('Confirm new password: ', '');
+            $passConf = $this->getHelper('question')->ask($input, $output, $q);
+        } while($pass != $passConf);
+
+        $this->writeGreen('Password for user \''.$username.'\' updated');
+        $user->setPassword(\App\Db\User::hashPassword($pass));
         $user->save();
 
         return self::SUCCESS;

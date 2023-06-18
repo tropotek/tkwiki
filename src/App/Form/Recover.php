@@ -142,7 +142,7 @@ class Recover
             $form->addFieldError('confPassword', 'Passwords do not match');
         } else {
             if (!$this->getConfig()->isDebug()) {
-                $errors = \App\Db\User::checkPassword($form->getFieldValue('newPassword'));
+                $errors = \App\Db\User::validatePassword($form->getFieldValue('newPassword'));
                 if (count($errors)) {
                     $form->addFieldError('confPassword', implode('<br/>', $errors));
                 }

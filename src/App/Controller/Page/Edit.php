@@ -172,7 +172,6 @@ class Edit extends PageController
 
         $this->setFormRenderer(new FormRenderer($this->getForm()));
 
-        //vd($this->getFactory()->getCrumbs()->getBackUrl());
         return $this->getPage();
     }
 

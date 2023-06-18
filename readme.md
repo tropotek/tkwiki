@@ -59,8 +59,3 @@ __Warning:__ Upgrading could potentially break the site change the database. Rem
 site files before running these commands.
 
 
-
-
-
-
-

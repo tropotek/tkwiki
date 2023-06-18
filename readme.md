@@ -34,16 +34,19 @@ $ composer install
 6. You may have to change the permissions of the `/data/` folder so PHP can read and write to it.
 7. To enable debug mode and logging edit the `/src/config/config.php` file to suit your server.
 8. Browse to the location that was shown at the end of install to see if it all worked.
-9. To login with the default admin account, you will need to create a password. To create the admin user password:
+9. To login with the default admin account, you will need to create a password. 
+To create the admin account password execute the `password` console command:
 ```bash
-$ ./bin/cmd password admin
+$ ./bin/cmd pwd admin
 ```
 
 
 ## Upgrading
 
 __NOTICE:__ Wiki Ver 8.0+ is based on a completely re-written base library. So there is no upgrade scripts from
-previous major versions. You will have to manually copy content and media.
+previous major versions. 
+
+When upgrading for Ver 8.0+ version of the wiki you can use the following: 
 
 ```bash
 $ git reset --hard

@@ -21,7 +21,7 @@ __Features:__
 
 ## Installation
 
-1. Befor installing, setup a database for the site and keep the DB name and login details handy.
+1. Before installing, set up a database for the site and keep the DB name and login details handy.
 2. Make sure you have the latest version of composer [https://getcomposer.org/download/].
 3. Use the following commands:
 ```bash
@@ -31,11 +31,11 @@ $ composer install
 ```
 4. You will be asked a number of questions to setup the environment settings.
 5. Edit the `/src/App/config/config.php` file to your required settings.
-6. You may have to change the permissions of the `/data/` folder so PHP can read and write to it.
+6. Check the permissions of the site `/data/` folder so PHP can read and write to it.
 7. To enable debug mode and logging edit the `/src/config/config.php` file to suit your server.
-8. Browse to the location that was shown at the end of install to see if it all worked.
-9. To login with the default admin account, you will need to create a password. 
-To create the admin account password execute the `password` console command:
+8. Browse to the URI that was shown at the end of install process to see if it all worked.
+9. To log in with the default admin account, you will need to create a password. 
+To create the admin account password execute the `password [pwd]` command using the sites CLI tool:
 ```bash
 $ ./bin/cmd pwd admin
 ```
@@ -55,7 +55,7 @@ $ git pull
 $ composer update
 ```
 
-__Warning:__ Upgrading could potentially break the site change the database. Back up any DB and
+__Warning:__ Upgrading could potentially break the site change the database. Remember to back up any DB and
 site files before running these commands.
 
 

@@ -76,6 +76,7 @@ class ViewToolbar extends Renderer implements DisplayInterface
 <ul class="list-unstyled">
   <li>Author: <span var="author"></span></li>
   <li>Title: <span var="title"></span></li>
+  <li>Category: <span var="category"></span></li>
   <li>Permission: <span var="permission"></span></li>
   <li>Revision: <span var="revision"></span></li>
   <li>Modified: <span var="modified"></span></li>
@@ -86,6 +87,7 @@ HTML;
 
         $t->setText('author', $this->page->getUser()->getName());
         $t->setText('title', $this->page->getTitle());
+        $t->setText('category', $this->page->getCategory());
         $t->setText('permission', $this->page->getPermissionLabel());
         $t->setText('revision', $this->content->getId());
         $t->setText('modified', $this->page->getModified(Date::FORMAT_LONG_DATETIME));

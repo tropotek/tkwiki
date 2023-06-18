@@ -120,8 +120,7 @@ class Edit extends PageController
             //->setRequired()
             ->setNotes('(Optional) Use page categories to group pages and allow them to show in the category listing widget')
             ->addBtnCss('fa fa-chevron-down')
-            ->setGroup($group)
-        ;
+            ->setGroup($group);
 
         /** @var Field\Select $permission */
         $permission = $this->getForm()->appendField(new Field\Select('permission', array_flip(Page::PERM_LIST)))
@@ -305,9 +304,22 @@ jQuery(function($) {
       "Scala",
       "Scheme"
     ];
+
+    let cache = {};
     $('[name=category]').autocomplete({
+      //source: availableTags,
       //source: '/api/page/category',
-      source: availableTags,
+      source: function(request, response) {
+        let term = request.term;
+        if (term in cache) {
+          response(cache[term]);
+          return;
+        }
+        $.getJSON(config.baseUrl + '/api/page/category', request, function(data, status, xhr) {
+          cache[term] = data;
+          response(data);
+        });
+      },
       minLength: 0  // Must be 0 for dropdown btn to work
     });
 

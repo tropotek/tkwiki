@@ -149,10 +149,10 @@ UPDATE `user` SET `hash` = MD5(CONCAT(username, id)) WHERE 1;
 
 TRUNCATE TABLE page;
 TRUNCATE TABLE content;
-INSERT INTO page (user_id, title, url, permission) VALUES
-  (1,'Home', 'home', 0),
-  (1,'Wiki How To', 'Wiki_How_To', 0),
-  (1,'Example Content', 'Example_Content', 0)
+INSERT INTO page (user_id, category, title, url, permission) VALUES
+  (1, 'Wiki', 'Home', 'home', 0),
+  (1, 'Wiki', 'Wiki How To', 'Wiki_How_To', 0),
+  (1, 'Wiki', 'Example Content', 'Example_Content', 0)
 ;
 INSERT INTO content (page_id, user_id, html, css, js) VALUES
     (1, 1, '<h2>Welcome to the WIKI</h2>

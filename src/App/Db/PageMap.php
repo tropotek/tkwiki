@@ -166,9 +166,21 @@ class PageMap extends Mapper
         return $filter;
     }
 
-    public function getCategoryList(string $search = '')
+    /**
+     * Get a list of all existing categories
+     */
+    public function getCategoryList(string $search = ''): array
     {
-
+        $sql = <<<SQL
+            SELECT DISTINCT a.category
+            FROM page a
+            WHERE a.category LIKE ?
+        SQL;
+        $stm = $this->getDb()->prepare($sql);
+        $stm->execute([
+            '%' . $search . '%'
+        ]);
+        return $stm->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 

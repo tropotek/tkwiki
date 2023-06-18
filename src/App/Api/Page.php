@@ -2,6 +2,7 @@
 namespace App\Api;
 
 use App\Db\Lock;
+use App\Db\PageMap;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,22 @@ class Page
                 $data['lock'] = $b;
             }
         }
+
+        return new JsonResponse($data, Response::HTTP_OK);
+    }
+
+    /**
+     * Search for all available categories using a supplied search term
+     * Used for the jquery UI autocomplete component
+     */
+    public function doCategorySearch(Request $request): Response
+    {
+        $data = ['status' => 'ok', 'lock' => false];
+
+        vd($request->request->all());
+
+        $list = PageMap::create()->getCategoryList('');
+        vd($list);
 
         return new JsonResponse($data, Response::HTTP_OK);
     }

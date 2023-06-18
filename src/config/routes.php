@@ -68,6 +68,9 @@ return function (CollectionConfigurator $routes) {
     $routes->add('api-lock-refresh', '/api/lock/refresh')
         ->controller([\App\Api\Page::class, 'doRefreshLock'])
         ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
+    $routes->add('api-category-lookup', '/api/page/category')
+        ->controller([\App\Api\Page::class, 'doCategorySearch'])
+        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
 
 
     // DO NOT MOVE.... CatchAll must be the last route.

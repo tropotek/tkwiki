@@ -35,7 +35,7 @@ $ composer install
 7. To enable debug mode and logging edit the `/src/config/config.php` file to suit your server.
 8. Browse to the URI that was shown at the end of install process to see if it all worked.
 9. To log in with the default admin account, you will need to create a password. 
-To create the admin account password execute the `password [pwd]` command using the sites CLI tool:
+To create the admin account password execute the `password [pwd]` command using the site's CLI tool:
 ```bash
 $ ./bin/cmd pwd admin
 ```

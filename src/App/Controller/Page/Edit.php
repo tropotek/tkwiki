@@ -116,9 +116,17 @@ class Edit extends PageController
             ->setRequired()
             ->setGroup($group);
 
+        $this->getForm()->appendField(new Field\InputButton('category'))
+            //->setRequired()
+            ->setNotes('(Optional) Use page categories to group pages and allow them to show in the category listing widget')
+            ->addBtnCss('fa fa-chevron-down')
+            ->setGroup($group)
+        ;
+
         /** @var Field\Select $permission */
         $permission = $this->getForm()->appendField(new Field\Select('permission', array_flip(Page::PERM_LIST)))
             ->setRequired()
+            ->setNotes('Select who can view/edit/delete this page. <a href="/Wiki_How_To#getting_started" target="_blank" title="Permission help">Permission help</a>')
             ->setGroup($group)
             ->setStrict(true)
             ->prependOption('-- Select --', '');
@@ -268,6 +276,49 @@ class Edit extends PageController
             $dialog = new SecretSelect();
             $template->appendBodyTemplate($dialog->show());
         }
+
+        // Autocomplete js
+        $js = <<<JS
+jQuery(function($) {
+
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $('[name=category]').autocomplete({
+      //source: '/api/page/category',
+      source: availableTags,
+      minLength: 0  // Must be 0 for dropdown btn to work
+    });
+
+    // Show the dropdown on click
+    $('.fld-category button').on('click', function () {
+        $('[name=category]').autocomplete('search', $('[name=category]').val());
+    });
+
+});
+JS;
+        $template->appendJs($js);
 
         return $template;
     }

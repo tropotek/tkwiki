@@ -50,6 +50,8 @@ class Page extends Model
 
     public string $template = '';
 
+    public string $category = '';
+
     public string $title = '';
 
     public string $url = '';
@@ -157,6 +159,17 @@ class Page extends Model
         return $this->template;
     }
 
+    public function getCategory(): string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): Page
+    {
+        $this->category = $category;
+        return $this;
+    }
+
     public function setTitle(string $title): Page
     {
         $this->title = $title;
@@ -234,18 +247,20 @@ class Page extends Model
             $errors['userId'] = 'Invalid user ID value';
         }
         if (!$this->getTitle()) {
-            $errors['title'] = 'Please enter a title for your page';
+            $errors['title'] = 'Please enter a title for the page';
         }
-        //if  ($this->getId()) {
-            $comp = PageMap::create()->findByUrl($this->getUrl());
-            if ($comp && $comp->getId() != $this->getId()) {
-                $errors['url'] = 'This url already exists, try again';
-            }
-            // Match any existing system routes
-            if (self::routeExists($this->getUrl())) {
-                $errors['url'] = 'This url already exists, try again';
-            }
-        //}
+//        if (!$this->getCategory()) {
+//            $errors['category'] = 'Please enter a category for the page';
+//        }
+
+        $comp = PageMap::create()->findByUrl($this->getUrl());
+        if ($comp && $comp->getId() != $this->getId()) {
+            $errors['url'] = 'This url already exists, try again';
+        }
+        // Match any existing system routes
+        if (self::routeExists($this->getUrl())) {
+            $errors['url'] = 'This url already exists, try again';
+        }
 
         return $errors;
     }

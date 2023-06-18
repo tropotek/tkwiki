@@ -20,6 +20,7 @@ class PageMap extends Mapper
             $map->addDataType(new Db\Integer('id'));
             $map->addDataType(new Db\Integer('userId', 'user_id'));
             $map->addDataType(new Db\Text('template'));
+            $map->addDataType(new Db\Text('category'));
             $map->addDataType(new Db\Text('title'));
             $map->addDataType(new Db\Text('url'));
             $map->addDataType(new Db\Integer('views'));
@@ -36,6 +37,7 @@ class PageMap extends Mapper
             $map->addDataType(new Form\Integer('id'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Text('template'));
+            $map->addDataType(new Form\Text('category'));
             $map->addDataType(new Form\Text('title'));
             $map->addDataType(new Form\Text('url'));
             $map->addDataType(new Form\Integer('views'));
@@ -50,6 +52,7 @@ class PageMap extends Mapper
             $map->addDataType(new Form\Integer('id'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Text('template'));
+            $map->addDataType(new Form\Text('category'));
             $map->addDataType(new Form\Text('title'));
             $map->addDataType(new Form\Text('url'));
             $map->addDataType(new Form\Integer('views'));
@@ -89,6 +92,7 @@ class PageMap extends Mapper
         if (!empty($filter['search'])) {
             $kw = '%' . $this->escapeString($filter['search']) . '%';
             $w = sprintf('a.title LIKE %s OR ', $this->quote($kw));
+            $w .= sprintf('a.category LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['search'])) {
                 $id = (int)$filter['search'];
                 $w .= sprintf('a.id = %d OR ', $id);
@@ -117,6 +121,10 @@ class PageMap extends Mapper
 
         if (!empty($filter['template'])) {
             $filter->appendWhere('a.template = %s AND ', $this->quote($filter['template']));
+        }
+
+        if (!empty($filter['category'])) {
+            $filter->appendWhere('a.category = %s AND ', $this->quote($filter['category']));
         }
 
         if (!empty($filter['title'])) {
@@ -157,6 +165,12 @@ class PageMap extends Mapper
 
         return $filter;
     }
+
+    public function getCategoryList(string $search = '')
+    {
+
+    }
+
 
     /**
      * Test if the supplied pageId is an orphaned page

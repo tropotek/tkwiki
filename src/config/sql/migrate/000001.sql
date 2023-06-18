@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS page
   id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id INT(11) UNSIGNED NULL,
   template VARCHAR(64) NOT NULL DEFAULT '',
+  category VARCHAR(128) NOT NULL DEFAULT '',
   title VARCHAR(255) NOT NULL DEFAULT '',
   url VARCHAR(255) NULL,
   views INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -52,7 +53,8 @@ CREATE TABLE IF NOT EXISTS page
   modified TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uk_url (url),
-  KEY user_id (user_id),
+  KEY k_user_id (user_id),
+  KEY k_category (category),
   CONSTRAINT fk_page__user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL
 );
 
@@ -148,7 +150,7 @@ UPDATE `user` SET `hash` = MD5(CONCAT(username, id)) WHERE 1;
 TRUNCATE TABLE page;
 TRUNCATE TABLE content;
 INSERT INTO page (user_id, title, url, permission) VALUES
-  (1, 'Home', 'home', 0),
+  (1,'Home', 'home', 0),
   (1,'Wiki How To', 'Wiki_How_To', 0),
   (1,'Example Content', 'Example_Content', 0)
 ;

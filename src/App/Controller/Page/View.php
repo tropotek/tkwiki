@@ -76,7 +76,8 @@ class View extends PageController
             throw new HttpException(404, 'page not found');
         }
         if (!$this->wPage->canEdit($this->getFactory()->getAuthUser())) {
-            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'page cannot be rendered');
+            $this->wPage->getPageUrl()->redirect();
+            //throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'page cannot be rendered');
         }
         $this->toolbar = new ViewToolbar($this->wPage);
 

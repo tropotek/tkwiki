@@ -152,10 +152,12 @@ class Edit extends PageController
             ->setGroup($group);
 
         $this->getForm()->appendField(new Field\Textarea('css'))
+            ->setLabel('Global Stylesheet')
             ->addCss('css-edit')
             ->setGroup($group);
 
         $this->getForm()->appendField(new Field\Textarea('js'))
+            ->setLabel('Global JavaScript')
             ->addCss('js-edit')
             ->setGroup($group);
 

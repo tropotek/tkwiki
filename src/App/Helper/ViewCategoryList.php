@@ -31,18 +31,19 @@ class ViewCategoryList extends Renderer implements DisplayInterface
     {
         $template = $this->getTemplate();
 
+
         $filter = [
             'category'   => $this->category,
             'published'  => true,
             'permission' => Page::PERM_PUBLIC
         ];
-        if ($this->getFactory()->getAuthUser()->isUser()) {
+        if ($this->getFactory()->getAuthUser()?->isUser()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER];
         }
-        if ($this->getFactory()->getAuthUser()->isStaff()) {
+        if ($this->getFactory()->getAuthUser()?->isStaff()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER, Page::PERM_STAFF];
         }
-        if ($this->getFactory()->getAuthUser()->isAdmin()) {
+        if ($this->getFactory()->getAuthUser()?->isAdmin()) {
             unset($filter['permission']);
         }
         $list = PageMap::create()->findFiltered($filter, Tool::create('title'));
@@ -74,7 +75,7 @@ class ViewCategoryList extends Renderer implements DisplayInterface
     {
         $html = <<<HTML
 <div class="wk-category-list">
-  <ul choice="list">
+  <ul class="" choice="list">
     <li repeat="li"><a href="#" var="url"></a></li>
   </ul>
   <div class="row g-3" choice="table">

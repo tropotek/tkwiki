@@ -42,6 +42,7 @@ class PageSelect
                 $cell->getLink()->setAttr('data-page-id', $page->getId());
                 $cell->getLink()->setAttr('data-page-title', $page->getTitle());
                 $cell->getLink()->setAttr('data-page-url', $page->getUrl());
+                $cell->getLink()->setAttr('title', 'Insert a page link');
             });
         $this->getTable()->appendCell(new Cell\Text('category'))
             ->addOnValue(function (Cell\Text $cell) {

@@ -52,7 +52,7 @@ class Login extends PageController
     {
         $html = <<<HTML
 <div>
-    <h1 class="text-center h3 mb-3 fw-normal">Login</h1>
+    <h1 class="text-center h3 mb-3 fw-normal"><a href="/">Login</a></h1>
     <div class="" var="content"></div>
 </div>
 HTML;

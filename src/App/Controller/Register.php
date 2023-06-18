@@ -80,7 +80,7 @@ class Register extends PageController
     {
         $html = <<<HTML
 <div>
-    <h1 class="h3 mb-3 fw-normal text-center">Account Registration</h1>
+    <h1 class="h3 mb-3 fw-normal text-center"><a href="/">Account Registration</a></h1>
     <div class="" var="content"></div>
 </div>
 HTML;

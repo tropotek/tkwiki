@@ -15,8 +15,7 @@ class Lock
 {
     use SystemTrait;
 
-    //const TIMEOUT_SEC = 60*60*2;    // Default 2 hours
-    const TIMEOUT_SEC = 60*2;    // Default 2 hours
+    const TIMEOUT_SEC = 60*2;    // Default 2 minutes
 
     protected User $user;
 
@@ -54,26 +53,23 @@ class Lock
     {
         if (!$this->canAccess($pageId)) return false;
 
-        $expire = \Tk\Date::create(time() + self::TIMEOUT_SEC);
         if ($this->isLocked($pageId)) {
             if ($this->ownLock($pageId)) {
-                $sql = sprintf('UPDATE %s SET expire = %s WHERE hash = %s',
-                    $this->getDb()->quoteParameter('lock'),
-                    $this->getDb()->quote($expire->format(\Tk\Date::FORMAT_ISO_DATE)),
-                    $this->getDb()->quote($this->getPageHash($pageId))
-                );
-                $this->getDb()->exec($sql);
+                $stm = $this->getDb()->prepare('UPDATE `lock` SET expire = (NOW() + INTERVAL ? SECOND) WHERE hash = ?');
+                $stm->execute([
+                    self::TIMEOUT_SEC,
+                    $this->getPageHash($pageId)
+                ]);
             }
         } else {
-            $sql = sprintf('INSERT INTO %s VALUES (%s, %d, %d, %s, %s)',
-                $this->getDb()->quoteParameter('lock'),
-                $this->getDb()->quote($this->getPageHash($pageId)),
+            $stm = $this->getDb()->prepare('INSERT INTO `lock` VALUES (?, ?, ?, ?, (NOW() + INTERVAL ? SECOND))');
+            $stm->execute([
+                $this->getPageHash($pageId),
                 $pageId,
                 $this->getUser()->getId(),
-                $this->getDb()->quote($this->getRequest()->getClientIp()),
-                $this->getDb()->quote($expire->format(\Tk\Date::FORMAT_ISO_DATE))
-            );
-            $this->getDb()->exec($sql);
+                $this->getRequest()->getClientIp(),
+                self::TIMEOUT_SEC
+            ]);
         }
         return true;
     }
@@ -81,12 +77,8 @@ class Lock
     public function unlock(int $pageId): bool
     {
         if (!$this->canAccess($pageId)) return true;
-
-        $sql = sprintf('DELETE FROM %s WHERE hash = %s',
-            $this->getDb()->quoteParameter('lock'),
-            $this->getDb()->quote($this->getPageHash($pageId))
-        );
-        return $this->getDb()->exec($sql);
+        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE hash = ?');
+        return $stm->execute([$this->getPageHash($pageId)]);
     }
 
     /**
@@ -94,9 +86,8 @@ class Lock
      */
     public function clearAllLocks(): bool
     {
-        $sql = sprintf('DELETE FROM %s WHERE user_id = %s',
-            $this->getDb()->quoteParameter('lock'), $this->getUser()->getId());
-        return $this->getDb()->exec($sql);
+        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE user_id = ?');
+        return $stm->execute([$this->getUser()->getId()]);
     }
 
     /**
@@ -125,40 +116,23 @@ class Lock
     public function isLocked(int $pageId): bool
     {
         $this->clearExpired();
-        $sql = sprintf('SELECT COUNT(*) as i FROM %s WHERE page_id = %d',
-            $this->getDb()->quoteParameter('lock'),
-            $pageId
-        );
-        $res = $this->getDb()->query($sql);
-        $row = $res->fetch();
+        $stm = $this->getDb()->prepare('SELECT COUNT(*) as i FROM `lock` WHERE page_id = ?');
+        $stm->execute([$pageId]);
+        $row = $stm->fetch();
         return ($row->i > 0);
     }
 
     public function ownLock(int $pageId): bool
     {
-        $sql = sprintf('SELECT COUNT(*) as i FROM %s WHERE hash = %s',
-            $this->getDb()->quoteParameter('lock'),
-            $this->getDb()->quote($this->getPageHash($pageId))
-        );
-        $res = $this->getDb()->query($sql);
-        $row = $res->fetch();
+        $stm = $this->getDb()->prepare('SELECT COUNT(*) as i FROM `lock` WHERE hash = ?');
+        $stm->execute([$this->getPageHash($pageId)]);
+        $row = $stm->fetch();
         return ($row->i > 0);
     }
 
-    /**
-     * occasionally look at clearing the expired locks
-     * The default time to check is 2 * timeout
-     */
-    public function clearExpired(): void
+    public function clearExpired(): bool
     {
-        static $last = null;
-        $now = time();
-        if ( !$last || ($now - $last) > (self::TIMEOUT_SEC * 2) ) {
-            $sql = sprintf('DELETE FROM %s WHERE expire < %s ',
-                $this->getDb()->quoteParameter('lock'),
-                $this->getDb()->quote(\Tk\Date::create()->format(\Tk\Date::FORMAT_ISO_DATE))
-            );
-            $this->getDb()->exec($sql);
-        }
+        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE expire < NOW()');
+        return $stm->execute();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Controller\Page;
 use App\Db\Content;
 use App\Db\ContentMap;
 use App\Db\Page;
+use App\Helper\HtmlFormatter;
 use App\Helper\ViewToolbar;
 use App\Util\Pdf;
 use Bs\PageController;
@@ -94,12 +95,11 @@ class View extends PageController
         if ($request->query->get('contentId')) {
             $rev = '-' . $request->query->get('contentId');
         }
-
-        $pdf = Pdf::create($this->wContent->getHtml(), $this->wPage->getTitle());
+        $html = HtmlFormatter::create($this->wContent->getHtml())->getHtml();
+        $pdf = Pdf::create($html, $this->wPage->getTitle());
         $filename = $this->wPage->getTitle().$rev.'.pdf';
         if (!$request->query->has('isHtml'))
             $pdf->output($filename);     // comment this to see html version
-
         return $pdf->show();
     }
 

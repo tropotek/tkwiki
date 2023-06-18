@@ -283,10 +283,14 @@ class Edit extends PageController
         }
 
         // Autocomplete js
+        $jsPageId = json_encode($this->wPage->getId());
         $js = <<<JS
 jQuery(function($) {
+    let pageId = {$jsPageId}
     let cache = {};
     let input = $('[name=category]');
+
+
     input.autocomplete({
       source: function(request, response) {
         let term = request.term;
@@ -307,8 +311,36 @@ jQuery(function($) {
         input.autocomplete('search', input.val());
     });
 
+    // Start page lock trigger
+    var lockTimeout = 1000*60;     // 1000 = 1 sec
+    function saveLock() {
+        $.getJSON(config.baseUrl + '/api/lock/refresh', {pid: pageId}, function(data) {});
+        setTimeout(saveLock, lockTimeout);
+    }
+    setTimeout(saveLock, lockTimeout);
+
 });
 JS;
+        $template->appendJs($js);
+
+        $js = <<<JS
+
+jQuery(function($) {
+
+    // Leave page confirm
+    setTimeout(function () {
+        $('form#page').data('serialize', $('form#page').serialize());
+        $(window).on('beforeunload', function(e) {
+            if($('form#page').serialize() != $('form#page').data('serialize')) return true;
+            else e=null;
+        });
+    }, 1000);
+    $('button#page-cancel, button#page-save').on('click', function(){
+        $(window).off('beforeunload');
+    });
+});
+JS;
+
         $template->appendJs($js);
 
         return $template;

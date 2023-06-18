@@ -20,7 +20,6 @@ class Page
     {
         $data = ['status' => 'ok', 'lock' => false];
         $pageId = $request->get('pid');
-
         if ($this->getFactory()->getAuthUser()) {
             $lock = new Lock($this->getFactory()->getAuthUser());
             if ($lock->isLocked($pageId)) {
@@ -28,7 +27,6 @@ class Page
                 $data['lock'] = $b;
             }
         }
-
         return new JsonResponse($data, Response::HTTP_OK);
     }
 

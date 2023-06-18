@@ -21,6 +21,11 @@ class HtmlFormatter
         $this->html = $this->parse($html);
     }
 
+    public static function create($html): HtmlFormatter
+    {
+        return new static($html);
+    }
+
     protected function parse(string $html): string
     {
         if (!$html) return $html;
@@ -75,16 +80,7 @@ class HtmlFormatter
         $wkSecretListNodes = [];
         $wkCategoryListNodes = [];
 
-        // Add CSS classes to content images
-        $nodeList = $doc->getElementsByTagName('div');
-        /** @var \DOMElement $node */
-        foreach ($nodeList as $node) {
-            if ($node->getAttribute('wk-secret-list')) {
-                $wkSecretListNodes[] = $node;
-            }
-        }
-
-        // Add CSS classes to content images
+        // Find all category listing nodes
         $nodeList = $doc->getElementsByTagName('div');
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
@@ -93,7 +89,7 @@ class HtmlFormatter
             }
         }
 
-        // Add CSS classes to content images
+        // Find all secret widget nodes
         $nodeList = $doc->getElementsByTagName('img');
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
@@ -106,7 +102,16 @@ class HtmlFormatter
             }
         }
 
-        // Add CSS classes to wiki page links
+        // Find all secret listing nodes
+        $nodeList = $doc->getElementsByTagName('div');
+        /** @var \DOMElement $node */
+        foreach ($nodeList as $node) {
+            if ($node->getAttribute('wk-secret-list')) {
+                $wkSecretListNodes[] = $node;
+            }
+        }
+
+        // Add CSS classes to wiki page elements
         $nodeList = $doc->getElementsByTagName('a');
         /** @var \DOMElement $node */
         foreach ($nodeList as $node) {
@@ -144,7 +149,9 @@ class HtmlFormatter
         }
         $secretEnabled = $this->getRegistry()->get('wiki.enable.secret.mod', false);
 
-        // remove/replace node as the last action
+        // remove/replace nodes as the last action
+
+        // Replace all secret widget nodes
         foreach ($wkSecretNodes as  $node) {
             /** @var Secret $secret */
             $secret = SecretMap::create()->find($node->getAttribute('wk-secret'));
@@ -162,6 +169,7 @@ class HtmlFormatter
             }
         }
 
+        // Replace all secret listing nodes
         foreach ($wkSecretListNodes as  $node) {
             /** @var User $user */
             $user = UserMap::create()->find((int)$node->getAttribute('wk-secret-list'));
@@ -173,6 +181,7 @@ class HtmlFormatter
             $node->parentNode->replaceChild($newNode, $node);
         }
 
+        // Replace all category listing nodes
         foreach ($wkCategoryListNodes as  $node) {
             $renderer = new ViewCategoryList($node->getAttribute('wk-category-list'), (bool)$node->getAttribute('data-table'));
             $template = $renderer->show();

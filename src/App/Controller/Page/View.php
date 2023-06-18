@@ -131,11 +131,6 @@ class View extends PageController
         if ($this->wContent->getDescription()) {
             $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->getDescription(), $this->getPage()->getTemplate()->getTitleElement());
         }
-        $title = trim($this->getPage()->getTemplate()->getTitleText());
-        if ($title) {
-            $title .= ' - ';
-        }
-        $this->getPage()->getTemplate()->setTitleText($title . $this->wPage->getTitle());
 
         return $template;
     }

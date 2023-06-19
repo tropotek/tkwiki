@@ -167,7 +167,7 @@ let app = function () {
       plugins: [
         'advlist', 'save', 'autolink', 'lists', 'link', 'anchor', 'image', 'media', 'charmap', 'preview',
         'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-        'insertdatetime', 'media', 'table', 'help', 'wordcount', 'codesample'
+        'insertdatetime', 'media', 'table', 'help', 'wordcount', 'codesample', 'template'
       ],
       toolbar1:
         'save wikiPage wikiSecret | bold italic strikethrough | blocks | alignleft aligncenter ' +
@@ -181,7 +181,7 @@ let app = function () {
       //a11y_advanced_options: true,
       image_advtab: true,
       statusbar: false,
-      extended_valid_elements: 'i[*],em[*],b[*],a[*],div[*],span[*],img[*]',
+      extended_valid_elements: 'span[*],i[*],em[*],b[*],a[*],div[*],img[*]',
 
       save_onsavecallback: () => {
         $('#page-save', tinymce.activeEditor.formElement).trigger('click');
@@ -217,7 +217,106 @@ let app = function () {
           });
         }
 
-      }
+      },
+
+      templates : [
+        {
+          title: 'Card Content',
+          description: 'Add an optional header and/or footer within a card.',
+          content: `<div class="card">
+  <h5 class="card-header">Featured</h5>
+  <div class="card-body">
+    <h5 class="card-title">Special title treatment</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>`
+        },
+        {
+          title: 'Placeholder Content',
+          description: 'In the example below, we take a typical card component and recreate it with placeholders applied to create a “loading card”. ',
+          content: `<div class="card" aria-hidden="true">
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <i class="placeholder col-6"></i>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <i class="placeholder col-7"></i>
+      <i class="placeholder col-4"></i>
+      <i class="placeholder col-4"></i>
+      <i class="placeholder col-6"></i>
+      <i class="placeholder col-8"></i>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6"></a>
+  </div>
+</div>
+`
+        },
+        {
+          title: 'Accordion',
+          description: 'Click the accordions below to expand/collapse the accordion content.',
+          content: `<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Accordion Item #1
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Accordion Item #2
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        Accordion Item #3
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+</div>`
+        },
+        {
+          title: 'Description list',
+          description: 'Adds a boostrap description list template.',
+          content: `<dl class="row">
+    <dt class="col-sm-3">{Label}</dt>
+    <dd class="col-sm-9">{Description}</dd>
+    <dt class="col-sm-3">{Label}</dt>
+    <dd class="col-sm-9">{Description}</dd>
+</dl>`
+        },
+        {
+          title: 'Naming a source',
+          description: 'When providing attribution',
+          content: `<figure>
+  <blockquote class="blockquote">
+    <p>A well-known quote, contained in a blockquote element.</p>
+  </blockquote>
+  <figcaption class="blockquote-footer">
+    Someone famous in <cite title="Source Title">Source Title</cite>
+  </figcaption>
+</figure>`
+        },
+      ]
 
     };
 
@@ -226,7 +325,7 @@ let app = function () {
 
       // Tiny MCE with only the default editing no upload
       //   functionality with elfinder
-      $('textarea.mce-min', form).tinymce({});
+      $('textarea.mce-min', form).tinymce();
 
       // Full tinymce with elfinder file manager
       $('textarea.mce', form).each(function () {

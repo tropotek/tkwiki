@@ -238,16 +238,16 @@ let app = function () {
           content: `<div class="card" aria-hidden="true">
   <div class="card-body">
     <h5 class="card-title placeholder-glow">
-      <i class="placeholder col-6"></i>
+      <span class="placeholder col-6">&nbsp;</span>
     </h5>
     <p class="card-text placeholder-glow">
-      <i class="placeholder col-7"></i>
-      <i class="placeholder col-4"></i>
-      <i class="placeholder col-4"></i>
-      <i class="placeholder col-6"></i>
-      <i class="placeholder col-8"></i>
+      <span class="placeholder col-7">&nbsp;</span>
+      <span class="placeholder col-4">&nbsp;</span>
+      <span class="placeholder col-4">&nbsp;</span>
+      <span class="placeholder col-6">&nbsp;</span>
+      <span class="placeholder col-8">&nbsp;</span>
     </p>
-    <a class="btn btn-primary disabled placeholder col-6"></a>
+    <a class="btn btn-primary disabled placeholder col-6">&nbsp;</a>
   </div>
 </div>
 `

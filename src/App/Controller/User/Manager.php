@@ -17,6 +17,7 @@ class Manager extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('User Manager');
+        $this->getCrumbs()->reset();
     }
 
     public function doDefault(Request $request, string $type)

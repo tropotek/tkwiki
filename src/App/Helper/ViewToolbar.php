@@ -66,6 +66,10 @@ class ViewToolbar extends Renderer implements DisplayInterface
         }
         $template->setAttr('pdf-url', 'href', Uri::create()->set('pdf'));
 
+        if ($this->getRequest()->get('contentId')) {
+            $template->addCss('group', 'revision');
+        }
+
         return $template;
     }
 
@@ -78,7 +82,7 @@ class ViewToolbar extends Renderer implements DisplayInterface
   <li>Title: <span var="title"></span></li>
   <li>Category: <span var="category"></span></li>
   <li>Permission: <span var="permission"></span></li>
-  <li>Revision: <span var="revision"></span></li>
+  <li>Current Revision: <span var="revision"></span></li>
   <li>Modified: <span var="modified"></span></li>
   <li>Created: <span var="created"></span></li>
 </ul>
@@ -100,7 +104,7 @@ HTML;
     public function __makeTemplate(): ?Template
     {
         $html = <<<HTML
-<div class="wk-toolbar btn-group btn-group-sm float-end" role="group" aria-label="Small button group">
+<div class="wk-toolbar btn-group btn-group-sm float-end" role="group" aria-label="Small button group" var="group">
   <a href="/edit?pageId=1" title="Edit The Page" class="btn btn-outline-secondary" choice="can-edit" var="edit-url"><i class="fa fa-fw fa-pencil"></i></a>
   <a href="javascript:;" title="Page History" class="btn btn-outline-secondary" choice="can-edit" var="history"><i class="fa fa-fw fa-clock-rotate-left"></i></a>
   <a href="/?pdf=pdf" title="Download PDF" class="btn btn-outline-secondary" target="_blank" var="pdf-url"><i class="fa fa-fw fa-file-pdf"></i></a>

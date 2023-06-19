@@ -23,6 +23,7 @@ class Manager extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Secret Manager');
+        $this->getCrumbs()->reset();
         if (
             !$this->getAuthUser()?->isType(User::TYPE_STAFF) ||
             !$this->getRegistry()->get('wiki.enable.secret.mod', false)

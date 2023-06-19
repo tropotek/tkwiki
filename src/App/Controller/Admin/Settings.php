@@ -17,6 +17,7 @@ class Settings extends PageController
         $this->getPage()->setTitle('Edit Settings');
         $this->setAccess(User::PERM_SYSADMIN);
         $this->getRegistry()->save();
+        $this->getCrumbs()->reset();
     }
 
     public function doDefault(Request $request)

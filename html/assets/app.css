@@ -46,6 +46,9 @@ a.wk-link-external {
   background-color: #FFF;
   opacity: 0.80;
 }
+.wk-content .wk-toolbar.revision {
+  background-color: rgb(207, 244, 252);
+}
 /* ==================  WIKI .end  ================== */
 
 

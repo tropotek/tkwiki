@@ -18,6 +18,7 @@ class Orphaned extends PageController
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Orphaned Pages');
         $this->setAccess(User::PERM_EDITOR);
+        $this->getCrumbs()->reset();
     }
 
     public function doDefault(Request $request)

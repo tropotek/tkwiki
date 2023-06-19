@@ -17,6 +17,7 @@ class Manager extends PageController
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Page Manager');
         $this->setAccess(User::PERM_EDITOR);
+        $this->getCrumbs()->reset();
     }
 
     public function doDefault(Request $request)

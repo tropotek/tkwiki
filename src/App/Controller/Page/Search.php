@@ -30,6 +30,7 @@ class Search extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Search Results');
+        $this->getCrumbs()->reset();
     }
 
     public function doDefault(Request $request)

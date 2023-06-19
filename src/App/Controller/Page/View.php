@@ -78,13 +78,14 @@ class View extends PageController
         }
         if (!$this->wPage->canEdit($this->getFactory()->getAuthUser())) {
             $this->wPage->getPageUrl()->redirect();
-            //throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'page cannot be rendered');
         }
-        $this->toolbar = new ViewToolbar($this->wPage);
 
         if ($request->query->has('pdf')) {
             return $this->doPdf($request);
         }
+
+        Alert::addInfo('You are viewing revision ' . $this->wContent->getId());
+        $this->toolbar = new ViewToolbar($this->wPage);
 
         return $this->getPage();
     }

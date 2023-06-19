@@ -7,7 +7,7 @@ use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * TODO: Create a user profile edit page.
+ *
  */
 class Profile extends PageController
 {
@@ -18,6 +18,7 @@ class Profile extends PageController
     {
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('My Profile');
+        $this->getCrumbs()->reset();
 
     }
 

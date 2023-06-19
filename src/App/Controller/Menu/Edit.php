@@ -28,6 +28,7 @@ class Edit extends PageController
         parent::__construct($this->getFactory()->getPublicPage());
         $this->getPage()->setTitle('Edit Menu');
         $this->setAccess(User::PERM_SYSADMIN | User::PERM_EDITOR);
+        $this->getCrumbs()->reset();
     }
 
     public function doDefault(Request $request)

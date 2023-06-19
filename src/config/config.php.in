@@ -40,7 +40,6 @@ return function (Config $config) {
      */
     //$config['php.date.timezone']    = 'Australia/Melbourne';
 
-
     /*
      * Email template relative path
      */
@@ -57,6 +56,12 @@ return function (Config $config) {
      */
     $config['log.logLevel'] = \Psr\Log\LogLevel::ERROR;
 
+    /*
+     * Set the location of the log file
+     * Default uses the system PHP log file
+     * Change this to get full logging with formatting and without truncated lines
+     */
+     //$config['php.error_log']      = '/home/user/log/error.log';
 
 
     // Setup dev environment

@@ -164,7 +164,7 @@ class Settings
         Alert::addSuccess('Site settings saved successfully.');
         $action->setRedirect(Uri::create());
         if ($form->getTriggeredAction()->isExit()) {
-            $action->setRedirect(Uri::create('/dashboard'));
+            $action->setRedirect(Uri::create('/'));
         }
     }
 

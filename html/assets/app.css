@@ -94,9 +94,8 @@ pre {
 
 .wk-content .wk-secret {
   display: inline-block;
-  font-size: 0.8em;
+  font-size: 0.9em;
   padding: 0.5em;
-  /*border: 1px solid #EFEFEF;*/
   background-color: #FFF;
 }
 .wk-content .wk-secret .strong {

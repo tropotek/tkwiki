@@ -55,7 +55,9 @@ class ViewSecret extends Renderer implements DisplayInterface
         }
         if ($this->secret->getUsername()) {
             $template->setText('username', $this->secret->getUsername());
-            $template->setText('password', $this->secret->getPassword());
+            $template->setAttr('username','data-text', $this->secret->getUsername());
+            $template->setText('password', str_repeat('*', strlen($this->secret->getPassword())));
+            $template->setAttr('password','data-text', $this->secret->getPassword());
             $template->setVisible('userpass');
         }
 
@@ -80,8 +82,8 @@ class ViewSecret extends Renderer implements DisplayInterface
   <span class="strong" var="name" choice="no-url"></span><br choice="no-url"/>
   <a href="#" target="_blank" class="strong" title="Visit site" var="name" choice="url"></a><br choice="url"/>
   <span class="userpass" choice="userpass">
-    U: <span var="username"></span> <i class="fa fa-copy cp-username" title="Copy"></i><br />
-    P: <span var="password"></span> <i class="fa fa-copy cp-password" title="Copy"></i><br choice="o"/>
+    U: <span class="usr" var="username"></span> <i class="fa fa-copy cp-usr" data-target=".usr" title="Copy"></i><br />
+    P: <span class="pas" var="password"></span> <i class="fa fa-eye pw-show" title="Show/Hide"></i> <i class="fa fa-copy cp-pas" data-target=".pas" title="Copy"></i><br choice="o"/>
     <span var="otp" choice="o" title="Gen and copy OTP code"><i class="fa fa-compass cp-otp"></i> <span class="otp-code">------</span></span>
   </span>
 </div>

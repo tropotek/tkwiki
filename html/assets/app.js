@@ -46,13 +46,13 @@ let app = function () {
    */
   let initWkSecret = function () {
 
-    $('.wk-secret .userpass .fa').on('click', function () {
-      copyToClipboard($(this).prev('span')[0]);
+    $('.cp-usr, .cp-pas', '.wk-secret').on('click', function () {
+      let val = $(this).parent().find($(this).data('target')).data('text');
+      copyToClipboard($(`<p>${val}<p>`)[0]);
     });
 
-    $('.wk-secret  .userpass .cp-otp').on('click', function (e) {
+    $('.wk-secret .cp-otp').on('click', function (e) {
       let btn = $(this);
-      //var params = {'o': btn.data('id'), 'nolog': 'nolog'};
       var params = {'o': btn.parent().data('id')};
       $.post(document.location, params, function (data) {
         btn.next().text(data.otp);
@@ -61,30 +61,18 @@ let app = function () {
       return false;
     });
 
-    // Scroll-to-top button
-    let mybutton = document.getElementById("btn-back-to-top");
-    // When the user scrolls down 20px from the top of the document, show the button
-    window.onscroll = function () {
-      scrollFunction();
-    };
-    function scrollFunction() {
-      if (
-        document.body.scrollTop > 20 ||
-        document.documentElement.scrollTop > 20
-      ) {
-        mybutton.style.display = "block";
+    // show/hide secret pw field
+    $('.wk-secret .pw-show').on('click', function () {
+      if ($(this).is('.fa-eye')) {
+        $(this).removeClass('fa-eye');
+        $(this).addClass('fa-eye-slash')
+        $(this).prev().text($(this).prev().data('text'));
       } else {
-        mybutton.style.display = "none";
+        $(this).removeClass('fa-eye-slash');
+        $(this).addClass('fa-eye')
+        $(this).prev().text(''.padEnd($(this).prev().data('text').length, '*'));
       }
-    }
-    // When the user clicks on the button, scroll to the top of the document
-    mybutton.addEventListener("click", backToTop);
-    function backToTop() {
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-    }
-
-
+    });
 
   };
 
@@ -117,6 +105,29 @@ let app = function () {
       const lightbox = new Lightbox(el, options);
       lightbox.show();
     }));
+
+    // Scroll-to-top button
+    let mybutton = document.getElementById("btn-back-to-top");
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+      scrollFunction();
+    };
+    function scrollFunction() {
+      if (
+        document.body.scrollTop > 20 ||
+        document.documentElement.scrollTop > 20
+      ) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+    function backToTop() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
 
   };
 

@@ -14,18 +14,16 @@ class Page extends \Bs\Page
     {
         $template = parent::show();
 
-        $secretEnabled = json_encode(boolval($this->getRegistry()->get('wiki.enable.secret.mod')));
+        $secretEnabled = json_encode(boolval($this->getRegistry()->get('wiki.enable.secret.mod', false)));
         $js = <<<JS
 config.enableSecretMod = {$secretEnabled};
 JS;
         $template->appendJs($js, array('data-jsl-priority' => -1000));
 
-        if ($this->getRegistry()->get('system.meta.keywords')) {
-            $template->appendMetaTag('keywords', $this->getRegistry()->get('system.meta.keywords', ''));
-        }
-        if ($this->getRegistry()->get('system.meta.description')) {
-            $template->appendMetaTag('description', $this->getRegistry()->get('system.meta.description', ''));
-        }
+        $template->setText('site-name', $this->getRegistry()->get('site.name.short', ''));
+        $template->appendMetaTag('keywords', $this->getRegistry()->get('system.meta.keywords', ''));
+        $template->appendMetaTag('description', $this->getRegistry()->get('system.meta.description', ''));
+
 
         $template->appendJs($this->getRegistry()->get('system.global.js', ''));
         $template->appendCss($this->getRegistry()->get('system.global.css', ''));

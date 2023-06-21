@@ -188,6 +188,8 @@ let app = function () {
       },
       urlconverter_callback : function (url, node, on_save) {
         let parts = url.split(config.baseUrl);
+        console.log(config.baseUrl);
+        console.log(parts);
         if (parts.length > 1) {
           url = config.baseUrl + parts[1];
         }

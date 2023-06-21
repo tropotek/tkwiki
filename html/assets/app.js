@@ -51,6 +51,7 @@ let app = function () {
       copyToClipboard($(`<p>${val}<p>`)[0]);
     });
 
+    
     $('.wk-secret .cp-otp').on('click', function (e) {
       let btn = $(this);
       var params = {'o': btn.parent().data('id')};

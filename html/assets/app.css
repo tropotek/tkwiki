@@ -3,21 +3,22 @@ html {
   /*font-size: 1em;*/
 }
 body {
-  padding-top: 5rem;
-  padding-bottom: 3rem;
+  /*padding-top: 5rem;*/
+  /*padding-bottom: 3rem;*/
   color: #5a5a5a;
   background-color: #FFF;
-}
-.nav-bar {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-
 }
 .navbar .nav-link.dropdown-toggle {
   text-shadow: #CCC 2px 2px 2px;
 }
-
+#btn-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+  opacity: 0.6;
+  border-radius: 50%;
+}
 
 /* ==================  WIKI Styles  ================== */
 a.wk-page-disable {
@@ -42,7 +43,7 @@ a.wk-link-external {
   opacity: 0.80;
 }
 .wk-content .wk-toolbar {
-  top: 60px;
+  top: 15px;
   background-color: #FFF;
   opacity: 0.80;
 }

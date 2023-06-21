@@ -20,6 +20,7 @@ jQuery(function ($) {
 function copyToClipboard(el) {
   if(navigator.clipboard) {
     let text = $(el).text();
+    console.log(text);
     navigator.clipboard.writeText(text)
   } else {
     let range = document.createRange();
@@ -48,6 +49,7 @@ let app = function () {
 
     $('.cp-usr, .cp-pas', '.wk-secret').on('click', function () {
       let val = $(this).parent().find($(this).data('target')).data('text');
+    console.log(val);
       copyToClipboard($(`<p>${val}<p>`)[0]);
     });
 

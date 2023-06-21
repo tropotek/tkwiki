@@ -255,7 +255,6 @@ class Edit extends PageController
             foreach ($nodeList as $node) {
                 $regs = [];
                 if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
-                    vd($regs);
                     if (isset ($regs[1])) {
                         PageMap::create()->insertLink($page->getId(), $regs[1]);
                     }

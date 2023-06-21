@@ -18,10 +18,11 @@ jQuery(function ($) {
 });
 
 function copyToClipboard(el) {
+  console.log(el);
   if(navigator.clipboard) {
     let text = $(el).text();
     console.log(text);
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(text);
   } else {
     let range = document.createRange();
     range.selectNode(el);

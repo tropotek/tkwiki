@@ -177,7 +177,6 @@ jQuery(function($) {
     var params = {'o': btn.data('id')};
     $.post(document.location, params, function (data) {
       btn.next().text(data.otp);
-      // copyToClipboard(btn.next().get(0));
       copyToClipboard(data.otp);
     });
     return false;

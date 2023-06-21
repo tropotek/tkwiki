@@ -17,28 +17,6 @@ jQuery(function ($) {
   app.initWkSecret();
 });
 
-function copyToClipboard(text) {
-  if(navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(r => console.log(arguments));
-  } else {
-    let el = $(`<p>${text}<p>`)[0];
-    let range = document.createRange();
-    range.selectNode(el);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-    window.getSelection().removeAllRanges();
-
-    // Select the text
-    range = document.createRange();
-    range.selectNodeContents(el);
-    let sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-    el.remove();
-  }
-}
-
 let app = function () {
   "use strict";
 
@@ -52,13 +30,11 @@ let app = function () {
       copyToClipboard(val);
     });
 
-
     $('.wk-secret .cp-otp').on('click', function (e) {
       let btn = $(this);
       var params = {'o': btn.parent().data('id')};
       $.post(document.location, params, function (data) {
         btn.next().text(data.otp);
-        //copyToClipboard(btn.next().get(0));
         copyToClipboard(data.otp);
       });
       return false;

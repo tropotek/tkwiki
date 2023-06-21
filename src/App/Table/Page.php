@@ -59,7 +59,6 @@ jQuery(function($) {
         let url = $('.mUrl', tr).text();
         let title = $('.mTitle a', tr).text();
         let code = `<p>&lt;a href="page://\${url}" title="\${title}"&gt;\${title}&lt;/a&gt;</p>`;
-        // copyToClipboard($(code)[0]);
         copyToClipboard($(code).text());
     });
 

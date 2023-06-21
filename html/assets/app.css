@@ -37,13 +37,11 @@ a.wk-link-external {
   position: relative;
 }
 
-.wk-content .wk-toolbar {
-  top: 1px;
-  background-color: #FFF;
-  opacity: 0.80;
+.wk-content .sticky-top {
+  z-index: 999;
 }
 .wk-content .wk-toolbar {
-  top: 15px;
+  top: 1em;
   background-color: #FFF;
   opacity: 0.80;
 }

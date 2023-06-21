@@ -17,13 +17,13 @@ jQuery(function ($) {
   app.initWkSecret();
 });
 
-function copyToClipboard(el) {
-  console.log(el);
+function copyToClipboard(text) {
+  console.log(text);
   if(navigator.clipboard) {
-    let text = $(el).text();
     console.log(text);
     navigator.clipboard.writeText(text);
   } else {
+    let el = $(`<p>${text}<p>`)[0];
     let range = document.createRange();
     range.selectNode(el);
     window.getSelection().removeAllRanges();
@@ -37,6 +37,7 @@ function copyToClipboard(el) {
     let sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
+    el.remove();
   }
 }
 
@@ -51,7 +52,7 @@ let app = function () {
     $('.cp-usr, .cp-pas', '.wk-secret').on('click', function () {
       let val = $(this).parent().find($(this).data('target')).data('text');
     console.log(val);
-      copyToClipboard($(`<p>${val}<p>`)[0]);
+      copyToClipboard(val);
     });
 
 
@@ -60,7 +61,8 @@ let app = function () {
       var params = {'o': btn.parent().data('id')};
       $.post(document.location, params, function (data) {
         btn.next().text(data.otp);
-        copyToClipboard(btn.next().get(0));
+        //copyToClipboard(btn.next().get(0));
+        copyToClipboard(data.otp);
       });
       return false;
     });

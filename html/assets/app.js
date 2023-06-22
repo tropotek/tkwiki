@@ -9,51 +9,17 @@ jQuery(function ($) {
   tkbase.initTkInputLock();
   tkbase.initDataToggle();
   tkbase.initPasswordToggle();
+  tkbase.initDatepicker();
 
-  app.initTkFormTabs();
-  app.initDatepicker();
-  app.initTinymce();
   app.initWikiScripts();
   app.initWkSecret();
+  app.initTkFormTabs();
+  app.initCodemirror();
+  app.initTinymce();
 });
 
 let app = function () {
   "use strict";
-
-  /**
-   * Init all wk-secret module functions
-   */
-  let initWkSecret = function () {
-
-    $('.cp-usr, .cp-pas', '.wk-secret').on('click', function () {
-      let val = $(this).parent().find($(this).data('target')).data('text');
-      copyToClipboard(val);
-    });
-
-    $('.wk-secret .cp-otp').on('click', function (e) {
-      let btn = $(this);
-      var params = {'o': btn.parent().data('id')};
-      $.post(document.location, params, function (data) {
-        btn.next().text(data.otp);
-        copyToClipboard(data.otp);
-      });
-      return false;
-    });
-
-    // show/hide secret pw field
-    $('.wk-secret .pw-show').on('click', function () {
-      if ($(this).is('.fa-eye')) {
-        $(this).removeClass('fa-eye');
-        $(this).addClass('fa-eye-slash')
-        $(this).prev().text($(this).prev().data('text'));
-      } else {
-        $(this).removeClass('fa-eye-slash');
-        $(this).addClass('fa-eye')
-        $(this).prev().text(''.padEnd($(this).prev().data('text').length, '*'));
-      }
-    });
-
-  };
 
   /**
    * Init all wiki base level functions
@@ -110,6 +76,41 @@ let app = function () {
 
   };
 
+  /**
+   * Init all wk-secret module functions
+   */
+  let initWkSecret = function () {
+
+    $('.cp-usr, .cp-pas', '.wk-secret').on('click', function () {
+      let val = $(this).parent().find($(this).data('target')).data('text');
+      copyToClipboard(val);
+    });
+
+    $('.wk-secret .cp-otp').on('click', function (e) {
+      let btn = $(this);
+      var params = {'o': btn.parent().data('id')};
+      $.post(document.location, params, function (data) {
+        btn.next().text(data.otp);
+        copyToClipboard(data.otp);
+      });
+      return false;
+    });
+
+    // show/hide secret pw field
+    $('.wk-secret .pw-show').on('click', function () {
+      if ($(this).is('.fa-eye')) {
+        $(this).removeClass('fa-eye');
+        $(this).addClass('fa-eye-slash')
+        $(this).prev().text($(this).prev().data('text'));
+      } else {
+        $(this).removeClass('fa-eye-slash');
+        $(this).addClass('fa-eye')
+        $(this).prev().text(''.padEnd($(this).prev().data('text').length, '*'));
+      }
+    });
+
+  };
+
 
   /**
    * Creates bootstrap 5 tabs around the \Tk\Form renderer groups (.tk-form-group) output
@@ -129,25 +130,36 @@ let app = function () {
 
 
   /**
-   * Setup the jquery datepicker UI
+   * Code Mirror setup
+   * @todo Implement this into our javascript and css textarea editors
    */
-  let initDatepicker = function () {
-    if ($.fn.datepicker === undefined) {
-      console.warn('jquery-ui.js is not installed.');
+  let initCodemirror = function () {
+    if (typeof CodeMirror === 'undefined') {
+      console.warn('Plugin not loaded: CodeMirror');
       return;
     }
 
     function init() {
-      let defaults = { dateFormat: config.dateFormat.jqDatepicker };
-      $('input.date').each(function () {
-        let settings = $.extend({}, defaults, $(this).data());
-        $(this).datepicker(settings);
-      });
-    }
+      let el = this;
+      this.cm = CodeMirror.fromTextArea(this, $.extend({}, {
+        lineNumbers: true,
+        mode: 'javascript',
+        smartIndent: true,
+        indentUnit: 2,
+        tabSize: 2,
+        autoRefresh: true,
+        indentWithTabs: false,
+        dragDrop: false
+      }, $(this).data()));
+
+      $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function () {
+        this.refresh();
+      }.bind(el.cm));
+    };
 
     init();
     $('body').on(EVENT_INIT_FORM, init);
-  };
+  };  // end initCodemirror()
 
 
   /**
@@ -227,6 +239,14 @@ let app = function () {
             onAction: function (_) {
               $('#secret-select-dialog').modal('show');
             }
+          });
+
+          // Edit secret on double click, in new page...
+          // TODO: We should modify the dialog to handle edit and add secrets
+          editor.on('init', function () {
+            $(editor.getDoc()).on('dblclick', 'img.wk-secret', function () {
+              window.open(config.baseUrl + '/secretEdit?id=' + $(this).attr('wk-secret'), '_blank');
+            });
           });
         }
 
@@ -380,10 +400,10 @@ let app = function () {
 
   return {
     initWikiScripts: initWikiScripts,
+    initWkSecret: initWkSecret,
     initTkFormTabs: initTkFormTabs,
-    initDatepicker: initDatepicker,
-    initTinymce: initTinymce,
-    initWkSecret: initWkSecret
+    initCodemirror: initCodemirror,
+    initTinymce: initTinymce
   }
 
 }();

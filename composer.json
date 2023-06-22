@@ -29,7 +29,6 @@
       "Tk\\Composer\\Installer::postUpdate"
     ]
   },
-
   "require": {
     "php": "^8.2",
     "ext-curl": "*",

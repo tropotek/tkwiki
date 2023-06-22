@@ -94,7 +94,7 @@ class Secret
         } else {
             $this->getForm()->appendField(new Action\SubmitExit('save', [$this, 'onSubmit']));
         }
-        $this->getForm()->appendField(new Action\Link('cancel', Uri::create('/secretManager')));
+        $this->getForm()->appendField(new Action\Link('cancel', Uri::create($this->getFactory()->getBackUrl())));
 
         $load = $this->secret->getMapper()->getFormMap()->getArray($this->secret);
         $load['secret_id'] = $this->secret->getId();

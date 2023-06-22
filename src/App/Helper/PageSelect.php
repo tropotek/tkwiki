@@ -17,7 +17,7 @@ class PageSelect extends \Dom\Renderer\Renderer implements DisplayInterface
     {
         $this->table = new \App\Table\PageSelect();
         $this->table->doDefault($this->getRequest());
-        $this->table->getTable()->resetTableSession();
+        //$this->table->getTable()->resetTableSession();
         $tool = $this->table->getTable()->getTool('title', 10);
         $filter = [
             'published' => true,

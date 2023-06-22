@@ -98,14 +98,23 @@ let app = function () {
 
     // show/hide secret pw field
     $('.wk-secret .pw-show').on('click', function () {
-      if ($(this).is('.fa-eye')) {
-        $(this).removeClass('fa-eye');
-        $(this).addClass('fa-eye-slash')
-        $(this).prev().text($(this).prev().data('text'));
+      let ico = $(this);
+      if (ico.is('.fa-eye')) {
+        ico.prev().text(ico.prev().data('text'));
+        if (ico.prev().data('id')) {
+          let id = ico.prev().data('id');
+          ico.prev().removeAttr('data-id');
+          $.get(config.baseUrl + '/api/secret/pass', {id}, function (data) {
+            ico.removeClass('fa-eye');
+            ico.addClass('fa-eye-slash')
+            ico.prev().data('text', data.p);
+            ico.prev().text(ico.prev().data('text'));
+          }, 'json');
+        }
       } else {
-        $(this).removeClass('fa-eye-slash');
-        $(this).addClass('fa-eye')
-        $(this).prev().text(''.padEnd($(this).prev().data('text').length, '*'));
+        ico.removeClass('fa-eye-slash');
+        ico.addClass('fa-eye')
+        ico.prev().text(''.padEnd(ico.prev().data('text').length, '*'));
       }
     });
 

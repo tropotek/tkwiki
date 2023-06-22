@@ -71,6 +71,10 @@ return function (CollectionConfigurator $routes) {
     $routes->add('api-category-lookup', '/api/page/category')
         ->controller([\App\Api\Page::class, 'doCategorySearch'])
         ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
+    $routes->add('api-secret-pass', '/api/secret/pass')
+        ->controller([\App\Api\Secret::class, 'doGetPass'])
+        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET])
+        ->schemes(['https']);
 
 
     // DO NOT MOVE.... CatchAll must be the last route.

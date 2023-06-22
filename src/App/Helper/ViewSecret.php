@@ -60,7 +60,8 @@ class ViewSecret extends Renderer implements DisplayInterface
             $template->setText('username', $this->secret->getUsername());
             $template->setAttr('username','data-text', $this->secret->getUsername());
             $template->setText('password', str_repeat('*', strlen($this->secret->getPassword())));
-            $template->setAttr('password','data-text', $this->secret->getPassword());
+            $template->setAttr('password','data-text', str_repeat('*', strlen($this->secret->getPassword())));
+            $template->setAttr('password','data-id', $this->secret->getId());
             $template->setVisible('userpass');
         }
 

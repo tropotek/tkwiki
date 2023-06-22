@@ -8,6 +8,8 @@ use Tk\Config;
 
 return function (Config $config) {
 
+    $config->set('path.template.public', '/html/default.html');
+
     /*
      * Setup available page templates that reside in the "/html" directory
      * Add the filename without an extension, the extension should be '.html'
@@ -15,8 +17,8 @@ return function (Config $config) {
      *    ['Template Name' => 'filename']
      */
     $config['wiki.templates'] = [
-        'Public' => 'public',
-        'Public Fluid' => 'public_fluid',
+        'Default' => 'default',
+        'Default Fluid' => 'default_fluid',
     ];
 
     /*

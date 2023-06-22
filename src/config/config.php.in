@@ -10,10 +10,13 @@ return function (Config $config) {
 
     /*
      * Setup available page templates that reside in the "/html" directory
+     * Add the filename without an extension, the extension should be '.html'
+     * array:
+     *    ['Template Name' => 'filename']
      */
     $config['wiki.templates'] = [
-        'public' => 'Public',
-        'public_fluid' => 'Public Fluid',
+        'Public' => 'public',
+        'Public Fluid' => 'public_fluid',
     ];
 
     /*

@@ -81,9 +81,29 @@ let app = function () {
    */
   let initWkSecret = function () {
 
+
+    function loadPass(el, callback) {
+      let id = el.data('id');
+      if (id) {
+        el.removeAttr('data-id');
+        $.get(config.baseUrl + '/api/secret/pass', {id}, function (data) {
+          el.data('text', data.p);
+          callback.apply(el, [data]);
+        }, 'json');
+      }
+    }
+
+
     $('.cp-usr, .cp-pas', '.wk-secret').on('click', function () {
-      let val = $(this).parent().find($(this).data('target')).data('text');
+      let pass = $(this).parent().find($(this).data('target'));
+      if (!pass) return;
+      let val = pass.data('text');
       copyToClipboard(val);
+      if ($(this).is('.cp-pas')) {
+        loadPass(pass, function (data) {
+          copyToClipboard(pass.data('text'));
+        });
+      }
     });
 
     $('.wk-secret .cp-otp').on('click', function (e) {
@@ -101,16 +121,11 @@ let app = function () {
       let ico = $(this);
       if (ico.is('.fa-eye')) {
         ico.prev().text(ico.prev().data('text'));
-        if (ico.prev().data('id')) {
-          let id = ico.prev().data('id');
-          ico.prev().removeAttr('data-id');
-          $.get(config.baseUrl + '/api/secret/pass', {id}, function (data) {
-            ico.removeClass('fa-eye');
-            ico.addClass('fa-eye-slash')
-            ico.prev().data('text', data.p);
-            ico.prev().text(ico.prev().data('text'));
-          }, 'json');
-        }
+        loadPass(ico.prev(), function (data) {
+          ico.removeClass('fa-eye');
+          ico.addClass('fa-eye-slash')
+          ico.prev().text(ico.prev().data('text'));
+        });
       } else {
         ico.removeClass('fa-eye-slash');
         ico.addClass('fa-eye')

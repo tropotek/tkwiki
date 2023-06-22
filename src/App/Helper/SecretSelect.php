@@ -81,9 +81,7 @@ jQuery(function($) {
 
     selectDialog.on('show.bs.modal', function() {
         $('input', this).val('');
-    })
-    .on('shown.bs.modal', function() {
-        $('input', this).last().focus();
+        $('#secret-select-table', selectDialog).load(document.location.href + ' #secret-select-table');
     })
     .on('click', '.wiki-insert', function() {
         // insert existing secret
@@ -147,7 +145,6 @@ jQuery(function($) {
             });
         });
     }
-
 
     init();
     $('body').on(EVENT_INIT_TABLE, init);

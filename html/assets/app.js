@@ -246,6 +246,25 @@ let app = function () {
 </div>`
         },
         {
+          title: 'Row/Col x3',
+          description: 'Add an optional header and/or footer within a card.',
+          content: `<div class="row">
+  <div class="col-md-4">&nbsp;</div>
+  <div class="col-md-4">&nbsp;</div>
+  <div class="col-md-4">&nbsp;</div>
+</div>`
+        },
+        {
+          title: 'Row/Col x4',
+          description: 'Add an optional header and/or footer within a card.',
+          content: `<div class="row">
+  <div class="col-md-3">&nbsp;</div>
+  <div class="col-md-3">&nbsp;</div>
+  <div class="col-md-3">&nbsp;</div>
+  <div class="col-md-3">&nbsp;</div>
+</div>`
+        },
+        {
           title: 'Placeholder Content',
           description: 'In the example below, we take a typical card component and recreate it with placeholders applied to create a “loading card”. ',
           content: `<div class="card" aria-hidden="true">

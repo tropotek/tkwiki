@@ -226,6 +226,7 @@ let app = function () {
         config.baseUrl + '/html/assets/app.css'
       ],
       content_style: 'body {padding: 15px;}',
+      contextmenu: 'link image template inserttable | cell row column deletetable',
       //image_prepend_url: config.baseUrl,
       //a11y_advanced_options: true,
       image_advtab: true,
@@ -271,6 +272,7 @@ let app = function () {
             $(editor.getDoc()).on('dblclick', 'img.wk-secret', function () {
               window.open(config.baseUrl + '/secretEdit?id=' + $(this).attr('wk-secret'), '_blank');
             });
+            editor.getBody().setAttribute('spellcheck', true);
           });
         }
 

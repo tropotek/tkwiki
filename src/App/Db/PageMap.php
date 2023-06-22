@@ -25,6 +25,7 @@ class PageMap extends Mapper
             $map->addDataType(new Db\Text('url'));
             $map->addDataType(new Db\Integer('views'));
             $map->addDataType(new Db\Integer('permission'));
+            $map->addDataType(new Db\Boolean('titleVisible', 'title_visible'));
             $map->addDataType(new Db\Boolean('published'));
             $map->addDataType(new Db\Date('modified'));
             $map->addDataType(new Db\Date('created'));
@@ -42,6 +43,7 @@ class PageMap extends Mapper
             $map->addDataType(new Form\Text('url'));
             $map->addDataType(new Form\Integer('views'));
             $map->addDataType(new Form\Integer('permission'));
+            $map->addDataType(new Form\Boolean('titleVisible'));
             $map->addDataType(new Form\Boolean('published'));
 
             $this->addDataMap(self::DATA_MAP_FORM, $map);
@@ -57,6 +59,7 @@ class PageMap extends Mapper
             $map->addDataType(new Form\Text('url'));
             $map->addDataType(new Form\Integer('views'));
             $map->addDataType(new Form\Integer('permission'));
+            $map->addDataType(new Table\Boolean('titleVisible'));
             $map->addDataType(new Table\Boolean('published'));
             $map->addDataType(new Form\Date('modified'))->setDateFormat('d/m/Y h:i:s');
             $map->addDataType(new Form\Date('created'))->setDateFormat('d/m/Y h:i:s');

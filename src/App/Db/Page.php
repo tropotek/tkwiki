@@ -62,6 +62,8 @@ class Page extends Model
 
     public bool $published = true;
 
+    public bool $titleVisible = true;
+
     public \DateTime $modified;
 
     public \DateTime $created;
@@ -235,6 +237,17 @@ class Page extends Model
     public function setPublished(bool $published): Page
     {
         $this->published = $published;
+        return $this;
+    }
+
+    public function isTitleVisible(): bool
+    {
+        return $this->titleVisible;
+    }
+
+    public function setTitleVisible(bool $titleVisible): Page
+    {
+        $this->titleVisible = $titleVisible;
         return $this;
     }
 

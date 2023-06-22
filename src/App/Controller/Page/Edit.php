@@ -109,15 +109,19 @@ class Edit extends PageController
         $this->setForm(Form::create('page'));
 
         $group = 'Details';
-        $this->getForm()->appendField(new Field\Hidden('pid'))
-            ->setGroup($group);
+        $this->getForm()->appendField(new Field\Hidden('pid'));
 
         $this->getForm()->appendField(new Field\Input('title'))
             ->setRequired()
             ->setGroup($group);
 
+        $list = $this->getConfig()->get('wiki.templates', []);
+        $this->getForm()->appendField(new Field\Select('template', $list))
+            ->setRequired()
+            ->setGroup($group)
+            ->prependOption('-- Default --', '');
+
         $this->getForm()->appendField(new Field\InputButton('category'))
-            //->setRequired()
             ->setNotes('(Optional) Use page categories to group pages and allow them to show in the category listing widget')
             ->addBtnCss('fa fa-chevron-down')
             ->setGroup($group);
@@ -132,6 +136,13 @@ class Edit extends PageController
         if ($this->wPage && $this->wPage->getUrl() == Page::getHomeUrl()) {
             $permission->setDisabled();
         }
+
+        $this->getForm()->appendField(new Field\Checkbox('titleVisible'))
+            ->setLabel('')
+            ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+                $option->setName('Show Page Title');
+            })
+            ->setGroup($group);
 
         $this->getForm()->appendField(new Field\Checkbox('published'))
             ->setLabel('')
@@ -274,6 +285,14 @@ class Edit extends PageController
         }
         $template->setAttr('back', 'href', $url);
 
+        $this->getForm()->getField('title')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('template')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('category')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('permission')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('titleVisible')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('published')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('keywords')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('description')->addFieldCss('col-sm-6');
         $template->appendTemplate('content', $this->getFormRenderer()->show());
 
         $dialog = new PageSelect();
@@ -291,7 +310,6 @@ jQuery(function($) {
     let pageId = {$jsPageId}
     let cache = {};
     let input = $('[name=category]');
-
 
     input.autocomplete({
       source: function(request, response) {
@@ -320,16 +338,14 @@ jQuery(function($) {
         setTimeout(saveLock, lockTimeout);
     }
     setTimeout(saveLock, lockTimeout);
-
 });
 JS;
         $template->appendJs($js);
 
+
+        // Leave page confirm
         $js = <<<JS
-
 jQuery(function($) {
-
-    // Leave page confirm
     setTimeout(function () {
         $('form#page').data('serialize', $('form#page').serialize());
         $(window).on('beforeunload', function(e) {

@@ -9,6 +9,14 @@ use Tk\Config;
 return function (Config $config) {
 
     /*
+     * Setup available page templates that reside in the "/html" directory
+     */
+    $config['wiki.templates'] = [
+        'public' => 'Public',
+        'public_fluid' => 'Public Fluid',
+    ];
+
+    /*
      * Site hostname
      */
     $config['hostname'] = 'localhost';

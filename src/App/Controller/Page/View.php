@@ -51,6 +51,11 @@ class View extends PageController
             }
         }
 
+        if ($this->wPage->getTemplate()) {
+            $tplPath = $this->getSystem()->makePath(sprintf('/html/%s.html', $this->wPage->getTemplate()));
+            $this->setPage($this->getFactory()->createPage($tplPath));
+        }
+
         $this->getPage()->setTitle($this->wPage->getTitle());
         $this->wContent = $this->wPage->getContent();
         $this->toolbar = new ViewToolbar($this->wPage);
@@ -115,7 +120,10 @@ class View extends PageController
             $this->getFactory()->getEventDispatcher()->dispatch($event, \App\WikiEvents::WIKI_CONTENT_VIEW);
         }
 
+
         $template->setText('title', $this->wPage->getTitle());
+        $template->setVisible('title', $this->wPage->isTitleVisible());
+
         $template->insertHtml('content', $this->wContent->getHtml());
 
         if ($this->wContent->getCss()) {
@@ -141,7 +149,7 @@ class View extends PageController
         $html = <<<HTML
 <div class="wk-content">
     <div class="sticky-top" style="" var="toolbar"></div>
-    <h1 class="mb-3" var="title"></h1>
+    <h1 class="mb-3" choice="title"></h1>
     <div var="content"></div>
 </div>
 HTML;

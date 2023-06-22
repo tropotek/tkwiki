@@ -121,7 +121,6 @@ class Secret
         $action->setRedirect(Uri::create()->set('id', $this->secret->getId()));
         if ($form->getTriggeredAction()->isExit()) {
             $action->setRedirect($this->getFactory()->getBackUrl());
-            //$action->setRedirect(Uri::create('/secretManager'));
         }
 
         if ($this->isHtmx()) {
@@ -140,6 +139,8 @@ class Secret
         //$this->getForm()->getField('url')->addFieldCss('col-sm-6');
         $this->getForm()->getField('username')->addFieldCss('col-sm-6');
         $this->getForm()->getField('password')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('keys')->setAttr('style', 'height: 20em;')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('notes')->setAttr('style', 'height: 20em;')->addFieldCss('col-sm-6');
 
         $renderer = $this->getFormRenderer();
         $renderer->addFieldCss('mb-3');

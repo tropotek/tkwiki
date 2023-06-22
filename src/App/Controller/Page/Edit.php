@@ -115,12 +115,6 @@ class Edit extends PageController
             ->setRequired()
             ->setGroup($group);
 
-        $list = $this->getConfig()->get('wiki.templates', []);
-        $this->getForm()->appendField(new Field\Select('template', $list))
-            ->setRequired()
-            ->setGroup($group)
-            ->prependOption('-- Default --', '');
-
         $this->getForm()->appendField(new Field\InputButton('category'))
             ->setNotes('(Optional) Use page categories to group pages and allow them to show in the category listing widget')
             ->addBtnCss('fa fa-chevron-down')
@@ -154,6 +148,13 @@ class Edit extends PageController
             ->setGroup($group);
 
         $group = 'Extra';
+
+        $list = $this->getConfig()->get('wiki.templates', []);
+        $this->getForm()->appendField(new Field\Select('template', $list))
+            ->setRequired()
+            ->setGroup($group)
+            ->prependOption('-- Site Default --', '');
+
         $this->getForm()->appendField(new Field\Input('keywords'))
             ->setRequired()
             ->setGroup($group);
@@ -285,8 +286,7 @@ class Edit extends PageController
         }
         $template->setAttr('back', 'href', $url);
 
-        $this->getForm()->getField('title')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('template')->addFieldCss('col-sm-6');
+        //$this->getForm()->getField('title')->addFieldCss('col-sm-6');
         $this->getForm()->getField('category')->addFieldCss('col-sm-6');
         $this->getForm()->getField('permission')->addFieldCss('col-sm-6');
         $this->getForm()->getField('titleVisible')->addFieldCss('col-sm-6');

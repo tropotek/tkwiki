@@ -47,6 +47,9 @@ class ViewSecret extends Renderer implements DisplayInterface
         $template = $this->getTemplate();
 
         $template->setText('name', $this->secret->getName());
+        if ($this->secret->getKeys() || $this->secret->getNotes()) {
+            $template->prependText('name', '* ');
+        }
         if ($this->secret->getUrl()) {
             $template->setAttr('name', 'href', $this->secret->getUrl());
             $template->setVisible('url', true);

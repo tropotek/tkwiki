@@ -231,9 +231,10 @@ jQuery(function($) {
             $.post(location.href, {action: 'create', pageId: page.pageId, type: 'item'}, function(data) {
                 let li = $(liTpl);
                 li.addClass('mjs-nestedSortable-no-nesting');
-                li.attr('data-item-id', data.menuItemId);
-                li.attr('data-page-id', data.pageId);
-                li.attr('data-type', data.type);
+                li.attr('id', 'item-' + data.menuItemId);
+                li.data('itemId', data.menuItemId);
+                li.data('pageId', data.pageId);
+                li.data('type', data.type);
                 $('a', li).html(data.name);
                 $('a', li).attr('contentEditable', 'true');
                 sortable.append(li);
@@ -253,9 +254,10 @@ jQuery(function($) {
         $.post(location.href, {action: 'create', pageId: 0, type: 'dropdown', name: name}, function(data) {
             let li = $(liTpl);
             li.addClass('dropdown');
-            li.attr('data-item-id', data.menuItemId);
-            li.attr('data-page-id', '0');
-            li.attr('data-type', data.type);
+            li.attr('id', 'item-' + data.menuItemId);
+            li.data('itemId', data.menuItemId);
+            li.data('pageId', '0');
+            li.data('type', data.type);
             $('a', li).html(data.name);
             $('a', li).attr('contentEditable', 'true');
             sortable.append(li);

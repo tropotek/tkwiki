@@ -14,9 +14,11 @@ class WikiHandler implements EventSubscriberInterface
     {
         $content = $event->getContent();
         try {
-            $formatter = new HtmlFormatter($content->getHtml());
-            // Format the content html
-            $content->setHtml($formatter->getHtml());
+            if (trim($content->getHtml())) {
+                $formatter = new HtmlFormatter($content->getHtml());
+                // Format the content html
+                $content->setHtml($formatter->getHtml());
+            }
         } catch (\Exception $e) {
             Log::error($e->__toString());
             $content->setHtml('<div role="alert" class="alert alert-danger"><strong>Error:</strong> '.$e->getMessage().'</div>');

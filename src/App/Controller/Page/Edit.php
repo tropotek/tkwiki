@@ -45,6 +45,11 @@ class Edit extends PageController
 
     public function doDefault(Request $request)
     {
+        $ref = Uri::create($request->server->get('HTTP_REFERER', ''))->getRelativePath();
+        if ($ref != '/pageManager') {
+            $this->getPage()->setCrumbEnabled(false);
+        }
+
         $this->lock = new Lock($this->getAuthUser());
 
         // Find requested page
@@ -226,7 +231,7 @@ class Edit extends PageController
         }
 
         // Index page links
-        if ($this->wContent->getHtml()) {
+        if (trim($this->wContent->getHtml())) {
             $this->indexLinks($this->wPage, $this->wContent->getHtml());
         }
 

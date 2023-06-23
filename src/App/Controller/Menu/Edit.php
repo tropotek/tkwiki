@@ -205,7 +205,7 @@ jQuery(function($) {
     });
 
     // Delete menu item
-    $('li b.fa-trash', sortable).on('click', function () {
+    $(sortable).on('click', 'li b.fa-trash', function () {
         if (confirm('Delete this menu item.')) {
             $(this).parent().remove();
             $.post(location.href, {action: 'delete', id: $(this).parent().data('itemId') }, function(data) { });

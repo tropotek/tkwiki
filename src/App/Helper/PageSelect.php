@@ -66,11 +66,13 @@ jQuery(function($) {
         $('input', this).val('');
     })
     .on('shown.bs.modal', function() {
-        let title = tinymce.activeEditor.selection.getContent({ format: 'text' });
-        if (title !== '') {
-            $('input', this).last().val(title);
+        if (tinymce.activeEditor) {
+            let title = tinymce.activeEditor.selection.getContent({ format: 'text' });
+            if (title !== '') {
+                $('input', this).last().val(title);
+            }
+            $('input', this).last().focus();
         }
-        $('input', this).last().focus();
     })
     .on('click', '.wiki-insert', function() {
         // On insert existing page event

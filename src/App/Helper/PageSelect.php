@@ -106,7 +106,7 @@ jQuery(function($) {
 
 
     function init() {
-        let links = $('th a, .tk-foot a', this).not('[href="javascript:;"], [href="#"]');
+        let links = $('th a, .tk-foot a', dialog).not('[href="javascript:;"], [href="#"]');
         // Handle table links
         links.on('click', function(e) {
             e.stopPropagation();
@@ -117,7 +117,7 @@ jQuery(function($) {
             return false;
         });
         // Handle table filters
-        $('form.tk-form', this).on('submit', function (e) {
+        $('form.tk-form', dialog).on('submit', function (e) {
             e.stopPropagation();
             let url = $(this).attr('action');
             let data = $(this).serializeArray();

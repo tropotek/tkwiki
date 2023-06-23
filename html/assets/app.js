@@ -14,7 +14,6 @@ jQuery(function ($) {
   app.initWikiScripts();
   app.initWkSecret();
   app.initTkFormTabs();
-  app.initCodemirror();
   app.initTinymce();
 });
 
@@ -152,38 +151,6 @@ let app = function () {
     $('body').on(EVENT_INIT_FORM, init);
   };
 
-
-  /**
-   * Code Mirror setup
-   * @todo Implement this into our javascript and css textarea editors
-   */
-  let initCodemirror = function () {
-    if (typeof CodeMirror === 'undefined') {
-      console.warn('Plugin not loaded: CodeMirror');
-      return;
-    }
-
-    function init() {
-      let el = this;
-      this.cm = CodeMirror.fromTextArea(this, $.extend({}, {
-        lineNumbers: true,
-        mode: 'javascript',
-        smartIndent: true,
-        indentUnit: 2,
-        tabSize: 2,
-        autoRefresh: true,
-        indentWithTabs: false,
-        dragDrop: false
-      }, $(this).data()));
-
-      $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function () {
-        this.refresh();
-      }.bind(el.cm));
-    };
-
-    init();
-    $('body').on(EVENT_INIT_FORM, init);
-  };  // end initCodemirror()
 
 
   /**
@@ -428,7 +395,6 @@ let app = function () {
     initWikiScripts: initWikiScripts,
     initWkSecret: initWkSecret,
     initTkFormTabs: initTkFormTabs,
-    initCodemirror: initCodemirror,
     initTinymce: initTinymce
   }
 

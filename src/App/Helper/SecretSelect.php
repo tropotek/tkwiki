@@ -121,7 +121,7 @@ jQuery(function($) {
 
     function init() {
         $('.tk-table.secret-table').each(function() {
-            let links = $('th a, .tk-foot a', this).not('[href="javascript:;"], [href="#"]');
+            let links = $('th a, .tk-foot a', selectDialog).not('[href="javascript:;"], [href="#"]');
             // Handle table links
             links.on('click', function(e) {
                 e.stopPropagation();
@@ -132,7 +132,7 @@ jQuery(function($) {
                 return false;
             });
             // Handle table filters
-            $('form.tk-form', this).on('submit', function (e) {
+            $('form.tk-form', selectDialog).on('submit', function (e) {
                 e.stopPropagation();
                 let url = $(this).attr('action');
                 let data = $(this).serializeArray();

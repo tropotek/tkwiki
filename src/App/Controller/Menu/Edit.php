@@ -252,7 +252,7 @@ jQuery(function($) {
             });
             return false;
         });
-    };
+    }
     init();
     $('body').on(EVENT_INIT_TABLE, init);
 

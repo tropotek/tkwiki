@@ -228,28 +228,33 @@ jQuery(function($) {
     }
     //$('button.btn-save-menu').on('click', saveItem);
 
-    // Add page dialog
-    $('td a.wiki-insert', '#page-select-dialog').on('click', function (e) {
-        e.stopPropagation();
-        let page = $(this).data();
 
-        // Create new menu item and get item id returned from server
-        $.post(location.href, {action: 'create', pageId: page.pageId, type: 'item'}, function(data) {
-            let li = $(liTpl);
-            li.addClass('mjs-nestedSortable-no-nesting');
-            li.attr('id', 'item-' + data.menuItemId);
-            li.data('itemId', data.menuItemId);
-            li.data('pageId', data.pageId);
-            li.data('type', data.type);
-            $('a', li).html(data.name);
-            $('a', li).attr('contentEditable', 'true');
-            sortable.append(li);
-            $('button.btn-save-menu').prop('disabled', false);
+    function init() {
+        // Add page dialog
+        $('td a.wiki-insert', '#page-select-dialog').on('click', function (e) {
+            e.stopPropagation();
+            let page = $(this).data();
 
-            $('#page-select-dialog').modal('hide');
+            // Create new menu item and get item id returned from server
+            $.post(location.href, {action: 'create', pageId: page.pageId, type: 'item'}, function(data) {
+                let li = $(liTpl);
+                li.addClass('mjs-nestedSortable-no-nesting');
+                li.attr('id', 'item-' + data.menuItemId);
+                li.data('itemId', data.menuItemId);
+                li.data('pageId', data.pageId);
+                li.data('type', data.type);
+                $('a', li).html(data.name);
+                $('a', li).attr('contentEditable', 'true');
+                sortable.append(li);
+                $('button.btn-save-menu').prop('disabled', false);
+
+                $('#page-select-dialog').modal('hide');
+            });
+            return false;
         });
-        return false;
-    });
+    };
+    init();
+    $('body').on(EVENT_INIT_TABLE, init);
 
     // Add dropdown item
     sortable.on('create-dropdown', function(obj, name) {

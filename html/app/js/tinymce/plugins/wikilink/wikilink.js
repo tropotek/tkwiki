@@ -2,8 +2,8 @@
  * Created by mifsudm on 29/06/16.
  * 
  * 
- * TODO: Still not fiully tested
- * TODO: We will have to check on the pagenator when ready
+ * TODO: Still not fully tested
+ * TODO: We will have to check on the generator when ready
  * TODO: Get a friggen decent ICON working
  */
 tinymce.PluginManager.add('wikilink', function(editor, url) {
@@ -18,7 +18,7 @@ tinymce.PluginManager.add('wikilink', function(editor, url) {
   var win = null;
   var onlyText = false;
 
-      function createNewPageLink()
+  function createNewPageLink()
   {
     if (!$('#wikilink-new').val()) {
       editor.windowManager.alert('Please enter a valid title for the new page');

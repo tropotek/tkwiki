@@ -181,11 +181,19 @@ class PageMap extends Mapper
 
         $homeUrl = \App\Config::getInstance()->get('wiki.page.default');
 
-        $from = sprintf('%s a LEFT JOIN %s b ON (a.%s = b.%s)', $this->getDb()->quoteParameter($this->getTable()), $this->getDb()->quoteParameter('links'),
-            $this->getDb()->quoteParameter('url'), $this->getDb()->quoteParameter('page_url'));
-        $where = sprintf('b.%s IS NULL AND (a.%s != %s AND a.%s != %s)', $this->getDb()->quoteParameter('page_id'),
-            $this->getDb()->quoteParameter('url'), $this->getDb()->quote($homeUrl),
-            $this->getDb()->quoteParameter('type'), $this->getDb()->quote(Page::TYPE_NAV));
+        $from = sprintf('%s a LEFT JOIN %s b ON (a.%s = b.%s)',
+            $this->getDb()->quoteParameter($this->getTable()),
+            $this->getDb()->quoteParameter('links'),
+            $this->getDb()->quoteParameter('url'),
+            $this->getDb()->quoteParameter('page_url')
+        );
+        $where = sprintf('b.%s IS NULL AND (a.%s != %s AND a.%s != %s)',
+            $this->getDb()->quoteParameter('page_id'),
+            $this->getDb()->quoteParameter('url'),
+            $this->getDb()->quote($homeUrl),
+            $this->getDb()->quoteParameter('type'),
+            $this->getDb()->quote(Page::TYPE_NAV)
+        );
 
         $res = $this->selectFrom($from, $where, $tool);
         return $res;

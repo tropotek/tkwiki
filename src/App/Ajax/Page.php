@@ -29,7 +29,7 @@ class Page extends \App\Controller\Iface
     public function doRefreshLock(Request $request)
     {
         $pageId = $request->get('pid');
-        // Refresh the lock timeout to prevent user loosing the lock over long edits.
+        // Refresh the lock timeout to prevent user losing the lock over long edits.
         $data = ['status' => 'ok', 'lock' => false];
         if ($this->getConfig()->getLockMap()->isLocked($pageId)) {
             $b = $this->getConfig()->getLockMap()->lock($pageId);

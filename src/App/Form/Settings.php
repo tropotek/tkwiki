@@ -90,14 +90,14 @@ class Settings
 
         $this->getForm()->appendField(new Field\Textarea('system.global.js'))
             ->setAttr('id', 'site-global-js')
-            ->setLabel('Custom JS')
+            ->setLabel('Global JavaScript')
             ->setNotes('You can omit the &lt;script&gt; tags here')
             ->addCss('code')->setAttr('data-mode', 'javascript')
             ->setGroup($tab);
 
         $this->getForm()->appendField(new Field\Textarea('system.global.css'))
             ->setAttr('id', 'site-global-css')
-            ->setLabel('Custom CSS Styles')
+            ->setLabel('Global CSS Styles')
             ->setNotes('You can omit the &lt;style&gt; tags here')
             ->addCss('code')->setAttr('data-mode', 'css')
             ->setGroup($tab);

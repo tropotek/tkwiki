@@ -168,14 +168,14 @@ class Edit extends PageController
             ->setRequired()
             ->setGroup($group);
 
-        $this->getForm()->appendField(new Field\Textarea('css'))
-            ->setLabel('Page Stylesheet')
-            ->addCss('css-edit')
-            ->setGroup($group);
-
         $this->getForm()->appendField(new Field\Textarea('js'))
             ->setLabel('Page JavaScript')
             ->addCss('js-edit')
+            ->setGroup($group);
+
+        $this->getForm()->appendField(new Field\Textarea('css'))
+            ->setLabel('Page Stylesheet')
+            ->addCss('css-edit')
             ->setGroup($group);
 
         $this->getForm()->appendField(new Action\Submit('save', [$this, 'onSubmit']));
@@ -381,7 +381,7 @@ JS;
   </div>
   <div class="card mb-3">
     <div class="card-header" var="title"><i class="fa fa-users"></i> </div>
-    <div class="card-body" var="content"></div>
+    <div class="card-body wk-page-edit" var="content"></div>
   </div>
 </div>
 HTML;

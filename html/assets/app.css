@@ -62,6 +62,12 @@ pre {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.wk-page-edit .js-edit,
+.wk-page-edit .css-edit{
+  height: 500px;
+}
+
 /* ==================  WIKI .end  ================== */
 
 

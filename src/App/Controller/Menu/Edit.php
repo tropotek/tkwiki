@@ -187,8 +187,6 @@ jQuery(function($) {
 		maxLevels: 2,
 		opacity: .6,
 		relocate: function (a, b) {
-            //$('button.btn-save-menu').prop('disabled', false);
-            //$('button.btn-save-menu').trigger('click');
             saveItem();
 		}
     });
@@ -197,10 +195,9 @@ jQuery(function($) {
         $(this).data('name', $('a', this).html());
     });
 
-    $('li a', sortable).on('keyup', function (e) {
+    $(sortable).on('keyup', 'li a', function (e) {
         if (e.which === 13) $(this).blur();
-        //$('button.btn-save-menu').prop('disabled', false);
-    }).on('blur', function () {
+    }).on('blur', 'li a', function () {
         $(this).parent().data('name', $(this).html());
     });
 
@@ -208,7 +205,7 @@ jQuery(function($) {
     $(sortable).on('click', 'li b.fa-trash', function () {
         if (confirm('Delete this menu item.')) {
             $(this).parent().remove();
-            $.post(location.href, {action: 'delete', id: $(this).parent().data('itemId') }, function(data) { });
+            $.post(location.href, {action: 'delete', id: $(this).parent().data('itemId') }, function(data) {  });
         }
     });
 
@@ -222,12 +219,7 @@ jQuery(function($) {
 		}
         result.shift();
         $.post(location.href, {action: 'update', list: result}, function(data) { });
-
-        //$('button.btn-save-menu').prop('disabled', true);
-
     }
-    //$('button.btn-save-menu').on('click', saveItem);
-
 
     function init() {
         // Add page dialog
@@ -239,10 +231,9 @@ jQuery(function($) {
             $.post(location.href, {action: 'create', pageId: page.pageId, type: 'item'}, function(data) {
                 let li = $(liTpl);
                 li.addClass('mjs-nestedSortable-no-nesting');
-                li.attr('id', 'item-' + data.menuItemId);
-                li.data('itemId', data.menuItemId);
-                li.data('pageId', data.pageId);
-                li.data('type', data.type);
+                li.attr('data-item-id', data.menuItemId);
+                li.attr('data-page-id', data.pageId);
+                li.attr('data-type', data.type);
                 $('a', li).html(data.name);
                 $('a', li).attr('contentEditable', 'true');
                 sortable.append(li);
@@ -262,17 +253,14 @@ jQuery(function($) {
         $.post(location.href, {action: 'create', pageId: 0, type: 'dropdown', name: name}, function(data) {
             let li = $(liTpl);
             li.addClass('dropdown');
-            li.attr('id', 'item-' + data.menuItemId);
-            li.data('itemId', data.menuItemId);
-            li.data('pageId', '0');
-            li.data('type', data.type);
+            li.attr('data-item-id', data.menuItemId);
+            li.attr('data-page-id', '0');
+            li.attr('data-type', data.type);
             $('a', li).html(data.name);
             $('a', li).attr('contentEditable', 'true');
             sortable.append(li);
-            //$('button.btn-save-menu').prop('disabled', false);
         });
     });
-
 
     // Add divider item
     $('.btn-add-divider').on('click', function() {
@@ -286,10 +274,8 @@ jQuery(function($) {
             li.data('type', data.type);
             $('a', li).html(data.name);
             sortable.append(li);
-            //$('button.btn-save-menu').prop('disabled', false);
         });
     });
-
 
 });
 JS;

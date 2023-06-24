@@ -105,12 +105,13 @@ class User extends Model implements UserInterface, FileInterface
     {
         $user = Factory::instance()->getAuthUser();
         if ($user) {
+            if (Masquerade::isMasquerading()) {
+                Masquerade::masqueradeLogout();
+                return;
+            }
             Factory::instance()->getAuthController()->clearIdentity();
             if ($cookie) {
                 $user->forgetMe();
-            }
-            if (Masquerade::isMasquerading()) {
-                Masquerade::clearAll();
             }
             $user->setSessionId('');
             $user->save();

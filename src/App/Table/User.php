@@ -49,8 +49,8 @@ class User
         /** @var \App\Db\User $msqUser */
         $msqUser = UserMap::create()->find($id);
         if ($msqUser && Masquerade::masqueradeLogin($this->getFactory()->getAuthUser(), $msqUser)) {
-            Alert::addSuccess('You are now logged in as user ' . $msqUser->getUsername());
-            Uri::create('/dashboard')->redirect();
+            Alert::addWarning('You are now logged in as user ' . $msqUser->getUsername());
+            Uri::create('/')->redirect();
         }
 
         Alert::addWarning('You cannot login as user ' . $msqUser->getUsername() . ' invalid permissions');
@@ -66,7 +66,7 @@ class User
         if ($request->query->has(Masquerade::QUERY_MSQ)) {
             $this->doMsq($request->query->get(Masquerade::QUERY_MSQ));
         }
-        $editUrl = sprintf('/%sEdit', $this->type);
+        $editUrl = sprintf('/user/%sEdit', $this->type);
 
         $this->getTable()->appendCell(new Cell\Checkbox('id'));
         $this->getTable()->appendCell(new Cell\Text('actions'))
@@ -161,7 +161,7 @@ class User
                 ->setAttr('data-confirm', 'Are you sure you want to reset the Table`s session?')
                 ->setAttr('title', 'Reset table filters and order to default.');
         }
-        //$this->getTable()->appendAction(new Action\Button('Create'))->setUrl(Uri::create('/'.$this->type.'Edit'));
+        //$this->getTable()->appendAction(new Action\Button('Create'))->setUrl(Uri::create('/user/'.$this->type.'Edit'));
         $this->getTable()->appendAction(new Action\Delete());
         $this->getTable()->appendAction(new Action\Csv())->addExcluded('actions');
 

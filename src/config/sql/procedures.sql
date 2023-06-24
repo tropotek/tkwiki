@@ -40,24 +40,24 @@ END //
 DELIMITER ;
 
 -- Create a temporary date table for count queries that have no data on every date required
-DROP PROCEDURE IF EXISTS procFillCal;
-DELIMITER //
-CREATE PROCEDURE procFillCal(pTableName VARCHAR(32), pStartDate DATE, pEndDate DATE, pInterval VARCHAR(8), pIntervalUnit INTEGER)
-BEGIN
-  DECLARE pDate DATE;
---  DROP TEMPORARY TABLE IF EXISTS pTableName;
-  CREATE TEMPORARY TABLE pTableName (`date` DATE );
-  TRUNCATE pTableName;
-  SET pDate = pStartDate;
-  WHILE pDate < pEndDate DO
-    INSERT INTO pTableName VALUES(pDate);
-    CASE UPPER(pInterval)
-      WHEN 'DAY' THEN SET pDate = ADDDATE(pDate, INTERVAL pIntervalUnit DAY);
-      WHEN 'WEEK' THEN SET pDate = ADDDATE(pDate, INTERVAL pIntervalUnit WEEK);
-      WHEN 'MONTH' THEN SET pDate = ADDDATE(pDate, INTERVAL pIntervalUnit MONTH);
-      WHEN 'YEAR' THEN SET pDate = ADDDATE(pDate, INTERVAL pIntervalUnit YEAR);
-    END CASE;
-  END WHILE;
- END //
-DELIMITER ;
+# DROP PROCEDURE IF EXISTS procFillCal;
+# DELIMITER //
+# CREATE PROCEDURE procFillCal(pTableName VARCHAR(32), pStartDate DATE, pEndDate DATE, pInterval VARCHAR(8), pIntervalUnit INTEGER)
+# BEGIN
+#   DECLARE pDate DATE;
+# --  DROP TEMPORARY TABLE IF EXISTS pTableName;
+#   CREATE TEMPORARY TABLE pTableName (`date` DATE );
+#   TRUNCATE pTableName;
+#   SET pDate = pStartDate;
+#   WHILE pDate < pEndDate DO
+#     INSERT INTO pTableName VALUES(pDate);
+#     CASE UPPER(pInterval)
+#       WHEN 'DAY' THEN SET pDate = ADDDATE(pDate, INTERVAL pIntervalUnit DAY);
+#       WHEN 'WEEK' THEN SET pDate = ADDDATE(pDate, INTERVAL pIntervalUnit WEEK);
+#       WHEN 'MONTH' THEN SET pDate = ADDDATE(pDate, INTERVAL pIntervalUnit MONTH);
+#       WHEN 'YEAR' THEN SET pDate = ADDDATE(pDate, INTERVAL pIntervalUnit YEAR);
+#     END CASE;
+#   END WHILE;
+#  END //
+# DELIMITER ;
 

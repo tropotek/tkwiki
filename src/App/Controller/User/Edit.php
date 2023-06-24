@@ -43,7 +43,7 @@ class Edit extends PageController
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        $template->setAttr('back', 'href', Uri::create('/' . $this->type.'Manager'));
+        $template->setAttr('back', 'href', $this->getBackUrl());
         $template->setAttr('resend', 'href', Uri::create()->set('action', 'reset'));
 
         $template->appendText('title', $this->getPage()->getTitle());

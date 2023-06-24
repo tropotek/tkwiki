@@ -44,7 +44,8 @@ class Manager extends PageController
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
-        $template->setAttr('create', 'href', Uri::create('/'.$this->type.'Edit'));
+        $template->setAttr('back', 'href', $this->getBackUrl());
+        $template->setAttr('create', 'href', Uri::create('/user/'.$this->type.'Edit'));
 
         $template->appendTemplate('content', $this->table->show());
 

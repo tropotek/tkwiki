@@ -262,19 +262,19 @@ let app = function () {
           title: 'Row/Col x3',
           description: 'Add a row x3 with UL lists.',
           content: `<div class="row">
-<div class="col-md-4"><ul><li>&nbsp;</li></ul></div>
-<div class="col-md-4"><ul><li>&nbsp;</li></ul></div>
-<div class="col-md-4"><ul><li>&nbsp;</li></ul></div>
+<div class="col-md-4"><p><strong>Cell 1:</strong></p><ul><li>&nbsp;</li></ul></div>
+<div class="col-md-4"><p><strong>Cell 2:</strong></p><ul><li>&nbsp;</li></ul></div>
+<div class="col-md-4"><p><strong>Cell 3:</strong></p><ul><li>&nbsp;</li></ul></div>
 </div>`
         },
         {
           title: 'Row/Col x4',
           description: 'Add a row x4 with UL lists.',
           content: `<div class="row">
-  <div class="col-md-3"><div class="col-md-4"><ul><li>&nbsp;</li></ul></div></div>
-  <div class="col-md-3"><div class="col-md-4"><ul><li>&nbsp;</li></ul></div></div>
-  <div class="col-md-3"><div class="col-md-4"><ul><li>&nbsp;</li></ul></div></div>
-  <div class="col-md-3"><div class="col-md-4"><ul><li>&nbsp;</li></ul></div></div>
+  <div class="col-md-3"><p><strong>Cell 1:</strong></p><div class="col-md-4"><ul><li>&nbsp;</li></ul></div></div>
+  <div class="col-md-3"><p><strong>Cell 2:</strong></p><div class="col-md-4"><ul><li>&nbsp;</li></ul></div></div>
+  <div class="col-md-3"><p><strong>Cell 3:</strong></p><div class="col-md-4"><ul><li>&nbsp;</li></ul></div></div>
+  <div class="col-md-3"><p><strong>Cell 4:</strong></p><div class="col-md-4"><ul><li>&nbsp;</li></ul></div></div>
 </div>`
         },
         {

@@ -13,11 +13,11 @@ class User extends \Bs\Db\User
      * permission groups and descriptions
      */
 	const PERMISSION_LIST = [
-        self::PERM_ADMIN          => "Admin Full Access",
-        self::PERM_SYSADMIN       => "Change Site Settings",
-        self::PERM_MANAGE_STAFF   => "Manage Staff",
-        self::PERM_MANAGE_USER    => "Manage Users",
-        self::PERM_EDITOR         => "Content Editor",
+        self::PERM_ADMIN            => "Admin",
+        self::PERM_SYSADMIN         => "Manage Settings",
+        self::PERM_MANAGE_STAFF     => "Manage Staff",
+        self::PERM_MANAGE_USER      => "Manage Users",
+        self::PERM_EDITOR           => "Manage Content",
     ];
 
 

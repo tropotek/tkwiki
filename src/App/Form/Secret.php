@@ -139,8 +139,10 @@ class Secret
         //$this->getForm()->getField('url')->addFieldCss('col-sm-6');
         $this->getForm()->getField('username')->addFieldCss('col-sm-6');
         $this->getForm()->getField('password')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('keys')->setAttr('style', 'height: 20em;')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('notes')->setAttr('style', 'height: 20em;')->addFieldCss('col-sm-6');
+        $this->getForm()->getField('keys')->setAttr('style', 'height: 20em;');
+        $this->getForm()->getField('notes')->setAttr('style', 'height: 20em;');
+//        $this->getForm()->getField('keys')->addFieldCss('col-sm-6');
+//        $this->getForm()->getField('notes')->addFieldCss('col-sm-6');
 
         $renderer = $this->getFormRenderer();
         $renderer->addFieldCss('mb-3');

@@ -376,7 +376,6 @@ let app = function () {
   return {
     initWikiScripts: initWikiScripts,
     initWkSecret: initWkSecret,
-    initTkFormTabs: initTkFormTabs,
     initTinymce: initTinymce
   }
 

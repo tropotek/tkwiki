@@ -26,8 +26,6 @@ class Dispatch extends \Bs\Dispatch
         parent::httpInit();
 
         $this->getDispatcher()->addSubscriber(new WikiHandler());
-        $this->getDispatcher()->addSubscriber(new RequestHandler());
-        $this->getDispatcher()->addSubscriber(new CrumbsHandler());
 
     }
 

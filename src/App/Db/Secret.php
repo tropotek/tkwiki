@@ -1,7 +1,7 @@
 <?php
 namespace App\Db;
 
-use App\Db\Traits\UserTrait;
+use Bs\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
 use OTPHP\TOTP;
 use Tk\Db\Mapper\Model;

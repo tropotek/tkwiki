@@ -2,7 +2,7 @@
 namespace App\Db;
 
 use App\Db\Traits\PageTrait;
-use App\Db\Traits\UserTrait;
+use Bs\Db\Traits\UserTrait;
 use App\Factory;
 use Bs\Db\Traits\CreatedTrait;
 use Tk\Db\Mapper\Model;

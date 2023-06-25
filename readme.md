@@ -5,7 +5,7 @@ __Web:__ <https://github.com/tropotek/tkwiki>
 __Authors:__ Tropotek <http://www.tropotek.com/>
 
 A WIKI/CMS that is easy to use for people that want a website to store info fast.
-Great for projects that need documentation, can be edited live using WYSIWYG editors within the site.
+Perfect for projects that require online documentation, and can be edited by teams.
 
 __Features:__
 - The ability to add CSS and Javascript within each page.
@@ -46,8 +46,13 @@ To create the admin account password execute the `password [pwd]` command using 
 __NOTICE:__ Wiki Ver 8.0+ is based on a completely re-written base library. So there is no upgrade scripts from
 previous major versions. 
 
-When upgrading for Ver 8.0+ version of the wiki you can use the following: 
+Upgrade the site by the CLI command;
+```bash
+$ cd {siteroot}
+$ ./bin/cmd ug
+```
 
+Manual upgrade process if the above fails:
 ```bash
 $ git reset --hard
 $ git checkout master

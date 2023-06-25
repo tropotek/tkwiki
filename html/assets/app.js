@@ -10,10 +10,10 @@ jQuery(function ($) {
   tkbase.initDataToggle();
   tkbase.initPasswordToggle();
   tkbase.initDatepicker();
+  tkbase.initTkFormTabs();
 
   app.initWikiScripts();
   app.initWkSecret();
-  app.initTkFormTabs();
   app.initTinymce();
 });
 
@@ -133,24 +133,6 @@ let app = function () {
     });
 
   };
-
-
-  /**
-   * Creates bootstrap 5 tabs around the \Tk\Form renderer groups (.tk-form-group) output
-   */
-  let initTkFormTabs = function () {
-    if ($.fn.tktabs === undefined) {
-      console.warn('jquery.tktabs.js is not installed.');
-      return;
-    }
-
-    function init() {
-      $('form.tk-form').tktabs({});
-    }
-    init();
-    $('body').on(EVENT_INIT_FORM, init);
-  };
-
 
 
   /**

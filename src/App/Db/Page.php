@@ -1,7 +1,7 @@
 <?php
 namespace App\Db;
 
-use App\Db\Traits\UserTrait;
+use Bs\Db\Traits\UserTrait;
 use App\Factory;
 use Bs\Db\Traits\TimestampTrait;
 use Tk\Config;

@@ -2,7 +2,7 @@
 namespace App;
 
 use App\Controller\Menu\View;
-use App\Helper\UserNav;
+use App\Helper\Navigation;
 use Bs\Ui\Dialog;
 use Dom\Template;
 use Tk\Uri;
@@ -42,7 +42,7 @@ JS;
             $template->setText('username', $this->getFactory()->getAuthUser()->getUsername());
         }
 
-        $userNav = new UserNav();
+        $userNav = new Navigation();
         $template->replaceTemplate('user-nav', $userNav->show());
 
         return $template;

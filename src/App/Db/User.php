@@ -16,7 +16,7 @@ class User extends \Bs\Db\User
         self::PERM_ADMIN            => "Admin",
         self::PERM_SYSADMIN         => "Manage Settings",
         self::PERM_MANAGE_STAFF     => "Manage Staff",
-        self::PERM_MANAGE_USER      => "Manage Users",
+        self::PERM_MANAGE_MEMBER    => "Manage Users",
         self::PERM_EDITOR           => "Manage Content",
     ];
 

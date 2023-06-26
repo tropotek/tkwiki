@@ -25,7 +25,7 @@ class User
 
     protected ?Form $filter = null;
 
-    protected string $type = \App\Db\User::TYPE_USER;
+    protected string $type = \App\Db\User::TYPE_MEMBER;
 
 
     public function __construct()

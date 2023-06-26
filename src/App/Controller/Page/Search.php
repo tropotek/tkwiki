@@ -52,7 +52,7 @@ class Search extends PageController
         } elseif ($user?->isStaff()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER, Page::PERM_STAFF];
             $filter['author'] = $user->getId();
-        } elseif ($user?->isUser()) {
+        } elseif ($user?->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER];
         } else {
             $filter['permission'] = [Page::PERM_PUBLIC];

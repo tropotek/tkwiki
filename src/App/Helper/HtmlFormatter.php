@@ -134,7 +134,7 @@ class HtmlFormatter
                     }
                 } else {
                     $css = $this->addClass($css, 'wk-page-new');
-                    if (!$user || $user->isUser()) {
+                    if (!$user || $user->isMember()) {
                         $css = $this->addClass($css, 'wk-page-disable');
                     }
                     $css = $this->removeClass($css, 'wk-page');

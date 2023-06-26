@@ -221,7 +221,7 @@ class Secret extends Model
 
         // Staff and users can view USER secrets
         if ($this->getPermission() == self::PERM_USER) {
-            return ($user->isUser() || $user->isStaff());
+            return ($user->isMember() || $user->isStaff());
         }
 
         // Staff can view STAFF secrets
@@ -235,7 +235,7 @@ class Secret extends Model
     public function canEdit(?User $user): bool
     {
         if (!$user) return false;
-        if ($user->isUser()) return false;
+        if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
         if ($this->getUserId() == $user->getId()) return true;
 
@@ -255,7 +255,7 @@ class Secret extends Model
     public function canDelete(?User $user): bool
     {
         if (!$user) return false;
-        if ($user->isUser()) return false;
+        if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
         if ($this->getUserId() == $user->getId()) return true;
 

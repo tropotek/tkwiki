@@ -23,7 +23,7 @@ class PageSelect extends \Dom\Renderer\Renderer implements DisplayInterface
             'published' => true,
             'permission' => Page::PERM_PUBLIC
         ];
-        if ($this->getFactory()->getAuthUser()->isUser()) {
+        if ($this->getFactory()->getAuthUser()->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER];
         }
         if ($this->getFactory()->getAuthUser()->isStaff()) {

@@ -48,7 +48,7 @@ class Page extends Model
 
     public int $userId = 0;
 
-    public string $template = 'public';
+    public string $template = '';
 
     public string $category = '';
 

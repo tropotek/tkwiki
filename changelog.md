@@ -5,6 +5,25 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 3.0.14 [2023-06-27]:
+-------------------------------
+  - Enable browser dictionary
+  - secure the password show/hide function
+  - Added new templates
+  - Added scroll to top btn
+  - Added categories and listing widget
+  - Fix checkboxes, and add disable secret mod
+  - Added secret edit functions
+  - Add user can change own password
+  - removing files
+  - added history and lightbox
+  - Added menu editor
+  - Added new Menu system
+  - Fixed breadcrumbs
+  - saving progress
+  - Start of new tk wiki ver 8.0
+
+
 Ver 3.0.12 [2023-04-25]:
 -------------------------------
 

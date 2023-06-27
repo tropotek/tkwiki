@@ -56,6 +56,12 @@
   "require-dev": {
     "composer/composer": "^2.0"
   },
+  
+  "extra": {
+    "branch-alias": {
+      "dev-master": "8.0.x-dev"
+    }
+  },
 
   "config": {
     "preferred-install": {

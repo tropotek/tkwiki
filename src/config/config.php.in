@@ -38,8 +38,9 @@ return function (Config $config) {
 
     /**
      * Enable/disable users to change password from their profile page
+     * default: true
      */
-    $config['wiki.profile.password']    = false;
+    //$config['user.profile.password']    = false;
 
     /*
      * Encrypt function secret seed

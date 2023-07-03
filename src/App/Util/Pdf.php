@@ -50,11 +50,11 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
         return $this->title;
     }
 
-    protected function initPdf(): void
+    protected function initPdf(array $data = []): void
     {
         $html = $this->show()->toString();
         $tpl = \Tk\CurlyTemplate::create($html);
-        $parsedHtml = $tpl->parse(array());
+        $parsedHtml = $tpl->parse($data);
 
         $this->mpdf = new \Mpdf\Mpdf(array(
 			'format' => 'A4-P',
@@ -122,15 +122,10 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
         if ($this->rendered) return $template;
         $this->rendered = true;
 
-//        $template->appendCssUrl(Uri::create('/vendor/twbs/bootstrap/dist/css/bootstrap.css'));
-
         $template->appendText('title', $this->getTitle());
         $template->appendHtml('content', $this->getHtml());
 
-//        if ($this->getCoa()->getBackgroundUrl()) {
-//            $template->setAttr('body', 'style', 'background-image: url('.$this->getCoa()->getBackgroundUrl().');background-image-resize: 4; background-image-resolution: from-image;');
-//        }
-
+        $this->getFactory()->getTemplateModifier()->execute($template->getDocument());
         return $template;
     }
 

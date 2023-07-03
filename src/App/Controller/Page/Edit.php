@@ -6,7 +6,6 @@ use App\Db\ContentMap;
 use App\Db\Lock;
 use App\Db\Page;
 use App\Db\PageMap;
-use App\Helper\HtmlFormatter;
 use App\Helper\PageSelect;
 use App\Helper\SecretSelect;
 use Bs\PageController;
@@ -27,8 +26,6 @@ class Edit extends PageController
     protected ?Page $wPage = null;
 
     protected ?Content $wContent = null;
-
-    protected ?HtmlFormatter $formatter = null;
 
     protected Lock $lock;
 
@@ -265,7 +262,8 @@ class Edit extends PageController
     protected function indexLinks(Page $page, string $html): void
     {
         try {
-            $doc = HtmlFormatter::parseDomDocument($html);
+            $doc = Template::load($html)->getDocument(false);
+            //$doc = HtmlFormatter::parseDomDocument($html);
             PageMap::create()->deleteLinkByPageId($page->getId());
             $nodeList = $doc->getElementsByTagName('a');
             /** @var \DOMElement $node */

@@ -3,6 +3,10 @@ namespace App;
 
 use App\Db\User;
 use App\Db\UserMap;
+use App\Dom\Modifier\CategoryList;
+use App\Dom\Modifier\SecretList;
+use App\Dom\Modifier\Secrets;
+use App\Dom\Modifier\WikiImg;
 use App\Dom\Modifier\WikiUrl;
 use Bs\Ui\Crumbs;
 use Dom\Mvc\Modifier;
@@ -44,7 +48,13 @@ class Factory extends \Bs\Factory implements FactoryInterface
     {
         if (!$this->get('templateModifier')) {
             $dm = parent::getTemplateModifier();
-            $dm->addFilter('appWikiUrl', new WikiUrl());
+            if ($this->getRegistry()->get('wiki.enable.secret.mod', false)) {
+                $dm->addFilter('wikiSecrets', new Secrets());
+                $dm->addFilter('wikiSecretList', new SecretList());
+            }
+            $dm->addFilter('wikiCategoryList', new CategoryList());
+            $dm->addFilter('wikiImg', new WikiImg());
+            $dm->addFilter('wikiUrl', new WikiUrl());
         }
         return $this->get('templateModifier');
     }
@@ -74,4 +84,5 @@ class Factory extends \Bs\Factory implements FactoryInterface
         }
         return $this->get('breadcrumbs');
     }
+
 }

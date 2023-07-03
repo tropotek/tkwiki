@@ -4,7 +4,6 @@ namespace App\Controller\Page;
 use App\Db\Content;
 use App\Db\ContentMap;
 use App\Db\Page;
-use App\Helper\HtmlFormatter;
 use App\Helper\ViewToolbar;
 use App\Util\Pdf;
 use Bs\PageController;
@@ -101,9 +100,10 @@ class View extends PageController
         if ($request->query->get('contentId')) {
             $rev = '-' . $request->query->get('contentId');
         }
-        $html = HtmlFormatter::create($this->wContent->getHtml())->getHtml();
-        $pdf = Pdf::create($html, $this->wPage->getTitle());
+
+        $pdf = Pdf::create($this->wContent->getHtml(), $this->wPage->getTitle());
         $filename = $this->wPage->getTitle().$rev.'.pdf';
+
         if (!$request->query->has('isHtml'))
             $pdf->output($filename);     // comment this to see html version
         return $pdf->show();
@@ -114,12 +114,6 @@ class View extends PageController
         $template = $this->getTemplate();
 
         $template->appendTemplate('toolbar', $this->toolbar->show());
-
-        if ($this->getFactory()->getEventDispatcher()) {
-            $event = new \App\Event\ContentEvent($this->wContent);
-            $this->getFactory()->getEventDispatcher()->dispatch($event, \App\WikiEvents::WIKI_CONTENT_VIEW);
-        }
-
 
         $template->setText('title', $this->wPage->getTitle());
         $template->setVisible('title', $this->wPage->isTitleVisible());

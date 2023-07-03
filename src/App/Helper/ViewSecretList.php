@@ -34,7 +34,7 @@ class ViewSecretList extends Renderer implements DisplayInterface
         $filter = [
             'author' => $this->user->getId()
         ];
-        $list = SecretMap::create()->findFiltered($filter, Tool::create('created DESC'));
+        $list = SecretMap::create()->findFiltered($filter, Tool::create('name'));
 
         foreach ($list as $secret) {
             if (!$secret->canView($this->getFactory()->getAuthUser())) continue;

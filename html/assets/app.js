@@ -19,7 +19,7 @@ jQuery(function ($) {
 
 let app = function () {
   "use strict";
-
+  let $ = jQuery;
   /**
    * Init all wiki base level functions
    */
@@ -85,7 +85,6 @@ let app = function () {
    */
   let initWkSecret = function () {
 
-
     function loadPass(el, callback) {
       let id = el.data('id');
       if (id) {
@@ -96,7 +95,6 @@ let app = function () {
         }, 'json');
       }
     }
-
 
     $('.cp-usr, .cp-pas', '.wk-secret').on('click', function () {
       let pass = $(this).parent().find($(this).data('target'));

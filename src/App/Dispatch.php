@@ -25,8 +25,6 @@ class Dispatch extends \Bs\Dispatch
     {
         parent::httpInit();
 
-        $this->getDispatcher()->addSubscriber(new WikiHandler());
-
     }
 
     /**

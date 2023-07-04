@@ -263,7 +263,6 @@ class Edit extends PageController
     {
         try {
             $doc = Template::load($html)->getDocument(false);
-            //$doc = HtmlFormatter::parseDomDocument($html);
             PageMap::create()->deleteLinkByPageId($page->getId());
             $nodeList = $doc->getElementsByTagName('a');
             /** @var \DOMElement $node */

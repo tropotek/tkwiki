@@ -3,6 +3,7 @@ namespace App\Api;
 
 use App\Db\Lock;
 use App\Db\PageMap;
+use App\Db\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

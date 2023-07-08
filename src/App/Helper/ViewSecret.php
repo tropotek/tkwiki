@@ -61,17 +61,17 @@ class ViewSecret extends Renderer implements DisplayInterface
             $template->setAttr('username','data-text', $this->secret->getUsername());
             $template->setText('password', str_repeat('*', strlen($this->secret->getPassword())));
             $template->setAttr('password','data-text', str_repeat('*', strlen($this->secret->getPassword())));
-            $template->setAttr('password','data-id', $this->secret->getId());
+            $template->setAttr('password','data-id', $this->secret->getSecretId());
             $template->setVisible('userpass');
         }
 
         if ($this->secret->getOtp()) {
-            $template->setAttr('otp', 'data-id', $this->secret->getId());
+            $template->setAttr('otp', 'data-id', $this->secret->getSecretId());
             $template->setVisible('o');
         }
 
         if ($this->secret->canEdit($this->getFactory()->getAuthUser())) {
-            $template->setAttr('edit', 'href', Uri::create('/secretEdit')->set('id', $this->secret->getId()));
+            $template->setAttr('edit', 'href', Uri::create('/secretEdit')->set('secretId', $this->secret->getSecretId()));
             $template->setVisible('edit');
         }
 

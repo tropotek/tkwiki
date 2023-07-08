@@ -38,13 +38,13 @@ class Edit extends PageController
 
     public function doDefault(Request $request)
     {
-        if ($request->get('secretId')) {
-            $this->secret = \App\Db\SecretMap::create()->find($request->get('id', 0));
+        if ($request->query->get('secretId')) {
+            $this->secret = \App\Db\SecretMap::create()->find($request->query->get('secretId', 0));
         }
 
         // Get the form template
         $this->form = new \App\Form\Secret();
-        $this->form->doDefault($request, $request->query->get('id', 0));
+        $this->form->doDefault($request, $request->query->get('secretId', 0));
 
         return $this->getPage();
     }

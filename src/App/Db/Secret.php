@@ -31,7 +31,7 @@ class Secret extends Model
         self::PERM_USER      => 'VIEW: registered users, EDIT: staff, DELETE: staff',
     ];
 
-    protected int $id = 0;
+    protected int $secretId = 0;
 
     protected int $userId = 0;
 
@@ -75,16 +75,17 @@ class Secret extends Model
         return $code;
     }
 
-    public function getUserId(): int
+    public function getSecretId(): int
     {
-        return $this->userId;
+        return $this->secretId;
     }
 
-    public function setUserId(int $userId): Secret
+    public function setSecretId(int $secretId): Secret
     {
-        $this->userId = $userId;
+        $this->secretId = $secretId;
         return $this;
     }
+
 
     public function getPermission(): int
     {
@@ -217,7 +218,7 @@ class Secret extends Model
     {
         if (!$user) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getId()) return true;
+        if ($this->getUserId() == $user->getUserId()) return true;
 
         // Staff and users can view USER secrets
         if ($this->getPermission() == self::PERM_USER) {
@@ -237,7 +238,7 @@ class Secret extends Model
         if (!$user) return false;
         if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getId()) return true;
+        if ($this->getUserId() == $user->getUserId()) return true;
 
         // Allow any staff to edit public or user secrets
         if ($this->getPermission() == self::PERM_USER) {
@@ -257,7 +258,7 @@ class Secret extends Model
         if (!$user) return false;
         if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getId()) return true;
+        if ($this->getUserId() == $user->getUserId()) return true;
 
         // Allow any staff to delete public or user secrets
         if ($this->getPermission() == self::PERM_USER) {

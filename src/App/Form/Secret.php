@@ -52,7 +52,7 @@ class Secret
         }
 
         $tab = 'Details';
-        $this->getForm()->appendField(new Field\Hidden('secret_id'));
+        $this->getForm()->appendField(new Field\Hidden('secretId'));
 
 //        $list = UserMap::create()->findFiltered(['type' => \App\Db\User::TYPE_STAFF], Tool::create('name'));
 //        $this->getForm()->appendField(new Field\Select('userId', $list))
@@ -97,7 +97,7 @@ class Secret
         $this->getForm()->appendField(new Action\Link('cancel', Uri::create($this->getFactory()->getBackUrl())));
 
         $load = $this->secret->getMapper()->getFormMap()->getArray($this->secret);
-        $load['secret_id'] = $this->secret->getId();
+        $load['secretId'] = $this->secret->getSecretId();
         $this->getForm()->setFieldValues($load); // Use form data mapper if loading objects
 
         $this->getForm()->execute($request->request->all());
@@ -118,15 +118,15 @@ class Secret
         $this->secret->save();
 
         Alert::addSuccess('Form save successfully.');
-        $action->setRedirect(Uri::create()->set('id', $this->secret->getId()));
+        $action->setRedirect(Uri::create()->set('id', $this->secret->getSecretId()));
         if ($form->getTriggeredAction()->isExit()) {
             $action->setRedirect($this->getFactory()->getBackUrl());
         }
 
         if ($this->isHtmx()) {
-            $form->setFieldValue('secret_id', $this->getSecret()->getId());
+            $form->setFieldValue('secretId', $this->getSecret()->getSecretId());
             $action->setRedirect(null);
-            //$this->getForm()->setAttr('hx-post', Uri::create()->set('secret_id', $this->secret->getId()));
+            //$this->getForm()->setAttr('hx-post', Uri::create()->set('secretId', $this->secret->getSecretId()));
         }
     }
 

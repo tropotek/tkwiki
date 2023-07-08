@@ -53,9 +53,9 @@ class Secret
             $this->doOtp($request);
         }
 
-        $this->getTable()->appendCell(new Cell\Checkbox('id'));
+        $this->getTable()->appendCell(new Cell\Checkbox('secretId'));
         $this->getTable()->appendCell(new Cell\Text('actions'))
-            ->addOnShow(function (Cell\Text $cell, string $html) use ($editUrl) {
+            ->addOnShow(function (Cell\Text $cell, string $html) {
             $cell->addCss('text-nowrap text-center');
             $obj = $cell->getRow()->getData();
 
@@ -89,7 +89,9 @@ class Secret
                 return $html;
             });
 
-        $this->getTable()->appendCell(new Cell\Text('name'))->addCss('key')->setUrl($editUrl);
+        $this->getTable()->appendCell(new Cell\Text('name'))->addCss('key')
+            ->setUrlProperty('secretId')
+            ->setUrl($editUrl);
 
         $this->getTable()->appendCell(new Cell\Text('userId'))
             ->addOnValue(function (Cell\Text $cell, mixed $value) {
@@ -97,12 +99,14 @@ class Secret
                 $obj = $cell->getRow()->getData();
                 return $obj->getUser()?->getName() ?? $value;
             });
+
         $this->getTable()->appendCell(new Cell\Text('permission'))
             ->addOnValue(function (Cell\Text $cell, mixed $value) {
                 /** @var \App\Db\Secret $obj */
                 $obj = $cell->getRow()->getData();
                 return $obj->getPermissionLabel();
             });
+
         $this->getTable()->appendCell(new Cell\Text('created'));
 
 
@@ -130,9 +134,9 @@ class Secret
                 ->setAttr('data-confirm', 'Are you sure you want to reset the Table`s session?')
                 ->setAttr('title', 'Reset table filters and order to default.');
         }
-        $this->getTable()->appendAction(new Action\Button('Create'))->setUrl($editUrl);
-        $this->getTable()->appendAction(new Action\Delete());
-        $this->getTable()->appendAction(new Action\Csv())->addExcluded('actions');
+        //$this->getTable()->appendAction(new Action\Button('Create'))->setUrl($editUrl);
+        $this->getTable()->appendAction(new Action\Delete('delete', 'secretId'));
+        $this->getTable()->appendAction(new Action\Csv('csv', 'secretId'))->addExcluded('actions');
 
     }
 
@@ -147,7 +151,7 @@ class Secret
                 ; // Search all
             } elseif ($user?->isStaff()) {
                 $filter['permission'] = [\App\Db\Secret::PERM_USER, \App\Db\Secret::PERM_STAFF];
-                $filter['author'] = $user->getId();
+                $filter['author'] = $user->getUserId();
             }
             $list = \App\Db\SecretMap::create()->findFiltered($filter, $tool);
         }

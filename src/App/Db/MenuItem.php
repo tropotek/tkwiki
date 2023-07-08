@@ -12,7 +12,7 @@ class MenuItem extends Model
     const TYPE_DROPDOWN = 'dropdown';
     const TYPE_DIVIDER  = 'divider';
 
-    public int $id = 0;
+    public int $menuItemId = 0;
 
     public ?int $parentId = null;
 
@@ -25,9 +25,16 @@ class MenuItem extends Model
     public string $name = '';
 
 
-    public function __construct()
-    {
 
+    public function getMenuItemId(): int
+    {
+        return $this->menuItemId;
+    }
+
+    public function setMenuItemId(int $menuItemId): MenuItem
+    {
+        $this->menuItemId = $menuItemId;
+        return $this;
     }
 
     public function getParentId(): ?int

@@ -17,7 +17,6 @@ use Tk\Exception;
 use Tk\Uri;
 
 /**
- *
  * @see https://github.com/ilikenwf/nestedSortable/tree/v2.0.0
  */
 class Edit extends PageController
@@ -69,11 +68,11 @@ class Edit extends PageController
             }
 
             $item->save();
-            $item->setOrderId($item->getId());
+            $item->setOrderId($item->getMenuItemId());
             $item->save();
 
             $data = [
-                'menuItemId' => $item->getId(),
+                'menuItemId' => $item->getMenuItemId(),
                 'pageId' => $item->getPageId(),
                 'name' => $item->getName(),
                 'type' => $item->getType(),
@@ -105,8 +104,8 @@ class Edit extends PageController
     public function doDelete(Request $request): JsonResponse
     {
         try {
-            $itemId = $request->request->getInt('id');
-            $item = MenuItemMap::create()->find($itemId);
+            $menuItemId = $request->request->getInt('id');
+            $item = MenuItemMap::create()->find($menuItemId);
             $item?->delete();
             return new JsonResponse([ 'status' => 'ok' ]);
         } catch (\Exception $e) {
@@ -190,6 +189,7 @@ jQuery(function($) {
             saveItem();
 		}
     });
+
     // Store menu item name into data attr
     $('li', sortable).each(function () {
         $(this).data('name', $('a', this).html());
@@ -305,10 +305,10 @@ JS;
             if ($item->isType(MenuItem::TYPE_DROPDOWN)) {
                 $iul = '';
                 if ($item->hasChildren()) {
-                    $iul = $this->showMenu($item->getId());
+                    $iul = $this->showMenu($item->getMenuItemId());
                 }
                 $ul .= <<<HTML
-<li class="dropdown" id="item-{$item->getId()}" data-item-id="{$item->getId()}" data-page-id="0" data-type="{$item->getType()}">
+<li class="dropdown" id="item-{$item->getMenuItemId()}" data-item-id="{$item->getMenuItemId()}" data-page-id="0" data-type="{$item->getType()}">
   <i class="fa fa-fw fa-ellipsis-vertical"></i>
   <a href="javascript:;" contentEditable="true">{$item->getName()}</a>
   <b class="fa fa-fw fa-trash text-danger float-end pt-1"></b>
@@ -318,7 +318,7 @@ HTML;
 
             } elseif ($item->isType(MenuItem::TYPE_DIVIDER)) {
                 $ul .= <<<HTML
-<li id="item-{$item->getId()}" data-item-id="{$item->getId()}" data-page-id="0" data-type="{$item->getType()}" class="mjs-nestedSortable-no-nesting">
+<li id="item-{$item->getId()}" data-item-id="{$item->getMenuItemId()}" data-page-id="0" data-type="{$item->getType()}" class="mjs-nestedSortable-no-nesting">
   <i class="fa fa-fw fa-ellipsis-vertical"></i>
   <a href="javascript:;" contentEditable="true">{$item->getName()}</a>
   <b class="fa fa-fw fa-trash text-danger float-end"></b>
@@ -327,7 +327,7 @@ HTML;
 
             } else {
                 $ul .= <<<HTML
-<li id="item-{$item->getId()}" data-item-id="{$item->getId()}" data-page-id="{$item->getPageId()}" data-type="{$item->getType()}" class="mjs-nestedSortable-no-nesting">
+<li id="item-{$item->getId()}" data-item-id="{$item->getMenuItemId()}" data-page-id="{$item->getPageId()}" data-type="{$item->getType()}" class="mjs-nestedSortable-no-nesting">
   <i class="fa fa-fw fa-ellipsis-vertical"></i>
   <a href="javascript:;" contentEditable="true">{$item->getName()}</a>
   <b class="fa fa-fw fa-trash text-danger float-end"></b>

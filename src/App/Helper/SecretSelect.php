@@ -59,7 +59,7 @@ class SecretSelect extends Renderer implements DisplayInterface
         $template->appendTemplate('dialogs', $this->createDialog->show());
         $template->appendTemplate('table', $this->table->show());
 
-        $template->setAttr('user-id', 'data-user-id', $this->getFactory()->getAuthUser()->getId());
+        $template->setAttr('user-id', 'data-user-id', $this->getFactory()->getAuthUser()->getUserId());
 
         // Add a select wiki page button to the tinyMCE editor.
         $js = <<<JS

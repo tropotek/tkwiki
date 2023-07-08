@@ -1,7 +1,7 @@
 <?php
 namespace App\Console;
 
-use App\Db\User;
+use Bs\Db\User;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -48,7 +48,7 @@ class TestData extends \Tk\Console\Command\TestData
                         $perm |= User::PERM_MANAGE_STAFF;
                     }
                     if (rand(1, 10) <= 5) {
-                        $perm |= User::PERM_MANAGE_USER;
+                        $perm |= User::PERM_MANAGE_MEMBER;
                     }
                 }
                 $obj->setPermissions($perm);

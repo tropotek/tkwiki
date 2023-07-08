@@ -54,7 +54,7 @@ class FormDialog extends Dialog
 
     public function execute(Request $request)
     {
-        $this->form->doDefault($request, $request->query->getInt('secret_id'));
+        $this->form->doDefault($request, $request->query->getInt('secretId'));
         $this->getOnExecute()->execute($this, $request);
     }
 

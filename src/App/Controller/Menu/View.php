@@ -33,7 +33,7 @@ class View extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterf
         foreach ($items as $item) {
             if ($item->hasChildren() && $item->isType(MenuItem::TYPE_DROPDOWN)) {
                 // Normal order here as we are appending to the sub menu ul
-                $children = MenuItemMap::create()->findByParentId($item->getId(), Tool::create('order_id'));
+                $children = MenuItemMap::create()->findByParentId($item->getMenuItemId(), Tool::create('order_id'));
                 $dropdown = $template->getRepeat('dropdown');
                 $this->showItem($dropdown, $item);
                 $count = 0;

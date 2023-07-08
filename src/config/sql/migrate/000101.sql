@@ -69,20 +69,20 @@ CREATE TABLE IF NOT EXISTS `lock` (
 
 CREATE TABLE IF NOT EXISTS menu_item
 (
-  id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  menu_item_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   parent_id INT(11) UNSIGNED NULL,
   page_id INT(11) UNSIGNED NULL,
   order_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
   type enum('item','dropdown','divider') NOT NULL DEFAULT 'item',
   name VARCHAR(255) NOT NULL DEFAULT '',
   KEY k_page_id (page_id),
-  CONSTRAINT fk_menu_item__parent_id FOREIGN KEY (parent_id) REFERENCES menu_item (id) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT fk_menu_item__page_id FOREIGN KEY (page_id) REFERENCES page (id) ON DELETE CASCADE
+  CONSTRAINT fk_menu_item__parent_id FOREIGN KEY (parent_id) REFERENCES menu_item (menu_item_id) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT fk_menu_item__page_id FOREIGN KEY (page_id) REFERENCES page (page_id) ON DELETE CASCADE
 );
 
 
 CREATE TABLE IF NOT EXISTS secret (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    secret_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL DEFAULT 0,                      -- Author of the key
     permission INT NOT NULL DEFAULT 0,                            -- Same as page permissions (no public permission)
     name VARCHAR(64) NOT NULL DEFAULT '',                         -- A name for this secret record
@@ -92,11 +92,11 @@ CREATE TABLE IF NOT EXISTS secret (
     otp VARCHAR(128) NOT NULL DEFAULT '',                         -- (encoded) OTP/Google auth key: wen set we can generate onetime 2FA keys
     `keys` TEXT,                                                  -- (encoded) could be a wallet key, or API key, public/private keys
     notes TEXT,                                                   --
-    `modified` TIMESTAMP NOT NULL,
-    `created` TIMESTAMP NOT NULL,
+    modified TIMESTAMP NOT NULL,
+    created TIMESTAMP NOT NULL,
     KEY k_user_id (user_id),
-    -- TODO: be sure to move all non private secrets to the auth user on user deletes
-    CONSTRAINT fk_secret__user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
+    -- TODO: be sure to move all non private secrets to the auth user on user deletes if we want to keep them????
+    CONSTRAINT fk_secret__user_id FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
 
@@ -110,7 +110,7 @@ TRUNCATE TABLE user;
 INSERT INTO user (type, username, email, name, timezone, permissions) VALUES
   ('staff', 'admin', 'admin@example.com', 'Administrator', NULL, 1)
 ;
-UPDATE `user` SET `hash` = MD5(CONCAT(username, id)) WHERE 1;
+UPDATE `user` SET `hash` = MD5(CONCAT(username, user_id)) WHERE 1;
 
 
 

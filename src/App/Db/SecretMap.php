@@ -16,7 +16,7 @@ class SecretMap extends Mapper
     {
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
             $map = new DataMap();
-            $map->addDataType(new Db\Integer('id'));
+            $map->addDataType(new Db\Integer('secretId', 'secret_id'));
             $map->addDataType(new Db\Integer('userId', 'user_id'));
             $map->addDataType(new Db\Integer('permission'));
             $map->addDataType(new Db\Text('name'));
@@ -34,7 +34,7 @@ class SecretMap extends Mapper
 
         if (!$this->getDataMappers()->has(self::DATA_MAP_FORM)) {
             $map = new DataMap();
-            $map->addDataType(new Form\Integer('id'));
+            $map->addDataType(new Form\Integer('secretId'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Integer('permission'));
             $map->addDataType(new Form\Text('name'));
@@ -50,7 +50,7 @@ class SecretMap extends Mapper
 
         if (!$this->getDataMappers()->has(self::DATA_MAP_TABLE)) {
             $map = new DataMap();
-            $map->addDataType(new Form\Integer('id'));
+            $map->addDataType(new Form\Integer('secretId'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Integer('permission'));
             $map->addDataType(new Form\Text('name'));
@@ -81,18 +81,21 @@ class SecretMap extends Mapper
             $w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['search'])) {
                 $id = (int)$filter['search'];
-                $w .= sprintf('a.id = %d OR ', $id);
+                $w .= sprintf('a.secret_id = %d OR ', $id);
             }
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
-        if (!empty($filter['author'])) {
-            $filter->appendWhere('(a.user_id = %s) OR ', $this->quote($filter['author']));
+        if (!empty($filter['id'])) {
+            $filter['secretId'] = $filter['id'];
+        }
+        if (!empty($filter['secretId'])) {
+            $w = $this->makeMultiQuery($filter['secretId'], 'a.secret_id');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (!empty($filter['id'])) {
-            $w = $this->makeMultiQuery($filter['id'], 'a.id');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+        if (!empty($filter['author'])) {
+            $filter->appendWhere('(a.user_id = %s) OR ', $this->quote($filter['author']));
         }
 
         if (!empty($filter['exclude'])) {

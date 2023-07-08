@@ -17,7 +17,7 @@ class MenuItemMap extends Mapper
     {
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
             $map = new DataMap();
-            $map->addDataType(new Db\Integer('id'), 'key');
+            $map->addDataType(new Db\Integer('menuItemId', 'menu_item_id'));
             $map->addDataType(new Db\Integer('parentId', 'parent_id'))->setNullable(true);
             $map->addDataType(new Db\Integer('pageId', 'page_id'))->setNullable(true);
             $map->addDataType(new Db\Integer('orderId', 'order_id'));
@@ -60,7 +60,10 @@ class MenuItemMap extends Mapper
         }
 
         if (!empty($filter['id'])) {
-            $w = $this->makeMultiQuery($filter['id'], 'a.id');
+            $filter['menuItemId'] = $filter['id'];
+        }
+        if (!empty($filter['menuItemId'])) {
+            $w = $this->makeMultiQuery($filter['menuItemId'], 'a.menu_item_id');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
@@ -95,10 +98,10 @@ class MenuItemMap extends Mapper
         return $filter;
     }
 
-    public function updateItem(int $itemId, ?int $parentId, int $orderId, string $name): bool
+    public function updateItem(int $menuItemId, ?int $parentId, int $orderId, string $name): bool
     {
         $sql = <<<SQL
-UPDATE menu_item SET parent_id = ?, order_id = ?, name = ? WHERE id = ?
+UPDATE menu_item SET parent_id = ?, order_id = ?, name = ? WHERE menu_item_id = ?
 SQL;
         $stm = $this->getDb()->prepare($sql);
 
@@ -106,7 +109,7 @@ SQL;
             $parentId,
             $orderId,
             $name,
-            $itemId
+            $menuItemId
         ]);
     }
 

@@ -18,7 +18,7 @@ CREATE EVENT evt_delete_expired_user_tokens
   COMMENT 'Delete expired user remember me login tokens'
   DO
   BEGIN
-    DELETE FROM user_tokens WHERE expiry < NOW();
+    DELETE FROM user_token WHERE expiry < NOW();
   END
 //
 DELIMITER ;

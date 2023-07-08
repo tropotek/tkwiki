@@ -21,13 +21,13 @@ CREATE TABLE IF NOT EXISTS page
   UNIQUE KEY uk_url (url),
   KEY k_user_id (user_id),
   KEY k_category (category),
-  CONSTRAINT fk_page__user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL
+  CONSTRAINT fk_page__user_id FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL
 );
 
 -- Store the content of each page revision
 CREATE TABLE IF NOT EXISTS content
 (
-  id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  content_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   page_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
   user_id INT(11) UNSIGNED NULL,
   html LONGTEXT NOT NULL,
@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS content
   FULLTEXT KEY ft_html (html),
   KEY k_page_id (page_id),
   KEY k_user_id (user_id),
-  CONSTRAINT fk_content__page_id FOREIGN KEY (page_id) REFERENCES page (id) ON DELETE CASCADE,
-  CONSTRAINT fk_content__user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL
+  CONSTRAINT fk_content__page_id FOREIGN KEY (page_id) REFERENCES page (page_id) ON DELETE CASCADE,
+  CONSTRAINT fk_content__user_id FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL
 );
 
 -- wiki links contained within a pages html content
@@ -59,8 +59,8 @@ CREATE TABLE IF NOT EXISTS `lock` (
     user_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
     ip VARCHAR(64) NOT NULL DEFAULT '',
     expire TIMESTAMP NOT NULL,
-    CONSTRAINT fk_lock__page_id FOREIGN KEY (page_id) REFERENCES page (id) ON DELETE CASCADE,
-    CONSTRAINT fk_lock__user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
+    CONSTRAINT fk_lock__page_id FOREIGN KEY (page_id) REFERENCES page (page_id) ON DELETE CASCADE,
+    CONSTRAINT fk_lock__user_id FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
     UNIQUE KEY uk_hash (hash),
     KEY k_pageId (page_id),
     KEY k_userId (user_id)

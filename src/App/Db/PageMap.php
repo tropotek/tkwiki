@@ -17,7 +17,7 @@ class PageMap extends Mapper
     {
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
             $map = new DataMap();
-            $map->addDataType(new Db\Integer('id'));
+            $map->addDataType(new Db\Integer('pageId', 'page_id'));
             $map->addDataType(new Db\Integer('userId', 'user_id'));
             $map->addDataType(new Db\Text('template'));
             $map->addDataType(new Db\Text('category'));
@@ -35,7 +35,7 @@ class PageMap extends Mapper
 
         if (!$this->getDataMappers()->has(self::DATA_MAP_FORM)) {
             $map = new DataMap();
-            $map->addDataType(new Form\Integer('id'));
+            $map->addDataType(new Form\Integer('pageId'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Text('template'));
             $map->addDataType(new Form\Text('category'));
@@ -51,7 +51,7 @@ class PageMap extends Mapper
 
         if (!$this->getDataMappers()->has(self::DATA_MAP_TABLE)) {
             $map = new DataMap();
-            $map->addDataType(new Form\Integer('id'));
+            $map->addDataType(new Form\Integer('pageId'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Text('template'));
             $map->addDataType(new Form\Text('category'));
@@ -98,27 +98,30 @@ class PageMap extends Mapper
             $w .= sprintf('a.category LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['search'])) {
                 $id = (int)$filter['search'];
-                $w .= sprintf('a.id = %d OR ', $id);
+                $w .= sprintf('a.page_id = %d OR ', $id);
             }
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+        }
+
+        if (!empty($filter['id'])) {
+            $filter['pageId'] = $filter['id'];
+        }
+        if (!empty($filter['pageId'])) {
+            $w = $this->makeMultiQuery($filter['pageId'], 'a.page_id');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
+        }
+
+        if (!empty($filter['exclude'])) {
+            $w = $this->makeMultiQuery($filter['exclude'], 'a.page_id', 'AND', '!=');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
         if (!empty($filter['author'])) {
             $filter->appendWhere('(a.user_id = %s) OR ', $this->quote($filter['author']));
         }
 
-        if (!empty($filter['id'])) {
-            $w = $this->makeMultiQuery($filter['id'], 'a.id');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
-        }
-
-        if (!empty($filter['exclude'])) {
-            $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
-        }
-
         if (!empty($filter['userId'])) {
-            $w = $this->makeMultiQuery($filter['userId'], 'a.userId');
+            $w = $this->makeMultiQuery($filter['userId'], 'a.user_id');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
@@ -158,12 +161,12 @@ class PageMap extends Mapper
         // Do a full text search on the content
         if (isset($filter['fullSearch'])) {
             $filter->appendFrom('  JOIN (
-                SELECT MAX(created), id, page_id, html
+                SELECT MAX(created), content_id, page_id, html
                 FROM content
                 WHERE MATCH (html) AGAINST (%s IN NATURAL LANGUAGE MODE)
                 GROUP BY page_id
-            ) c ON (a.id = c.page_id)', $this->quote($filter['fullSearch'] ?? ''));
-            $filter->appendWhere('c.id IS NOT NULL');
+            ) c ON (a.content_id = c.page_id)', $this->quote($filter['fullSearch'] ?? ''));
+            $filter->appendWhere('c.content_id IS NOT NULL');
         }
 
         return $filter;
@@ -186,7 +189,6 @@ class PageMap extends Mapper
         return $stm->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-
     /**
      * Test if the supplied pageId is an orphaned page
      */
@@ -194,9 +196,9 @@ class PageMap extends Mapper
     {
         $homeUrl = $this->getRegistry()->get('wiki.page.default');
         $sql = <<<SQL
-SELECT a.id
+SELECT a.page_id
 FROM page a LEFT JOIN links b USING (url)
-WHERE b.page_id IS NULL AND (a.url != ? AND a.id = ?)
+WHERE b.page_id IS NULL AND (a.url != ? AND a.page_id = ?)
 SQL;
         $stm = $this->getDb()->prepare($sql);
         $stm->execute([

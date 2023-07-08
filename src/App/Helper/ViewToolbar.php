@@ -53,8 +53,8 @@ class ViewToolbar extends Renderer implements DisplayInterface
         $template = $this->getTemplate();
 
         if ($this->getPage()->canEdit($this->getUser())) {
-            $template->setAttr('edit-url', 'href', Uri::create('/edit')->set('id', $this->getPage()->getId()));
-            $template->setAttr('history', 'href', Uri::create('/historyManager')->set('id', $this->getPage()->getId()));
+            $template->setAttr('edit-url', 'href', Uri::create('/edit')->set('pageId', $this->getPage()->getPageId()));
+            $template->setAttr('history', 'href', Uri::create('/historyManager')->set('pageId', $this->getPage()->getPageId()));
             $template->setVisible('can-edit');
         }
         if ($this->getFactory()->getAuthUser()?->isStaff()) {
@@ -93,7 +93,7 @@ HTML;
         $t->setText('title', $this->page->getTitle());
         $t->setText('category', $this->page->getCategory());
         $t->setText('permission', $this->page->getPermissionLabel());
-        $t->setText('revision', $this->content->getId());
+        $t->setText('revision', $this->content->getContentId());
         $t->setText('modified', $this->page->getModified(Date::FORMAT_LONG_DATETIME));
         $t->setText('created', $this->page->getCreated(Date::FORMAT_LONG_DATETIME));
 

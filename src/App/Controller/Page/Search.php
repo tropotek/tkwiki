@@ -51,7 +51,7 @@ class Search extends PageController
             ; // Search all
         } elseif ($user?->isStaff()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER, Page::PERM_STAFF];
-            $filter['author'] = $user->getId();
+            $filter['author'] = $user->getUserId();
         } elseif ($user?->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER];
         } else {
@@ -108,7 +108,6 @@ class Search extends PageController
         $template->setText('found', $this->list->countAll());
 
         $css = <<<CSS
-
 .wiki-search .search-result h4 {
     margin-bottom: 0;
     color: #1E0FBE;
@@ -142,7 +141,6 @@ class Search extends PageController
 CSS;
         $template->appendCss($css);
 
-
         return $template;
     }
 
@@ -152,7 +150,6 @@ CSS;
 <div>
   <h2 var="title">Search Results</h2>
   <div class="wiki-search" var="content">
-
     <div class="search-head">
       <h5 class="">
         <strong class="text-danger" var="found">0</strong>
@@ -160,9 +157,7 @@ CSS;
         <strong class="text-danger" var="terms"></strong>
       </h5>
     </div>
-
-
-      <div class="hr-line-dashed"></div>
+    <div class="hr-line-dashed"></div>
     <div repeat="row">
       <div class="search-result">
         <h4><a href="#" var="title"></a></h4>
@@ -177,8 +172,6 @@ CSS;
       </div>
       <div class="hr-line-dashed"></div>
     </div>
-
-
   </div>
 </div>
 HTML;

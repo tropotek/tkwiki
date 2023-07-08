@@ -88,7 +88,7 @@ class View extends PageController
             return $this->doPdf($request);
         }
 
-        Alert::addInfo('You are viewing revision ' . $this->wContent->getId() . ' <a href="'.$this->wPage->getPageUrl().'">click here</a> to return to current revision');
+        Alert::addInfo('You are viewing revision ' . $this->wContent->getContentId() . ' <a href="'.$this->wPage->getPageUrl().'">click here</a> to return to current revision');
         $this->toolbar = new ViewToolbar($this->wPage);
 
         return $this->getPage();

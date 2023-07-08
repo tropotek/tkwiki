@@ -38,7 +38,7 @@ class Content
 
     public function doDefault(Request $request, int $pageId)
     {
-        $this->page = PageMap::create()->find($request->query->getInt('id'));
+        $this->page = PageMap::create()->find($request->query->getInt('pageId'));
         if (!$pageId) {
             Alert::addWarning('Invalid page id: ' . $pageId);
             \App\Db\Page::homeUrl()->redirect();
@@ -51,6 +51,7 @@ class Content
         $this->getTable()->appendCell(new Cell\Text('actions'))
             ->addOnShow(function (Cell\Text $cell, string $html) {
                 $cell->addCss('text-nowrap text-center');
+                /** @var \App\Db\Content $obj */
                 $obj = $cell->getRow()->getData();
 
                 $template = $cell->getTemplate();
@@ -58,8 +59,8 @@ class Content
                 $btn->setText('');
                 $btn->setIcon('fa fa-fw fa-share');
                 $btn->addCss('btn btn-outline-dark');
-                $btn->setAttr('data-confirm', 'Are you sure you want to revert the content to revision ' . $obj->getId(). '?');
-                $btn->setUrl(Uri::create()->set('r', $obj->getId()));
+                $btn->setAttr('data-confirm', 'Are you sure you want to revert the content to revision ' . $obj->getContentId(). '?');
+                $btn->setUrl(Uri::create()->set('r', $obj->getContentId()));
                 $template->appendTemplate('td', $btn->show());
                 $template->appendHtml('td', '&nbsp;');
 
@@ -67,14 +68,14 @@ class Content
                 $btn->setText('');
                 $btn->setIcon('fa fa-fw fa-eye');
                 $btn->addCss('btn btn-outline-dark');
-                $btn->setUrl(Uri::create('/view')->set('contentId', $obj->getId()));
+                $btn->setUrl(Uri::create('/view')->set('contentId', $obj->getContentId()));
                 $template->appendTemplate('td', $btn->show());
 
                 return '';
             });
 
         $this->getTable()->appendCell(new Cell\Text('revisionId'))
-            ->setOrderByName('id')
+            ->setOrderByName('content_id')
             ->addOnValue(function (Cell\Text $cell) {
                 /** @var \App\Db\Content $content */
                 $content = $cell->getRow()->getData();
@@ -156,7 +157,7 @@ class Content
         $content = \App\Db\Content::cloneContent($revision);
         $content->save();
 
-        Alert::addSuccess('Page reverted to version ' . $revision->id . ' [' . $revision->created->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
+        Alert::addSuccess('Page reverted to version ' . $revision->getContentId() . ' [' . $revision->created->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
         $this->page->getPageUrl()->redirect();
     }
 

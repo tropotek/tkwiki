@@ -1,6 +1,7 @@
 <?php
 namespace App\Db;
 
+use Bs\Db\UserInterface;
 use Tk\Db\Pdo;
 use Tk\Traits\SystemTrait;
 
@@ -19,7 +20,9 @@ class Lock
 
     protected User $user;
 
-
+    /**
+     * @param User|UserInterface $user
+     */
     public function __construct(User $user)
     {
         $this->user = $user;

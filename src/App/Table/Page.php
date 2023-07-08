@@ -36,7 +36,7 @@ class Page
 
     public function doDefault(Request $request)
     {
-        $this->getTable()->appendCell(new Cell\Checkbox('id'));
+        $this->getTable()->appendCell(new Cell\Checkbox('pageId'));
         $this->getTable()->appendCell(new Cell\Text('actions'))
             ->addOnShow(function (Cell\Text $cell, string $html) {
                 $cell->addCss('text-nowrap text-center');
@@ -48,7 +48,7 @@ class Page
                 $btn->setIcon('fa fa-fw fa-code');
                 $btn->addCss('btn btn-outline-secondary btn-copy-code');
                 $btn->setAttr('title', 'Click to copy wiki link');
-                $btn->setAttr('data-page-id', $obj->getId());
+                $btn->setAttr('data-page-id', $obj->getPageId());
                 $template->appendTemplate('td', $btn->show());
                 //$template->appendHtml('td', '&nbsp;');
                 $js = <<<JS
@@ -68,7 +68,10 @@ JS;
 
                 return '';
             });
-        $this->getTable()->appendCell(new Cell\Text('title'))->setUrl(Uri::create('/edit'))->addCss('key');
+        $this->getTable()->appendCell(new Cell\Text('title'))
+            ->addCss('key')
+            ->setUrlProperty('pageId')
+            ->setUrl(Uri::create('/edit'));
         $this->getTable()->appendCell(new Cell\Text('category'));
         $this->getTable()->appendCell(new Cell\Text('url'));
         $this->getTable()->appendCell(new Cell\Boolean('published'));
@@ -118,7 +121,7 @@ JS;
                 ->setAttr('title', 'Reset table filters and order to default.');
         }
         if ($this->getFactory()->getAuthUser()->hasPermission(\App\Db\User::PERM_SYSADMIN)) {
-            $this->getTable()->appendAction(new Action\Delete())
+            $this->getTable()->appendAction(new Action\Delete('delete', 'pageId'))
                 ->addOnDelete(function (Action\Delete $action, \App\Db\Page $obj) {
                     if (!$obj->canDelete($this->getFactory()->getAuthUser())) {
                         Alert::addWarning('You do not have permission to delete this page.');
@@ -126,7 +129,7 @@ JS;
                     }
                 });
         }
-        $this->getTable()->appendAction(new Action\Csv())->addExcluded('actions');
+        $this->getTable()->appendAction(new Action\Csv('csv', 'pageId'))->addExcluded('actions');
 
     }
 

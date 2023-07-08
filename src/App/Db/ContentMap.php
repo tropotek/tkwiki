@@ -17,7 +17,7 @@ class ContentMap extends Mapper
     {
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
             $map = new DataMap();
-            $map->addDataType(new Db\Integer('id'));
+            $map->addDataType(new Db\Integer('contentId', 'content_id'));
             $map->addDataType(new Db\Integer('pageId', 'page_id'));
             $map->addDataType(new Db\Integer('userId', 'user_id'));
             $map->addDataType(new Db\Text('html'));
@@ -32,7 +32,7 @@ class ContentMap extends Mapper
 
         if (!$this->getDataMappers()->has(self::DATA_MAP_FORM)) {
             $map = new DataMap();
-            $map->addDataType(new Form\Integer('id'));
+            $map->addDataType(new Form\Integer('contentId'));
             $map->addDataType(new Form\Integer('pageId'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Text('html'));
@@ -46,7 +46,7 @@ class ContentMap extends Mapper
 
         if (!$this->getDataMappers()->has(self::DATA_MAP_TABLE)) {
             $map = new DataMap();
-            $map->addDataType(new Form\Integer('id'));
+            $map->addDataType(new Form\Integer('contentId'));
             $map->addDataType(new Form\Integer('pageId'));
             $map->addDataType(new Form\Integer('userId'));
             $map->addDataType(new Form\Text('html'));
@@ -96,18 +96,21 @@ class ContentMap extends Mapper
             //$w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
             if (is_numeric($filter['search'])) {
                 $id = (int)$filter['search'];
-                $w .= sprintf('a.id = %d OR ', $id);
+                $w .= sprintf('a.content_id = %d OR ', $id);
             }
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
         if (!empty($filter['id'])) {
-            $w = $this->makeMultiQuery($filter['id'], 'a.id');
+            $filter['contentId'] = $filter['id'];
+        }
+        if (!empty($filter['contentId'])) {
+            $w = $this->makeMultiQuery($filter['contentId'], 'a.content_id');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
         if (!empty($filter['exclude'])) {
-            $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
+            $w = $this->makeMultiQuery($filter['exclude'], 'a.content_id', 'AND', '!=');
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 

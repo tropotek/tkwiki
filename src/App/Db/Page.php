@@ -44,7 +44,7 @@ class Page extends Model
     ];
 
 
-    public int $id = 0;
+    public int $pageId = 0;
 
     public int $userId = 0;
 
@@ -136,7 +136,7 @@ class Page extends Model
         }
 
         // delete all page links referred to by this page.
-        $this->getMapper()->deleteLinkByPageId($this->getId());
+        $this->getMapper()->deleteLinkByPageId($this->getPageId());
 
         return parent::delete();
     }
@@ -144,11 +144,22 @@ class Page extends Model
     public function getContent(): ?Content
     {
         if (!$this->_content) {
-            $this->_content = ContentMap::create()->findByPageId($this->id, \Tk\Db\Tool::create('created DESC', 1))->current();
+            $this->_content = ContentMap::create()->findByPageId($this->getPageId(), \Tk\Db\Tool::create('created DESC', 1))->current();
         }
         return $this->_content;
     }
 
+
+    public function getPageId(): int
+    {
+        return $this->pageId;
+    }
+
+    public function setPageId(int $pageId): Page
+    {
+        $this->pageId = $pageId;
+        return $this;
+    }
 
     public function setTemplate(string $template): Page
     {
@@ -267,7 +278,7 @@ class Page extends Model
 //        }
 
         $comp = PageMap::create()->findByUrl($this->getUrl());
-        if ($comp && $comp->getId() != $this->getId()) {
+        if ($comp && $comp->getPageId() != $this->getPageId()) {
             $errors['url'] = 'This url already exists, try again';
         }
         // Match any existing system routes
@@ -306,7 +317,7 @@ class Page extends Model
         if ($this->getPermission() == self::PERM_PUBLIC) return true;
         if (!$user) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getId()) return true;
+        if ($this->getUserId() == $user->getUserId()) return true;
 
         // Try this see if it works as expected
         if (!$this->isPublished()) return false;
@@ -329,7 +340,7 @@ class Page extends Model
         if (!$user) return false;
         if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getId()) return true;
+        if ($this->getUserId() == $user->getUserId()) return true;
 
         // Only allow Editors to edit home page regardless of permissions
         if ($this->getUrl() == self::getHomeUrl()) {
@@ -362,7 +373,7 @@ class Page extends Model
         if (!$user) return false;
         if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getId()) return true;
+        if ($this->getUserId() == $user->getUserId()) return true;
 
         // Allow any staff to delete public or user pages
         if (

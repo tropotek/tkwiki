@@ -94,28 +94,30 @@ class SecretMap extends Mapper
             if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (!empty($filter['author'])) {
-            $filter->appendWhere('(a.user_id = %s) OR ', $this->quote($filter['author']));
+        if (!empty($filter['exclude'])) {
+            $w = $this->makeMultiQuery($filter['exclude'], 'a.secret_id', 'AND', '!=');
+            if ($w) $filter->appendWhere('(%s) AND ', $w);
         }
 
-        if (!empty($filter['exclude'])) {
-            $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+        if (!empty($filter['author'])) {
+            $filter->appendWhere('(a.user_id = %s) OR ', $this->quote($filter['author']));
         }
 
         if (!empty($filter['userId'])) {
             $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
         }
+
         if (!empty($filter['permission'])) {
             $filter->appendWhere('a.permission = %s AND ', (int)$filter['permission']);
         }
+
         if (!empty($filter['name'])) {
             $filter->appendWhere('a.name = %s AND ', $this->quote($filter['name']));
         }
+
         if (!empty($filter['url'])) {
             $filter->appendWhere('a.url = %s AND ', $this->quote($filter['url']));
         }
-
 
         return $filter;
     }

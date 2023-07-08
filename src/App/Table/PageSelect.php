@@ -39,7 +39,7 @@ class PageSelect
                 $cell->setUrlProperty('');
                 $cell->setUrl(Uri::create('javascript:;'));
                 $cell->getLink()->addCss('wiki-insert');
-                $cell->getLink()->setAttr('data-page-id', $page->getId());
+                $cell->getLink()->setAttr('data-page-id', $page->getPageId());
                 $cell->getLink()->setAttr('data-page-title', $page->getTitle());
                 $cell->getLink()->setAttr('data-page-url', $page->getUrl());
                 $cell->getLink()->setAttr('title', 'Insert a page link');

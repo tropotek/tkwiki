@@ -50,7 +50,7 @@ class Edit extends PageController
         $this->lock = new Lock($this->getAuthUser());
 
         // Find requested page
-        $this->wPage = PageMap::create()->find($request->query->get('id') ?? 0);
+        $this->wPage = PageMap::create()->find($request->query->get('pageId') ?? 0);
 
         if ($this->wPage && !$this->wPage->canEdit($this->getAuthUser())) {
             Alert::addWarning('You do not have permissions to edit `' . $this->wPage->getTitle() . '`');
@@ -68,7 +68,7 @@ class Edit extends PageController
             $this->wPage->setTitle(str_replace('_', ' ', $this->wPage->getUrl()));
             $this->wPage->setPermission(\App\Db\Page::PERM_PRIVATE);
             $this->wContent = new Content();
-            $this->wContent->setUserId($this->getAuthUser()->getId());
+            $this->wContent->setUserId($this->getAuthUser()->getUserId());
         }
 
         if (!$this->wPage) {
@@ -83,13 +83,13 @@ class Edit extends PageController
             $error = true;
         }
 
-        if ($this->wPage->id && !$this->lock->canAccess($this->wPage->getId())) {
+        if ($this->wPage->id && !$this->lock->canAccess($this->wPage->getPageId())) {
             Alert::addWarning('The page is currently being edited by another user. Try again later.');
             $error = true;
         }
         if ($error) {
             $url = $this->wPage->getPageUrl();
-            if (!$this->wPage->getId()) {
+            if (!$this->wPage->getPageId()) {
                 $url = Uri::create('/');
             }
             $url->redirect();
@@ -100,7 +100,7 @@ class Edit extends PageController
         }
 
         // Acquire page lock.
-        $this->lock->lock($this->wPage->getId());
+        $this->lock->lock($this->wPage->getPageId());
 
         // If not a new page with new content
         if (!$this->wContent) {
@@ -193,12 +193,12 @@ class Edit extends PageController
 
     public function onCancel(Form $form, Action\ActionInterface $action): void
     {
-        $this->lock->unlock($this->wPage->getId());
+        $this->lock->unlock($this->wPage->getPageId());
 
         $url = \Tk\Uri::create($this->wPage->getHomeUrl());
         if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
             $url = $this->getFactory()->getBackUrl();
-        } else if ($this->wPage->getId()) {
+        } else if ($this->wPage->getPageId()) {
             $url = $this->wPage->getPageUrl();
         }
         $action->setRedirect($url);
@@ -223,7 +223,7 @@ class Edit extends PageController
         // only save content if it changes
         $currContent = $this->wPage->getContent();
         if (!$currContent || $this->wContent->diff($currContent)) {
-            $this->wContent->setPageId($this->wPage->getId());
+            $this->wContent->setPageId($this->wPage->getPageId());
             $this->wContent->save();
         }
 
@@ -233,14 +233,14 @@ class Edit extends PageController
         }
 
         // Remove page lock
-        $this->lock->unlock($this->wPage->getId());
+        $this->lock->unlock($this->wPage->getPageId());
 
         Alert::addSuccess('Page save successfully.');
 
         $url = \Tk\Uri::create($this->wPage->getHomeUrl());
         if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
             $url = $this->getFactory()->getBackUrl();
-        } else if ($this->wPage->getId()) {
+        } else if ($this->wPage->getPageId()) {
             $url = $this->wPage->getPageUrl();
         }
         $action->setRedirect($url);
@@ -263,14 +263,14 @@ class Edit extends PageController
     {
         try {
             $doc = Template::load($html)->getDocument(false);
-            PageMap::create()->deleteLinkByPageId($page->getId());
+            PageMap::create()->deleteLinkByPageId($page->getPageId());
             $nodeList = $doc->getElementsByTagName('a');
             /** @var \DOMElement $node */
             foreach ($nodeList as $node) {
                 $regs = [];
                 if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
                     if (isset ($regs[1])) {
-                        PageMap::create()->insertLink($page->getId(), $regs[1]);
+                        PageMap::create()->insertLink($page->getPageId(), $regs[1]);
                     }
                 }
             }
@@ -283,7 +283,7 @@ class Edit extends PageController
         $template->appendText('title', $this->getPage()->getTitle());
 
         $url = $this->getFactory()->getBackUrl();
-        if ($this->wPage->getId()) {
+        if ($this->wPage->getPageId()) {
             $url = $this->wPage->getPageUrl();
         }
         $template->setAttr('back', 'href', $url);
@@ -306,7 +306,7 @@ class Edit extends PageController
         }
 
         // Autocomplete js
-        $jsPageId = json_encode($this->wPage->getId());
+        $jsPageId = json_encode($this->wPage->getPageId());
         $js = <<<JS
 jQuery(function($) {
     let pageId = {$jsPageId}
@@ -343,7 +343,6 @@ jQuery(function($) {
 });
 JS;
         $template->appendJs($js);
-
 
         // Leave page confirm
         $js = <<<JS

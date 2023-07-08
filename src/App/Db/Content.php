@@ -13,7 +13,7 @@ class Content extends Model
     use UserTrait;
     use PageTrait;
 
-    public int $id = 0;
+    public int $contentId = 0;
 
     public int $pageId = 0;
 
@@ -36,13 +36,13 @@ class Content extends Model
     public function __construct()
     {
         $this->_CreatedTrait();
-        $this->userId = Factory::instance()->getAuthUser()?->getId() ?? 0;
+        $this->userId = Factory::instance()->getAuthUser()?->getUserId() ?? 0;
     }
 
     public static function cloneContent(Content $src): Content
     {
         $dst = new static();
-        $dst->userId = Factory::instance()->getAuthUser()?->getId() ?? 0;
+        $dst->userId = Factory::instance()->getAuthUser()?->getUserId() ?? 0;
 
         $dst->pageId = $src->pageId;
         $dst->html = $src->html;
@@ -77,6 +77,18 @@ class Content extends Model
         }
 
         return false;
+    }
+
+
+    public function getContentId(): int
+    {
+        return $this->contentId;
+    }
+
+    public function setContentId(int $contentId): Content
+    {
+        $this->contentId = $contentId;
+        return $this;
     }
 
     public function setHtml(string $html): Content

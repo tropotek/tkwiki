@@ -32,7 +32,7 @@ class ViewSecretList extends Renderer implements DisplayInterface
         }
 
         $filter = [
-            'author' => $this->user->getId()
+            'author' => $this->user->getUserId()
         ];
         $list = SecretMap::create()->findFiltered($filter, Tool::create('name'));
 

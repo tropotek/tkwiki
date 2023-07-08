@@ -40,7 +40,7 @@ class SecretSelect
                 $cell->setUrlProperty('');
                 $cell->setUrl(Uri::create('javascript:;'));
                 $cell->getLink()->addCss('wiki-insert');
-                $cell->getLink()->setAttr('data-secret-id', $obj->getId());
+                $cell->getLink()->setAttr('data-secret-id', $obj->getSecretId());
                 $cell->getLink()->setAttr('data-secret-name', $obj->getName());
                 $cell->getLink()->setAttr('data-secret-url', $obj->getUrl());
             });

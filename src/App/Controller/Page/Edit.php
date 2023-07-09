@@ -83,7 +83,7 @@ class Edit extends PageController
             $error = true;
         }
 
-        if ($this->wPage->id && !$this->lock->canAccess($this->wPage->getPageId())) {
+        if ($this->wPage->getPageId() && !$this->lock->canAccess($this->wPage->getPageId())) {
             Alert::addWarning('The page is currently being edited by another user. Try again later.');
             $error = true;
         }

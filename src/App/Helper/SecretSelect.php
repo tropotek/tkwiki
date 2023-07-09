@@ -114,7 +114,7 @@ jQuery(function($) {
         // exit if there are errors in the form
         if ($('form .is-invalid', createDialog).length) return;
 
-        let id = $('#secret-secret_id', 'form#secret').val();
+        let id = $('#secret-secretId', 'form#secret').val();
         let name = $('#secret-name', 'form#secret').val();
         insertSecretHtml(id, name);
         selectDialog.modal('hide');

@@ -2,42 +2,25 @@
 namespace App\Table;
 
 use App\Db\PageMap;
-use App\Db\UserMap;
-use App\Util\Masquerade;
+use Bs\Table\ManagerInterface;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Tk\Alert;
 use Tk\Db\Mapper\Result;
-use Tk\Traits\SystemTrait;
+use Tk\Db\Tool;
 use Tk\Ui\Link;
 use Tk\Uri;
-use Tk\Form;
 use Tk\Form\Field;
-use Tk\FormRenderer;
-use Tk\Table;
 use Tk\Table\Cell;
 use Tk\Table\Action;
-use Tk\TableRenderer;
 
-class Page
+class Page extends ManagerInterface
 {
-    use SystemTrait;
 
-    protected Table $table;
-
-    protected ?Form $filter = null;
-
-
-    public function __construct()
+    public function initCells(): void
     {
-        $this->table = new Table('pages');
-        $this->filter = new Form($this->table->getId() . '-filters');
-    }
-
-    public function doDefault(Request $request)
-    {
-        $this->getTable()->appendCell(new Cell\Checkbox('pageId'));
-        $this->getTable()->appendCell(new Cell\Text('actions'))
+        $this->appendCell(new Cell\Checkbox('pageId'));
+        $this->appendCell(new Cell\Text('actions'))
             ->addOnShow(function (Cell\Text $cell, string $html) {
                 $cell->addCss('text-nowrap text-center');
                 $obj = $cell->getRow()->getData();
@@ -68,60 +51,38 @@ JS;
 
                 return '';
             });
-        $this->getTable()->appendCell(new Cell\Text('title'))
+        $this->appendCell(new Cell\Text('title'))
             ->addCss('key')
             ->setUrlProperty('pageId')
             ->setUrl(Uri::create('/edit'));
-        $this->getTable()->appendCell(new Cell\Text('category'));
-        $this->getTable()->appendCell(new Cell\Text('url'));
-        $this->getTable()->appendCell(new Cell\Boolean('published'));
-        $this->getTable()->appendCell(new Cell\Text('permission'))
+        $this->appendCell(new Cell\Text('category'));
+        $this->appendCell(new Cell\Text('url'));
+        $this->appendCell(new Cell\Boolean('published'));
+        $this->appendCell(new Cell\Text('permission'))
             ->addOnValue(function (Cell\Text $cell) {
                 /** @var \App\Db\Page $page */
                 $page = $cell->getRow()->getData();
                 $cell->setValue($page->getPermissionLabel());
             });
-        $this->getTable()->appendCell(new Cell\Text('userId'))
+        $this->appendCell(new Cell\Text('userId'))
             ->addOnValue(function (Cell\Text $cell) {
                 /** @var \App\Db\Page $page */
                 $page = $cell->getRow()->getData();
                 $cell->setValue($page->getUser()->getName());
             });
-        $this->getTable()->appendCell(new Cell\Text('modified'));
-        $this->getTable()->appendCell(new Cell\Text('created'));
+        $this->appendCell(new Cell\Text('modified'));
+        $this->appendCell(new Cell\Text('created'));
 
 
         // Table filters
-        $this->getFilter()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
+        $this->getFilterForm()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
 
         $list = PageMap::create()->getCategoryList();
-        $this->getFilter()->appendField(new Field\Select('category', $list))->prependOption('-- Category -- ', '');
-
-
-        // Load filter values
-        $this->getFilter()->setFieldValues($this->getTable()->getTableSession()->get($this->getFilter()->getId(), []));
-
-        $this->getFilter()->appendField(new Form\Action\Submit('Search', function (Form $form, Form\Action\ActionInterface $action) {
-            $this->getTable()->getTableSession()->set($this->getFilter()->getId(), $form->getFieldValues());
-            Uri::create()->redirect();
-        }))->setGroup('');
-        $this->getFilter()->appendField(new Form\Action\Submit('Clear', function (Form $form, Form\Action\ActionInterface $action) {
-            $this->getTable()->getTableSession()->set($this->getFilter()->getId(), []);
-            Uri::create()->redirect();
-        }))->setGroup('')->addCss('btn-outline-secondary');
-
-        $this->getFilter()->execute($request->request->all());
-
+        $this->getFilterForm()->appendField(new Field\Select('category', $list))->prependOption('-- Category -- ', '');
 
         // Table Actions
-        if ($this->getConfig()->isDebug()) {
-            $this->getTable()->appendAction(new Action\Link('reset', Uri::create()->set(Table::RESET_TABLE, $this->getTable()->getId()), 'fa fa-retweet'))
-                ->setLabel('')
-                ->setAttr('data-confirm', 'Are you sure you want to reset the Table`s session?')
-                ->setAttr('title', 'Reset table filters and order to default.');
-        }
         if ($this->getFactory()->getAuthUser()->hasPermission(\App\Db\User::PERM_SYSADMIN)) {
-            $this->getTable()->appendAction(new Action\Delete('delete', 'pageId'))
+            $this->appendAction(new Action\Delete('delete', 'pageId'))
                 ->addOnDelete(function (Action\Delete $action, \App\Db\Page $obj) {
                     if (!$obj->canDelete($this->getFactory()->getAuthUser())) {
                         Alert::addWarning('You do not have permission to delete this page.');
@@ -129,47 +90,30 @@ JS;
                     }
                 });
         }
-        $this->getTable()->appendAction(new Action\Csv('csv', 'pageId'))->addExcluded('actions');
+        $this->appendAction(new Action\Csv('csv', 'pageId'))->addExcluded('actions');
 
     }
 
-    public function execute(Request $request, ?Result $list = null): void
+    public function execute(Request $request): static
     {
-        // Query
-        if (!$list) {
-            $tool = $this->getTable()->getTool();
-            $filter = $this->getFilter()->getFieldValues();
-            $list = PageMap::create()->findFiltered($filter, $tool);
-        }
-        $this->getTable()->setList($list);
+        return parent::execute($request);
+    }
 
-        $this->getTable()->execute($request);
+    public function findList(array $filter = [], ?Tool $tool = null): null|array|Result
+    {
+        if (!$tool) $tool = $this->getTool();
+        $filter = array_merge($this->getFilterForm()->getFieldValues(), $filter);
+        $list = PageMap::create()->findFiltered($filter, $tool);
+        $this->setList($list);
+        return $list;
     }
 
     public function show(): ?Template
     {
-        $renderer = new TableRenderer($this->getTable());
-        //$renderer->setFooterEnabled(false);
-        $this->getTable()->getRow()->addCss('text-nowrap');
-        $this->getTable()->addCss('table-hover');
-
-        if ($this->getFilter()) {
-            $this->getFilter()->addCss('row gy-2 gx-3 align-items-center');
-            $filterRenderer = FormRenderer::createInlineRenderer($this->getFilter());
-            $renderer->getTemplate()->appendTemplate('filters', $filterRenderer->show());
-            $renderer->getTemplate()->setVisible('filters');
-        }
-
+        $renderer = $this->getTableRenderer();
+        $this->getRow()->addCss('text-nowrap');
+        $this->showFilterForm();
         return $renderer->show();
     }
 
-    public function getTable(): Table
-    {
-        return $this->table;
-    }
-
-    public function getFilter(): ?Form
-    {
-        return $this->filter;
-    }
 }

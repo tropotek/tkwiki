@@ -1,6 +1,7 @@
 <?php
 namespace App\Ui;
 
+use App\Db\SecretMap;
 use App\Form\Secret;
 use Bs\Ui\Dialog;
 use Dom\Template;
@@ -45,6 +46,7 @@ class FormDialog extends Dialog
         $this->form = $form;
         parent::__construct($title, $dialogId);
         $this->addCss('modal-lg');
+        $this->setAttr('data-bs-backdrop', 'static');
     }
 
     public function init()
@@ -54,7 +56,15 @@ class FormDialog extends Dialog
 
     public function execute(Request $request)
     {
-        $this->form->doDefault($request, $request->query->getInt('secretId'));
+        $secret = new \App\Db\Secret();
+        $secret->setUserId($this->getFactory()->getAuthUser()->getUserId());
+        if ($request->query->getInt('secretId')) {
+            $secret = SecretMap::create()->find($request->query->getInt('secretId'));
+        }
+
+        $this->form->setModel($secret);
+        $this->form->execute($request->request->all());
+
         $this->getOnExecute()->execute($this, $request);
     }
 
@@ -67,11 +77,12 @@ class FormDialog extends Dialog
         $formId = $this->form->getForm()->getId();
         $js = <<<JS
 jQuery(function($) {
-    let formId = '#{$formId}';
+    let dialogId = '#{$dialogId}';
 
     function init() {
-        $('form.tk-form').each(function () {
+        $('form.tk-form', dialogId).each(function () {
             let form = $(this);
+            let formId = '#' + $(this).attr('id');
             let dialog = form.closest('.modal');
             $(formId+'-cancel', form).on('click', function () {
                 dialog.modal('hide');
@@ -83,7 +94,7 @@ jQuery(function($) {
     init();
     $('body').on(EVENT_INIT_FORM, init);
 
-    $('#{$dialogId}').on('show.bs.modal', function () {
+    $(dialogId).on('show.bs.modal', function () {
         clearForm(this);
     });
 

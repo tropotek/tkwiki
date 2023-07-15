@@ -1,124 +1,97 @@
 <?php
 namespace App\Form;
 
-use App\Db\UserMap;
+use Bs\Form\EditInterface;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
 use Tk\Alert;
-use Tk\Db\Tool;
-use Tk\Exception;
 use Tk\Form;
 use Tk\Form\Field;
 use Tk\Form\Action;
-use Tk\FormRenderer;
-use Tk\Traits\SystemTrait;
 use Tk\Uri;
 
-class Secret
+class Secret extends EditInterface
 {
-    use SystemTrait;
-    use Form\FormTrait;
-
-    protected ?\App\Db\Secret $secret = null;
 
     protected bool $htmx = false;
 
-    public function __construct(bool $htmx = false)
+
+    protected function initFields(): void
     {
-        $this->htmx = $htmx;
-        $this->setForm(Form::create('secret'));
-    }
-
-    public function doDefault(Request $request, int $id)
-    {
-        $this->secret = new \App\Db\Secret();
-        $this->secret->setUserId($this->getFactory()->getAuthUser()->getUserId());
-
-        if ($id) {
-            $this->secret = \App\Db\SecretMap::create()->find($id);
-            if (!$this->secret) {
-                throw new Exception('Invalid ID: ' . $id);
-            }
-        }
-
         // Enable HTMX
         if ($this->isHtmx()) {
-            $this->getForm()->setAttr('hx-post', Uri::create());
-            $this->getForm()->setAttr('hx-target', 'this');
-            $this->getForm()->setAttr('hx-swap', 'outerHTML');
-            $this->getForm()->setAttr('hx-select', '#'.$this->form->getId());
+            $this->setAttr('hx-post', Uri::create());
+            $this->setAttr('hx-target', 'this');
+            $this->setAttr('hx-swap', 'outerHTML');
+            $this->setAttr('hx-select', '#'.$this->form->getId());
             // trigger JS init event on settle
             header('HX-Trigger-After-Settle: tk-init-form');
         }
 
         $tab = 'Details';
-        $this->getForm()->appendField(new Field\Hidden('secretId'));
+        $this->appendField(new Field\Hidden('secretId'));
 
-//        $list = UserMap::create()->findFiltered(['type' => \App\Db\User::TYPE_STAFF], Tool::create('name'));
-//        $this->getForm()->appendField(new Field\Select('userId', $list))
-//            ->setGroup($tab)
-//            ->prependOption('-- Select --', '');
-
-        $this->getForm()->appendField(new Field\Input('name'))
+        $this->appendField(new Field\Input('name'))
             ->setGroup($tab);
 
         /** @var Field\Select $permission */
-        $this->getForm()->appendField(new Field\Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
+        $this->appendField(new Field\Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
             ->setGroup($tab)
             ->setRequired()
             ->prependOption('-- Select --', '');
 
-        $this->getForm()->appendField(new Field\Input('url'))
+        $this->appendField(new Field\Input('url'))
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Input('username'))
+        $this->appendField(new Field\Input('username'))
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Password('password'))
+        $this->appendField(new Field\Password('password'))
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Input('otp'))
+        $this->appendField(new Field\Input('otp'))
             ->setGroup($tab)
             ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
 
+
         $tab = 'Extra';
-        $this->getForm()->appendField(new Field\Textarea('keys'))
+        $this->appendField(new Field\Textarea('keys'))
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Textarea('notes'))
+        $this->appendField(new Field\Textarea('notes'))
             ->setGroup($tab);
 
 
         if ($this->isHtmx()) {
-            $this->getForm()->appendField(new Action\Submit('insert', [$this, 'onSubmit']));
+            $this->appendField(new Action\Submit('insert', [$this, 'onSubmit']));
         } else {
-            $this->getForm()->appendField(new Action\SubmitExit('save', [$this, 'onSubmit']));
+            $this->appendField(new Action\SubmitExit('save', [$this, 'onSubmit']));
         }
-        $this->getForm()->appendField(new Action\Link('cancel', Uri::create($this->getFactory()->getBackUrl())));
-
-        $load = $this->secret->getMapper()->getFormMap()->getArray($this->secret);
-        $load['secretId'] = $this->secret->getSecretId();
-        $this->getForm()->setFieldValues($load); // Use form data mapper if loading objects
-
-        $this->getForm()->execute($request->request->all());
-
-        $this->setFormRenderer(new FormRenderer($this->getForm()));
+        $this->appendField(new Action\Link('cancel', Uri::create($this->getFactory()->getBackUrl())));
 
     }
 
-    public function onSubmit(Form $form, Action\ActionInterface $action)
+    public function execute(array $values = []): static
     {
-        $this->secret->getMapper()->getFormMap()->loadObject($this->secret, $form->getFieldValues());
+        $load = $this->getSecret()->getMapper()->getFormMap()->getArray($this->getSecret());
+        $load['secretId'] = $this->getSecret()->getSecretId();
+        $this->getForm()->setFieldValues($load);
+        parent::execute($values);
+        return $this;
+    }
 
-        $form->addFieldErrors($this->secret->validate());
+    public function onSubmit(Form $form, Action\ActionInterface $action): void
+    {
+        $this->getSecret()->getMapper()->getFormMap()->loadObject($this->getSecret(), $form->getFieldValues());
+
+        $form->addFieldErrors($this->getSecret()->validate());
         if ($form->hasErrors()) {
             return;
         }
 
-        $this->secret->save();
+        $this->getSecret()->save();
 
         Alert::addSuccess('Form save successfully.');
-        $action->setRedirect(Uri::create()->set('secretId', $this->secret->getSecretId()));
+        $action->setRedirect(Uri::create()->set('secretId', $this->getSecret()->getSecretId()));
         if ($form->getTriggeredAction()->isExit()) {
             $action->setRedirect($this->getFactory()->getBackUrl());
         }
@@ -126,23 +99,19 @@ class Secret
         if ($this->isHtmx()) {
             $form->setFieldValue('secretId', $this->getSecret()->getSecretId());
             $action->setRedirect(null);
-            //$this->getForm()->setAttr('hx-post', Uri::create()->set('secretId', $this->secret->getSecretId()));
+            //$this->setAttr('hx-post', Uri::create()->set('secretId', $this->getSecret()->getSecretId()));
         }
     }
 
     public function show(): ?Template
     {
         // Setup field group widths with bootstrap classes
-        //$this->getForm()->getField('userId')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('permission')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('name')->addFieldCss('col-sm-6');
-        //$this->getForm()->getField('url')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('username')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('password')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('keys')->setAttr('style', 'height: 20em;');
-        $this->getForm()->getField('notes')->setAttr('style', 'height: 20em;');
-//        $this->getForm()->getField('keys')->addFieldCss('col-sm-6');
-//        $this->getForm()->getField('notes')->addFieldCss('col-sm-6');
+        $this->getField('permission')->addFieldCss('col-sm-6');
+        $this->getField('name')->addFieldCss('col-sm-6');
+        $this->getField('username')->addFieldCss('col-sm-6');
+        $this->getField('password')->addFieldCss('col-sm-6');
+        $this->getField('keys')->setAttr('style', 'height: 20em;');
+        $this->getField('notes')->setAttr('style', 'height: 20em;');
 
         $renderer = $this->getFormRenderer();
         $renderer->addFieldCss('mb-3');
@@ -153,12 +122,18 @@ class Secret
 
     public function getSecret(): ?\App\Db\Secret
     {
-        return $this->secret;
+        return $this->getModel();
     }
 
     public function isHtmx(): bool
     {
         return $this->htmx;
+    }
+
+    public function setHtmx(bool $htmx): Secret
+    {
+        $this->htmx = $htmx;
+        return $this;
     }
 
 }

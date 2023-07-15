@@ -2,42 +2,33 @@
 namespace App\Form;
 
 use App\Db\PageMap;
+use Bs\Form\EditInterface;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
 use Tk\Alert;
 use Tk\Db\Tool;
 use Tk\Form\Field;
 use Tk\Form;
-use Tk\FormRenderer;
-use Tk\Traits\SystemTrait;
 use Tk\Uri;
 
-class Settings
+class Settings extends EditInterface
 {
-    use SystemTrait;
-    use Form\FormTrait;
 
-    public function __construct()
-    {
-        $this->setForm(Form::create('settings'));
-    }
-
-    public function doDefault(Request $request)
+    protected function initFields(): void
     {
         $tab = 'Site';
-        $this->getForm()->appendField(new Field\Input('site.name'))
+        $this->appendField(new Field\Input('site.name'))
             ->setLabel('Site Title')
             ->setNotes('Site Full title. Used for email subjects and content texts.')
             ->setRequired(true)
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Input('site.name.short'))
+        $this->appendField(new Field\Input('site.name.short'))
             ->setGroup($tab)
             ->setLabel('Site Short Title')
             ->setNotes('Site short title. Used for nav bars and title where space is limited.')
             ->setRequired(true);
 
-        $this->getForm()->appendField(new Field\Checkbox('site.account.registration'))
+        $this->appendField(new Field\Checkbox('site.account.registration'))
             ->setGroup($tab)
             ->setLabel('Account Registration')
             ->setNotes('Enable public user registrations for this site. (Default user type is `user`)')
@@ -48,14 +39,14 @@ class Settings
         $list = PageMap::create()->findFiltered([
             'permission' => \App\Db\Page::PERM_PUBLIC,
             'published'  => true], Tool::create('created', 25));
-        $this->getForm()->appendField(new Field\Select('wiki.page.default', $list, 'title', 'url'))
+        $this->appendField(new Field\Select('wiki.page.default', $list, 'title', 'url'))
             ->setLabel('Home Page')
             ->setNotes('Select the default wiki page home content.<br/>Note you cannot delete a home page, you must reassign it first.')
             ->setRequired(true)
             ->addCss('select-home')
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Checkbox('wiki.enable.secret.mod'))
+        $this->appendField(new Field\Checkbox('wiki.enable.secret.mod'))
             ->setGroup($tab)
             ->setLabel('Enable Secure Credential Module')
             ->setNotes('Store passwords and secret keys securely and with view/edit permissions')
@@ -65,37 +56,38 @@ class Settings
 
 
         $tab = 'Email';
-        $this->getForm()->appendField(new Field\Input('site.email'))
+        $this->appendField(new Field\Input('site.email'))
             ->setLabel('Site Email')
             ->setRequired(true)
             ->setNotes('The default sender address when sending system emails.')
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Textarea('site.email.sig'))
+        $this->appendField(new Field\Textarea('site.email.sig'))
             ->setLabel('Email Signature')
             ->setNotes('Set the email signature to appear at the footer of all system emails.')
             ->addCss('mce-min')
             ->setGroup($tab);
 
+
         $tab = 'Metadata';
-        $this->getForm()->appendField(new Field\Input('system.meta.keywords'))
+        $this->appendField(new Field\Input('system.meta.keywords'))
             ->setLabel('Metadata Keywords')
             ->setNotes('Set meta tag SEO keywords for this site. ')
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Input('system.meta.description'))
+        $this->appendField(new Field\Input('system.meta.description'))
             ->setLabel('Metadata Description')
             ->setNotes('Set meta tag SEO description for this site. ')
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Textarea('system.global.js'))
+        $this->appendField(new Field\Textarea('system.global.js'))
             ->setAttr('id', 'site-global-js')
             ->setLabel('Global JavaScript')
             ->setNotes('You can omit the &lt;script&gt; tags here')
             ->addCss('code')->setAttr('data-mode', 'javascript')
             ->setGroup($tab);
 
-        $this->getForm()->appendField(new Field\Textarea('system.global.css'))
+        $this->appendField(new Field\Textarea('system.global.css'))
             ->setAttr('id', 'site-global-css')
             ->setLabel('Global CSS Styles')
             ->setNotes('You can omit the &lt;style&gt; tags here')
@@ -103,13 +95,14 @@ class Settings
             ->setGroup($tab);
 
 //        $tab = 'API Keys';
-//        $this->getForm()->appendField(new Field\Input('google.map.apikey'))
+//        $this->appendField(new Field\Input('google.map.apikey'))
 //            ->setGroup($tab)->setLabel('Google API Key')
 //            ->setNotes('<a href="https://cloud.google.com/maps-platform/" target="_blank">Get Google Maps Api Key</a> And be sure to enable `Maps Javascript API`, `Maps Embed API` and `Places API for Web` for this site.')
 //            ->setGroup($tab);
 
+
         $tab = 'Maintenance';
-        $this->getForm()->appendField(new Field\Checkbox('system.maintenance.enabled'))
+        $this->appendField(new Field\Checkbox('system.maintenance.enabled'))
             ->addCss('check-enable')
             ->setLabel('Maintenance Mode Enabled')
             ->setNotes('Enable maintenance mode. Admin users will still have access to the site.')
@@ -118,27 +111,24 @@ class Settings
                 $option->setName('Enable');
             });
 
-        $this->getForm()->appendField(new Field\Textarea('system.maintenance.message'))
+        $this->appendField(new Field\Textarea('system.maintenance.message'))
             ->addCss('mce-min')
             ->setLabel('Message')
             ->setNotes('Set the message public users will see when in maintenance mode.')
             ->setGroup($tab);
 
+        $this->appendField(new Form\Action\SubmitExit('save', [$this, 'onSubmit']));
+        $this->appendField(new Form\Action\Link('back', $this->getBackUrl()));
+    }
 
-        $this->getForm()->appendField(new Form\Action\SubmitExit('save', [$this, 'onSubmit']));
-        $this->getForm()->appendField(new Form\Action\Link('back', Uri::create('/')));
-
-        $this->getForm()->setFieldValues($this->getRegistry()->all()); // Use form data mapper if loading objects
-
-        // Replace converted key from request
+    public function execute(array $values = []): void
+    {
+        $this->setFieldValues($this->getRegistry()->all());
         $values = array_combine(
             array_map(fn($r) => str_replace('_', '.', $r), array_keys($this->getRequest()->request->all()) ),
             array_values($this->getRequest()->request->all())
         );
-        $this->getForm()->execute($values);
-
-        $this->setFormRenderer(new FormRenderer($this->getForm()));
-
+        parent::execute($values);
     }
 
     public function onSubmit(Form $form, Form\Action\ActionInterface $action)
@@ -164,15 +154,15 @@ class Settings
         Alert::addSuccess('Site settings saved successfully.');
         $action->setRedirect(Uri::create());
         if ($form->getTriggeredAction()->isExit()) {
-            $action->setRedirect(Uri::create('/'));
+            $action->setRedirect($this->getBackUrl());
         }
     }
 
     public function show(): ?Template
     {
         $renderer = $this->getFormRenderer();
-        $this->getForm()->getField('site.name')->addFieldCss('col-6');
-        $this->getForm()->getField('site.name.short')->addFieldCss('col-6');
+        $this->getField('site.name')->addFieldCss('col-6');
+        $this->getField('site.name.short')->addFieldCss('col-6');
         $renderer->addFieldCss('mb-3');
 
         return $renderer->show();

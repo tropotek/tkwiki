@@ -1,16 +1,15 @@
 <?php
 namespace App\Controller\Page;
 
-use App\Db\PageMap;
 use App\Db\User;
 use Bs\PageController;
+use Bs\Table\ManagerTrait;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 
 class Orphaned extends PageController
 {
-
-    protected \App\Table\Page $table;
+    use ManagerTrait;
 
 
     public function __construct()
@@ -21,17 +20,13 @@ class Orphaned extends PageController
         $this->getCrumbs()->reset();
     }
 
-    public function doDefault(Request $request)
+    public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
     {
-        // Get the form template
-        $this->table = new \App\Table\Page();
-        $this->table->doDefault($request);
-
-        $tool = $this->table->getTable()->getTool();
-        $filter = $this->table->getFilter()->getFieldValues();
-        $filter['orphaned'] = true;
-        $list = PageMap::create()->findFiltered($filter, $tool);
-        $this->table->execute($request, $list);
+        $this->setTable(new \App\Table\Page());
+        $this->getTable()->findList([
+            'orphaned' => true
+        ], $this->getTable()->getTool('title'));
+        $this->getTable()->init()->execute($request);
 
         return $this->getPage();
     }
@@ -41,7 +36,7 @@ class Orphaned extends PageController
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
 
-        $template->appendTemplate('content', $this->table->show());
+        $template->appendTemplate('content', $this->getTable()->show());
 
         return $template;
     }

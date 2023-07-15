@@ -3,13 +3,13 @@ namespace App\Controller\Page;
 
 use App\Db\User;
 use Bs\PageController;
+use Bs\Table\ManagerTrait;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 
 class Manager extends PageController
 {
-
-    protected \App\Table\Page $table;
+    use ManagerTrait;
 
 
     public function __construct()
@@ -20,12 +20,11 @@ class Manager extends PageController
         $this->getCrumbs()->reset();
     }
 
-    public function doDefault(Request $request)
+    public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
     {
-        // Get the form template
-        $this->table = new \App\Table\Page();
-        $this->table->doDefault($request);
-        $this->table->execute($request);
+        $this->setTable(new \App\Table\Page());
+        $this->getTable()->findList([], $this->getTable()->getTool('title'));
+        $this->getTable()->init()->execute($request);
 
         return $this->getPage();
     }
@@ -35,7 +34,7 @@ class Manager extends PageController
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
 
-        $template->appendTemplate('content', $this->table->show());
+        $template->appendTemplate('content', $this->getTable()->show());
 
         return $template;
     }

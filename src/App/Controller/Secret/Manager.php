@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Secret;
 
+use Bs\Table\ManagerTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Bs\PageController;
 use Dom\Template;
@@ -17,7 +18,7 @@ use Tk\Uri;
  */
 class Manager extends PageController
 {
-    protected \App\Table\Secret $table;
+    use ManagerTrait;
 
     public function __construct()
     {
@@ -33,13 +34,11 @@ class Manager extends PageController
         }
     }
 
-    public function doDefault(Request $request)
+    public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
     {
-
-        // Get the form template
-        $this->table = new \App\Table\Secret();
-        $this->table->doDefault($request);
-        $this->table->execute($request);
+        $this->setTable(new \App\Table\Page());
+        $this->getTable()->findList([], $this->getTable()->getTool('title'));
+        $this->getTable()->init()->execute($request);
 
         return $this->getPage();
     }

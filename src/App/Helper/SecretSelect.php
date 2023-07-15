@@ -45,7 +45,9 @@ class SecretSelect extends Renderer implements DisplayInterface
 
 
         // Create form dialog
-        $form = new Secret(true);
+        $form = new Secret(new \App\Db\Secret());
+        $form->setHtmx(true);
+        $form->init();
         $this->createDialog = new FormDialog($form, 'Create Secret', 'secret-create-dialog');
         $this->createDialog->init();
         $this->createDialog->execute($this->getRequest());
@@ -110,7 +112,8 @@ jQuery(function($) {
     });
 
     // On create secret
-    $('body').on(EVENT_INIT_FORM, function() {
+    $('body').on('htmx-stuff', function() {
+        console.log('init_form 0');
         // exit if there are errors in the form
         if ($('form .is-invalid', createDialog).length) return;
 
@@ -135,7 +138,7 @@ jQuery(function($) {
             });
             // Handle table filters
             $('form.tk-form', selectDialog).on('submit', function (e) {
-                e.stopPropagation();
+                //e.stopPropagation();
                 let url = $(this).attr('action');
                 let data = $(this).serializeArray();
                 let submit = $(e.originalEvent.submitter);

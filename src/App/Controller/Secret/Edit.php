@@ -1,11 +1,15 @@
 <?php
 namespace App\Controller\Secret;
 
+use App\Db\Secret;
+use App\Db\SecretMap;
+use Bs\Form\EditTrait;
 use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 use App\Db\User;
 use Tk\Alert;
+use Tk\Exception;
 use Tk\Uri;
 
 /**
@@ -17,10 +21,9 @@ use Tk\Uri;
  */
 class Edit extends PageController
 {
+    use EditTrait;
 
-    protected ?\App\Db\Secret $secret = null;
-
-    protected \App\Form\Secret $form;
+    protected ?Secret $secret = null;
 
 
     public function __construct()
@@ -36,15 +39,20 @@ class Edit extends PageController
         }
     }
 
-    public function doDefault(Request $request)
+    public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
     {
-        if ($request->query->get('secretId')) {
-            $this->secret = \App\Db\SecretMap::create()->find($request->query->get('secretId', 0));
+        $this->secret = new Secret();
+        $this->secret->setUserId($this->getFactory()->getAuthUser()->getUserId());
+        if ($request->query->getInt('secretId')) {
+            $this->secret = SecretMap::create()->find($request->query->getInt('secretId'));
+        }
+        if (!$this->secret) {
+            throw new Exception('Invalid ID: ' . $request->query->getInt('secretId'));
         }
 
         // Get the form template
-        $this->form = new \App\Form\Secret();
-        $this->form->doDefault($request, $request->query->get('secretId', 0));
+        $this->setForm(new \App\Form\Secret($this->secret));
+        $this->getForm()->init()->execute($request->request->all());
 
         return $this->getPage();
     }
@@ -53,9 +61,9 @@ class Edit extends PageController
     {
         $template = $this->getTemplate();
         $template->setText('title', $this->getPage()->getTitle());
-        $template->setAttr('back', 'href', $this->getFactory()->getBackUrl());
+        $template->setAttr('back', 'href', $this->getBackUrl());
 
-        $template->appendTemplate('content', $this->form->show());
+        $template->appendTemplate('content', $this->getForm()->show());
 
         return $template;
     }

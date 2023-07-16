@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.22 [2023-07-16]:
+-------------------------------
+  - Update orphan links tracking
+  - Update Edit and manager interfaces
+
+
 Ver 8.0.20 [2023-07-09]:
 -------------------------------
 

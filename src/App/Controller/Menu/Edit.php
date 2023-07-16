@@ -77,6 +77,7 @@ class Edit extends PageController
                 'name' => $item->getName(),
                 'type' => $item->getType(),
             ];
+            MenuItem::indexLinks();
             return new JsonResponse($data);
         } catch (\Exception $e) {
             return new JsonResponse(['err' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -94,6 +95,8 @@ class Edit extends PageController
                 if (empty($item['parent_id'])) $item['parent_id'] = null;
                 MenuItemMap::create()->updateItem((int)$item['id'], $item['parent_id'], (int)$orderId, trim($item['name']));
             }
+
+            MenuItem::indexLinks();
             $data = [ 'status' => 'ok' ];
             return new JsonResponse($data);
         } catch (\Exception $e) {
@@ -107,6 +110,7 @@ class Edit extends PageController
             $menuItemId = $request->request->getInt('id');
             $item = MenuItemMap::create()->find($menuItemId);
             $item?->delete();
+            MenuItem::indexLinks();
             return new JsonResponse([ 'status' => 'ok' ]);
         } catch (\Exception $e) {
             return new JsonResponse(['err' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);

@@ -4,6 +4,7 @@ namespace App\Db;
 use Bs\Db\Traits\UserTrait;
 use App\Factory;
 use Bs\Db\Traits\TimestampTrait;
+use Dom\Template;
 use Tk\Config;
 use Tk\Db\Mapper\Model;
 use Tk\Uri;
@@ -100,6 +101,28 @@ class Page extends Model
             }
         } while($comp || self::routeExists($url));
         return $url;
+    }
+
+    /**
+     * Find all page links and add them to the links table
+     * so we can track orphaned pages
+     */
+    public static function indexLinks(Page $page, string $html): void
+    {
+        try {
+            $doc = Template::load($html)->getDocument(false);
+            PageMap::create()->deleteLinkByPageId($page->getPageId());
+            $nodeList = $doc->getElementsByTagName('a');
+            /** @var \DOMElement $node */
+            foreach ($nodeList as $node) {
+                $regs = [];
+                if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
+                    if (isset ($regs[1]) && $page->getUrl() != $regs[1]) {
+                        PageMap::create()->insertLink($page->getPageId(), $regs[1]);
+                    }
+                }
+            }
+        } catch (\Exception $e) { }
     }
 
     public static function findPage(string $url): ?Page

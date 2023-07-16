@@ -229,7 +229,7 @@ class Edit extends PageController
 
         // Index page links
         if (trim($this->wContent->getHtml())) {
-            $this->indexLinks($this->wPage, $this->wContent->getHtml());
+            Page::indexLinks($this->wPage, $this->wContent->getHtml());
         }
 
         // Remove page lock
@@ -257,24 +257,6 @@ class Edit extends PageController
             \Tk\Uri::create($homeUrl)->redirect();
         }
         \Tk\Alert::addWarning('You do not have the permissions to delete this page.');
-    }
-
-    protected function indexLinks(Page $page, string $html): void
-    {
-        try {
-            $doc = Template::load($html)->getDocument(false);
-            PageMap::create()->deleteLinkByPageId($page->getPageId());
-            $nodeList = $doc->getElementsByTagName('a');
-            /** @var \DOMElement $node */
-            foreach ($nodeList as $node) {
-                $regs = [];
-                if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
-                    if (isset ($regs[1])) {
-                        PageMap::create()->insertLink($page->getPageId(), $regs[1]);
-                    }
-                }
-            }
-        } catch (\Exception $e) { }
     }
 
     public function show(): ?Template

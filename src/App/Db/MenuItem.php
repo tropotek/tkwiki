@@ -24,7 +24,23 @@ class MenuItem extends Model
 
     public string $name = '';
 
+    /**
+     * Find all page links and add them to the links table
+     * so we can track orphaned pages
+     */
+    public static function indexLinks(): void
+    {
+        $items = MenuItemMap::create()->findFiltered(['type' => self::TYPE_ITEM]);
+        PageMap::create()->deleteLinkByPageId(0);
+        /** @var MenuItem $item */
+        foreach ($items as $item) {
+            $page = $item->getPage();
+            if ($page) {
+                PageMap::create()->insertLink(0, $page->getUrl());
+            }
+        }
 
+    }
 
     public function getMenuItemId(): int
     {

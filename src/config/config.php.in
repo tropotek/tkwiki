@@ -9,6 +9,8 @@ use Tk\Config;
 return function (Config $config) {
 
     $config->set('path.template.public', '/html/default.html');
+    $config->set('path.template.admin', $config->get('path.template.public'));
+    $config->set('path.template.user', $config->get('path.template.public'));
 
     /*
      * Setup available page templates that reside in the "/html" directory

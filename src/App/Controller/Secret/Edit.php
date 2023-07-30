@@ -28,7 +28,7 @@ class Edit extends PageController
 
     public function __construct()
     {
-        parent::__construct($this->getFactory()->getPublicPage());
+        parent::__construct();
         $this->getPage()->setTitle('Edit Secret');
         if (
             !$this->getAuthUser()?->isType(User::TYPE_STAFF) ||

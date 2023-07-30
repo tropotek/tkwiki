@@ -25,13 +25,9 @@ class Factory extends \Bs\Factory implements FactoryInterface
         return $this->getEventDispatcher();
     }
 
-    public function createPage($templatePath, callable $onCreate = null): Page
+    public function createPage(string $templatePath = ''): Page
     {
-        $page = Page::create($templatePath);
-        if ($onCreate) {
-            call_user_func_array($onCreate, [$page]);
-        }
-        return $page;
+        return Page::create($templatePath);
     }
 
     public function createUser(): User

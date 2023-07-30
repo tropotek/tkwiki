@@ -9,7 +9,6 @@ use App\Util\Pdf;
 use Bs\PageController;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tk\Alert;
 use Tk\Uri;
@@ -23,11 +22,6 @@ class View extends PageController
 
     protected ?ViewToolbar $toolbar = null;
 
-
-    public function __construct()
-    {
-        parent::__construct($this->getFactory()->getPublicPage());
-    }
 
     public function doDefault(Request $request, string $pageUrl)
     {

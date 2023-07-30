@@ -22,7 +22,7 @@ class Manager extends PageController
 
     public function __construct()
     {
-        parent::__construct($this->getFactory()->getPublicPage());
+        parent::__construct();
         $this->getPage()->setTitle('Secret Manager');
         $this->getCrumbs()->reset();
         if (

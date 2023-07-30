@@ -121,14 +121,14 @@ class Settings extends EditInterface
         $this->appendField(new Form\Action\Link('back', $this->getBackUrl()));
     }
 
-    public function execute(array $values = []): void
+    public function execute(array $values = []): static
     {
         $this->setFieldValues($this->getRegistry()->all());
         $values = array_combine(
             array_map(fn($r) => str_replace('_', '.', $r), array_keys($this->getRequest()->request->all()) ),
             array_values($this->getRequest()->request->all())
         );
-        parent::execute($values);
+        return parent::execute($values);
     }
 
     public function onSubmit(Form $form, Form\Action\ActionInterface $action)

@@ -28,7 +28,7 @@ class Contact extends PageController
 
     public function __construct()
     {
-        parent::__construct($this->getFactory()->getPublicPage());
+        parent::__construct();
         $this->getPage()->setTitle('Contact Us');
         $this->setForm(Form::create('contact'));
     }

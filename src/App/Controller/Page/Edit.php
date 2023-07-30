@@ -32,7 +32,7 @@ class Edit extends PageController
 
     public function __construct()
     {
-        parent::__construct($this->getFactory()->getPublicPage());
+        parent::__construct();
         $this->getPage()->setTitle('Edit Page');
         if (!$this->getFactory()->getAuthUser()) {
             Alert::addWarning('You are not logged in.');

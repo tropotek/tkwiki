@@ -14,7 +14,7 @@ class Manager extends PageController
 
     public function __construct()
     {
-        parent::__construct($this->getFactory()->getPublicPage());
+        parent::__construct();
         $this->getPage()->setTitle('Page Manager');
         $this->setAccess(User::PERM_EDITOR);
         $this->getCrumbs()->reset();

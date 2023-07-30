@@ -19,7 +19,7 @@ class History extends PageController
 
     public function __construct()
     {
-        parent::__construct($this->getFactory()->getPublicPage());
+        parent::__construct();
         $this->getPage()->setTitle('Page History');
         $this->setAccess(User::PERM_EDITOR);
     }

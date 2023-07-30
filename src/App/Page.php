@@ -32,7 +32,7 @@ JS;
         $this->showAlert();
 
         // public page
-        if ($this->getTemplatePath() == $this->getFactory()->getPublicPage()->getTemplatePath()) {
+        if ($this->getType() == self::TEMPLATE_PUBLIC) {
             $this->showMenu();
             $this->showCrumbs();
             $this->showCreatePageDialog();

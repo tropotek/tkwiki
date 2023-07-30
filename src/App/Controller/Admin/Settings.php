@@ -14,7 +14,7 @@ class Settings extends PageController
 
     public function __construct()
     {
-        parent::__construct($this->getFactory()->getPublicPage());
+        parent::__construct();
         $this->getPage()->setTitle('Edit Settings');
         $this->setAccess(User::PERM_SYSADMIN);
         $this->getRegistry()->save();

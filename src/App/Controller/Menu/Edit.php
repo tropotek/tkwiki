@@ -24,7 +24,7 @@ class Edit extends PageController
 
     public function __construct()
     {
-        parent::__construct($this->getFactory()->getPublicPage());
+        parent::__construct();
         $this->getPage()->setTitle('Edit Menu');
         $this->setAccess(User::PERM_SYSADMIN | User::PERM_EDITOR);
         $this->getCrumbs()->reset();

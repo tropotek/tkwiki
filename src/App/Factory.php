@@ -60,9 +60,12 @@ class Factory extends \Bs\Factory implements FactoryInterface
      */
     public function getCrumbs(): ?Crumbs
     {
+        //$type = $this->getRequest()->get('template', 'public');
+        $id = 'breadcrumbs.public';
         //$this->getSession()->set('breadcrumbs', null);
-        if (!$this->has('breadcrumbs')) {
-            $crumbs = $this->getSession()->get('breadcrumbs');
+        if (!$this->has($id)) {
+            $crumbs = $this->getSession()->get($id);
+            // Reset crumbs if wiki home page has been updated
             if ($crumbs && Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath() != $crumbs->getHomeUrl()) {
                 $crumbs = null;
             }
@@ -74,11 +77,11 @@ class Factory extends \Bs\Factory implements FactoryInterface
                     $crumbs->setHomeUrl(\App\Db\Page::getHomeUrl());
                 }
                 $crumbs->reset();
-                $this->getSession()->set('breadcrumbs', $crumbs);
+                $this->getSession()->set($id, $crumbs);
             }
-            $this->set('breadcrumbs', $crumbs);
+            $this->set($id, $crumbs);
         }
-        return $this->get('breadcrumbs');
+        return $this->get($id);
     }
 
 }

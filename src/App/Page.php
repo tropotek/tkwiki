@@ -34,9 +34,9 @@ JS;
         // public page
         if ($this->getType() == self::TEMPLATE_PUBLIC) {
             $this->showMenu();
-            $this->showCrumbs();
             $this->showCreatePageDialog();
         }
+        $this->showCrumbs();
 
         if ($this->getFactory()->getAuthUser()) {
             $template->setText('username', $this->getFactory()->getAuthUser()->getUsername());

@@ -215,15 +215,10 @@ SELECT COUNT(*) as i FROM links WHERE page_id = :pageId AND url = :pageUrl
 SQL;
         $stm = $this->getDb()->prepare($sql);
         $stm->execute(compact('pageId', 'pageUrl'));
-//        $stm->execute([
-//            $pageId,
-//            $pageUrl
-//        ]);
         $value = $stm->fetch();
         if (!$value) return false;
         return ($value->i > 0);
     }
-
 
     public function insertLink(int $pageId, string $pageUrl): int
     {
@@ -235,10 +230,6 @@ INSERT INTO links VALUES (:pageId, :pageUrl)
 SQL;
         $stm = $this->getDb()->prepare($sql);
         return $stm->execute(compact('pageId', 'pageUrl'));
-//        return $stm->execute([
-//            $pageId,
-//            $pageUrl
-//        ]);
     }
 
     public function deleteLink($pageId, $pageUrl): bool
@@ -251,10 +242,6 @@ DELETE FROM links WHERE page_id = :pageId AND url = :pageUrl LIMIT 1
 SQL;
         $stm = $this->getDb()->prepare($sql);
         return $stm->execute(compact('pageId', 'pageUrl'));
-//        return $stm->execute([
-//            $pageId,
-//            $pageUrl
-//        ]);
     }
 
     public function deleteLinkByPageId(int $pageId): bool
@@ -264,7 +251,6 @@ DELETE FROM links WHERE page_id = :pageId
 SQL;
         $stm = $this->getDb()->prepare($sql);
         return $stm->execute(compact('pageId'));
-        //return $stm->execute([$pageId]);
     }
 
 }

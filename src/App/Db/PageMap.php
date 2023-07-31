@@ -180,7 +180,8 @@ class PageMap extends Mapper
         $sql = <<<SQL
             SELECT DISTINCT a.category
             FROM page a
-            WHERE a.category LIKE ?
+            WHERE a.category != ''
+            AND a.category LIKE ?
         SQL;
         $stm = $this->getDb()->prepare($sql);
         $stm->execute([
@@ -198,13 +199,10 @@ class PageMap extends Mapper
         $sql = <<<SQL
 SELECT a.page_id
 FROM page a LEFT JOIN links b USING (url)
-WHERE b.page_id IS NULL AND (a.url != ? AND a.page_id = ?)
+WHERE b.page_id IS NULL AND (a.url != :homeUrl AND a.page_id = :pageId)
 SQL;
         $stm = $this->getDb()->prepare($sql);
-        $stm->execute([
-            $homeUrl,
-            $pageId
-        ]);
+        $stm->execute(compact('homeUrl', 'pageId'));
 
         if ($stm->rowCount() > 0) return true;
         return false;
@@ -213,15 +211,15 @@ SQL;
     public function linkExists(int $pageId, string $pageUrl): bool
     {
         $sql = <<<SQL
-SELECT COUNT(*) as i FROM links WHERE page_id = ? AND url = ?
+SELECT COUNT(*) as i FROM links WHERE page_id = :pageId AND url = :pageUrl
 SQL;
         $stm = $this->getDb()->prepare($sql);
-        $stm->execute([
-            $pageId,
-            $pageUrl
-        ]);
+        $stm->execute(compact('pageId', 'pageUrl'));
+//        $stm->execute([
+//            $pageId,
+//            $pageUrl
+//        ]);
         $value = $stm->fetch();
-
         if (!$value) return false;
         return ($value->i > 0);
     }
@@ -233,13 +231,14 @@ SQL;
             return false;
         }
         $sql = <<<SQL
-INSERT INTO links VALUES (?, ?)
+INSERT INTO links VALUES (:pageId, :pageUrl)
 SQL;
         $stm = $this->getDb()->prepare($sql);
-        return $stm->execute([
-            $pageId,
-            $pageUrl
-        ]);
+        return $stm->execute(compact('pageId', 'pageUrl'));
+//        return $stm->execute([
+//            $pageId,
+//            $pageUrl
+//        ]);
     }
 
     public function deleteLink($pageId, $pageUrl): bool
@@ -248,22 +247,24 @@ SQL;
             return false;
         }
         $sql = <<<SQL
-DELETE FROM links WHERE page_id = ? AND url = ? LIMIT 1
+DELETE FROM links WHERE page_id = :pageId AND url = :pageUrl LIMIT 1
 SQL;
         $stm = $this->getDb()->prepare($sql);
-        return $stm->execute([
-            $pageId,
-            $pageUrl
-        ]);
+        return $stm->execute(compact('pageId', 'pageUrl'));
+//        return $stm->execute([
+//            $pageId,
+//            $pageUrl
+//        ]);
     }
 
     public function deleteLinkByPageId(int $pageId): bool
     {
         $sql = <<<SQL
-DELETE FROM links WHERE page_id = ?
+DELETE FROM links WHERE page_id = :pageId
 SQL;
         $stm = $this->getDb()->prepare($sql);
-        return $stm->execute([$pageId]);
+        return $stm->execute(compact('pageId'));
+        //return $stm->execute([$pageId]);
     }
 
 }

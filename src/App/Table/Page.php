@@ -19,7 +19,8 @@ class Page extends ManagerInterface
 
     public function initCells(): void
     {
-        $this->appendCell(new Cell\Checkbox('pageId'));
+        //$this->resetTableSession();
+        $this->appendCell(new Cell\RowSelect('pageId'));
         $this->appendCell(new Cell\Text('actions'))
             ->addOnShow(function (Cell\Text $cell, string $html) {
                 $cell->addCss('text-nowrap text-center');
@@ -70,8 +71,8 @@ JS;
                 $page = $cell->getRow()->getData();
                 $cell->setValue($page->getUser()->getName());
             });
-        $this->appendCell(new Cell\Text('modified'));
-        $this->appendCell(new Cell\Text('created'));
+        $this->appendCell(new Cell\Date('modified'));
+        $this->appendCell(new Cell\Date('created'));
 
 
         // Table filters

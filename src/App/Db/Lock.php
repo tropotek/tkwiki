@@ -58,20 +58,20 @@ class Lock
 
         if ($this->isLocked($pageId)) {
             if ($this->ownLock($pageId)) {
-                $stm = $this->getDb()->prepare('UPDATE `lock` SET expire = (NOW() + INTERVAL ? SECOND) WHERE hash = ?');
+                $stm = $this->getDb()->prepare('UPDATE `lock` SET expire = (NOW() + INTERVAL :timeout SECOND) WHERE hash = :hash');
                 $stm->execute([
-                    self::TIMEOUT_SEC,
-                    $this->getPageHash($pageId)
+                    'timeout' => self::TIMEOUT_SEC,
+                    'hash' => $this->getPageHash($pageId)
                 ]);
             }
         } else {
-            $stm = $this->getDb()->prepare('INSERT INTO `lock` VALUES (?, ?, ?, ?, (NOW() + INTERVAL ? SECOND))');
+            $stm = $this->getDb()->prepare('INSERT INTO `lock` VALUES (:hash, :pageId, :userId, :ip, (NOW() + INTERVAL :timeout SECOND))');
             $stm->execute([
-                $this->getPageHash($pageId),
-                $pageId,
-                $this->getUser()->getId(),
-                $this->getRequest()->getClientIp(),
-                self::TIMEOUT_SEC
+                'hash' => $this->getPageHash($pageId),
+                'pageId' => $pageId,
+                'userId' => $this->getUser()->getId(),
+                'ip' => $this->getRequest()->getClientIp(),
+                'timeout' => self::TIMEOUT_SEC
             ]);
         }
         return true;
@@ -80,8 +80,8 @@ class Lock
     public function unlock(int $pageId): bool
     {
         if (!$this->canAccess($pageId)) return true;
-        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE hash = ?');
-        return $stm->execute([$this->getPageHash($pageId)]);
+        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE hash = :hash');
+        return $stm->execute(['hash' => $this->getPageHash($pageId)]);
     }
 
     /**
@@ -89,8 +89,8 @@ class Lock
      */
     public function clearAllLocks(): bool
     {
-        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE user_id = ?');
-        return $stm->execute([$this->getUser()->getId()]);
+        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE user_id = :userId');
+        return $stm->execute(['userId' => $this->getUser()->getId()]);
     }
 
     /**
@@ -119,16 +119,16 @@ class Lock
     public function isLocked(int $pageId): bool
     {
         $this->clearExpired();
-        $stm = $this->getDb()->prepare('SELECT COUNT(*) as i FROM `lock` WHERE page_id = ?');
-        $stm->execute([$pageId]);
+        $stm = $this->getDb()->prepare('SELECT COUNT(*) as i FROM `lock` WHERE page_id = :pageId');
+        $stm->execute(compact('pageId'));
         $row = $stm->fetch();
         return ($row->i > 0);
     }
 
     public function ownLock(int $pageId): bool
     {
-        $stm = $this->getDb()->prepare('SELECT COUNT(*) as i FROM `lock` WHERE hash = ?');
-        $stm->execute([$this->getPageHash($pageId)]);
+        $stm = $this->getDb()->prepare('SELECT COUNT(*) as i FROM `lock` WHERE hash = :hash');
+        $stm->execute(['hash' => $this->getPageHash($pageId)]);
         $row = $stm->fetch();
         return ($row->i > 0);
     }

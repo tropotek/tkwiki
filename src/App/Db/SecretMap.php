@@ -47,20 +47,6 @@ class SecretMap extends Mapper
 
             $this->addDataMap(self::DATA_MAP_FORM, $map);
         }
-
-        if (!$this->getDataMappers()->has(self::DATA_MAP_TABLE)) {
-            $map = new DataMap();
-            $map->addDataType(new Form\Integer('secretId'));
-            $map->addDataType(new Form\Integer('userId'));
-            $map->addDataType(new Form\Integer('permission'));
-            $map->addDataType(new Form\Text('name'));
-            $map->addDataType(new Form\Text('url'));
-            $map->addDataType(new Form\Text('username'));
-            $map->addDataType(new Form\Date('modified'))->setDateFormat('d/m/Y h:i:s');
-            $map->addDataType(new Form\Date('created'))->setDateFormat('d/m/Y h:i:s');
-
-            $this->addDataMap(self::DATA_MAP_TABLE, $map);
-        }
     }
 
     /**

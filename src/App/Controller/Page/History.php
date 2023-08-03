@@ -24,7 +24,7 @@ class History extends PageController
         $this->setAccess(User::PERM_EDITOR);
     }
 
-    public function doDefault(Request $request)
+    public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
     {
         $this->wPage = PageMap::create()->find($request->query->getInt('pageId'));
         $this->getPage()->setTitle('History for `' . $this->wPage->getTitle() . '`');

@@ -48,24 +48,6 @@ class PageMap extends Mapper
 
             $this->addDataMap(self::DATA_MAP_FORM, $map);
         }
-
-        if (!$this->getDataMappers()->has(self::DATA_MAP_TABLE)) {
-            $map = new DataMap();
-            $map->addDataType(new Form\Integer('pageId'));
-            $map->addDataType(new Form\Integer('userId'));
-            $map->addDataType(new Form\Text('template'));
-            $map->addDataType(new Form\Text('category'));
-            $map->addDataType(new Form\Text('title'));
-            $map->addDataType(new Form\Text('url'));
-            $map->addDataType(new Form\Integer('views'));
-            $map->addDataType(new Form\Integer('permission'));
-            $map->addDataType(new Table\Boolean('titleVisible'));
-            $map->addDataType(new Table\Boolean('published'));
-            $map->addDataType(new Form\Date('modified'))->setDateFormat('d/m/Y h:i:s');
-            $map->addDataType(new Form\Date('created'))->setDateFormat('d/m/Y h:i:s');
-
-            $this->addDataMap(self::DATA_MAP_TABLE, $map);
-        }
     }
 
     public function find(mixed $id): null|\Tk\Db\Mapper\Model|Page
@@ -181,11 +163,11 @@ class PageMap extends Mapper
             SELECT DISTINCT a.category
             FROM page a
             WHERE a.category != ''
-            AND a.category LIKE ?
+            AND a.category LIKE :search
         SQL;
         $stm = $this->getDb()->prepare($sql);
         $stm->execute([
-            '%' . $search . '%'
+            'search' => '%' . $search . '%'
         ]);
         return $stm->fetchAll(\PDO::FETCH_COLUMN);
     }

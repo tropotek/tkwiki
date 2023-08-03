@@ -22,7 +22,7 @@ class Secret extends ManagerInterface
     {
         $editUrl = Uri::create('/secretEdit');
 
-        $this->appendCell(new Cell\Checkbox('secretId'));
+        $this->appendCell(new Cell\RowSelect('secretId'));
         $this->appendCell(new Cell\Text('actions'))
             ->addOnShow(function (Cell\Text $cell, string $html) {
             $cell->addCss('text-nowrap text-center');
@@ -76,7 +76,7 @@ class Secret extends ManagerInterface
                 return $obj->getPermissionLabel();
             });
 
-        $this->appendCell(new Cell\Text('created'));
+        $this->appendCell(new Cell\Date('created'));
 
 
         // Filters

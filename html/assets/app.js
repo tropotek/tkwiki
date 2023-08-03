@@ -222,7 +222,7 @@ let app = function () {
           // TODO: We should modify the dialog to handle edit and add secrets
           editor.on('init', function () {
             $(editor.getDoc()).on('dblclick', 'img.wk-secret', function () {
-              window.open(config.baseUrl + '/secretEdit?id=' + $(this).attr('wk-secret'), '_blank');
+              window.open(config.baseUrl + '/secretEdit?secretId=' + $(this).attr('wk-secret'), '_blank');
             });
             editor.getBody().setAttribute('spellcheck', true);
           });

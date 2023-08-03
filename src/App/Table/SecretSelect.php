@@ -30,7 +30,7 @@ class SecretSelect
         $this->filter = new Form($this->table->getId() . '-filters');
     }
 
-    public function doDefault(Request $request)
+    public function doDefault(Request $request): void
     {
         //$this->getTable()->appendCell(new Cell\Checkbox('id'));
         $this->getTable()->appendCell(new Cell\Text('name'))->setOrderByName('')->addCss('key')

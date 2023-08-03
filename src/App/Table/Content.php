@@ -89,8 +89,8 @@ class Content
                 }
                 return $html;
             });
-        $this->getTable()->appendCell(new Cell\Text('created'))->addCss('key')
-            ->addOnShow(function (Cell\Text $cell, string $html) {
+        $this->getTable()->appendCell(new Cell\Date('created'))->addCss('key')
+            ->addOnShow(function (Cell\Date $cell, string $html) {
                 /** @var \App\Db\Content $content */
                 $content = $cell->getRow()->getData();
                 $html = $content->getCreated(Date::FORMAT_LONG_DATETIME);

@@ -55,7 +55,6 @@ class Settings extends EditInterface
             });
 
         $list = $this->getConfig()->get('wiki.templates', []);
-        vd($list);
         $this->getForm()->appendField(new Field\Select('wiki.default.template', $list))
             ->setGroup($tab)
             ->setRequired()

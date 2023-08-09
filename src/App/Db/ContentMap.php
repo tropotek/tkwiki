@@ -67,7 +67,7 @@ class ContentMap extends Mapper
      */
     public function findFiltered(array|Filter $filter, ?Tool $tool = null): Result
     {
-        return $this->selectFromFilter($this->makeQuery(Filter::create($filter)), $tool);
+        return $this->prepareFromFilter($this->makeQuery(Filter::create($filter)), $tool);
     }
 
 
@@ -76,13 +76,11 @@ class ContentMap extends Mapper
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
 
         if (!empty($filter['search'])) {
-            $kw = '%' . $this->escapeString($filter['search']) . '%';
-            $w = '';
-            //$w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
-            if (is_numeric($filter['search'])) {
-                $id = (int)$filter['search'];
-                $w .= sprintf('a.content_id = %d OR ', $id);
-            }
+            $filter['search'] = '%' . $this->getDb()->escapeString($filter['search']) . '%';
+            $w = 'a.title LIKE :search OR ';
+            $w .= 'a.keywords LIKE :search OR ';
+            $w .= 'a.description LIKE :search OR ';
+            $w .= 'a.content_id LIKE :search OR ';
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
@@ -90,23 +88,20 @@ class ContentMap extends Mapper
             $filter['contentId'] = $filter['id'];
         }
         if (!empty($filter['contentId'])) {
-            $w = $this->makeMultiQuery($filter['contentId'], 'a.content_id');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.content_id IN (:contentId)) AND ');
         }
 
         if (!empty($filter['exclude'])) {
-            $w = $this->makeMultiQuery($filter['exclude'], 'a.content_id', 'AND', '!=');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.content_id NOT IN (:exclude)) AND ');
         }
 
         if (!empty($filter['pageId'])) {
-            $filter->appendWhere('a.page_id = %s AND ', (int)$filter['pageId']);
+            $filter->appendWhere('a.page_id = :pageId AND ');
         }
 
         if (!empty($filter['userId'])) {
-            $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
+            $filter->appendWhere('a.user_id = :userId AND ');
         }
-
 
         return $filter;
     }
@@ -122,25 +117,25 @@ class ContentMap extends Mapper
      *     [created] => 2016-06-23 08:37:27
      *   )
      * )
-     * TODO: rewrite this query me thinks////
+     * TODO: rewrite this query me thinks.....
      */
-    public function findContributors(int $pageId): array
-    {
-        // pgsql
-        $sql = sprintf('SELECT DISTINCT ON (user_id) user_id, created FROM %s WHERE page_id = %s ORDER BY user_id, created DESC ',
-            $this->getDb()->quoteParameter($this->getTable()), (int)$pageId);
-        // Mysql
-        if($this->getDb()->getDriver() == 'mysql') {
-            $sql = sprintf('SELECT DISTINCT user_id, created FROM %s WHERE page_id = %s GROUP BY user_id ORDER BY user_id, created DESC ',
-                $this->getDb()->quoteParameter($this->getTable()), (int)$pageId);
-        }
-
-        $stmt = $this->getDb()->query($sql);
-        $res = array();
-        foreach($stmt as $row) {
-            $res[] = $row;
-        }
-        return $res;
-    }
+//    public function findContributors(int $pageId): array
+//    {
+//        // pgsql
+//        $sql = sprintf('SELECT DISTINCT ON (user_id) user_id, created FROM %s WHERE page_id = %s ORDER BY user_id, created DESC ',
+//            $this->getDb()->quoteParameter($this->getTable()), (int)$pageId);
+//        // Mysql
+//        if($this->getDb()->getDriver() == 'mysql') {
+//            $sql = sprintf('SELECT DISTINCT user_id, created FROM %s WHERE page_id = %s GROUP BY user_id ORDER BY user_id, created DESC ',
+//                $this->getDb()->quoteParameter($this->getTable()), (int)$pageId);
+//        }
+//
+//        $stmt = $this->getDb()->query($sql);
+//        $res = array();
+//        foreach($stmt as $row) {
+//            $res[] = $row;
+//        }
+//        return $res;
+//    }
 
 }

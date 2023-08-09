@@ -18,8 +18,8 @@ class MenuItemMap extends Mapper
         if (!$this->getDataMappers()->has(self::DATA_MAP_DB)) {
             $map = new DataMap();
             $map->addDataType(new Db\Integer('menuItemId', 'menu_item_id'));
-            $map->addDataType(new Db\Integer('parentId', 'parent_id'))->setNullable(true);
-            $map->addDataType(new Db\Integer('pageId', 'page_id'))->setNullable(true);
+            $map->addDataType(new Db\Integer('parentId', 'parent_id'));
+            $map->addDataType(new Db\Integer('pageId', 'page_id'));
             $map->addDataType(new Db\Integer('orderId', 'order_id'));
             $map->addDataType(new Db\Text('type'));
             $map->addDataType(new Db\Text('name'));
@@ -41,7 +41,7 @@ class MenuItemMap extends Mapper
      */
     public function findFiltered(array|Filter $filter, ?Tool $tool = null): Result
     {
-        return $this->selectFromFilter($this->makeQuery(Filter::create($filter)), $tool);
+        return $this->prepareFromFilter($this->makeQuery(Filter::create($filter)), $tool);
     }
 
     public function makeQuery(Filter $filter): Filter
@@ -49,13 +49,9 @@ class MenuItemMap extends Mapper
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
 
         if (!empty($filter['search'])) {
-            $kw = '%' . $this->escapeString($filter['search']) . '%';
-            $w = '';
-            //$w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
-            if (is_numeric($filter['search'])) {
-                $id = (int)$filter['search'];
-                $w .= sprintf('a.id = %d OR ', $id);
-            }
+            $filter['search'] = '%' . $this->getDb()->escapeString($filter['search']) . '%';
+            $w = 'a.name LIKE :search OR ';
+            $w .= 'a.menu_item_id LIKE :search OR ';
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
@@ -63,35 +59,32 @@ class MenuItemMap extends Mapper
             $filter['menuItemId'] = $filter['id'];
         }
         if (!empty($filter['menuItemId'])) {
-            $w = $this->makeMultiQuery($filter['menuItemId'], 'a.menu_item_id');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.menu_item_id IN (:menuItemId)) AND ');
         }
 
         if (!empty($filter['exclude'])) {
-            $w = $this->makeMultiQuery($filter['exclude'], 'a.id', 'AND', '!=');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.menu_item_id NOT IN (:exclude)) AND ');
         }
 
         if (isset($filter['parentId'])) {
             if (!$filter['parentId']) {
                 $filter->appendWhere('a.parent_id IS NULL AND ');
             } else {
-                $filter->appendWhere('a.parent_id = %s AND ', (int)$filter['parentId']);
+                $filter->appendWhere('a.parent_id = :parentId AND ');
             }
         }
         if (isset($filter['pageId'])) {
             if (!$filter['pageId']) {
                 $filter->appendWhere('a.page_id IS NULL AND ');
             } else {
-                $filter->appendWhere('a.page_id = %s AND ', (int)$filter['pageId']);
+                $filter->appendWhere('a.page_id = :pageId AND ');
             }
         }
         if (!empty($filter['type'])) {
-            $w = $this->makeMultiQuery($filter['type'], 'a.type');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.type IN (:type)) AND ');
         }
         if (!empty($filter['name'])) {
-            $filter->appendWhere('a.name = %s AND ', $this->quote($filter['name']));
+            $filter->appendWhere('a.name = :name AND ');
         }
 
 
@@ -101,16 +94,16 @@ class MenuItemMap extends Mapper
     public function updateItem(int $menuItemId, ?int $parentId, int $orderId, string $name): bool
     {
         $sql = <<<SQL
-UPDATE menu_item SET parent_id = ?, order_id = ?, name = ? WHERE menu_item_id = ?
+UPDATE menu_item SET parent_id = :parentId, order_id = :orderId, name = :name WHERE menu_item_id = :menuItemId
 SQL;
         $stm = $this->getDb()->prepare($sql);
 
-        return $stm->execute([
-            $parentId,
-            $orderId,
-            $name,
-            $menuItemId
-        ]);
+        return $stm->execute(compact(
+            'parentId',
+            'orderId',
+            'name',
+            'menuItemId'
+        ));
     }
 
 }

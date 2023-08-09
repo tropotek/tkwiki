@@ -68,20 +68,18 @@ class PageMap extends Mapper
      */
     public function findFiltered(array|Filter $filter, ?Tool $tool = null): Result
     {
-        return $this->selectFromFilter($this->makeQuery(Filter::create($filter)), $tool);
+        return $this->prepareFromFilter($this->makeQuery(Filter::create($filter)), $tool);
     }
 
     public function makeQuery(Filter $filter): Filter
     {
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
+
         if (!empty($filter['search'])) {
-            $kw = '%' . $this->escapeString($filter['search']) . '%';
-            $w = sprintf('a.title LIKE %s OR ', $this->quote($kw));
-            $w .= sprintf('a.category LIKE %s OR ', $this->quote($kw));
-            if (is_numeric($filter['search'])) {
-                $id = (int)$filter['search'];
-                $w .= sprintf('a.page_id = %d OR ', $id);
-            }
+            $filter['search'] = '%' . $this->getDb()->escapeString($filter['search']) . '%';
+            $w  = 'a.title LIKE :search OR ';
+            $w .= 'a.category LIKE :search OR ';
+            $w .= 'a.page_id LIKE :search OR ';
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
@@ -89,55 +87,49 @@ class PageMap extends Mapper
             $filter['pageId'] = $filter['id'];
         }
         if (!empty($filter['pageId'])) {
-            $w = $this->makeMultiQuery($filter['pageId'], 'a.page_id');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.page_id IN (:pageId)) AND ');
         }
 
         if (!empty($filter['exclude'])) {
-            $w = $this->makeMultiQuery($filter['exclude'], 'a.page_id', 'AND', '!=');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.page_id NOT IN (:exclude)) AND ');
         }
 
         if (!empty($filter['author'])) {
-            $filter->appendWhere('(a.user_id = %s) OR ', $this->quote($filter['author']));
+            $filter->appendWhere('(a.user_id = :author) OR ');
         }
 
         if (!empty($filter['userId'])) {
-            $w = $this->makeMultiQuery($filter['userId'], 'a.user_id');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.user_id IN (:userId)) AND ');
         }
 
         if (!empty($filter['template'])) {
-            $filter->appendWhere('a.template = %s AND ', $this->quote($filter['template']));
+            $filter->appendWhere('a.template = :template AND ');
         }
 
         if (!empty($filter['category'])) {
-            $filter->appendWhere('a.category = %s AND ', $this->quote($filter['category']));
+            $filter->appendWhere('a.category = :category AND ');
         }
 
         if (!empty($filter['title'])) {
-            $filter->appendWhere('a.title = %s AND ', $this->quote($filter['title']));
+            $filter->appendWhere('a.title = :title AND ');
         }
 
         if (!empty($filter['url'])) {
-            $filter->appendWhere('a.url = %s AND ', $this->quote($filter['url']));
+            $filter->appendWhere('a.url = :url AND ');
         }
 
         if (is_bool($filter['published'])) {
-            $filter->appendWhere('a.published = %s AND ', (int)$filter['published']);
+            $filter->appendWhere('a.published = :published AND ');
         }
 
         if (!empty($filter['permission'])) {
-            $w = $this->makeMultiQuery($filter['permission'], 'a.permission');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.permission IN (:permission)) AND ');
         }
 
         if (isset($filter['orphaned'])) {
-            $homeUrl = $this->getRegistry()->get('wiki.page.default');
+            $filter['homeUrl'] = $this->getRegistry()->get('wiki.page.default');
             $filter->appendFrom(' LEFT JOIN links b USING (url)');
-            $filter->appendWhere('b.page_id IS NULL AND (a.url != %s) ',
-                $this->quote($homeUrl)
-            );
+            $filter->appendWhere('b.page_id IS NULL AND (a.url != :homeUrl) ');
         }
 
         // Do a full text search on the content
@@ -147,7 +139,7 @@ class PageMap extends Mapper
                 FROM content
                 WHERE MATCH (html) AGAINST (%s IN NATURAL LANGUAGE MODE)
                 GROUP BY page_id
-            ) c ON (a.content_id = c.page_id)', $this->quote($filter['fullSearch'] ?? ''));
+            ) c USING (page_id)', $this->quote($filter['fullSearch'] ?? ''));
             $filter->appendWhere('c.content_id IS NOT NULL');
         }
 

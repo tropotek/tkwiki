@@ -54,7 +54,7 @@ class SecretMap extends Mapper
      */
     public function findFiltered(array|Filter $filter, ?Tool $tool = null): Result
     {
-        return $this->selectFromFilter($this->makeQuery(Filter::create($filter)), $tool);
+        return $this->prepareFromFilter($this->makeQuery(Filter::create($filter)), $tool);
     }
 
     public function makeQuery(Filter $filter): Filter
@@ -62,13 +62,10 @@ class SecretMap extends Mapper
         $filter->appendFrom('%s a', $this->quoteParameter($this->getTable()));
 
         if (!empty($filter['search'])) {
-            $kw = '%' . $this->escapeString($filter['search']) . '%';
-            $w = '';
-            $w .= sprintf('a.name LIKE %s OR ', $this->quote($kw));
-            if (is_numeric($filter['search'])) {
-                $id = (int)$filter['search'];
-                $w .= sprintf('a.secret_id = %d OR ', $id);
-            }
+            $filter['search'] = '%' . $this->getDb()->escapeString($filter['search']) . '%';
+            $w  = 'a.name LIKE :search OR ';
+            $w .= 'a.url LIKE :search OR ';
+            $w .= 'a.secret_id LIKE :search OR ';
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
@@ -76,33 +73,31 @@ class SecretMap extends Mapper
             $filter['secretId'] = $filter['id'];
         }
         if (!empty($filter['secretId'])) {
-            $w = $this->makeMultiQuery($filter['secretId'], 'a.secret_id');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.secret_id IN (:secretId)) AND ');
         }
 
         if (!empty($filter['exclude'])) {
-            $w = $this->makeMultiQuery($filter['exclude'], 'a.secret_id', 'AND', '!=');
-            if ($w) $filter->appendWhere('(%s) AND ', $w);
+            $filter->appendWhere('(a.secret_id NOT IN (:exclude)) AND ');
         }
 
         if (!empty($filter['author'])) {
-            $filter->appendWhere('(a.user_id = %s) OR ', $this->quote($filter['author']));
+            $filter->appendWhere('(a.user_id = :author) OR ');
         }
 
         if (!empty($filter['userId'])) {
-            $filter->appendWhere('a.user_id = %s AND ', (int)$filter['userId']);
+            $filter->appendWhere('a.user_id = :userId AND ');
         }
 
         if (!empty($filter['permission'])) {
-            $filter->appendWhere('a.permission = %s AND ', (int)$filter['permission']);
+            $filter->appendWhere('a.permission = :permission AND ');
         }
 
         if (!empty($filter['name'])) {
-            $filter->appendWhere('a.name = %s AND ', $this->quote($filter['name']));
+            $filter->appendWhere('a.name = :name AND ');
         }
 
         if (!empty($filter['url'])) {
-            $filter->appendWhere('a.url = %s AND ', $this->quote($filter['url']));
+            $filter->appendWhere('a.url = :url AND ');
         }
 
         return $filter;

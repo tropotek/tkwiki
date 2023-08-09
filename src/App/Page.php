@@ -90,7 +90,10 @@ JS;
     protected function showCrumbs(): void
     {
         $crumbs = $this->getFactory()->getCrumbs();
+        $crumbs->addCss('mt-2 ');
+
         if (!($crumbs && $crumbs->isVisible())) return;
+
         $template = $crumbs->show();
         if ($this->getTemplate()->hasVar('crumbs')) {
             $this->getTemplate()->insertTemplate('crumbs', $template);

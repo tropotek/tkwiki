@@ -30,6 +30,19 @@ class Factory extends \Bs\Factory implements FactoryInterface
         return Page::create($templatePath);
     }
 
+    public function createPageFromType(string $pageType = ''): Page
+    {
+        if (empty($pageType)) $pageType = Page::TEMPLATE_PUBLIC;
+        $path = $this->getSystem()->makePath($this->getConfig()->get('path.template.'.$pageType));
+        if ($pageType == Page::TEMPLATE_PUBLIC) {
+            $template = $this->getRegistry()->get('wiki.default.template', 'default');
+            $path = $this->getSystem()->makePath(sprintf('/html/%s.html', $template));
+        }
+        $page = $this->createPage($path);
+        $page->setType($pageType);
+        return $page;
+    }
+
     public function createUser(): User
     {
         return new User();
@@ -60,9 +73,7 @@ class Factory extends \Bs\Factory implements FactoryInterface
      */
     public function getCrumbs(): ?Crumbs
     {
-        //$type = $this->getRequest()->get('template', 'public');
         $id = 'breadcrumbs.public';
-        //$this->getSession()->set('breadcrumbs', null);
         if (!$this->has($id)) {
             $crumbs = $this->getSession()->get($id);
             // Reset crumbs if wiki home page has been updated

@@ -23,7 +23,7 @@ class View extends PageController
     protected ?ViewToolbar $toolbar = null;
 
 
-    public function doDefault(Request $request, string $pageUrl)
+    public function doDefault(Request $request, string $pageUrl): Template|\App\Page|\Dom\Mvc\Page|null
     {
         if ($pageUrl == Page::DEFAULT_TAG) {
             $pageUrl = $this->getRegistry()->get('wiki.page.default');

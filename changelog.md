@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.28 [2023-08-09]:
+-------------------------------
+  - Added global default template select to settings
+
+
 Ver 8.0.26 [2023-08-09]:
 -------------------------------
 

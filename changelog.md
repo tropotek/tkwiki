@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.30 [2023-08-09]:
+-------------------------------
+  - Convert to prepared statements
+
+
 Ver 8.0.28 [2023-08-09]:
 -------------------------------
   - Added global default template select to settings

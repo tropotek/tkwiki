@@ -43,21 +43,6 @@ class ContentMap extends Mapper
 
             $this->addDataMap(self::DATA_MAP_FORM, $map);
         }
-
-        if (!$this->getDataMappers()->has(self::DATA_MAP_TABLE)) {
-            $map = new DataMap();
-            $map->addDataType(new Form\Integer('contentId'));
-            $map->addDataType(new Form\Integer('pageId'));
-            $map->addDataType(new Form\Integer('userId'));
-            $map->addDataType(new Form\Text('html'));
-            $map->addDataType(new Form\Text('keywords'));
-            $map->addDataType(new Form\Text('description'));
-            $map->addDataType(new Form\Text('css'));
-            $map->addDataType(new Form\Text('js'));
-            $map->addDataType(new Form\Date('created'))->setDateFormat('d/m/Y h:i:s');
-
-            $this->addDataMap(self::DATA_MAP_TABLE, $map);
-        }
     }
 
 

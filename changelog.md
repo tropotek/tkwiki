@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.32 [2023-08-15]:
+-------------------------------
+  - implemented new user names
+
+
 Ver 8.0.30 [2023-08-09]:
 -------------------------------
   - Convert to prepared statements

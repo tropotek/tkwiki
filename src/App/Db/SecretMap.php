@@ -89,6 +89,11 @@ class SecretMap extends Mapper
         }
 
         if (!empty($filter['permission'])) {
+            $perm = 0;
+            foreach ($filter['permission'] as $p) {
+                $perm |= $p;
+            }
+            $filter['permission'] = $perm;
             $filter->appendWhere('a.permission = :permission AND ');
         }
 

@@ -107,7 +107,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_SAFE_UPDATES = 0;
 
 TRUNCATE TABLE user;
-INSERT INTO user (type, username, email, name, timezone, permissions) VALUES
+INSERT INTO user (type, username, email, name_first, timezone, permissions) VALUES
   ('staff', 'admin', 'admin@example.com', 'Administrator', NULL, 1)
 ;
 UPDATE `user` SET `hash` = MD5(CONCAT(username, user_id)) WHERE 1;

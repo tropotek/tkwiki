@@ -6,6 +6,7 @@ class User extends \Bs\Db\User
 {
     /**
      * Wiki user permission values
+     * @TODO: move this permission to 0x00000100
      */
     const PERM_EDITOR             = 0x00000010; // Ability to edit/audit all site pages except private pages
 

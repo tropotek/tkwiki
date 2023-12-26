@@ -16,7 +16,6 @@ use Tk\Form;
 use Tk\Form\Field;
 use Tk\Form\Action;
 use Tk\Form\FormTrait;
-use Tk\FormRenderer;
 use Tk\Uri;
 
 class Edit extends PageController
@@ -186,7 +185,7 @@ class Edit extends PageController
 
         $this->getForm()->execute($request->request->all());
 
-        $this->setFormRenderer(new FormRenderer($this->getForm()));
+        $this->setFormRenderer(new Form\Renderer\Dom\Renderer($this->getForm()));
 
         return $this->getPage();
     }

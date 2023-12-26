@@ -13,7 +13,6 @@ use Tk\Ui\Link;
 use Tk\Uri;
 use Tk\Form;
 use Tk\Form\Field;
-use Tk\FormRenderer;
 use Tk\Table;
 use Tk\Table\Cell;
 use Tk\Table\Action;
@@ -170,7 +169,7 @@ class Content
 
         if ($this->getFilter()) {
             $this->getFilter()->addCss('row gy-2 gx-3 align-items-center');
-            $filterRenderer = FormRenderer::createInlineRenderer($this->getFilter());
+            $filterRenderer = Form\Renderer\Dom\Renderer::createInlineRenderer($this->getFilter());
             $renderer->getTemplate()->appendTemplate('filters', $filterRenderer->show());
             $renderer->getTemplate()->setVisible('filters');
         }

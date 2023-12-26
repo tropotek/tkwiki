@@ -1,7 +1,6 @@
 <?php
 namespace App\Table;
 
-use App\Db\PageMap;
 use App\Db\SecretMap;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +9,6 @@ use Tk\Traits\SystemTrait;
 use Tk\Uri;
 use Tk\Form;
 use Tk\Form\Field;
-use Tk\FormRenderer;
 use Tk\Table;
 use Tk\Table\Cell;
 use Tk\TableRenderer;
@@ -96,7 +94,7 @@ class SecretSelect
 
         if ($this->getFilter()) {
             $this->getFilter()->addCss('row gy-2 gx-3 align-items-center');
-            $filterRenderer = FormRenderer::createInlineRenderer($this->getFilter());
+            $filterRenderer = Form\Renderer\Dom\Renderer::createInlineRenderer($this->getFilter());
             $renderer->getTemplate()->appendTemplate('filters', $filterRenderer->show());
             $renderer->getTemplate()->setVisible('filters');
         }

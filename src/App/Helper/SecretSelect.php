@@ -84,7 +84,7 @@ jQuery(function($) {
     selectDialog.on('show.bs.modal', function() {
         $('input', this).val('');
         $('#secret-select-table', selectDialog).load(document.location.href + ' #secret-select-table', function (response, status, xhr) {
-            $('body').trigger(EVENT_INIT_TABLE);
+            $('body').trigger(EVENT_INIT_TABLE, $('#secret-select-table', selectDialog));
         });
     })
     .on('click', '.wiki-insert', function() {
@@ -132,7 +132,7 @@ jQuery(function($) {
                 e.stopPropagation();
                 let url = $(this).attr('href');
                 $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', function (response, status, xhr) {
-                    $('body').trigger(EVENT_INIT_TABLE);
+                    $('body').trigger(EVENT_INIT_TABLE, $('#secret-select-table', selectDialog));
                 });
                 return false;
             });
@@ -144,15 +144,14 @@ jQuery(function($) {
                 let submit = $(e.originalEvent.submitter);
                 data.push({name: submit.attr('name'), value: submit.attr('value')});
                 $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', data, function (response, status, xhr) {
-                    $('body').trigger(EVENT_INIT_TABLE);
+                    $('body').trigger(EVENT_INIT_TABLE, $('#secret-select-table', selectDialog));
                 });
                 return false;
             });
         });
     }
-
-    init();
-    $('body').on(EVENT_INIT_TABLE, init);
+    tableEvents.push(init);
+    
 });
 JS;
         $template->appendJs($js);

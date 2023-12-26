@@ -74,26 +74,22 @@ class FormDialog extends Dialog
         $template = parent::show();
 
         $dialogId = $this->getId();
-        $formId = $this->form->getForm()->getId();
+        //$formId = $this->form->getForm()->getId();
         $js = <<<JS
 jQuery(function($) {
     let dialogId = '#{$dialogId}';
-
-    function init() {
-        $('form.tk-form', dialogId).each(function () {
-            let form = $(this);
-            let formId = '#' + $(this).attr('id');
-            let dialog = form.closest('.modal');
-            $(formId+'-cancel', form).on('click', function () {
-                dialog.modal('hide');
-                $(formId+'-select-dialog').modal('show');
-                return false;
-            });
+    
+    $('form.tk-form', dialogId).each(function () {
+        let form = $(this);
+        let formId = '#' + $(this).attr('id');
+        let dialog = form.closest('.modal');
+        $(formId+'-cancel', form).on('click', function () {
+            dialog.modal('hide');
+            $(formId+'-select-dialog').modal('show');
+            return false;
         });
-    }
-    init();
-    $('body').on(EVENT_INIT_FORM, init);
-
+    });
+    
     $(dialogId).on('show.bs.modal', function () {
         clearForm(this);
     });

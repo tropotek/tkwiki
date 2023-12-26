@@ -145,7 +145,7 @@ let app = function () {
    */
   let initTinymce = function () {
     if (typeof tinymce === "undefined") {
-      vd('Plugin not loaded: jquery.tinymce');
+      console.warn('Plugin not loaded: jquery.tinymce');
       return;
     }
 
@@ -364,10 +364,9 @@ let app = function () {
           file_picker_callback : getMceElf(el.data()).browser,
         }));
       });
-    };
+    }
 
-    init();
-    $('body').on(EVENT_INIT_FORM, init);
+    formEvents.push(init);
 
     // TODO: Tinymce Bug: The page scrolls up/down when the cursor reaches the
     //       bottom of the editor window, we need to find out a way to stop this

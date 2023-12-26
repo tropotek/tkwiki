@@ -26,7 +26,7 @@ class Edit extends PageController
 
     protected ?Content $wContent = null;
 
-    protected Lock $lock;
+    protected ?Lock $lock = null;
 
 
     public function __construct()

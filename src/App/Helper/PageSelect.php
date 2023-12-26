@@ -114,7 +114,7 @@ jQuery(function($) {
             e.stopPropagation();
             let url = $(this).attr('href');
             $('#page-select-table', dialog).load(url + ' #page-select-table', function (response, status, xhr) {
-                $('body').trigger(EVENT_INIT_TABLE);
+                $('body').trigger(EVENT_INIT_TABLE, $('table', dialog));
             });
             return false;
         });
@@ -126,13 +126,12 @@ jQuery(function($) {
             let submit = $(e.originalEvent.submitter);
             data.push({name: submit.attr('name'), value: submit.attr('value')});
             $('#page-select-table', dialog).load(url + ' #page-select-table', data, function (response, status, xhr) {
-                $('body').trigger(EVENT_INIT_TABLE);
+                $('body').trigger(EVENT_INIT_TABLE, $('table', dialog));
             });
             return false;
         });
     }
-    init();
-    $('body').on(EVENT_INIT_TABLE, init);
+    tableEvents.push(init);
 });
 JS;
         $template->appendJs($js);

@@ -52,7 +52,6 @@ class Edit extends PageController
             $name   = $request->request->getString('name', '');
 
             $item = new MenuItem();
-            $item->setPageId($pageId);
             $item->setType($type);
 
             if ($type == MenuItem::TYPE_ITEM) {
@@ -60,6 +59,7 @@ class Edit extends PageController
                 if (!$page) {
                     throw new Exception('Invalid page id: ' . $pageId);
                 }
+                $item->setPageId($pageId);
                 $item->setName($page->getTitle());
             } elseif ($type == MenuItem::TYPE_DIVIDER) {
                 $item->setName($name);
@@ -73,7 +73,7 @@ class Edit extends PageController
 
             $data = [
                 'menuItemId' => $item->getMenuItemId(),
-                'pageId' => $item->getPageId(),
+                'pageId' => $item->getPageId() ?? 0,
                 'name' => $item->getName(),
                 'type' => $item->getType(),
             ];

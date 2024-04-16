@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.36 [2024-04-16]:
+-------------------------------
+  - Fix wiki menu edit page_id api error
+  - Fix form init js
+
+
 Ver 8.0.34 [2023-09-28]:
 -------------------------------
 

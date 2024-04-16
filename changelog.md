@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.38 [2024-04-16]:
+-------------------------------
+  - Fix mpdf version for php8.3
+
+
 Ver 8.0.36 [2024-04-16]:
 -------------------------------
   - Fix wiki menu edit page_id api error

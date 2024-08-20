@@ -6,6 +6,7 @@ use App\Db\SecretMap;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
+use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,16 +26,15 @@ class ViewSecret extends Renderer implements DisplayInterface
     public function __construct(Secret $secret)
     {
         $this->secret = $secret;
-        if ($this->getRequest()->request->getInt('o')) {
-            $this->doOtp($this->getRequest());
+        if (isset($_POST['o'])) {
+            $this->doOtp();
         }
     }
 
-    public function doOtp(Request $request)
+    #[NoReturn] public function doOtp()
     {
         $response = new JsonResponse(['msg' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        /** @var \App\Db\Secret $secret */
-        $secret = SecretMap::create()->find($request->request->getInt('o', 0));
+        $secret = Secret::find($_GET['o'] ?? 0);
         if ($secret && $secret->canView($this->getFactory()->getAuthUser())) {
             $response = new JsonResponse(['otp' => $secret->genOtpCode()]);
         }
@@ -46,38 +46,38 @@ class ViewSecret extends Renderer implements DisplayInterface
     {
         $template = $this->getTemplate();
 
-        $template->setText('name', $this->secret->getName());
-        if ($this->secret->getKeys() || $this->secret->getNotes()) {
+        $template->setText('name', $this->secret->name);
+        if ($this->secret->keys || $this->secret->notes) {
             $template->prependText('name', '* ');
         }
-        if ($this->secret->getUrl()) {
-            $template->setAttr('name', 'href', $this->secret->getUrl());
+        if ($this->secret->url) {
+            $template->setAttr('name', 'href', $this->secret->url);
             $template->setVisible('url', true);
         } else {
             $template->setVisible('no-url', true);
         }
-        if ($this->secret->getUsername() || $this->secret->getPassword()) {
-            if ($this->secret->getUsername()) {
-                $template->setText('username', $this->secret->getUsername());
-                $template->setAttr('username', 'data-text', $this->secret->getUsername());
+        if ($this->secret->username || $this->secret->password) {
+            if ($this->secret->username) {
+                $template->setText('username', $this->secret->username);
+                $template->setAttr('username', 'data-text', $this->secret->username);
                 $template->setVisible('user');
             }
-            if ($this->secret->getPassword()) {
-                $template->setText('password', str_repeat('*', strlen($this->secret->getPassword())));
-                $template->setAttr('password', 'data-text', str_repeat('*', strlen($this->secret->getPassword())));
-                $template->setAttr('password', 'data-id', $this->secret->getSecretId());
+            if ($this->secret->password) {
+                $template->setText('password', str_repeat('*', strlen($this->secret->password)));
+                $template->setAttr('password', 'data-text', str_repeat('*', strlen($this->secret->password)));
+                $template->setAttr('password', 'data-id', $this->secret->secretId);
                 $template->setVisible('pass');
             }
             $template->setVisible('userpass');
         }
 
-        if ($this->secret->getOtp()) {
-            $template->setAttr('otp', 'data-id', $this->secret->getSecretId());
+        if ($this->secret->otp) {
+            $template->setAttr('otp', 'data-id', $this->secret->secretId);
             $template->setVisible('o');
         }
 
         if ($this->secret->canEdit($this->getFactory()->getAuthUser())) {
-            $template->setAttr('edit', 'href', Uri::create('/secretEdit')->set('secretId', $this->secret->getSecretId()));
+            $template->setAttr('edit', 'href', Uri::create('/secretEdit')->set('secretId', $this->secret->secretId));
             $template->setVisible('edit');
         }
 

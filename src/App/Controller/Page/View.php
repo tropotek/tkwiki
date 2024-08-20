@@ -2,32 +2,30 @@
 namespace App\Controller\Page;
 
 use App\Db\Content;
-use App\Db\ContentMap;
 use App\Db\Page;
 use App\Helper\ViewToolbar;
 use App\Util\Pdf;
-use Bs\PageController;
+use Bs\ControllerDomInterface;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tk\Alert;
 use Tk\Uri;
 
-class View extends PageController
+class View extends ControllerDomInterface
 {
 
-    protected ?Page $wPage = null;
-
-    protected ?Content $wContent = null;
-
-    protected ?ViewToolbar $toolbar = null;
+    protected ?Page        $wPage    = null;
+    protected ?Content     $wContent = null;
+    protected ?ViewToolbar $toolbar  = null;
 
 
-    public function doDefault(Request $request, string $pageUrl): Template|\App\Page|\Dom\Mvc\Page|null
+    public function doDefault(Request $request, string $pageUrl)
     {
         if ($pageUrl == Page::DEFAULT_TAG) {
-            $pageUrl = $this->getRegistry()->get('wiki.page.default');
+            $pageUrl = $this->getRegistry()->get('wiki.page.default', 'home');
         }
+
         $this->wPage = Page::findPage($pageUrl);
         if (!$this->wPage) {
             if (Page::canCreate($this->getFactory()->getAuthUser())) {
@@ -39,34 +37,33 @@ class View extends PageController
             }
         } else {
             if (!$this->wPage->canView($this->getFactory()->getAuthUser())) {
-                Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->getTitle() . '`');
+                Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
                 Uri::create(Page::getHomeUrl())->redirect();
             }
         }
 
-        if ($this->wPage->getTemplate()) {
-            $tplPath = $this->getSystem()->makePath(sprintf('/html/%s.html', $this->wPage->getTemplate()));
-            $this->setPage($this->getFactory()->createPage($tplPath));
-        }
+//        if ($this->wPage->template) {
+//            $tplPath = $this->getSystem()->makePath(sprintf('/html/%s.html', $this->wPage->template));
+//            $this->setPage($this->getFactory()->createPage($tplPath));
+//        }
 
-        $this->getPage()->setTitle($this->wPage->getTitle());
+        $this->getPage()->setTitle($this->wPage->title);
         $this->wContent = $this->wPage->getContent();
         $this->toolbar = new ViewToolbar($this->wPage);
 
-        if ($request->query->has('pdf')) {
-            return $this->doPdf($request);
+        if (isset($_GET['pdf'])) {
+            return $this->doPdf();
         }
 
-        return $this->getPage();
     }
 
     /**
      * This method is used for system users viewing wiki pages
      * thus they should have edit access or this link should fail
      */
-    public function doContentView(Request $request)
+    public function doContentView()
     {
-        $this->wContent = ContentMap::create()->find($request->get('contentId'));
+        $this->wContent = Content::find($_GET['contentId'] ?? 0);
         if (!$this->wContent) {
             throw new HttpException(404, 'page not found');
         }
@@ -78,28 +75,30 @@ class View extends PageController
             $this->wPage->getPageUrl()->redirect();
         }
 
-        if ($request->query->has('pdf')) {
-            return $this->doPdf($request);
+        if (isset($_GET['pdf'])) {
+            return $this->doPdf();
         }
 
-        Alert::addInfo('You are viewing revision ' . $this->wContent->getContentId() . ' <a href="'.$this->wPage->getPageUrl().'">click here</a> to return to current revision');
+        Alert::addInfo('You are viewing revision ' . $this->wContent->contentId . ' <a href="'.$this->wPage->getPageUrl().'">click here</a> to return to current revision');
         $this->toolbar = new ViewToolbar($this->wPage);
 
-        return $this->getPage();
+        //return $this->getPage();
     }
 
-    public function doPdf(Request $request)
+    public function doPdf()
     {
         $rev = '';
-        if ($request->query->get('contentId')) {
-            $rev = '-' . $request->query->get('contentId');
+        if (isset($_GET['contentId'])) {
+            $rev = '-' . $_GET['contentId'];
         }
 
-        $pdf = Pdf::create($this->wContent->getHtml(), $this->wPage->getTitle());
-        $filename = $this->wPage->getTitle().$rev.'.pdf';
+        $pdf = Pdf::create($this->wContent->html, $this->wPage->title);
+        $filename = $this->wPage->title.$rev.'.pdf';
 
-        if (!$request->query->has('isHtml'))
+        if (!isset($_GET['isHtml'])) {
             $pdf->output($filename);     // comment this to see html version
+        }
+
         return $pdf->show();
     }
 
@@ -109,24 +108,24 @@ class View extends PageController
 
         $template->appendTemplate('toolbar', $this->toolbar->show());
 
-        $template->setText('title', $this->wPage->getTitle());
-        $template->setVisible('title', $this->wPage->isTitleVisible());
+        $template->setText('title', $this->wPage->title);
+        $template->setVisible('title', $this->wPage->titleVisible);
 
-        $template->insertHtml('content', $this->wContent->getHtml());
+        $template->setHtml('content', $this->wContent->html);
 
-        if ($this->wContent->getCss()) {
-            $template->appendCss($this->wContent->getCss());
+        if ($this->wContent->css) {
+            $template->appendCss($this->wContent->css);
         }
-        if ($this->wContent->getJs()) {
-            $template->appendJs($this->wContent->getJs());
-        }
-
-        if ($this->wContent->getKeywords()) {
-            $this->getPage()->getTemplate()->appendMetaTag('keywords', $this->wContent->getKeywords(), $this->getPage()->getTemplate()->getTitleElement());
+        if ($this->wContent->js) {
+            $template->appendJs($this->wContent->js);
         }
 
-        if ($this->wContent->getDescription()) {
-            $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->getDescription(), $this->getPage()->getTemplate()->getTitleElement());
+        if ($this->wContent->keywords) {
+            $this->getPage()->getTemplate()->appendMetaTag('keywords', $this->wContent->keywords, $this->getPage()->getTemplate()->getTitleElement());
+        }
+
+        if ($this->wContent->description) {
+            $this->getPage()->getTemplate()->appendMetaTag('description', $this->wContent->description, $this->getPage()->getTemplate()->getTitleElement());
         }
 
         return $template;

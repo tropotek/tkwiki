@@ -2,7 +2,6 @@
 namespace App\Helper;
 
 use App\Db\Page;
-use App\Db\SecretMap;
 use App\Form\Secret;
 use App\Ui\FormDialog;
 use Dom\Renderer\DisplayInterface;
@@ -76,7 +75,7 @@ jQuery(function($) {
           class: 'wk-secret',
           'wk-secret': id,
           'title': name,
-          src: config.baseUrl + '/html/assets/img/secretbg.png'
+          src: tkConfig.baseUrl + '/html/assets/img/secretbg.png'
         };
         editor.insertContent(editor.dom.createHTML('img', linkAttrs));
     }
@@ -151,7 +150,7 @@ jQuery(function($) {
         });
     }
     tableEvents.push(init);
-    
+
 });
 JS;
         $template->appendJs($js);

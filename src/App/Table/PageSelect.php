@@ -1,6 +1,7 @@
 <?php
 namespace App\Table;
 
+use App\Db\Page;
 use App\Db\PageMap;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,9 +39,9 @@ class PageSelect
                 $cell->setUrlProperty('');
                 $cell->setUrl(Uri::create('javascript:;'));
                 $cell->getLink()->addCss('wiki-insert');
-                $cell->getLink()->setAttr('data-page-id', $page->getPageId());
-                $cell->getLink()->setAttr('data-page-title', $page->getTitle());
-                $cell->getLink()->setAttr('data-page-url', $page->getUrl());
+                $cell->getLink()->setAttr('data-page-id', $page->pageId);
+                $cell->getLink()->setAttr('data-page-title', $page->title);
+                $cell->getLink()->setAttr('data-page-url', $page->url);
                 $cell->getLink()->setAttr('title', 'Insert a page link');
             });
         $this->getTable()->appendCell(new Cell\Text('category'))
@@ -50,7 +51,7 @@ class PageSelect
                 $cell->setUrl(Uri::create('javascript:;'));
                 $cell->getLink()->addCss('wiki-cat-list');
                 $cell->getLink()->setAttr('title', 'Insert a category table');
-                $cell->getLink()->setAttr('data-category', $page->getCategory());
+                $cell->getLink()->setAttr('data-category', $page->category);
             });
         $this->getTable()->appendCell(new Cell\Text('userId'))->setOrderByName('')
             ->addOnValue(function (Cell\Text $cell) {
@@ -90,7 +91,9 @@ class PageSelect
         if (!$list) {
             $tool = $this->getTable()->getTool();
             $filter = $this->getFilter()->getFieldValues();
-            $list = PageMap::create()->findFiltered($filter, $tool);
+
+            $list = Page::findFiltered($filter);
+            //$list = PageMap::create()->findFiltered($filter, $tool);
         }
         $this->getTable()->setList($list);
 

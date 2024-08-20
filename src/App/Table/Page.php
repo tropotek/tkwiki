@@ -78,7 +78,7 @@ JS;
         // Table filters
         $this->getFilterForm()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
 
-        $list = PageMap::create()->getCategoryList();
+        $list = \App\Db\Page::getCategoryList();
         $this->getFilterForm()->appendField(new Field\Select('category', $list))->prependOption('-- Category -- ', '');
 
         // Table Actions
@@ -104,7 +104,9 @@ JS;
     {
         if (!$tool) $tool = $this->getTool();
         $filter = array_merge($this->getFilterForm()->getFieldValues(), $filter);
-        $list = PageMap::create()->findFiltered($filter, $tool);
+
+        $list = \App\Db\Page::findFiltered($filter);
+        //$list = PageMap::create()->findFiltered($filter, $tool);
         $this->setList($list);
         return $list;
     }

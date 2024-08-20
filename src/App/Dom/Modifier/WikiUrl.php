@@ -1,7 +1,8 @@
 <?php
 namespace App\Dom\Modifier;
 
-use Dom\Mvc\Modifier\FilterInterface;
+use App\Db\Page;
+use Dom\Modifier\FilterInterface;
 use Tk\Traits\SystemTrait;
 
 /**
@@ -24,14 +25,14 @@ class WikiUrl extends FilterInterface
         $href = $node->getAttribute('href');
 
         if (preg_match('/^page:\/\/(.+)/i', $href, $regs)) {
-            $page = \App\Db\PageMap::create()->findByUrl($regs[1]);
+            $page = Page::findByUrl($regs[1]);
             $url = new \Tk\Uri('/' . $regs[1]);
             $node->setAttribute('href', $url->getPath());
 
             if ($page) {
                 $css = $this->addClass($css, 'wk-page');
                 $css = $this->removeClass($css, 'wk-page-new');
-                if (!($page->canView($user) && $page->isPublished())) {
+                if (!($page->canView($user) && $page->published)) {
                     $css = $this->addClass($css, 'wk-page-disable');
                     $node->setAttribute('title', 'Invalid Permission');
                     $node->setAttribute('href', '#');

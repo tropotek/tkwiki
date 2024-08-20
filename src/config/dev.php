@@ -9,6 +9,8 @@
  *   `./bin/cmd debug`
  */
 
+use Bs\Db\User;
+
 $config = \Tk\Config::instance();
 
 if (!$config->isDebug()) {
@@ -16,9 +18,8 @@ if (!$config->isDebug()) {
     return;
 }
 
-/** @var \App\Db\User $user */
-foreach (\App\Db\UserMap::create()->findAll() as $user) {
-    $user->setPassword(\App\Db\User::hashPassword('password', PASSWORD_DEFAULT));
+foreach (User::findAll() as $user) {
+    $user->setPassword(User::hashPassword('password', PASSWORD_DEFAULT));
     $user->save();
 }
 

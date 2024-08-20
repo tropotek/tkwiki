@@ -27,16 +27,17 @@ class History extends PageController
     public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
     {
         $this->wPage = PageMap::create()->find($request->query->getInt('pageId'));
-        $this->getPage()->setTitle('History for `' . $this->wPage->getTitle() . '`');
+        $this->getPage()->setTitle('History for `' . $this->wPage->title . '`');
 
         // Get the form template
         $this->table = new \App\Table\Content();
-        $this->table->doDefault($request, $this->wPage->getPageId());
+        $this->table->doDefault($request, $this->wPage->pageId);
 
         $tool = $this->table->getTable()->getTool('created DESC');
         $filter = $this->table->getFilter()->getFieldValues();
-        $filter['pageId'] = $this->wPage->getPageId();
-        $list = ContentMap::create()->findFiltered($filter, $tool);
+        $filter['pageId'] = $this->wPage->pageId;
+        //$list = ContentMap::create()->findFiltered($filter, $tool);
+        $list = []
         $this->table->execute($request, $list);
 
         return $this->getPage();

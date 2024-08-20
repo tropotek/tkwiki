@@ -1,11 +1,8 @@
 <?php
 namespace App\Dom\Modifier;
 
-use Dom\Mvc\Modifier\FilterInterface;
+use Dom\Modifier\FilterInterface;
 
-/**
- *
- */
 class WikiImg extends FilterInterface
 {
 

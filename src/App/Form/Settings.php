@@ -1,6 +1,7 @@
 <?php
 namespace App\Form;
 
+use App\Db\Page;
 use App\Db\PageMap;
 use Bs\Form\EditInterface;
 use Dom\Template;
@@ -36,9 +37,15 @@ class Settings extends EditInterface
                 $option->setName('Enable');
             });
 
-        $list = PageMap::create()->findFiltered([
+        $list = Page::findFiltered([
             'permission' => \App\Db\Page::PERM_PUBLIC,
-            'published'  => true], Tool::create('created', 25));
+            'published'  => true
+        ]);
+
+//        $list = PageMap::create()->findFiltered([
+//            'permission' => \App\Db\Page::PERM_PUBLIC,
+//            'published'  => true], Tool::create('created', 25));
+
         $this->appendField(new Field\Select('wiki.page.default', $list, 'title', 'url'))
             ->setGroup($tab)
             ->setLabel('Home Page')

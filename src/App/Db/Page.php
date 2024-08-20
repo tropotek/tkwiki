@@ -1,15 +1,18 @@
 <?php
 namespace App\Db;
 
-use Bs\Db\Traits\UserTrait;
 use App\Factory;
-use Bs\Db\Traits\TimestampTrait;
+use Bs\Db\User;
 use Dom\Template;
-use Tk\Config;
-use Tk\Db\Mapper\Model;
+use Tk\Registry;
 use Tk\Uri;
+use Bs\Db\Traits\UserTrait;
+use Bs\Db\Traits\TimestampTrait;
+use Tt\Db;
+use Tt\DbFilter;
+use Tt\DbModel;
 
-class Page extends Model
+class Page extends DbModel
 {
     use TimestampTrait;
     use UserTrait;
@@ -44,29 +47,16 @@ class Page extends Model
         self::PERM_PUBLIC    => 'VIEW: anyone, EDIT: staff, DELETE: staff',
     ];
 
-
-    public int $pageId = 0;
-
-    public int $userId = 0;
-
-    public string $template = '';
-
-    public string $category = '';
-
-    public string $title = '';
-
-    public string $url = '';
-
-    public int $views = 0;
-
-    public int $permission = 0;
-
-    public bool $published = true;
-
-    public bool $titleVisible = true;
-
+    public int    $pageId       = 0;
+    public int    $userId       = 0;
+    public string $category     = '';
+    public string $title        = '';
+    public string $url          = '';
+    public int    $views        = 0;    // todo: implement the page counter and display it
+    public int    $permission   = 0;
+    public bool   $published    = true;
+    public bool   $titleVisible = true;
     public \DateTime $modified;
-
     public \DateTime $created;
 
     private ?Content $_content = null;
@@ -75,6 +65,41 @@ class Page extends Model
     public function __construct()
     {
         $this->_TimestampTrait();
+    }
+
+    public function save(): void
+    {
+        $map = static::getDataMap();
+        $values = $map->getArray($this);
+
+        if (!$this->url) {
+            $this->url = self::makePageUrl($this->title);
+        }
+
+        if ($this->pageId) {
+            $values['page_id'] = $this->pageId;
+            Db::update('page', 'page_id', $values);
+        } else {
+            unset($values['page_id']);
+            Db::insert('page', $values);
+            $this->pageId = Db::getLastInsertId();
+        }
+
+        $this->reload();
+    }
+
+    public function delete(): bool
+    {
+        // do not delete first page and first menu item
+        if ($this->url == self::getHomeUrl()) {
+            return false;
+        }
+
+        if (false !== Db::delete('page', ['page_id' => $this->pageId])) {
+            self::deleteLinkByPageId($this->pageId);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -111,28 +136,21 @@ class Page extends Model
     {
         try {
             $doc = Template::load($html)->getDocument(false);
-            PageMap::create()->deleteLinkByPageId($page->getPageId());
+            Page::deleteLinkByPageId($page->pageId);
             $nodeList = $doc->getElementsByTagName('a');
             /** @var \DOMElement $node */
             foreach ($nodeList as $node) {
                 $regs = [];
                 if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
-                    if (isset ($regs[1]) && $page->getUrl() != $regs[1]) {
-                        PageMap::create()->insertLink($page->getPageId(), $regs[1]);
+                    if (isset ($regs[1]) && $page->url != $regs[1]) {
+                        Page::insertLink($page->pageId, $regs[1]);
                     }
                 }
             }
         } catch (\Exception $e) { }
     }
 
-    public static function findPage(string $url): ?Page
-    {
-        if ($url == self::DEFAULT_TAG) {
-            $url = self::getHomeUrl();
-        }
-        return PageMap::create()->findByUrl($url);
-    }
-
+    // todo refactor these to a single method, be sure to update the delete() method
     public static function getHomeUrl(): string
     {
         return Factory::instance()->getRegistry()->get('wiki.page.default', '');
@@ -143,146 +161,211 @@ class Page extends Model
         return Uri::create(self::getHomeUrl());
     }
 
-    public function update(): int
-    {
-        if (!$this->getUrl()) {
-            $this->setUrl(self::makePageUrl($this->getTitle()));
-        }
-        return parent::update();
-    }
-
-    public function delete(): int
-    {
-        // Cannot delete first page and first menu item
-        if ($this->getUrl() == self::getHomeUrl()) {
-            return false;
-        }
-
-        // delete all page links referred to by this page.
-        $this->getMapper()->deleteLinkByPageId($this->getPageId());
-
-        return parent::delete();
-    }
-
     public function getContent(): ?Content
     {
         if (!$this->_content) {
-            $this->_content = ContentMap::create()->findByPageId($this->getPageId(), \Tk\Db\Tool::create('created DESC', 1))->current();
+            $this->_content = Content::findCurrent($this->pageId);
         }
         return $this->_content;
     }
-
-
-    public function getPageId(): int
-    {
-        return $this->pageId;
-    }
-
-    public function setPageId(int $pageId): Page
-    {
-        $this->pageId = $pageId;
-        return $this;
-    }
-
-    public function setTemplate(string $template): Page
-    {
-        $this->template = $template;
-        return $this;
-    }
-
-    public function getTemplate(): string
-    {
-        return $this->template;
-    }
-
-    public function getCategory(): string
-    {
-        return $this->category;
-    }
-
-    public function setCategory(string $category): Page
-    {
-        $this->category = $category;
-        return $this;
-    }
-
-    public function setTitle(string $title): Page
-    {
-        $this->title = $title;
-        return $this;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function setUrl(string $url): Page
-    {
-        $this->url = $url;
-        return $this;
-    }
-
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
     public function getPageUrl(): Uri
     {
-        return Uri::create('/'.trim($this->getUrl(), '/'));
+        return Uri::create('/'.trim($this->url, '/'));
     }
-
-    public function setViews(int $views): Page
-    {
-        $this->views = $views;
-        return $this;
-    }
-
-    public function getViews(): int
-    {
-        return $this->views;
-    }
-
-    public function setPermission(int $permission): Page
-    {
-        $this->permission = $permission;
-        return $this;
-    }
-
-    public function getPermission(): int
-    {
-        return $this->permission;
-    }
-
     /**
      * Get the page permission level as a string
      */
     public function getPermissionLabel(): string
     {
-        return self::PERM_LIST[$this->getPermission()] ?? '';
+        return self::PERM_LIST[$this->permission] ?? '';
     }
 
-    public function isPublished(): bool
+    public static function findPage(string $url): ?Page
     {
-        return $this->published;
+        if ($url == self::DEFAULT_TAG) {
+            $url = self::getHomeUrl();
+        }
+        return self::findByUrl($url);
     }
 
-    public function setPublished(bool $published): Page
+    public static function find(int $id): ?static
     {
-        $this->published = $published;
-        return $this;
+        return Db::queryOne("
+                SELECT *
+                FROM page
+                WHERE page_id = :id",
+            compact('id'),
+            self::class
+        );
     }
 
-    public function isTitleVisible(): bool
+    public static function findAll(): array
     {
-        return $this->titleVisible;
+        return Db::query("
+            SELECT *
+            FROM page",
+            null,
+            self::class
+        );
     }
 
-    public function setTitleVisible(bool $titleVisible): Page
+    public static function findByUrl($url): ?static
     {
-        $this->titleVisible = $titleVisible;
-        return $this;
+        return self::findFiltered(['url' => $url])[0] ?? null;
+    }
+
+    public static function findFiltered(array|DbFilter $filter): array
+    {
+        $filter = DbFilter::create($filter);
+
+        if (!empty($filter['search'])) {
+            $filter['search'] = '%' . $filter['search'] . '%';
+            $w  = 'a.title LIKE :search OR ';
+            $w .= 'a.category LIKE :search OR ';
+            $w .= 'a.page_id LIKE :search OR ';
+            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+        }
+
+        if (!empty($filter['id'])) {
+            $filter['pageId'] = $filter['id'];
+        }
+        if (!empty($filter['pageId'])) {
+            if (!is_array($filter['pageId'])) $filter['pageId'] = [$filter['pageId']];
+            $filter->appendWhere('a.page_id IN :contentId AND ');
+        }
+
+        if (!empty($filter['exclude'])) {
+            if (!is_array($filter['exclude'])) $filter['exclude'] = [$filter['exclude']];
+            $filter->appendWhere('a.page_id NOT IN :exclude AND ');
+        }
+
+
+        if (!empty($filter['author'])) {
+            if (!is_array($filter['author'])) $filter['author'] = [$filter['author']];
+            $filter->appendWhere('a.user_id IN :author AND ');
+        }
+
+        if (!empty($filter['userId'])) {
+            if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
+            $filter->appendWhere('a.user_id IN :userId AND ');
+        }
+
+        if (!empty($filter['template'])) {
+            $filter->appendWhere('a.template = :template AND ');
+        }
+
+        if (!empty($filter['category'])) {
+            $filter->appendWhere('a.category = :category AND ');
+        }
+
+        if (!empty($filter['title'])) {
+            $filter->appendWhere('a.title = :title AND ');
+        }
+
+        if (!empty($filter['url'])) {
+            $filter->appendWhere('a.url = :url AND ');
+        }
+
+        if (isset($filter['published'])) {
+            $filter['published'] = truefalse($filter['published']);
+            $filter->appendWhere('a.published = :published AND ');
+        }
+
+        if (!empty($filter['permission'])) {
+            if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
+            $filter->appendWhere('a.permission IN :permission AND ');
+        }
+
+        // TODO: create a single query for this
+//        if (isset($filter['orphaned'])) {
+//            $filter['homeUrl'] = Registry::instance()->get('wiki.page.default');
+//            $filter->appendFrom(' LEFT JOIN links b USING (url)');
+//            $filter->appendWhere('b.page_id IS NULL AND (a.url != :homeUrl) ');
+//        }
+
+        // TODO: create a single query for this
+        // Do a full text search on the content
+//        if (isset($filter['fullSearch'])) {
+//            $filter->appendFrom('  JOIN (
+//                SELECT MAX(created), content_id, page_id, html
+//                FROM content
+//                WHERE MATCH (html) AGAINST (%s IN NATURAL LANGUAGE MODE)
+//                GROUP BY page_id
+//            ) c USING (page_id)', $this->quote($filter['fullSearch'] ?? ''));
+//            $filter->appendWhere('c.content_id IS NOT NULL');
+//        }
+
+
+        return Db::query("
+            SELECT *
+            FROM page a
+            {$filter->getSql()}",
+            $filter->all(),
+            self::class
+        );
+    }
+
+    /**
+     * Get a list of all existing categories
+     */
+    public static function getCategoryList(string $search = ''): array
+    {
+        $list = Db::queryList("
+            SELECT DISTINCT category
+            FROM page
+            WHERE category != ''
+            AND category LIKE :search",
+            '',
+            'category',
+            [
+                'search' => '%' . $search . '%'
+            ]
+        );
+        return $list;
+    }
+
+    /**
+     * Test if the supplied pageId is an orphaned page
+     */
+    public static function isOrphan(int $pageId): bool
+    {
+        $homeUrl = Registry::instance()->get('wiki.page.default');
+        return Db::queryBool("
+            SELECT count(*)
+            FROM page a
+                LEFT JOIN links b USING (url)
+            WHERE b.page_id IS NULL
+            AND (a.url != :homeUrl AND a.page_id = :pageId)",
+            compact('homeUrl', 'pageId')
+        );
+    }
+
+    public static function linkExists(int $pageId, string $pageUrl): bool
+    {
+        return Db::queryBool("
+            SELECT count(*)
+            FROM links
+            WHERE page_id = :pageId
+            AND url = :pageUrl",
+            compact('pageId', 'pageUrl')
+        );
+    }
+
+    public static function insertLink(int $pageId, string $pageUrl): int
+    {
+        if (self::linkExists($pageId, $pageUrl)) return false;
+        return Db::insertIgnore('links', compact('pageId', 'pageUrl'));
+    }
+
+    public static function deleteLink($pageId, $pageUrl): bool
+    {
+        if (!self::linkExists($pageId, $pageUrl)) return false;
+        return (false !== Db::delete('links', compact('pageId', 'pageUrl')));
+    }
+
+    public static function deleteLinkByPageId(int $pageId): bool
+    {
+        return (false !== Db::delete('links', compact('pageId')));
     }
 
 
@@ -290,22 +373,22 @@ class Page extends Model
     {
         $errors = [];
 
-        if (!$this->getUserId()) {
+        if (!$this->userId) {
             $errors['userId'] = 'Invalid user ID value';
         }
-        if (!$this->getTitle()) {
+        if (!$this->title) {
             $errors['title'] = 'Please enter a title for the page';
         }
-//        if (!$this->getCategory()) {
+//        if (!$this->category) {
 //            $errors['category'] = 'Please enter a category for the page';
 //        }
 
-        $comp = PageMap::create()->findByUrl($this->getUrl());
-        if ($comp && $comp->getPageId() != $this->getPageId()) {
+        $comp = self::findByUrl($this->url);
+        if ($comp && $comp->pageId != $this->pageId) {
             $errors['url'] = 'This url already exists, try again';
         }
         // Match any existing system routes
-        if (self::routeExists($this->getUrl())) {
+        if (self::routeExists($this->url)) {
             $errors['url'] = 'This url already exists, try again';
         }
 
@@ -337,21 +420,21 @@ class Page extends Model
 
     public function canView(?User $user): bool
     {
-        if ($this->getPermission() == self::PERM_PUBLIC) return true;
+        if ($this->permission == self::PERM_PUBLIC) return true;
         if (!$user) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getUserId()) return true;
+        if ($this->userId == $user->userId) return true;
 
         // Try this see if it works as expected
-        if (!$this->isPublished()) return false;
+        if (!$this->published) return false;
 
         // Staff and users can view USER pages
-        if ($this->getPermission() == self::PERM_USER) {
+        if ($this->permission == self::PERM_USER) {
             return ($user->isMember() || $user->isStaff());
         }
 
         // Staff can view STAFF pages
-        if ($this->getPermission() == self::PERM_STAFF) {
+        if ($this->permission == self::PERM_STAFF) {
             return $user->isStaff();
         }
 
@@ -363,24 +446,24 @@ class Page extends Model
         if (!$user) return false;
         if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getUserId()) return true;
+        if ($this->userId == $user->userId) return true;
 
         // Only allow Editors to edit home page regardless of permissions
-        if ($this->getUrl() == self::getHomeUrl()) {
-            return $user->hasPermission(User::PERM_EDITOR);
+        if ($this->url == self::getHomeUrl()) {
+            return $user->hasPermission(Permissions::PERM_EDITOR);
         }
 
         // Allow any staff to edit public or user pages
         if (
-            $this->getPermission() == self::PERM_PUBLIC ||
-            $this->getPermission() == self::PERM_USER
+            $this->permission == self::PERM_PUBLIC ||
+            $this->permission == self::PERM_USER
         ) {
             return $user->isStaff();
         }
 
         // Only Editors can edit staff pages
-        if ($this->getPermission() == self::PERM_STAFF) {
-            return $user->hasPermission(User::PERM_EDITOR);
+        if ($this->permission == self::PERM_STAFF) {
+            return $user->hasPermission(Permissions::PERM_EDITOR);
         }
 
         return false;
@@ -389,26 +472,26 @@ class Page extends Model
     public function canDelete(?User $user): bool
     {
         // Do not allow deletion of currently assigned home page
-        if ($this->getUrl() == self::getHomeUrl()) {
+        if ($this->url == self::getHomeUrl()) {
             return false;
         }
 
         if (!$user) return false;
         if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getUserId()) return true;
+        if ($this->userId == $user->userId) return true;
 
         // Allow any staff to delete public or user pages
         if (
-            $this->getPermission() == self::PERM_PUBLIC ||
-            $this->getPermission() == self::PERM_USER
+            $this->permission == self::PERM_PUBLIC ||
+            $this->permission == self::PERM_USER
         ) {
             return $user->isStaff();
         }
 
         // Only Editors can delete staff pages
-        if ($this->getPermission() == self::PERM_STAFF) {
-            return $user->hasPermission(User::PERM_EDITOR);
+        if ($this->permission == self::PERM_STAFF) {
+            return $user->hasPermission(Permissions::PERM_EDITOR);
         }
 
         return false;

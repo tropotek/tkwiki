@@ -4,7 +4,7 @@ namespace App\Controller\Menu;
 use App\Db\MenuItem;
 use App\Db\MenuItemMap;
 use App\Db\PageMap;
-use App\Db\User;
+use App\Db\Permissions;
 use App\Helper\PageSelect;
 use Bs\PageController;
 use Bs\Ui\Dialog;
@@ -12,7 +12,6 @@ use Dom\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tk\Db\Tool;
 use Tk\Exception;
 use Tk\Uri;
 
@@ -26,7 +25,7 @@ class Edit extends PageController
     {
         parent::__construct();
         $this->getPage()->setTitle('Edit Menu');
-        $this->setAccess(User::PERM_SYSADMIN | User::PERM_EDITOR);
+        $this->setAccess(Permissions::PERM_SYSADMIN | Permissions::PERM_EDITOR);
         $this->getCrumbs()->reset();
     }
 
@@ -52,15 +51,15 @@ class Edit extends PageController
             $name   = $request->request->getString('name', '');
 
             $item = new MenuItem();
-            $item->setType($type);
+            $item->type = $type;
 
             if ($type == MenuItem::TYPE_ITEM) {
                 $page = PageMap::create()->find($pageId);
                 if (!$page) {
                     throw new Exception('Invalid page id: ' . $pageId);
                 }
-                $item->setPageId($pageId);
-                $item->setName($page->getTitle());
+                $item->pageId = $pageId;
+                $item->setName($page->title);
             } elseif ($type == MenuItem::TYPE_DIVIDER) {
                 $item->setName($name);
             } elseif ($type == MenuItem::TYPE_DROPDOWN) {
@@ -68,14 +67,14 @@ class Edit extends PageController
             }
 
             $item->save();
-            $item->setOrderId($item->getMenuItemId());
+            $item->orderId = $item->menuItemId;
             $item->save();
 
             $data = [
-                'menuItemId' => $item->getMenuItemId(),
-                'pageId' => $item->getPageId() ?? 0,
-                'name' => $item->getName(),
-                'type' => $item->getType(),
+                'menuItemId' => $item->menuItemId,
+                'pageId' => $item->pageId ?? 0,
+                'name' => $item->name,
+                'type' => $item->type,
             ];
             MenuItem::indexLinks();
             return new JsonResponse($data);
@@ -93,7 +92,7 @@ class Edit extends PageController
             }
             foreach ($list as $orderId => $item) {
                 if (empty($item['parent_id'])) $item['parent_id'] = null;
-                MenuItemMap::create()->updateItem((int)$item['id'], $item['parent_id'], (int)$orderId, trim($item['name']));
+                MenuItem::updateItem((int)$item['id'], $item['parent_id'], (int)$orderId, trim($item['name']));
             }
 
             MenuItem::indexLinks();
@@ -294,7 +293,8 @@ JS;
 
     private function showMenu(int $parentId = 0): string
     {
-        $items = MenuItemMap::create()->findByParentId($parentId, Tool::create('order_id'));
+        $items = MenuItem::findByParentId($parentId);
+        //$items = MenuItemMap::create()->findByParentId($parentId, Tool::create('order_id'));
         $css = '';
         if ($parentId == 0) {
             $css = ' class="menu-list sortable"';
@@ -305,12 +305,12 @@ JS;
             if ($item->isType(MenuItem::TYPE_DROPDOWN)) {
                 $iul = '';
                 if ($item->hasChildren()) {
-                    $iul = $this->showMenu($item->getMenuItemId());
+                    $iul = $this->showMenu($item->menuItemId);
                 }
                 $ul .= <<<HTML
-<li class="dropdown" id="item-{$item->getMenuItemId()}" data-item-id="{$item->getMenuItemId()}" data-page-id="0" data-type="{$item->getType()}">
+<li class="dropdown" id="item-{$item->menuItemId}" data-item-id="{$item->menuItemId}" data-page-id="0" data-type="{$item->type}">
   <i class="fa fa-fw fa-ellipsis-vertical"></i>
-  <a href="javascript:;" contentEditable="true">{$item->getName()}</a>
+  <a href="javascript:;" contentEditable="true">{$item->name}</a>
   <b class="fa fa-fw fa-trash text-danger float-end pt-1"></b>
   {$iul}
 </li>
@@ -318,18 +318,18 @@ HTML;
 
             } elseif ($item->isType(MenuItem::TYPE_DIVIDER)) {
                 $ul .= <<<HTML
-<li id="item-{$item->getId()}" data-item-id="{$item->getMenuItemId()}" data-page-id="0" data-type="{$item->getType()}" class="mjs-nestedSortable-no-nesting">
+<li id="item-{$item->getId()}" data-item-id="{$item->menuItemId}" data-page-id="0" data-type="{$item->type}" class="mjs-nestedSortable-no-nesting">
   <i class="fa fa-fw fa-ellipsis-vertical"></i>
-  <a href="javascript:;" contentEditable="true">{$item->getName()}</a>
+  <a href="javascript:;" contentEditable="true">{$item->name}</a>
   <b class="fa fa-fw fa-trash text-danger float-end"></b>
 </li>
 HTML;
 
             } else {
                 $ul .= <<<HTML
-<li id="item-{$item->getId()}" data-item-id="{$item->getMenuItemId()}" data-page-id="{$item->getPageId()}" data-type="{$item->getType()}" class="mjs-nestedSortable-no-nesting">
+<li id="item-{$item->getId()}" data-item-id="{$item->menuItemId}" data-page-id="{$item->pageId}" data-type="{$item->type}" class="mjs-nestedSortable-no-nesting">
   <i class="fa fa-fw fa-ellipsis-vertical"></i>
-  <a href="javascript:;" contentEditable="true">{$item->getName()}</a>
+  <a href="javascript:;" contentEditable="true">{$item->name}</a>
   <b class="fa fa-fw fa-trash text-danger float-end"></b>
 </li>
 HTML;

@@ -5,6 +5,7 @@ use App\Controller\Menu\View;
 use App\Helper\Navigation;
 use Bs\Ui\Dialog;
 use Dom\Template;
+use Tk\Alert;
 use Tk\Uri;
 
 class Page extends \Bs\Page
@@ -16,7 +17,7 @@ class Page extends \Bs\Page
 
         $secretEnabled = json_encode(boolval($this->getRegistry()->get('wiki.enable.secret.mod', false)));
         $js = <<<JS
-config.enableSecretMod = {$secretEnabled};
+tkConfig.enableSecretMod = {$secretEnabled};
 JS;
         $template->appendJs($js, array('data-jsl-priority' => -1000));
 
@@ -39,7 +40,7 @@ JS;
         $this->showCrumbs();
 
         if ($this->getFactory()->getAuthUser()) {
-            $template->setText('username', $this->getFactory()->getAuthUser()->getUsername());
+            $template->setText('username', $this->getFactory()->getAuthUser()->username);
         }
 
         $userNav = new Navigation();
@@ -70,7 +71,7 @@ jQuery(function ($) {
     $('.btn-create', '#create-page-dialog').on('click', function () {
         let url = $('#create-page-title').val().trim().replace(/[^a-zA-Z0-9_-]/g, '_');
         if (url) {
-            document.location = config.baseUrl + '/edit?u=' + url;
+            document.location = tkConfig.baseUrl + '/edit?u=' + url;
         }
         $('#create-page-dialog').modal('hide');
     });
@@ -92,7 +93,7 @@ JS;
         $crumbs = $this->getFactory()->getCrumbs();
         $crumbs->addCss('mt-2 ');
 
-        if (!($crumbs && $crumbs->isVisible())) return;
+        if (!$crumbs->isVisible()) return;
 
         $template = $crumbs->show();
         if ($this->getTemplate()->hasVar('crumbs')) {
@@ -105,7 +106,7 @@ JS;
 
     protected function showAlert(): void
     {
-        if (!count($this->getFactory()->getSession()->getFlashBag()->peekAll())) return;
+        if (!Alert::hasAlerts()) return;
 
         $html = <<<HTML
 <div var="alertPanel">
@@ -120,15 +121,14 @@ HTML;
         $template = $this->loadTemplate($html);
 
         $template->setAttr('alertPanel', 'hx-get', Uri::create('/api/htmx/alert'));
-        foreach ($this->getFactory()->getSession()->getFlashBag()->all() as $type => $flash) {
+        foreach (Alert::getAlerts() as $type => $flash) {
             foreach ($flash as $a) {
-                $a = unserialize($a);
                 $r = $template->getRepeat('alert');
                 $css = strtolower($type);
                 if ($css == 'error') $css = 'danger';
                 $r->addCss('alert', 'alert-' . $css);
                 //$r->setText('title', ucfirst(strtolower($type)));
-                $r->insertHtml('message', $a->message);
+                $r->setHtml('message', $a->message);
                 if ($a->icon) {
                     $r->addCss('icon', $a->icon);
                     $r->setVisible('icon');
@@ -136,8 +136,7 @@ HTML;
                 $r->appendRepeat();
             }
         }
-        // TODO: see how prepending to content goes, may need its
-        //       own div tag for easier placement of the alerts
+
         if ($this->getTemplate()->hasVar('alert')) {
             $this->getTemplate()->insertTemplate('alert', $template);
         } else {

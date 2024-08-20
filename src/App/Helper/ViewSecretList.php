@@ -1,13 +1,13 @@
 <?php
 namespace App\Helper;
 
-use App\Db\SecretMap;
-use App\Db\User;
+use App\Db\Secret;
+use Bs\Db\User;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use Tk\Db\Tool;
 use Tk\Traits\SystemTrait;
+use Tt\DbFilter;
 
 /**
  * Render the secret output table list
@@ -32,9 +32,9 @@ class ViewSecretList extends Renderer implements DisplayInterface
         }
 
         $filter = [
-            'author' => $this->user->getUserId()
+            'author' => $this->user->userId
         ];
-        $list = SecretMap::create()->findFiltered($filter, Tool::create('name'));
+        $list = Secret::findFiltered(DbFilter::create($filter, 'name'));
 
         foreach ($list as $secret) {
             if (!$secret->canView($this->getFactory()->getAuthUser())) continue;

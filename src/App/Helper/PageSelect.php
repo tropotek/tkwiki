@@ -2,12 +2,12 @@
 namespace App\Helper;
 
 use App\Db\Page;
-use App\Db\PageMap;
 use Dom\Renderer\DisplayInterface;
+use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
 
-class PageSelect extends \Dom\Renderer\Renderer implements DisplayInterface
+class PageSelect extends Renderer implements DisplayInterface
 {
     use SystemTrait;
 
@@ -35,7 +35,8 @@ class PageSelect extends \Dom\Renderer\Renderer implements DisplayInterface
 
         $filter = array_merge($this->table->getFilter()->getFieldValues(), $filter);
 
-        $list = PageMap::create()->findFiltered($filter, $tool);
+        $list = Page::findFiltered($filter);
+        //$list = PageMap::create()->findFiltered($filter, $tool);
         $this->table->execute($this->getRequest(), $list);
 
     }

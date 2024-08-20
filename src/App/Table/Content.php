@@ -58,8 +58,8 @@ class Content
                 $btn->setText('');
                 $btn->setIcon('fa fa-fw fa-share');
                 $btn->addCss('btn btn-outline-dark');
-                $btn->setAttr('data-confirm', 'Are you sure you want to revert the content to revision ' . $obj->getContentId(). '?');
-                $btn->setUrl(Uri::create()->set('r', $obj->getContentId()));
+                $btn->setAttr('data-confirm', 'Are you sure you want to revert the content to revision ' . $obj->contentId. '?');
+                $btn->setUrl(Uri::create()->set('r', $obj->contentId));
                 $template->appendTemplate('td', $btn->show());
                 $template->appendHtml('td', '&nbsp;');
 
@@ -67,7 +67,7 @@ class Content
                 $btn->setText('');
                 $btn->setIcon('fa fa-fw fa-eye');
                 $btn->addCss('btn btn-outline-dark');
-                $btn->setUrl(Uri::create('/view')->set('contentId', $obj->getContentId()));
+                $btn->setUrl(Uri::create('/view')->set('contentId', $obj->contentId));
                 $template->appendTemplate('td', $btn->show());
 
                 return '';
@@ -138,7 +138,8 @@ class Content
         if (!$list) {
             $tool = $this->getTable()->getTool();
             $filter = $this->getFilter()->getFieldValues();
-            $list = ContentMap::create()->findFiltered($filter, $tool);
+            //$list = ContentMap::create()->findFiltered($filter, $tool);
+            $list = [];
         }
         $this->getTable()->setList($list);
 
@@ -156,7 +157,7 @@ class Content
         $content = \App\Db\Content::cloneContent($revision);
         $content->save();
 
-        Alert::addSuccess('Page reverted to version ' . $revision->getContentId() . ' [' . $revision->created->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
+        Alert::addSuccess('Page reverted to version ' . $revision->contentId . ' [' . $revision->created->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
         $this->page->getPageUrl()->redirect();
     }
 

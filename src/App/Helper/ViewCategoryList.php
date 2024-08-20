@@ -2,12 +2,11 @@
 namespace App\Helper;
 
 use App\Db\Page;
-use App\Db\PageMap;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use Tk\Db\Tool;
 use Tk\Traits\SystemTrait;
+use Tt\DbFilter;
 
 /**
  * Render the secret output table list
@@ -46,23 +45,24 @@ class ViewCategoryList extends Renderer implements DisplayInterface
         if ($this->getFactory()->getAuthUser()?->isAdmin()) {
             unset($filter['permission']);
         }
-        $list = PageMap::create()->findFiltered($filter, Tool::create('title'));
+
+        $list = Page::findFiltered(DbFilter::create($filter, 'title'));
 
         foreach ($list as $page) {
             if (!$page->canView($this->getFactory()->getAuthUser())) continue;
 
             if ($this->asTable) {
                 $col = $template->getRepeat('col');
-                $col->setText('url', $page->getTitle());
+                $col->setText('url', $page->title);
                 $col->setAttr('url', 'href', $page->getPageUrl());
-                $col->setAttr('url', 'title', $page->getTitle());
+                $col->setAttr('url', 'title', $page->title);
                 $col->appendRepeat();
                 $template->setVisible('table');
             } else {
                 $li = $template->getRepeat('li');
-                $li->setText('url', $page->getTitle());
+                $li->setText('url', $page->title);
                 $li->setAttr('url', 'href', $page->getPageUrl());
-                $li->setAttr('url', 'title', $page->getTitle());
+                $li->setAttr('url', 'title', $page->title);
                 $li->appendRepeat();
                 $template->setVisible('list');
             }

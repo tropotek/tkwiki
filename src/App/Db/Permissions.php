@@ -1,14 +1,13 @@
 <?php
+
 namespace App\Db;
 
-
-class User extends \Bs\Db\User
+class Permissions extends \Bs\Db\Permissions
 {
     /**
      * Wiki user permission values
-     * @TODO: move this permission to 0x00000100
      */
-    const PERM_EDITOR             = 0x00000010; // Ability to edit/audit all site pages except private pages
+    const PERM_EDITOR             = 0x10; // Ability to edit/audit non-private pages
 
 	/**
      * permission groups and descriptions
@@ -20,6 +19,5 @@ class User extends \Bs\Db\User
         self::PERM_MANAGE_MEMBER    => "Manage Users",
         self::PERM_EDITOR           => "Manage Content",
     ];
-
 
 }

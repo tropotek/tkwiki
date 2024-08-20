@@ -1,7 +1,6 @@
 <?php
 namespace App\Api;
 
-use App\Db\SecretMap;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +18,9 @@ class Secret
         $data = ['p' => ''];
         $id = $request->query->getInt('id', 0);
         if ($this->getFactory()->getAuthUser() && $id) {
-            /** @var \App\Db\Secret $secret */
-            $secret = SecretMap::create()->find($id);
+            $secret = \App\Db\Secret::find($id);
             if ($secret?->canView($this->getFactory()->getAuthUser())) {
-                $data = ['p' => $secret->getPassword()];
+                $data = ['p' => $secret->password];
             }
         }
         return new JsonResponse($data, Response::HTTP_OK);

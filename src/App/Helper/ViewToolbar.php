@@ -3,7 +3,7 @@ namespace App\Helper;
 
 use App\Db\Content;
 use App\Db\Page;
-use App\Db\User;
+use Bs\Db\User;
 use Bs\Ui\Dialog;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
@@ -53,8 +53,8 @@ class ViewToolbar extends Renderer implements DisplayInterface
         $template = $this->getTemplate();
 
         if ($this->getPage()->canEdit($this->getUser())) {
-            $template->setAttr('edit-url', 'href', Uri::create('/edit')->set('pageId', $this->getPage()->getPageId()));
-            $template->setAttr('history', 'href', Uri::create('/historyManager')->set('pageId', $this->getPage()->getPageId()));
+            $template->setAttr('edit-url', 'href', Uri::create('/edit')->set('pageId', $this->getPage()->pageId));
+            $template->setAttr('history', 'href', Uri::create('/historyManager')->set('pageId', $this->getPage()->pageId));
             $template->setVisible('can-edit');
         }
         if ($this->getFactory()->getAuthUser()?->isStaff()) {
@@ -66,7 +66,7 @@ class ViewToolbar extends Renderer implements DisplayInterface
         }
         $template->setAttr('pdf-url', 'href', Uri::create()->set('pdf'));
 
-        if ($this->getRequest()->get('contentId')) {
+        if (isset($_GET['contentId'])) {
             $template->addCss('group', 'revision');
         }
 
@@ -90,10 +90,10 @@ HTML;
         $t = $this->loadTemplate($html);
 
         $t->setText('author', $this->page->getUser()->getName());
-        $t->setText('title', $this->page->getTitle());
-        $t->setText('category', $this->page->getCategory());
+        $t->setText('title', $this->page->title);
+        $t->setText('category', $this->page->category);
         $t->setText('permission', $this->page->getPermissionLabel());
-        $t->setText('revision', $this->content->getContentId());
+        $t->setText('revision', $this->content->contentId);
         $t->setText('modified', $this->page->getModified(Date::FORMAT_LONG_DATETIME));
         $t->setText('created', $this->page->getCreated(Date::FORMAT_LONG_DATETIME));
 

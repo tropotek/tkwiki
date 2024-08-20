@@ -3,10 +3,18 @@ namespace App\Db;
 
 use Bs\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
+use Bs\Db\User;
+use Tt\DataMap\DataMap;
+use Tt\DataMap\Db\Date;
+use Tt\DataMap\Db\Integer;
+use Tt\DataMap\Db\Text;
+use Tt\DataMap\Db\TextEncrypt;
+use Tt\Db;
+use Tt\DbFilter;
+use Tt\DbModel;
 use OTPHP\TOTP;
-use Tk\Db\Mapper\Model;
 
-class Secret extends Model
+class Secret extends DbModel
 {
     use UserTrait;
     Use TimestampTrait;
@@ -15,51 +23,86 @@ class Secret extends Model
      * Page permission values
      * NOTE: Admin users have all permissions at all times
      */
-    const PERM_PRIVATE            = 9;
-    const PERM_STAFF              = 2;
-    const PERM_USER               = 1;
+    const PERM_PRIVATE  = 9;
+    const PERM_STAFF    = 2;
+    const PERM_USER     = 1;
 
     const PERM_LIST = [
-        self::PERM_PRIVATE   => 'Private',
-        self::PERM_STAFF     => 'Staff',
-        self::PERM_USER      => 'User',
+        self::PERM_PRIVATE  => 'Private',
+        self::PERM_STAFF    => 'Staff',
+        self::PERM_USER     => 'User',
     ];
 
     const PERM_HELP = [
-        self::PERM_PRIVATE   => 'VIEW: author, EDIT: author, DELETE: author',
-        self::PERM_STAFF     => 'VIEW: staff users, EDIT: staff editors, DELETE: staff editors',
-        self::PERM_USER      => 'VIEW: registered users, EDIT: staff, DELETE: staff',
+        self::PERM_PRIVATE  => 'VIEW: author, EDIT: author, DELETE: author',
+        self::PERM_STAFF    => 'VIEW: staff users, EDIT: staff editors, DELETE: staff editors',
+        self::PERM_USER     => 'VIEW: registered users, EDIT: staff, DELETE: staff',
     ];
 
-    protected int $secretId = 0;
-
-    protected int $userId = 0;
-
-    protected int $permission = self::PERM_PRIVATE;
-
-    protected string $name = '';
-
-    protected string $url = '';
-
-    protected string $username = '';
-
-    protected string $password = '';
-
-    protected string $otp = '';
-
-    protected string $keys = '';
-
-    protected string $notes = '';
-
-    protected \DateTime $modified;
-
-    protected \DateTime $created;
-
+    public int    $secretId   = 0;
+    public int    $userId     = 0;
+    public int    $permission = self::PERM_PRIVATE;
+    public string $name       = '';
+    public string $url        = '';
+    public string $username   = '';
+    public string $password   = '';
+    public string $otp        = '';
+    public string $keys       = '';
+    public string $notes      = '';
+    public \DateTime $modified;
+    public \DateTime $created;
 
 
     public function __construct()
     {
         $this->_TimestampTrait();
+    }
+
+    public function save(): void
+    {
+        $map = static::getDataMap();
+        $values = $map->getArray($this);
+        if ($this->secretId) {
+            $values['secret_id'] = $this->secretId;
+            Db::update('secret', 'secret_id', $values);
+        } else {
+            unset($values['secret_id']);
+            Db::insert('secret', $values);
+            $this->secretId = Db::getLastInsertId();
+        }
+
+        $this->reload();
+    }
+
+    public function delete(): bool
+    {
+        return (false !== Db::delete('secret', ['secret_id' => $this->secretId]));
+    }
+
+    /**
+     * create a custom data map for encrypted types
+     */
+    public static function getDataMap(string $table = '', string $view = ''): DataMap
+    {
+        $map = self::$_MAPS[static::class] ?? null;
+        if (!is_null($map)) return $map;
+
+        $map = new DataMap();
+        $map->addType(new Integer('secretId', 'secret_id'))->setFlag(DataMap::PRI);
+        $map->addType(new Integer('userId', 'user_id'));
+        $map->addType(new Integer('permission'));
+        $map->addType(new Text('name'));
+        $map->addType(new TextEncrypt('url'));
+        $map->addType(new TextEncrypt('username'));
+        $map->addType(new TextEncrypt('password'));
+        $map->addType(new TextEncrypt('otp'));
+        $map->addType(new TextEncrypt('keys'));
+        $map->addType(new TextEncrypt('notes'));
+        $map->addType(new Date('modified'));
+        $map->addType(new Date('created'));
+
+        self::$_MAPS[static::class] = $map;
+        return $map;
     }
 
     /**
@@ -69,33 +112,10 @@ class Secret extends Model
     {
         $code = '';
         try {
-            $otp = TOTP::create($this->getOtp());
+            $otp = TOTP::create($this->otp);
             $code = $otp->now();
         } catch (\Exception $e) { }
         return $code;
-    }
-
-    public function getSecretId(): int
-    {
-        return $this->secretId;
-    }
-
-    public function setSecretId(int $secretId): Secret
-    {
-        $this->secretId = $secretId;
-        return $this;
-    }
-
-
-    public function getPermission(): int
-    {
-        return $this->permission;
-    }
-
-    public function setPermission(int $permission): Secret
-    {
-        $this->permission = $permission;
-        return $this;
     }
 
     /**
@@ -103,84 +123,89 @@ class Secret extends Model
      */
     public function getPermissionLabel(): string
     {
-        return self::PERM_LIST[$this->getPermission()] ?? '';
+        return self::PERM_LIST[$this->permission] ?? '';
     }
 
-    public function getName(): string
+    public static function find(int $id): ?static
     {
-        return $this->name;
+        return Db::queryOne("
+            SELECT *
+            FROM secret
+            WHERE secret_id = :id",
+        compact('id'),
+        self::class
+        );
     }
 
-    public function setName(string $name): Secret
+    public static function findAll(): array
     {
-        $this->name = $name;
-        return $this;
+        return Db::query("
+            SELECT *
+            FROM secret",
+            null,
+            self::class
+        );
     }
 
-    public function getUrl(): string
+    public static function findFiltered(array|DbFilter $filter): array
     {
-        return $this->url;
-    }
+        $filter = DbFilter::create($filter);
 
-    public function setUrl(string $url): Secret
-    {
-        $this->url = $url;
-        return $this;
-    }
+        if (!empty($filter['search'])) {
+            $filter['search'] = '%' . $filter['search'] . '%';
+            $w  = 'a.name LIKE :search OR ';
+            $w .= 'a.url LIKE :search OR ';
+            $w .= 'a.secret_id LIKE :search OR ';
+            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+        }
 
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
+        if (!empty($filter['id'])) {
+            $filter['secretId'] = $filter['id'];
+        }
+        if (!empty($filter['secretId'])) {
+            if (!is_array($filter['secretId'])) $filter['secretId'] = [$filter['secretId']];
+            $filter->appendWhere('a.secret_id IN :secretId AND ');
+        }
 
-    public function setUsername(string $username): Secret
-    {
-        $this->username = $username;
-        return $this;
-    }
+        if (!empty($filter['exclude'])) {
+            if (!is_array($filter['exclude'])) $filter['exclude'] = [$filter['exclude']];
+            $filter->appendWhere('a.secret_id NOT IN :exclude AND ');
+        }
 
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
 
-    public function setPassword(string $password): Secret
-    {
-        $this->password = $password;
-        return $this;
-    }
+        if (!empty($filter['author'])) {
+            if (!is_array($filter['author'])) $filter['author'] = [$filter['author']];
+            $filter->appendWhere('a.user_id IN :author AND ');
+        }
 
-    public function getOtp(): string
-    {
-        return $this->otp;
-    }
+        if (!empty($filter['userId'])) {
+            $filter->appendWhere('a.user_id = :userId AND ');
+        }
 
-    public function setOtp(string $otp): Secret
-    {
-        $this->otp = $otp;
-        return $this;
-    }
+        if (!empty($filter['permission'])) {
+            $perm = 0;
+            foreach ($filter['permission'] as $p) {
+                $perm |= $p;
+            }
+            $filter['permission'] = $perm;
+            $filter->appendWhere('a.permission = :permission AND ');
+        }
 
-    public function getKeys(): string
-    {
-        return $this->keys;
-    }
+        if (!empty($filter['name'])) {
+            $filter->appendWhere('a.name = :name AND ');
+        }
 
-    public function setKeys(string $keys): Secret
-    {
-        $this->keys = $keys;
-        return $this;
-    }
+        if (!empty($filter['url'])) {
+            $filter->appendWhere('a.url = :url AND ');
+        }
 
-    public function getNotes(): string
-    {
-        return $this->notes;
-    }
-
-    public function setNotes(string $notes): Secret
-    {
-        $this->notes = $notes;
-        return $this;
+        return Db::query("
+            SELECT *
+            FROM secret a
+            {$filter->getSql()}",
+            $filter->all(),
+            self::class
+        );
     }
 
 
@@ -188,19 +213,19 @@ class Secret extends Model
     {
         $errors = [];
 
-        if (!$this->getUserId()) {
+        if (!$this->userId) {
             $errors['userId'] = 'Invalid value: userId';
         }
 
-        if (!$this->getPermission()) {
+        if (!$this->permission) {
             $errors['permission'] = 'Invalid value: permission';
         }
 
-        if (!$this->getName()) {
+        if (!$this->name) {
             $errors['name'] = 'Invalid value: name';
         }
 
-        if ($this->getUrl() && !filter_var($this->getUrl(), FILTER_VALIDATE_URL)) {
+        if ($this->url && !filter_var($this->url, FILTER_VALIDATE_URL)) {
             $errors['url'] = 'Invalid value: url';
         }
 
@@ -218,15 +243,15 @@ class Secret extends Model
     {
         if (!$user) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getUserId()) return true;
+        if ($this->userId == $user->userId) return true;
 
         // Staff and users can view USER secrets
-        if ($this->getPermission() == self::PERM_USER) {
+        if ($this->permission == self::PERM_USER) {
             return ($user->isMember() || $user->isStaff());
         }
 
         // Staff can view STAFF secrets
-        if ($this->getPermission() == self::PERM_STAFF) {
+        if ($this->permission == self::PERM_STAFF) {
             return $user->isStaff();
         }
 
@@ -238,16 +263,16 @@ class Secret extends Model
         if (!$user) return false;
         if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getUserId()) return true;
+        if ($this->userId == $user->userId) return true;
 
         // Allow any staff to edit public or user secrets
-        if ($this->getPermission() == self::PERM_USER) {
+        if ($this->permission == self::PERM_USER) {
             return $user->isStaff();
         }
 
         // Only Editors can edit staff secrets
-        if ($this->getPermission() == self::PERM_STAFF) {
-            return $user->hasPermission(User::PERM_EDITOR);
+        if ($this->permission == self::PERM_STAFF) {
+            return $user->hasPermission(Permissions::PERM_EDITOR);
         }
 
         return false;
@@ -258,16 +283,16 @@ class Secret extends Model
         if (!$user) return false;
         if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
-        if ($this->getUserId() == $user->getUserId()) return true;
+        if ($this->userId == $user->userId) return true;
 
         // Allow any staff to delete public or user secrets
-        if ($this->getPermission() == self::PERM_USER) {
+        if ($this->permission == self::PERM_USER) {
             return $user->isStaff();
         }
 
         // Only Editors can delete staff secrets
-        if ($this->getPermission() == self::PERM_STAFF) {
-            return $user->hasPermission(User::PERM_EDITOR);
+        if ($this->permission == self::PERM_STAFF) {
+            return $user->hasPermission(Permissions::PERM_EDITOR);
         }
 
         return false;

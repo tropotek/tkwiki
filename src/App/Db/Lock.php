@@ -1,16 +1,14 @@
 <?php
 namespace App\Db;
 
-use Bs\Db\UserInterface;
-use Tk\Db\Pdo;
+use Bs\Db\User;
+use Bs\Factory;
 use Tk\Traits\SystemTrait;
+use Tt\Db;
 
 /**
  * This object manages page edit locking
- *
- * Pages are locked to a user when they edited to avoid overwriting another
- * users edits.
- *
+ * Pages are locked to a user when they are edited to avoid user edits clashing.
  */
 class Lock
 {
@@ -20,9 +18,7 @@ class Lock
 
     protected User $user;
 
-    /**
-     * @param User|UserInterface $user
-     */
+
     public function __construct(User $user)
     {
         $this->user = $user;
@@ -38,16 +34,10 @@ class Lock
         return $this->user;
     }
 
-    public function getDb(): Pdo
-    {
-        return $this->getFactory()->getDb();
-    }
-
     public function getPageHash(int $pageId): string
     {
-        return md5($pageId . $this->getUser()->getId());
+        return md5($pageId . $this->getUser()->userId);
     }
-
 
     /**
      * lock a wiki page if the user has access to the lock
@@ -58,21 +48,28 @@ class Lock
 
         if ($this->isLocked($pageId)) {
             if ($this->ownLock($pageId)) {
-                $stm = $this->getDb()->prepare('UPDATE `lock` SET expire = (NOW() + INTERVAL :timeout SECOND) WHERE hash = :hash');
-                $stm->execute([
-                    'timeout' => self::TIMEOUT_SEC,
-                    'hash' => $this->getPageHash($pageId)
-                ]);
+                Db::execute("
+                    UPDATE `lock` SET
+                        expire = (NOW() + INTERVAL :timeout SECOND)
+                    WHERE hash = :hash",
+                    [
+                        'timeout' => self::TIMEOUT_SEC,
+                        'hash' => $this->getPageHash($pageId)
+                    ]
+                );
             }
         } else {
-            $stm = $this->getDb()->prepare('INSERT INTO `lock` VALUES (:hash, :pageId, :userId, :ip, (NOW() + INTERVAL :timeout SECOND))');
-            $stm->execute([
-                'hash' => $this->getPageHash($pageId),
-                'pageId' => $pageId,
-                'userId' => $this->getUser()->getId(),
-                'ip' => $this->getRequest()->getClientIp(),
-                'timeout' => self::TIMEOUT_SEC
-            ]);
+                Db::execute("
+                    INSERT INTO `lock` VALUES
+                        (:hash, :pageId, :userId, :ip, (NOW() + INTERVAL :timeout SECOND))",
+                    [
+                        'hash' => $this->getPageHash($pageId),
+                        'pageId' => $pageId,
+                        'userId' => $this->getUser()->userId,
+                        'ip' => Factory::instance()->getRequest()->getClientIp(),
+                        'timeout' => self::TIMEOUT_SEC
+                    ]
+                );
         }
         return true;
     }
@@ -80,8 +77,9 @@ class Lock
     public function unlock(int $pageId): bool
     {
         if (!$this->canAccess($pageId)) return true;
-        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE hash = :hash');
-        return $stm->execute(['hash' => $this->getPageHash($pageId)]);
+        return (false !== Db::execute("DELETE FROM `lock` WHERE hash = :hash",
+            ['hash' => $this->getPageHash($pageId)]
+        ));
     }
 
     /**
@@ -89,8 +87,9 @@ class Lock
      */
     public function clearAllLocks(): bool
     {
-        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE user_id = :userId');
-        return $stm->execute(['userId' => $this->getUser()->getId()]);
+        return (false !== Db::execute("DELETE FROM `lock` WHERE user_id = :hash",
+            ['userId' => $this->getUser()->userId]
+        ));
     }
 
     /**
@@ -119,23 +118,18 @@ class Lock
     public function isLocked(int $pageId): bool
     {
         $this->clearExpired();
-        $stm = $this->getDb()->prepare('SELECT COUNT(*) as i FROM `lock` WHERE page_id = :pageId');
-        $stm->execute(compact('pageId'));
-        $row = $stm->fetch();
-        return ($row->i > 0);
+        return Db::queryBool("SELECT COUNT(*) FROM `lock` WHERE page_id = :pageId", compact('pageId'));
     }
 
     public function ownLock(int $pageId): bool
     {
-        $stm = $this->getDb()->prepare('SELECT COUNT(*) as i FROM `lock` WHERE hash = :hash');
-        $stm->execute(['hash' => $this->getPageHash($pageId)]);
-        $row = $stm->fetch();
-        return ($row->i > 0);
+        return Db::queryBool("SELECT COUNT(*) FROM `lock` WHERE hash = :hash",
+            ['hash' => $this->getPageHash($pageId)]
+        );
     }
 
     public function clearExpired(): bool
     {
-        $stm = $this->getDb()->prepare('DELETE FROM `lock` WHERE expire < NOW()');
-        return $stm->execute();
+        return (false !== Db::execute("DELETE FROM `lock` WHERE expire < NOW()"));
     }
 }

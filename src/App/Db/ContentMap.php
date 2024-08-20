@@ -8,8 +8,10 @@ use Tk\Db\Mapper\Result;
 use Tk\Db\Tool;
 use Tk\DataMap\Db;
 use Tk\DataMap\Form;
-use Tk\DataMap\Table;
 
+/**
+ * @deprecated
+ */
 class ContentMap extends Mapper
 {
 

@@ -58,7 +58,8 @@ class Search extends PageController
             $filter['permission'] = [Page::PERM_PUBLIC];
         }
 
-        $this->list = PageMap::create()->findFiltered($filter, Tool::create('modified DESC'));
+        $this->list = Page::findFiltered($filter);
+        //$this->list = PageMap::create()->findFiltered($filter, Tool::create('modified DESC'));
 
         return $this->getPage();
     }
@@ -72,8 +73,8 @@ class Search extends PageController
             if (!$page->canView($this->getAuthUser())) continue;
 
             $rpt = $template->getRepeat('row');
-            $rpt->setText('title', $page->getTitle());
-            $rpt->setAttr('title', 'title', $page->getTitle());
+            $rpt->setText('title', $page->title);
+            $rpt->setAttr('title', 'title', $page->title);
             $rpt->setAttr('title', 'href', $page->getPageUrl());
 
             $rpt->setAttr('link', 'href', $page->getPageUrl());
@@ -84,18 +85,18 @@ class Search extends PageController
             $rpt->setText('time', $page->getCreated()->format('H:i'));
 
             if ($page->getContent()) {
-                $description = $page->getContent()->getDescription();
+                $description = $page->getContent()->description;
                 // This is a security risk as is can show sensitive data from the content, do not do this...
                 if (!$description) {
-                    $description = trim(substr(strip_tags(html_entity_decode($page->getContent()->getHtml())), 0, 256));
+                    $description = trim(substr(strip_tags(html_entity_decode($page->getContent()->html)), 0, 256));
                 }
 
                 $rpt->insertHtml('description', htmlentities($description));
                 $rpt->setText('author', $page->getUser()->getName());
                 $rpt->setText('date', $page->getContent()->getCreated()->format(\Tk\Date::FORMAT_MED_DATE));
                 $rpt->setText('time', $page->getContent()->getCreated()->format('H:i'));
-                if (trim($page->getContent()->getKeywords())) {
-                    $rpt->setText('keywords', $page->getContent()->getKeywords());
+                if (trim($page->getContent()->keywords)) {
+                    $rpt->setText('keywords', $page->getContent()->keywords);
                     $rpt->setVisible('keywords');
                 }
             }

@@ -1,29 +1,28 @@
 <?php
 namespace App\Util;
 
+use Dom\Renderer\DisplayInterface;
+use Dom\Renderer\Renderer;
 use Dom\Template;
 use JetBrains\PhpStorm\NoReturn;
 use Mpdf\Mpdf;
+use Mpdf\Output\Destination;
+use Tk\CurlyTemplate;
 use Tk\Traits\SystemTrait;
-use Tk\Uri;
 
 /**
  * @note This file uses the mpdf lib
  * @link https://mpdf.github.io/
  */
-class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterface
+class Pdf extends Renderer implements DisplayInterface
 {
     use SystemTrait;
 
-    protected ?Mpdf $mpdf = null;
-
+    protected ?Mpdf  $mpdf      = null;
     protected string $watermark = '';
-
-    protected bool $rendered = false;
-
-    protected string $html = '';
-
-    protected string $title = '';
+    protected bool   $rendered  = false;
+    protected string $html      = '';
+    protected string $title     = '';
 
 
     public function __construct(string $html, string $title = 'PDF DOCUMENT', string $watermark = '')
@@ -53,7 +52,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
     protected function initPdf(array $data = []): void
     {
         $html = $this->show()->toString();
-        $tpl = \Tk\CurlyTemplate::create($html);
+        $tpl = CurlyTemplate::create($html);
         $parsedHtml = $tpl->parse($data);
 
         $this->mpdf = new \Mpdf\Mpdf(array(
@@ -101,7 +100,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
         header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1
         header('Pragma: no-cache'); // HTTP 1.0
         header('Expires: 0'); // Proxies
-        $this->mpdf->Output($filename, \Mpdf\Output\Destination::INLINE);
+        $this->mpdf->Output($filename, Destination::INLINE);
         exit;
     }
 
@@ -112,7 +111,7 @@ class Pdf extends \Dom\Renderer\Renderer implements \Dom\Renderer\DisplayInterfa
     {
         if (!$filename)
             $filename = \Tk\Uri::create()->basename() . '.pdf';
-        return $this->mpdf->Output($filename, \Mpdf\Output\Destination::STRING_RETURN);
+        return $this->mpdf->Output($filename, Destination::STRING_RETURN);
     }
 
     public function show(): ?Template

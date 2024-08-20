@@ -1,11 +1,8 @@
 <?php
 namespace App\Dom\Modifier;
 
-use App\Db\User;
-use App\Db\UserMap;
 use App\Helper\ViewCategoryList;
-use App\Helper\ViewSecretList;
-use Dom\Mvc\Modifier\FilterInterface;
+use Dom\Modifier\FilterInterface;
 use Tk\Traits\SystemTrait;
 
 /**

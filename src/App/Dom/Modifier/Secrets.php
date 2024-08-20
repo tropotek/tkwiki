@@ -2,9 +2,8 @@
 namespace App\Dom\Modifier;
 
 use App\Db\Secret;
-use App\Db\SecretMap;
 use App\Helper\ViewSecret;
-use Dom\Mvc\Modifier\FilterInterface;
+use Dom\Modifier\FilterInterface;
 use Tk\Traits\SystemTrait;
 
 /**
@@ -21,10 +20,9 @@ class Secrets extends FilterInterface
         if ($node->nodeName != 'img') return;
         if (!$node->hasAttribute('wk-secret')) return;
 
-        /** @var Secret $secret */
-        $secret = SecretMap::create()->find($node->getAttribute('wk-secret'));
-
+        $secret = Secret::find((int)$node->getAttribute('wk-secret'));
         if (!$secret) return;
+
         if ($secret->canView($this->getFactory()->getAuthUser())) {
             $renderer = new ViewSecret($secret);
             $template = $renderer->show();

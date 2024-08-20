@@ -73,7 +73,7 @@ class Secret extends EditInterface
     public function execute(array $values = []): static
     {
         $load = $this->getSecret()->getMapper()->getFormMap()->getArray($this->getSecret());
-        $load['secretId'] = $this->getSecret()->getSecretId();
+        $load['secretId'] = $this->getSecret()->secretId;
         $this->getForm()->setFieldValues($load);
         parent::execute($values);
         return $this;
@@ -91,13 +91,13 @@ class Secret extends EditInterface
         $this->getSecret()->save();
 
         Alert::addSuccess('Form save successfully.');
-        $action->setRedirect(Uri::create()->set('secretId', $this->getSecret()->getSecretId()));
+        $action->setRedirect(Uri::create()->set('secretId', $this->getSecret()->secretId));
         if ($form->getTriggeredAction()->isExit()) {
             $action->setRedirect($this->getFactory()->getBackUrl());
         }
 
         if ($this->isHtmx()) {
-            $form->setFieldValue('secretId', $this->getSecret()->getSecretId());
+            $form->setFieldValue('secretId', $this->getSecret()->secretId);
             $action->setRedirect(null);
             //$this->setAttr('hx-post', Uri::create()->set('secretId', $this->getSecret()->getSecretId()));
         }

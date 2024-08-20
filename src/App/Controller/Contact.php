@@ -1,14 +1,15 @@
 <?php
 namespace App\Controller;
 
-use Dom\Mvc\PageController;
+use Bs\ControllerDomInterface;
+use Bs\Form;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
 use Tk\Alert;
-use Tk\Form;
-use Tk\Form\Field;
-use Tk\Form\Action;
-use Tk\Form\FormTrait;
+use Tk\Form\Action\Link;
+use Tk\Form\Action\Submit;
+use Tk\Form\Field\Hidden;
+use Tk\Form\Field\Input;
+use Tk\Form\Field\Textarea;
 use Tk\Traits\SystemTrait;
 use Tk\Uri;
 
@@ -20,48 +21,44 @@ use Tk\Uri;
  * Most clients prefer this type of
  *
  */
-class Contact extends PageController
+class Contact extends ControllerDomInterface
 {
     use SystemTrait;
-    use FormTrait;
 
-    public function __construct()
+    protected ?Form $form = null;
+
+
+    public function doDefault(): void
     {
-        parent::__construct();
         $this->getPage()->setTitle('Contact Us');
-        $this->setForm(Form::create('contact'));
-    }
 
-    public function doDefault(Request $request)
-    {
-        $hash = $this->getSession()->get($this->getForm()->getId() . '-nc');
+        $this->form = new Form();
+
+        $hash = $_SESSION[$this->form->getId() . '-nc'] ?? '';
         if (!$hash) {
             $hash = md5(time());
-            $this->getSession()->set($this->getForm()->getId() . '-nc', $hash);
+            $_SESSION[$this->form->getId() . '-nc'] = $hash;
         }
-        $this->getForm()->appendField(new Field\Hidden('nc'))->setValue($hash);
-        $this->getForm()->appendField(new Field\Input('name'));
-        $this->getForm()->appendField(new Field\Input('email'))->setType('email');
-        $this->getForm()->appendField(new Field\Input('phone'));
-        $this->getForm()->appendField(new Field\Textarea('message'));
 
+        $this->form->appendField(new Hidden('nc'))->setValue($hash);
+        $this->form->appendField(new Input('name'));
+        $this->form->appendField(new Input('email'))->setType('email');
+        $this->form->appendField(new Input('phone'));
+        $this->form->appendField(new Textarea('message'));
 
-        $this->getForm()->appendField(new Action\Submit('send', [$this, 'onSubmit']));
-        $this->getForm()->appendField(new Action\Link('cancel', Uri::create()));
+        $this->form->appendField(new Submit('send', [$this, 'onSubmit']));
+        $this->form->appendField(new Link('cancel', Uri::create()));
 
-        $this->getForm()->setFieldValues($this->getRegistry()->all()); // Use form data mapper if loading objects
+        $this->form->setFieldValues($this->getRegistry()->all());
 
-        $this->getForm()->execute($request->request->all());
+        $this->form->execute($_POST);
 
-        $this->setFormRenderer(new Form\Renderer\Dom\Renderer($this->getForm()));
-
-
-        return $this->getPage();
     }
 
-    public function onSubmit(Form $form, Form\Action\ActionInterface $action)
+    public function onSubmit(Form $form, Submit $action): void
     {
-        $hash = $this->getSession()->get($this->getForm()->getId() . '-nc');
+        $hash = $_SESSION[$form->getId() . '-nc'];
+
         if ($form->getFieldValue('nc') != $hash) {
             $form->addError('Form system error, please try again.');
         }
@@ -76,7 +73,7 @@ class Contact extends PageController
         }
 
         if ($form->hasErrors()) return;
-        $this->getSession()->remove($this->getForm()->getId() . '-nc');
+        unset($_SESSION[$form->getId() . '-nc']);
 
         $message = $this->getFactory()->createMessage();
         $message->addTo($form->getFieldValue('email'));
@@ -106,9 +103,8 @@ HTML;
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
 
-        $renderer = $this->getFormRenderer();
-        $renderer->addFieldCss('mb-3');
-        $template->appendTemplate('content', $renderer->show());
+        $this->form->getRenderer()->addFieldCss('mb-3');
+        $template->appendTemplate('content', $this->form->show());
 
         return $template;
     }

@@ -1,7 +1,6 @@
 <?php
 namespace App\Ui;
 
-use App\Db\SecretMap;
 use App\Form\Secret;
 use Bs\Ui\Dialog;
 use Dom\Template;
@@ -49,23 +48,23 @@ class FormDialog extends Dialog
         $this->setAttr('data-bs-backdrop', 'static');
     }
 
-    public function init()
+    public function init(): void
     {
         $this->getOnInit()->execute($this);
     }
 
-    public function execute(Request $request)
+    public function execute(): void
     {
         $secret = new \App\Db\Secret();
-        $secret->setUserId($this->getFactory()->getAuthUser()->getUserId());
-        if ($request->query->getInt('secretId')) {
-            $secret = SecretMap::create()->find($request->query->getInt('secretId'));
+        $secret->userId = $this->getFactory()->getAuthUser()->userId;
+        if ($_GET['secretId'] ?? false) {
+            $secret = \App\Db\Secret::find((int)$_GET['secretId']);
         }
 
         $this->form->setModel($secret);
-        $this->form->execute($request->request->all());
+        $this->form->execute($_POST);
 
-        $this->getOnExecute()->execute($this, $request);
+        $this->getOnExecute()->execute($this);
     }
 
     public function show(): ?Template
@@ -78,7 +77,7 @@ class FormDialog extends Dialog
         $js = <<<JS
 jQuery(function($) {
     let dialogId = '#{$dialogId}';
-    
+
     $('form.tk-form', dialogId).each(function () {
         let form = $(this);
         let formId = '#' + $(this).attr('id');
@@ -89,7 +88,7 @@ jQuery(function($) {
             return false;
         });
     });
-    
+
     $(dialogId).on('show.bs.modal', function () {
         clearForm(this);
     });

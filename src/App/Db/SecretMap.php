@@ -9,6 +9,9 @@ use Tk\Db\Tool;
 use Tk\DataMap\Db;
 use Tk\DataMap\Form;
 
+/**
+ * @deprecated
+ */
 class SecretMap extends Mapper
 {
 

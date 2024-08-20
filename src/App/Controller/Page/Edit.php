@@ -52,7 +52,7 @@ class Edit extends PageController
         $this->wPage = PageMap::create()->find($request->query->get('pageId') ?? 0);
 
         if ($this->wPage && !$this->wPage->canEdit($this->getAuthUser())) {
-            Alert::addWarning('You do not have permissions to edit `' . $this->wPage->getTitle() . '`');
+            Alert::addWarning('You do not have permissions to edit `' . $this->wPage->title . '`');
             if ($this->wPage->canView($this->getAuthUser())) {
                 $this->wPage->getPageUrl()->redirect();
             }
@@ -63,9 +63,9 @@ class Edit extends PageController
         if (!$this->wPage && $request->query->has('u') && Page::canCreate($this->getAuthUser())) {
             $this->wPage = new Page();
             $this->wPage->setUserId($this->getAuthUser()->getVolatileId());
-            $this->wPage->setUrl($request->get('u'));
-            $this->wPage->setTitle(str_replace('_', ' ', $this->wPage->getUrl()));
-            $this->wPage->setPermission(\App\Db\Page::PERM_PRIVATE);
+            $this->wPage->url = $request->get('u');
+            $this->wPage->title = str_replace('_', ' ', $this->wPage->url);
+            $this->wPage->permission = \App\Db\Page::PERM_PRIVATE;
             $this->wContent = new Content();
             $this->wContent->setUserId($this->getAuthUser()->getUserId());
         }
@@ -82,13 +82,13 @@ class Edit extends PageController
             $error = true;
         }
 
-        if ($this->wPage->getPageId() && !$this->lock->canAccess($this->wPage->getPageId())) {
+        if ($this->wPage->pageId && !$this->lock->canAccess($this->wPage->pageId)) {
             Alert::addWarning('The page is currently being edited by another user. Try again later.');
             $error = true;
         }
         if ($error) {
             $url = $this->wPage->getPageUrl();
-            if (!$this->wPage->getPageId()) {
+            if (!$this->wPage->pageId) {
                 $url = Uri::create('/');
             }
             $url->redirect();
@@ -99,7 +99,7 @@ class Edit extends PageController
         }
 
         // Acquire page lock.
-        $this->lock->lock($this->wPage->getPageId());
+        $this->lock->lock($this->wPage->pageId);
 
         // If not a new page with new content
         if (!$this->wContent) {
@@ -128,7 +128,7 @@ class Edit extends PageController
             ->setGroup($group)
             ->setStrict(true)
             ->prependOption('-- Select --', '');
-        if ($this->wPage && $this->wPage->getUrl() == Page::getHomeUrl()) {
+        if ($this->wPage && $this->wPage->url == Page::getHomeUrl()) {
             $permission->setDisabled();
         }
 
@@ -192,12 +192,12 @@ class Edit extends PageController
 
     public function onCancel(Form $form, Action\ActionInterface $action): void
     {
-        $this->lock->unlock($this->wPage->getPageId());
+        $this->lock->unlock($this->wPage->pageId);
 
         $url = \Tk\Uri::create($this->wPage->getHomeUrl());
         if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
             $url = $this->getFactory()->getBackUrl();
-        } else if ($this->wPage->getPageId()) {
+        } else if ($this->wPage->pageId) {
             $url = $this->wPage->getPageUrl();
         }
         $action->setRedirect($url);
@@ -216,30 +216,30 @@ class Edit extends PageController
             return;
         }
 
-        $this->wContent->setHtml(mb_convert_encoding($this->wContent->getHtml(), 'UTF-8'));
+        $this->wContent->html = mb_convert_encoding($this->wContent->html, 'UTF-8');
         $this->wPage->save();
 
         // only save content if it changes
         $currContent = $this->wPage->getContent();
         if (!$currContent || $this->wContent->diff($currContent)) {
-            $this->wContent->setPageId($this->wPage->getPageId());
+            $this->wContent->pageId = $this->wPage->pageId;
             $this->wContent->save();
         }
 
         // Index page links
-        if (trim($this->wContent->getHtml())) {
-            Page::indexLinks($this->wPage, $this->wContent->getHtml());
+        if (trim($this->wContent->html)) {
+            Page::indexLinks($this->wPage, $this->wContent->html);
         }
 
         // Remove page lock
-        $this->lock->unlock($this->wPage->getPageId());
+        $this->lock->unlock($this->wPage->pageId);
 
         Alert::addSuccess('Page save successfully.');
 
         $url = \Tk\Uri::create($this->wPage->getHomeUrl());
         if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
             $url = $this->getFactory()->getBackUrl();
-        } else if ($this->wPage->getPageId()) {
+        } else if ($this->wPage->pageId) {
             $url = $this->wPage->getPageUrl();
         }
         $action->setRedirect($url);
@@ -264,7 +264,7 @@ class Edit extends PageController
         $template->appendText('title', $this->getPage()->getTitle());
 
         $url = $this->getFactory()->getBackUrl();
-        if ($this->wPage->getPageId()) {
+        if ($this->wPage->pageId) {
             $url = $this->wPage->getPageUrl();
         }
         $template->setAttr('back', 'href', $url);
@@ -287,7 +287,7 @@ class Edit extends PageController
         }
 
         // Autocomplete js
-        $jsPageId = json_encode($this->wPage->getPageId());
+        $jsPageId = json_encode($this->wPage->pageId);
         $js = <<<JS
 jQuery(function($) {
     let pageId = {$jsPageId}
@@ -301,7 +301,7 @@ jQuery(function($) {
           response(cache[term]);
           return;
         }
-        $.getJSON(config.baseUrl + '/api/page/category', request, function(data, status, xhr) {
+        $.getJSON(tkConfig.baseUrl + '/api/page/category', request, function(data, status, xhr) {
           cache[term] = data;
           response(data);
         });
@@ -317,7 +317,7 @@ jQuery(function($) {
     // Start page lock trigger
     var lockTimeout = 1000*60;     // 1000 = 1 sec
     function saveLock() {
-        $.getJSON(config.baseUrl + '/api/lock/refresh', {pid: pageId}, function(data) {});
+        $.getJSON(tkConfig.baseUrl + '/api/lock/refresh', {pid: pageId}, function(data) {});
         setTimeout(saveLock, lockTimeout);
     }
     setTimeout(saveLock, lockTimeout);

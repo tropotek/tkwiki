@@ -1,10 +1,9 @@
 <?php
 namespace App\Dom\Modifier;
 
-use App\Db\User;
-use App\Db\UserMap;
 use App\Helper\ViewSecretList;
-use Dom\Mvc\Modifier\FilterInterface;
+use Bs\Db\User;
+use Dom\Modifier\FilterInterface;
 use Tk\Traits\SystemTrait;
 
 /**
@@ -23,7 +22,7 @@ class SecretList extends FilterInterface
         if (!$node->getAttribute('wk-secret-list')) return;
 
         /** @var User $user */
-        $user = UserMap::create()->find((int)$node->getAttribute('wk-secret-list'));
+        $user = User::find((int)$node->getAttribute('wk-secret-list'));
         if (!$user) return;
 
         // TODO: I do not think the user ID is needed here....

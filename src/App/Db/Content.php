@@ -5,53 +5,67 @@ use App\Db\Traits\PageTrait;
 use Bs\Db\Traits\UserTrait;
 use App\Factory;
 use Bs\Db\Traits\CreatedTrait;
-use Tk\Db\Mapper\Model;
+use Tt\Db;
+use Tt\DbFilter;
+use Tt\DbModel;
 
-class Content extends Model
+class Content extends DbModel
 {
     use CreatedTrait;
     use UserTrait;
     use PageTrait;
 
-    public int $contentId = 0;
-
-    public int $pageId = 0;
-
-    public int $userId = 0;
-
-    public string $html = '';
-
-    public string $keywords = '';
-
+    public int    $contentId   = 0;
+    public int    $pageId      = 0;
+    public int    $userId      = 0;
+    public string $html        = '';
+    public string $keywords    = '';
     public string $description = '';
-
-    public string $css = '';
-
-    public string $js = '';
-
+    public string $css         = '';
+    public string $js          = '';
     public \DateTime $created;
-
 
 
     public function __construct()
     {
         $this->_CreatedTrait();
-        $this->userId = Factory::instance()->getAuthUser()?->getUserId() ?? 0;
+        $this->userId = Factory::instance()->getAuthUser()?->userId ?? 0;
     }
 
     public static function cloneContent(Content $src): Content
     {
         $dst = new static();
-        $dst->userId = Factory::instance()->getAuthUser()?->getUserId() ?? 0;
+        $dst->userId = Factory::instance()->getAuthUser()?->userId ?? 0;
 
-        $dst->pageId = $src->pageId;
-        $dst->html = $src->html;
-        $dst->keywords = $src->keywords;
+        $dst->pageId      = $src->pageId;
+        $dst->html        = $src->html;
+        $dst->keywords    = $src->keywords;
         $dst->description = $src->description;
-        $dst->css = $src->css;
-        $dst->js = $src->js;
+        $dst->css         = $src->css;
+        $dst->js          = $src->js;
 
         return $dst;
+    }
+
+    public function save(): void
+    {
+        $map = static::getDataMap();
+        $values = $map->getArray($this);
+        if ($this->contentId) {
+            $values['content_id'] = $this->contentId;
+            Db::update('content', 'content_id', $values);
+        } else {
+            unset($values['content_id']);
+            Db::insert('content', $values);
+            $this->contentId = Db::getLastInsertId();
+        }
+
+        $this->reload();
+    }
+
+    public function delete(): bool
+    {
+        return (false !== Db::delete('content', ['content_id' => $this->contentId]));
     }
 
     /**
@@ -60,102 +74,110 @@ class Content extends Model
      */
     public function diff(Content $content): bool
     {
-        if ($this->getHtml() != $content->getHtml()) {
+        if ($this->html != $content->html) {
             return true;
         }
-        if ($this->getKeywords() != $content->getKeywords()) {
+        if ($this->keywords != $content->keywords) {
             return true;
         }
-        if ($this->getDescription() != $content->getDescription()) {
+        if ($this->description != $content->description) {
             return true;
         }
-        if ($this->getCss() != $content->getCss()) {
+        if ($this->css != $content->css) {
             return true;
         }
-        if ($this->getJs() != $content->getJs()) {
+        if ($this->js != $content->js) {
             return true;
         }
-
         return false;
     }
 
-
-    public function getContentId(): int
+    public static function find(int $id): ?static
     {
-        return $this->contentId;
+        return Db::queryOne("
+                SELECT *
+                FROM content
+                WHERE content_id = :id",
+            compact('id'),
+            self::class
+        );
     }
 
-    public function setContentId(int $contentId): Content
+    public static function findAll(): array
     {
-        $this->contentId = $contentId;
-        return $this;
+        return Db::query("
+            SELECT *
+            FROM content",
+            null,
+            self::class
+        );
     }
 
-    public function setHtml(string $html): Content
+    public static function findCurrent(int $pageId): static
     {
-        $this->html = $html;
-        return $this;
+        return Db::queryOne("
+                SELECT *
+                FROM content
+                WHERE page_id = :id
+                ORDER BY created DESC
+                LIMIT 1",
+            compact('pageId'),
+            self::class
+        );
     }
 
-    public function getHtml(): string
+    public static function findFiltered(array|DbFilter $filter): array
     {
-        return $this->html;
-    }
+        $filter = DbFilter::create($filter);
 
-    public function setKeywords(string $keywords): Content
-    {
-        $this->keywords = $keywords;
-        return $this;
-    }
+        if (!empty($filter['search'])) {
+            $filter['search'] = '%' . $filter['search'] . '%';
+            $w  = 'a.title LIKE :search OR ';
+            $w .= 'a.keywords LIKE :search OR ';
+            $w .= 'a.description LIKE :search OR ';
+            $w .= 'a.content_id LIKE :search OR ';
+            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+        }
 
-    public function getKeywords(): string
-    {
-        return $this->keywords;
-    }
+        if (!empty($filter['id'])) {
+            $filter['contentId'] = $filter['id'];
+        }
+        if (!empty($filter['contentId'])) {
+            if (!is_array($filter['contentId'])) $filter['contentId'] = [$filter['contentId']];
+            $filter->appendWhere('a.content_id IN :contentId AND ');
+        }
 
-    public function setDescription(string $description): Content
-    {
-        $this->description = $description;
-        return $this;
-    }
+        if (!empty($filter['exclude'])) {
+            if (!is_array($filter['exclude'])) $filter['exclude'] = [$filter['exclude']];
+            $filter->appendWhere('a.example_id NOT IN :exclude AND ');
+        }
 
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
+        if (!empty($filter['pageId'])) {
+        $filter->appendWhere('a.page_id = :pageId AND ');
+        }
 
-    public function setCss(string $css): Content
-    {
-        $this->css = $css;
-        return $this;
-    }
+        if (!empty($filter['userId'])) {
+            $filter->appendWhere('a.user_id = :userId AND ');
+        }
 
-    public function getCss(): string
-    {
-        return $this->css;
+        return Db::query("
+            SELECT *
+            FROM content a
+            {$filter->getSql()}",
+            $filter->all(),
+            self::class
+        );
     }
-
-    public function setJs(string $js): Content
-    {
-        $this->js = $js;
-        return $this;
-    }
-
-    public function getJs(): string
-    {
-        return $this->js;
-    }
-
 
     public function validate(): array
     {
         $errors = [];
 
-        if (!$this->getUserId()) {
+        if (!$this->userId) {
             $errors['userId'] = 'Invalid value: userId';
         }
 
-        if (!$this->getPageId()) {
+        if (!$this->pageId) {
             $errors['pageId'] = 'Invalid value: pageId';
         }
 

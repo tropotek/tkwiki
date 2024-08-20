@@ -38,9 +38,9 @@ class SecretSelect
                 $cell->setUrlProperty('');
                 $cell->setUrl(Uri::create('javascript:;'));
                 $cell->getLink()->addCss('wiki-insert');
-                $cell->getLink()->setAttr('data-secret-id', $obj->getSecretId());
-                $cell->getLink()->setAttr('data-secret-name', $obj->getName());
-                $cell->getLink()->setAttr('data-secret-url', $obj->getUrl());
+                $cell->getLink()->setAttr('data-secret-id', $obj->secretId);
+                $cell->getLink()->setAttr('data-secret-name', $obj->name);
+                $cell->getLink()->setAttr('data-secret-url', $obj->url);
             });
         $this->getTable()->appendCell(new Cell\Text('userId'))->setOrderByName('')
             ->addOnValue(function (Cell\Text $cell) {

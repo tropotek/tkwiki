@@ -21,8 +21,6 @@ class Test extends Console
             return self::FAILURE;
         }
 
-
-
         $output->writeln('Complete!!!');
         return self::SUCCESS;
     }

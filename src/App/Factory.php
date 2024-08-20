@@ -1,15 +1,13 @@
 <?php
 namespace App;
 
-use App\Db\User;
-use App\Db\UserMap;
 use App\Dom\Modifier\CategoryList;
 use App\Dom\Modifier\SecretList;
 use App\Dom\Modifier\Secrets;
 use App\Dom\Modifier\WikiImg;
 use App\Dom\Modifier\WikiUrl;
 use Bs\Ui\Crumbs;
-use Dom\Mvc\Modifier;
+use Dom\Modifier;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tk\Auth\FactoryInterface;
 use Tk\Uri;
@@ -25,11 +23,18 @@ class Factory extends \Bs\Factory implements FactoryInterface
         return $this->getEventDispatcher();
     }
 
+
     public function createPage(string $templatePath = ''): Page
     {
-        return Page::create($templatePath);
+        $page = new Page($templatePath);
+        $page->setDomModifier($this->getTemplateModifier());
+        return $page;
     }
 
+    /**
+     * @todo Not sure we are using this?
+     *       May need to be refactored
+     */
     public function createPageFromType(string $pageType = ''): Page
     {
         if (empty($pageType)) $pageType = Page::TEMPLATE_PUBLIC;
@@ -41,16 +46,6 @@ class Factory extends \Bs\Factory implements FactoryInterface
         $page = $this->createPage($path);
         $page->setType($pageType);
         return $page;
-    }
-
-    public function createUser(): User
-    {
-        return new User();
-    }
-
-    public function getUserMap(): UserMap
-    {
-        return UserMap::create();
     }
 
     public function getTemplateModifier(): Modifier
@@ -75,7 +70,7 @@ class Factory extends \Bs\Factory implements FactoryInterface
     {
         $id = 'breadcrumbs.public';
         if (!$this->has($id)) {
-            $crumbs = $this->getSession()->get($id);
+            $crumbs = $_SESSION[$id] ?? null;
             // Reset crumbs if wiki home page has been updated
             if ($crumbs && Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath() != $crumbs->getHomeUrl()) {
                 $crumbs = null;
@@ -88,7 +83,7 @@ class Factory extends \Bs\Factory implements FactoryInterface
                     $crumbs->setHomeUrl(\App\Db\Page::getHomeUrl());
                 }
                 $crumbs->reset();
-                $this->getSession()->set($id, $crumbs);
+                $_SESSION[$id] = $crumbs;
             }
             $this->set($id, $crumbs);
         }

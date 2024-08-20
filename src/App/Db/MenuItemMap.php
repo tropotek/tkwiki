@@ -10,6 +10,9 @@ use Tk\DataMap\Db;
 use Tk\DataMap\Form;
 use Tk\DataMap\Table;
 
+/**
+ * @deprecated
+ */
 class MenuItemMap extends Mapper
 {
 

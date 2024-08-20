@@ -1,9 +1,6 @@
 <?php
 namespace App;
 
-use App\Listener\RequestHandler;
-use App\Listener\WikiHandler;
-use Bs\Listener\CrumbsHandler;
 
 class Dispatch extends \Bs\Dispatch
 {
@@ -14,8 +11,7 @@ class Dispatch extends \Bs\Dispatch
     protected function commonInit()
     {
         parent::commonInit();
-
-
+        vd('DELETE THIS FILE IF NOT USED');
     }
 
     /**
@@ -24,7 +20,6 @@ class Dispatch extends \Bs\Dispatch
     protected function httpInit()
     {
         parent::httpInit();
-
     }
 
     /**
@@ -33,8 +28,6 @@ class Dispatch extends \Bs\Dispatch
     protected function cliInit()
     {
         parent::cliInit();
-
-
     }
 
 }

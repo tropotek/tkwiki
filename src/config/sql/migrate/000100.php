@@ -1,7 +1,7 @@
 <?php
 
 $registry = \App\Factory::instance()->getRegistry();
-$registry->set('site.name', 'Tk Wiki - Tropotek');
+$registry->set('site.name', 'Tropotek - Wiki');
 $registry->set('site.name.short', 'Wiki');
 $registry->set('site.email', 'site@email.com');
 $registry->set('site.email.sig', '');

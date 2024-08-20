@@ -51,9 +51,9 @@ class Secret extends ManagerInterface
             ->addOnShow(function (Cell\Text $cell, string $html) {
                 /** @var \App\Db\Secret $obj */
                 $obj = $cell->getRow()->getData();
-                if ($obj->getOtp()) {
+                if ($obj->otp) {
                     $html = sprintf('<a href="javascript:;" class="btn btn-sm btn-outline-success otp" data-id="%s"><i class="fa fa-refresh"></i></a> <em>------</em>',
-                        $obj->getId());
+                        $obj->secretId);
                 }
                 return $html;
             });

@@ -8,44 +8,14 @@ use App\Dom\Modifier\WikiImg;
 use App\Dom\Modifier\WikiUrl;
 use Bs\Ui\Crumbs;
 use Dom\Modifier;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tk\Auth\FactoryInterface;
 use Tk\Uri;
 
 class Factory extends \Bs\Factory implements FactoryInterface
 {
-
-    public function initEventDispatcher(): ?EventDispatcher
-    {
-        if ($this->getEventDispatcher()) {
-            new Dispatch($this->getEventDispatcher());
-        }
-        return $this->getEventDispatcher();
-    }
-
-
     public function createPage(string $templatePath = ''): Page
     {
-        $page = new Page($templatePath);
-        $page->setDomModifier($this->getTemplateModifier());
-        return $page;
-    }
-
-    /**
-     * @todo Not sure we are using this?
-     *       May need to be refactored
-     */
-    public function createPageFromType(string $pageType = ''): Page
-    {
-        if (empty($pageType)) $pageType = Page::TEMPLATE_PUBLIC;
-        $path = $this->getSystem()->makePath($this->getConfig()->get('path.template.'.$pageType));
-        if ($pageType == Page::TEMPLATE_PUBLIC) {
-            $template = $this->getRegistry()->get('wiki.default.template', 'default');
-            $path = $this->getSystem()->makePath(sprintf('/html/%s.html', $template));
-        }
-        $page = $this->createPage($path);
-        $page->setType($pageType);
-        return $page;
+        return new Page($templatePath);
     }
 
     public function getTemplateModifier(): Modifier

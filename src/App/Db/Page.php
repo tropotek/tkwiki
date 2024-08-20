@@ -116,7 +116,7 @@ class Page extends DbModel
     {
         $url = preg_replace('/[^a-z0-9_-]/i', '_', $title);
         do {
-            $comp = \App\Db\PageMap::create()->findByUrl($url);
+            $comp = Page::findByUrl($url);
             if ($comp || self::routeExists($url)) {
                 if (preg_match('/(.+)(_([0-9]+))$/', $url, $regs)) {
                     $url = $regs[1] . '_' . ((int)$regs[3]+1);
@@ -129,8 +129,7 @@ class Page extends DbModel
     }
 
     /**
-     * Find all page links and add them to the links table
-     * so we can track orphaned pages
+     * Find all page links and add them to the links table, so we can track orphaned pages
      */
     public static function indexLinks(Page $page, string $html): void
     {

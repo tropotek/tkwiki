@@ -5,14 +5,14 @@ use App\Db\Content;
 use App\Db\Page;
 use App\Helper\ViewToolbar;
 use App\Util\Pdf;
-use Bs\ControllerDomInterface;
+use Bs\ControllerPublic;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tk\Alert;
 use Tk\Uri;
 
-class View extends ControllerDomInterface
+class View extends ControllerPublic
 {
 
     protected ?Page        $wPage    = null;
@@ -41,11 +41,6 @@ class View extends ControllerDomInterface
                 Uri::create(Page::getHomeUrl())->redirect();
             }
         }
-
-//        if ($this->wPage->template) {
-//            $tplPath = $this->getSystem()->makePath(sprintf('/html/%s.html', $this->wPage->template));
-//            $this->setPage($this->getFactory()->createPage($tplPath));
-//        }
 
         $this->getPage()->setTitle($this->wPage->title);
         $this->wContent = $this->wPage->getContent();
@@ -79,10 +74,10 @@ class View extends ControllerDomInterface
             return $this->doPdf();
         }
 
-        Alert::addInfo('You are viewing revision ' . $this->wContent->contentId . ' <a href="'.$this->wPage->getPageUrl().'">click here</a> to return to current revision');
+        Alert::addInfo('You are viewing revision ' . $this->wContent->contentId .
+            ' <a href="'.$this->wPage->getPageUrl().'">click here</a> to return to current revision');
         $this->toolbar = new ViewToolbar($this->wPage);
 
-        //return $this->getPage();
     }
 
     public function doPdf()

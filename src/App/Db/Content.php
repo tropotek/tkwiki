@@ -118,7 +118,7 @@ class Content extends DbModel
         return Db::queryOne("
                 SELECT *
                 FROM content
-                WHERE page_id = :id
+                WHERE page_id = :pageId
                 ORDER BY created DESC
                 LIMIT 1",
             compact('pageId'),

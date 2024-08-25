@@ -2,54 +2,55 @@
 namespace App\Controller\Page;
 
 use App\Db\Content;
-use App\Db\ContentMap;
 use App\Db\Lock;
 use App\Db\Page;
-use App\Db\PageMap;
 use App\Helper\PageSelect;
 use App\Helper\SecretSelect;
-use Bs\PageController;
+use Bs\ControllerPublic;
+use Bs\Form;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
 use Tk\Alert;
-use Tk\Form;
-use Tk\Form\Field;
-use Tk\Form\Action;
-use Tk\Form\FormTrait;
+use Tk\Form\Action\Submit;
+use Tk\Form\Field\Checkbox;
+use Tk\Form\Field\Hidden;
+use Tk\Form\Field\Input;
+use Tk\Form\Field\InputButton;
+use Tk\Form\Field\Option;
+use Tk\Form\Field\Select;
+use Tk\Form\Field\Textarea;
 use Tk\Uri;
 
-class Edit extends PageController
+class Edit extends ControllerPublic
 {
-    use FormTrait;
 
-    protected ?Page $wPage = null;
-
+    protected ?Form    $form     = null;
+    protected ?Page    $wPage    = null;
     protected ?Content $wContent = null;
+    protected ?Lock    $lock     = null;
 
-    protected ?Lock $lock = null;
 
-
-    public function __construct()
+    public function doDefault()
     {
-        parent::__construct();
+        $referrer = trim($_SERVER['HTTP_REFERER'] ?? '');
+        $pageId   = intval($_GET['pageId'] ?? 0);
+        $pageUrl  = trim($_GET['u'] ?? '');
+        $delete   = intval($_GET['del'] ?? 0);
+
         $this->getPage()->setTitle('Edit Page');
         if (!$this->getFactory()->getAuthUser()) {
             Alert::addWarning('You are not logged in.');
             Uri::create(Page::getHomeUrl())->redirect();
         }
-    }
 
-    public function doDefault(Request $request)
-    {
-        $ref = Uri::create($request->server->get('HTTP_REFERER', ''))->getRelativePath();
+        $ref = Uri::create($referrer)->getRelativePath();
         if ($ref != '/pageManager') {
-            $this->getPage()->setCrumbEnabled(false);
+            $this->getPage()->setCrumbsEnabled(false);
         }
 
         $this->lock = new Lock($this->getAuthUser());
 
         // Find requested page
-        $this->wPage = PageMap::create()->find($request->query->get('pageId') ?? 0);
+        $this->wPage = Page::find($pageId);
 
         if ($this->wPage && !$this->wPage->canEdit($this->getAuthUser())) {
             Alert::addWarning('You do not have permissions to edit `' . $this->wPage->title . '`');
@@ -60,14 +61,14 @@ class Edit extends PageController
         }
 
         // Create a new page
-        if (!$this->wPage && $request->query->has('u') && Page::canCreate($this->getAuthUser())) {
+        if (!$this->wPage && $pageUrl && Page::canCreate($this->getAuthUser())) {
             $this->wPage = new Page();
-            $this->wPage->setUserId($this->getAuthUser()->getVolatileId());
-            $this->wPage->url = $request->get('u');
+            $this->wPage->userId = $this->getAuthUser()->userId;
+            $this->wPage->url = $pageUrl;
             $this->wPage->title = str_replace('_', ' ', $this->wPage->url);
             $this->wPage->permission = \App\Db\Page::PERM_PRIVATE;
             $this->wContent = new Content();
-            $this->wContent->setUserId($this->getAuthUser()->getUserId());
+            $this->wContent->userId = $this->getAuthUser()->userId;
         }
 
         if (!$this->wPage) {
@@ -94,8 +95,8 @@ class Edit extends PageController
             $url->redirect();
         }
 
-        if ($request->query->has('del')) {
-            $this->doDelete($request);
+        if ($delete) {
+            $this->doDelete($delete);
         }
 
         // Acquire page lock.
@@ -107,22 +108,22 @@ class Edit extends PageController
         }
 
         // Set the form
-        $this->setForm(Form::create('page'));
+        $this->form = new Form();
 
         $group = 'Details';
-        $this->getForm()->appendField(new Field\Hidden('pid'));
+        $this->form->appendField(new Hidden('pid'));
 
-        $this->getForm()->appendField(new Field\Input('title'))
+        $this->form->appendField(new Input('title'))
             ->setRequired()
             ->setGroup($group);
 
-        $this->getForm()->appendField(new Field\InputButton('category'))
+        $this->form->appendField(new InputButton('category'))
             ->setNotes('(Optional) Use page categories to group pages and allow them to show in the category listing widget')
             ->addBtnCss('fa fa-chevron-down')
             ->setGroup($group);
 
-        /** @var Field\Select $permission */
-        $permission = $this->getForm()->appendField(new Field\Select('permission', array_flip(Page::PERM_LIST)))
+        /** @var Select $permission */
+        $permission = $this->form->appendField(new Select('permission', array_flip(Page::PERM_LIST)))
             ->setRequired()
             ->setNotes('Select who can view/edit/delete this page. <a href="/Wiki_How_To#getting_started" target="_blank" title="Permission help">Permission help</a>')
             ->setGroup($group)
@@ -132,18 +133,18 @@ class Edit extends PageController
             $permission->setDisabled();
         }
 
-        $this->getForm()->appendField(new Field\Checkbox('titleVisible'))
+        $this->form->appendField(new Checkbox('titleVisible'))
             ->setLabel('')
-            ->addOnShowOption(function (\Dom\Template $template, \Tk\Form\Field\Option $option, $var) {
+            ->addOnShowOption(function (Template $template, Option $option, $var) {
                 $option->setName('Show Page Title');
             })
             ->setGroup($group);
 
-        $this->getForm()->appendField(new Field\Checkbox('published'))
+        $this->form->appendField(new Checkbox('published'))
             ->setLabel('')
             ->setGroup($group);
 
-        $this->getForm()->appendField(new Field\Textarea('html'))
+        $this->form->appendField(new Textarea('html'))
             ->addCss('mce')
             ->removeCss('form-control')
             ->setGroup($group);
@@ -151,46 +152,45 @@ class Edit extends PageController
         $group = 'Extra';
 
         $list = $this->getConfig()->get('wiki.templates', []);
-        $this->getForm()->appendField(new Field\Select('template', $list))
+        $this->form->appendField(new Select('template', $list))
             ->setRequired()
             ->setGroup($group)
             ->prependOption('-- Site Default --', '');
 
-        $this->getForm()->appendField(new Field\Input('keywords'))
+        $this->form->appendField(new Input('keywords'))
             ->setRequired()
             ->setGroup($group);
 
-        $this->getForm()->appendField(new Field\Input('description'))
+        $this->form->appendField(new Input('description'))
             ->setRequired()
             ->setGroup($group);
 
-        $this->getForm()->appendField(new Field\Textarea('js'))
+        $this->form->appendField(new Textarea('js'))
             ->setLabel('Page JavaScript')
             ->addCss('js-edit')
             ->setGroup($group);
 
-        $this->getForm()->appendField(new Field\Textarea('css'))
+        $this->form->appendField(new Textarea('css'))
             ->setLabel('Page Stylesheet')
             ->addCss('css-edit')
             ->setGroup($group);
 
-        $this->getForm()->appendField(new Action\Submit('save', [$this, 'onSubmit']));
-        $this->getForm()->appendField(new Action\Submit('cancel', [$this, 'onCancel']))
+        $this->form->appendField(new Submit('save', [$this, 'onSubmit']));
+        $this->form->appendField(new Submit('cancel', [$this, 'onCancel']))
             ->addCss('btn-outline-secondary');
 
-        $load = PageMap::create()->getFormMap()->getArray($this->wPage);
-        $this->getForm()->setFieldValues($load); // Use form data mapper if loading objects
-        $load = ContentMap::create()->getFormMap()->getArray($this->wContent);
-        $this->getForm()->setFieldValues($load); // Use form data mapper if loading objects
+        $load = $this->form->unmapValues($this->wPage);
+        //$load = PageMap::create()->getFormMap()->getArray($this->wPage);
+        $this->form->setFieldValues($load); // Use form data mapper if loading objects
+        $load = $this->form->unmapValues($this->wContent);
+        //$load = ContentMap::create()->getFormMap()->getArray($this->wContent);
+        $this->form->setFieldValues($load); // Use form data mapper if loading objects
 
-        $this->getForm()->execute($request->request->all());
+        $this->form->execute($_POST);
 
-        $this->setFormRenderer(new Form\Renderer\Dom\Renderer($this->getForm()));
-
-        return $this->getPage();
     }
 
-    public function onCancel(Form $form, Action\ActionInterface $action): void
+    public function onCancel(Form $form, Submit $action): void
     {
         $this->lock->unlock($this->wPage->pageId);
 
@@ -203,10 +203,13 @@ class Edit extends PageController
         $action->setRedirect($url);
     }
 
-    public function onSubmit(Form $form, Action\ActionInterface $action): void
+    public function onSubmit(Form $form, Submit $action): void
     {
-        PageMap::create()->getFormMap()->loadObject($this->wPage, $form->getFieldValues());
-        ContentMap::create()->getFormMap()->loadObject($this->wContent, $form->getFieldValues());
+//        PageMap::create()->getFormMap()->loadObject($this->wPage, $form->getFieldValues());
+//        ContentMap::create()->getFormMap()->loadObject($this->wContent, $form->getFieldValues());
+        // TODO: check this works as expected
+        $form->mapValues($this->wPage);
+        $form->mapValues($this->wContent);
 
         $form->addFieldErrors($this->wPage->validate());
         $form->addFieldErrors($this->wContent->validate());
@@ -245,15 +248,12 @@ class Edit extends PageController
         $action->setRedirect($url);
     }
 
-    public function doDelete(Request $request): void
+    public function doDelete($pageId): void
     {
-        /** @var Page $page */
-        $page = PageMap::create()->find($request->get('del'));
+        $page = Page::find($pageId);
         if ($page && $page->canDelete($this->getAuthUser())) {
             $page->delete();
-            // Redirect to homepage
-            $homeUrl = $this->wPage->getHomeUrl();
-            \Tk\Uri::create($homeUrl)->redirect();
+            \Tk\Uri::create($this->wPage->getHomeUrl())->redirect();
         }
         \Tk\Alert::addWarning('You do not have the permissions to delete this page.');
     }
@@ -269,14 +269,14 @@ class Edit extends PageController
         }
         $template->setAttr('back', 'href', $url);
 
-        //$this->getForm()->getField('title')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('category')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('permission')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('titleVisible')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('published')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('keywords')->addFieldCss('col-sm-6');
-        $this->getForm()->getField('description')->addFieldCss('col-sm-6');
-        $template->appendTemplate('content', $this->getFormRenderer()->show());
+        //$this->form->getField('title')->addFieldCss('col-sm-6');
+        $this->form->getField('category')->addFieldCss('col-sm-6');
+        $this->form->getField('permission')->addFieldCss('col-sm-6');
+        $this->form->getField('titleVisible')->addFieldCss('col-sm-6');
+        $this->form->getField('published')->addFieldCss('col-sm-6');
+        $this->form->getField('keywords')->addFieldCss('col-sm-6');
+        $this->form->getField('description')->addFieldCss('col-sm-6');
+        $template->appendTemplate('content', $this->form->show());
 
         $dialog = new PageSelect();
         $template->appendBodyTemplate($dialog->show());
@@ -317,7 +317,7 @@ jQuery(function($) {
     // Start page lock trigger
     var lockTimeout = 1000*60;     // 1000 = 1 sec
     function saveLock() {
-        $.getJSON(tkConfig.baseUrl + '/api/lock/refresh', {pid: pageId}, function(data) {});
+        $.getJSON(tkConfig.baseUrl + '/api/lock/refresh', {pid: pageId});
         setTimeout(saveLock, lockTimeout);
     }
     setTimeout(saveLock, lockTimeout);
@@ -331,8 +331,11 @@ jQuery(function($) {
     setTimeout(function () {
         $('form#page').data('serialize', $('form#page').serialize());
         $(window).on('beforeunload', function(e) {
-            if($('form#page').serialize() != $('form#page').data('serialize')) return true;
-            else e=null;
+            if($('form#page').serialize() !== $('form#page').data('serialize')) {
+                return true;
+            } else {
+                e = null;
+            }
         });
     }, 1000);
     $('button#page-cancel, button#page-save').on('click', function(){

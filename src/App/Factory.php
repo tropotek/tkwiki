@@ -13,7 +13,7 @@ use Tk\Uri;
 
 class Factory extends \Bs\Factory implements FactoryInterface
 {
-    public function createPage(string $templatePath = ''): Page
+    public function createDomPage(string $templatePath = ''): Page
     {
         return new Page($templatePath);
     }

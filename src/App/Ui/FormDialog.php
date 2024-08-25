@@ -4,7 +4,6 @@ namespace App\Ui;
 use App\Form\Secret;
 use Bs\Ui\Dialog;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * This class uses the bootstrap dialog box model

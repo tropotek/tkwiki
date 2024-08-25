@@ -6,6 +6,7 @@ use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\User;
 use Tt\DataMap\DataMap;
 use Tt\DataMap\Db\Date;
+use Tt\DataMap\Db\DateTime;
 use Tt\DataMap\Db\Integer;
 use Tt\DataMap\Db\Text;
 use Tt\DataMap\Db\TextEncrypt;
@@ -98,8 +99,8 @@ class Secret extends DbModel
         $map->addType(new TextEncrypt('otp'));
         $map->addType(new TextEncrypt('keys'));
         $map->addType(new TextEncrypt('notes'));
-        $map->addType(new Date('modified'));
-        $map->addType(new Date('created'));
+        $map->addType(new DateTime('modified'));
+        $map->addType(new DateTime('created'));
 
         self::$_MAPS[static::class] = $map;
         return $map;

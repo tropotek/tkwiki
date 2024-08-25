@@ -8,22 +8,21 @@ use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
+use Tt\Db;
+use Tt\DbFilter;
 
 class SecretSelect extends Renderer implements DisplayInterface
 {
     use SystemTrait;
 
-    protected \App\Table\SecretSelect $table;
-
     protected ?FormDialog $createDialog = null;
+    protected \App\Table\SecretSelect $table;
 
     public function __construct()
     {
         $this->table = new \App\Table\SecretSelect();
-        $this->table->doDefault($this->getRequest());
-        //$this->table->getTable()->resetTableSession();
+        $this->table->execute();
 
-        $tool = $this->table->getTable()->getTool('name', 10);
         $filter = [
             'published' => true,
             'permission' => Page::PERM_PUBLIC
@@ -37,19 +36,17 @@ class SecretSelect extends Renderer implements DisplayInterface
         if ($this->getFactory()->getAuthUser()->isAdmin()) {
             unset($filter['permission']);
         }
-        $filter = array_merge($this->table->getFilter()->getFieldValues(), $filter);
-        $list = SecretMap::create()->findFiltered($filter, $tool);
-
-        $this->table->execute($this->getRequest(), $list);
-
+        $filter = array_merge($this->table->getForm()->getFieldValues(), $filter);
+        $list = \App\Db\Secret::findFiltered(DbFilter::create($filter, 'name', 10));
+        $this->table->setRows($list, Db::getLastStatement()->getTotalRows());
 
         // Create form dialog
         $form = new Secret(new \App\Db\Secret());
         $form->setHtmx(true);
-        $form->init();
+        //$form->init();
         $this->createDialog = new FormDialog($form, 'Create Secret', 'secret-create-dialog');
         $this->createDialog->init();
-        $this->createDialog->execute($this->getRequest());
+        $this->createDialog->execute();
 
     }
 
@@ -60,7 +57,7 @@ class SecretSelect extends Renderer implements DisplayInterface
         $template->appendTemplate('dialogs', $this->createDialog->show());
         $template->appendTemplate('table', $this->table->show());
 
-        $template->setAttr('user-id', 'data-user-id', $this->getFactory()->getAuthUser()->getUserId());
+        $template->setAttr('user-id', 'data-user-id', $this->getFactory()->getAuthUser()->userId);
 
         // Add a select wiki page button to the tinyMCE editor.
         $js = <<<JS

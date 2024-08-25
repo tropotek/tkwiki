@@ -6,6 +6,8 @@ use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
+use Tt\Db;
+use Tt\DbFilter;
 
 class PageSelect extends Renderer implements DisplayInterface
 {
@@ -16,9 +18,8 @@ class PageSelect extends Renderer implements DisplayInterface
     public function __construct()
     {
         $this->table = new \App\Table\PageSelect();
-        $this->table->doDefault($this->getRequest());
-        //$this->table->getTable()->resetTableSession();
-        $tool = $this->table->getTable()->getTool('title', 10);
+        $this->table->execute();
+
         $filter = [
             'published' => true,
             'permission' => Page::PERM_PUBLIC
@@ -33,11 +34,9 @@ class PageSelect extends Renderer implements DisplayInterface
             unset($filter['permission']);
         }
 
-        $filter = array_merge($this->table->getFilter()->getFieldValues(), $filter);
-
-        $list = Page::findFiltered($filter);
-        //$list = PageMap::create()->findFiltered($filter, $tool);
-        $this->table->execute($this->getRequest(), $list);
+        $filter = array_merge($this->table->getForm()->getFieldValues(), $filter);
+        $list = Page::findFiltered(DbFilter::create($filter, 'title', 10));
+        $this->table->setRows($list, Db::getLastStatement()->getTotalRows());
 
     }
 
@@ -137,7 +136,6 @@ jQuery(function($) {
 JS;
         $template->appendJs($js);
         $template->appendTemplate('table', $this->table->show());
-
 
         return $template;
     }

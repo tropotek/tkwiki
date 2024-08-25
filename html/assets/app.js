@@ -89,7 +89,7 @@ let app = function () {
       let id = el.data('id');
       if (id) {
         el.removeAttr('data-id');
-        $.get(config.baseUrl + '/api/secret/pass', {id}, function (data) {
+        $.get(tkConfig.baseUrl + '/api/secret/pass', {id}, function (data) {
           el.data('text', data.p);
           callback.apply(el, [data]);
         }, 'json');
@@ -153,7 +153,7 @@ let app = function () {
       let path = data.elfinderPath ?? '/media';
       return new tinymceElfinder({
         // connector URL (Use elFinder Demo site's connector for this demo)
-        url: config.vendorOrgUrl + '/tk-base/assets/js/elfinder/connector.minimal.php?path='+ path,
+        url: tkConfig.vendorOrgUrl + '/tk-base/assets/js/elfinder/connector.minimal.php?path='+ path,
         // upload target folder hash for this tinyMCE
         uploadTargetHash: 'l1_lw',
         // elFinder dialog node id
@@ -168,18 +168,19 @@ let app = function () {
       plugins: [
         'advlist', 'save', 'autolink', 'lists', 'link', 'anchor', 'image', 'media', 'charmap', 'preview',
         'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-        'insertdatetime', 'media', 'table', 'help', 'wordcount', 'codesample', 'template'
+        'insertdatetime', 'media', 'table', 'help', 'wordcount', 'codesample'
+        // unavailable in v7: , 'template'
       ],
       toolbar1:
         'save wikiPage wikiSecret | bold italic strikethrough | blocks | alignleft aligncenter ' +
         'alignright alignjustify | bullist numlist outdent indent | codesample link image media | removeformat code fullscreen',
       content_css: [
         '//cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
-        config.baseUrl + '/html/assets/app.css'
+        tkConfig.baseUrl + '/html/assets/app.css'
       ],
       content_style: 'body {padding: 15px;}',
       contextmenu: 'link image template inserttable | cell row column deletetable',
-      //image_prepend_url: config.baseUrl,
+      //image_prepend_url: tkConfig.baseUrl,
       //a11y_advanced_options: true,
       image_advtab: true,
       statusbar: false,
@@ -189,9 +190,9 @@ let app = function () {
         $('#page-save', tinymce.activeEditor.formElement).trigger('click');
       },
       urlconverter_callback : function (url, node, on_save) {
-        let parts = url.split(config.baseUrl);
-        if (config.baseUrl && parts.length > 1) {
-          url = config.baseUrl + parts[1];
+        let parts = url.split(tkConfig.baseUrl);
+        if (tkConfig.baseUrl && parts.length > 1) {
+          url = tkConfig.baseUrl + parts[1];
         }
         return url;
       },
@@ -209,7 +210,7 @@ let app = function () {
 
         // Button to create/insert a secret record
         // See \App\Helper\SecretSelect object for more info
-        if (config.enableSecretMod) {
+        if (tkConfig.enableSecretMod) {
           editor.ui.registry.addButton('wikiSecret', {
             icon: 'lock',
             tooltip: 'Add/Insert Secret Content',
@@ -222,7 +223,7 @@ let app = function () {
           // TODO: We should modify the dialog to handle edit and add secrets
           editor.on('init', function () {
             $(editor.getDoc()).on('dblclick', 'img.wk-secret', function () {
-              window.open(config.baseUrl + '/secretEdit?secretId=' + $(this).attr('wk-secret'), '_blank');
+              window.open(tkConfig.baseUrl + '/secretEdit?secretId=' + $(this).attr('wk-secret'), '_blank');
             });
             editor.getBody().setAttribute('spellcheck', true);
           });

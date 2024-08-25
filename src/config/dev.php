@@ -19,18 +19,6 @@ if (!$config->isDebug()) {
 }
 
 foreach (User::findAll() as $user) {
-    $user->setPassword(User::hashPassword('password', PASSWORD_DEFAULT));
+    $user->password = User::hashPassword('password');
     $user->save();
 }
-
-/*
--- --------------------------------------
--- Change all passwords to 'password' for debug mode
--- --------------------------------------
-
--- Salted
--- UPDATE `user` SET `password` = MD5(CONCAT('password', `hash`));
-
--- Unsalted
--- UPDATE `user` SET `password` = MD5('password');
-*/

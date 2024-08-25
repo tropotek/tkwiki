@@ -1,21 +1,24 @@
 <?php
 namespace App\Form;
 
-use Bs\Form\EditInterface;
+use Bs\Form;
 use Dom\Template;
 use Tk\Alert;
-use Tk\Form;
-use Tk\Form\Field;
-use Tk\Form\Action;
+use Tk\Form\Action\Link;
+use Tk\Form\Action\Submit;
+use Tk\Form\Action\SubmitExit;
+use Tk\Form\Field\Hidden;
+use Tk\Form\Field\Input;
+use Tk\Form\Field\Password;
+use Tk\Form\Field\Select;
+use Tk\Form\Field\Textarea;
 use Tk\Uri;
 
-class Secret extends EditInterface
+class Secret extends Form
 {
-
     protected bool $htmx = false;
 
-
-    protected function initFields(): void
+    public function init(): static
     {
         // Enable HTMX
         if ($this->isHtmx()) {
@@ -28,60 +31,65 @@ class Secret extends EditInterface
         }
 
         $tab = 'Details';
-        $this->appendField(new Field\Hidden('secretId'));
+        $this->appendField(new Hidden('secretId'));
 
-        $this->appendField(new Field\Input('name'))
+        $this->appendField(new Input('name'))
             ->setGroup($tab);
 
-        /** @var Field\Select $permission */
-        $this->appendField(new Field\Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
+        /** @var Select $permission */
+        $this->appendField(new Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
             ->setGroup($tab)
             ->setRequired()
             ->prependOption('-- Select --', '');
 
-        $this->appendField(new Field\Input('url'))
+        $this->appendField(new Input('url'))
             ->setGroup($tab);
 
-        $this->appendField(new Field\Input('username'))
+        $this->appendField(new Input('username'))
             ->setGroup($tab);
 
-        $this->appendField(new Field\Password('password'))
+        $this->appendField(new Password('password'))
             ->setGroup($tab);
 
-        $this->appendField(new Field\Input('otp'))
+        $this->appendField(new Input('otp'))
             ->setGroup($tab)
             ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
 
 
         $tab = 'Extra';
-        $this->appendField(new Field\Textarea('keys'))
+        $this->appendField(new Textarea('keys'))
             ->setGroup($tab);
 
-        $this->appendField(new Field\Textarea('notes'))
+        $this->appendField(new Textarea('notes'))
             ->setGroup($tab);
 
 
         if ($this->isHtmx()) {
-            $this->appendField(new Action\Submit('insert', [$this, 'onSubmit']));
+            $this->appendField(new Submit('insert', [$this, 'onSubmit']));
         } else {
-            $this->appendField(new Action\SubmitExit('save', [$this, 'onSubmit']));
+            $this->appendField(new SubmitExit('save', [$this, 'onSubmit']));
         }
-        $this->appendField(new Action\Link('cancel', Uri::create($this->getFactory()->getBackUrl())));
+        $this->appendField(new Link('cancel', Uri::create($this->getFactory()->getBackUrl())));
 
+        return $this;
     }
 
     public function execute(array $values = []): static
     {
-        $load = $this->getSecret()->getMapper()->getFormMap()->getArray($this->getSecret());
+        $this->init();
+
+        $load = $this->form->unmapValues($this->getSecret());
         $load['secretId'] = $this->getSecret()->secretId;
         $this->getForm()->setFieldValues($load);
+
         parent::execute($values);
+
         return $this;
     }
 
-    public function onSubmit(Form $form, Action\ActionInterface $action): void
+    public function onSubmit(Form $form, Submit $action): void
     {
-        $this->getSecret()->getMapper()->getFormMap()->loadObject($this->getSecret(), $form->getFieldValues());
+        $form->mapValues($this->getSecret());
 
         $form->addFieldErrors($this->getSecret()->validate());
         if ($form->hasErrors()) {
@@ -113,16 +121,18 @@ class Secret extends EditInterface
         $this->getField('keys')->setAttr('style', 'height: 20em;');
         $this->getField('notes')->setAttr('style', 'height: 20em;');
 
-        $renderer = $this->getFormRenderer();
-        $renderer->addFieldCss('mb-3');
+        $renderer = $this->getRenderer();
+        $renderer?->addFieldCss('mb-3');
 
-        return $renderer->show();
+        return $renderer?->show();
     }
 
 
     public function getSecret(): ?\App\Db\Secret
     {
-        return $this->getModel();
+        /** @var \App\Db\Secret $obj */
+        $obj = $this->getModel();
+        return $obj;
     }
 
     public function isHtmx(): bool

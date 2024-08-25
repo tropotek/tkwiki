@@ -4,6 +4,7 @@ namespace App;
 use App\Controller\Menu\View;
 use App\Helper\Navigation;
 use Bs\Ui\Dialog;
+use Dom\Modifier\JsLast;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Uri;
@@ -19,7 +20,7 @@ class Page extends \Bs\Page
         $js = <<<JS
 tkConfig.enableSecretMod = {$secretEnabled};
 JS;
-        $template->appendJs($js, array('data-jsl-priority' => -1000));
+        $template->appendJs($js, array(JsLast::$ATTR_PRIORITY => -9990));
 
         $template->setText('site-name', $this->getRegistry()->get('site.name.short', ''));
         $template->appendMetaTag('keywords', $this->getRegistry()->get('system.meta.keywords', ''));
@@ -33,10 +34,10 @@ JS;
         $this->showAlert();
 
         // public page
-        if ($this->getType() == self::TEMPLATE_PUBLIC) {
-            $this->showMenu();
-            $this->showCreatePageDialog();
-        }
+        // TODO Check user permissions for elements to display
+        $this->showMenu();
+        $this->showCreatePageDialog();
+
         $this->showCrumbs();
 
         if ($this->getFactory()->getAuthUser()) {

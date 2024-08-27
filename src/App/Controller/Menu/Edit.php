@@ -72,7 +72,7 @@ class Edit extends PageController
 
             $data = [
                 'menuItemId' => $item->menuItemId,
-                'pageId' => $item->pageId ?? 0,
+                'pageId' => $item->pageId,
                 'name' => $item->name,
                 'type' => $item->type,
             ];

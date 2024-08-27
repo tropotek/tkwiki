@@ -29,7 +29,7 @@ class Edit extends ControllerPublic
     protected ?Lock    $lock     = null;
 
 
-    public function doDefault()
+    public function doDefault(): void
     {
         $referrer = trim($_SERVER['HTTP_REFERER'] ?? '');
         $pageId   = intval($_GET['pageId'] ?? 0);

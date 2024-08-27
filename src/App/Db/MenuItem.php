@@ -22,6 +22,28 @@ class MenuItem extends DbModel
     public string $name       = '';
 
 
+    public function save(): void
+    {
+        $map = static::getDataMap();
+        $values = $map->getArray($this);
+
+        if ($this->menuItemId) {
+            $values['menu_item_id'] = $this->menuItemId;
+            Db::update('menu_item', 'menu_item_id', $values);
+        } else {
+            unset($values['menu_item_id']);
+            Db::insert('menu_item', $values);
+            $this->menuItemId = Db::getLastInsertId();
+        }
+
+        $this->reload();
+    }
+
+    public function delete(): bool
+    {
+        return (false !== Db::delete('menu_item', ['menu_item_id' => $this->menuItemId]));
+    }
+
     /**
      * Find all page links and add them to the links table
      * so we can track orphaned pages
@@ -63,6 +85,16 @@ class MenuItem extends DbModel
 
     public static function findByParentId(int $parentId): array
     {
+        if ($parentId == 0) {
+            return Db::query("
+                SELECT *
+                FROM menu_item
+                WHERE parent_id IS NULL
+                ORDER BY order_id",
+                [],
+                self::class
+            );
+        }
         return Db::query("
             SELECT *
             FROM menu_item

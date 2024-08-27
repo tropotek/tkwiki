@@ -8,6 +8,7 @@ use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
 use Tk\Uri;
+use Tt\Db;
 
 /**
  * An object to manage and display the wiki Page header

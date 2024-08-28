@@ -22,7 +22,7 @@ class Settings extends ControllerPublic
 
     protected ?Form  $form = null;
 
-    public function doDefault()
+    public function doDefault(): void
     {
         $this->getPage()->setTitle('Edit Settings');
         $this->setAccess(Permissions::PERM_SYSADMIN);
@@ -157,7 +157,6 @@ class Settings extends ControllerPublic
         ) + $_POST; // keep the original post values for the events
 
         $this->form->execute($values);
-
     }
 
     public function onSubmit(Form $form, SubmitExit $action): void
@@ -187,10 +186,14 @@ class Settings extends ControllerPublic
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
+        $template->setAttr('back', 'href', $this->getBackUrl());
 
         $this->form->getField('site.name')->addFieldCss('col-6');
         $this->form->getField('site.name.short')->addFieldCss('col-6');
         $this->form->getRenderer()->addFieldCss('mb-3');
+
+        $template->setVisible('staff', $this->getAuthUser()->hasPermission(Permissions::PERM_MANAGE_STAFF));
+        $template->setVisible('member', $this->getAuthUser()->hasPermission(Permissions::PERM_MANAGE_MEMBERS));
 
         $template->appendTemplate('content', $this->form->show());
 
@@ -201,10 +204,12 @@ class Settings extends ControllerPublic
     {
         $html = <<<HTML
 <div>
-  <div class="card mb-3">
+  <div class="page-actions card mb-3">
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
       <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
+      <a href="/user/staffManager" title="Manage Staff" class="btn btn-outline-secondary"><i class="fa fa-fw fa-users" choice="staff"></i> Staff</a>
+      <a href="/user/memberManager" title="Manage Members" class="btn btn-outline-secondary"><i class="fa fa-fw fa-users" choice="member"></i> Members</a>
     </div>
   </div>
   <div class="card mb-3">

@@ -35,6 +35,7 @@ class Factory extends \Bs\Factory implements FactoryInterface
 
     /**
      * get the breadcrumb storage object
+     * @todo: the crumbs have Login as the home link, look into it!
      */
     public function getCrumbs(): ?Crumbs
     {
@@ -42,7 +43,15 @@ class Factory extends \Bs\Factory implements FactoryInterface
         if (!$this->has($id)) {
             $crumbs = $_SESSION[$id] ?? null;
             // Reset crumbs if wiki home page has been updated
-            if ($crumbs && Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath() != $crumbs->getHomeUrl()) {
+            $rel = Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath();
+            $resetUrls = [
+                \App\Db\Page::getHomeUrl(),
+                '/login',
+                '/logout'
+            ];
+
+            //if ($crumbs && Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath() == \App\Db\Page::getHomeUrl()) {
+            if ($crumbs && in_array($rel, $resetUrls)) {
                 $crumbs = null;
             }
             if (!$crumbs instanceof Crumbs) {

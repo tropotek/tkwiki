@@ -1401,12 +1401,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "00574b88d11f100bd057a87f9ed42ebb7e1354e9"
+                "reference": "29ae82433e76d5a428c3864b502f22dbc3ddbe6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/00574b88d11f100bd057a87f9ed42ebb7e1354e9",
-                "reference": "00574b88d11f100bd057a87f9ed42ebb7e1354e9",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/29ae82433e76d5a428c3864b502f22dbc3ddbe6d",
+                "reference": "29ae82433e76d5a428c3864b502f22dbc3ddbe6d",
                 "shasum": ""
             },
             "require": {
@@ -1468,7 +1468,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-06T10:13:58+00:00"
+            "time": "2024-08-27T06:39:40+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -2744,12 +2744,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "ebca244e93490f9c61047834723323610d2a05c6"
+                "reference": "a2fc900371c350141e464e376b9193dcd2a0360f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/ebca244e93490f9c61047834723323610d2a05c6",
-                "reference": "ebca244e93490f9c61047834723323610d2a05c6",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/a2fc900371c350141e464e376b9193dcd2a0360f",
+                "reference": "a2fc900371c350141e464e376b9193dcd2a0360f",
                 "shasum": ""
             },
             "require": {
@@ -2907,12 +2907,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "8eea4b11f52de3898c0305fa9fc4422d0836013f"
+                "reference": "5194017e4b380511acab4ec93cec245c2e4cb9d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/8eea4b11f52de3898c0305fa9fc4422d0836013f",
-                "reference": "8eea4b11f52de3898c0305fa9fc4422d0836013f",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/5194017e4b380511acab4ec93cec245c2e4cb9d7",
+                "reference": "5194017e4b380511acab4ec93cec245c2e4cb9d7",
                 "shasum": ""
             },
             "require": {
@@ -3526,12 +3526,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/pcre.git",
-                "reference": "7cafee339d355a7a2623180d3817f51265daf8d0"
+                "reference": "63aaeac21d7e775ff9bc9d45021e1745c97521c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/pcre/zipball/7cafee339d355a7a2623180d3817f51265daf8d0",
-                "reference": "7cafee339d355a7a2623180d3817f51265daf8d0",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/63aaeac21d7e775ff9bc9d45021e1745c97521c4",
+                "reference": "63aaeac21d7e775ff9bc9d45021e1745c97521c4",
                 "shasum": ""
             },
             "require": {
@@ -3598,7 +3598,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-23T14:08:28+00:00"
+            "time": "2024-08-27T18:44:43+00:00"
         },
         {
             "name": "composer/semver",

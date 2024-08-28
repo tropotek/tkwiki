@@ -14,10 +14,6 @@ class Navigation extends Renderer implements DisplayInterface
     use SystemTrait;
 
 
-    public function __construct()
-    {
-    }
-
     public function show(): ?Template
     {
         $template = $this->getTemplate();
@@ -33,9 +29,6 @@ class Navigation extends Renderer implements DisplayInterface
 <ul var="nav">
   <li><a class="dropdown-item" href="/profile">My Profile</a></li>
   <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
-  <li><a class="dropdown-item" href="/user/manager" app-has-perm="PERM_ADMIN">Users</a></li>
-<!--  <li><a class="dropdown-item" href="/user/staffManager" app-has-perm="PERM_MANAGE_STAFF">Staff</a></li>-->
-<!--  <li><a class="dropdown-item" href="/user/userManager" app-has-perm="PERM_MANAGE_USER | PERM_MANAGE_STAFF">Users</a></li>-->
   <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_EDITOR">Wiki Pages</a></li>
   <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_EDITOR">Orphaned Pages</a></li>
   <li><a class="dropdown-item" href="/menuEdit" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Menu Edit</a></li>

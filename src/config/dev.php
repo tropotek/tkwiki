@@ -13,7 +13,7 @@ use Bs\Db\User;
 
 $config = \Tk\Config::instance();
 
-if (!$config->isDebug()) {
+if (!$config->isDebug() || $config->isProd()) {
     error_log(__FILE__ . ': Do not execute this file in a production environment!');
     return;
 }

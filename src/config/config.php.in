@@ -70,6 +70,12 @@ return function (Config $config) {
      */
     //$config['php.date.timezone']    = 'Australia/Melbourne';
 
+    /**
+     * Set default home page urls for users
+     * (None required for the wiki)
+     */
+    $config['user.homepage'] = [];
+
     /*
      * Email template relative path
      */

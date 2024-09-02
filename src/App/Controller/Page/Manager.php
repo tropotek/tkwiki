@@ -1,41 +1,42 @@
 <?php
 namespace App\Controller\Page;
 
-use App\Db\User;
-use Bs\PageController;
-use Bs\Table\ManagerTrait;
+use App\Db\Permissions;
+use App\Table\Page;
+use Bs\ControllerPublic;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
+use Tt\Db;
+use Tt\DbFilter;
 
-class Manager extends PageController
+class Manager extends ControllerPublic
 {
-    use ManagerTrait;
 
+    protected ?Page $table = null;
 
-    public function __construct()
+    public function doDefault(): void
     {
-        parent::__construct();
         $this->getPage()->setTitle('Page Manager');
-        $this->setAccess(User::PERM_EDITOR);
+        $this->setAccess(Permissions::PERM_EDITOR);
         $this->getCrumbs()->reset();
-    }
 
-    public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
-    {
-        $this->setTable(new \App\Table\Page());
-        $this->getTable()->init();
-        $this->getTable()->findList([], $this->getTable()->getTool('title'));
-        $this->getTable()->execute($request);
+        $this->table = new \App\Table\Page();
+        $this->table->execute();
 
-        return $this->getPage();
+        // Set the table rows
+        $filter = $this->table->getDbFilter();
+        $rows = \App\Db\Page::findFiltered(DbFilter::create($filter, 'title'));
+
+        $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());
+
     }
 
     public function show(): ?Template
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
+        $template->setAttr('back', 'href', $this->getBackUrl());
 
-        $template->appendTemplate('content', $this->getTable()->show());
+        $template->appendTemplate('content', $this->table->show());
 
         return $template;
     }

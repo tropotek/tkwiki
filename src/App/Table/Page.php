@@ -1,41 +1,103 @@
 <?php
 namespace App\Table;
 
-use App\Db\PageMap;
-use Bs\Table\ManagerInterface;
+use Bs\Table;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
-use Tk\Alert;
-use Tk\Db\Mapper\Result;
-use Tk\Db\Tool;
-use Tk\Ui\Link;
+use Tk\Form\Field\Input;
+use Tk\Form\Field\Select;
 use Tk\Uri;
-use Tk\Form\Field;
-use Tk\Table\Cell;
-use Tk\Table\Action;
+use Tt\Db;
+use Tt\Table\Action\Delete;
+use Tt\Table\Cell;
+use Tt\Table\Cell\RowSelect;
 
-class Page extends ManagerInterface
+class Page extends Table
 {
 
-    public function initCells(): void
+    public function init(): static
     {
-        //$this->resetTableSession();
-        $this->appendCell(new Cell\RowSelect('pageId'));
-        $this->appendCell(new Cell\Text('actions'))
-            ->addOnShow(function (Cell\Text $cell, string $html) {
-                $cell->addCss('text-nowrap text-center');
-                $obj = $cell->getRow()->getData();
+        $rowSelect = RowSelect::create('id', 'userId');
+        $this->appendCell($rowSelect);
 
-                $template = $cell->getTemplate();
-                $btn = new Link('WikiLink');
-                $btn->setText('');
-                $btn->setIcon('fa fa-fw fa-code');
-                $btn->addCss('btn btn-outline-secondary btn-copy-code');
-                $btn->setAttr('title', 'Click to copy wiki link');
-                $btn->setAttr('data-page-id', $obj->getPageId());
-                $template->appendTemplate('td', $btn->show());
-                //$template->appendHtml('td', '&nbsp;');
-                $js = <<<JS
+        $this->appendCell('actions')
+            ->addCss('text-nowrap text-center')
+            ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
+                return <<<HTML
+                    <a class="btn btn-outline-secondary btn-copy-code" href="javascript:;" data-page-id="{$page->pageId}" title="Click to copy wiki link"><i class="fa fa-fw fa-code"></i></a>
+                HTML;
+            });
+
+        $this->appendCell('title')
+            ->addCss('text-nowrap')
+            ->addHeaderCss('max-width')
+            ->setSortable(true)
+            ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
+                $url = Uri::create('/edit', ['pageId' => $page->pageId]);
+                return sprintf('<a href="%s">%s</a>', $url, $page->title);
+            });
+
+        $this->appendCell('category')
+            ->addCss('text-nowrap')
+            ->setSortable(true);
+
+        $this->appendCell('url')
+            ->addCss('text-nowrap')
+            ->setSortable(true);
+
+        $this->appendCell('published')
+            ->addCss('text-nowrap')
+            ->setSortable(true)
+            ->addOnValue('\Tt\Table\Type\Boolean::onValue');
+
+        $this->appendCell('permission')
+            ->addCss('text-nowrap')
+            ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
+                return $page->getPermissionLabel();
+            });
+
+        $this->appendCell('userId')
+            ->addCss('text-nowrap')
+            ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
+                return $page->getUser()->getName();
+            });
+
+        $this->appendCell('modified')
+            ->addCss('text-nowrap')
+            ->setSortable(true)
+            ->addOnValue('\Tt\Table\Type\DateFmt::onValue');
+
+        $this->appendCell('created')
+            ->addCss('text-nowrap')
+            ->setSortable(true)
+            ->addOnValue('\Tt\Table\Type\DateFmt::onValue');
+
+
+        // Add Filter Fields
+        $this->getForm()->appendField(new Input('search'))
+            ->setAttr('placeholder', 'Search: name');
+
+        $list = \App\Db\Page::getCategoryList();
+        $this->getForm()->appendField(new Select('active', $list))->prependOption('-- Category -- ', '');
+
+        // init filter fields for actions to access to the filter values
+        $this->initForm();
+
+        // Add Table actions
+        $this->appendAction(Delete::create($rowSelect))
+            ->addOnDelete(function(Delete $action, array $selected) {
+                foreach ($selected as $page_id) {
+                    Db::delete('page', compact('page_id'));
+                }
+            });
+
+        return $this;
+    }
+
+    public function show(): ?Template
+    {
+        $template = parent::show();
+
+        $js = <<<JS
 jQuery(function($) {
 
     $('.btn-copy-code').on('click', function () {
@@ -48,75 +110,8 @@ jQuery(function($) {
 
 });
 JS;
-                $template->appendJs($js);
-
-                return '';
-            });
-        $this->appendCell(new Cell\Text('title'))
-            ->addCss('key')
-            ->setUrlProperty('pageId')
-            ->setUrl(Uri::create('/edit'));
-        $this->appendCell(new Cell\Text('category'));
-        $this->appendCell(new Cell\Text('url'));
-        $this->appendCell(new Cell\Boolean('published'));
-        $this->appendCell(new Cell\Text('permission'))
-            ->addOnValue(function (Cell\Text $cell) {
-                /** @var \App\Db\Page $page */
-                $page = $cell->getRow()->getData();
-                $cell->setValue($page->getPermissionLabel());
-            });
-        $this->appendCell(new Cell\Text('userId'))
-            ->addOnValue(function (Cell\Text $cell) {
-                /** @var \App\Db\Page $page */
-                $page = $cell->getRow()->getData();
-                $cell->setValue($page->getUser()->getName());
-            });
-        $this->appendCell(new Cell\Date('modified'));
-        $this->appendCell(new Cell\Date('created'));
-
-
-        // Table filters
-        $this->getFilterForm()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
-
-        $list = \App\Db\Page::getCategoryList();
-        $this->getFilterForm()->appendField(new Field\Select('category', $list))->prependOption('-- Category -- ', '');
-
-        // Table Actions
-        if ($this->getFactory()->getAuthUser()->hasPermission(\App\Db\User::PERM_SYSADMIN)) {
-            $this->appendAction(new Action\Delete('delete', 'pageId'))
-                ->addOnDelete(function (Action\Delete $action, \App\Db\Page $obj) {
-                    if (!$obj->canDelete($this->getFactory()->getAuthUser())) {
-                        Alert::addWarning('You do not have permission to delete this page.');
-                        return false;
-                    }
-                });
-        }
-        $this->appendAction(new Action\Csv('csv', 'pageId'))->addExcluded('actions');
-
-    }
-
-    public function execute(Request $request): static
-    {
-        return parent::execute($request);
-    }
-
-    public function findList(array $filter = [], ?Tool $tool = null): null|array|Result
-    {
-        if (!$tool) $tool = $this->getTool();
-        $filter = array_merge($this->getFilterForm()->getFieldValues(), $filter);
-
-        $list = \App\Db\Page::findFiltered($filter);
-        //$list = PageMap::create()->findFiltered($filter, $tool);
-        $this->setList($list);
-        return $list;
-    }
-
-    public function show(): ?Template
-    {
-        $renderer = $this->getTableRenderer();
-        $this->getRow()->addCss('text-nowrap');
-        $this->showFilterForm();
-        return $renderer->show();
+        $template->appendJs($js);
+        return $template;
     }
 
 }

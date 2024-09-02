@@ -38,7 +38,7 @@ class View extends ControllerPublic
         } else {
             if (!$this->wPage->canView($this->getFactory()->getAuthUser())) {
                 Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
-                Uri::create(Page::getHomeUrl())->redirect();
+                Uri::create(Page::getHome())->redirect();
             }
         }
 

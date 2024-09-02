@@ -2,11 +2,9 @@
 namespace App\Controller\Menu;
 
 use App\Db\MenuItem;
-use App\Db\MenuItemMap;
-use App\Db\PageMap;
 use App\Db\Permissions;
 use App\Helper\PageSelect;
-use Bs\PageController;
+use Bs\ControllerPublic;
 use Bs\Ui\Dialog;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,20 +16,13 @@ use Tk\Uri;
 /**
  * @see https://github.com/ilikenwf/nestedSortable/tree/v2.0.0
  */
-class Edit extends PageController
+class Edit extends ControllerPublic
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->getPage()->setTitle('Edit Menu');
-        $this->setAccess(Permissions::PERM_SYSADMIN | Permissions::PERM_EDITOR);
-        $this->getCrumbs()->reset();
-    }
 
     public function doDefault(Request $request)
     {
-        switch ($request->request->get('action')) {
+        switch ($_GET['action'] ?? '') {
             case 'create':
                 return $this->doCreate($request);
             case 'update':
@@ -40,7 +31,11 @@ class Edit extends PageController
                 return $this->doDelete($request);
         }
 
-        return $this->getPage();
+        $this->getPage()->setTitle('Edit Menu');
+        $this->setAccess(Permissions::PERM_SYSADMIN | Permissions::PERM_EDITOR);
+        $this->getCrumbs()->reset();
+
+       //return $this->getPage();
     }
 
     public function doCreate(Request $request): JsonResponse
@@ -54,7 +49,7 @@ class Edit extends PageController
             $item->type = $type;
 
             if ($type == MenuItem::TYPE_ITEM) {
-                $page = PageMap::create()->find($pageId);
+                $page = Page::find($pageId);
                 if (!$page) {
                     throw new Exception('Invalid page id: ' . $pageId);
                 }
@@ -107,7 +102,7 @@ class Edit extends PageController
     {
         try {
             $menuItemId = $request->request->getInt('id');
-            $item = MenuItemMap::create()->find($menuItemId);
+            $item = MenuItem::find($menuItemId);
             $item?->delete();
             MenuItem::indexLinks();
             return new JsonResponse([ 'status' => 'ok' ]);
@@ -294,7 +289,6 @@ JS;
     private function showMenu(int $parentId = 0): string
     {
         $items = MenuItem::findByParentId($parentId);
-        //$items = MenuItemMap::create()->findByParentId($parentId, Tool::create('order_id'));
         $css = '';
         if ($parentId == 0) {
             $css = ' class="menu-list sortable"';
@@ -318,7 +312,7 @@ HTML;
 
             } elseif ($item->isType(MenuItem::TYPE_DIVIDER)) {
                 $ul .= <<<HTML
-<li id="item-{$item->getId()}" data-item-id="{$item->menuItemId}" data-page-id="0" data-type="{$item->type}" class="mjs-nestedSortable-no-nesting">
+<li id="item-{$item->menuItemId}" data-item-id="{$item->menuItemId}" data-page-id="0" data-type="{$item->type}" class="mjs-nestedSortable-no-nesting">
   <i class="fa fa-fw fa-ellipsis-vertical"></i>
   <a href="javascript:;" contentEditable="true">{$item->name}</a>
   <b class="fa fa-fw fa-trash text-danger float-end"></b>
@@ -327,7 +321,7 @@ HTML;
 
             } else {
                 $ul .= <<<HTML
-<li id="item-{$item->getId()}" data-item-id="{$item->menuItemId}" data-page-id="{$item->pageId}" data-type="{$item->type}" class="mjs-nestedSortable-no-nesting">
+<li id="item-{$item->menuItemId}" data-item-id="{$item->menuItemId}" data-page-id="{$item->pageId}" data-type="{$item->type}" class="mjs-nestedSortable-no-nesting">
   <i class="fa fa-fw fa-ellipsis-vertical"></i>
   <a href="javascript:;" contentEditable="true">{$item->name}</a>
   <b class="fa fa-fw fa-trash text-danger float-end"></b>

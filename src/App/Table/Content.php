@@ -40,7 +40,7 @@ class Content
         $this->page = PageMap::create()->find($request->query->getInt('pageId'));
         if (!$pageId) {
             Alert::addWarning('Invalid page id: ' . $pageId);
-            \App\Db\Page::homeUrl()->redirect();
+            \App\Db\Page::getHomeUrl()->redirect();
         }
         if ($request->query->has('r')) {
             $this->doRevert($request);

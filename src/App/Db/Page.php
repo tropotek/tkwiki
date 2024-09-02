@@ -91,7 +91,7 @@ class Page extends DbModel
     public function delete(): bool
     {
         // do not delete first page and first menu item
-        if ($this->url == self::getHomeUrl()) {
+        if ($this->url == self::getHome()) {
             return false;
         }
 
@@ -150,14 +150,14 @@ class Page extends DbModel
     }
 
     // todo refactor these to a single method, be sure to update the delete() method
-    public static function getHomeUrl(): string
+    public static function getHome(): string
     {
         return Factory::instance()->getRegistry()->get('wiki.page.default', '');
     }
 
-    public static function homeUrl(): Uri
+    public static function getHomeUrl(): Uri
     {
-        return Uri::create(self::getHomeUrl());
+        return Uri::create(self::getHome());
     }
 
     public function getContent(): ?Content
@@ -182,7 +182,7 @@ class Page extends DbModel
     public static function findPage(string $url): ?Page
     {
         if ($url == self::DEFAULT_TAG) {
-            $url = self::getHomeUrl();
+            $url = self::getHome();
         }
         return self::findByUrl($url);
     }
@@ -448,7 +448,7 @@ class Page extends DbModel
         if ($this->userId == $user->userId) return true;
 
         // Only allow Editors to edit home page regardless of permissions
-        if ($this->url == self::getHomeUrl()) {
+        if ($this->url == self::getHome()) {
             return $user->hasPermission(Permissions::PERM_EDITOR);
         }
 
@@ -471,7 +471,7 @@ class Page extends DbModel
     public function canDelete(?User $user): bool
     {
         // Do not allow deletion of currently assigned home page
-        if ($this->url == self::getHomeUrl()) {
+        if ($this->url == self::getHome()) {
             return false;
         }
 

@@ -39,7 +39,7 @@ class Edit extends ControllerPublic
         $this->getPage()->setTitle('Edit Page');
         if (!$this->getFactory()->getAuthUser()) {
             Alert::addWarning('You are not logged in.');
-            Uri::create(Page::getHomeUrl())->redirect();
+            Uri::create(Page::getHome())->redirect();
         }
 
         $ref = Uri::create($referrer)->getRelativePath();
@@ -57,7 +57,7 @@ class Edit extends ControllerPublic
             if ($this->wPage->canView($this->getAuthUser())) {
                 $this->wPage->getPageUrl()->redirect();
             }
-            Uri::create(Page::getHomeUrl())->redirect();
+            Uri::create(Page::getHome())->redirect();
         }
 
         // Create a new page
@@ -73,7 +73,7 @@ class Edit extends ControllerPublic
 
         if (!$this->wPage) {
             Alert::addWarning('The page you are attempting to edit cannot be found.');
-            Uri::create(Page::getHomeUrl())->redirect();
+            Uri::create(Page::getHome())->redirect();
         }
 
         // check if the user can edit the page
@@ -127,9 +127,9 @@ class Edit extends ControllerPublic
             ->setRequired()
             ->setNotes('Select who can view/edit/delete this page. <a href="/Wiki_How_To#getting_started" target="_blank" title="Permission help">Permission help</a>')
             ->setGroup($group)
-            ->setStrict(true)
             ->prependOption('-- Select --', '');
-        if ($this->wPage && $this->wPage->url == Page::getHomeUrl()) {
+
+        if ($this->wPage && $this->wPage->url == Page::getHome()) {
             $permission->setDisabled();
         }
 
@@ -179,12 +179,12 @@ class Edit extends ControllerPublic
         $this->form->appendField(new Submit('cancel', [$this, 'onCancel']))
             ->addCss('btn-outline-secondary');
 
-        $load = $this->form->unmapValues($this->wPage);
-        //$load = PageMap::create()->getFormMap()->getArray($this->wPage);
-        $this->form->setFieldValues($load); // Use form data mapper if loading objects
-        $load = $this->form->unmapValues($this->wContent);
-        //$load = ContentMap::create()->getFormMap()->getArray($this->wContent);
-        $this->form->setFieldValues($load); // Use form data mapper if loading objects
+
+        $load = array_merge(
+            $this->form->unmapValues($this->wContent),
+            $this->form->unmapValues($this->wPage)
+        );
+        $this->form->setFieldValues($load);
 
         $this->form->execute($_POST);
 
@@ -194,7 +194,7 @@ class Edit extends ControllerPublic
     {
         $this->lock->unlock($this->wPage->pageId);
 
-        $url = \Tk\Uri::create($this->wPage->getHomeUrl());
+        $url = \Tk\Uri::create($this->wPage->getHome());
         if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
             $url = $this->getFactory()->getBackUrl();
         } else if ($this->wPage->pageId) {
@@ -205,8 +205,6 @@ class Edit extends ControllerPublic
 
     public function onSubmit(Form $form, Submit $action): void
     {
-//        PageMap::create()->getFormMap()->loadObject($this->wPage, $form->getFieldValues());
-//        ContentMap::create()->getFormMap()->loadObject($this->wContent, $form->getFieldValues());
         // TODO: check this works as expected
         $form->mapValues($this->wPage);
         $form->mapValues($this->wContent);
@@ -239,7 +237,7 @@ class Edit extends ControllerPublic
 
         Alert::addSuccess('Page save successfully.');
 
-        $url = \Tk\Uri::create($this->wPage->getHomeUrl());
+        $url = \Tk\Uri::create($this->wPage->getHome());
         if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
             $url = $this->getFactory()->getBackUrl();
         } else if ($this->wPage->pageId) {
@@ -253,7 +251,7 @@ class Edit extends ControllerPublic
         $page = Page::find($pageId);
         if ($page && $page->canDelete($this->getAuthUser())) {
             $page->delete();
-            \Tk\Uri::create($this->wPage->getHomeUrl())->redirect();
+            \Tk\Uri::create($this->wPage->getHome())->redirect();
         }
         \Tk\Alert::addWarning('You do not have the permissions to delete this page.');
     }
@@ -269,7 +267,8 @@ class Edit extends ControllerPublic
         }
         $template->setAttr('back', 'href', $url);
 
-        //$this->form->getField('title')->addFieldCss('col-sm-6');
+        $this->form->addCss('page-form');
+
         $this->form->getField('category')->addFieldCss('col-sm-6');
         $this->form->getField('permission')->addFieldCss('col-sm-6');
         $this->form->getField('titleVisible')->addFieldCss('col-sm-6');
@@ -328,18 +327,20 @@ JS;
         // Leave page confirm
         $js = <<<JS
 jQuery(function($) {
-    setTimeout(function () {
-        $('form#page').data('serialize', $('form#page').serialize());
-        $(window).on('beforeunload', function(e) {
-            if($('form#page').serialize() !== $('form#page').data('serialize')) {
-                return true;
-            } else {
-                e = null;
-            }
-        });
-    }, 1000);
+
+    $(document).data('pageUpdated', false);
+
+    $('input,select,textarea', '.page-form').on('change', function(e) {
+        console.log(e);
+        $(document).data('pageUpdated', true);
+    });
+
+    $(window).on('beforeunload', function(e) {
+        return $(document).data('pageUpdated');
+    });
+
     $('button#page-cancel, button#page-save').on('click', function(){
-        $(window).off('beforeunload');
+        $(document).data('pageUpdated', false);
     });
 });
 JS;

@@ -33,33 +33,29 @@ class Factory extends \Bs\Factory implements FactoryInterface
         return $this->get('templateModifier');
     }
 
-    /**
-     * get the breadcrumb storage object
-     * @todo: the crumbs have Login as the home link, look into it!
-     */
     public function getCrumbs(): ?Crumbs
     {
         $id = 'breadcrumbs.public';
         if (!$this->has($id)) {
             $crumbs = $_SESSION[$id] ?? null;
-            // Reset crumbs if wiki home page has been updated
-            $rel = Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath();
-            $resetUrls = [
-                \App\Db\Page::getHomeUrl(),
-                '/login',
-                '/logout'
-            ];
 
-            //if ($crumbs && Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath() == \App\Db\Page::getHomeUrl()) {
-            if ($crumbs && in_array($rel, $resetUrls)) {
-                $crumbs = null;
-            }
+            // TODO: see if any of this is needed
+//            $rel = Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath();
+//            $resetUrls = [
+//                \App\Db\Page::getHomeUrl()->getRelativePath(),
+//                '/login',
+//                '/logout'
+//            ];
+//            if ($crumbs && in_array($rel, $resetUrls)) {
+//                $crumbs = null;
+//            }
+
             if (!$crumbs instanceof Crumbs) {
                 $crumbs = Crumbs::create();
                 $crumbs->setTrim(5);
-                if (\App\Db\Page::getHomeUrl()) {
+                if (\App\Db\Page::getHome()) {
                     $crumbs->setHomeTitle('<i class="fa fa-home"></i>');
-                    $crumbs->setHomeUrl(\App\Db\Page::getHomeUrl());
+                    $crumbs->setHomeUrl('/' . \App\Db\Page::getHome());
                 }
                 $crumbs->reset();
                 $_SESSION[$id] = $crumbs;

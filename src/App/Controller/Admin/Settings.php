@@ -120,12 +120,6 @@ class Settings extends ControllerPublic
             ->setNotes('You can omit the &lt;style&gt; tags here')
             ->addCss('code')->setAttr('data-mode', 'css');
 
-//        $tab = 'API Keys';
-//        $this->form->appendField(new Input('google.map.apikey'))
-//            ->setGroup($tab)
-//            ->setGroup($tab)->setLabel('Google API Key')
-//            ->setNotes('<a href="https://cloud.google.com/maps-platform/" target="_blank">Get Google Maps Api Key</a> And be sure to enable `Maps Javascript API`, `Maps Embed API` and `Places API for Web` for this site.');
-
 
         $tab = 'Maintenance';
         $this->form->appendField(new Checkbox('system.maintenance.enabled'))

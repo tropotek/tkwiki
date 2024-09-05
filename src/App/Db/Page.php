@@ -4,6 +4,7 @@ namespace App\Db;
 use App\Factory;
 use Bs\Db\User;
 use Dom\Template;
+use Tk\Log;
 use Tk\Registry;
 use Tk\Uri;
 use Bs\Db\Traits\UserTrait;
@@ -52,10 +53,12 @@ class Page extends DbModel
     public string $category     = '';
     public string $title        = '';
     public string $url          = '';
-    public int    $views        = 0;    // todo: implement the page counter and display it
+    public int    $views        = 0;    // todo: implement the page counter and increment it
     public int    $permission   = 0;
+    public int    $linked       = 0;
     public bool   $published    = true;
     public bool   $titleVisible = true;
+    public bool   $isOrphaned   = true;
     public \DateTime $modified;
     public \DateTime $created;
 
@@ -65,6 +68,7 @@ class Page extends DbModel
     public function __construct()
     {
         $this->_TimestampTrait();
+        static::getDataMap('page', 'v_page');
     }
 
     public function save(): void
@@ -91,7 +95,7 @@ class Page extends DbModel
     public function delete(): bool
     {
         // do not delete first page and first menu item
-        if ($this->url == self::getHome()) {
+        if ($this->url == self::getHomePage()->url) {
             return false;
         }
 
@@ -105,12 +109,8 @@ class Page extends DbModel
     /**
      * create a unique url by comparing to the
      * existing urls and adding to a tail count if duplicated exist.
-     *
      * EG:
-     *   Home
-     *   Home_1
-     *   Home_2
-     *   ...
+     *   Home, Home_1, .n
      */
     public static function makePageUrl(string $title): string
     {
@@ -128,49 +128,19 @@ class Page extends DbModel
         return $url;
     }
 
-    /**
-     * Find all page links and add them to the links table, so we can track orphaned pages
-     */
-    public static function indexLinks(Page $page, string $html): void
-    {
-        try {
-            $doc = Template::load($html)->getDocument(false);
-            Page::deleteLinkByPageId($page->pageId);
-            $nodeList = $doc->getElementsByTagName('a');
-            /** @var \DOMElement $node */
-            foreach ($nodeList as $node) {
-                $regs = [];
-                if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
-                    if (isset ($regs[1]) && $page->url != $regs[1]) {
-                        Page::insertLink($page->pageId, $regs[1]);
-                    }
-                }
-            }
-        } catch (\Exception $e) { }
-    }
-
-    // todo refactor these to a single method, be sure to update the delete() method
-    public static function getHome(): string
-    {
-        return Factory::instance()->getRegistry()->get('wiki.page.default', '');
-    }
-
-    public static function getHomeUrl(): Uri
-    {
-        return Uri::create(self::getHome());
-    }
-
     public function getContent(): ?Content
     {
-        if (!$this->_content) {
+        if (is_null($this->_content)) {
             $this->_content = Content::findCurrent($this->pageId);
         }
         return $this->_content;
     }
-    public function getPageUrl(): Uri
+
+    public function getUrl(): Uri
     {
         return Uri::create('/'.trim($this->url, '/'));
     }
+
     /**
      * Get the page permission level as a string
      */
@@ -179,10 +149,42 @@ class Page extends DbModel
         return self::PERM_LIST[$this->permission] ?? '';
     }
 
+    /**
+     * index all wiki links in this page
+     */
+    public static function indexPage(Page $page): void
+    {
+        $content = $page->getContent();
+        if (is_null($content) || !trim($content->html)) return;
+
+        // clear page links
+        Db::delete('links', ['page_id' => 0]);
+        Db::delete('links', ['page_id' => $page->pageId]);
+
+        try {
+            $doc = Template::load('<div>' . trim($content->html) . '</div>')->getDocument(false);
+            Page::deleteLinkByPageId($page->pageId);
+            $nodeList = $doc->getElementsByTagName('a');
+            foreach ($nodeList as $node) {
+                $regs = [];
+                if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
+                    if (!isset($regs[1]) || $page->url == $regs[1]) continue;
+                    self::insertLinkByUrl($page->pageId, $regs[1]);
+                }
+            }
+        } catch (\Exception $e) { vd($e->__toString()); }
+    }
+
+    public static function getHomePage(): static
+    {
+        $homeId = intval(Factory::instance()->getRegistry()->get('wiki.page.home', 1));
+        return self::find($homeId);
+    }
+
     public static function findPage(string $url): ?Page
     {
         if ($url == self::DEFAULT_TAG) {
-            $url = self::getHome();
+            $url = self::getHomePage()->url;
         }
         return self::findByUrl($url);
     }
@@ -277,7 +279,7 @@ class Page extends DbModel
 
         // TODO: create a single query for this
 //        if (isset($filter['orphaned'])) {
-//            $filter['homeUrl'] = Registry::instance()->get('wiki.page.default');
+//            $filter['homeUrl'] = Registry::instance()->get('wiki.page.home');
 //            $filter->appendFrom(' LEFT JOIN links b USING (url)');
 //            $filter->appendWhere('b.page_id IS NULL AND (a.url != :homeUrl) ');
 //        }
@@ -309,7 +311,7 @@ class Page extends DbModel
      */
     public static function getCategoryList(string $search = ''): array
     {
-        $list = Db::queryList("
+        return Db::queryList("
             SELECT DISTINCT category
             FROM page
             WHERE category != ''
@@ -320,51 +322,54 @@ class Page extends DbModel
                 'search' => '%' . $search . '%'
             ]
         );
-        return $list;
     }
 
     /**
      * Test if the supplied pageId is an orphaned page
+     *
+     * @deprecated use view
      */
-    public static function isOrphan(int $pageId): bool
-    {
-        $homeUrl = Registry::instance()->get('wiki.page.default');
-        return Db::queryBool("
-            SELECT count(*)
-            FROM page a
-                LEFT JOIN links b USING (url)
-            WHERE b.page_id IS NULL
-            AND (a.url != :homeUrl AND a.page_id = :pageId)",
-            compact('homeUrl', 'pageId')
-        );
-    }
+//    public static function isOrphan(int $pageId): bool
+//    {
+//        $homeUrl = Registry::instance()->get('wiki.page.home');
+//        return Db::queryBool("
+//            SELECT count(*)
+//            FROM page a
+//                LEFT JOIN links b USING (url)
+//            WHERE b.page_id IS NULL
+//            AND (a.url != :homeUrl AND a.page_id = :pageId)",
+//            compact('homeUrl', 'pageId')
+//        );
+//    }
 
-    public static function linkExists(int $pageId, string $pageUrl): bool
+    public static function linkExists(int $pageId, int $linkedId): bool
     {
         return Db::queryBool("
             SELECT count(*)
             FROM links
             WHERE page_id = :pageId
-            AND url = :pageUrl",
-            compact('pageId', 'pageUrl')
+            AND linked_id = :linkedId",
+            compact('pageId', 'linkedId')
         );
     }
 
-    public static function insertLink(int $pageId, string $pageUrl): int
+    public static function insertLinkByUrl(int $page_id, string $url): int
     {
-        if (self::linkExists($pageId, $pageUrl)) return false;
-        return Db::insertIgnore('links', compact('pageId', 'pageUrl'));
+        $linked = self::findByUrl($url);
+        if (!$linked || self::linkExists($page_id, $linked->pageId)) return 0;
+        $linked_id = $linked->pageId;
+        return Db::insertIgnore('links', compact('page_id', 'linked_id'));
     }
 
-    public static function deleteLink($pageId, $pageUrl): bool
+    public static function insertLink(int $page_id, int $linked_id): int
     {
-        if (!self::linkExists($pageId, $pageUrl)) return false;
-        return (false !== Db::delete('links', compact('pageId', 'pageUrl')));
+        if (self::linkExists($page_id, $linked_id)) return 0;
+        return Db::insertIgnore('links', compact('page_id', 'linked_id'));
     }
 
-    public static function deleteLinkByPageId(int $pageId): bool
+    public static function deleteLinkByPageId(int $page_id): bool
     {
-        return (false !== Db::delete('links', compact('pageId')));
+        return (false !== Db::delete('links', compact('page_id')));
     }
 
 
@@ -448,7 +453,7 @@ class Page extends DbModel
         if ($this->userId == $user->userId) return true;
 
         // Only allow Editors to edit home page regardless of permissions
-        if ($this->url == self::getHome()) {
+        if ($this->url == self::getHomePage()->url) {
             return $user->hasPermission(Permissions::PERM_EDITOR);
         }
 
@@ -471,7 +476,7 @@ class Page extends DbModel
     public function canDelete(?User $user): bool
     {
         // Do not allow deletion of currently assigned home page
-        if ($this->url == self::getHome()) {
+        if ($this->url == self::getHomePage()->url) {
             return false;
         }
 

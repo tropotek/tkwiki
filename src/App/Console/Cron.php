@@ -1,10 +1,12 @@
 <?php
 namespace App\Console;
 
+use App\Db\Page;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tk\Console\Console;
+use Tt\Db;
 
 /**
  * Cron job to be run nightly
@@ -31,14 +33,17 @@ class Cron extends Console
             return self::SUCCESS;
         }
 
+        // index wiki pages to identify orphaned pages that are not linked
 
-//        for($i = 0; $i < 599999999; $i++) {
-//            echo '';
-//        }
+        Db::execute("TRUNCATE links");
+        $pages = Page::findAll();
+        foreach ($pages as $page) {
+            Page::indexPage($page);
+        }
+
         $this->writeComment('Completed!!!');
 
-
-        $this->release();
+        $this->release();   // release lock
         return self::SUCCESS;
     }
 

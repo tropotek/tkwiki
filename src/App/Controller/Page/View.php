@@ -23,7 +23,7 @@ class View extends ControllerPublic
     public function doDefault(Request $request, string $pageUrl)
     {
         if ($pageUrl == Page::DEFAULT_TAG) {
-            $pageUrl = $this->getRegistry()->get('wiki.page.default', 'home');
+            $pageUrl = $this->getRegistry()->get('wiki.page.home', '0');
         }
 
         $this->wPage = Page::findPage($pageUrl);
@@ -38,7 +38,7 @@ class View extends ControllerPublic
         } else {
             if (!$this->wPage->canView($this->getFactory()->getAuthUser())) {
                 Alert::addWarning('You do not have permission to view the page: `' . $this->wPage->title . '`');
-                Uri::create(Page::getHome())->redirect();
+                Page::getHomePage()->getUrl()->redirect();
             }
         }
 
@@ -67,7 +67,7 @@ class View extends ControllerPublic
             throw new HttpException(404, 'page not found');
         }
         if (!$this->wPage->canEdit($this->getFactory()->getAuthUser())) {
-            $this->wPage->getPageUrl()->redirect();
+            $this->wPage->getUrl()->redirect();
         }
 
         if (isset($_GET['pdf'])) {
@@ -75,7 +75,7 @@ class View extends ControllerPublic
         }
 
         Alert::addInfo('You are viewing revision ' . $this->wContent->contentId .
-            ' <a href="'.$this->wPage->getPageUrl().'">click here</a> to return to current revision');
+            ' <a href="'.$this->wPage->getUrl().'">click here</a> to return to current revision');
         $this->toolbar = new ViewToolbar($this->wPage);
 
     }

@@ -54,17 +54,18 @@ class Settings extends ControllerPublic
                 $option->setName('Enable');
             });
 
+        // todo Need to create a select dialog here to search for the pages
         $list = Page::findFiltered(DbFilter::create([
             'permission' => Page::PERM_PUBLIC,
             'published'  => true
         ], 'created', 25));
-
-        $this->form->appendField(new Select('wiki.page.default', $list, 'title', 'url'))
+        $this->form->appendField(new Select('wiki.page.home', $list, 'title', 'pageId'))
             ->setGroup($tab)
             ->setLabel('Home Page')
             ->setNotes('Select the default wiki page home content.<br/>Note: you cannot delete a home page, you must reassign it first.')
             ->setRequired()
-            ->addCss('select-home');
+            ->addCss('select-home')
+            ->prependOption('-- Select Home Page --', '');
 
         $this->form->appendField(new Checkbox('wiki.enable.secret.mod'))
             ->setGroup($tab)
@@ -163,6 +164,9 @@ class Settings extends ControllerPublic
         }
         if (!filter_var($values['site.email'] ?? '', \FILTER_VALIDATE_EMAIL)) {
             $form->addFieldError('site.email', 'Please enter a valid email address');
+        }
+        if (!$values['wiki.page.home']) {
+            $form->addFieldError('wiki.page.home', 'Please enter a valid home page');
         }
 
         if ($form->hasErrors()) return;

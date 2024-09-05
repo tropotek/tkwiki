@@ -75,9 +75,9 @@ class View extends Renderer implements DisplayInterface
         $page = $item->getPage();
         $t->setText('name', $item->name);
         if ($page) {
-            $t->setAttr('name', 'href', $page->getPageUrl());
+            $t->setAttr('name', 'href', $page->getUrl());
             if (!($page->canView($user) && $page->published)) {
-                $t->setAttr('name', 'href', Uri::create(Page::getHome()));
+                $t->setAttr('name', 'href', Page::getHomePage()->getUrl());
                 $t->addCss('name', 'disabled');
                 return false;
             }

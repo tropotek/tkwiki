@@ -53,7 +53,7 @@ class ViewToolbar extends Renderer implements DisplayInterface
         $template = $this->getTemplate();
 
         if ($this->getPage()->canEdit($this->getUser())) {
-            $template->setAttr('edit-url', 'href', Uri::create('/edit')->set('pageId', $this->getPage()->pageId));
+            $template->setAttr('edit-url', 'href', Uri::create('/edit')->set('pageId', $this->getPage()->pageId)->set('e'));
             $template->setAttr('history', 'href', Uri::create('/historyManager')->set('pageId', $this->getPage()->pageId));
             $template->setVisible('can-edit');
         }

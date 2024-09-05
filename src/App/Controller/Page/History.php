@@ -47,7 +47,7 @@ class History extends PageController
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
-        $template->setAttr('back', 'href', $this->wPage->getPageUrl());
+        $template->setAttr('back', 'href', $this->wPage->getUrl());
 
         $template->appendTemplate('content', $this->table->show());
 

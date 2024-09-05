@@ -75,10 +75,10 @@ class Search extends PageController
             $rpt = $template->getRepeat('row');
             $rpt->setText('title', $page->title);
             $rpt->setAttr('title', 'title', $page->title);
-            $rpt->setAttr('title', 'href', $page->getPageUrl());
+            $rpt->setAttr('title', 'href', $page->getUrl());
 
-            $rpt->setAttr('link', 'href', $page->getPageUrl());
-            $rpt->setText('link', $page->getPageUrl());
+            $rpt->setAttr('link', 'href', $page->getUrl());
+            $rpt->setText('link', $page->getUrl());
 
             $rpt->setText('description', 'No Content.');
             $rpt->setText('date', $page->getCreated()->format(\Tk\Date::FORMAT_MED_DATE));

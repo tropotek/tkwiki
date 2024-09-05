@@ -40,7 +40,7 @@ class Content
         $this->page = PageMap::create()->find($request->query->getInt('pageId'));
         if (!$pageId) {
             Alert::addWarning('Invalid page id: ' . $pageId);
-            \App\Db\Page::getHomeUrl()->redirect();
+            \App\Db\Page::getHomePage()->getUrl()->redirect();
         }
         if ($request->query->has('r')) {
             $this->doRevert($request);
@@ -152,13 +152,13 @@ class Content
         $revision = ContentMap::create()->find($request->query->getInt('r'));
         if (!$revision) {
             Alert::addWarning('Failed to revert to revision ID ' . $request->query->getInt('r'));
-            $this->page->getPageUrl()->redirect();
+            $this->page->getUrl()->redirect();
         }
         $content = \App\Db\Content::cloneContent($revision);
         $content->save();
 
         Alert::addSuccess('Page reverted to version ' . $revision->contentId . ' [' . $revision->created->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
-        $this->page->getPageUrl()->redirect();
+        $this->page->getUrl()->redirect();
     }
 
     public function show(): ?Template

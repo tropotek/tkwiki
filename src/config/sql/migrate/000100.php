@@ -14,7 +14,7 @@ $registry->set('system.meta.keywords', '');
 $registry->set('site.account.registration', '');
 
 $registry->set('site.page.header.hide', '');
-$registry->set('wiki.page.default', 'home');
+$registry->set('wiki.page.home', 1);
 $registry->set('wiki.enable.credential.mod', '');
 
 $registry->save();

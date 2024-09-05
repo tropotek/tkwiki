@@ -28,7 +28,6 @@ class Edit extends ControllerPublic
     protected ?Content $wContent = null;
     protected ?Lock    $lock     = null;
 
-
     public function doDefault(): void
     {
         $referrer = trim($_SERVER['HTTP_REFERER'] ?? '');
@@ -39,7 +38,7 @@ class Edit extends ControllerPublic
         $this->getPage()->setTitle('Edit Page');
         if (!$this->getFactory()->getAuthUser()) {
             Alert::addWarning('You are not logged in.');
-            Uri::create(Page::getHome())->redirect();
+            Page::getHomePage()->getUrl()->redirect();
         }
 
         $ref = Uri::create($referrer)->getRelativePath();
@@ -55,9 +54,9 @@ class Edit extends ControllerPublic
         if ($this->wPage && !$this->wPage->canEdit($this->getAuthUser())) {
             Alert::addWarning('You do not have permissions to edit `' . $this->wPage->title . '`');
             if ($this->wPage->canView($this->getAuthUser())) {
-                $this->wPage->getPageUrl()->redirect();
+                $this->wPage->getUrl()->redirect();
             }
-            Uri::create(Page::getHome())->redirect();
+            Page::getHomePage()->getUrl()->redirect();
         }
 
         // Create a new page
@@ -73,7 +72,7 @@ class Edit extends ControllerPublic
 
         if (!$this->wPage) {
             Alert::addWarning('The page you are attempting to edit cannot be found.');
-            Uri::create(Page::getHome())->redirect();
+            Page::getHomePage()->getUrl()->redirect();
         }
 
         // check if the user can edit the page
@@ -88,7 +87,7 @@ class Edit extends ControllerPublic
             $error = true;
         }
         if ($error) {
-            $url = $this->wPage->getPageUrl();
+            $url = $this->wPage->getUrl();
             if (!$this->wPage->pageId) {
                 $url = Uri::create('/');
             }
@@ -129,7 +128,7 @@ class Edit extends ControllerPublic
             ->setGroup($group)
             ->prependOption('-- Select --', '');
 
-        if ($this->wPage && $this->wPage->url == Page::getHome()) {
+        if ($this->wPage && $this->wPage->url == Page::getHomePage()->url) {
             $permission->setDisabled();
         }
 
@@ -194,11 +193,9 @@ class Edit extends ControllerPublic
     {
         $this->lock->unlock($this->wPage->pageId);
 
-        $url = \Tk\Uri::create($this->wPage->getHome());
-        if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
-            $url = $this->getFactory()->getBackUrl();
-        } else if ($this->wPage->pageId) {
-            $url = $this->wPage->getPageUrl();
+        $url = $this->getFactory()->getBackUrl();
+        if ($this->wPage->pageId && $_GET['e']) {
+            $url = $this->wPage->getUrl();
         }
         $action->setRedirect($url);
     }
@@ -229,7 +226,7 @@ class Edit extends ControllerPublic
 
         // Index page links
         if (trim($this->wContent->html)) {
-            Page::indexLinks($this->wPage, $this->wContent->html);
+            Page::indexPage($this->wPage);
         }
 
         // Remove page lock
@@ -237,11 +234,9 @@ class Edit extends ControllerPublic
 
         Alert::addSuccess('Page save successfully.');
 
-        $url = \Tk\Uri::create($this->wPage->getHome());
-        if ($this->getFactory()->getBackUrl()->getRelativePath() == '/pageManager') {
-            $url = $this->getFactory()->getBackUrl();
-        } else if ($this->wPage->pageId) {
-            $url = $this->wPage->getPageUrl();
+        $url = $this->getFactory()->getBackUrl();
+        if ($this->wPage->pageId && $_GET['e']) {
+            $url = $this->wPage->getUrl();
         }
         $action->setRedirect($url);
     }
@@ -251,7 +246,7 @@ class Edit extends ControllerPublic
         $page = Page::find($pageId);
         if ($page && $page->canDelete($this->getAuthUser())) {
             $page->delete();
-            \Tk\Uri::create($this->wPage->getHome())->redirect();
+            Page::getHomePage()->getUrl()->redirect();
         }
         \Tk\Alert::addWarning('You do not have the permissions to delete this page.');
     }
@@ -262,8 +257,8 @@ class Edit extends ControllerPublic
         $template->appendText('title', $this->getPage()->getTitle());
 
         $url = $this->getFactory()->getBackUrl();
-        if ($this->wPage->pageId) {
-            $url = $this->wPage->getPageUrl();
+        if ($this->wPage->pageId && isset($_GET['e'])) {
+            $url = $this->wPage->getUrl();
         }
         $template->setAttr('back', 'href', $url);
 
@@ -331,12 +326,14 @@ jQuery(function($) {
     $(document).data('pageUpdated', false);
 
     $('input,select,textarea', '.page-form').on('change', function(e) {
-        console.log(e);
+        //console.log(e);
         $(document).data('pageUpdated', true);
     });
 
     $(window).on('beforeunload', function(e) {
-        return $(document).data('pageUpdated');
+        if ($(document).data('pageUpdated')) {
+            return "Are you sure you want to exit?";
+        }
     });
 
     $('button#page-cancel, button#page-save').on('click', function(){

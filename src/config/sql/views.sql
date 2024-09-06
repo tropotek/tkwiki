@@ -19,7 +19,7 @@ WITH
 SELECT
   p.*,
   IFNULL(l.total, 0) AS linked,
-  IFNULL(l.total, 0) = 0 AND p.page_id != r.value AS is_ophaned
+  IFNULL(l.total, 0) = 0 AND p.page_id != r.value AS is_orphaned
 FROM page p
 JOIN registry r ON (r.`key` = 'wiki.page.home')
 LEFT JOIN linked l USING (page_id)

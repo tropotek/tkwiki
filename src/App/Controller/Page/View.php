@@ -23,7 +23,7 @@ class View extends ControllerPublic
     public function doDefault(Request $request, string $pageUrl)
     {
         if ($pageUrl == Page::DEFAULT_TAG) {
-            $pageUrl = $this->getRegistry()->get('wiki.page.home', '0');
+            $pageUrl = Page::getHomePage()->url;
         }
 
         $this->wPage = Page::findPage($pageUrl);

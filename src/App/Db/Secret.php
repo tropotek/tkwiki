@@ -83,7 +83,7 @@ class Secret extends DbModel
     /**
      * create a custom data map for encrypted types
      */
-    public static function getDataMap(string $table = '', string $view = ''): DataMap
+    public static function getDataMap(): DataMap
     {
         $map = self::$_MAPS[static::class] ?? null;
         if (!is_null($map)) return $map;
@@ -173,14 +173,9 @@ class Secret extends DbModel
             $filter->appendWhere('a.secret_id NOT IN :exclude AND ');
         }
 
-
-        if (!empty($filter['author'])) {
-            if (!is_array($filter['author'])) $filter['author'] = [$filter['author']];
-            $filter->appendWhere('a.user_id IN :author AND ');
-        }
-
         if (!empty($filter['userId'])) {
-            $filter->appendWhere('a.user_id = :userId AND ');
+            if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
+            $filter->appendWhere('a.user_id IN :userId AND ');
         }
 
         if (!empty($filter['permission'])) {
@@ -194,6 +189,10 @@ class Secret extends DbModel
 
         if (!empty($filter['name'])) {
             $filter->appendWhere('a.name = :name AND ');
+        }
+
+        if (!empty($filter['otp'])) {
+            $filter->appendWhere("a.otp != '' AND ");
         }
 
         if (!empty($filter['url'])) {

@@ -1,21 +1,38 @@
 <?php
 namespace App;
 
+use App\Db\Permissions;
 use App\Dom\Modifier\CategoryList;
 use App\Dom\Modifier\SecretList;
 use App\Dom\Modifier\Secrets;
 use App\Dom\Modifier\WikiImg;
 use App\Dom\Modifier\WikiUrl;
+use Bs\Db\User;
 use Bs\Ui\Crumbs;
 use Dom\Modifier;
 use Tk\Auth\FactoryInterface;
-use Tk\Uri;
 
 class Factory extends \Bs\Factory implements FactoryInterface
 {
     public function createDomPage(string $templatePath = ''): Page
     {
         return new Page($templatePath);
+    }
+
+    public function getPermissions(): array
+    {
+        return Permissions::PERMISSION_LIST;
+    }
+
+    public function getAvailablePermissions(?User $user): array
+    {
+        $list = [];
+        if ($user) {
+            if ($user->isStaff()) {
+                $list = Permissions::PERMISSION_LIST;
+            }
+        }
+        return $list;
     }
 
     public function getTemplateModifier(): Modifier
@@ -38,17 +55,6 @@ class Factory extends \Bs\Factory implements FactoryInterface
         $id = 'breadcrumbs.public';
         if (!$this->has($id)) {
             $crumbs = $_SESSION[$id] ?? null;
-
-            // TODO: see if any of this is needed
-//            $rel = Uri::create(\App\Db\Page::getHomeUrl())->getRelativePath();
-//            $resetUrls = [
-//                \App\Db\Page::getHomeUrl()->getRelativePath(),
-//                '/login',
-//                '/logout'
-//            ];
-//            if ($crumbs && in_array($rel, $resetUrls)) {
-//                $crumbs = null;
-//            }
 
             if (!$crumbs instanceof Crumbs) {
                 $crumbs = Crumbs::create();

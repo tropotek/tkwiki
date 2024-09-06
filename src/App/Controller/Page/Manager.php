@@ -24,6 +24,11 @@ class Manager extends ControllerPublic
 
         // Set the table rows
         $filter = $this->table->getDbFilter();
+        if (!$this->getAuthUser()->isAdmin()) {
+            $filter['userId'] = $this->getAuthUser()->userId;
+        }
+
+        // todo: if admin allow to view all, otherwise users can only view their own pages
         $rows = \App\Db\Page::findFiltered(DbFilter::create($filter, 'title'));
 
         $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());

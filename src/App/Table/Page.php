@@ -49,6 +49,12 @@ class Page extends Table
             ->setSortable(true)
             ->addOnValue('\Tt\Table\Type\Boolean::onValue');
 
+        $this->appendCell('isOrphaned')
+            ->addCss('text-nowrap')
+            ->setHeader('Orphan')
+            ->setSortable(true)
+            ->addOnValue('\Tt\Table\Type\Boolean::onValue');
+
         $this->appendCell('permission')
             ->addCss('text-nowrap')
             ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
@@ -77,7 +83,10 @@ class Page extends Table
             ->setAttr('placeholder', 'Search: name');
 
         $list = \App\Db\Page::getCategoryList();
-        $this->getForm()->appendField(new Select('active', $list))->prependOption('-- Category -- ', '');
+        $this->getForm()->appendField(new Select('category', $list))->prependOption('-- Category -- ', '');
+
+        $list = ['-- All --' => '', 'Linked' => 'n', 'Orphaned' => 'y'];
+        $this->getForm()->appendField(new Select('isOrphaned', $list));
 
         // init filter fields for actions to access to the filter values
         $this->initForm();
@@ -85,7 +94,9 @@ class Page extends Table
         // Add Table actions
         $this->appendAction(Delete::create($rowSelect))
             ->addOnDelete(function(Delete $action, array $selected) {
+                $homeId = intval($this->getRegistry()->get('wiki.page.home', 1));
                 foreach ($selected as $page_id) {
+                    if ($page_id == $homeId) continue;
                     Db::delete('page', compact('page_id'));
                 }
             });

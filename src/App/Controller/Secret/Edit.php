@@ -2,12 +2,8 @@
 namespace App\Controller\Secret;
 
 use App\Db\Secret;
-use App\Db\SecretMap;
-use Bs\Form\EditTrait;
-use Bs\PageController;
+use Bs\ControllerPublic;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
-use App\Db\User;
 use Tk\Alert;
 use Tk\Exception;
 use Tk\Uri;
@@ -19,42 +15,42 @@ use Tk\Uri;
  *       ->controller([App\Controller\Secret\Edit::class, 'doDefault']);
  * ```
  */
-class Edit extends PageController
+class Edit extends ControllerPublic
 {
-    use EditTrait;
-
     protected ?Secret $secret = null;
+    protected ?\App\Form\Secret $form = null;
 
 
     public function __construct()
     {
-        parent::__construct();
-        $this->getPage()->setTitle('Edit Secret');
-        if (
-            !$this->getAuthUser()?->isType(User::TYPE_STAFF) ||
-            !$this->getRegistry()->get('wiki.enable.secret.mod', false)
-        ) {
-            Alert::addWarning('You do not have permission to access the page: <b>' . Uri::create()->getRelativePath() . '</b>');
-            Uri::create('/')->redirect();
-        }
+
     }
 
-    public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
+    public function doDefault(): void
     {
+        $this->getPage()->setTitle('Edit Secret');
+        if (
+            !$this->getAuthUser()?->isStaff() ||
+            !$this->getRegistry()->get('wiki.enable.secret.mod', false)
+        ) {
+            Alert::addWarning('You do not have permission to access the page');
+            Uri::create('/')->redirect();
+        }
+
+        $secretId = intval($_GET['secretId'] ?? 0);
+
         $this->secret = new Secret();
-        $this->secret->setUserId($this->getFactory()->getAuthUser()->getUserId());
-        if ($request->query->getInt('secretId')) {
-            $this->secret = SecretMap::create()->find($request->query->getInt('secretId'));
+        $this->secret->userId = $this->getFactory()->getAuthUser()->userId;
+        if ($secretId) {
+            $this->secret = Secret::find($secretId);
         }
         if (!$this->secret) {
-            throw new Exception('Invalid ID: ' . $request->query->getInt('secretId'));
+            throw new Exception("cannot find object id {$secretId}");
         }
 
-        // Get the form template
-        $this->setForm(new \App\Form\Secret($this->secret));
-        $this->getForm()->init()->execute($request->request->all());
+        $this->form = new \App\Form\Secret($this->secret);
+        $this->form->execute();
 
-        return $this->getPage();
     }
 
     public function show(): ?Template
@@ -63,7 +59,7 @@ class Edit extends PageController
         $template->setText('title', $this->getPage()->getTitle());
         $template->setAttr('back', 'href', $this->getBackUrl());
 
-        $template->appendTemplate('content', $this->getForm()->show());
+        $template->appendTemplate('content', $this->form->show());
 
         return $template;
     }

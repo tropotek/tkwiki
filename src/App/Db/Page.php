@@ -58,7 +58,7 @@ class Page extends DbModel
     public int    $linked       = 0;
     public bool   $published    = true;
     public bool   $titleVisible = true;
-    public bool   $isOrphaned   = true;
+    public bool   $isOrphaned   = false;
     public \DateTime $modified;
     public \DateTime $created;
 
@@ -68,7 +68,6 @@ class Page extends DbModel
     public function __construct()
     {
         $this->_TimestampTrait();
-        static::getDataMap('page', 'v_page');
     }
 
     public function save(): void
@@ -193,7 +192,7 @@ class Page extends DbModel
     {
         return Db::queryOne("
                 SELECT *
-                FROM page
+                FROM v_page
                 WHERE page_id = :id",
             compact('id'),
             self::class
@@ -204,7 +203,7 @@ class Page extends DbModel
     {
         return Db::query("
             SELECT *
-            FROM page",
+            FROM v_page",
             null,
             self::class
         );
@@ -267,22 +266,20 @@ class Page extends DbModel
             $filter->appendWhere('a.url = :url AND ');
         }
 
-        if (isset($filter['published'])) {
+        if (!empty($filter['published'])) {
             $filter['published'] = truefalse($filter['published']);
             $filter->appendWhere('a.published = :published AND ');
+        }
+
+        if (!empty($filter['isOrphaned'])) {
+            $filter['isOrphaned'] = truefalse($filter['isOrphaned']);
+            $filter->appendWhere('a.is_orphaned = :isOrphaned AND ');
         }
 
         if (!empty($filter['permission'])) {
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
             $filter->appendWhere('a.permission IN :permission AND ');
         }
-
-        // TODO: create a single query for this
-//        if (isset($filter['orphaned'])) {
-//            $filter['homeUrl'] = Registry::instance()->get('wiki.page.home');
-//            $filter->appendFrom(' LEFT JOIN links b USING (url)');
-//            $filter->appendWhere('b.page_id IS NULL AND (a.url != :homeUrl) ');
-//        }
 
         // TODO: create a single query for this
         // Do a full text search on the content
@@ -299,7 +296,7 @@ class Page extends DbModel
 
         return Db::query("
             SELECT *
-            FROM page a
+            FROM v_page a
             {$filter->getSql()}",
             $filter->all(),
             self::class
@@ -323,24 +320,6 @@ class Page extends DbModel
             ]
         );
     }
-
-    /**
-     * Test if the supplied pageId is an orphaned page
-     *
-     * @deprecated use view
-     */
-//    public static function isOrphan(int $pageId): bool
-//    {
-//        $homeUrl = Registry::instance()->get('wiki.page.home');
-//        return Db::queryBool("
-//            SELECT count(*)
-//            FROM page a
-//                LEFT JOIN links b USING (url)
-//            WHERE b.page_id IS NULL
-//            AND (a.url != :homeUrl AND a.page_id = :pageId)",
-//            compact('homeUrl', 'pageId')
-//        );
-//    }
 
     public static function linkExists(int $pageId, int $linkedId): bool
     {

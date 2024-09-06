@@ -1,53 +1,53 @@
 <?php
 namespace App\Controller\Secret;
 
-use Bs\Table\ManagerTrait;
-use Symfony\Component\HttpFoundation\Request;
-use Bs\PageController;
+use App\Db\Secret;
+use Bs\ControllerPublic;
+use Bs\Table;
 use Dom\Template;
-use App\Db\User;
 use Tk\Alert;
 use Tk\Uri;
+use Tt\Db;
+use Tt\DbFilter;
 
 /**
- * Add Route to /src/config/routes.php:
- * ```php
- *   $routes->add('secret-manager', '/secretManager')
- *       ->controller([App\Controller\Secret\Manager::class, 'doDefault']);
- * ```
+ *
  */
-class Manager extends PageController
+class Manager extends ControllerPublic
 {
-    use ManagerTrait;
 
-    public function __construct()
+    protected ?Table $table = null;
+
+
+    public function doDefault(): void
     {
-        parent::__construct();
         $this->getPage()->setTitle('Secret Manager');
         $this->getCrumbs()->reset();
         if (
-            !$this->getAuthUser()?->isType(User::TYPE_STAFF) ||
+            !$this->getAuthUser()?->isStaff() ||
             !$this->getRegistry()->get('wiki.enable.secret.mod', false)
         ) {
-            Alert::addWarning('You do not have permission to access the page: <b>' . Uri::create()->getRelativePath() . '</b>');
+            Alert::addWarning('You do not have permission to access this page');
             Uri::create('/')->redirect();
         }
-    }
 
-    public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
-    {
-        $this->setTable(new \App\Table\Secret());
-        $this->getTable()->init();
-        $this->getTable()->findList([], $this->getTable()->getTool('name'));
-        $this->getTable()->execute($request);
+        $this->table = new \App\Table\Secret();
+        $this->table->execute();
 
-        return $this->getPage();
+        // Set the table rows
+        $filter = $this->table->getDbFilter();
+        $filter['userId'] = $this->getAuthUser()->userId;
+        $rows = Secret::findFiltered(DbFilter::create($filter, 'name'));
+
+        $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());
     }
 
     public function show(): ?Template
     {
         $template = $this->getTemplate();
         $template->setText('title', $this->getPage()->getTitle());
+        $template->setAttr('back', 'href', $this->getBackUrl());
+
         $template->setAttr('create', 'href', Uri::create('/secretEdit'));
 
         $template->appendTemplate('content', $this->table->show());

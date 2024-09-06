@@ -1,6 +1,7 @@
 <?php
 namespace App\Helper;
 
+use App\Db\Permissions;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
@@ -17,8 +18,14 @@ class Navigation extends Renderer implements DisplayInterface
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-
-        $template->setVisible('secret', $this->getRegistry()->get('wiki.enable.secret.mod', false));
+        $user = $this->getFactory()->getAuthUser();
+        if ($user) {
+            $template->setVisible('settings', $user->hasPermission(Permissions::PERM_SYSADMIN));
+            $template->setVisible('pageManager', $user->hasPermission(Permissions::PERM_EDITOR));
+            $template->setVisible('menu', $user->hasPermission(Permissions::PERM_SYSADMIN | Permissions::PERM_SYSADMIN));
+            $template->setVisible('secret', $user && $this->getRegistry()->get('wiki.enable.secret.mod', false));
+            $template->setVisible('admin', $user->isAdmin());
+        }
 
         return $template;
     }
@@ -28,15 +35,14 @@ class Navigation extends Renderer implements DisplayInterface
         $html = <<<HTML
 <ul var="nav">
   <li><a class="dropdown-item" href="/profile">My Profile</a></li>
-  <li><a class="dropdown-item" href="/settings" app-has-perm="PERM_SYSADMIN">Site Settings</a></li>
-  <li><a class="dropdown-item" href="/pageManager" app-has-perm="PERM_EDITOR">Wiki Pages</a></li>
-  <li><a class="dropdown-item" href="/orphanManager" app-has-perm="PERM_EDITOR">Orphaned Pages</a></li>
-  <li><a class="dropdown-item" href="/menuEdit" app-has-perm="PERM_SYSADMIN | PERM_EDITOR">Menu Edit</a></li>
-  <li><a class="dropdown-item" href="/secretManager" app-is-type="TYPE_STAFF" var="secret">Secret Manager</a></li>
-  <li><hr class="dropdown-divider" app-has-perm="PERM_ADMIN"></li>
-  <li><a class="dropdown-item" href="/tailLog" app-has-perm="PERM_ADMIN">Tail Log</a></li>
-  <li><a class="dropdown-item" href="/listEvents" app-has-perm="PERM_ADMIN">List Events</a></li>
-  <li><hr class="dropdown-divider" app-is-type="TYPE_STAFF"></li>
+  <li><a class="dropdown-item" href="/settings" var="settings">Site Settings</a></li>
+  <li><a class="dropdown-item" href="/pageManager" var="pageManager">Wiki Pages</a></li>
+  <li><a class="dropdown-item" href="/menuEdit" var="menu">Menu Edit</a></li>
+  <li><a class="dropdown-item" href="/secretManager" var="secret">Secret Manager</a></li>
+  <li><hr class="dropdown-divider" choice="admin"></li>
+  <li><a class="dropdown-item" href="/tailLog" choice="admin">Tail Log</a></li>
+  <li><a class="dropdown-item" href="/listEvents" choice="admin">List Events</a></li>
+  <li><hr class="dropdown-divider"></li>
   <li><a class="dropdown-item" href="/logout">Sign out</a></li>
 </ul>
 HTML;

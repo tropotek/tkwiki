@@ -29,3 +29,10 @@ CREATE TABLE IF NOT EXISTS links
 UPDATE registry SET `key` = 'wiki.page.home', value = 1 WHERE `key` = 'wiki.page.default';
 
 
+
+-- Remove the `admin` user we no longer want to use that as a default username
+-- DO NOT run this in the migration, personal wiki DB only
+# UPDATE page SET user_id = 2 WHERE 1;
+# UPDATE content SET user_id = 2 WHERE 1;
+# UPDATE secret SET user_id = 2 WHERE 1;
+# DELETE FROM user WHERE user_id = 1;

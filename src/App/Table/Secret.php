@@ -19,6 +19,7 @@ class Secret extends Table
 
     public function init(): static
     {
+
         $rowSelect = RowSelect::create('id', 'userId');
         $this->appendCell($rowSelect);
 

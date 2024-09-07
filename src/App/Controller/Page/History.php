@@ -1,53 +1,53 @@
 <?php
 namespace App\Controller\Page;
 
-use App\Db\ContentMap;
 use App\Db\Page;
-use App\Db\PageMap;
-use App\Db\User;
-use Bs\PageController;
+use App\Table\Content;
+use Bs\ControllerPublic;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
+use Tk\Alert;
+use Tt\Db;
 
-class History extends PageController
+class History extends ControllerPublic
 {
 
-    protected \App\Table\Content $table;
+    protected Content $table;
+    protected ?Page $page = null;
 
-    protected ?Page $wPage = null;
 
-
-    public function __construct()
+    public function doDefault(): void
     {
-        parent::__construct();
         $this->getPage()->setTitle('Page History');
-        $this->setAccess(User::PERM_EDITOR);
-    }
+        //$this->setAccess(Permissions::PERM_EDITOR);
 
-    public function doDefault(Request $request): \App\Page|\Dom\Mvc\Page
-    {
-        $this->wPage = PageMap::create()->find($request->query->getInt('pageId'));
-        $this->getPage()->setTitle('History for `' . $this->wPage->title . '`');
+        $pageId = intval($_GET['pageId'] ?? 0);
+        $this->page = Page::find($pageId);
+
+        if (!$this->page->canEdit($this->getAuthUser())) {
+            Alert::addError("You do not have permission to access this page");
+            $this->getBackUrl()->redirect();
+        }
+
+        $this->getPage()->setTitle('History for `' . $this->page->title . '`');
 
         // Get the form template
-        $this->table = new \App\Table\Content();
-        $this->table->doDefault($request, $this->wPage->pageId);
+        $this->table = new Content();
+        $this->table->setOrderBy('-created');
+        $this->table->setWikiPage($this->page);
+        $this->table->execute();
 
-        $tool = $this->table->getTable()->getTool('created DESC');
-        $filter = $this->table->getFilter()->getFieldValues();
-        $filter['pageId'] = $this->wPage->pageId;
-        //$list = ContentMap::create()->findFiltered($filter, $tool);
-        $list = [];
-        $this->table->execute($request, $list);
-
-        return $this->getPage();
+        // Set the table rows
+        $filter = $this->table->getDbFilter();
+        $filter['pageId'] = $this->page->pageId;
+        $rows = \App\Db\Content::findFiltered($filter);
+        $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());
     }
 
     public function show(): ?Template
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
-        $template->setAttr('back', 'href', $this->wPage->getUrl());
+        $template->setAttr('back', 'href', $this->page->getUrl());
 
         $template->appendTemplate('content', $this->table->show());
 

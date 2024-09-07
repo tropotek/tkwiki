@@ -21,6 +21,7 @@ class SecretSelect extends Renderer implements DisplayInterface
     public function __construct()
     {
         $this->table = new \App\Table\SecretSelect();
+        $this->table->setOrderBy('name');
         $this->table->execute();
 
         $filter = $this->table->getDbFilter();
@@ -36,7 +37,7 @@ class SecretSelect extends Renderer implements DisplayInterface
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
 
-        $list = \App\Db\Secret::findViewable(DbFilter::create($filter, 'name', 10));
+        $list = \App\Db\Secret::findViewable($filter);
         $this->table->setRows($list, Db::getLastStatement()->getTotalRows());
 
         // Create form dialog

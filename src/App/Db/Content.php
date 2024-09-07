@@ -159,7 +159,12 @@ class Content extends DbModel
         if (!empty($filter['userId'])) {
             $filter->appendWhere('a.user_id = :userId AND ');
         }
-
+vd("
+            SELECT *
+            FROM content a
+            {$filter->getSql()}",
+    $filter->all(),
+    self::class);
         return Db::query("
             SELECT *
             FROM content a

@@ -153,6 +153,7 @@ th
 {
   /*text-align: center;*/
 }
+.tk-table .max-width,
 td.key {
   width: 100%;
 }

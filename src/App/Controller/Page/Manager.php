@@ -20,6 +20,8 @@ class Manager extends ControllerPublic
         $this->getCrumbs()->reset();
 
         $this->table = new \App\Table\Page();
+        $this->table->setOrderBy('title');
+        $this->table->setLimit(25);
         $this->table->execute();
 
         // Set the table rows
@@ -27,9 +29,7 @@ class Manager extends ControllerPublic
         if (!$this->getAuthUser()->isAdmin()) {
             $filter['userId'] = $this->getAuthUser()->userId;
         }
-
-        // todo: if admin allow to view all, otherwise users can only view their own pages
-        $rows = \App\Db\Page::findFiltered(DbFilter::create($filter, 'title'));
+        $rows = \App\Db\Page::findFiltered($filter);
 
         $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());
 

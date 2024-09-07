@@ -83,6 +83,7 @@ class ViewToolbar extends Renderer implements DisplayInterface
   <li>Category: <span var="category"></span></li>
   <li>Permission: <span var="permission"></span></li>
   <li>Current Revision: <span var="revision"></span></li>
+  <li>Views: <span var="views"></span></li>
   <li>Modified: <span var="modified"></span></li>
   <li>Created: <span var="created"></span></li>
 </ul>
@@ -94,6 +95,7 @@ HTML;
         $t->setText('category', $this->page->category);
         $t->setText('permission', $this->page->getPermissionLabel());
         $t->setText('revision', $this->content->contentId);
+        $t->setText('views', $this->page->views);
         $t->setText('modified', $this->page->getModified(Date::FORMAT_LONG_DATETIME));
         $t->setText('created', $this->page->getCreated(Date::FORMAT_LONG_DATETIME));
 

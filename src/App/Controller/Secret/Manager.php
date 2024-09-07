@@ -32,12 +32,14 @@ class Manager extends ControllerPublic
         }
 
         $this->table = new \App\Table\Secret();
+        $this->table->setOrderBy('name');
+        $this->table->setLimit(25);
         $this->table->execute();
 
         // Set the table rows
         $filter = $this->table->getDbFilter();
         $filter['userId'] = $this->getAuthUser()->userId;
-        $rows = Secret::findFiltered(DbFilter::create($filter, 'name'));
+        $rows = Secret::findFiltered($filter);
 
         $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());
     }

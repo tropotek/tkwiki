@@ -24,8 +24,8 @@ class Edit extends ControllerPublic
 {
 
     protected ?Form    $form     = null;
-    protected ?Page    $wPage    = null;
-    protected ?Content $wContent = null;
+    protected ?Page    $page     = null;
+    protected ?Content $content  = null;
     protected ?Lock    $lock     = null;
 
     public function doDefault(): void
@@ -49,46 +49,46 @@ class Edit extends ControllerPublic
         $this->lock = new Lock($this->getAuthUser());
 
         // Find requested page
-        $this->wPage = Page::find($pageId);
+        $this->page = Page::find($pageId);
 
-        if ($this->wPage && !$this->wPage->canEdit($this->getAuthUser())) {
-            Alert::addWarning('You do not have permissions to edit `' . $this->wPage->title . '`');
-            if ($this->wPage->canView($this->getAuthUser())) {
-                $this->wPage->getUrl()->redirect();
+        if ($this->page && !$this->page->canEdit($this->getAuthUser())) {
+            Alert::addWarning('You do not have permissions to edit `' . $this->page->title . '`');
+            if ($this->page->canView($this->getAuthUser())) {
+                $this->page->getUrl()->redirect();
             }
             Page::getHomePage()->getUrl()->redirect();
         }
 
         // Create a new page
-        if (!$this->wPage && $pageUrl && Page::canCreate($this->getAuthUser())) {
-            $this->wPage = new Page();
-            $this->wPage->userId = $this->getAuthUser()->userId;
-            $this->wPage->url = $pageUrl;
-            $this->wPage->title = str_replace('_', ' ', $this->wPage->url);
-            $this->wPage->permission = \App\Db\Page::PERM_PRIVATE;
-            $this->wContent = new Content();
-            $this->wContent->userId = $this->getAuthUser()->userId;
+        if (!$this->page && $pageUrl && Page::canCreate($this->getAuthUser())) {
+            $this->page = new Page();
+            $this->page->userId = $this->getAuthUser()->userId;
+            $this->page->url = $pageUrl;
+            $this->page->title = str_replace('_', ' ', $this->page->url);
+            $this->page->permission = \App\Db\Page::PERM_PRIVATE;
+            $this->content = new Content();
+            $this->content->userId = $this->getAuthUser()->userId;
         }
 
-        if (!$this->wPage) {
+        if (!$this->page) {
             Alert::addWarning('The page you are attempting to edit cannot be found.');
             Page::getHomePage()->getUrl()->redirect();
         }
 
         // check if the user can edit the page
         $error = false;
-        if (!$this->wPage->canEdit($this->getAuthUser())) {
+        if (!$this->page->canEdit($this->getAuthUser())) {
             Alert::addWarning('You do not have permission to edit this page.');
             $error = true;
         }
 
-        if ($this->wPage->pageId && !$this->lock->canAccess($this->wPage->pageId)) {
+        if ($this->page->pageId && !$this->lock->canAccess($this->page->pageId)) {
             Alert::addWarning('The page is currently being edited by another user. Try again later.');
             $error = true;
         }
         if ($error) {
-            $url = $this->wPage->getUrl();
-            if (!$this->wPage->pageId) {
+            $url = $this->page->getUrl();
+            if (!$this->page->pageId) {
                 $url = Uri::create('/');
             }
             $url->redirect();
@@ -99,11 +99,11 @@ class Edit extends ControllerPublic
         }
 
         // Acquire page lock.
-        $this->lock->lock($this->wPage->pageId);
+        $this->lock->lock($this->page->pageId);
 
         // If not a new page with new content
-        if (!$this->wContent) {
-            $this->wContent = \App\Db\Content::cloneContent($this->wPage->getContent());
+        if (!$this->content) {
+            $this->content = \App\Db\Content::cloneContent($this->page->getContent());
         }
 
         // Set the form
@@ -128,7 +128,7 @@ class Edit extends ControllerPublic
             ->setGroup($group)
             ->prependOption('-- Select --', '');
 
-        if ($this->wPage && $this->wPage->url == Page::getHomePage()->url) {
+        if ($this->page && $this->page->url == Page::getHomePage()->url) {
             $permission->setDisabled();
         }
 
@@ -180,8 +180,8 @@ class Edit extends ControllerPublic
 
 
         $load = array_merge(
-            $this->form->unmapValues($this->wContent),
-            $this->form->unmapValues($this->wPage)
+            $this->form->unmapValues($this->content),
+            $this->form->unmapValues($this->page)
         );
         $this->form->setFieldValues($load);
 
@@ -191,11 +191,11 @@ class Edit extends ControllerPublic
 
     public function onCancel(Form $form, Submit $action): void
     {
-        $this->lock->unlock($this->wPage->pageId);
+        $this->lock->unlock($this->page->pageId);
 
         $url = $this->getFactory()->getBackUrl();
-        if ($this->wPage->pageId && $_GET['e']) {
-            $url = $this->wPage->getUrl();
+        if ($this->page->pageId && $_GET['e']) {
+            $url = $this->page->getUrl();
         }
         $action->setRedirect($url);
     }
@@ -203,40 +203,40 @@ class Edit extends ControllerPublic
     public function onSubmit(Form $form, Submit $action): void
     {
         // TODO: check this works as expected
-        $form->mapValues($this->wPage);
-        $form->mapValues($this->wContent);
+        $form->mapValues($this->page);
+        $form->mapValues($this->content);
 
-        $form->addFieldErrors($this->wPage->validate());
-        $form->addFieldErrors($this->wContent->validate());
+        $form->addFieldErrors($this->page->validate());
+        $form->addFieldErrors($this->content->validate());
 
         if ($form->hasErrors()) {
             Alert::addError('Form contains errors.');
             return;
         }
 
-        $this->wContent->html = mb_convert_encoding($this->wContent->html, 'UTF-8');
-        $this->wPage->save();
+        $this->content->html = mb_convert_encoding($this->content->html, 'UTF-8');
+        $this->page->save();
 
         // only save content if it changes
-        $currContent = $this->wPage->getContent();
-        if (!$currContent || $this->wContent->diff($currContent)) {
-            $this->wContent->pageId = $this->wPage->pageId;
-            $this->wContent->save();
+        $currContent = $this->page->getContent();
+        if (!$currContent || $this->content->diff($currContent)) {
+            $this->content->pageId = $this->page->pageId;
+            $this->content->save();
         }
 
         // Index page links
-        if (trim($this->wContent->html)) {
-            Page::indexPage($this->wPage);
+        if (trim($this->content->html)) {
+            Page::indexPage($this->page);
         }
 
         // Remove page lock
-        $this->lock->unlock($this->wPage->pageId);
+        $this->lock->unlock($this->page->pageId);
 
         Alert::addSuccess('Page save successfully.');
 
         $url = $this->getFactory()->getBackUrl();
         if ($_GET['e']) {
-            $url = $this->wPage->getUrl();
+            $url = $this->page->getUrl();
         }
         $action->setRedirect($url);
     }
@@ -257,8 +257,8 @@ class Edit extends ControllerPublic
         $template->appendText('title', $this->getPage()->getTitle());
 
         $url = $this->getFactory()->getBackUrl();
-        if ($this->wPage->pageId && isset($_GET['e'])) {
-            $url = $this->wPage->getUrl();
+        if ($this->page->pageId && isset($_GET['e'])) {
+            $url = $this->page->getUrl();
         }
         $template->setAttr('back', 'href', $url);
 
@@ -281,7 +281,7 @@ class Edit extends ControllerPublic
         }
 
         // Autocomplete js
-        $jsPageId = json_encode($this->wPage->pageId);
+        $jsPageId = json_encode($this->page->pageId);
         $js = <<<JS
 jQuery(function($) {
     let pageId = {$jsPageId}

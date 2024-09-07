@@ -18,6 +18,7 @@ class PageSelect extends Renderer implements DisplayInterface
     public function __construct()
     {
         $this->table = new \App\Table\PageSelect();
+        $this->table->setOrderBy('title');
         $this->table->execute();
 
         $filter = $this->table->getDbFilter();
@@ -33,7 +34,7 @@ class PageSelect extends Renderer implements DisplayInterface
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
 
-        $list = Page::findViewable(DbFilter::create($filter, 'title', 10));
+        $list = Page::findViewable($filter);
         $this->table->setRows($list, Db::getLastStatement()->getTotalRows());
 
     }

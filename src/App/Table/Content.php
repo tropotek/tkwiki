@@ -1,190 +1,89 @@
 <?php
 namespace App\Table;
 
-use App\Db\ContentMap;
-use App\Db\PageMap;
-use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
+use Bs\Table;
 use Tk\Alert;
-use Tk\Date;
-use Tk\Db\Mapper\Result;
-use Tk\Traits\SystemTrait;
-use Tk\Ui\Link;
+use Tk\Exception;
+use Tk\Form\Field\Input;
 use Tk\Uri;
-use Tk\Form;
-use Tk\Form\Field;
-use Tk\Table;
-use Tk\Table\Cell;
-use Tk\Table\Action;
-use Tk\TableRenderer;
+use Tt\Table\Cell;
 
-class Content
+class Content extends Table
 {
-    use SystemTrait;
 
-    protected Table $table;
+    protected ?\App\Db\Page $wPage = null;
 
-    protected ?Form $filter = null;
-
-    protected ?\App\Db\Page $page = null;
-
-
-    public function __construct()
+    public function init(): static
     {
-        $this->table = new Table('content');
-        $this->filter = new Form($this->table->getId() . '-filters');
-    }
-
-    public function doDefault(Request $request, int $pageId)
-    {
-        $this->page = PageMap::create()->find($request->query->getInt('pageId'));
-        if (!$pageId) {
-            Alert::addWarning('Invalid page id: ' . $pageId);
-            \App\Db\Page::getHomePage()->getUrl()->redirect();
-        }
-        if ($request->query->has('r')) {
-            $this->doRevert($request);
+        if (!$this->wPage) {
+            throw new Exception("Wiki page not found");
         }
 
-
-        $this->getTable()->appendCell(new Cell\Text('actions'))
-            ->addOnShow(function (Cell\Text $cell, string $html) {
-                $cell->addCss('text-nowrap text-center');
-                /** @var \App\Db\Content $obj */
-                $obj = $cell->getRow()->getData();
-
-                $template = $cell->getTemplate();
-                $btn = new Link('Revert');
-                $btn->setText('');
-                $btn->setIcon('fa fa-fw fa-share');
-                $btn->addCss('btn btn-outline-dark');
-                $btn->setAttr('data-confirm', 'Are you sure you want to revert the content to revision ' . $obj->contentId. '?');
-                $btn->setUrl(Uri::create()->set('r', $obj->contentId));
-                $template->appendTemplate('td', $btn->show());
-                $template->appendHtml('td', '&nbsp;');
-
-                $btn = new Link('View');
-                $btn->setText('');
-                $btn->setIcon('fa fa-fw fa-eye');
-                $btn->addCss('btn btn-outline-dark');
-                $btn->setUrl(Uri::create('/view')->set('contentId', $obj->contentId));
-                $template->appendTemplate('td', $btn->show());
-
-                return '';
+        $this->appendCell('actions')
+            ->addCss('text-nowrap text-center')
+            ->addOnValue(function(\App\Db\Content $obj, Cell $cell) {
+                $revUrl  = Uri::create()->set('r', $obj->contentId);
+                $viewUrl = Uri::create('/view')->set('contentId', $obj->contentId);
+                return <<<HTML
+                    <a class="btn btn-outline-secondary" href="$revUrl" title="Revert" data-confirm="Are you sure you want to revert the content to revision {$obj->contentId}?"><i class="fa fa-fw fa-share"></i></a>
+                    <a class="btn btn-outline-secondary" href="$viewUrl" title="View"><i class="fa fa-fw fa-eye"></i></a>
+                HTML;
             });
 
-        $this->getTable()->appendCell(new Cell\Text('revisionId'))
-            ->setOrderByName('content_id')
-            ->addOnValue(function (Cell\Text $cell) {
-                /** @var \App\Db\Content $content */
-                $content = $cell->getRow()->getData();
-                return $content->getId();
-            })
-            ->addOnShow(function (Cell\Text $cell, string $html) {
-                /** @var \App\Db\Content $content */
-                $content = $cell->getRow()->getData();
-                if ($this->page->getContent() && $content->getId() == $this->page->getContent()->getId()) {
-                    $html = '<b title="Current">' . $html . '</b>';
+        $this->appendCell('contentId')
+            ->setHeader('Revision')
+            ->addCss('text-nowrap')
+            ->addOnValue(function(\App\Db\Content $obj, Cell $cell) {
+                if ($this->wPage->getContent()?->contentId == $obj->contentId) {
+                    return sprintf('<strong title="Current">%s</strong>', $obj->contentId);
                 }
-                return $html;
-            });
-        $this->getTable()->appendCell(new Cell\Date('created'))->addCss('key')
-            ->addOnShow(function (Cell\Date $cell, string $html) {
-                /** @var \App\Db\Content $content */
-                $content = $cell->getRow()->getData();
-                $html = $content->getCreated(Date::FORMAT_LONG_DATETIME);
-                $cell->setUrl(Uri::create('/view')->set('contentId', $content->getId()));
-                return $html;
-            });
-        $this->getTable()->appendCell(new Cell\Text('userId'))
-            ->addOnValue(function (Cell\Text $cell) {
-                /** @var \App\Db\Content $content */
-                $content = $cell->getRow()->getData();
-                $cell->setValue($content->getUser()->getName());
+                return $obj->contentId;
             });
 
+        $this->appendCell('created')
+            ->addHeaderCss('max-width')
+            ->addCss('text-nowrap')
+            ->addOnValue('\Tt\Table\Type\DateTime::onValue');
 
-        // Table filters
-        $this->getFilter()->appendField(new Field\Input('search'))->setAttr('placeholder', 'Search');
+        $this->appendCell('userId')
+            ->addCss('text-nowrap')
+            ->addOnValue(function(\App\Db\Content $obj, Cell $cell) {
+                return $obj->getUser()->getName();
+            });
 
-        // Load filter values
-        $this->getFilter()->setFieldValues($this->getTable()->getTableSession()->get($this->getFilter()->getId(), []));
+        // Add Filter Fields
+        $this->getForm()->appendField(new Input('search'))
+            ->setAttr('placeholder', 'Search: name');
 
-        $this->getFilter()->appendField(new Form\Action\Submit('Search', function (Form $form, Form\Action\ActionInterface $action) {
-            $this->getTable()->getTableSession()->set($this->getFilter()->getId(), $form->getFieldValues());
-            Uri::create()->redirect();
-        }))->setGroup('');
-        $this->getFilter()->appendField(new Form\Action\Submit('Clear', function (Form $form, Form\Action\ActionInterface $action) {
-            $this->getTable()->getTableSession()->set($this->getFilter()->getId(), []);
-            Uri::create()->redirect();
-        }))->setGroup('')->addCss('btn-outline-secondary');
-
-        $this->getFilter()->execute($request->request->all());
-
-
-        // Table Actions
-        if ($this->getConfig()->isDebug()) {
-            $this->getTable()->appendAction(new Action\Link('reset', Uri::create()->set(Table::RESET_TABLE, $this->getTable()->getId()), 'fa fa-retweet'))
-                ->setLabel('')
-                ->setAttr('data-confirm', 'Are you sure you want to reset the Table`s session?')
-                ->setAttr('title', 'Reset table filters and order to default.');
-        }
-
+        return $this;
     }
 
-    public function execute(Request $request, ?Result $list = null): void
+    public function execute(): static
     {
-        // Query
-        if (!$list) {
-            $tool = $this->getTable()->getTool();
-            $filter = $this->getFilter()->getFieldValues();
-            //$list = ContentMap::create()->findFiltered($filter, $tool);
-            $list = [];
+        if (isset($_GET['r'])) {
+            $this->doRevert(intval($_GET['r']));
         }
-        $this->getTable()->setList($list);
 
-        $this->getTable()->execute($request);
+        parent::execute();
+        return $this;
     }
 
-    public function doRevert(Request $request)
+    public function doRevert(int $revId): void
     {
-        /** @var \App\Db\Content $revision */
-        $revision = ContentMap::create()->find($request->query->getInt('r'));
+        $revision = \App\Db\Content::find($revId);
         if (!$revision) {
-            Alert::addWarning('Failed to revert to revision ID ' . $request->query->getInt('r'));
-            $this->page->getUrl()->redirect();
+            Alert::addWarning("Failed to revert to revision ID $revId");
+            $this->wPage->getUrl()->redirect();
         }
         $content = \App\Db\Content::cloneContent($revision);
         $content->save();
 
         Alert::addSuccess('Page reverted to version ' . $revision->contentId . ' [' . $revision->created->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
-        $this->page->getUrl()->redirect();
+        $this->wPage->getUrl()->redirect();
     }
 
-    public function show(): ?Template
+    public function setWikiPage(\App\Db\Page $page)
     {
-        $renderer = new TableRenderer($this->getTable());
-        //$renderer->setFooterEnabled(false);
-        $this->getTable()->getRow()->addCss('text-nowrap');
-        $this->getTable()->addCss('table-hover');
-
-        if ($this->getFilter()) {
-            $this->getFilter()->addCss('row gy-2 gx-3 align-items-center');
-            $filterRenderer = Form\Renderer\Dom\Renderer::createInlineRenderer($this->getFilter());
-            $renderer->getTemplate()->appendTemplate('filters', $filterRenderer->show());
-            $renderer->getTemplate()->setVisible('filters');
-        }
-
-        return $renderer->show();
-    }
-
-    public function getTable(): Table
-    {
-        return $this->table;
-    }
-
-    public function getFilter(): ?Form
-    {
-        return $this->filter;
+        $this->wPage = $page;
     }
 }

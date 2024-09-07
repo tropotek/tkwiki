@@ -151,8 +151,8 @@ class MenuItem extends DbModel
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'a.name LIKE :search OR ';
-            $w .= 'a.menu_item_id LIKE :search OR ';
+            $w  = 'LOWER(a.name) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.menu_item_id) LIKE LOWER(:search) OR ';
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 

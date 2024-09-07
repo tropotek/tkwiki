@@ -219,9 +219,9 @@ class Page extends DbModel
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'a.title LIKE :search OR ';
-            $w .= 'a.category LIKE :search OR ';
-            $w .= 'a.page_id LIKE :search OR ';
+            $w  = 'LOWER(a.title) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.category) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.page_id) LIKE LOWER(:search) OR ';
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
@@ -242,8 +242,6 @@ class Page extends DbModel
             }
         }
 
-
-
         return Db::query("
             SELECT *
             FROM v_page a
@@ -251,7 +249,6 @@ class Page extends DbModel
             $filter->all(),
             self::class
         );
-
     }
 
     public static function findFiltered(array|DbFilter $filter): array
@@ -260,9 +257,9 @@ class Page extends DbModel
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'a.title LIKE :search OR ';
-            $w .= 'a.category LIKE :search OR ';
-            $w .= 'a.page_id LIKE :search OR ';
+            $w  = 'LOWER(a.title) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.category) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.page_id) LIKE LOWER(:search) OR ';
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 

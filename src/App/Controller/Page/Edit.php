@@ -235,7 +235,7 @@ class Edit extends ControllerPublic
         Alert::addSuccess('Page save successfully.');
 
         $url = $this->getFactory()->getBackUrl();
-        if ($this->wPage->pageId && $_GET['e']) {
+        if ($_GET['e']) {
             $url = $this->wPage->getUrl();
         }
         $action->setRedirect($url);

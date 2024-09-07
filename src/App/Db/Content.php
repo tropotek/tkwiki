@@ -132,10 +132,10 @@ class Content extends DbModel
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'a.title LIKE :search OR ';
-            $w .= 'a.keywords LIKE :search OR ';
-            $w .= 'a.description LIKE :search OR ';
-            $w .= 'a.content_id LIKE :search OR ';
+            $w  = 'LOWER(a.title) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.keywords) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.description) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.content_id) LIKE LOWER(:search) OR ';
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 

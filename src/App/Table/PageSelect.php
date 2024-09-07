@@ -13,8 +13,6 @@ class PageSelect extends Table
 
     public function init(): static
     {
-//        $this->table = new Table('pages-min');
-//        $this->filter = new Form($this->table->getId() . '-filters');
 
         $this->appendCell('title')
             ->addHeaderCss('max-width')
@@ -50,18 +48,4 @@ class PageSelect extends Table
 
         return $this;
     }
-
-//    public function show(): ?Template
-//    {
-//        //$renderer = $this->getRenderer();
-//        //$this->addCss('text-nowrap');
-//        //$renderer->getFooterList()->remove('limit');
-//
-//        $this->getForm()->addCss('row gy-2 gx-3 align-items-center');
-//        //$filterRenderer = Form\Renderer\Dom\Renderer::createInlineRenderer($this->getFilter());
-//        //$renderer->getTemplate()->appendTemplate('filters', $filterRenderer->show());
-//        //$renderer->getTemplate()->setVisible('filters');
-//
-//        return parent::show();
-//    }
 }

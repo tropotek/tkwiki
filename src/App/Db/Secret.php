@@ -148,6 +148,44 @@ class Secret extends DbModel
         );
     }
 
+    public static function findViewable(array|DbFilter $filter): array
+    {
+        $filter = DbFilter::create($filter);
+
+        if (!empty($filter['search'])) {
+            $filter['search'] = '%' . $filter['search'] . '%';
+            $w  = 'LOWER(a.name) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.url) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.secret_id) LIKE LOWER(:search) OR ';
+            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+        }
+
+        if (!(empty($filter['userId']) || empty($filter['permission']))) {
+            if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
+            $filter->appendWhere('(a.user_id IN :userId OR ');
+            if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
+            $filter->appendWhere('a.permission IN :permission) AND ');
+        } else {
+            if (!empty($filter['userId'])) {
+                if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
+                $filter->appendWhere('a.user_id IN :userId AND ');
+            }
+
+            if (!empty($filter['permission'])) {
+                if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
+                $filter->appendWhere('a.permission IN :permission AND ');
+            }
+        }
+
+        return Db::query("
+            SELECT *
+            FROM secret a
+            {$filter->getSql()}",
+            $filter->all(),
+            self::class
+        );
+    }
+
     public static function findFiltered(array|DbFilter $filter): array
     {
         $filter = DbFilter::create($filter);

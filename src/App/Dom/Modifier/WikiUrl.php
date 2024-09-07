@@ -39,7 +39,7 @@ class WikiUrl extends FilterInterface
                 }
             } else {
                 $css = $this->addClass($css, 'wk-page-new');
-                if (!$user || $user->isMember()) {
+                if (!$user) {
                     $css = $this->addClass($css, 'wk-page-disable');
                 }
                 $css = $this->removeClass($css, 'wk-page');

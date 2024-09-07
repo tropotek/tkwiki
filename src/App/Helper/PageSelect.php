@@ -20,11 +20,12 @@ class PageSelect extends Renderer implements DisplayInterface
         $this->table = new \App\Table\PageSelect();
         $this->table->execute();
 
-        $filter = [
+        $filter = $this->table->getDbFilter();
+        $filter->replace([
             'published' => true,
             'userId' => $this->getFactory()->getAuthUser()->userId,
             'permission' => Page::PERM_PUBLIC,
-        ];
+        ]);
         if ($this->getFactory()->getAuthUser()->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         }
@@ -32,7 +33,6 @@ class PageSelect extends Renderer implements DisplayInterface
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
 
-        $filter = array_merge($this->table->getForm()->getFieldValues(), $filter);
         $list = Page::findViewable(DbFilter::create($filter, 'title', 10));
         $this->table->setRows($list, Db::getLastStatement()->getTotalRows());
 
@@ -45,7 +45,7 @@ class PageSelect extends Renderer implements DisplayInterface
         // Add a select wiki page button to the tinyMCE editor.
         $js = <<<JS
 jQuery(function($) {
-    let dialog = $('#page-select-dialog');
+    let dialog = '#page-select-dialog';
 
     function insertWikiUrl(title, url, isNew) {
         const editor = tinymce.activeEditor;
@@ -60,7 +60,7 @@ jQuery(function($) {
         }
     }
 
-    dialog.on('show.bs.modal', function() {
+    $(dialog).on('show.bs.modal', function() {
         $('input', this).val('');
     })
     .on('shown.bs.modal', function() {
@@ -77,7 +77,7 @@ jQuery(function($) {
         let title = $(this).data('page-title');
         let url = $(this).data('page-url');
         insertWikiUrl(title, url, false);
-        dialog.modal('hide');
+        $(dialog).modal('hide');
         return false;
     })
     .on('click', '.btn-create-page', function() {
@@ -87,7 +87,7 @@ jQuery(function($) {
         // TODO: we could check for existing url (using ajax)?
         //       Check on a keyup event (with delay 250ms), disable btn if exists
         insertWikiUrl(title, url, true);
-        dialog.modal('hide');
+        $(dialog).modal('hide');
         return false;
     })
     .on('click', '.wiki-cat-list', function() {
@@ -100,11 +100,11 @@ jQuery(function($) {
         editor.insertContent(editor.dom.createHTML('div', attrs,
             editor.dom.encode('{Category List: ' + category + '}'))
         );
-        dialog.modal('hide');
+        $(dialog).modal('hide');
         return false;
     });
 
-
+    // setup page select dialog table
     tkRegisterInit(function () {
         let links = $('th a, .tk-foot a', dialog).not('[href="javascript:;"], [href="#"]');
 
@@ -112,11 +112,14 @@ jQuery(function($) {
         links.on('click', function(e) {
             e.stopPropagation();
             let url = $(this).attr('href');
+            console.log(url);
             $('#page-select-table', dialog).load(url + ' #page-select-table', function (response, status, xhr) {
-                tkInit(dialog);
+                tkInit($(dialog));
             });
             return false;
         });
+        $('.tk-foot select').prop('disabled', true);
+
         // Handle table filters
         $('form.tk-form', dialog).on('submit', function (e) {
             e.stopPropagation();
@@ -125,7 +128,7 @@ jQuery(function($) {
             let submit = $(e.originalEvent.submitter);
             data.push({name: submit.attr('name'), value: submit.attr('value')});
             $('#page-select-table', dialog).load(url + ' #page-select-table', data, function (response, status, xhr) {
-                tkInit(dialog);
+                tkInit($(dialog));
             });
             return false;
         });

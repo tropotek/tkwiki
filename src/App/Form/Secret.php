@@ -20,15 +20,6 @@ class Secret extends Form
 
     public function init(): static
     {
-        // Enable HTMX
-        if ($this->isHtmx()) {
-            $this->setAttr('hx-post', Uri::create());
-            $this->setAttr('hx-target', 'this');
-            $this->setAttr('hx-swap', 'outerHTML');
-            $this->setAttr('hx-select', '#'.$this->form->getId());
-            // trigger JS init event on settle
-            header('HX-Trigger-After-Settle: tk-init-form');
-        }
 
         $tab = 'Details';
         $this->appendField(new Hidden('secretId'));
@@ -108,11 +99,23 @@ class Secret extends Form
             $form->setFieldValue('secretId', $this->getSecret()->secretId);
             $action->setRedirect(null);
             //$this->setAttr('hx-post', Uri::create()->set('secretId', $this->getSecret()->getSecretId()));
+            header('HX-Trigger-After-Settle: secret-success');
         }
     }
 
     public function show(): ?Template
     {
+        // Enable HTMX
+        if ($this->isHtmx()) {
+            $this->setAttr('hx-post', Uri::create());
+            $this->setAttr('hx-target', 'this');
+            $this->setAttr('hx-swap', 'outerHTML');
+            $this->setAttr('hx-select', '#'.$this->form->getId());
+            // trigger JS init event on settle
+            //header('HX-Trigger-After-Settle: tk-init-form');
+            $this->removeAttr('action');
+        }
+
         // Setup field group widths with bootstrap classes
         $this->getField('permission')->addFieldCss('col-sm-6');
         $this->getField('name')->addFieldCss('col-sm-6');

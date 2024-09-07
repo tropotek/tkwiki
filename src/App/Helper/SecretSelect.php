@@ -23,21 +23,20 @@ class SecretSelect extends Renderer implements DisplayInterface
         $this->table = new \App\Table\SecretSelect();
         $this->table->execute();
 
-        $filter = [
+        $filter = $this->table->getDbFilter();
+        $filter->replace([
             'published' => true,
+            'userId' => $this->getFactory()->getAuthUser()->userId,
             'permission' => Page::PERM_PUBLIC
-        ];
+        ]);
         if ($this->getFactory()->getAuthUser()->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         }
         if ($this->getFactory()->getAuthUser()->isStaff()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
-        if ($this->getFactory()->getAuthUser()->isAdmin()) {
-            unset($filter['permission']);
-        }
-        $filter = array_merge($this->table->getForm()->getFieldValues(), $filter);
-        $list = \App\Db\Secret::findFiltered(DbFilter::create($filter, 'name', 10));
+
+        $list = \App\Db\Secret::findViewable(DbFilter::create($filter, 'name', 10));
         $this->table->setRows($list, Db::getLastStatement()->getTotalRows());
 
         // Create form dialog
@@ -63,8 +62,8 @@ class SecretSelect extends Renderer implements DisplayInterface
         $js = <<<JS
 jQuery(function($) {
 
-    let selectDialog = $('#secret-select-dialog');
-    let createDialog = $('#secret-create-dialog');
+    let selectDialog = '#secret-select-dialog';
+    let createDialog = '#secret-create-dialog';
 
     function insertSecretHtml(id, name) {
         const editor = tinymce.activeEditor;
@@ -77,11 +76,10 @@ jQuery(function($) {
         editor.insertContent(editor.dom.createHTML('img', linkAttrs));
     }
 
-    selectDialog.on('show.bs.modal', function() {
+    $(selectDialog).on('show.bs.modal', function() {
         $('input', this).val('');
         $('#secret-select-table', selectDialog).load(document.location.href + ' #secret-select-table', function (response, status, xhr) {
-            tkInit(selectDialog);
-            //$(document).trigger(EVENT_INIT_TABLE, $('#secret-select-table', selectDialog));
+            tkInit($(selectDialog));
         });
     })
     .on('click', '.wiki-insert', function() {
@@ -93,8 +91,8 @@ jQuery(function($) {
         return false;
     })
     .on('click', '.btn-create-secret', function() {
-        selectDialog.modal('hide');
-        createDialog.modal('show');
+        $(selectDialog).modal('hide');
+        $(createDialog).modal('show');
         return false;
     });
 
@@ -105,47 +103,63 @@ jQuery(function($) {
           'wk-secret-list': $(this).data('user-id')
         };
         editor.insertContent(editor.dom.createHTML('div', linkAttrs, editor.dom.encode('{Secret Table Listing}')));
-        selectDialog.modal('hide');
+        $(selectDialog).modal('hide');
     });
 
-    // On create secret
-    $(document).on('htmx-stuff', function() {
-        console.log('init_form 0');
+    // Secret select table
+    tkRegisterInit(function () {
+        let links = $('th a, .tk-foot a', selectDialog).not('[href="javascript:;"], [href="#"]');
+
+        // Handle table links
+        links.on('click', function(e) {
+            e.stopPropagation();
+            let url = $(this).attr('href');
+            $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', function (response, status, xhr) {
+                tkInit($(selectDialog));
+            });
+            return false;
+        });
+
+        // Handle table filters
+        $('form.tk-form', selectDialog).on('submit', function (e) {
+            //e.stopPropagation();
+            let url = $(this).attr('action');
+            let data = $(this).serializeArray();
+            let submit = $(e.originalEvent.submitter);
+            data.push({name: submit.attr('name'), value: submit.attr('value')});
+            $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', data, function (response, status, xhr) {
+                tkInit($(selectDialog));
+            });
+            return false;
+        });
+
+        $('#secret_cancel', createDialog).on('click', function(e) {
+            e.stopPropagation();
+            $(createDialog).modal('hide');
+            return false;
+        });
+
+    });
+
+    // Secret edit form
+    $(document).on('htmx:afterSettle', function(e) {
+        if ($(e.target).is('#secret')) {
+            tkInit($(createDialog));
+        }
+    });
+
+    $(document).on('show.bs.modal', createDialog, function() {
+        $('form .is-invalid', createDialog).removeClass('is-invalid');
+    })
+
+    $(document).on('secret-success', function() {
         // exit if there are errors in the form
         if ($('form .is-invalid', createDialog).length) return;
-
-        let id = $('#secret-secretId', 'form#secret').val();
-        let name = $('#secret-name', 'form#secret').val();
+        let id = $('#secret_secretId', 'form#secret').val();
+        let name = $('#secret_name', 'form#secret').val();
         insertSecretHtml(id, name);
-        selectDialog.modal('hide');
-        createDialog.modal('hide');
-    });
-
-    tkRegisterInit(function () {
-        $('.tk-table.secret-table').each(function() {
-            let links = $('th a, .tk-foot a', selectDialog).not('[href="javascript:;"], [href="#"]');
-            // Handle table links
-            links.on('click', function(e) {
-                e.stopPropagation();
-                let url = $(this).attr('href');
-                $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', function (response, status, xhr) {
-                    tkInit(selectDialog);
-                });
-                return false;
-            });
-            // Handle table filters
-            $('form.tk-form', selectDialog).on('submit', function (e) {
-                //e.stopPropagation();
-                let url = $(this).attr('action');
-                let data = $(this).serializeArray();
-                let submit = $(e.originalEvent.submitter);
-                data.push({name: submit.attr('name'), value: submit.attr('value')});
-                $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', data, function (response, status, xhr) {
-                    tkInit(selectDialog);
-                });
-                return false;
-            });
-        });
+        $(selectDialog).modal('hide');
+        $(createDialog).modal('hide');
     });
 
 });

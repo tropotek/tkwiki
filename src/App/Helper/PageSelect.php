@@ -22,20 +22,18 @@ class PageSelect extends Renderer implements DisplayInterface
 
         $filter = [
             'published' => true,
-            'permission' => Page::PERM_PUBLIC
+            'userId' => $this->getFactory()->getAuthUser()->userId,
+            'permission' => Page::PERM_PUBLIC,
         ];
         if ($this->getFactory()->getAuthUser()->isMember()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER];
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         }
         if ($this->getFactory()->getAuthUser()->isStaff()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER, Page::PERM_STAFF];
-        }
-        if ($this->getFactory()->getAuthUser()->isAdmin()) {
-            unset($filter['permission']);
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
 
         $filter = array_merge($this->table->getForm()->getFieldValues(), $filter);
-        $list = Page::findFiltered(DbFilter::create($filter, 'title', 10));
+        $list = Page::findViewable(DbFilter::create($filter, 'title', 10));
         $this->table->setRows($list, Db::getLastStatement()->getTotalRows());
 
     }
@@ -107,14 +105,15 @@ jQuery(function($) {
     });
 
 
-    function init() {
+    tkRegisterInit(function () {
         let links = $('th a, .tk-foot a', dialog).not('[href="javascript:;"], [href="#"]');
+
         // Handle table links
         links.on('click', function(e) {
             e.stopPropagation();
             let url = $(this).attr('href');
             $('#page-select-table', dialog).load(url + ' #page-select-table', function (response, status, xhr) {
-                $('body').trigger(EVENT_INIT_TABLE, $('table', dialog));
+                tkInit(dialog);
             });
             return false;
         });
@@ -126,12 +125,12 @@ jQuery(function($) {
             let submit = $(e.originalEvent.submitter);
             data.push({name: submit.attr('name'), value: submit.attr('value')});
             $('#page-select-table', dialog).load(url + ' #page-select-table', data, function (response, status, xhr) {
-                $('body').trigger(EVENT_INIT_TABLE, $('table', dialog));
+                tkInit(dialog);
             });
             return false;
         });
-    }
-    tableEvents.push(init);
+    });
+
 });
 JS;
         $template->appendJs($js);

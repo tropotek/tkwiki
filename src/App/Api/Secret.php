@@ -2,7 +2,6 @@
 namespace App\Api;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tk\Traits\SystemTrait;
 
@@ -13,10 +12,10 @@ class Secret
     /**
      * TODO: we should implement a hash for a more secure fetch.
      */
-    public function doGetPass(Request $request)
+    public function doGetPass()
     {
         $data = ['p' => ''];
-        $id = $request->query->getInt('id', 0);
+        $id = intval($_GET['id'] ?? 0);
         if ($this->getFactory()->getAuthUser() && $id) {
             $secret = \App\Db\Secret::find($id);
             if ($secret?->canView($this->getFactory()->getAuthUser())) {

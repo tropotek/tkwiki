@@ -13,11 +13,6 @@ return function (Config $config) {
      */
     $config['db.mysql'] = 'localhost:3306/user/pass/dbName';
 
-    /*
-     * Site hostname
-     */
-    $config['hostname'] = 'localhost';
-
     /**
      * Set environment type to prevent destructive functions on production sites
      * options are 'dev' | 'prod'

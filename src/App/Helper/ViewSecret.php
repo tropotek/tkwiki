@@ -2,20 +2,16 @@
 namespace App\Helper;
 
 use App\Db\Secret;
-use App\Db\SecretMap;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tk\Traits\SystemTrait;
 use Tk\Uri;
 
-/**
- * Render the secret output
- */
+
 class ViewSecret extends Renderer implements DisplayInterface
 {
     use SystemTrait;

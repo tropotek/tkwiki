@@ -8,9 +8,7 @@ use Dom\Template;
 use Tk\Traits\SystemTrait;
 use Tt\DbFilter;
 
-/**
- * Render the secret output table list
- */
+
 class ViewCategoryList extends Renderer implements DisplayInterface
 {
     use SystemTrait;
@@ -37,10 +35,10 @@ class ViewCategoryList extends Renderer implements DisplayInterface
             'permission' => Page::PERM_PUBLIC
         ];
         if ($this->getFactory()->getAuthUser()?->isMember()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER];
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         }
         if ($this->getFactory()->getAuthUser()?->isStaff()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER, Page::PERM_STAFF];
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
         if ($this->getFactory()->getAuthUser()?->isAdmin()) {
             unset($filter['permission']);

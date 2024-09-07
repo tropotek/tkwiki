@@ -3,7 +3,6 @@ namespace App\Table;
 
 use App\Db\Page;
 use Bs\Table;
-use Dom\Template;
 use Tk\Form\Field\Input;
 use Tk\Traits\SystemTrait;
 use Tt\Table\Cell;

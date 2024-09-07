@@ -42,6 +42,9 @@ class View extends ControllerPublic
             }
         }
 
+        $this->wPage->views++;
+        $this->wPage->save();
+
         $this->getPage()->setTitle($this->wPage->title);
         $this->wContent = $this->wPage->getContent();
         $this->toolbar = new ViewToolbar($this->wPage);

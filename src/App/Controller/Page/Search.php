@@ -50,10 +50,10 @@ class Search extends PageController
         if ($user?->isAdmin()) {
             ; // Search all
         } elseif ($user?->isStaff()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER, Page::PERM_STAFF];
-            $filter['author'] = $user->getUserId();
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
+            $filter['userId'] = $user->getUserId();
         } elseif ($user?->isMember()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER];
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         } else {
             $filter['permission'] = [Page::PERM_PUBLIC];
         }

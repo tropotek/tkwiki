@@ -20,32 +20,31 @@ class Page extends DbModel
 
     /**
      * The default tag string used for routes
-     * This actual default page url should be looked up in the config
-     * when this tag is returned from the router
+     * This default/home page url can be looked up in the registry (wiki.page.home)
      */
     const DEFAULT_TAG = '__default';
 
     /**
      * Page permission values
-     * NOTE: Admin users have all permissions at all times
+     * NOTE: Admin users have all permissions, authors have all permissions to their pages
      */
     const PERM_PRIVATE            = 9;
     const PERM_STAFF              = 2;
-    const PERM_USER               = 1;
+    const PERM_MEMBER             = 1;
 	const PERM_PUBLIC             = 0;
 
     const PERM_LIST = [
         self::PERM_PRIVATE   => 'Private',
         self::PERM_STAFF     => 'Staff',
-        self::PERM_USER      => 'User',
+        self::PERM_MEMBER    => 'User',
         self::PERM_PUBLIC    => 'Public',
     ];
 
     const PERM_HELP = [
         self::PERM_PRIVATE   => 'VIEW: author, EDIT: author, DELETE: author',
-        self::PERM_STAFF     => 'VIEW: staff users, EDIT: staff editors, DELETE: staff editors',
-        self::PERM_USER      => 'VIEW: registered users, EDIT: staff, DELETE: staff',
-        self::PERM_PUBLIC    => 'VIEW: anyone, EDIT: staff, DELETE: staff',
+        self::PERM_STAFF     => 'VIEW: staff, EDIT: editors/author, DELETE: editors/author',
+        self::PERM_MEMBER    => 'VIEW: members/staff, EDIT: members/editors/author, DELETE: members/editors/author',
+        self::PERM_PUBLIC    => 'VIEW: all, EDIT: editors/author, DELETE: editors/author',
     ];
 
     public int    $pageId       = 0;
@@ -214,6 +213,47 @@ class Page extends DbModel
         return self::findFiltered(['url' => $url])[0] ?? null;
     }
 
+    public static function findViewable(array|DbFilter $filter): array
+    {
+        $filter = DbFilter::create($filter);
+
+        if (!empty($filter['search'])) {
+            $filter['search'] = '%' . $filter['search'] . '%';
+            $w  = 'a.title LIKE :search OR ';
+            $w .= 'a.category LIKE :search OR ';
+            $w .= 'a.page_id LIKE :search OR ';
+            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+        }
+
+        if (!(empty($filter['userId']) || empty($filter['permission']))) {
+            if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
+            $filter->appendWhere('(a.user_id IN :userId OR ');
+            if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
+            $filter->appendWhere('a.permission IN :permission) AND ');
+        } else {
+            if (!empty($filter['userId'])) {
+                if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
+                $filter->appendWhere('a.user_id IN :userId AND ');
+            }
+
+            if (!empty($filter['permission'])) {
+                if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
+                $filter->appendWhere('a.permission IN :permission AND ');
+            }
+        }
+
+
+
+        return Db::query("
+            SELECT *
+            FROM v_page a
+            {$filter->getSql()}",
+            $filter->all(),
+            self::class
+        );
+
+    }
+
     public static function findFiltered(array|DbFilter $filter): array
     {
         $filter = DbFilter::create($filter);
@@ -237,12 +277,6 @@ class Page extends DbModel
         if (!empty($filter['exclude'])) {
             if (!is_array($filter['exclude'])) $filter['exclude'] = [$filter['exclude']];
             $filter->appendWhere('a.page_id NOT IN :exclude AND ');
-        }
-
-
-        if (!empty($filter['author'])) {
-            if (!is_array($filter['author'])) $filter['author'] = [$filter['author']];
-            $filter->appendWhere('a.user_id IN :author AND ');
         }
 
         if (!empty($filter['userId'])) {
@@ -397,29 +431,23 @@ class Page extends DbModel
     public static function canCreate(?User $user): bool
     {
         if (!$user) return false;
-        if ($user->isAdmin() || $user->isStaff()) return true;
-        return false;
+        return true;
     }
 
     public function canView(?User $user): bool
     {
+        // Try this see if it works as expected
+        if (!$this->published) return false;
+
         if ($this->permission == self::PERM_PUBLIC) return true;
         if (!$user) return false;
         if ($user->isAdmin()) return true;
         if ($this->userId == $user->userId) return true;
 
-        // Try this see if it works as expected
-        if (!$this->published) return false;
-
-        // Staff and users can view USER pages
-        if ($this->permission == self::PERM_USER) {
-            return ($user->isMember() || $user->isStaff());
-        }
-
+        // Staff and members can view MEMBER pages
+        if ($this->permission == self::PERM_MEMBER) return ($user->isMember() || $user->isStaff());
         // Staff can view STAFF pages
-        if ($this->permission == self::PERM_STAFF) {
-            return $user->isStaff();
-        }
+        if ($this->permission == self::PERM_STAFF) return $user->isStaff();
 
         return false;
     }
@@ -427,57 +455,23 @@ class Page extends DbModel
     public function canEdit(?User $user): bool
     {
         if (!$user) return false;
-        if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
         if ($this->userId == $user->userId) return true;
+        if (!$user->isStaff()) return false;
 
-        // Only allow Editors to edit home page regardless of permissions
-        if ($this->url == self::getHomePage()->url) {
-            return $user->hasPermission(Permissions::PERM_EDITOR);
-        }
-
-        // Allow any staff to edit public or user pages
-        if (
-            $this->permission == self::PERM_PUBLIC ||
-            $this->permission == self::PERM_USER
-        ) {
-            return $user->isStaff();
-        }
-
-        // Only Editors can edit staff pages
-        if ($this->permission == self::PERM_STAFF) {
-            return $user->hasPermission(Permissions::PERM_EDITOR);
-        }
-
-        return false;
+        return $user->hasPermission(Permissions::PERM_EDITOR);
     }
 
     public function canDelete(?User $user): bool
     {
         // Do not allow deletion of currently assigned home page
-        if ($this->url == self::getHomePage()->url) {
-            return false;
-        }
-
+        if ($this->url == self::getHomePage()->url) return false;
         if (!$user) return false;
-        if ($user->isMember()) return false;
         if ($user->isAdmin()) return true;
         if ($this->userId == $user->userId) return true;
+        if (!$user->isStaff()) return false;
 
-        // Allow any staff to delete public or user pages
-        if (
-            $this->permission == self::PERM_PUBLIC ||
-            $this->permission == self::PERM_USER
-        ) {
-            return $user->isStaff();
-        }
-
-        // Only Editors can delete staff pages
-        if ($this->permission == self::PERM_STAFF) {
-            return $user->hasPermission(Permissions::PERM_EDITOR);
-        }
-
-        return false;
+        return $user->hasPermission(Permissions::PERM_EDITOR);
     }
 
 }

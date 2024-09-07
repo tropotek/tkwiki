@@ -28,10 +28,10 @@ class SecretSelect extends Renderer implements DisplayInterface
             'permission' => Page::PERM_PUBLIC
         ];
         if ($this->getFactory()->getAuthUser()->isMember()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER];
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         }
         if ($this->getFactory()->getAuthUser()->isStaff()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_USER, Page::PERM_STAFF];
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
         if ($this->getFactory()->getAuthUser()->isAdmin()) {
             unset($filter['permission']);
@@ -80,7 +80,8 @@ jQuery(function($) {
     selectDialog.on('show.bs.modal', function() {
         $('input', this).val('');
         $('#secret-select-table', selectDialog).load(document.location.href + ' #secret-select-table', function (response, status, xhr) {
-            $('body').trigger(EVENT_INIT_TABLE, $('#secret-select-table', selectDialog));
+            tkInit(selectDialog);
+            //$(document).trigger(EVENT_INIT_TABLE, $('#secret-select-table', selectDialog));
         });
     })
     .on('click', '.wiki-insert', function() {
@@ -108,7 +109,7 @@ jQuery(function($) {
     });
 
     // On create secret
-    $('body').on('htmx-stuff', function() {
+    $(document).on('htmx-stuff', function() {
         console.log('init_form 0');
         // exit if there are errors in the form
         if ($('form .is-invalid', createDialog).length) return;
@@ -120,7 +121,7 @@ jQuery(function($) {
         createDialog.modal('hide');
     });
 
-    function init() {
+    tkRegisterInit(function () {
         $('.tk-table.secret-table').each(function() {
             let links = $('th a, .tk-foot a', selectDialog).not('[href="javascript:;"], [href="#"]');
             // Handle table links
@@ -128,7 +129,7 @@ jQuery(function($) {
                 e.stopPropagation();
                 let url = $(this).attr('href');
                 $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', function (response, status, xhr) {
-                    $('body').trigger(EVENT_INIT_TABLE, $('#secret-select-table', selectDialog));
+                    tkInit(selectDialog);
                 });
                 return false;
             });
@@ -140,13 +141,12 @@ jQuery(function($) {
                 let submit = $(e.originalEvent.submitter);
                 data.push({name: submit.attr('name'), value: submit.attr('value')});
                 $('#secret-select-table', selectDialog).load(url + ' #secret-select-table', data, function (response, status, xhr) {
-                    $('body').trigger(EVENT_INIT_TABLE, $('#secret-select-table', selectDialog));
+                    tkInit(selectDialog);
                 });
                 return false;
             });
         });
-    }
-    tableEvents.push(init);
+    });
 
 });
 JS;

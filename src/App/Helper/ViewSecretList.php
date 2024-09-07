@@ -32,7 +32,7 @@ class ViewSecretList extends Renderer implements DisplayInterface
         }
 
         $filter = [
-            'author' => $this->user->userId
+            'userId' => $this->user->userId
         ];
         $list = Secret::findFiltered(DbFilter::create($filter, 'name'));
 

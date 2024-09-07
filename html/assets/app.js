@@ -119,23 +119,6 @@ let app = function () {
       return false;
     });
 
-    // show/hide secret pw field
-    // $('.wk-secret .pw-show').on('click', function () {
-    //   let ico = $(this);
-    //   if (ico.is('.fa-eye')) {
-    //     ico.prev().text(ico.prev().data('text'));
-    //     loadPass(ico.prev(), function (data) {
-    //       ico.removeClass('fa-eye');
-    //       ico.addClass('fa-eye-slash')
-    //       ico.prev().text(ico.prev().data('text'));
-    //     });
-    //   } else {
-    //     ico.removeClass('fa-eye-slash');
-    //     ico.addClass('fa-eye')
-    //     ico.prev().text(''.padEnd(ico.prev().data('text').length, '*'));
-    //   }
-    // });
-
   };
 
 
@@ -230,10 +213,10 @@ let app = function () {
 
     };
 
-    function init () {
+    tkRegisterInit(function () {
       // Tiny MCE with only the default editing no upload
       //   functionality with elfinder
-      $('textarea.mce-min', this).tinymce();
+      $('textarea.mce-min', this).tinymce({});
 
       // Full tinymce with elfinder file manager
       $('textarea.mce', this).each(function () {
@@ -242,13 +225,7 @@ let app = function () {
           file_picker_callback : getMceElf(el.data()).browser,
         }));
       });
-    }
-
-    formEvents.push(init);
-
-    // TODO: Tinymce Bug: The page scrolls up/down when the cursor reaches the
-    //       bottom of the editor window, we need to find out a way to stop this
-    //       can we intercept this event and cancel it?????
+    });
 
   };  // end initTinymce()
 

@@ -1,7 +1,7 @@
 {
   "name": "ttek/tkwiki",
   "type": "project",
-  "description": "A simple WIKI/CMS for local projects and sites.",
+  "description": "A simple WIKI/CMS for sharing content.",
   "keywords": [
     "tropotek",
     "wiki",
@@ -31,7 +31,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "8.2.x-dev"
+      "dev-master": "8.0.x-dev"
     }
   },
 
@@ -41,7 +41,8 @@
     "ext-pdo": "*",
     "ext-dom": "*",
     "ext-libxml": "*",
-    "ttek/tk-base": "~8.2.0",
+    "ttek/tk-base": "~8.0.0",
+
     "components/jquery": "~3.6.0",
     "components/jqueryui": "~1.12.0",
     "components/font-awesome": "~6.2.0",

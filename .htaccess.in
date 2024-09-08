@@ -17,7 +17,7 @@
 # ----------------------------------------------------------------------
 # | Rewrite engine                                                     |
 # ----------------------------------------------------------------------
-# 
+#
 # (1) Turn on the rewrite engine (this is necessary in order for
 #     the `RewriteRule` directives to work).
 #
@@ -567,7 +567,7 @@ AddDefaultCharset utf-8
 # include: configuration files, files that contain metadata about the
 # project (e.g.: project dependencies), build scripts, etc..
 
-<FilesMatch "(^#.*#|\.(bak|conf|dist|fla|in[ci]|in|lock|log|psd|sh|sql|sw[op])|~)$">
+<FilesMatch "(^#.*#|\.(bak|md|conf|dist|fla|in[ci]|in|lock|log|psd|sh|sql|sw[op])|~)$">
 
     # Apache < 2.3
     <IfModule !mod_authz_core.c>

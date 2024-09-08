@@ -6,7 +6,6 @@ use App\Table\Page;
 use Bs\ControllerPublic;
 use Dom\Template;
 use Tt\Db;
-use Tt\DbFilter;
 
 class Manager extends ControllerPublic
 {

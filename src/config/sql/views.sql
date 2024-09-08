@@ -15,13 +15,22 @@ WITH
       COUNT(*) AS total
     FROM links
     GROUP BY linked_id
+  ),
+  latest AS (
+      SELECT
+          page_id,
+          content_id,
+          ROW_NUMBER() OVER (PARTITION BY page_id ORDER BY created DESC) AS latest
+      FROM content
   )
 SELECT
   p.*,
+  IFNULL(c.content_id, 0) AS content_id,
   IFNULL(l.total, 0) AS linked,
   IFNULL(l.total, 0) = 0 AND p.page_id != r.value AS is_orphaned
 FROM page p
-JOIN registry r ON (r.`key` = 'wiki.page.home')
 LEFT JOIN linked l USING (page_id)
+JOIN latest c ON (p.page_id = c.page_id AND c.latest = 1)
+JOIN registry r ON (r.`key` = 'wiki.page.home')
 ;
 

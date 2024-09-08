@@ -2,74 +2,56 @@
 namespace App\Controller\Page;
 
 use App\Db\Page;
-use App\Db\PageMap;
-use Bs\PageController;
+use Bs\ControllerPublic;
 use Dom\Template;
-use Symfony\Component\HttpFoundation\Request;
-use Tk\Db\Mapper\Result;
-use Tk\Db\Tool;
+use Tt\Db;
+use Tt\DbFilter;
 
-/**
- *
- *
- * TODO: We need to implement the Table DIV renderer and use
- *       that to render the results.
- *
- */
-class Search extends PageController
+
+class Search extends ControllerPublic
 {
     const SID = 'search.terms';
 
+    protected array $rows    = [];
+    protected string $search = '';
+    protected int    $total  = 0;
 
-    protected ?Result $list = null;
-
-    protected string $terms = '';
-
-
-    public function __construct()
+    public function doDefault(): void
     {
-        parent::__construct();
         $this->getPage()->setTitle('Search Results');
         $this->getCrumbs()->reset();
-    }
 
-    public function doDefault(Request $request)
-    {
-
-        if ($request->request->has('search')) {
-            $this->terms = $request->request->get('search');
-            $this->getSession()->set(self::SID, $this->terms);
-            \Tk\Uri::create()->remove('search')->redirect();
+        $this->search = trim($_POST['s'] ?? $_SESSION[self::SID] ?? '');
+        if (isset($_POST['s'])) {
+            $_SESSION[self::SID] = $this->search;
+            \Tk\Uri::create()->remove('s')->redirect();
         }
-        $this->terms = $this->getConfig()->getSession()->get(self::SID, '');
 
-        $filter = [
-            'fullSearch' => $this->terms,
-        ];
-        $user = $this->getFactory()->getAuthUser();
-        if ($user?->isAdmin()) {
-            ; // Search all
-        } elseif ($user?->isStaff()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
-            $filter['userId'] = $user->getUserId();
-        } elseif ($user?->isMember()) {
+        $filter = DbFilter::create([
+            'fullSearch' => $this->search,
+            'published' => true,
+            'userId' => $this->getFactory()->getAuthUser()->userId,
+            'permission' => Page::PERM_PUBLIC,
+        ], '-modified', 250);
+        if ($this->getFactory()->getAuthUser()->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
-        } else {
-            $filter['permission'] = [Page::PERM_PUBLIC];
+        }
+        if ($this->getFactory()->getAuthUser()->isStaff()) {
+            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
 
-        $this->list = Page::findFiltered($filter);
-        //$this->list = PageMap::create()->findFiltered($filter, Tool::create('modified DESC'));
+        if ($this->search) {
+            $this->rows = Page::findViewable($filter);
+            $this->total = Db::getLastStatement()->getTotalRows();
+        }
 
-        return $this->getPage();
     }
 
     public function show(): ?Template
     {
         $template = $this->getTemplate();
 
-        /** @var \App\Db\Page $page */
-        foreach($this->list as $page) {
+        foreach($this->rows as $page) {
             if (!$page->canView($this->getAuthUser())) continue;
 
             $rpt = $template->getRepeat('row');
@@ -91,7 +73,7 @@ class Search extends PageController
                     $description = trim(substr(strip_tags(html_entity_decode($page->getContent()->html)), 0, 256));
                 }
 
-                $rpt->insertHtml('description', htmlentities($description));
+                $rpt->setHtml('description', htmlentities($description));
                 $rpt->setText('author', $page->getUser()->getName());
                 $rpt->setText('date', $page->getContent()->getCreated()->format(\Tk\Date::FORMAT_MED_DATE));
                 $rpt->setText('time', $page->getContent()->getCreated()->format('H:i'));
@@ -104,9 +86,9 @@ class Search extends PageController
             $rpt->appendRepeat();
         }
 
-        $terms = '"'.$this->terms.'"';
+        $terms = '"'.$this->search.'"';
         $template->setText('terms', $terms);
-        $template->setText('found', $this->list->countAll());
+        $template->setText('found', $this->total);
 
         $css = <<<CSS
 .wiki-search .search-result h4 {

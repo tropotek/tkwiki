@@ -18,7 +18,6 @@ class History extends ControllerPublic
     public function doDefault(): void
     {
         $this->getPage()->setTitle('Page History');
-        //$this->setAccess(Permissions::PERM_EDITOR);
 
         $pageId = intval($_GET['pageId'] ?? 0);
         $this->page = Page::find($pageId);

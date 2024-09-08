@@ -49,6 +49,7 @@ class Page extends DbModel
 
     public int    $pageId       = 0;
     public int    $userId       = 0;
+    public int    $contentId    = 0;    // latest content ID
     public string $category     = '';
     public string $title        = '';
     public string $url          = '';
@@ -129,7 +130,7 @@ class Page extends DbModel
     public function getContent(): ?Content
     {
         if (is_null($this->_content)) {
-            $this->_content = Content::findCurrent($this->pageId);
+            $this->_content = Content::find($this->contentId);
         }
         return $this->_content;
     }
@@ -242,6 +243,23 @@ class Page extends DbModel
             }
         }
 
+        if (!empty($filter['fullSearch'])) {
+            $filter->appendWhere('MATCH (c.html) AGAINST (:fullSearch IN NATURAL LANGUAGE MODE) AND ');
+
+            return Db::query("
+                SELECT *
+                FROM v_page a
+                JOIN (
+                    SELECT content_id, html
+                    FROM content
+                    WHERE MATCH (html) AGAINST (:fullSearch IN NATURAL LANGUAGE MODE)
+                ) c USING (content_id)
+                {$filter->getSql()}",
+                $filter->all(),
+                self::class
+            );
+        }
+
         return Db::query("
             SELECT *
             FROM v_page a
@@ -312,19 +330,6 @@ class Page extends DbModel
             $filter->appendWhere('a.permission IN :permission AND ');
         }
 
-        // TODO: create a single query for this
-        // Do a full text search on the content
-//        if (isset($filter['fullSearch'])) {
-//            $filter->appendFrom('  JOIN (
-//                SELECT MAX(created), content_id, page_id, html
-//                FROM content
-//                WHERE MATCH (html) AGAINST (%s IN NATURAL LANGUAGE MODE)
-//                GROUP BY page_id
-//            ) c USING (page_id)', $this->quote($filter['fullSearch'] ?? ''));
-//            $filter->appendWhere('c.content_id IS NOT NULL');
-//        }
-
-
         return Db::query("
             SELECT *
             FROM v_page a
@@ -393,9 +398,6 @@ class Page extends DbModel
         if (!$this->title) {
             $errors['title'] = 'Please enter a title for the page';
         }
-//        if (!$this->category) {
-//            $errors['category'] = 'Please enter a category for the page';
-//        }
 
         $comp = self::findByUrl($this->url);
         if ($comp && $comp->pageId != $this->pageId) {

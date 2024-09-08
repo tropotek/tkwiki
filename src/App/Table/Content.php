@@ -34,7 +34,7 @@ class Content extends Table
             ->setHeader('Revision')
             ->addCss('text-nowrap')
             ->addOnValue(function(\App\Db\Content $obj, Cell $cell) {
-                if ($this->wPage->getContent()?->contentId == $obj->contentId) {
+                if ($this->wPage->contentId == $obj->contentId) {
                     return sprintf('<strong title="Current">%s</strong>', $obj->contentId);
                 }
                 return $obj->contentId;

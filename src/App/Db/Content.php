@@ -113,19 +113,6 @@ class Content extends DbModel
         );
     }
 
-    public static function findCurrent(int $pageId): static
-    {
-        return Db::queryOne("
-                SELECT *
-                FROM content
-                WHERE page_id = :pageId
-                ORDER BY created DESC
-                LIMIT 1",
-            compact('pageId'),
-            self::class
-        );
-    }
-
     public static function findFiltered(array|DbFilter $filter): array
     {
         $filter = DbFilter::create($filter);

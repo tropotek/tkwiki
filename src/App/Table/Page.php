@@ -7,9 +7,9 @@ use Tk\Form\Field\Input;
 use Tk\Form\Field\Select;
 use Tk\Uri;
 use Tk\Db;
-use Tt\Table\Action\Delete;
-use Tt\Table\Cell;
-use Tt\Table\Cell\RowSelect;
+use Tk\Table\Action\Delete;
+use Tk\Table\Cell;
+use Tk\Table\Cell\RowSelect;
 
 class Page extends Table
 {
@@ -47,13 +47,13 @@ class Page extends Table
         $this->appendCell('published')
             ->addCss('text-nowrap')
             ->setSortable(true)
-            ->addOnValue('\Tt\Table\Type\Boolean::onValue');
+            ->addOnValue('\Tk\Table\Type\Boolean::onValue');
 
         $this->appendCell('isOrphaned')
             ->addCss('text-nowrap')
             ->setHeader('Orphan')
             ->setSortable(true)
-            ->addOnValue('\Tt\Table\Type\Boolean::onValue');
+            ->addOnValue('\Tk\Table\Type\Boolean::onValue');
 
         $this->appendCell('permission')
             ->addCss('text-nowrap')
@@ -70,12 +70,12 @@ class Page extends Table
         $this->appendCell('modified')
             ->addCss('text-nowrap')
             ->setSortable(true)
-            ->addOnValue('\Tt\Table\Type\DateFmt::onValue');
+            ->addOnValue('\Tk\Table\Type\DateFmt::onValue');
 
         $this->appendCell('created')
             ->addCss('text-nowrap')
             ->setSortable(true)
-            ->addOnValue('\Tt\Table\Type\DateFmt::onValue');
+            ->addOnValue('\Tk\Table\Type\DateFmt::onValue');
 
 
         // Add Filter Fields

@@ -10,9 +10,9 @@ use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Input;
 use Tk\Uri;
 use Tk\Db;
-use Tt\Table\Action\Delete;
-use Tt\Table\Cell;
-use Tt\Table\Cell\RowSelect;
+use Tk\Table\Action\Delete;
+use Tk\Table\Cell;
+use Tk\Table\Cell\RowSelect;
 
 class Secret extends Table
 {
@@ -65,7 +65,7 @@ class Secret extends Table
         $this->appendCell('created')
             ->addCss('text-nowrap')
             ->setSortable(true)
-            ->addOnValue('\Tt\Table\Type\DateFmt::onValue');
+            ->addOnValue('\Tk\Table\Type\DateFmt::onValue');
 
 
         // Add Filter Fields

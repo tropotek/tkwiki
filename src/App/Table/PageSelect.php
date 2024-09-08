@@ -5,7 +5,7 @@ use App\Db\Page;
 use Bs\Table;
 use Tk\Form\Field\Input;
 use Tk\Traits\SystemTrait;
-use Tt\Table\Cell;
+use Tk\Table\Cell;
 
 class PageSelect extends Table
 {

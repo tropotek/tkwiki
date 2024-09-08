@@ -6,7 +6,7 @@ use Tk\Alert;
 use Tk\Exception;
 use Tk\Form\Field\Input;
 use Tk\Uri;
-use Tt\Table\Cell;
+use Tk\Table\Cell;
 
 class Content extends Table
 {
@@ -43,7 +43,7 @@ class Content extends Table
         $this->appendCell('created')
             ->addHeaderCss('max-width')
             ->addCss('text-nowrap')
-            ->addOnValue('\Tt\Table\Type\DateTime::onValue');
+            ->addOnValue('\Tk\Table\Type\DateTime::onValue');
 
         $this->appendCell('userId')
             ->addCss('text-nowrap')

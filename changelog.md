@@ -5,6 +5,18 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.40 [2024-09-08]:
+-------------------------------
+  - done
+  - fixed search page
+  - fix dbfilter for managers
+  - fixed select dialogs
+  - finish upgrading libs
+  - update home page and lined table
+  - Fix users and nav
+  - WIP
+
+
 Ver 8.0.38 [2024-04-16]:
 -------------------------------
   - Fix mpdf version for php8.3

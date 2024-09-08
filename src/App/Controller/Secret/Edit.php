@@ -49,7 +49,7 @@ class Edit extends ControllerPublic
         }
 
         $this->form = new \App\Form\Secret($this->secret);
-        $this->form->execute();
+        $this->form->execute($_POST);
 
     }
 

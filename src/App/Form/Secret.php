@@ -18,6 +18,7 @@ class Secret extends Form
 {
     protected bool $htmx = false;
 
+
     public function init(): static
     {
 
@@ -69,13 +70,11 @@ class Secret extends Form
     {
         $this->init();
 
-        $load = $this->form->unmapValues($this->getSecret());
+        $load = $this->unmapValues($this->getSecret());
         $load['secretId'] = $this->getSecret()->secretId;
-        $this->getForm()->setFieldValues($load);
+        $this->setFieldValues($load);
 
-        parent::execute($values);
-
-        return $this;
+        return parent::execute($values);
     }
 
     public function onSubmit(Form $form, Submit $action): void
@@ -83,6 +82,7 @@ class Secret extends Form
         $form->mapValues($this->getSecret());
 
         $form->addFieldErrors($this->getSecret()->validate());
+        vd($form->hasErrors(), $form->getAllErrors());
         if ($form->hasErrors()) {
             return;
         }
@@ -98,7 +98,6 @@ class Secret extends Form
         if ($this->isHtmx()) {
             $form->setFieldValue('secretId', $this->getSecret()->secretId);
             $action->setRedirect(null);
-            //$this->setAttr('hx-post', Uri::create()->set('secretId', $this->getSecret()->getSecretId()));
             header('HX-Trigger-After-Settle: secret-success');
         }
     }
@@ -111,8 +110,6 @@ class Secret extends Form
             $this->setAttr('hx-target', 'this');
             $this->setAttr('hx-swap', 'outerHTML');
             $this->setAttr('hx-select', '#'.$this->form->getId());
-            // trigger JS init event on settle
-            //header('HX-Trigger-After-Settle: tk-init-form');
             $this->removeAttr('action');
         }
 

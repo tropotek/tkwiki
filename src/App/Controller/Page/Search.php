@@ -4,8 +4,8 @@ namespace App\Controller\Page;
 use App\Db\Page;
 use Bs\ControllerPublic;
 use Dom\Template;
-use Tt\Db;
-use Tt\DbFilter;
+use Tk\Db;
+use Tk\Db\Filter;
 
 
 class Search extends ControllerPublic
@@ -27,7 +27,7 @@ class Search extends ControllerPublic
             \Tk\Uri::create()->remove('s')->redirect();
         }
 
-        $filter = DbFilter::create([
+        $filter = Filter::create([
             'fullSearch' => $this->search,
             'published' => true,
             'userId' => $this->getFactory()->getAuthUser()->userId,

@@ -8,8 +8,8 @@ use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
-use Tt\Db;
-use Tt\DbFilter;
+use Tk\Db;
+use Tk\Db\Filter;
 
 class SecretSelect extends Renderer implements DisplayInterface
 {
@@ -43,7 +43,7 @@ class SecretSelect extends Renderer implements DisplayInterface
         // Create form dialog
         $form = new Secret(new \App\Db\Secret());
         $form->setHtmx(true);
-        //$form->init();
+
         $this->createDialog = new FormDialog($form, 'Create Secret', 'secret-create-dialog');
         $this->createDialog->init();
         $this->createDialog->execute();

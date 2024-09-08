@@ -7,8 +7,8 @@ use Bs\Table;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Uri;
-use Tt\Db;
-use Tt\DbFilter;
+use Tk\Db;
+use Tk\Db\Filter;
 
 /**
  *

@@ -4,7 +4,7 @@ namespace App\Db;
 use Bs\Db\User;
 use Bs\Factory;
 use Tk\Traits\SystemTrait;
-use Tt\Db;
+use Tk\Db;
 
 /**
  * This object manages page edit locking

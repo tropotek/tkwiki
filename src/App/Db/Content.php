@@ -5,11 +5,11 @@ use App\Db\Traits\PageTrait;
 use Bs\Db\Traits\UserTrait;
 use App\Factory;
 use Bs\Db\Traits\CreatedTrait;
-use Tt\Db;
-use Tt\DbFilter;
-use Tt\DbModel;
+use Tk\Db;
+use Tk\Db\Filter;
+use Tk\Db\Model;
 
-class Content extends DbModel
+class Content extends Model
 {
     use CreatedTrait;
     use UserTrait;
@@ -113,9 +113,9 @@ class Content extends DbModel
         );
     }
 
-    public static function findFiltered(array|DbFilter $filter): array
+    public static function findFiltered(array|Filter $filter): array
     {
-        $filter = DbFilter::create($filter);
+        $filter = Filter::create($filter);
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';

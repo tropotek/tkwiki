@@ -15,7 +15,7 @@ use Tk\Form\Field\Option;
 use Tk\Form\Field\Select;
 use Tk\Form\Field\Textarea;
 use Tk\Uri;
-use Tt\DbFilter;
+use Tk\Db\Filter;
 
 class Settings extends ControllerPublic
 {
@@ -55,10 +55,10 @@ class Settings extends ControllerPublic
             });
 
         // todo Need to create a select dialog here to search for the pages
-        $list = Page::findFiltered(DbFilter::create([
+        $list = Page::findFiltered(Filter::create([
             'permission' => Page::PERM_PUBLIC,
             'published'  => true
-        ], 'created', 25));
+        ], '-modified', 25));
         $this->form->appendField(new Select('wiki.page.home', $list, 'title', 'pageId'))
             ->setGroup($tab)
             ->setLabel('Home Page')

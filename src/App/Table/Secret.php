@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Input;
 use Tk\Uri;
-use Tt\Db;
+use Tk\Db;
 use Tt\Table\Action\Delete;
 use Tt\Table\Cell;
 use Tt\Table\Cell\RowSelect;

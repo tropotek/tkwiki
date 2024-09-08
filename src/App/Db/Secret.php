@@ -4,18 +4,18 @@ namespace App\Db;
 use Bs\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\User;
-use Tt\DataMap\DataMap;
-use Tt\DataMap\Db\Date;
-use Tt\DataMap\Db\DateTime;
-use Tt\DataMap\Db\Integer;
-use Tt\DataMap\Db\Text;
-use Tt\DataMap\Db\TextEncrypt;
-use Tt\Db;
-use Tt\DbFilter;
-use Tt\DbModel;
+use Tk\DataMap\DataMap;
+use Tk\DataMap\Db\Date;
+use Tk\DataMap\Db\DateTime;
+use Tk\DataMap\Db\Integer;
+use Tk\DataMap\Db\Text;
+use Tk\DataMap\Db\TextEncrypt;
+use Tk\Db;
+use Tk\Db\Filter;
+use Tk\Db\Model;
 use OTPHP\TOTP;
 
-class Secret extends DbModel
+class Secret extends Model
 {
     use UserTrait;
     Use TimestampTrait;
@@ -148,9 +148,9 @@ class Secret extends DbModel
         );
     }
 
-    public static function findViewable(array|DbFilter $filter): array
+    public static function findViewable(array|Filter $filter): array
     {
-        $filter = DbFilter::create($filter);
+        $filter = Filter::create($filter);
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';
@@ -186,9 +186,9 @@ class Secret extends DbModel
         );
     }
 
-    public static function findFiltered(array|DbFilter $filter): array
+    public static function findFiltered(array|Filter $filter): array
     {
-        $filter = DbFilter::create($filter);
+        $filter = Filter::create($filter);
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';

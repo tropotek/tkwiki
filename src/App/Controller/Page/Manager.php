@@ -5,7 +5,7 @@ use App\Db\Permissions;
 use App\Table\Page;
 use Bs\ControllerPublic;
 use Dom\Template;
-use Tt\Db;
+use Tk\Db;
 
 class Manager extends ControllerPublic
 {

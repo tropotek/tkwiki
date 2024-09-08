@@ -6,7 +6,7 @@ use Dom\Template;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Select;
 use Tk\Uri;
-use Tt\Db;
+use Tk\Db;
 use Tt\Table\Action\Delete;
 use Tt\Table\Cell;
 use Tt\Table\Cell\RowSelect;

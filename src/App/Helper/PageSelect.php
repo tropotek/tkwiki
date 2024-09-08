@@ -6,8 +6,8 @@ use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
-use Tt\Db;
-use Tt\DbFilter;
+use Tk\Db;
+use Tk\Db\Filter;
 
 class PageSelect extends Renderer implements DisplayInterface
 {

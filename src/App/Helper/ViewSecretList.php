@@ -7,7 +7,7 @@ use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
-use Tt\DbFilter;
+use Tk\Db\Filter;
 
 /**
  * Render the secret output table list
@@ -34,7 +34,7 @@ class ViewSecretList extends Renderer implements DisplayInterface
         $filter = [
             'userId' => $this->user->userId
         ];
-        $list = Secret::findFiltered(DbFilter::create($filter, 'name'));
+        $list = Secret::findFiltered(Filter::create($filter, 'name'));
 
         foreach ($list as $secret) {
             if (!$secret->canView($this->getFactory()->getAuthUser())) continue;

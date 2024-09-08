@@ -6,7 +6,7 @@ use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tk\Console\Console;
-use Tt\Db;
+use Tk\Db;
 
 /**
  * Cron job to be run nightly
@@ -33,7 +33,7 @@ class Cron extends Console
             return self::SUCCESS;
         }
 
-        // index wiki pages to identify orphaned pages that are not linked
+        // re-index wiki pages to identify orphaned pages that are not linked
 
         Db::execute("TRUNCATE links");
         $pages = Page::findAll();

@@ -9,11 +9,11 @@ use Tk\Registry;
 use Tk\Uri;
 use Bs\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
-use Tt\Db;
-use Tt\DbFilter;
-use Tt\DbModel;
+use Tk\Db;
+use Tk\Db\Filter;
+use Tk\Db\Model;
 
-class Page extends DbModel
+class Page extends Model
 {
     use TimestampTrait;
     use UserTrait;
@@ -214,9 +214,9 @@ class Page extends DbModel
         return self::findFiltered(['url' => $url])[0] ?? null;
     }
 
-    public static function findViewable(array|DbFilter $filter): array
+    public static function findViewable(array|Filter $filter): array
     {
-        $filter = DbFilter::create($filter);
+        $filter = Filter::create($filter);
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';
@@ -269,9 +269,9 @@ class Page extends DbModel
         );
     }
 
-    public static function findFiltered(array|DbFilter $filter): array
+    public static function findFiltered(array|Filter $filter): array
     {
-        $filter = DbFilter::create($filter);
+        $filter = Filter::create($filter);
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';

@@ -6,7 +6,7 @@ use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Traits\SystemTrait;
-use Tt\DbFilter;
+use Tk\Db\Filter;
 
 
 class ViewCategoryList extends Renderer implements DisplayInterface
@@ -44,7 +44,7 @@ class ViewCategoryList extends Renderer implements DisplayInterface
             unset($filter['permission']);
         }
 
-        $list = Page::findFiltered(DbFilter::create($filter, 'title'));
+        $list = Page::findFiltered(Filter::create($filter, 'title'));
 
         foreach ($list as $page) {
             if (!$page->canView($this->getFactory()->getAuthUser())) continue;

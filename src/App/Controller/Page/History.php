@@ -6,7 +6,7 @@ use App\Table\Content;
 use Bs\ControllerPublic;
 use Dom\Template;
 use Tk\Alert;
-use Tt\Db;
+use Tk\Db;
 
 class History extends ControllerPublic
 {

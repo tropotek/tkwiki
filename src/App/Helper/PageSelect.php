@@ -35,7 +35,6 @@ class PageSelect extends Renderer implements DisplayInterface
         }
 
         $list = Page::findViewable($filter);
-        vd(Db::getLastStatement()->getTotalRows(), Db::getLastStatement()->queryString);
         $this->table->setRows($list, Db::getLastStatement()->getTotalRows());
 
     }

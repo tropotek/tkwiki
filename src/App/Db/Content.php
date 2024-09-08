@@ -146,7 +146,7 @@ class Content extends Model
         if (!empty($filter['userId'])) {
             $filter->appendWhere('a.user_id = :userId AND ');
         }
-        
+
         return Db::query("
             SELECT *
             FROM content a

@@ -25,8 +25,6 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Controller\Menu\Edit::class, 'doDefault']);
     $routes->add('wiki-page', '/pageManager')
         ->controller([\App\Controller\Page\Manager::class, 'doDefault']);
-    $routes->add('wiki-orphaned', '/orphanManager')
-        ->controller([\App\Controller\Page\Orphaned::class, 'doDefault']);
     $routes->add('wiki-history', '/historyManager')
         ->controller([\App\Controller\Page\History::class, 'doDefault']);
     $routes->add('wiki-page-view', '/view')
@@ -73,7 +71,7 @@ return function (CollectionConfigurator $routes) {
         ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET]);
     $routes->add('api-secret-pass', '/api/secret/pass')
         ->controller([\App\Api\Secret::class, 'doGetPass'])
-        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_GET])
+        ->methods([\Symfony\Component\HttpFoundation\Request::METHOD_POST])
         ->schemes(['https']);
 
 

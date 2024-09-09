@@ -86,35 +86,59 @@ let app = function () {
    */
   let initWkSecret = function () {
 
+    // TODO: implement secret hash to replace ID
     function loadPass(el, callback) {
       let id = el.data('id');
       if (id) {
-        el.removeAttr('data-id');
-        $.get(tkConfig.baseUrl + '/api/secret/pass', {id}, function (data) {
-          el.data('text', data.p);
+        //el.removeAttr('data-id');
+        $.post(tkConfig.baseUrl + '/api/secret/pass', {id}, function (data) {
+          el.data('pw', data.p);
           callback.apply(el, [data]);
-        }, 'json');
+        }, 'json').fail(function () {
+          console.error(arguments);
+        });
       }
     }
 
-    $('.cp-usr, .cp-pas', '.wk-secret').on('click', function () {
-      let pass = $(this).parent().find($(this).data('target'));
-      if (!pass) return;
-      let val = pass.data('text');
-      copyToClipboard(val);
-      if ($(this).is('.cp-pas')) {
-        loadPass(pass, function (data) {
-          copyToClipboard(pass.data('text'));
-        });
+    $('.pw-show', '.wk-secret').on('click', function () {
+      let secret = $(this).closest('.wk-secret');
+      if (!secret.length) return;
+      if (secret.data('pw')) {
+        $(this).parent().find('.pas').text(secret.data('pw'))
+        return;
       }
+      loadPass(secret, function (data) {
+        $(this).parent().find('.pas').text(secret.data('pw'))
+      });
     });
 
-    $('.wk-secret .cp-otp').on('click', function (e) {
+    $('.cp-pas', '.wk-secret').on('click', function () {
+      let secret = $(this).closest('.wk-secret');
+      if (!secret.length) return;
+      if (secret.data('pw')) {
+        copyToClipboard(secret.data('pw'));
+        return;
+      }
+      loadPass(secret, function (data) {
+        copyToClipboard(secret.data('pw'));
+      });
+    });
+
+    $('.cp-usr', '.wk-secret').on('click', function () {
+      let val = $(this).parent().find('.usr').text;
+      copyToClipboard(val);
+    });
+
+    // TODO: implement secret hash to replace ID
+    $('.cp-otp').on('click', function (e) {
       let btn = $(this);
+      if (!btn.parent().data('id')) return;
       var params = {'o': btn.parent().data('id')};
       $.post(document.location, params, function (data) {
         btn.next().text(data.otp);
         copyToClipboard(data.otp);
+      }).fail(function () {
+        console.error(arguments);
       });
       return false;
     });

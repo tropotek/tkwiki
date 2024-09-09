@@ -30,7 +30,7 @@ class ViewSecret extends Renderer implements DisplayInterface
     #[NoReturn] public function doOtp()
     {
         $response = new JsonResponse(['msg' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        $secret = Secret::find($_GET['o'] ?? 0);
+        $secret = Secret::find($_POST['o'] ?? 0);
         if ($secret && $secret->canView($this->getFactory()->getAuthUser())) {
             $response = new JsonResponse(['otp' => $secret->genOtpCode()]);
         }
@@ -42,7 +42,9 @@ class ViewSecret extends Renderer implements DisplayInterface
     {
         $template = $this->getTemplate();
 
+        $template->setAttr('secret', 'data-id', $this->secret->secretId);
         $template->setText('name', $this->secret->name);
+
         if ($this->secret->keys || $this->secret->notes) {
             $template->prependText('name', '* ');
         }
@@ -55,20 +57,20 @@ class ViewSecret extends Renderer implements DisplayInterface
         if ($this->secret->username || $this->secret->password) {
             if ($this->secret->username) {
                 $template->setText('username', $this->secret->username);
-                $template->setAttr('username', 'data-text', $this->secret->username);
+                //$template->setAttr('username', 'data-text', $this->secret->username);
                 $template->setVisible('user');
             }
             if ($this->secret->password) {
                 $template->setText('password', str_repeat('*', strlen($this->secret->password)));
-                $template->setAttr('password', 'data-text', str_repeat('*', strlen($this->secret->password)));
-                $template->setAttr('password', 'data-id', $this->secret->secretId);
+                //$template->setAttr('password', 'data-text', str_repeat('*', strlen($this->secret->password)));
+                //$template->setAttr('password', 'data-id', $this->secret->secretId);
                 $template->setVisible('pass');
             }
             $template->setVisible('userpass');
         }
 
         if ($this->secret->otp) {
-            $template->setAttr('otp', 'data-id', $this->secret->secretId);
+            //$template->setAttr('otp', 'data-id', $this->secret->secretId);
             $template->setVisible('o');
         }
 
@@ -83,7 +85,7 @@ class ViewSecret extends Renderer implements DisplayInterface
     public function __makeTemplate(): ?Template
     {
         $html = <<<HTML
-<div class="wk-secret align-top" >
+<div class="wk-secret align-top" var="secret">
   <a href="#" class="wk-secret-edit" title="Edit" choice="edit"><i class="fa fa-light fa-pen-to-square"></i></a>
   <span class="strong" var="name" choice="no-url"></span><br choice="no-url"/>
   <a href="#" target="_blank" class="strong" title="Visit site" var="name" choice="url"></a><br choice="url"/>

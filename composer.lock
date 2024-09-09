@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f69eec823183157f02e73f8fcdbc2907",
+    "content-hash": "3769c6293169fa0465cfc0ab8e57fe33",
     "packages": [
         {
             "name": "components/font-awesome",
@@ -3038,12 +3038,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-mail.git",
-                "reference": "2c34188f7f9a14989eb441429010b5c38b1aebd3"
+                "reference": "3fa462800b51f64e7237a9ccd2053160640fa2f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-mail/zipball/2c34188f7f9a14989eb441429010b5c38b1aebd3",
-                "reference": "2c34188f7f9a14989eb441429010b5c38b1aebd3",
+                "url": "https://api.github.com/repos/tropotek/tk-mail/zipball/3fa462800b51f64e7237a9ccd2053160640fa2f6",
+                "reference": "3fa462800b51f64e7237a9ccd2053160640fa2f6",
                 "shasum": ""
             },
             "require": {

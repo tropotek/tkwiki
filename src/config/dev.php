@@ -14,7 +14,7 @@ use Bs\Db\User;
 $config = \Tk\Config::instance();
 
 if (!$config->isDebug() || $config->isProd()) {
-    error_log(__FILE__ . ': Do not execute this file in a production environment!');
+    error_log("Warning Project must be in debug and in a dev mode to execute dev.php");
     return;
 }
 

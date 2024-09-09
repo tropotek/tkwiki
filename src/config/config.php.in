@@ -9,7 +9,8 @@ use Tk\Config;
 return function (Config $config) {
 
     /**
-     * Default System DB
+     * System DB DSN
+     * hostname[:port]/username/password/dbname
      */
     $config['db.mysql'] = 'localhost:3306/user/pass/dbName';
 
@@ -31,7 +32,7 @@ return function (Config $config) {
     $config->set('path.template.admin', $config->get('path.template.public'));
     $config->set('path.template.user', $config->get('path.template.public'));
 
-    /*
+    /**
      * Setup available page templates that reside in the "/html" directory
      * Add the filename without an extension, the extension should be '.html'
      * array:
@@ -48,19 +49,18 @@ return function (Config $config) {
      */
     //$config['user.profile.password']    = false;
 
-    /*
-     * DB secret API key
+    /**
+     * Mirror command secret API key
      * Use this key for the mirror command in a dev environment.
-     * Default: empty, and disabled
      */
     //$config['db.mirror.secret'] = '';
 
-    /*
+    /**
      * \Tk\Encrypt function secret seed
      */
     $config['system.encrypt'] = '';
 
-    /*
+    /**
      * Set the site timezone for PHP and MySQL
      */
     //$config['php.date.timezone']    = 'Australia/Melbourne';
@@ -71,24 +71,24 @@ return function (Config $config) {
      */
     $config['user.homepage'] = [];
 
-    /*
+    /**
      * Email template relative path
      */
     $config['system.mail.template'] = '/html/templates/mail.default.xtpl';
 
-    /*
+    /**
      * Enable DB sessions
      * Default: false
      */
     $config['session.db_enable']    = true;
 
-    /*
+    /**
      * Set the location of the site log file
      * Default: uses the system PHP log file
      */
      //$config['php.error_log']      = '/home/user/log/error.log';
 
-    /*
+    /**
      * The default log level
      * Default: LogLevel::ERROR
      */

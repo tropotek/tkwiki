@@ -272,13 +272,52 @@ class Edit extends ControllerPublic
         $this->form->getField('description')->addFieldCss('col-sm-6');
         $template->appendTemplate('content', $this->form->show());
 
-        $dialog = new PageSelect();
-        $template->appendBodyTemplate($dialog->show());
+        $pageSelect = new PageSelect();
+        $template->appendBodyTemplate($pageSelect->show());
 
         if ($this->getRegistry()->get('wiki.enable.secret.mod', false)) {
-            $dialog = new SecretSelect();
-            $template->appendBodyTemplate($dialog->show());
+            $secretSelect = new SecretSelect();
+            $template->appendBodyTemplate($secretSelect->show());
         }
+
+        $js = <<<JS
+jQuery(function($) {
+    // page select event
+    $(document).on('selected.ps.modal', '#page-select-dialog', function(e, title, url, pageId) {
+        const editor = tinymce.activeEditor;
+        let attrs = {
+          href: 'page://' + url,
+          title: title
+        };
+        if (editor.selection.getContent()) {
+          editor.execCommand('CreateLink', false, attrs);
+        } else {
+          editor.insertContent(editor.dom.createHTML('a', attrs, editor.dom.encode(title)));
+        }
+    });
+
+    // category select event
+    $(document).on('catSelect.ps.modal', '#page-select-dialog', function(e, category, attrs) {
+        const editor = tinymce.activeEditor;
+        editor.insertContent(editor.dom.createHTML('div', attrs,
+            editor.dom.encode('{Category List: ' + category + '}'))
+        );
+    });
+
+    // secret select event
+    $(document).on('selected.ss.modal', '#secret-select-dialog', function(e, secretId, name) {
+        const editor = tinymce.activeEditor;
+        let linkAttrs = {
+          class: 'wk-secret',
+          'wk-secret': secretId,
+          'title': name,
+          src: tkConfig.baseUrl + '/html/assets/img/secretbg.png'
+        };
+        editor.insertContent(editor.dom.createHTML('img', linkAttrs));
+    })
+});
+JS;
+        $template->appendJs($js);
 
         // Autocomplete js
         $jsPageId = json_encode($this->page->pageId);
@@ -326,7 +365,6 @@ jQuery(function($) {
     $(document).data('pageUpdated', false);
 
     $('input,select,textarea', '.page-form').on('change', function(e) {
-        //console.log(e);
         $(document).data('pageUpdated', true);
     });
 

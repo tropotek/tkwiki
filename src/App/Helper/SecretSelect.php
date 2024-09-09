@@ -66,17 +66,6 @@ jQuery(function($) {
     let selectDialog = '#secret-select-dialog';
     let createDialog = '#secret-create-dialog';
 
-    function insertSecretHtml(id, name) {
-        const editor = tinymce.activeEditor;
-        let linkAttrs = {
-          class: 'wk-secret',
-          'wk-secret': id,
-          'title': name,
-          src: tkConfig.baseUrl + '/html/assets/img/secretbg.png'
-        };
-        editor.insertContent(editor.dom.createHTML('img', linkAttrs));
-    }
-
     $(selectDialog).on('show.bs.modal', function() {
         $('input', this).val('');
         $('#secret-select-table', selectDialog).load(document.location.href + ' #secret-select-table', function (response, status, xhr) {
@@ -85,9 +74,9 @@ jQuery(function($) {
     })
     .on('click', '.wiki-insert', function() {
         // insert existing secret
-        let id = $(this).data('secret-id');
-        let name = $(this).data('secret-name');
-        insertSecretHtml(id, name);
+        let secretId = $(this).data('secretId');
+        let name = $(this).data('secretName');
+        $(selectDialog).trigger('selected.ss.modal', [secretId, name]);
         $('#secret-select-dialog').modal('hide');
         return false;
     })

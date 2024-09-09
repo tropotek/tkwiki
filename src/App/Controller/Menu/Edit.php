@@ -2,13 +2,13 @@
 namespace App\Controller\Menu;
 
 use App\Db\MenuItem;
+use App\Db\Page;
 use App\Db\Permissions;
 use App\Helper\PageSelect;
 use Bs\ControllerPublic;
 use Bs\Ui\Dialog;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tk\Exception;
 use Tk\Uri;
@@ -20,30 +20,30 @@ class Edit extends ControllerPublic
 {
 
 
-    public function doDefault(Request $request)
+    public function doDefault(): mixed
     {
-        switch ($_GET['action'] ?? '') {
+        switch ($_REQUEST['action'] ?? '') {
             case 'create':
-                return $this->doCreate($request);
+                return $this->doCreate();
             case 'update':
-                return $this->doUpdate($request);
+                return $this->doUpdate();
             case 'delete':
-                return $this->doDelete($request);
+                return $this->doDelete();
         }
 
         $this->getPage()->setTitle('Edit Menu');
         $this->setAccess(Permissions::PERM_SYSADMIN | Permissions::PERM_EDITOR);
         $this->getCrumbs()->reset();
 
-       //return $this->getPage();
+        return null;
     }
 
-    public function doCreate(Request $request): JsonResponse
+    public function doCreate(): JsonResponse
     {
         try {
-            $pageId = $request->request->getInt('pageId');
-            $type   = $request->request->getString('type', MenuItem::TYPE_ITEM);
-            $name   = $request->request->getString('name', '');
+            $pageId = intval($_POST['pageId'] ?? 0);
+            $type   = trim($_POST['type'] ?? MenuItem::TYPE_ITEM);
+            $name   = trim($_POST['name'] ?? '');
 
             $item = new MenuItem();
             $item->type = $type;
@@ -71,17 +71,16 @@ class Edit extends ControllerPublic
                 'name' => $item->name,
                 'type' => $item->type,
             ];
-            MenuItem::indexLinks();
             return new JsonResponse($data);
         } catch (\Exception $e) {
             return new JsonResponse(['err' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    public function doUpdate(Request $request): JsonResponse
+    public function doUpdate(): JsonResponse
     {
         try {
-            $list = $_POST['list'];
+            $list = $_POST['list'] ?? [];
             if (!is_array($list)) {
                 throw new Exception('cannot save menu');
             }
@@ -90,7 +89,6 @@ class Edit extends ControllerPublic
                 MenuItem::updateItem((int)$item['id'], $item['parent_id'], (int)$orderId, trim($item['name']));
             }
 
-            MenuItem::indexLinks();
             $data = [ 'status' => 'ok' ];
             return new JsonResponse($data);
         } catch (\Exception $e) {
@@ -98,13 +96,13 @@ class Edit extends ControllerPublic
         }
     }
 
-    public function doDelete(Request $request): JsonResponse
+    public function doDelete(): JsonResponse
     {
         try {
-            $menuItemId = $request->request->getInt('id');
+            $menuItemId = intval($_POST['id'] ?? 0);
+
             $item = MenuItem::find($menuItemId);
             $item?->delete();
-            MenuItem::indexLinks();
             return new JsonResponse([ 'status' => 'ok' ]);
         } catch (\Exception $e) {
             return new JsonResponse(['err' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -219,18 +217,16 @@ jQuery(function($) {
         $.post(location.href, {action: 'update', list: result}, function(data) { });
     }
 
-    // Add page dialog
-    $('td a.wiki-insert', '#page-select-dialog').on('click', function (e) {
-        e.stopPropagation();
-        let page = $(this).data();
-
-        // Create new menu item and get item id returned from server
-        $.post(location.href, {action: 'create', pageId: page.pageId, type: 'item'}, function(data) {
+    // on dialog page select
+    $(document).on('selected.ps.modal', '#page-select-dialog', function(e, title, url, pageId) {
+        if (pageId === 0) return;
+        $.post(location.href, {action: 'create', pageId: pageId, type: 'item'}, function(data) {
+            console.log(data);
             let li = $(liTpl);
             li.addClass('mjs-nestedSortable-no-nesting');
             li.attr('id', 'item-' + data.menuItemId);
             li.data('itemId', data.menuItemId);
-            li.data('pageId', data.pageId);
+            li.data('pageId', pageId);
             li.data('type', data.type);
             $('a', li).html(data.name);
             $('a', li).attr('contentEditable', 'true');
@@ -240,6 +236,12 @@ jQuery(function($) {
             $('#page-select-dialog').modal('hide');
         });
         return false;
+    });
+
+    // category select event
+    $(document).on('catSelect.ps.modal', '#page-select-dialog', function(e, category, attrs) {
+        console.log(arguments);
+        // todo: insert a link to a page category list???
     });
 
     // Add dropdown item

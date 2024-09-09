@@ -48,19 +48,6 @@ class PageSelect extends Renderer implements DisplayInterface
 jQuery(function($) {
     let dialog = '#page-select-dialog';
 
-    function insertWikiUrl(title, url, isNew) {
-        const editor = tinymce.activeEditor;
-        let attrs = {
-          href: 'page://' + url,
-          title: title
-        };
-        if (editor.selection.getContent()) {
-          editor.execCommand('CreateLink', false, attrs);
-        } else {
-          editor.insertContent(editor.dom.createHTML('a', attrs, editor.dom.encode(title)));
-        }
-    }
-
     $(dialog).on('show.bs.modal', function() {
         $('input', this).val('');
     })
@@ -75,9 +62,10 @@ jQuery(function($) {
     })
     .on('click', '.wiki-insert', function() {
         // On insert existing page event
-        let title = $(this).data('page-title');
-        let url = $(this).data('page-url');
-        insertWikiUrl(title, url, false);
+        let title = $(this).data('pageTitle');
+        let url = $(this).data('pageUrl');
+        let pageId = $(this).data('pageId');
+        $(dialog).trigger('selected.ps.modal', [title, url, pageId]);
         $(dialog).modal('hide');
         return false;
     })
@@ -85,22 +73,17 @@ jQuery(function($) {
         // On insert new page event
         let title = $(this).parent().find('input').val();
         let url = title.trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-        // TODO: we could check for existing url (using ajax)?
-        //       Check on a keyup event (with delay 250ms), disable btn if exists
-        insertWikiUrl(title, url, true);
+        $(dialog).trigger('selected.ps.modal', [title, url, 0]);
         $(dialog).modal('hide');
         return false;
     })
     .on('click', '.wiki-cat-list', function() {
-        const editor = tinymce.activeEditor;
         // On insert new page event
         let category = $(this).data('category');
         let attrs = {
           'wk-category-list': category
         };
-        editor.insertContent(editor.dom.createHTML('div', attrs,
-            editor.dom.encode('{Category List: ' + category + '}'))
-        );
+        $(dialog).trigger('catSelect.ps.modal', [category, attrs]);
         $(dialog).modal('hide');
         return false;
     });
@@ -113,7 +96,6 @@ jQuery(function($) {
         links.on('click', function(e) {
             e.stopPropagation();
             let url = $(this).attr('href');
-            console.log(url);
             $('#page-select-table', dialog).load(url + ' #page-select-table', function (response, status, xhr) {
                 tkInit($(dialog));
             });

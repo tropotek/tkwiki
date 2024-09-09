@@ -9,6 +9,7 @@
 -- \App\Db\Page
 CREATE OR REPLACE VIEW v_page AS
 WITH
+  -- TODO: also look for links in the menu as they will not be a parent page_id
   linked AS (
     SELECT
       linked_id AS page_id,

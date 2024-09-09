@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.46 [2024-09-09]:
+-------------------------------
+  - fix secret widget
+  - Page manager updates
+
+
 Ver 8.0.44 [2024-09-09]:
 -------------------------------
   - Fixed save page in mce

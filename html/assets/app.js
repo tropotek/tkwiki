@@ -125,7 +125,7 @@ let app = function () {
     });
 
     $('.cp-usr', '.wk-secret').on('click', function () {
-      let val = $(this).parent().find('.usr').text;
+      let val = $(this).parent().find('.usr').text();
       copyToClipboard(val);
     });
 

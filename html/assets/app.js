@@ -104,15 +104,15 @@ let app = function () {
       let secret = $(this).closest('.wk-secret');
       if (!secret.length) return;
       if (secret.data('pw')) {
-        $('.pas', $(this).parent()).text(secret.data('pw'))
+        $('.pas', secret).text(secret.data('pw'))
         return;
       }
       loadPass(secret, function (data) {
-        $('.pas', $(this).parent()).text(secret.data('pw'))
+        $('.pas', secret).text(secret.data('pw'))
       });
     });
 
-    $('.cp-pas', '.wk-secret').on('click', function () {
+    $('.wk-secret .cp-pas').on('click', function () {
       let secret = $(this).closest('.wk-secret');
       if (!secret.length) return;
       if (secret.data('pw')) {
@@ -130,12 +130,12 @@ let app = function () {
     });
 
     // TODO: implement secret hash to replace ID
-    $('.cp-otp').on('click', function (e) {
-      let btn = $(this);
-      if (!btn.parent().data('id')) return;
-      var params = {'o': btn.parent().data('id')};
+    $('.wk-secret .cp-otp').on('click', function (e) {
+      let secret = $(this).closest('.wk-secret');
+      if (!secret.data('id')) return;
+      var params = {'o': secret.data('id')};
       $.post(document.location, params, function (data) {
-        btn.next().text(data.otp);
+        $('.otp-code', secret).text(data.otp);
         copyToClipboard(data.otp);
       }).fail(function () {
         console.error(arguments);

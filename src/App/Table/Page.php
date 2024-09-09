@@ -22,8 +22,10 @@ class Page extends Table
         $this->appendCell('actions')
             ->addCss('text-nowrap text-center')
             ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
+                $viewUrl = $page->getUrl();
                 return <<<HTML
                     <a class="btn btn-outline-secondary btn-copy-code" href="javascript:;" data-page-id="{$page->pageId}" title="Click to copy wiki link"><i class="fa fa-fw fa-code"></i></a>
+                    <a class="btn btn-outline-secondary" href="$viewUrl" title="View"><i class="fa fa-fw fa-eye"></i></a>
                 HTML;
             });
 
@@ -42,7 +44,10 @@ class Page extends Table
 
         $this->appendCell('url')
             ->addCss('text-nowrap')
-            ->setSortable(true);
+            ->setSortable(true)
+            ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
+                return sprintf('<a href="%s">/%s</a>', $page->getUrl(), $page->url);
+            });
 
         $this->appendCell('published')
             ->addCss('text-nowrap')

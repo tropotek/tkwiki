@@ -202,7 +202,6 @@ class Edit extends ControllerPublic
 
     public function onSubmit(Form $form, Submit $action): void
     {
-        // TODO: check this works as expected
         $form->mapValues($this->page);
         $form->mapValues($this->content);
 
@@ -280,8 +279,46 @@ class Edit extends ControllerPublic
             $template->appendBodyTemplate($secretSelect->show());
         }
 
+        // Autocomplete js
+        $jsPageId = json_encode($this->page->pageId);
         $js = <<<JS
 jQuery(function($) {
+    let pageId = $jsPageId;
+    let cache = {};
+    let input = $('[name=category]');
+
+    input.autocomplete({
+      source: function(request, response) {
+        let term = request.term;
+        if (term in cache) {
+          response(cache[term]);
+          return;
+        }
+        $.getJSON(tkConfig.baseUrl + '/api/page/category', request, function(data, status, xhr) {
+          cache[term] = data;
+          response(data);
+        });
+      },
+      minLength: 0  // Must be 0 for dropdown btn to work
+    });
+
+    // Show the dropdown on click
+    $('.fld-category button').on('click', function () {
+        input.autocomplete('search', input.val());
+    });
+
+    // Start page lock trigger
+    var lockTimeout = 1000*60;     // 1000 = 1 sec
+    function saveLock() {
+        $.getJSON(tkConfig.baseUrl + '/api/lock/refresh', {pid: pageId});
+        setTimeout(saveLock, lockTimeout);
+    }
+    setTimeout(saveLock, lockTimeout);
+
+    $(document).on('save.mce', '.mce, .mce-min', function() {
+        $('#form_save').trigger('click');
+    });
+
     // page select event
     $(document).on('selected.ps.modal', '#page-select-dialog', function(e, title, url, pageId) {
         const editor = tinymce.activeEditor;
@@ -315,65 +352,20 @@ jQuery(function($) {
         };
         editor.insertContent(editor.dom.createHTML('img', linkAttrs));
     })
-});
-JS;
-        $template->appendJs($js);
 
-        // Autocomplete js
-        $jsPageId = json_encode($this->page->pageId);
-        $js = <<<JS
-jQuery(function($) {
-    let pageId = {$jsPageId}
-    let cache = {};
-    let input = $('[name=category]');
+    // on editor save event
 
-    input.autocomplete({
-      source: function(request, response) {
-        let term = request.term;
-        if (term in cache) {
-          response(cache[term]);
-          return;
-        }
-        $.getJSON(tkConfig.baseUrl + '/api/page/category', request, function(data, status, xhr) {
-          cache[term] = data;
-          response(data);
-        });
-      },
-      minLength: 0  // Must be 0 for dropdown btn to work
-    });
 
-    // Show the dropdown on click
-    $('.fld-category button').on('click', function () {
-        input.autocomplete('search', input.val());
-    });
-
-    // Start page lock trigger
-    var lockTimeout = 1000*60;     // 1000 = 1 sec
-    function saveLock() {
-        $.getJSON(tkConfig.baseUrl + '/api/lock/refresh', {pid: pageId});
-        setTimeout(saveLock, lockTimeout);
-    }
-    setTimeout(saveLock, lockTimeout);
-});
-JS;
-        $template->appendJs($js);
-
-        // Leave page confirm
-        $js = <<<JS
-jQuery(function($) {
-
+    // on window unload event
     $(document).data('pageUpdated', false);
-
     $('input,select,textarea', '.page-form').on('change', function(e) {
         $(document).data('pageUpdated', true);
     });
-
     $(window).on('beforeunload', function(e) {
         if ($(document).data('pageUpdated')) {
             return "Are you sure you want to exit?";
         }
     });
-
     $('button#page-cancel, button#page-save').on('click', function(){
         $(document).data('pageUpdated', false);
     });

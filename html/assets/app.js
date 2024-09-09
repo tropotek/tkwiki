@@ -168,6 +168,7 @@ let app = function () {
 
       save_onsavecallback: () => {
         $('#page-save', tinymce.activeEditor.formElement).trigger('click');
+        $(tinymce.activeEditor.targetElm).trigger('save.mce');
       },
       urlconverter_callback : function (url, node, on_save) {
         let parts = url.split(tkConfig.baseUrl);

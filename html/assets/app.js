@@ -104,11 +104,11 @@ let app = function () {
       let secret = $(this).closest('.wk-secret');
       if (!secret.length) return;
       if (secret.data('pw')) {
-        $(this).parent().find('.pas').text(secret.data('pw'))
+        $('.pas', $(this).parent()).text(secret.data('pw'))
         return;
       }
       loadPass(secret, function (data) {
-        $(this).parent().find('.pas').text(secret.data('pw'))
+        $('.pas', $(this).parent()).text(secret.data('pw'))
       });
     });
 
@@ -125,7 +125,7 @@ let app = function () {
     });
 
     $('.cp-usr', '.wk-secret').on('click', function () {
-      let val = $(this).parent().find('.usr').text();
+      let val = $('.usr', $(this).parent()).text();
       copyToClipboard(val);
     });
 

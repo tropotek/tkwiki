@@ -10,12 +10,12 @@ class Secret
     use SystemTrait;
 
     /**
-     * TODO: we should implement a hash for a more secure fetch.
+     * TODO:  implement a hash for a more secure fetch.
      */
     public function doGetPass()
     {
         $data = ['p' => ''];
-        $id = intval($_GET['id'] ?? 0);
+        $id = intval($_POST['id'] ?? 0);
         if ($this->getFactory()->getAuthUser() && $id) {
             $secret = \App\Db\Secret::find($id);
             if ($secret?->canView($this->getFactory()->getAuthUser())) {

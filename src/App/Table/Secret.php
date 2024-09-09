@@ -36,8 +36,9 @@ class Secret extends Table
             ->addCss('text-nowrap text-center')
             ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
                 if (empty($obj->otp)) return '';
+                $cell->setAttr('data-id', $obj->secretId);
                 return <<<HTML
-                    <a href="javascript:;" class="btn btn-sm btn-outline-success otp" data-id="{$obj->secretId}"><i class="fa fa-refresh"></i></a> <em>------</em>
+                    <a href="javascript:;" class="btn btn-sm btn-outline-success cp-otp"><i class="fa fa-refresh"></i></a> <em>------</em>
                 HTML;
             });
 
@@ -109,28 +110,6 @@ class Secret extends Table
         }
         $response->send();
         exit;
-    }
-
-    public function show(): ?Template
-    {
-        $renderer = $this->getRenderer();
-
-        $js = <<<JS
-jQuery(function($) {
-  $('.tk-table table .otp').on('click', function (e) {
-    let btn = $(this);
-    var params = {'o': btn.data('id'), 'nolog': 'nolog'};
-    $.post(document.location, params, function (data) {
-      btn.next().text(data.otp);
-      copyToClipboard(data.otp);
-    });
-    return false;
-  });
-});
-JS;
-        $renderer->getTemplate()->appendJs($js);
-
-        return parent::show();
     }
 
 }

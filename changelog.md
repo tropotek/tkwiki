@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.42 [2024-09-09]:
+-------------------------------
+  - fix menu edit and page select dialog
+
+
 Ver 8.0.40 [2024-09-08]:
 -------------------------------
   - done

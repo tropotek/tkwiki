@@ -33,12 +33,12 @@ class Secret extends Table
             });
 
         $this->appendCell('otp')
-            ->addCss('text-nowrap text-center')
+            ->addCss('text-nowrap text-center wk-secret')
             ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
                 if (empty($obj->otp)) return '';
                 $cell->setAttr('data-id', $obj->secretId);
                 return <<<HTML
-                    <a href="javascript:;" class="btn btn-sm btn-outline-success cp-otp"><i class="fa fa-refresh"></i></a> <em>------</em>
+                    <a href="javascript:;" class="btn btn-sm btn-outline-success cp-otp"><i class="fa fa-refresh"></i></a> <em class="otp-code">------</em>
                 HTML;
             });
 

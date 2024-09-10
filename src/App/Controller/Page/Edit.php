@@ -194,7 +194,7 @@ class Edit extends ControllerPublic
         $this->lock->unlock($this->page->pageId);
 
         $url = $this->getFactory()->getBackUrl();
-        if ($this->page->pageId && $_GET['e']) {
+        if ($this->page->pageId && isset($_GET['e'])) {
             $url = $this->page->getUrl();
         }
         $action->setRedirect($url);
@@ -234,7 +234,7 @@ class Edit extends ControllerPublic
         Alert::addSuccess('Page save successfully.');
 
         $url = $this->getFactory()->getBackUrl();
-        if ($_GET['e']) {
+        if (isset($_GET['e'])) {
             $url = $this->page->getUrl();
         }
         $action->setRedirect($url);

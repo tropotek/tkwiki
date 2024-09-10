@@ -32,7 +32,7 @@ class Edit extends ControllerPublic
             Uri::create('/')->redirect();
         }
 
-        $hash = trim($_GET['hash'] ?? '');
+        $hash = trim($_GET['h'] ?? '');
 
         $this->secret = new Secret();
         $this->secret->userId = $this->getFactory()->getAuthUser()->userId;

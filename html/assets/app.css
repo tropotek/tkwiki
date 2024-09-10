@@ -110,7 +110,9 @@ pre {
 .wk-content .wk-secret-list .wk-secret {
   overflow: hidden;
 }
-
+.wk-content .wk-secret a.wk-secret-edit {
+  color: #0099FF;
+}
 
 /* \Tk\Form */
 form textarea {

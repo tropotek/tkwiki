@@ -21,11 +21,6 @@ class Edit extends ControllerPublic
     protected ?\App\Form\Secret $form = null;
 
 
-    public function __construct()
-    {
-
-    }
-
     public function doDefault(): void
     {
         $this->getPage()->setTitle('Edit Secret');
@@ -37,15 +32,15 @@ class Edit extends ControllerPublic
             Uri::create('/')->redirect();
         }
 
-        $secretId = intval($_GET['secretId'] ?? 0);
+        $hash = trim($_GET['hash'] ?? '');
 
         $this->secret = new Secret();
         $this->secret->userId = $this->getFactory()->getAuthUser()->userId;
-        if ($secretId) {
-            $this->secret = Secret::find($secretId);
+        if ($hash) {
+            $this->secret = Secret::findByHash($hash);
         }
         if (!$this->secret) {
-            throw new Exception("cannot find object id {$secretId}");
+            throw new Exception("cannot find object hash {$hash}");
         }
 
         $this->form = new \App\Form\Secret($this->secret);

@@ -28,10 +28,21 @@ SELECT
   p.*,
   IFNULL(c.content_id, 0) AS content_id,
   IFNULL(l.total, 0) AS linked,
-  IFNULL(l.total, 0) = 0 AND p.page_id != r.value AS is_orphaned
+  IFNULL(l.total, 0) = 0 AND p.page_id != r.value AS is_orphaned,
+  MD5(CONCAT(p.page_id, 'Page')) AS hash
 FROM page p
 LEFT JOIN linked l USING (page_id)
 JOIN latest c ON (p.page_id = c.page_id AND c.latest = 1)
 JOIN registry r ON (r.`key` = 'wiki.page.home')
+;
+
+
+
+CREATE OR REPLACE VIEW v_secret AS
+SELECT
+  s.*,
+  MD5(CONCAT(s.secret_id, 'Secret')) AS hash
+FROM
+  secret s
 ;
 

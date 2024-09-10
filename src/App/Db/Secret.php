@@ -50,6 +50,7 @@ class Secret extends Model
     public string $otp        = '';
     public string $keys       = '';
     public string $notes      = '';
+    public string $hash       = '';
     public \DateTime $modified;
     public \DateTime $created;
 
@@ -99,6 +100,7 @@ class Secret extends Model
         $map->addType(new TextEncrypt('otp'));
         $map->addType(new TextEncrypt('keys'));
         $map->addType(new TextEncrypt('notes'));
+        $map->addType(new Text('hash'), DataMap::READ);
         $map->addType(new DateTime('modified'));
         $map->addType(new DateTime('created'));
 
@@ -131,10 +133,24 @@ class Secret extends Model
     {
         return Db::queryOne("
             SELECT *
-            FROM secret
+            FROM v_secret
             WHERE secret_id = :id",
-        compact('id'),
-        self::class
+            compact('id'),
+            self::class
+        );
+    }
+
+    public static function findByHash(string $hash): ?static
+    {
+        $hash = trim($hash);
+        if (empty($hash)) return null;
+
+        return Db::queryOne("
+            SELECT *
+            FROM v_secret
+            WHERE hash = :hash",
+            compact('hash'),
+            self::class
         );
     }
 
@@ -142,7 +158,7 @@ class Secret extends Model
     {
         return Db::query("
             SELECT *
-            FROM secret",
+            FROM v_secret",
             null,
             self::class
         );
@@ -179,7 +195,7 @@ class Secret extends Model
 
         return Db::query("
             SELECT *
-            FROM secret a
+            FROM v_secret a
             {$filter->getSql()}",
             $filter->all(),
             self::class
@@ -239,7 +255,7 @@ class Secret extends Model
 
         return Db::query("
             SELECT *
-            FROM secret a
+            FROM v_secret a
             {$filter->getSql()}",
             $filter->all(),
             self::class

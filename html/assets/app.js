@@ -86,29 +86,26 @@ let app = function () {
    */
   let initWkSecret = function () {
 
-    // TODO: implement secret hash to replace ID
-    function loadPass(el, callback) {
-      let id = el.data('id');
-      if (id) {
-        //el.removeAttr('data-id');
-        $.post(tkConfig.baseUrl + '/api/secret/pass', {id}, function (data) {
-          el.data('pw', data.p);
-          callback.apply(el, [data]);
-        }, 'json').fail(function () {
-          console.error(arguments);
-        });
-      }
+    function loadData(el, params, callback) {
+      let hash = el.data('hash');
+      if (!hash) return;
+      $.post(tkConfig.baseUrl + '/api/secret/pass', params, function (data) {
+        callback.apply(el, [data]);
+      }, 'json').fail(function () {
+        console.error(arguments);
+      });
     }
 
-    $('.pw-show', '.wk-secret').on('click', function () {
+    $('.wk-secret .pw-show').on('click', function () {
       let secret = $(this).closest('.wk-secret');
       if (!secret.length) return;
       if (secret.data('pw')) {
         $('.pas', secret).text(secret.data('pw'))
         return;
       }
-      loadPass(secret, function (data) {
-        $('.pas', secret).text(secret.data('pw'))
+      loadData(secret, {p: secret.data('hash')}, function (data) {
+        secret.data('pw', data.pw);
+        $('.pas', secret).text(data.pw);
       });
     });
 
@@ -119,26 +116,23 @@ let app = function () {
         copyToClipboard(secret.data('pw'));
         return;
       }
-      loadPass(secret, function (data) {
-        copyToClipboard(secret.data('pw'));
+      loadData(secret, {p: secret.data('hash')}, function (data) {
+        secret.data('pw', data.pw);
+        copyToClipboard(data.pw);
       });
     });
 
-    $('.cp-usr', '.wk-secret').on('click', function () {
+    $('.wk-secret .cp-usr').on('click', function () {
       let val = $('.usr', $(this).parent()).text();
       copyToClipboard(val);
     });
 
-    // TODO: implement secret hash to replace ID
     $('.wk-secret .cp-otp').on('click', function (e) {
       let secret = $(this).closest('.wk-secret');
-      if (!secret.data('id')) return;
-      var params = {'o': secret.data('id')};
-      $.post(document.location, params, function (data) {
+      if (!secret.length) return;
+      loadData(secret, {p: secret.data('hash')}, function (data) {
         $('.otp-code', secret).text(data.otp);
         copyToClipboard(data.otp);
-      }).fail(function () {
-        console.error(arguments);
       });
       return false;
     });

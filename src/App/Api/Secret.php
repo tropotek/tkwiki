@@ -9,20 +9,15 @@ class Secret
 {
     use SystemTrait;
 
-    /**
-     * TODO:  implement a hash for a more secure fetch.
-     */
-    public function doGetPass()
+
+    public function doGetPass(): JsonResponse
     {
-        $data = ['p' => ''];
-        $id = intval($_POST['id'] ?? 0);
-        if ($this->getFactory()->getAuthUser() && $id) {
-            $secret = \App\Db\Secret::find($id);
-            if ($secret?->canView($this->getFactory()->getAuthUser())) {
-                $data = ['p' => $secret->password];
-            }
+        $response = new JsonResponse(['msg' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        $secret = \App\Db\Secret::findByHash($_POST['p'] ?? '');
+        if ($secret && $secret->canView($this->getFactory()->getAuthUser())) {
+            $response = new JsonResponse(['pw' => $secret->password, 'otp' => $secret->genOtpCode()]);
         }
-        return new JsonResponse($data, Response::HTTP_OK);
+        return $response;
     }
 
 }

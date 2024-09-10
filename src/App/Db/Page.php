@@ -59,6 +59,7 @@ class Page extends Model
     public bool   $published    = true;
     public bool   $titleVisible = true;
     public bool   $isOrphaned   = false;
+    public string $hash         = '';
     public \DateTime $modified;
     public \DateTime $created;
 
@@ -191,9 +192,9 @@ class Page extends Model
     public static function find(int $id): ?static
     {
         return Db::queryOne("
-                SELECT *
-                FROM v_page
-                WHERE page_id = :id",
+            SELECT *
+            FROM v_page
+            WHERE page_id = :id",
             compact('id'),
             self::class
         );
@@ -205,6 +206,20 @@ class Page extends Model
             SELECT *
             FROM v_page",
             null,
+            self::class
+        );
+    }
+
+    public static function findByHash(string $hash): ?static
+    {
+        $hash = trim($hash);
+        if (empty($hash)) return null;
+
+        return Db::queryOne("
+            SELECT *
+            FROM v_page
+            WHERE hash = :hash",
+            compact('hash'),
             self::class
         );
     }

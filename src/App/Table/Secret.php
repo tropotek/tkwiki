@@ -36,7 +36,7 @@ class Secret extends Table
             ->addCss('text-nowrap text-center wk-secret')
             ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
                 if (empty($obj->otp)) return '';
-                $cell->setAttr('data-id', $obj->secretId);
+                $cell->setAttr('data-hash', $obj->hash);
                 return <<<HTML
                     <a href="javascript:;" class="btn btn-sm btn-outline-success cp-otp"><i class="fa fa-refresh"></i></a> <em class="otp-code">------</em>
                 HTML;
@@ -47,7 +47,7 @@ class Secret extends Table
             ->addHeaderCss('max-width')
             ->setSortable(true)
             ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
-                $url = Uri::create('/secretEdit', ['secretId' => $obj->secretId]);
+                $url = Uri::create('/secretEdit', ['hash' => $obj->hash]);
                 return sprintf('<a href="%s">%s</a>', $url, $obj->name);
             });
 
@@ -90,26 +90,6 @@ class Secret extends Table
             });
 
         return $this;
-    }
-
-    public function execute(): static
-    {
-        if (isset($_POST['o'])) {
-            $this->doOtp(intval($_POST['o']));
-        }
-        parent::execute();
-        return $this;
-    }
-
-    #[NoReturn] public function doOtp(int $secretId): void
-    {
-        $response = new JsonResponse(['msg' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        $secret = \App\Db\Secret::find($secretId);
-        if ($secret->canView($this->getFactory()->getAuthUser())) {
-            $response = new JsonResponse(['otp' => $secret->genOtpCode()]);
-        }
-        $response->send();
-        exit;
     }
 
 }

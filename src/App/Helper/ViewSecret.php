@@ -22,30 +22,14 @@ class ViewSecret extends Renderer implements DisplayInterface
     public function __construct(Secret $secret)
     {
         $this->secret = $secret;
-        if (isset($_POST['o'])) {
-            $this->doOtp();
-        }
-    }
 
-    #[NoReturn] public function doOtp()
-    {
-        $response = new JsonResponse(['msg' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        $secret = Secret::find($_POST['o'] ?? 0);
-        if ($secret && $secret->canView($this->getFactory()->getAuthUser())) {
-            $response = new JsonResponse(['otp' => $secret->genOtpCode()]);
-        }
-        $response->send();
-        exit;
     }
 
     public function show(): ?Template
     {
         $template = $this->getTemplate();
 
-        // todo
-        $template->setAttr('secret', 'data-hash', $this->secret->secretId);
-
-        $template->setAttr('secret', 'data-id', $this->secret->secretId);
+        $template->setAttr('secret', 'data-hash', $this->secret->hash);
         $template->setText('name', $this->secret->name);
 
         if ($this->secret->keys || $this->secret->notes) {
@@ -55,7 +39,7 @@ class ViewSecret extends Renderer implements DisplayInterface
             $template->setAttr('name', 'href', $this->secret->url);
             $template->setVisible('url', true);
         } else {
-            $template->setVisible('no-url', true);
+            $template->setVisible('no-url');
         }
         if ($this->secret->username || $this->secret->password) {
             if ($this->secret->username) {
@@ -74,7 +58,7 @@ class ViewSecret extends Renderer implements DisplayInterface
         }
 
         if ($this->secret->canEdit($this->getFactory()->getAuthUser())) {
-            $template->setAttr('edit', 'href', Uri::create('/secretEdit')->set('secretId', $this->secret->secretId));
+            $template->setAttr('edit', 'href', Uri::create('/secretEdit')->set('h', $this->secret->hash));
             $template->setVisible('edit');
         }
 

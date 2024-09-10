@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.50 [2024-09-10]:
+-------------------------------
+  - Use hash in place of secret ID
+  - Added sessions manager admin page
+
+
 Ver 8.0.48 [2024-09-09]:
 -------------------------------
   - fix secret widget

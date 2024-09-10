@@ -47,7 +47,7 @@ class Secret extends Table
             ->addHeaderCss('max-width')
             ->setSortable(true)
             ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
-                $url = Uri::create('/secretEdit', ['hash' => $obj->hash]);
+                $url = Uri::create('/secretEdit', ['h' => $obj->hash]);
                 return sprintf('<a href="%s">%s</a>', $url, $obj->name);
             });
 

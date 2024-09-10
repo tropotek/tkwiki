@@ -7,22 +7,9 @@ Tk-Wiki
 
 Ver 8.0.48 [2024-09-09]:
 -------------------------------
-  - damn it!
-
-
-Ver 8.0.46 [2024-09-09]:
--------------------------------
   - fix secret widget
   - Page manager updates
-
-
-Ver 8.0.44 [2024-09-09]:
--------------------------------
   - Fixed save page in mce
-
-
-Ver 8.0.42 [2024-09-09]:
--------------------------------
   - fix menu edit and page select dialog
 
 
@@ -41,10 +28,6 @@ Ver 8.0.40 [2024-09-08]:
 Ver 8.0.38 [2024-04-16]:
 -------------------------------
   - Fix mpdf version for php8.3
-
-
-Ver 8.0.36 [2024-04-16]:
--------------------------------
   - Fix wiki menu edit page_id api error
   - Fix form init js
 
@@ -61,15 +44,7 @@ Ver 8.0.32 [2023-08-15]:
 Ver 8.0.30 [2023-08-09]:
 -------------------------------
   - Convert to prepared statements
-
-
-Ver 8.0.28 [2023-08-09]:
--------------------------------
   - Added global default template select to settings
-
-
-Ver 8.0.26 [2023-08-09]:
--------------------------------
 
 
 Ver 8.0.24 [2023-07-30]:
@@ -86,15 +61,7 @@ Ver 8.0.20 [2023-07-09]:
 -------------------------------
 
 
-Ver 8.0.18 [2023-07-09]:
--------------------------------
-
-
 Ver 8.0.16 [2023-07-08]:
--------------------------------
-
-
-Ver 8.0.14 [2023-07-08]:
 -------------------------------
   - Change ID names
 
@@ -113,18 +80,6 @@ Ver 8.0.8 [2023-07-03]:
 
 
 Ver 8.0.6 [2023-06-28]:
--------------------------------
-
-
-Ver 8.0.4 [2023-06-27]:
--------------------------------
-
-
-Ver 8.0.2 [2023-06-27]:
--------------------------------
-
-
-Ver 8.0.0 [2023-06-27]:
 -------------------------------
 
 
@@ -168,18 +123,6 @@ Ver 3.0.4 [2022-03-16]:
 
 
 Ver 3.0.2 [2022-03-08]:
--------------------------------
-
-
-Ver 3.0.0 [2022-03-08]:
--------------------------------
-
-
-Ver 2.4.16 [2022-03-08]:
--------------------------------
-
-
-Ver 2.4.14 [2022-03-08]:
 -------------------------------
 
 
@@ -233,11 +176,6 @@ Ver 2.1.5 [2017-05-26]:
 Ver 2.1.4 [2017-04-02]:
 -------------------------------
  - Minor Code Updates
-
-
-Ver 2.1.3 [2017-04-02]:
--------------------------------
- - Minor Code Updates
  - Fixed tinymce isse with tidy removing ending tags for empty elements
  - 252s-dev.vet.unimelb.edu.au
 
@@ -251,10 +189,6 @@ Ver 2.1.2 [2017-03-08]:
 Ver 2.1.1 [2017-02-23]:
 -------------------------------
  - Minor Code Updates
-
-
-Ver 2.1.0 [2017-02-23]:
--------------------------------
  - Minor Code Updates
  - 252s-dev.vet.unimelb.edu.au
 
@@ -268,22 +202,7 @@ Ver 2.0.21 [2017-02-22]:
 Ver 2.0.20 [2017-01-20]:
 -------------------------------
  - Minor Code Updates
-
-
-Ver 2.0.19 [2017-01-20]:
--------------------------------
- - Minor Code Updates
-
-
-Ver 2.0.18 [2017-01-20]:
--------------------------------
- - Minor Code Updates
-
-
-Ver 2.0.17 [2017-01-20]:
--------------------------------
  - Fixed contributor search bug  #1
- - Minor Code Updates
 
 
 Ver 2.0.16 [2017-01-16]:
@@ -291,41 +210,19 @@ Ver 2.0.16 [2017-01-16]:
  - Minor Code Updates
 
 
-Ver 2.0.15 [2017-01-16]:
--------------------------------
- - Minor Code Updates
- - 252s-dev.vet.unimelb.edu.au
-
-
 Ver 2.0.14 [2017-01-11]:
 -------------------------------
  - Minor Code Updates
- - 252s-dev.vet.unimelb.edu.au
 
 
 Ver 2.0.13 [2017-01-10]:
 -------------------------------
- - Updated tinymce and added slightly responcive mce layouts
-
-
-Ver 2.0.12 [2017-01-10]:
--------------------------------
- - Updated tinymce and added slightly responcive mce layouts
+ - Updated tinymce and added slightly responsive mce layouts
 
 
 Ver 2.0.11 [2017-01-06]:
 -------------------------------
  - Fixed jquery-jtable issues
-
-
-Ver 2.0.10 [2017-01-06]:
--------------------------------
- - Fixed page not found error for public view
- - Fixed css main menu issues
-
-
-Ver 2.0.9 [2017-01-06]:
--------------------------------
  - Fixed page not found error for public view
  - Fixed css main menu issues
  - Fixed elFinder file manager scripts.
@@ -334,10 +231,6 @@ Ver 2.0.9 [2017-01-06]:
 Ver 2.0.8 [2016-12-30]:
 -------------------------------
  - Fixed elFinder file manager scripts.
-
-
-Ver 2.0.7 [2016-12-30]:
--------------------------------
  - Minor Code Updates
  - Added ability to create new templates just change the config param system.template.path to your
    templates location
@@ -349,12 +242,6 @@ Ver 2.0.6 [2016-11-14]:
 -------------------------------
  - Merge branch 'master' of github.com:tropotek/tkWiki
  - Minor Code Updates
-
-
-Ver 2.0.5 [2016-11-14]:
--------------------------------
- - Minor Code Updates
- - 252s-dev.vet.unimelb.edu.au
 
 
 Ver 2.0.4 [2016-11-11]:
@@ -376,16 +263,7 @@ Ver 2.0.4 [2016-11-11]:
  - Added new TOC button to tineymce editor
 
 
-Ver 2.0.3 [2016-07-11]:
--------------------------------
- - Added new TOC button to tineymce editor
-
-
 Ver 2.0.2 [2016-07-11]:
--------------------------------
-
-
-Ver 2.0.1 [2016-07-11]:
 -------------------------------
  - Fixed session object
 
@@ -434,18 +312,12 @@ Ver 1.0.1 [2015-03-04]:
 -------------------------------
  - Cleaning up files
  - Made SSL off by default.
-
-
-Ver 1.0.0 [2015-03-04]
--------------------------------
-
  - Released first github version of the site
  - All file in the lib folder are now static
  - Implemented composer into project
  - Fixed default SSL enabled to default SSL disabled, enable by the config.
  - Fixed template encoding errors
  - Fixed session file issues (temp fix only)
- 
 
 
 PRE GITHUB RELEASES.

@@ -19,9 +19,7 @@ node_modules
 
 # Project Files
 /config.php
-/src/config/_config*
 /.htaccess
-/_.htaccess*
 /*.bak
 /*.sql
 

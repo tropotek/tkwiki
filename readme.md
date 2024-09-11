@@ -30,23 +30,20 @@ __Features:__
     $ composer install
     ```
 4. You will be asked a number of questions to set up the environment settings.
-5. Edit the `/src/App/config/config.php` file to your required settings.
+5. Edit the `/config.php` file to your required settings.
 6. Check the permissions of the site `/data/` folder so PHP can read and write to it.
-7. To enable debug mode and logging edit the `/src/config/config.php` file to suit your server.
 8. Browse to the URI that was shown at the end of install process to see if it all worked.
-9. To log in with the default admin account, you will need to create a password. 
-To create the admin account password execute the `password [pwd]` command using the site's CLI tool:
+9. To log in with the default `wikiadmin` account, you will need to create a password. 
+To create the admin account password execute the password command using the site's CLI tool:
     ```bash
-    $ ./bin/cmd pwd admin
+    $ ./bin/cmd pwd wikiadmin
     ```
 
 
 ## Upgrading
 
-__NOTICE:__ Wiki Ver 8.0+ is based on a completely re-written base library. So there is no upgrade scripts from
-previous major versions. 
 
-Upgrade the site by the CLI command;
+Upgrade the site using the CLI command, whis will :
 ```bash
 $ cd {siteroot}
 $ ./bin/cmd ug

@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS page
   permission INT NOT NULL DEFAULT 0,
   title_visible BOOL NOT NULL DEFAULT TRUE,
   published BOOL NOT NULL DEFAULT TRUE,
-  modified TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uk_url (url),
   KEY k_user_id (user_id),
@@ -46,9 +46,11 @@ CREATE TABLE IF NOT EXISTS content
 -- wiki links contained within a pages html content
 CREATE TABLE IF NOT EXISTS links
 (
-  page_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
-  url VARCHAR(255) NOT NULL DEFAULT '',
-  UNIQUE KEY uk_page_id_url (page_id, url)
+  page_id INT(11) UNSIGNED NOT NULL DEFAULT 0,      -- content page id
+  linked_id INT(11) UNSIGNED NOT NULL DEFAULT 0,    -- link page id
+  PRIMARY KEY (page_id, linked_id),
+  CONSTRAINT fk_links__page_id FOREIGN KEY (page_id) REFERENCES page (page_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_links__linked_id FOREIGN KEY (linked_id) REFERENCES page (page_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- place to store a page lock while it is being edited.
@@ -92,10 +94,9 @@ CREATE TABLE IF NOT EXISTS secret (
     otp VARCHAR(128) NOT NULL DEFAULT '',                         -- (encoded) OTP/Google auth key: wen set we can generate onetime 2FA keys
     `keys` TEXT,                                                  -- (encoded) could be a wallet key, or API key, public/private keys
     notes TEXT,                                                   --
-    modified TIMESTAMP NOT NULL,
-    created TIMESTAMP NOT NULL,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     KEY k_user_id (user_id),
-    -- TODO: be sure to move all non private secrets to the auth user on user deletes if we want to keep them????
     CONSTRAINT fk_secret__user_id FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
@@ -108,10 +109,8 @@ SET SQL_SAFE_UPDATES = 0;
 
 TRUNCATE TABLE user;
 INSERT INTO user (type, username, email, name_first, timezone, permissions) VALUES
-  ('staff', 'admin', 'admin@example.com', 'Administrator', NULL, 1)
+  ('staff', 'wikiadmin', 'admin@example.com', 'Administrator', 'Australia/Melbourne', 1)
 ;
-UPDATE `user` SET `hash` = MD5(CONCAT(username, user_id)) WHERE 1;
-
 
 
 TRUNCATE TABLE page;

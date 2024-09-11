@@ -1,8 +1,7 @@
-# tkwiki
+# Tk-Wiki
 
-__Project:__ tkwiki    
 __Web:__ <https://github.com/tropotek/tkwiki>  
-__Authors:__ Tropotek <http://www.tropotek.com/>
+__Author:__ Tropotek <http://www.tropotek.com/>
 
 A WIKI/CMS that is easy to use for people that want a website to store info fast.
 Perfect for projects that require online documentation, and can be edited by teams.
@@ -10,9 +9,8 @@ Perfect for projects that require online documentation, and can be edited by tea
 __Features:__
 - The ability to add CSS and Javascript within each page.
 - Create/link pages within the WYSIWYG editor.
-- Edit the top nav menu
-- All templates are based on Bootstrap 5+
-- 
+- Edit the nav menu within the wiki
+- Bootstrap 5+ basic template
 
 ## Contents
 
@@ -42,8 +40,7 @@ To create the admin account password execute the password command using the site
 
 ## Upgrading
 
-
-Upgrade the site using the CLI command, whis will :
+Upgrade the site using the CLI command, whis will checkout the latest release and update the files and DB:
 ```bash
 $ cd {siteroot}
 $ ./bin/cmd ug
@@ -56,7 +53,7 @@ $ git checkout 8.0.0    // Use the latest tag version here
 $ composer update
 ```
 
-__Warning:__ Upgrading could potentially break the site change the database. Remember to back up any DB and
+__Warning:__ Upgrading could potentially break the site change the database. Remember to always back up all DB and
 site files before running these commands.
 
 

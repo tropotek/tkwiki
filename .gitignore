@@ -5,21 +5,16 @@
 /.vscode
 .directory
 .phpunit.result.cache
+/*.bak
+/*.sql
 
 # Project directories
-/assets
-/vendor
-/plugin
-/html/theme-*
 /_*
+/vendor
 /data
-/data_*
-/docs/api
 node_modules
 
 # Project Files
 /config.php
 /.htaccess
-/*.bak
-/*.sql
 

@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TestData extends \Tk\Console\Command\TestData
+class TestData extends \Bs\Console\Command\TestData
 {
 
     protected function configure(): void

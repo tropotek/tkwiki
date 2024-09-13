@@ -5,7 +5,7 @@ use App\Db\Page;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tk\Console\Console;
+use Bs\Console\Console;
 use Tk\Db;
 
 /**

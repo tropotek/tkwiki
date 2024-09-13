@@ -10,9 +10,8 @@ use App\Dom\Modifier\WikiUrl;
 use Bs\Db\User;
 use Bs\Ui\Crumbs;
 use Dom\Modifier;
-use Tk\Auth\FactoryInterface;
 
-class Factory extends \Bs\Factory implements FactoryInterface
+class Factory extends \Bs\Factory
 {
     public function createDomPage(string $templatePath = ''): Page
     {

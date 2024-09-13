@@ -10,9 +10,6 @@ use Tk\Uri;
 use Tk\Db;
 use Tk\Db\Filter;
 
-/**
- *
- */
 class Manager extends ControllerPublic
 {
 

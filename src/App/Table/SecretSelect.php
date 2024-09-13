@@ -3,12 +3,10 @@ namespace App\Table;
 
 use Bs\Table;
 use Tk\Form\Field\Input;
-use Tk\Traits\SystemTrait;
 use Tk\Table\Cell;
 
 class SecretSelect extends Table
 {
-    use SystemTrait;
 
     public function init(): static
     {

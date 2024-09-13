@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use Bs\Form;
+use Bs\Traits\SystemTrait;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Form\Action\Link;
@@ -16,6 +17,8 @@ use Tk\Uri;
 
 class Secret extends Form
 {
+    use SystemTrait;
+
     protected bool $htmx = false;
 
 
@@ -61,7 +64,7 @@ class Secret extends Form
         } else {
             $this->appendField(new SubmitExit('save', [$this, 'onSubmit']));
         }
-        $this->appendField(new Link('cancel', Uri::create($this->getFactory()->getBackUrl())));
+        $this->appendField(new Link('cancel', Uri::create($this->getBackUrl())));
 
         return $this;
     }
@@ -92,7 +95,7 @@ class Secret extends Form
         Alert::addSuccess('Form save successfully.');
         $action->setRedirect(Uri::create()->set('secretId', $this->getSecret()->secretId));
         if ($form->getTriggeredAction()->isExit()) {
-            $action->setRedirect($this->getFactory()->getBackUrl());
+            $action->setRedirect($this->getBackUrl());
         }
 
         if ($this->isHtmx()) {

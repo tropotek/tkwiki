@@ -4,12 +4,11 @@ namespace App\Helper;
 use App\Db\Page;
 use App\Form\Secret;
 use App\Ui\FormDialog;
+use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use Tk\Traits\SystemTrait;
 use Tk\Db;
-use Tk\Db\Filter;
 
 class SecretSelect extends Renderer implements DisplayInterface
 {
@@ -27,13 +26,13 @@ class SecretSelect extends Renderer implements DisplayInterface
         $filter = $this->table->getDbFilter();
         $filter->replace([
             'published' => true,
-            'userId' => $this->getFactory()->getAuthUser()->userId,
+            'userId' => $this->getAuthUser()->userId,
             'permission' => Page::PERM_PUBLIC
         ]);
-        if ($this->getFactory()->getAuthUser()->isMember()) {
+        if ($this->getAuthUser()->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         }
-        if ($this->getFactory()->getAuthUser()->isStaff()) {
+        if ($this->getAuthUser()->isStaff()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
 
@@ -57,7 +56,7 @@ class SecretSelect extends Renderer implements DisplayInterface
         $template->appendTemplate('dialogs', $this->createDialog->show());
         $template->appendTemplate('table', $this->table->show());
 
-        $template->setAttr('user-id', 'data-user-id', $this->getFactory()->getAuthUser()->userId);
+        $template->setAttr('user-id', 'data-user-id', $this->getAuthUser()->userId);
 
         // Add a select wiki page button to the tinyMCE editor.
         $js = <<<JS

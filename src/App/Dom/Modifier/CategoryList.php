@@ -3,7 +3,6 @@ namespace App\Dom\Modifier;
 
 use App\Helper\ViewCategoryList;
 use Dom\Modifier\FilterInterface;
-use Tk\Traits\SystemTrait;
 
 /**
  * Convert all page category liting modules set in the WYSIWYG editor.
@@ -11,7 +10,6 @@ use Tk\Traits\SystemTrait;
  */
 class CategoryList extends FilterInterface
 {
-    use SystemTrait;
 
     function init(\DOMDocument $doc) { }
 

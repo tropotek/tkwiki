@@ -4,12 +4,10 @@ namespace App\Table;
 use App\Db\Page;
 use Bs\Table;
 use Tk\Form\Field\Input;
-use Tk\Traits\SystemTrait;
 use Tk\Table\Cell;
 
 class PageSelect extends Table
 {
-    use SystemTrait;
 
     public function init(): static
     {

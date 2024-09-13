@@ -19,7 +19,7 @@ class Cron extends Console
 {
     use LockableTrait;
 
-    protected function configure()
+    protected function configure(): void
     {
         $path = getcwd();
         $this->setName('cron')

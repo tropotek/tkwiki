@@ -4,8 +4,6 @@ namespace App\Db;
 use App\Factory;
 use Bs\Db\User;
 use Dom\Template;
-use Tk\Log;
-use Tk\Registry;
 use Tk\Uri;
 use Bs\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;

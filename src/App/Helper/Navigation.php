@@ -2,10 +2,10 @@
 namespace App\Helper;
 
 use App\Db\Permissions;
+use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use Tk\Traits\SystemTrait;
 
 /**
  * Render the secret output
@@ -14,11 +14,10 @@ class Navigation extends Renderer implements DisplayInterface
 {
     use SystemTrait;
 
-
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        $user = $this->getFactory()->getAuthUser();
+        $user = $this->getAuthUser();
         if ($user) {
             $template->setVisible('settings', $user->hasPermission(Permissions::PERM_SYSADMIN));
             $template->setVisible('pageManager', $user->hasPermission(Permissions::PERM_EDITOR));

@@ -2,6 +2,7 @@
 namespace App\Ui;
 
 use App\Form\Secret;
+use Bs\Traits\SystemTrait;
 use Bs\Ui\Dialog;
 use Dom\Template;
 
@@ -36,6 +37,7 @@ use Dom\Template;
  */
 class FormDialog extends Dialog
 {
+    use SystemTrait;
 
     protected Secret $form;
 
@@ -55,7 +57,7 @@ class FormDialog extends Dialog
     public function execute(): void
     {
         $secret = new \App\Db\Secret();
-        $secret->userId = $this->getFactory()->getAuthUser()->userId;
+        $secret->userId = $this->getAuthUser()->userId;
         if ($_GET['secretId'] ?? false) {
             $secret = \App\Db\Secret::find((int)$_GET['secretId']);
         }

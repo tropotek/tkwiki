@@ -5,7 +5,6 @@ use Bs\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\User;
 use Tk\DataMap\DataMap;
-use Tk\DataMap\Db\Date;
 use Tk\DataMap\Db\DateTime;
 use Tk\DataMap\Db\Integer;
 use Tk\DataMap\Db\Text;

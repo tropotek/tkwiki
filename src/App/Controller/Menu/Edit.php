@@ -19,7 +19,6 @@ use Tk\Uri;
 class Edit extends ControllerPublic
 {
 
-
     public function doDefault(): mixed
     {
         switch ($_REQUEST['action'] ?? '') {

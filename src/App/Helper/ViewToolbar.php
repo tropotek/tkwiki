@@ -4,12 +4,12 @@ namespace App\Helper;
 use App\Db\Content;
 use App\Db\Page;
 use Bs\Db\User;
+use Bs\Traits\SystemTrait;
 use Bs\Ui\Dialog;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
 use Tk\Date;
-use Tk\Traits\SystemTrait;
 use Tk\Uri;
 
 /**
@@ -19,18 +19,16 @@ class ViewToolbar extends Renderer implements DisplayInterface
 {
     use SystemTrait;
 
-    protected Page $page;
-
+    protected ?User   $user = null;
+    protected Page    $page;
     protected Content $content;
-
-    protected ?User $user = null;
 
 
     public function __construct(Page $page)
     {
         $this->page = $page;
         $this->content = $page->getContent();
-        $this->user = $this->getFactory()->getAuthUser();
+        $this->user = $this->getAuthUser();
     }
 
     public function getPage(): Page
@@ -57,7 +55,7 @@ class ViewToolbar extends Renderer implements DisplayInterface
             $template->setAttr('history', 'href', Uri::create('/historyManager')->set('pageId', $this->getPage()->pageId));
             $template->setVisible('can-edit');
         }
-        if ($this->getFactory()->getAuthUser()?->isStaff()) {
+        if ($this->getAuthUser()?->isStaff()) {
             $template->setVisible('info-url');
             $dialog = $this->showInfoDialog();
             $template->appendBodyTemplate($dialog->show());

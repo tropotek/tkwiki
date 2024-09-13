@@ -2,10 +2,10 @@
 namespace App\Helper;
 
 use App\Db\Page;
+use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use Tk\Traits\SystemTrait;
 use Tk\Db\Filter;
 
 
@@ -28,26 +28,25 @@ class ViewCategoryList extends Renderer implements DisplayInterface
     {
         $template = $this->getTemplate();
 
-
         $filter = [
             'category'   => $this->category,
             'published'  => true,
             'permission' => Page::PERM_PUBLIC
         ];
-        if ($this->getFactory()->getAuthUser()?->isMember()) {
+        if ($this->getAuthUser()?->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         }
-        if ($this->getFactory()->getAuthUser()?->isStaff()) {
+        if ($this->getAuthUser()?->isStaff()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
-        if ($this->getFactory()->getAuthUser()?->isAdmin()) {
+        if ($this->getAuthUser()?->isAdmin()) {
             unset($filter['permission']);
         }
 
         $list = Page::findFiltered(Filter::create($filter, 'title'));
 
         foreach ($list as $page) {
-            if (!$page->canView($this->getFactory()->getAuthUser())) continue;
+            if (!$page->canView($this->getAuthUser())) continue;
 
             if ($this->asTable) {
                 $col = $template->getRepeat('col');

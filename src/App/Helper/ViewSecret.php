@@ -2,15 +2,11 @@
 namespace App\Helper;
 
 use App\Db\Secret;
+use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use JetBrains\PhpStorm\NoReturn;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Tk\Traits\SystemTrait;
 use Tk\Uri;
-
 
 class ViewSecret extends Renderer implements DisplayInterface
 {
@@ -22,7 +18,6 @@ class ViewSecret extends Renderer implements DisplayInterface
     public function __construct(Secret $secret)
     {
         $this->secret = $secret;
-
     }
 
     public function show(): ?Template
@@ -57,7 +52,7 @@ class ViewSecret extends Renderer implements DisplayInterface
             $template->setVisible('o');
         }
 
-        if ($this->secret->canEdit($this->getFactory()->getAuthUser())) {
+        if ($this->secret->canEdit($this->getAuthUser())) {
             $template->setAttr('edit', 'href', Uri::create('/secretEdit')->set('h', $this->secret->hash));
             $template->setVisible('edit');
         }

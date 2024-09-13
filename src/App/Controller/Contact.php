@@ -10,7 +10,6 @@ use Tk\Form\Action\Submit;
 use Tk\Form\Field\Hidden;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Textarea;
-use Tk\Traits\SystemTrait;
 use Tk\Uri;
 
 /**
@@ -23,7 +22,6 @@ use Tk\Uri;
  */
 class Contact extends ControllerPublic
 {
-    use SystemTrait;
 
     protected ?Form $form = null;
 

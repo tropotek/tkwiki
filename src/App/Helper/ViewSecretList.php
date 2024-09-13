@@ -3,10 +3,10 @@ namespace App\Helper;
 
 use App\Db\Secret;
 use Bs\Db\User;
+use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use Tk\Traits\SystemTrait;
 use Tk\Db\Filter;
 
 /**
@@ -37,7 +37,7 @@ class ViewSecretList extends Renderer implements DisplayInterface
         $list = Secret::findFiltered(Filter::create($filter, 'name'));
 
         foreach ($list as $secret) {
-            if (!$secret->canView($this->getFactory()->getAuthUser())) continue;
+            if (!$secret->canView($this->getAuthUser())) continue;
             $row = $template->getRepeat('col');
             $ren = new ViewSecret($secret);
             $row->appendTemplate('col', $ren->show());

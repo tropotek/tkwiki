@@ -3,8 +3,8 @@ namespace App\Dom\Modifier;
 
 use App\Db\Secret;
 use App\Helper\ViewSecret;
+use Bs\Traits\SystemTrait;
 use Dom\Modifier\FilterInterface;
-use Tk\Traits\SystemTrait;
 
 /**
  * Convert all secret image modules set in the WYSIWYG editor
@@ -23,7 +23,7 @@ class Secrets extends FilterInterface
         $secret = Secret::find((int)$node->getAttribute('wk-secret'));
         if (!$secret) return;
 
-        if ($secret->canView($this->getFactory()->getAuthUser())) {
+        if ($secret->canView($this->getAuthUser())) {
             $renderer = new ViewSecret($secret);
             $template = $renderer->show();
             $newNode = $node->ownerDocument->importNode($template->getDocument()->documentElement, true);

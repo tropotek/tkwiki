@@ -2,10 +2,6 @@
 namespace App\Table;
 
 use Bs\Table;
-use Dom\Template;
-use JetBrains\PhpStorm\NoReturn;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Input;
 use Tk\Uri;

@@ -2,8 +2,8 @@
 namespace App\Dom\Modifier;
 
 use App\Db\Page;
+use Bs\Traits\SystemTrait;
 use Dom\Modifier\FilterInterface;
-use Tk\Traits\SystemTrait;
 
 /**
  * This modifier changes link nodes:
@@ -20,7 +20,7 @@ class WikiUrl extends FilterInterface
         // Modify wiki URLs
         if ($node->nodeName != 'a') return;
 
-        $user = $this->getFactory()->getAuthUser();
+        $user = $this->getAuthUser();
         $css = $node->getAttribute('class');
         $href = $node->getAttribute('href');
 

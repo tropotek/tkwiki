@@ -4,7 +4,6 @@ namespace App\Dom\Modifier;
 use App\Helper\ViewSecretList;
 use Bs\Db\User;
 use Dom\Modifier\FilterInterface;
-use Tk\Traits\SystemTrait;
 
 /**
  * Convert all secret list div modules set in the WYSIWYG editor
@@ -12,7 +11,6 @@ use Tk\Traits\SystemTrait;
  */
 class SecretList extends FilterInterface
 {
-    use SystemTrait;
 
     function init(\DOMDocument $doc) { }
 

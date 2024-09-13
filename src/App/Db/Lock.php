@@ -3,7 +3,6 @@ namespace App\Db;
 
 use Bs\Db\User;
 use Bs\Factory;
-use Tk\Traits\SystemTrait;
 use Tk\Db;
 
 /**
@@ -12,7 +11,6 @@ use Tk\Db;
  */
 class Lock
 {
-    use SystemTrait;
 
     const TIMEOUT_SEC = 60*2;    // Default 2 minutes
 

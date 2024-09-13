@@ -8,7 +8,7 @@ use Tk\Console\Console;
 class Test extends Console
 {
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('test')
             ->setDescription('This is a test script');

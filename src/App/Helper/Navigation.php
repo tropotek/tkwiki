@@ -42,13 +42,13 @@ class Navigation extends Renderer implements DisplayInterface
   <li><hr class="dropdown-divider" choice="admin"></li>
   <li><a class="dropdown-item" href="/sessions" choice="admin">Current Sessions</a></li>
   <li><a class="dropdown-item" href="/tailLog" choice="admin">Tail Log</a></li>
-  <li><a class="dropdown-item" href="/listEvents" choice="dev">List Events</a></li>
+  <li><a class="dropdown-item" href="/info" choice="dev">Info</a></li>
   <li><hr class="dropdown-divider"></li>
   <li><a class="dropdown-item" href="/logout">Sign out</a></li>
 </ul>
 HTML;
 
-        return $this->loadTemplate($html);
+        return Template::load($html);
     }
 
 }

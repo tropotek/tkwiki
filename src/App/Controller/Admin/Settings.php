@@ -46,14 +46,6 @@ class Settings extends ControllerPublic
             ->setNotes('Site short title. Used for nav bars and title where space is limited.')
             ->setRequired();
 
-        $this->form->appendField(new Checkbox('site.account.registration'))
-            ->setGroup($tab)
-            ->setLabel('Account Registration')
-            ->setNotes('Enable public user registrations for this site. (Default user type is `user`)')
-            ->addOnShowOption(function (Template $template, Option $option, $var) {
-                $option->setName('Enable');
-            });
-
         // todo Need to create a select dialog here to search for the pages
         $list = Page::findFiltered(Filter::create([
             'permission' => Page::PERM_PUBLIC,
@@ -192,6 +184,7 @@ class Settings extends ControllerPublic
 
         $template->setVisible('staff', $this->getAuthUser()->hasPermission(Permissions::PERM_MANAGE_STAFF));
         $template->setVisible('member', $this->getAuthUser()->hasPermission(Permissions::PERM_MANAGE_MEMBERS));
+        $template->setVisible('admin', $this->getAuthUser()->hasPermission(Permissions::PERM_ADMIN));
 
         $template->appendTemplate('content', $this->form->show());
 
@@ -206,8 +199,9 @@ class Settings extends ControllerPublic
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
       <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
-      <a href="/user/staffManager" title="Manage Staff" class="btn btn-outline-secondary"><i class="fa fa-fw fa-users" choice="staff"></i> Staff</a>
-      <a href="/user/memberManager" title="Manage Members" class="btn btn-outline-secondary"><i class="fa fa-fw fa-users" choice="member"></i> Members</a>
+      <a href="/sessions" title="View Active Sessions" class="btn btn-outline-secondary" choice="admin"><i class="fa fa-fw fa-server"></i> Sessions</a>
+      <a href="/user/staffManager" title="Manage Staff" class="btn btn-outline-secondary" choice="staff"><i class="fa fa-fw fa-users"></i> Staff</a>
+      <a href="/user/memberManager" title="Manage Members" class="btn btn-outline-secondary" choice="member"><i class="fa fa-fw fa-users"></i> Members</a>
     </div>
   </div>
   <div class="card mb-3">

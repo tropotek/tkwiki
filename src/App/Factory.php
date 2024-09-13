@@ -10,6 +10,7 @@ use App\Dom\Modifier\WikiUrl;
 use Bs\Db\User;
 use Bs\Ui\Crumbs;
 use Dom\Modifier;
+use Symfony\Component\Console\Application;
 
 class Factory extends \Bs\Factory
 {
@@ -70,4 +71,17 @@ class Factory extends \Bs\Factory
         return $this->get($id);
     }
 
+    public function getConsole(): Application
+    {
+        if (!$this->has('console')) {
+            $app = parent::getConsole();
+            // Setup App Console Commands
+            $app->add(new \App\Console\Cron());
+            if ($this->getConfig()->isDev()) {
+                $app->add(new \App\Console\TestData());
+                $app->add(new \App\Console\Test());
+            }
+        }
+        return $this->get('console');
+    }
 }

@@ -3,10 +3,10 @@ namespace App\Controller\Menu;
 
 use App\Db\MenuItem;
 use App\Db\Page;
+use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use Tk\Traits\SystemTrait;
 
 /**
  * An object to manage and display the wiki Page header
@@ -69,7 +69,7 @@ class View extends Renderer implements DisplayInterface
      */
     private function showItem(Template $t, MenuItem $item): bool
     {
-        $user = $this->getFactory()->getAuthUser();
+        $user = $this->getAuthUser();
         $page = $item->getPage();
         $t->setText('name', $item->name);
         if ($page) {

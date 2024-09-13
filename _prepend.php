@@ -14,4 +14,4 @@ $config  = \Tk\Config::instance();
 $factory = \App\Factory::instance();
 $factory->set('classLoader', $composer);
 
-\Bs\Factory::instance()->getBootstrap()->init();
+\App\Factory::instance()->getBootstrap()->init();

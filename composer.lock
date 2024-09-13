@@ -2693,73 +2693,25 @@
             "time": "2024-08-07T06:30:33+00:00"
         },
         {
-            "name": "ttek/tk-auth",
-            "version": "8.0.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tropotek/tk-auth.git",
-                "reference": "a81895ded51f2e6cfe40c4f2a6ab3d314c63cd0b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-auth/zipball/a81895ded51f2e6cfe40c4f2a6ab3d314c63cd0b",
-                "reference": "a81895ded51f2e6cfe40c4f2a6ab3d314c63cd0b",
-                "shasum": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "8.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Tk\\": "Tk/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Mifsud",
-                    "homepage": "http://www.tropotek.com/"
-                }
-            ],
-            "description": "An authentication library for ttek based websites",
-            "keywords": [
-                "auth",
-                "tropotek"
-            ],
-            "support": {
-                "issues": "https://github.com/tropotek/tk-auth/issues",
-                "source": "https://github.com/tropotek/tk-auth/tree/8.0"
-            },
-            "time": "2022-10-15T00:00:00+00:00"
-        },
-        {
             "name": "ttek/tk-base",
             "version": "8.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "db40c46f9acae8e732394fd75822c0cd0761c75c"
+                "reference": "2215bbb4801e05cdbbffb14ceb5e41b1899803ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/db40c46f9acae8e732394fd75822c0cd0761c75c",
-                "reference": "db40c46f9acae8e732394fd75822c0cd0761c75c",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/2215bbb4801e05cdbbffb14ceb5e41b1899803ce",
+                "reference": "2215bbb4801e05cdbbffb14ceb5e41b1899803ce",
                 "shasum": ""
             },
             "require": {
                 "studio-42/elfinder": "~2.1.0",
                 "tinymce/tinymce": "~7.0",
-                "ttek/tk-auth": "~8.0.0",
                 "ttek/tk-domtemplate": "~8.0.0",
                 "ttek/tk-form": "~8.0.0",
                 "ttek/tk-framework": "~8.0.0",
-                "ttek/tk-mail": "~8.0.0",
                 "ttek/tk-table": "~8.0.0"
             },
             "type": "library",
@@ -2799,12 +2751,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-domtemplate.git",
-                "reference": "eb7f11dad34e3b5bcb754e84656b0256f9cc5481"
+                "reference": "67916cc0aa026ec50eaf399c4d5a39ee8f8fbae6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/eb7f11dad34e3b5bcb754e84656b0256f9cc5481",
-                "reference": "eb7f11dad34e3b5bcb754e84656b0256f9cc5481",
+                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/67916cc0aa026ec50eaf399c4d5a39ee8f8fbae6",
+                "reference": "67916cc0aa026ec50eaf399c4d5a39ee8f8fbae6",
                 "shasum": ""
             },
             "require": {
@@ -2858,12 +2810,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "632cfc73d88e4ef2e39d497d8c5eb0efe285cd9f"
+                "reference": "895af7583d80265edbd70ed484bcefdd40d2c9bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/632cfc73d88e4ef2e39d497d8c5eb0efe285cd9f",
-                "reference": "632cfc73d88e4ef2e39d497d8c5eb0efe285cd9f",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/895af7583d80265edbd70ed484bcefdd40d2c9bd",
+                "reference": "895af7583d80265edbd70ed484bcefdd40d2c9bd",
                 "shasum": ""
             },
             "require": {
@@ -2907,12 +2859,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "97f6d8180ea5ba4a636cda65a7f2fa1908c45927"
+                "reference": "2176d6bf3eb25509c7e8f4a16470112e5abb9402"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/97f6d8180ea5ba4a636cda65a7f2fa1908c45927",
-                "reference": "97f6d8180ea5ba4a636cda65a7f2fa1908c45927",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/2176d6bf3eb25509c7e8f4a16470112e5abb9402",
+                "reference": "2176d6bf3eb25509c7e8f4a16470112e5abb9402",
                 "shasum": ""
             },
             "require": {
@@ -2921,6 +2873,7 @@
                 "ext-json": "*",
                 "ext-pdo": "*",
                 "php": "^8.2",
+                "phpmailer/phpmailer": "~6.0",
                 "psr/log": "^1.0",
                 "sensiolabs/ansi-to-html": "~1.0",
                 "symfony/console": "^6.2",
@@ -2980,12 +2933,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-installers.git",
-                "reference": "dc174d097b6e2e400c233a11e293a0ce13223ff7"
+                "reference": "22749f3f633896c4b6bdeaa19aaa9c9e05937a35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/dc174d097b6e2e400c233a11e293a0ce13223ff7",
-                "reference": "dc174d097b6e2e400c233a11e293a0ce13223ff7",
+                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/22749f3f633896c4b6bdeaa19aaa9c9e05937a35",
+                "reference": "22749f3f633896c4b6bdeaa19aaa9c9e05937a35",
                 "shasum": ""
             },
             "require": {
@@ -3031,56 +2984,6 @@
                 "source": "https://github.com/tropotek/tk-installers/tree/8.0"
             },
             "time": "2022-10-15T00:00:00+00:00"
-        },
-        {
-            "name": "ttek/tk-mail",
-            "version": "8.0.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tropotek/tk-mail.git",
-                "reference": "5c71a6084c8be8e647aa326ba9f08c186e031ffb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-mail/zipball/5c71a6084c8be8e647aa326ba9f08c186e031ffb",
-                "reference": "5c71a6084c8be8e647aa326ba9f08c186e031ffb",
-                "shasum": ""
-            },
-            "require": {
-                "phpmailer/phpmailer": "~6.0",
-                "ttek/tk-framework": "~8.0.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "8.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Tk\\": "Tk/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Mifsud",
-                    "homepage": "http://www.tropotek.com/"
-                }
-            ],
-            "description": "A mail lib using PHPMailer for the tk libs",
-            "keywords": [
-                "table",
-                "tropotek"
-            ],
-            "support": {
-                "issues": "https://github.com/tropotek/tk-mail/issues",
-                "source": "https://github.com/tropotek/tk-mail/tree/8.0"
-            },
-            "time": "2022-11-12T00:00:00+00:00"
         },
         {
             "name": "ttek/tk-table",

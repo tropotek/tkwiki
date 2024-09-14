@@ -20,9 +20,9 @@ return function (Config $config) {
     /**
      * Site template paths
      */
-    $config->set('path.template.public', '/html/default.html');
-    $config->set('path.template.admin', $config->get('path.template.public'));
-    $config->set('path.template.user', $config->get('path.template.public'));
+    $config['path.template.public'] = '/html/default.html';
+    $config['path.template.admin']  = $config['path.template.public'];
+    $config['path.template.user']   = $config['path.template.public'];
 
     /**
      * Setup available page templates that reside in the "/html" directory
@@ -31,8 +31,8 @@ return function (Config $config) {
      *    ['Template Name' => 'filename']
      */
     $config['wiki.templates'] = [
-        'Default' => 'default',
-        'Default Fluid' => 'default_fluid',
+        'Default' => $config['path.template.public'],
+        'Default Fluid' => '/html/default_fluid.html',
     ];
 
     /**

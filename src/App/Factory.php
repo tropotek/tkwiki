@@ -11,11 +11,15 @@ use Bs\Db\User;
 use Bs\Ui\Crumbs;
 use Dom\Modifier;
 use Symfony\Component\Console\Application;
+use Tk\System;
 
 class Factory extends \Bs\Factory
 {
     public function createDomPage(string $templatePath = ''): Page
     {
+        if (!empty($this->getRegistry()->get('wiki.default.template', '')) && is_file(System::makePath($this->getRegistry()->get('wiki.default.template', '')))) {
+            $templatePath = System::makePath($this->getRegistry()->get('wiki.default.template', $templatePath));
+        }
         return new Page($templatePath);
     }
 

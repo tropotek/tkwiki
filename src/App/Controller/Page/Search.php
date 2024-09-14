@@ -33,11 +33,14 @@ class Search extends ControllerPublic
             'userId' => $this->getFactory()->getAuthUser()->userId,
             'permission' => Page::PERM_PUBLIC,
         ], '-modified', 250);
-        if ($this->getFactory()->getAuthUser()->isMember()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
-        }
-        if ($this->getFactory()->getAuthUser()->isStaff()) {
-            $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
+
+        if ($this->getFactory()->getAuthUser()) {
+            if ($this->getFactory()->getAuthUser()->isMember()) {
+                $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
+            }
+            if ($this->getFactory()->getAuthUser()->isStaff()) {
+                $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
+            }
         }
 
         if ($this->search) {

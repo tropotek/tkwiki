@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.54 [2024-09-14]:
+-------------------------------
+  - fix single checkbox value
+
+
 Ver 8.0.52 [2024-09-14]:
 -------------------------------
   - Update user config location

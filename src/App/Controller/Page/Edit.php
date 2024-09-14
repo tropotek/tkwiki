@@ -316,6 +316,7 @@ jQuery(function($) {
     setTimeout(saveLock, lockTimeout);
 
     $(document).on('save.mce', '.mce, .mce-min', function() {
+        $(document).data('pageUpdated', false);
         $('#form_save').trigger('click');
     });
 
@@ -366,7 +367,7 @@ jQuery(function($) {
             return "Are you sure you want to exit?";
         }
     });
-    $('button#page-cancel, button#page-save').on('click', function(){
+    $('button#form_cancel, button#form_save').on('click', function() {
         $(document).data('pageUpdated', false);
     });
 });

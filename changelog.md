@@ -5,6 +5,18 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.52 [2024-09-14]:
+-------------------------------
+  - Update user config location
+  - Tagging and releasing branch `8.0` with version `8.0.50`.
+  - Use hash in place of secret ID
+  - Added sessions manager admin page
+  - Tagging and releasing branch `8.0` with version `8.0.48`.
+  - damn it!
+  - Tagging and releasing branch `8.0` with version `8.0.46`.
+  - fix secret widget
+
+
 Ver 8.0.50 [2024-09-10]:
 -------------------------------
   - Use hash in place of secret ID

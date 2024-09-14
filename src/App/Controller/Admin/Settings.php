@@ -135,6 +135,7 @@ class Settings extends ControllerPublic
 
 
         // Load form with object values
+        vd($this->getRegistry()->all());
         $this->form->setFieldValues($this->getRegistry()->all());
 
         // Execute form with request values

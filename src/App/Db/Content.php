@@ -119,7 +119,7 @@ class Content extends Model
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.title) LIKE LOWER(:search) OR ';
+            $w  = 'LOWER(a.html) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.keywords) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.description) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.content_id) LIKE LOWER(:search) OR ';

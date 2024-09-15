@@ -29,6 +29,8 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Controller\Page\History::class, 'doDefault']);
     $routes->add('wiki-page-view', '/view')
         ->controller([\App\Controller\Page\View::class, 'doContentView']);
+    $routes->add('wiki-test-page', '/_test')
+        ->controller([\App\Controller\Test::class, 'doDefault']);
 
     $routes->add('secret-manager', '/secretManager')
         ->controller([App\Controller\Secret\Manager::class, 'doDefault']);

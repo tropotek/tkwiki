@@ -43,6 +43,7 @@ class Navigation extends Renderer implements DisplayInterface
   <li><a class="dropdown-item" href="/sessions" choice="admin">Current Sessions</a></li>
   <li><a class="dropdown-item" href="/tailLog" choice="admin">Tail Log</a></li>
   <li><a class="dropdown-item" href="/info" choice="dev">Info</a></li>
+  <li><a class="dropdown-item" href="/_test" choice="dev">Test</a></li>
   <li><hr class="dropdown-divider"></li>
   <li><a class="dropdown-item" href="/logout">Sign out</a></li>
 </ul>

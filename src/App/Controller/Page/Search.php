@@ -30,11 +30,11 @@ class Search extends ControllerPublic
         $filter = Filter::create([
             'fullSearch' => $this->search,
             'published' => true,
-            'userId' => $this->getFactory()->getAuthUser()->userId,
             'permission' => Page::PERM_PUBLIC,
         ], '-modified', 250);
 
         if ($this->getFactory()->getAuthUser()) {
+            $filter['userId'] = $this->getFactory()->getAuthUser()->userId;
             if ($this->getFactory()->getAuthUser()->isMember()) {
                 $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
             }

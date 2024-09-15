@@ -7,6 +7,7 @@ use Bs\ControllerPublic;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Db;
+use Tk\Exception;
 
 class History extends ControllerPublic
 {
@@ -21,6 +22,9 @@ class History extends ControllerPublic
 
         $pageId = intval($_GET['pageId'] ?? 0);
         $this->page = Page::find($pageId);
+        if (!$this->page) {
+            throw new Exception("Page not found!");
+        }
 
         if (!$this->page->canEdit($this->getAuthUser())) {
             Alert::addError("You do not have permission to access this page");

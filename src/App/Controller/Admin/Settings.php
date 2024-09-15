@@ -149,8 +149,12 @@ class Settings extends ControllerPublic
     public function onSubmit(Form $form, SubmitExit $action): void
     {
         $values = $form->getFieldValues();
-        $this->getRegistry()->replace($values);
+        // Sanitize values
+        $values['wiki.page.home'] = intval($values['wiki.page.home']);
+        $values['system.maintenance.enabled'] = intval(truefalse($values['system.maintenance.enabled']));
+        $values['wiki.enable.secret.mod'] = intval(truefalse($values['wiki.enable.secret.mod']));
 
+        // Validate values
         if (strlen($values['site.name'] ?? '') < 3) {
             $form->addFieldError('site.name', 'Please enter your name');
         }
@@ -160,9 +164,13 @@ class Settings extends ControllerPublic
         if (!$values['wiki.page.home']) {
             $form->addFieldError('wiki.page.home', 'Please enter a valid home page');
         }
+        if (!in_array($values['wiki.default.template'], $this->getConfig()->get('wiki.templates', []))) {
+            $form->addFieldError('wiki.default.template', 'Please enter a valid wiki template');
+        }
 
         if ($form->hasErrors()) return;
 
+        $this->getRegistry()->replace($values);
         $this->getRegistry()->save();
 
         Alert::addSuccess('Site settings saved successfully.');

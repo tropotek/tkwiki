@@ -41,6 +41,7 @@
     "ext-pdo": "*",
     "ext-dom": "*",
     "ext-libxml": "*",
+    "ext-http": "*",
     "ttek/tk-base": "~8.0.0",
 
     "components/jquery": "~3.6.0",
@@ -51,6 +52,7 @@
     "studio-42/elfinder": "~2.1.0",
     "mpdf/mpdf": "~8.0",
     "spomky-labs/otphp": "~11.2.0"
+
   },
   "require-dev": {
     "composer/composer": "^2.0"

@@ -27,7 +27,7 @@ class Test extends ControllerPublic
         }
 
         // log level test
-//        vd("Log level: " . $this->getConfig()->get('log.logLevel'));
+//        Log::debug("Log level: " . $this->getConfig()->get('log.logLevel'));
 //        Log::debug("Debug Message");
 //        Log::info("Info Message");
 //        Log::notice("Notice Message");
@@ -36,7 +36,6 @@ class Test extends ControllerPublic
 //        Log::critical("Critical Message");
 //        Log::alert("Alert Message");
 //        Log::emergency("Emergency Message");
-
 
     }
 

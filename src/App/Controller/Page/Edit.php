@@ -110,7 +110,7 @@ class Edit extends ControllerPublic
         $this->form = new Form();
 
         $group = 'Details';
-        $this->form->appendField(new Hidden('pid'));
+        $this->form->appendField(new Hidden('pid'))->setReadonly();
 
         $this->form->appendField(new Input('title'))
             ->setRequired()
@@ -180,8 +180,8 @@ class Edit extends ControllerPublic
 
 
         $load = array_merge(
-            $this->form->unmapValues($this->content),
-            $this->form->unmapValues($this->page)
+            $this->form->unmapModel($this->content),
+            $this->form->unmapModel($this->page)
         );
         $this->form->setFieldValues($load);
 
@@ -202,8 +202,8 @@ class Edit extends ControllerPublic
 
     public function onSubmit(Form $form, Submit $action): void
     {
-        $form->mapValues($this->page);
-        $form->mapValues($this->content);
+        $form->mapModel($this->page);
+        $form->mapModel($this->content);
 
         $form->addFieldErrors($this->page->validate());
         $form->addFieldErrors($this->content->validate());

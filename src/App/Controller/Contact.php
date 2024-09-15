@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Bs\ControllerPublic;
+use Bs\Db\User;
 use Bs\Form;
 use Dom\Template;
 use Tk\Alert;
@@ -43,6 +44,14 @@ class Contact extends ControllerPublic
         $this->form->setFieldValues($this->getRegistry()->all());
 
         $this->form->execute($_POST);
+
+
+        $user = User::find(1);
+
+        $map = User::getFormMap();
+
+
+
 
     }
 

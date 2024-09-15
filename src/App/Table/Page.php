@@ -1,6 +1,7 @@
 <?php
 namespace App\Table;
 
+use Bs\Registry;
 use Bs\Table;
 use Dom\Template;
 use Tk\Form\Field\Input;
@@ -99,7 +100,7 @@ class Page extends Table
         // Add Table actions
         $this->appendAction(Delete::create($rowSelect))
             ->addOnDelete(function(Delete $action, array $selected) {
-                $homeId = intval($this->getRegistry()->get('wiki.page.home', 1));
+                $homeId = intval(Registry::instance()->get('wiki.page.home', 1));
                 foreach ($selected as $page_id) {
                     if ($page_id == $homeId) continue;
                     Db::delete('page', compact('page_id'));

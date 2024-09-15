@@ -138,10 +138,10 @@ class Settings extends ControllerPublic
         $this->form->setFieldValues($this->getRegistry()->all());
 
         // Execute form with request values
-        $values = array_combine(
-            array_map(fn($r) => str_replace('_', '.', $r), array_keys($_POST) ),
+        $values = array_merge(array_combine(
+            array_map(fn($r) => str_replace('_', '.', $r), array_keys($_POST) ),    // rename key with . in place of _
             array_values($_POST)
-        ) + $_POST; // keep the original post values for the events
+        ), $_POST); // keep the original post values for the events with underscore names
 
         $this->form->execute($values);
     }

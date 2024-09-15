@@ -26,7 +26,7 @@ class Secret extends Form
     {
 
         $tab = 'Details';
-        $this->appendField(new Hidden('secretId'));
+        $this->appendField(new Hidden('secretId'))->setReadonly();
 
         $this->appendField(new Input('name'))
             ->setGroup($tab);
@@ -73,8 +73,7 @@ class Secret extends Form
     {
         $this->init();
 
-        $load = $this->unmapValues($this->getSecret());
-        $load['secretId'] = $this->getSecret()->secretId;
+        $load = $this->unmapModel($this->getSecret());
         $this->setFieldValues($load);
 
         return parent::execute($values);
@@ -82,10 +81,9 @@ class Secret extends Form
 
     public function onSubmit(Form $form, Submit $action): void
     {
-        $form->mapValues($this->getSecret());
+        $form->mapModel($this->getSecret());
 
         $form->addFieldErrors($this->getSecret()->validate());
-        vd($form->hasErrors(), $form->getAllErrors());
         if ($form->hasErrors()) {
             return;
         }

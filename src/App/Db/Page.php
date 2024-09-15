@@ -170,7 +170,7 @@ class Page extends Model
                     self::insertLinkByUrl($page->pageId, $regs[1]);
                 }
             }
-        } catch (\Exception $e) { vd($e->__toString()); }
+        } catch (\Exception $e) { \Tk\Log::debug($e->__toString()); }
     }
 
     public static function getHomePage(): static

@@ -26,10 +26,10 @@ class Page extends Model
      * Page permission values
      * NOTE: Admin users have all permissions, authors have all permissions to their pages
      */
-    const PERM_PRIVATE            = 9;
-    const PERM_STAFF              = 2;
-    const PERM_MEMBER             = 1;
-	const PERM_PUBLIC             = 0;
+    const PERM_PRIVATE  = 9;
+    const PERM_STAFF    = 2;
+    const PERM_MEMBER   = 1;
+	const PERM_PUBLIC   = 0;
 
     const PERM_LIST = [
         self::PERM_PRIVATE   => 'Private',
@@ -38,11 +38,22 @@ class Page extends Model
         self::PERM_PUBLIC    => 'Public',
     ];
 
+    const STAFF_PERMS = [
+        self::PERM_STAFF,
+        self::PERM_MEMBER,
+        self::PERM_PUBLIC,
+    ];
+
+    const MEMBER_VIEW_PERMS = [
+        self::PERM_MEMBER,
+        self::PERM_PUBLIC,
+    ];
+
     const PERM_HELP = [
-        self::PERM_PRIVATE   => 'VIEW: author, EDIT: author, DELETE: author',
-        self::PERM_STAFF     => 'VIEW: staff, EDIT: editors/author, DELETE: editors/author',
-        self::PERM_MEMBER    => 'VIEW: members/staff, EDIT: members/editors/author, DELETE: members/editors/author',
-        self::PERM_PUBLIC    => 'VIEW: all, EDIT: editors/author, DELETE: editors/author',
+        self::PERM_PRIVATE   => 'VIEW: author, EDIT: author',
+        self::PERM_STAFF     => 'VIEW: staff, EDIT: staff',
+        self::PERM_MEMBER    => 'VIEW: members/staff, EDIT: staff',
+        self::PERM_PUBLIC    => 'VIEW: all, EDIT: staff',
     ];
 
     public int    $pageId       = 0;
@@ -72,12 +83,12 @@ class Page extends Model
     public function save(): void
     {
         $map = static::getDataMap();
-        $values = $map->getArray($this);
 
-        if (!$this->url) {
+        if (empty($this->url)) {
             $this->url = self::makePageUrl($this->title);
         }
 
+        $values = $map->getArray($this);
         if ($this->pageId) {
             $values['page_id'] = $this->pageId;
             Db::update('page', 'page_id', $values);
@@ -239,22 +250,29 @@ class Page extends Model
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
-        if (!(empty($filter['userId']) || empty($filter['permission']))) {
+        if (!empty($filter['userId']) && isset($filter['permission'])) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
             $filter->appendWhere('(a.user_id IN :userId OR ');
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
             $filter->appendWhere('a.permission IN :permission) AND ');
-        } else {
-            if (!empty($filter['userId'])) {
-                if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
-                $filter->appendWhere('a.user_id IN :userId AND ');
-            }
-
-            if (!empty($filter['permission'])) {
-                if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
-                $filter->appendWhere('a.permission IN :permission AND ');
-            }
+        } elseif (!empty($filter['userId'])) {
+            if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
+            $filter->appendWhere('a.user_id IN :userId AND ');
+        } elseif (isset($filter['permission'])) {
+            if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
+            $filter->appendWhere('a.permission IN :permission AND ');
         }
+
+        if (!empty($filter['category'])) {
+            $filter->appendWhere('a.category = :category AND ');
+        }
+
+        if (!empty($filter['isOrphaned'])) {
+            $filter['isOrphaned'] = truefalse($filter['isOrphaned']);
+            $filter->appendWhere('a.is_orphaned = :isOrphaned AND ');
+        }
+
+        $filter->appendWhere('a.published AND ');
 
         if (!empty($filter['fullSearch'])) {
             $filter->appendWhere('MATCH (c.html) AGAINST (:fullSearch IN NATURAL LANGUAGE MODE) AND ');
@@ -438,19 +456,14 @@ class Page extends Model
         return false;
     }
 
-    // ------------------- PAGE PERMISSION METHODS -----------------------
-
     public static function canCreate(?User $user): bool
     {
-        if (!$user) return false;
+        if (!$user || $user->isMember()) return false;
         return true;
     }
 
     public function canView(?User $user): bool
     {
-        // Try this see if it works as expected
-        if (!$this->published) return false;
-
         if ($this->permission == self::PERM_PUBLIC) return true;
         if (!$user) return false;
         if ($user->isAdmin()) return true;
@@ -466,24 +479,15 @@ class Page extends Model
 
     public function canEdit(?User $user): bool
     {
-        if (!$user) return false;
+        if (!$user || $user->isMember()) return false;
         if ($user->isAdmin()) return true;
+        if ($this->permission == self::PERM_PUBLIC) return true;
         if ($this->userId == $user->userId) return true;
-        if (!$user->isStaff()) return false;
 
-        return $user->hasPermission(Permissions::PERM_EDITOR);
-    }
+        // Staff can edit MEMBER, STAFF pages
+        if (in_array($this->permission, [self::PERM_MEMBER, self::PERM_STAFF])) return $user->isStaff();
 
-    public function canDelete(?User $user): bool
-    {
-        // Do not allow deletion of currently assigned home page
-        if ($this->url == self::getHomePage()->url) return false;
-        if (!$user) return false;
-        if ($user->isAdmin()) return true;
-        if ($this->userId == $user->userId) return true;
-        if (!$user->isStaff()) return false;
-
-        return $user->hasPermission(Permissions::PERM_EDITOR);
+        return false;
     }
 
 }

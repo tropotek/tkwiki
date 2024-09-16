@@ -1,6 +1,7 @@
 <?php
 namespace App\Db;
 
+use Bs\Db\Permissions;
 use Bs\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\User;
@@ -62,6 +63,7 @@ class Secret extends Model
     public function save(): void
     {
         $map = static::getDataMap();
+
         $values = $map->getArray($this);
         if ($this->secretId) {
             $values['secret_id'] = $this->secretId;
@@ -325,7 +327,7 @@ class Secret extends Model
 
         // Only Editors can edit staff secrets
         if ($this->permission == self::PERM_STAFF) {
-            return $user->hasPermission(Permissions::PERM_EDITOR);
+            return $user->hasPermission(Permissions::PERM_SYSADMIN);
         }
 
         return false;
@@ -345,7 +347,7 @@ class Secret extends Model
 
         // Only Editors can delete staff secrets
         if ($this->permission == self::PERM_STAFF) {
-            return $user->hasPermission(Permissions::PERM_EDITOR);
+            return $user->hasPermission(Permissions::PERM_SYSADMIN);
         }
 
         return false;

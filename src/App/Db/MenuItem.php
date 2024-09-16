@@ -25,8 +25,8 @@ class MenuItem extends Model
     public function save(): void
     {
         $map = static::getDataMap();
-        $values = $map->getArray($this);
 
+        $values = $map->getArray($this);
         if ($this->menuItemId) {
             $values['menu_item_id'] = $this->menuItemId;
             Db::update('menu_item', 'menu_item_id', $values);

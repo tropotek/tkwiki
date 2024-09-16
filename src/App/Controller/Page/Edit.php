@@ -244,7 +244,7 @@ class Edit extends ControllerPublic
     public function doDelete($pageId): void
     {
         $page = Page::find($pageId);
-        if ($page && $page->canDelete($this->getAuthUser())) {
+        if ($page && $page->canEdit($this->getAuthUser())) {
             $page->delete();
             Page::getHomePage()->getUrl()->redirect();
         }

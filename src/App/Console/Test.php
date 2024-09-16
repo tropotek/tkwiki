@@ -16,8 +16,8 @@ class Test extends Console
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!$this->getConfig()->isDebug()) {
-            $this->writeError('Error: Only run this command in a debug environment.');
+        if (!$this->getConfig()->isDev()) {
+            $this->writeError('Error: Only run this command in a dev environment.');
             return self::FAILURE;
         }
 

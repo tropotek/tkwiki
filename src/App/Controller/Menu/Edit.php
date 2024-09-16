@@ -3,7 +3,7 @@ namespace App\Controller\Menu;
 
 use App\Db\MenuItem;
 use App\Db\Page;
-use App\Db\Permissions;
+use Bs\Db\Permissions;
 use App\Helper\PageSelect;
 use Bs\ControllerPublic;
 use Bs\Ui\Dialog;
@@ -31,7 +31,7 @@ class Edit extends ControllerPublic
         }
 
         $this->getPage()->setTitle('Edit Menu');
-        $this->setAccess(Permissions::PERM_SYSADMIN | Permissions::PERM_EDITOR);
+        $this->setAccess(Permissions::PERM_SYSADMIN);
         $this->getCrumbs()->reset();
 
         return null;

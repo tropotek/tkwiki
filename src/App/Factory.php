@@ -1,13 +1,15 @@
 <?php
 namespace App;
 
-use App\Db\Permissions;
+use App\Console\Cron;
+use App\Console\Test;
+use App\Console\TestData;
+use App\Console\WikiTest;
 use App\Dom\Modifier\CategoryList;
 use App\Dom\Modifier\SecretList;
 use App\Dom\Modifier\Secrets;
 use App\Dom\Modifier\WikiImg;
 use App\Dom\Modifier\WikiUrl;
-use Bs\Db\User;
 use Bs\Ui\Crumbs;
 use Dom\Modifier;
 use Symfony\Component\Console\Application;
@@ -17,26 +19,10 @@ class Factory extends \Bs\Factory
 {
     public function createDomPage(string $templatePath = ''): Page
     {
-        if (!empty($this->getRegistry()->get('wiki.default.template', '')) && is_file(System::makePath($this->getRegistry()->get('wiki.default.template', '')))) {
+        if (str_starts_with(basename($templatePath), 'default') && is_file(System::makePath($this->getRegistry()->get('wiki.default.template', '')))) {
             $templatePath = System::makePath($this->getRegistry()->get('wiki.default.template', $templatePath));
         }
         return new Page($templatePath);
-    }
-
-    public function getPermissions(): array
-    {
-        return Permissions::PERMISSION_LIST;
-    }
-
-    public function getAvailablePermissions(?User $user): array
-    {
-        $list = [];
-        if ($user) {
-            if ($user->isStaff()) {
-                $list = Permissions::PERMISSION_LIST;
-            }
-        }
-        return $list;
     }
 
     public function getTemplateModifier(): Modifier
@@ -80,10 +66,11 @@ class Factory extends \Bs\Factory
         if (!$this->has('console')) {
             $app = parent::getConsole();
             // Setup App Console Commands
-            $app->add(new \App\Console\Cron());
+            $app->add(new Cron());
             if ($this->getConfig()->isDev()) {
-                $app->add(new \App\Console\TestData());
-                $app->add(new \App\Console\Test());
+                $app->add(new WikiTest());
+                $app->add(new TestData());
+                $app->add(new Test());
             }
         }
         return $this->get('console');

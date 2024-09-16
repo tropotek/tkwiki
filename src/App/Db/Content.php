@@ -50,6 +50,7 @@ class Content extends Model
     public function save(): void
     {
         $map = static::getDataMap();
+
         $values = $map->getArray($this);
         if ($this->contentId) {
             $values['content_id'] = $this->contentId;

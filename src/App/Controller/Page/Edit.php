@@ -168,6 +168,7 @@ class Edit extends ControllerPublic
         if ($this->getAuthUser()->isAdmin()) {
             $this->form->appendField(new Textarea('js'))
                 ->setLabel('Page JavaScript')
+                ->setNotes('Only admin users can add javascript')
                 ->addCss('js-edit')
                 ->setGroup($group);
         }

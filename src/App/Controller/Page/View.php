@@ -113,7 +113,7 @@ class View extends ControllerPublic
         if ($this->content->css) {
             $template->appendCss($this->content->css);
         }
-        
+
         if ($this->content->js) {
             $template->appendJs($this->content->js);
         }

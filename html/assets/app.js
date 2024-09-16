@@ -183,6 +183,7 @@ let app = function () {
       image_advtab: true,
       statusbar: false,
       extended_valid_elements: 'span[*],i[*],em[*],b[*],a[*],div[*],img[*],input[*],textarea[*],select[*]',
+      content_security_policy: "default-src 'self'",
 
       save_onsavecallback: () => {
         $('#page-save', tinymce.activeEditor.formElement).trigger('click');

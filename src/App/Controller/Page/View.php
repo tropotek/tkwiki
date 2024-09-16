@@ -113,9 +113,10 @@ class View extends ControllerPublic
         if ($this->content->css) {
             $template->appendCss($this->content->css);
         }
-        if ($this->content->js) {
-            $template->appendJs($this->content->js);
-        }
+        // todo: disabled until we can figure a solution to CSC attacks
+//        if ($this->content->js) {
+//            $template->appendJs($this->content->js);
+//        }
 
         if ($this->content->keywords) {
             $this->getPage()->getTemplate()->appendMetaTag('keywords', $this->content->keywords, $this->getPage()->getTemplate()->getTitleElement());

@@ -164,10 +164,11 @@ class Edit extends ControllerPublic
             ->setRequired()
             ->setGroup($group);
 
-        $this->form->appendField(new Textarea('js'))
-            ->setLabel('Page JavaScript')
-            ->addCss('js-edit')
-            ->setGroup($group);
+        // todo: Disabled to prevent cross site scripting attacks
+//        $this->form->appendField(new Textarea('js'))
+//            ->setLabel('Page JavaScript')
+//            ->addCss('js-edit')
+//            ->setGroup($group);
 
         $this->form->appendField(new Textarea('css'))
             ->setLabel('Page Stylesheet')

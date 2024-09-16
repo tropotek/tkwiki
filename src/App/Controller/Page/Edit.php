@@ -165,10 +165,12 @@ class Edit extends ControllerPublic
             ->setGroup($group);
 
         // todo: Disabled to prevent cross site scripting attacks
-//        $this->form->appendField(new Textarea('js'))
-//            ->setLabel('Page JavaScript')
-//            ->addCss('js-edit')
-//            ->setGroup($group);
+        if ($this->getAuthUser()->isAdmin()) {
+            $this->form->appendField(new Textarea('js'))
+                ->setLabel('Page JavaScript')
+                ->addCss('js-edit')
+                ->setGroup($group);
+        }
 
         $this->form->appendField(new Textarea('css'))
             ->setLabel('Page Stylesheet')

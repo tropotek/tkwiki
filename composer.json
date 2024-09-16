@@ -41,7 +41,6 @@
     "ext-pdo": "*",
     "ext-dom": "*",
     "ext-libxml": "*",
-    "ext-http": "*",
     "ttek/tk-base": "~8.0.0",
 
     "components/jquery": "~3.6.0",

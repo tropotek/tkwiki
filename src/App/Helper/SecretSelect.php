@@ -35,7 +35,7 @@ class SecretSelect extends Renderer implements DisplayInterface
         if ($this->getAuthUser()->isStaff()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
-        
+
 
         $list = \App\Db\Secret::findViewable($filter);
         $this->table->setRows($list, Db::getLastStatement()->getTotalRows());

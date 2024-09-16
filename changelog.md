@@ -5,6 +5,13 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.60 [2024-09-16]:
+-------------------------------
+  - Fixed page and secret permissions
+  - refactor form mapping and csrf token
+  - Implement csrf token on forms
+
+
 Ver 8.0.58 [2024-09-14]:
 -------------------------------
 

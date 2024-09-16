@@ -1,7 +1,6 @@
 <?php
 namespace App\Db;
 
-use Bs\Db\Permissions;
 use Bs\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\User;
@@ -26,18 +25,17 @@ class Secret extends Model
      */
     const PERM_PRIVATE  = 9;
     const PERM_STAFF    = 2;
-    const PERM_USER     = 1;
+    const PERM_MEMBER   = 1;
 
     const PERM_LIST = [
         self::PERM_PRIVATE  => 'Private',
         self::PERM_STAFF    => 'Staff',
-        self::PERM_USER     => 'User',
+        self::PERM_MEMBER   => 'Member',
     ];
 
-    const PERM_HELP = [
-        self::PERM_PRIVATE  => 'VIEW: author, EDIT: author, DELETE: author',
-        self::PERM_STAFF    => 'VIEW: staff users, EDIT: staff editors, DELETE: staff editors',
-        self::PERM_USER     => 'VIEW: registered users, EDIT: staff, DELETE: staff',
+    const STAFF_PERMS = [
+        self::PERM_STAFF,
+        self::PERM_MEMBER,
     ];
 
     public int    $secretId   = 0;
@@ -177,22 +175,25 @@ class Secret extends Model
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
-        if (!(empty($filter['userId']) || empty($filter['permission']))) {
+        if (!empty($filter['userId']) && isset($filter['permission'])) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
             $filter->appendWhere('(a.user_id IN :userId OR ');
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
             $filter->appendWhere('a.permission IN :permission) AND ');
-        } else {
-            if (!empty($filter['userId'])) {
-                if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
-                $filter->appendWhere('a.user_id IN :userId AND ');
-            }
-
-            if (!empty($filter['permission'])) {
-                if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
-                $filter->appendWhere('a.permission IN :permission AND ');
-            }
+        } elseif (!empty($filter['userId'])) {
+            if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
+            $filter->appendWhere('a.user_id IN :userId AND ');
+        } elseif (isset($filter['permission'])) {
+            if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
+            $filter->appendWhere('a.permission IN :permission AND ');
         }
+
+        if (!empty($filter['otp'])) {
+            $filter->appendWhere("a.otp != '' AND ");
+        }
+
+        // todo Ad an active/published field
+        // $filter->appendWhere('a.published AND ');
 
         return Db::query("
             SELECT *
@@ -254,6 +255,11 @@ class Secret extends Model
             $filter->appendWhere('a.url = :url AND ');
         }
 
+        if (!empty($filter['published'])) {
+            $filter['published'] = truefalse($filter['published']);
+            $filter->appendWhere('a.published = :published AND ');
+        }
+
         return Db::query("
             SELECT *
             FROM v_secret a
@@ -301,54 +307,22 @@ class Secret extends Model
         if ($this->userId == $user->userId) return true;
 
         // Staff and users can view USER secrets
-        if ($this->permission == self::PERM_USER) {
-            return ($user->isMember() || $user->isStaff());
-        }
+        if ($this->permission == self::PERM_MEMBER) return ($user->isMember() || $user->isStaff());
 
         // Staff can view STAFF secrets
-        if ($this->permission == self::PERM_STAFF) {
-            return $user->isStaff();
-        }
+        if ($this->permission == self::PERM_STAFF) return $user->isStaff();
 
         return false;
     }
 
     public function canEdit(?User $user): bool
     {
-        if (!$user) return false;
-        if ($user->isMember()) return false;
+        if (!$user || $user->isMember()) return false;
         if ($user->isAdmin()) return true;
         if ($this->userId == $user->userId) return true;
 
-        // Allow any staff to edit public or user secrets
-        if ($this->permission == self::PERM_USER) {
-            return $user->isStaff();
-        }
-
-        // Only Editors can edit staff secrets
-        if ($this->permission == self::PERM_STAFF) {
-            return $user->hasPermission(Permissions::PERM_SYSADMIN);
-        }
-
-        return false;
-    }
-
-    public function canDelete(?User $user): bool
-    {
-        if (!$user) return false;
-        if ($user->isMember()) return false;
-        if ($user->isAdmin()) return true;
-        if ($this->userId == $user->userId) return true;
-
-        // Allow any staff to delete public or user secrets
-        if ($this->permission == self::PERM_USER) {
-            return $user->isStaff();
-        }
-
-        // Only Editors can delete staff secrets
-        if ($this->permission == self::PERM_STAFF) {
-            return $user->hasPermission(Permissions::PERM_SYSADMIN);
-        }
+        // Staff can edit MEMBER, STAFF secrets
+        if (in_array($this->permission, [self::PERM_MEMBER, self::PERM_STAFF])) return $user->isStaff();
 
         return false;
     }

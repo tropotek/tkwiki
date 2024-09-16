@@ -3,6 +3,7 @@ namespace App\Console;
 
 use App\Db\Content;
 use App\Db\Page;
+use App\Db\Secret;
 use Bs\Db\Permissions;
 use Bs\Db\User;
 use Bs\Factory;
@@ -38,6 +39,7 @@ class WikiTest extends Console
         if (!$editor) {
             $this->setup();
         }
+        $this->getOutput()->writeln("Pages:");
 
         $admin = User::findByUsername('wikiadmin');
         $this->showPages($admin);
@@ -63,10 +65,44 @@ class WikiTest extends Console
             $this->getOutput()->writeln("  {$i}. {$page->title} [{$author} - ".Page::PERM_LIST[$page->permission]."] [view: $canView] [edit: $canEdit]");
         }
 
-        $output->writeln('Complete!!!');
+        $this->getOutput()->writeln("");
+        $this->getOutput()->writeln("Secrets:");
+
+        $this->showSecrets($admin);
+        $this->showSecrets($editor);
+        $this->showSecrets($staff);
+        $this->showSecrets($member);
+
+        $this->getOutput()->writeln("");
         return self::SUCCESS;
     }
 
+
+    private function showSecrets(?User $user):void
+    {
+        $list = array_filter(Factory::instance()->getAvailablePermissions($user), function ($k) use ($user) {
+            return $user->hasPermission($k);
+        }, ARRAY_FILTER_USE_KEY);
+        $perms = implode(', ', $list);
+        $this->getOutput()->writeln("USER: {$user->username} - {$user->type} - {$perms}");
+        $perms = match (true) {
+            $user->isStaff() => Secret::STAFF_PERMS,
+            $user->isMember() => Secret::PERM_MEMBER,
+        };
+        $filter = [
+            'userId' => $user->userId,
+            'permission' => $perms,
+        ];
+        if ($user->isAdmin()) $filter = [];
+        $secrets = Secret::findViewable($filter);
+        foreach ($secrets as $i => $secret) {
+            $author = User::find($secret->userId)->nameFirst;
+            $canView = $secret->canView($user) ? 'Yes' : 'No';
+            $canEdit = $secret->canEdit($user) ? 'Yes' : 'No';
+            $this->getOutput()->writeln("  {$i}. {$secret->title} [{$author} - ".Page::PERM_LIST[$secret->permission]."] [view: $canView] [edit: $canEdit]");
+        }
+
+    }
 
     private function showPages(?User $user):void
     {
@@ -75,14 +111,16 @@ class WikiTest extends Console
         }, ARRAY_FILTER_USE_KEY);
         $perms = implode(', ', $list);
         $this->getOutput()->writeln("USER: {$user->username} - {$user->type} - {$perms}");
-        $perms = match ($user->type) {
-            User::TYPE_STAFF => Page::STAFF_PERMS,
-            User::TYPE_MEMBER => Page::MEMBER_VIEW_PERMS,
+        $perms = match (true) {
+            $user->isStaff() => Page::STAFF_PERMS,
+            $user->isMember() => Page::MEMBER_VIEW_PERMS,
         };
-        $pages = Page::findViewable([
+        $filter = [
             'userId' => $user->userId,
             'permission' => $perms,
-        ]);
+        ];
+        if ($user->isAdmin()) $filter = [];
+        $pages = Page::findViewable($filter);
         foreach ($pages as $i => $page) {
             $author = User::find($page->userId)->nameFirst;
             $canView = $page->canView($user) ? 'Yes' : 'No';
@@ -229,6 +267,57 @@ class WikiTest extends Console
         $cn->pageId = $p->pageId;
         $cn->html = sprintf('<p>Staff Private Page</p>');
         $cn->save();
+
+        // create secrets to test
+        // - PERM_PRIVATE  = 9;
+        // - PERM_STAFF    = 2;
+        // - PERM_USER     = 1;
+
+        $secret = new Secret();
+        $secret->userId = $editor->userId;
+        $secret->permission = Secret::PERM_PRIVATE;
+        $secret->name = "Editor Private Secret";
+        $secret->save();
+
+        $secret = new Secret();
+        $secret->userId = $editor->userId;
+        $secret->permission = Secret::PERM_STAFF;
+        $secret->name = "Editor Staff Secret";
+        $secret->save();
+
+        $secret = new Secret();
+        $secret->userId = $editor->userId;
+        $secret->permission = Secret::PERM_MEMBER;
+        $secret->name = "Editor Member Secret";
+        $secret->save();
+
+
+        $secret = new Secret();
+        $secret->userId = $staff->userId;
+        $secret->permission = Secret::PERM_PRIVATE;
+        $secret->name = "Staff Private Secret";
+        $secret->save();
+
+        $secret = new Secret();
+        $secret->userId = $staff->userId;
+        $secret->permission = Secret::PERM_STAFF;
+        $secret->name = "Staff Staff Secret";
+        $secret->save();
+
+        $secret = new Secret();
+        $secret->userId = $staff->userId;
+        $secret->permission = Secret::PERM_MEMBER;
+        $secret->name = "Staff Member Secret";
+        $secret->save();
+
+
+
+
+
+
+
+
+
 
     }
 

@@ -49,13 +49,6 @@ class Page extends Model
         self::PERM_PUBLIC,
     ];
 
-    const PERM_HELP = [
-        self::PERM_PRIVATE   => 'VIEW: author, EDIT: author',
-        self::PERM_STAFF     => 'VIEW: staff, EDIT: staff',
-        self::PERM_MEMBER    => 'VIEW: members/staff, EDIT: staff',
-        self::PERM_PUBLIC    => 'VIEW: all, EDIT: staff',
-    ];
-
     public int    $pageId       = 0;
     public int    $userId       = 0;
     public int    $contentId    = 0;    // latest content ID

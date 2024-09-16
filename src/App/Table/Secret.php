@@ -79,7 +79,7 @@ class Secret extends Table
             ->addOnDelete(function(Delete $action, array $selected) {
                 foreach ($selected as $secret_id) {
                     $secret = \App\Db\Secret::find($secret_id);
-                    if ($secret->canDelete($this->getAuthUser())) {
+                    if ($secret->canEdit($this->getAuthUser())) {
                         Db::delete('secret', compact('secret_id'));
                     }
                 }

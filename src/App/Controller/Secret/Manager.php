@@ -35,8 +35,12 @@ class Manager extends ControllerPublic
 
         // Set the table rows
         $filter = $this->table->getDbFilter();
-        $filter['userId'] = $this->getAuthUser()->userId;
-        $rows = Secret::findFiltered($filter);
+        $filter = $this->table->getDbFilter();
+        if (!$this->getAuthUser()->isAdmin()) {
+            $filter['userId'] = $this->getAuthUser()->userId;
+            $filter['permission'] = Secret::STAFF_PERMS;
+        }
+        $rows = Secret::findViewable($filter);
 
         $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());
     }

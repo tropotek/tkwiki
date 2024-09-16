@@ -144,7 +144,7 @@ class Pdf extends Renderer implements DisplayInterface
 </html>
 HTML;
 
-        return $this->loadTemplate($html);
+        return Template::load($html);
     }
 
 }

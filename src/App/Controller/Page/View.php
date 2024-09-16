@@ -20,7 +20,7 @@ class View extends ControllerPublic
     protected ?ViewToolbar $toolbar  = null;
 
 
-    public function doDefault(Request $request, string $pageUrl)
+    public function doDefault(Request $request, string $pageUrl): ?Template
     {
         if ($pageUrl == Page::DEFAULT_TAG) {
             $pageUrl = Page::getHomePage()->url;
@@ -53,15 +53,16 @@ class View extends ControllerPublic
             return $this->doPdf();
         }
 
+        return null;
     }
 
     /**
      * This method is used for system users viewing wiki pages
      * thus they should have edit access or this link should fail
      */
-    public function doContentView()
+    public function doContentView(): ?Template
     {
-        $this->content = Content::find($_GET['contentId'] ?? 0);
+        $this->content = Content::find(intval($_GET['contentId'] ?? 0));
         if (!$this->content) {
             throw new HttpException(404, 'page not found');
         }
@@ -81,14 +82,12 @@ class View extends ControllerPublic
             ' <a href="'.$this->page->getUrl().'">click here</a> to return to current revision');
         $this->toolbar = new ViewToolbar($this->page);
 
+        return null;
     }
 
-    public function doPdf()
+    public function doPdf(): ?Template
     {
-        $rev = '';
-        if (isset($_GET['contentId'])) {
-            $rev = '-' . $_GET['contentId'];
-        }
+        $rev = '-' . intval($_GET['contentId'] ?? 'unknown');
 
         $pdf = Pdf::create($this->content->html, $this->page->title);
         $filename = $this->page->title.$rev.'.pdf';

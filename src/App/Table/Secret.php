@@ -59,6 +59,11 @@ class Secret extends Table
                 return $obj->getPermissionLabel();
             });
 
+        $this->appendCell('publish')
+            ->addCss('text-nowrap')
+            ->setSortable(true)
+            ->addOnValue('\Tk\Table\Type\Boolean::onValue');
+
         $this->appendCell('created')
             ->addCss('text-nowrap')
             ->setSortable(true)

@@ -23,12 +23,11 @@ class Secrets extends FilterInterface
         $secret = Secret::find((int)$node->getAttribute('wk-secret'));
         if (!$secret) return;
 
-        if ($secret->canView($this->getAuthUser())) {
-            $renderer = new ViewSecret($secret);
-            $template = $renderer->show();
-            $newNode = $node->ownerDocument->importNode($template->getDocument()->documentElement, true);
-            $node->parentNode->insertBefore($newNode, $node);
-        }
+        $renderer = new ViewSecret($secret);
+        $template = $renderer->show();
+        $newNode = $node->ownerDocument->importNode($template->getDocument()->documentElement, true);
+        $node->parentNode->insertBefore($newNode, $node);
+
         $this->getDomModifier()->removeNode($node);
 
     }

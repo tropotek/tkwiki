@@ -32,24 +32,32 @@ class ViewSecret extends Renderer implements DisplayInterface
         }
         if ($this->secret->url) {
             $template->setAttr('name', 'href', $this->secret->url);
-            $template->setVisible('url', true);
+            $template->setVisible('url');
         } else {
             $template->setVisible('no-url');
         }
-        if ($this->secret->username || $this->secret->password) {
-            if ($this->secret->username) {
-                $template->setText('username', $this->secret->username);
-                $template->setVisible('user');
-            }
-            if ($this->secret->password) {
-                $template->setText('password', str_repeat('*', strlen($this->secret->password)));
-                $template->setVisible('pass');
-            }
-            $template->setVisible('userpass');
-        }
 
-        if ($this->secret->otp) {
-            $template->setVisible('o');
+        if ($this->secret->canView($this->getAuthUser())) {
+            if ($this->secret->publish) {
+                if ($this->secret->username || $this->secret->password) {
+                    if ($this->secret->username) {
+                        $template->setText('username', $this->secret->username);
+                        $template->setVisible('user');
+                    }
+                    if ($this->secret->password) {
+                        $template->setText('password', str_repeat('*', strlen($this->secret->password)));
+                        $template->setVisible('pass');
+                    }
+                    $template->setVisible('userpass');
+                }
+
+                if ($this->secret->otp) {
+                    $template->setVisible('o');
+                }
+            } else {
+                $template->addCss('name', 'text-strike');
+                $template->setAttr('name', 'title', 'Unpublished');
+            }
         }
 
         if ($this->secret->canEdit($this->getAuthUser())) {

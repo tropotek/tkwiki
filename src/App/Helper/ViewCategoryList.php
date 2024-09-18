@@ -30,7 +30,7 @@ class ViewCategoryList extends Renderer implements DisplayInterface
 
         $filter = [
             'category'   => $this->category,
-            'published'  => true,
+            'publish'  => true,
             'permission' => Page::PERM_PUBLIC
         ];
         if ($this->getAuthUser()?->isMember()) {

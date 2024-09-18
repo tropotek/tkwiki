@@ -38,9 +38,9 @@ class Edit extends ControllerPublic
         $this->secret->userId = $this->getFactory()->getAuthUser()->userId;
         if ($hash) {
             $this->secret = Secret::findByHash($hash);
-        }
-        if (!$this->secret) {
-            throw new Exception("cannot find object hash {$hash}");
+            if (!$this->secret) {
+                throw new Exception("cannot find object hash {$hash}");
+            }
         }
 
         $this->form = new \App\Form\Secret($this->secret);

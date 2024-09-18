@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS page
   views INT(11) UNSIGNED NOT NULL DEFAULT 0,
   permission INT NOT NULL DEFAULT 0,
   title_visible BOOL NOT NULL DEFAULT TRUE,
-  published BOOL NOT NULL DEFAULT TRUE,
+  publish BOOL NOT NULL DEFAULT TRUE,
   modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uk_url (url),
@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS secret (
     username VARCHAR(128) NOT NULL DEFAULT '',                    -- (encoded)
     password VARCHAR(128) NOT NULL DEFAULT '',                    -- (encoded)
     otp VARCHAR(128) NOT NULL DEFAULT '',                         -- (encoded) OTP/Google auth key: wen set we can generate onetime 2FA keys
+    publish BOOL NOT NULL DEFAULT TRUE,
     `keys` TEXT,                                                  -- (encoded) could be a wallet key, or API key, public/private keys
     notes TEXT,                                                   --
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

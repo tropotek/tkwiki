@@ -50,7 +50,7 @@ class Page extends Table
                 return sprintf('<a href="%s">/%s</a>', $page->getUrl(), $page->url);
             });
 
-        $this->appendCell('published')
+        $this->appendCell('publish')
             ->addCss('text-nowrap')
             ->setSortable(true)
             ->addOnValue('\Tk\Table\Type\Boolean::onValue');

@@ -49,7 +49,7 @@ class Settings extends ControllerPublic
         // todo Need to create a select dialog here to search for the pages
         $list = Page::findFiltered(Filter::create([
             'permission' => Page::PERM_PUBLIC,
-            'published'  => true
+            'publish'  => true
         ], '-modified', 25));
         $this->form->appendField(new Select('wiki.page.home', $list, 'title', 'pageId'))
             ->setGroup($tab)

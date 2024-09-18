@@ -5,6 +5,7 @@ use App\Db\Content;
 use App\Db\Page;
 use App\Helper\ViewToolbar;
 use App\Util\Pdf;
+use Bs\ControllerInterface;
 use Bs\ControllerPublic;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,12 +21,20 @@ class View extends ControllerPublic
     protected ?ViewToolbar $toolbar  = null;
 
 
+    public function getPageTemplate(): string
+    {
+        $this->page = Page::findPage(Uri::create()->basename());
+        if ($this->page && !empty($this->page->template)) {
+            return $this->page->template;
+        }
+        return $this->pageTemplate;
+    }
+
     public function doDefault(Request $request, string $pageUrl): ?Template
     {
         if ($pageUrl == Page::DEFAULT_TAG) {
             $pageUrl = Page::getHomePage()->url;
         }
-
         $this->page = Page::findPage($pageUrl);
         if (!$this->page) {
             if (Page::canCreate($this->getFactory()->getAuthUser())) {
@@ -139,6 +148,11 @@ class View extends ControllerPublic
 </div>
 HTML;
         return $this->loadTemplate($html);
+    }
+
+    public function getWikiPage(): ?Page
+    {
+        return $this->page;
     }
 
 }

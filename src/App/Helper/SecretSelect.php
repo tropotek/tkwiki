@@ -25,7 +25,7 @@ class SecretSelect extends Renderer implements DisplayInterface
 
         $filter = $this->table->getDbFilter();
         $filter->replace([
-            'published' => true,
+            'publish' => true,
             'userId' => $this->getAuthUser()->userId,
             'permission' => Page::PERM_PUBLIC
         ]);

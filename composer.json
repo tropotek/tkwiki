@@ -54,7 +54,8 @@
 
   },
   "require-dev": {
-    "composer/composer": "^2.0"
+    "composer/composer": "^2.0",
+    "zaproxy/php-owasp-zap-v2": "2.4.*@beta"
   },
 
   "config": {

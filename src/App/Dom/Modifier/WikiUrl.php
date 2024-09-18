@@ -32,7 +32,7 @@ class WikiUrl extends FilterInterface
             if ($page) {
                 $css = $this->addClass($css, 'wk-page');
                 $css = $this->removeClass($css, 'wk-page-new');
-                if (!($page->canView($user) && $page->published)) {
+                if (!($page->canView($user) && $page->publish)) {
                     $css = $this->addClass($css, 'wk-page-disable');
                     $node->setAttribute('title', 'Invalid Permission');
                     $node->setAttribute('href', '#');

@@ -132,14 +132,11 @@ class Edit extends ControllerPublic
             $permission->setDisabled();
         }
 
-        $this->form->appendField(new Checkbox('titleVisible'))
+        $this->form->appendField(new Checkbox('titleVisible', ['Show Page Title' => '1']))
             ->setLabel('')
-            ->addOnShowOption(function (Template $template, Option $option, $var) {
-                $option->setName('Show Page Title');
-            })
             ->setGroup($group);
 
-        $this->form->appendField(new Checkbox('published'))
+        $this->form->appendField(new Checkbox('publish', ['Publish' => '1']))
             ->setLabel('')
             ->setGroup($group);
 
@@ -150,11 +147,13 @@ class Edit extends ControllerPublic
 
         $group = 'Extra';
 
+
         $list = $this->getConfig()->get('wiki.templates', []);
         $this->form->appendField(new Select('template', $list))
             ->setRequired()
             ->setGroup($group)
             ->prependOption('-- Site Default --', '');
+
 
         $this->form->appendField(new Input('keywords'))
             ->setRequired()
@@ -164,19 +163,19 @@ class Edit extends ControllerPublic
             ->setRequired()
             ->setGroup($group);
 
-        // todo: Disabled to prevent cross site scripting attacks
+        // Only admins can update css/js content
         if ($this->getAuthUser()->isAdmin()) {
             $this->form->appendField(new Textarea('js'))
                 ->setLabel('Page JavaScript')
                 ->setNotes('Only admin users can add javascript')
                 ->addCss('js-edit')
                 ->setGroup($group);
-        }
 
-        $this->form->appendField(new Textarea('css'))
-            ->setLabel('Page Stylesheet')
-            ->addCss('css-edit')
-            ->setGroup($group);
+            $this->form->appendField(new Textarea('css'))
+                ->setLabel('Page Stylesheet')
+                ->addCss('css-edit')
+                ->setGroup($group);
+        }
 
         $this->form->appendField(new Submit('save', [$this, 'onSubmit']));
         $this->form->appendField(new Submit('cancel', [$this, 'onCancel']))
@@ -270,7 +269,7 @@ class Edit extends ControllerPublic
         $this->form->getField('category')->addFieldCss('col-sm-6');
         $this->form->getField('permission')->addFieldCss('col-sm-6');
         $this->form->getField('titleVisible')->addFieldCss('col-sm-6');
-        $this->form->getField('published')->addFieldCss('col-sm-6');
+        $this->form->getField('publish')->addFieldCss('col-sm-6');
         $this->form->getField('keywords')->addFieldCss('col-sm-6');
         $this->form->getField('description')->addFieldCss('col-sm-6');
         $template->appendTemplate('content', $this->form->show());

@@ -52,13 +52,14 @@ class Page extends Model
     public int    $pageId       = 0;
     public int    $userId       = 0;
     public int    $contentId    = 0;    // latest content ID
+    public string $template     = '';
     public string $category     = '';
     public string $title        = '';
     public string $url          = '';
     public int    $views        = 0;    // todo: implement the page counter and increment it
     public int    $permission   = 0;
     public int    $linked       = 0;
-    public bool   $published    = true;
+    public bool   $publish      = true;
     public bool   $titleVisible = true;
     public bool   $isOrphaned   = false;
     public string $hash         = '';
@@ -265,7 +266,7 @@ class Page extends Model
             $filter->appendWhere('a.is_orphaned = :isOrphaned AND ');
         }
 
-        $filter->appendWhere('a.published AND ');
+        $filter->appendWhere('a.publish AND ');
 
         if (!empty($filter['fullSearch'])) {
             $filter->appendWhere('MATCH (c.html) AGAINST (:fullSearch IN NATURAL LANGUAGE MODE) AND ');
@@ -339,9 +340,9 @@ class Page extends Model
             $filter->appendWhere('a.url = :url AND ');
         }
 
-        if (!empty($filter['published'])) {
-            $filter['published'] = truefalse($filter['published']);
-            $filter->appendWhere('a.published = :published AND ');
+        if (!empty($filter['publish'])) {
+            $filter['publish'] = truefalse($filter['publish']);
+            $filter->appendWhere('a.publish = :publish AND ');
         }
 
         if (!empty($filter['isOrphaned'])) {

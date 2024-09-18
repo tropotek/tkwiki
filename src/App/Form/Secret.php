@@ -8,6 +8,7 @@ use Tk\Alert;
 use Tk\Form\Action\Link;
 use Tk\Form\Action\Submit;
 use Tk\Form\Action\SubmitExit;
+use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Hidden;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Password;
@@ -50,6 +51,10 @@ class Secret extends Form
             ->setGroup($tab)
             ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
 
+
+        $this->form->appendField(new Checkbox('publish', ['Publish' => '1']))
+            ->setLabel('')
+            ->setGroup($tab);
 
         $tab = 'Extra';
         $this->appendField(new Textarea('keys'))

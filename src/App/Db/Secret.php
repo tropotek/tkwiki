@@ -5,6 +5,7 @@ use Bs\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Bs\Db\User;
 use Tk\DataMap\DataMap;
+use Tk\DataMap\Db\Boolean;
 use Tk\DataMap\Db\DateTime;
 use Tk\DataMap\Db\Integer;
 use Tk\DataMap\Db\Text;
@@ -46,6 +47,7 @@ class Secret extends Model
     public string $username   = '';
     public string $password   = '';
     public string $otp        = '';
+    public bool   $publish    = true;
     public string $keys       = '';
     public string $notes      = '';
     public string $hash       = '';
@@ -97,6 +99,7 @@ class Secret extends Model
         $map->addType(new TextEncrypt('username'));
         $map->addType(new TextEncrypt('password'));
         $map->addType(new TextEncrypt('otp'));
+        $map->addType(new Boolean('publish'));
         $map->addType(new TextEncrypt('keys'));
         $map->addType(new TextEncrypt('notes'));
         $map->addType(new Text('hash'), DataMap::READ);
@@ -192,8 +195,7 @@ class Secret extends Model
             $filter->appendWhere("a.otp != '' AND ");
         }
 
-        // todo Ad an active/published field
-        // $filter->appendWhere('a.published AND ');
+        $filter->appendWhere('a.publish AND ');
 
         return Db::query("
             SELECT *
@@ -255,9 +257,9 @@ class Secret extends Model
             $filter->appendWhere('a.url = :url AND ');
         }
 
-        if (!empty($filter['published'])) {
-            $filter['published'] = truefalse($filter['published']);
-            $filter->appendWhere('a.published = :published AND ');
+        if (!empty($filter['publish'])) {
+            $filter['publish'] = truefalse($filter['publish']);
+            $filter->appendWhere('a.publish = :publish AND ');
         }
 
         return Db::query("

@@ -29,7 +29,7 @@ class Search extends ControllerPublic
 
         $filter = Filter::create([
             'fullSearch' => $this->search,
-            'published' => true,
+            'publish' => true,
             'permission' => Page::PERM_PUBLIC,
         ], '-modified', 250);
 

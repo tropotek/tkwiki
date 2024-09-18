@@ -514,7 +514,9 @@ AddDefaultCharset utf-8
 <IfModule mod_headers.c>
 
     #Header set Content-Security-Policy "script-src 'self'; object-src 'self'; style-src 'self'"
-    Header set Content-Security-Policy "default-src 'none'; script-src 'self' 'unsafe-inline'; connect-src 'self' blob:; img-src 'self' data: blob:; font-src 'self'; style-src 'self' 'unsafe-inline';"
+
+    # TODO: this needs testing before we implement it in production
+#    Header set Content-Security-Policy "default-src 'none'; script-src 'self' 'unsafe-inline'; connect-src 'self' blob:; img-src 'self' data: blob:; font-src 'self'; style-src 'self' 'unsafe-inline';"
 
     # `mod_headers` cannot match based on the content-type, however,
     # the `Content-Security-Policy` response header should be send

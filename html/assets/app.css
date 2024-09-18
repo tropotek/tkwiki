@@ -63,6 +63,10 @@ pre {
   height: 500px;
 }
 
+.text-strike {
+  text-decoration-line: line-through;
+}
+
 /* ==================  WIKI .end  ================== */
 
 

@@ -5,6 +5,7 @@ use App\Console\Cron;
 use App\Console\Test;
 use App\Console\TestData;
 use App\Console\WikiTest;
+use App\Console\Zap;
 use App\Dom\Modifier\CategoryList;
 use App\Dom\Modifier\SecretList;
 use App\Dom\Modifier\Secrets;
@@ -67,6 +68,7 @@ class Factory extends \Bs\Factory
             $app = parent::getConsole();
             // Setup App Console Commands
             $app->add(new Cron());
+            $app->add(new Zap());
             if ($this->getConfig()->isDev()) {
                 $app->add(new WikiTest());
                 $app->add(new TestData());

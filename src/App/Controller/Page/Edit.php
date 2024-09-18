@@ -145,7 +145,7 @@ class Edit extends ControllerPublic
             ->removeCss('form-control')
             ->setGroup($group);
 
-        
+
         $group = 'Extra';
         $list = $this->getConfig()->get('wiki.templates', []);
         $this->form->appendField(new Select('template', $list))

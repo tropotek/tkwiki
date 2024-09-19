@@ -65,6 +65,9 @@ class MenuItem extends Model
         return count(self::findByParentId($this->menuItemId)) > 0;
     }
 
+    /**
+     * @return array<int,MenuItem>
+     */
     public static function findByParentId(int $parentId): array
     {
         if ($parentId == 0) {
@@ -98,6 +101,9 @@ class MenuItem extends Model
         );
     }
 
+    /**
+     * @return array<int,MenuItem>
+     */
     public static function findAll(): array
     {
         return Db::query("
@@ -127,6 +133,9 @@ class MenuItem extends Model
         return (false !== $ok);
     }
 
+    /**
+     * @return array<int,MenuItem>
+     */
     public static function findFiltered(array|Filter $filter): array
     {
         $filter = Filter::create($filter);

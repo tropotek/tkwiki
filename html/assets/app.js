@@ -87,7 +87,7 @@ let app = function () {
   let initWkSecret = function () {
 
     function loadData(el, params, callback) {
-      let hash = el.data('hash');
+      let hash = el.data('secretHash');
       if (!hash) return;
       $.post(tkConfig.baseUrl + '/api/secret/pass', params, function (data) {
         callback.apply(el, [data]);
@@ -103,7 +103,7 @@ let app = function () {
         $('.pas', secret).text(secret.data('pw'))
         return;
       }
-      loadData(secret, {p: secret.data('hash')}, function (data) {
+      loadData(secret, {p: secret.data('secretHash')}, function (data) {
         secret.data('pw', data.pw);
         $('.pas', secret).text(data.pw);
       });
@@ -116,7 +116,7 @@ let app = function () {
         copyToClipboard(secret.data('pw'));
         return;
       }
-      loadData(secret, {p: secret.data('hash')}, function (data) {
+      loadData(secret, {p: secret.data('secretHash')}, function (data) {
         secret.data('pw', data.pw);
         copyToClipboard(data.pw);
       });
@@ -130,7 +130,7 @@ let app = function () {
     $('.wk-secret .cp-otp').on('click', function (e) {
       let secret = $(this).closest('.wk-secret');
       if (!secret.length) return;
-      loadData(secret, {p: secret.data('hash')}, function (data) {
+      loadData(secret, {p: secret.data('secretHash')}, function (data) {
         $('.otp-code', secret).text(data.otp);
         copyToClipboard(data.otp);
       });
@@ -220,10 +220,9 @@ let app = function () {
           });
 
           // Edit secret on double click, in new page...
-          // TODO: We should modify the dialog to handle edit and add secrets
           editor.on('init', function () {
             $(editor.getDoc()).on('dblclick', 'img.wk-secret', function () {
-              window.open(tkConfig.baseUrl + '/secretEdit?secretId=' + $(this).attr('wk-secret'), '_blank');
+              window.open(tkConfig.baseUrl + '/secretEdit?h=' + $(this).data('secretHash'), '_blank');
             });
             editor.getBody().setAttribute('spellcheck', true);
           });

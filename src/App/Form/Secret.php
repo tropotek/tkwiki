@@ -28,6 +28,7 @@ class Secret extends Form
 
         $tab = 'Details';
         $this->appendField(new Hidden('secretId'))->setReadonly();
+        $this->appendField(new Hidden('hash'))->setReadonly();
 
         $this->appendField(new Input('name'))
             ->setGroup($tab);
@@ -52,7 +53,7 @@ class Secret extends Form
             ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
 
 
-        $this->form->appendField(new Checkbox('publish', ['Publish' => '1']))
+        $this->appendField(new Checkbox('publish', ['Publish' => '1']))
             ->setLabel('')
             ->setGroup($tab);
 
@@ -96,13 +97,13 @@ class Secret extends Form
         $this->getSecret()->save();
 
         Alert::addSuccess('Form save successfully.');
-        $action->setRedirect(Uri::create()->set('secretId', $this->getSecret()->secretId));
+        $action->setRedirect(Uri::create()->set('h', $this->getSecret()->hash));
         if ($form->getTriggeredAction()->isExit()) {
             $action->setRedirect($this->getBackUrl());
         }
 
         if ($this->isHtmx()) {
-            $form->setFieldValue('secretId', $this->getSecret()->secretId);
+            $form->setFieldValue('hash', $this->getSecret()->hash);
             $action->setRedirect(null);
             header('HX-Trigger-After-Settle: secret-success');
         }

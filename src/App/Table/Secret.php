@@ -16,7 +16,7 @@ class Secret extends Table
     public function init(): static
     {
 
-        $rowSelect = RowSelect::create('id', 'userId');
+        $rowSelect = RowSelect::create('id', 'secretId');
         $this->appendCell($rowSelect);
 
         $this->appendCell('actions')
@@ -32,7 +32,7 @@ class Secret extends Table
             ->addCss('text-nowrap text-center wk-secret')
             ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
                 if (empty($obj->otp)) return '';
-                $cell->setAttr('data-hash', $obj->hash);
+                $cell->setAttr('data-secret-hash', $obj->hash);
                 return <<<HTML
                     <a href="javascript:;" class="btn btn-sm btn-outline-success cp-otp"><i class="fa fa-refresh"></i></a> <em class="otp-code">------</em>
                 HTML;
@@ -84,7 +84,7 @@ class Secret extends Table
             ->addOnDelete(function(Delete $action, array $selected) {
                 foreach ($selected as $secret_id) {
                     $secret = \App\Db\Secret::find($secret_id);
-                    if ($secret->canEdit($this->getAuthUser())) {
+                    if ($secret?->canEdit($this->getAuthUser())) {
                         Db::delete('secret', compact('secret_id'));
                     }
                 }

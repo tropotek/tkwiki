@@ -14,8 +14,8 @@ class SecretSelect extends Table
             ->addHeaderCss('max-width')
             ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
                 return sprintf('<a href="javascript:;" class="wiki-insert"
-                    data-secret-id="%s" data-secret-hash="%s" data-secret-name="%s" data-secret-url="%s" title="Insert secret link">%s</a>',
-                    $obj->secretId, $obj->hash, $obj->name, $obj->url, $obj->name);
+                    data-secret-hash="%s" data-secret-name="%s" data-secret-url="%s" title="Insert secret link">%s</a>',
+                    $obj->hash, $obj->name, $obj->url, $obj->name);
             });
 
         $this->appendCell('userId')

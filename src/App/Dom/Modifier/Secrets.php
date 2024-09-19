@@ -18,9 +18,9 @@ class Secrets extends FilterInterface
     public function executeNode(\DOMElement $node): void
     {
         if ($node->nodeName != 'img') return;
-        if (!$node->hasAttribute('wk-secret')) return;
+        if (!$node->hasAttribute('data-secret-hash')) return;
 
-        $secret = Secret::find((int)$node->getAttribute('wk-secret'));
+        $secret = Secret::findByHash($node->getAttribute('data-secret-hash'));
         if (!$secret) return;
 
         $renderer = new ViewSecret($secret);

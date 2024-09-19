@@ -2,6 +2,7 @@
 namespace App;
 
 use App\Console\Cron;
+use App\Console\SecretUp;
 use App\Console\Test;
 use App\Console\TestData;
 use App\Console\WikiTest;
@@ -68,7 +69,8 @@ class Factory extends \Bs\Factory
             $app = parent::getConsole();
             // Setup App Console Commands
             $app->add(new Cron());
-            $app->add(new Zap());
+            $app->add(new SecretUp());
+            //$app->add(new Zap());
             if ($this->getConfig()->isDev()) {
                 $app->add(new WikiTest());
                 $app->add(new TestData());

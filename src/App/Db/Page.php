@@ -232,6 +232,9 @@ class Page extends Model
         return self::findFiltered(['url' => $url])[0] ?? null;
     }
 
+    /**
+     * @return array<int,Page>
+     */
     public static function findViewable(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
@@ -294,6 +297,9 @@ class Page extends Model
         );
     }
 
+    /**
+     * @return array<int,Page>
+     */
     public static function findFiltered(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
@@ -366,6 +372,7 @@ class Page extends Model
 
     /**
      * Get a list of all existing categories
+     * @return array<int,string>
      */
     public static function getCategoryList(string $search = ''): array
     {

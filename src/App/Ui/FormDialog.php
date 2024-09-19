@@ -33,7 +33,6 @@ use Dom\Template;
  *    $template->setAttr('modelBtn', 'data-bs-toggle', 'modal');
  *    $template->setAttr('modelBtn', 'data-bs-target', '#'.$this->dialog->getId());
  *
- * @todo review this class
  */
 class FormDialog extends Dialog
 {
@@ -56,15 +55,7 @@ class FormDialog extends Dialog
 
     public function execute(): void
     {
-        $secret = new \App\Db\Secret();
-        $secret->userId = $this->getAuthUser()->userId;
-        if ($_GET['secretId'] ?? false) {
-            $secret = \App\Db\Secret::find((int)$_GET['secretId']);
-        }
-
-        $this->form->setModel($secret);
         $this->form->execute($_POST);
-
         $this->getOnExecute()->execute($this);
     }
 
@@ -74,7 +65,7 @@ class FormDialog extends Dialog
         $template = parent::show();
 
         $dialogId = $this->getId();
-        //$formId = $this->form->getForm()->getId();
+
         $js = <<<JS
 jQuery(function($) {
     let dialogId = '#{$dialogId}';
@@ -91,9 +82,12 @@ jQuery(function($) {
     });
 
     $(dialogId).on('show.bs.modal', function () {
-        clearForm(this);
+        $('form.tk-form', dialogId)[0].reset();
     });
 
+    $(document).on('htmx:afterSettle', function(evt) {
+        tkInit($(dialogId));
+    });
 });
 JS;
         $template->appendJs($js);

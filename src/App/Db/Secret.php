@@ -156,6 +156,9 @@ class Secret extends Model
         );
     }
 
+    /**
+     * @return array<int,Secret>
+     */
     public static function findAll(): array
     {
         return Db::query("
@@ -166,6 +169,9 @@ class Secret extends Model
         );
     }
 
+    /**
+     * @return array<int,Secret>
+     */
     public static function findViewable(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
@@ -206,6 +212,9 @@ class Secret extends Model
         );
     }
 
+    /**
+     * @return array<int,Secret>
+     */
     public static function findFiltered(array|Filter $filter): array
     {
         $filter = Filter::create($filter);

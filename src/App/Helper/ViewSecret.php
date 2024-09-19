@@ -24,7 +24,7 @@ class ViewSecret extends Renderer implements DisplayInterface
     {
         $template = $this->getTemplate();
 
-        $template->setAttr('secret', 'data-hash', $this->secret->hash);
+        $template->setAttr('secret', 'data-secret-hash', $this->secret->hash);
         $template->setText('name', $this->secret->name);
 
         if ($this->secret->keys || $this->secret->notes) {

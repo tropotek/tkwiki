@@ -28,6 +28,9 @@ class Edit extends ControllerPublic
     protected ?Content $content  = null;
     protected ?Lock    $lock     = null;
 
+    protected ?PageSelect   $pageSelect   = null;
+    protected ?SecretSelect $secretSelect = null;
+
     public function doDefault(): void
     {
         $referrer = trim($_SERVER['HTTP_REFERER'] ?? '');
@@ -188,6 +191,11 @@ class Edit extends ControllerPublic
 
         $this->form->execute($_POST);
 
+        $this->pageSelect = new PageSelect();
+        if ($this->getRegistry()->get('wiki.enable.secret.mod', false)) {
+            $this->secretSelect = new SecretSelect();
+        }
+
     }
 
     public function onCancel(Form $form, Submit $action): void
@@ -272,12 +280,9 @@ class Edit extends ControllerPublic
         $this->form->getField('description')->addFieldCss('col-sm-6');
         $template->appendTemplate('content', $this->form->show());
 
-        $pageSelect = new PageSelect();
-        $template->appendBodyTemplate($pageSelect->show());
-
-        if ($this->getRegistry()->get('wiki.enable.secret.mod', false)) {
-            $secretSelect = new SecretSelect();
-            $template->appendBodyTemplate($secretSelect->show());
+        $template->appendBodyTemplate($this->pageSelect->show());
+        if (!is_null($this->secretSelect)) {
+            $template->appendBodyTemplate($this->secretSelect->show());
         }
 
         // Autocomplete js
@@ -344,11 +349,11 @@ jQuery(function($) {
     });
 
     // secret select event
-    $(document).on('selected.ss.modal', '#secret-select-dialog', function(e, secretId, name) {
+    $(document).on('selected.ss.modal', '#secret-select-dialog', function(e, hash, name) {
         const editor = tinymce.activeEditor;
         let linkAttrs = {
           class: 'wk-secret',
-          'wk-secret': secretId,
+          'data-secret-hash': hash,
           'title': name,
           src: tkConfig.baseUrl + '/html/assets/img/secretbg.png'
         };

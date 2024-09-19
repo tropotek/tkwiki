@@ -104,6 +104,9 @@ class Content extends Model
         );
     }
 
+    /**
+     * @return array<int,Content>
+     */
     public static function findAll(): array
     {
         return Db::query("
@@ -114,6 +117,9 @@ class Content extends Model
         );
     }
 
+    /**
+     * @return array<int,Content>
+     */
     public static function findFiltered(array|Filter $filter): array
     {
         $filter = Filter::create($filter);

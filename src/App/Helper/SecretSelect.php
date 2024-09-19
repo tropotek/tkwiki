@@ -36,12 +36,13 @@ class SecretSelect extends Renderer implements DisplayInterface
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
 
-
         $list = \App\Db\Secret::findViewable($filter);
         $this->table->setRows($list, Db::getLastStatement()->getTotalRows());
 
         // Create form dialog
-        $form = new Secret(new \App\Db\Secret());
+        $secret = new \App\Db\Secret();
+        $secret->userId = $this->getAuthUser()->userId;
+        $form = new Secret($secret);
         $form->setHtmx(true);
 
         $this->createDialog = new FormDialog($form, 'Create Secret', 'secret-create-dialog');
@@ -74,9 +75,9 @@ jQuery(function($) {
     })
     .on('click', '.wiki-insert', function() {
         // insert existing secret
-        let secretId = $(this).data('secretId');
+        let hash = $(this).data('secretHash');
         let name = $(this).data('secretName');
-        $(selectDialog).trigger('selected.ss.modal', [secretId, name]);
+        $(selectDialog).trigger('selected.ss.modal', [hash, name]);
         $('#secret-select-dialog').modal('hide');
         return false;
     })
@@ -112,7 +113,6 @@ jQuery(function($) {
 
         // Handle table filters
         $('form.tk-form', selectDialog).on('submit', function (e) {
-            //e.stopPropagation();
             let url = $(this).attr('action');
             let data = $(this).serializeArray();
             let submit = $(e.originalEvent.submitter);
@@ -131,13 +131,6 @@ jQuery(function($) {
 
     });
 
-    // Secret edit form
-    $(document).on('htmx:afterSettle', function(e) {
-        if ($(e.target).is('#secret')) {
-            tkInit($(createDialog));
-        }
-    });
-
     $(document).on('show.bs.modal', createDialog, function() {
         $('form .is-invalid', createDialog).removeClass('is-invalid');
     })
@@ -145,9 +138,11 @@ jQuery(function($) {
     $(document).on('secret-success', function() {
         // exit if there are errors in the form
         if ($('form .is-invalid', createDialog).length) return;
-        let id = $('#secret_secretId', 'form#secret').val();
+        let hash = $('#secret_hash', 'form#secret').val();
         let name = $('#secret_name', 'form#secret').val();
-        insertSecretHtml(id, name);
+        console.log(name);
+        console.log(hash);
+        $(selectDialog).trigger('selected.ss.modal', [hash, name]);
         $(selectDialog).modal('hide');
         $(createDialog).modal('hide');
     });

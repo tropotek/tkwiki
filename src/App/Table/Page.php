@@ -17,7 +17,7 @@ class Page extends Table
 
     public function init(): static
     {
-        $rowSelect = RowSelect::create('id', 'userId');
+        $rowSelect = RowSelect::create('id', 'pageId');
         $this->appendCell($rowSelect);
 
         $this->appendCell('actions')

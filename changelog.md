@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.70 [2024-09-20]:
+-------------------------------
+  - Add permission filter to tables
+  - Fix table paignation
+
+
 Ver 8.0.68 [2024-09-19]:
 -------------------------------
   - remove tinymce context menu

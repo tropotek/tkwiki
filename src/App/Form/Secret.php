@@ -36,6 +36,7 @@ class Secret extends Form
         /** @var Select $permission */
         $this->appendField(new Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
             ->setGroup($tab)
+            ->setStrict(true)
             ->setRequired()
             ->prependOption('-- Select --', '');
 

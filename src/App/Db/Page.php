@@ -356,7 +356,7 @@ class Page extends Model
             $filter->appendWhere('a.is_orphaned = :isOrphaned AND ');
         }
 
-        if (!empty($filter['permission'])) {
+        if (isset($filter['permission']) && is_numeric($filter['permission'])) {
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
             $filter->appendWhere('a.permission IN :permission AND ');
         }

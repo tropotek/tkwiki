@@ -4,6 +4,7 @@ namespace App\Table;
 use Bs\Table;
 use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Input;
+use Tk\Form\Field\Select;
 use Tk\Uri;
 use Tk\Db;
 use Tk\Table\Action\Delete;
@@ -73,6 +74,10 @@ class Secret extends Table
         // Add Filter Fields
         $this->getForm()->appendField(new Input('search'))
             ->setAttr('placeholder', 'Search: name');
+
+        $this->getForm()->appendField(new Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
+            ->prependOption('-- Permission -- ', '')
+            ->setStrict(true);
 
         $this->getForm()->appendField(new Checkbox('otp', ['otp' => 'y']));
 

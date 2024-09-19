@@ -91,7 +91,11 @@ class Page extends Table
         $list = \App\Db\Page::getCategoryList();
         $this->getForm()->appendField(new Select('category', $list))->prependOption('-- Category -- ', '');
 
-        $list = ['-- All --' => '', 'Linked' => 'n', 'Orphaned' => 'y'];
+        $this->getForm()->appendField(new Select('permission', array_flip(\App\Db\Page::PERM_LIST)))
+            ->prependOption('-- Permission -- ', '')
+            ->setStrict(true);
+
+        $list = ['-- Link Status --' => '', 'Linked' => 'n', 'Orphaned' => 'y'];
         $this->getForm()->appendField(new Select('isOrphaned', $list));
 
         // init filter fields for actions to access to the filter values

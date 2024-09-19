@@ -127,9 +127,10 @@ class Edit extends ControllerPublic
         /** @var Select $permission */
         $permission = $this->form->appendField(new Select('permission', array_flip(Page::PERM_LIST)))
             ->setRequired()
-            ->setNotes('Select who can view/edit/delete this page. <a href="/Wiki_How_To#getting_started" target="_blank" title="Permission help">Permission help</a>')
+            ->setStrict(true)
             ->setGroup($group)
-            ->prependOption('-- Select --', '');
+            ->prependOption('-- Select --', '')
+            ->setNotes('Select who can view/edit/delete this page. <a href="/Wiki_How_To#getting_started" target="_blank" title="Permission help">Permission help</a>');
 
         if ($this->page && $this->page->url == Page::getHomePage()->url) {
             $permission->setDisabled();
@@ -211,11 +212,17 @@ class Edit extends ControllerPublic
 
     public function onSubmit(Form $form, Submit $action): void
     {
+        $values = $form->getFieldValues();
+        if (!is_numeric($values['permission'])) {
+            $form->addFieldError('permission', "Select a valid page permission");
+        }
+
         $form->mapModel($this->page);
         $form->mapModel($this->content);
 
         $form->addFieldErrors($this->page->validate());
         $form->addFieldErrors($this->content->validate());
+
 
         if ($form->hasErrors()) {
             Alert::addError('Form contains errors.');

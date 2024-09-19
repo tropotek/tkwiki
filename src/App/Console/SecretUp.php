@@ -19,6 +19,7 @@ class SecretUp extends Console
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // This has been run and can be deleted whenever ready
         $updated = 0;
         $rows = Content::findAll();
         foreach ($rows as $content) {

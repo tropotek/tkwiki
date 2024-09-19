@@ -11,6 +11,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Bs\Console\Console;
 
+/**
+ * Basic self check of page and secret user access
+ *
+ * @todo Automate this test and cleanup after execution
+ */
 class WikiTest extends Console
 {
 
@@ -309,14 +314,6 @@ class WikiTest extends Console
         $secret->permission = Secret::PERM_MEMBER;
         $secret->name = "Staff Member Secret";
         $secret->save();
-
-
-
-
-
-
-
-
 
 
     }

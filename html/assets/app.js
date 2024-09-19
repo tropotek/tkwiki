@@ -179,7 +179,8 @@ let app = function () {
         tkConfig.baseUrl + '/html/assets/app.css'
       ],
       content_style: 'body {padding: 15px;}',
-      contextmenu: 'link image template inserttable | cell row column deletetable',
+      //contextmenu: 'link image template inserttable | cell row column deletetable',
+      contextmenu: false,
       image_advtab: true,
       statusbar: false,
       extended_valid_elements: 'span[*],i[*],em[*],b[*],a[*],div[*],img[*],input[*],textarea[*],select[*]',

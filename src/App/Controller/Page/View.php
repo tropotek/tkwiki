@@ -21,13 +21,14 @@ class View extends ControllerPublic
     protected ?ViewToolbar $toolbar  = null;
 
 
-    public function getPageTemplate(): string
+
+    public function __construct()
     {
         $this->page = Page::findPage(Uri::create()->basename());
+        // use page template if set
         if ($this->page && !empty($this->page->template)) {
-            return $this->page->template;
+            $this->setPageTemplate($this->page->template);
         }
-        return $this->pageTemplate;
     }
 
     public function doDefault(Request $request, string $pageUrl): ?Template

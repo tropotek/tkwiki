@@ -213,7 +213,8 @@ class Edit extends ControllerPublic
     public function onSubmit(Form $form, Submit $action): void
     {
         $values = $form->getFieldValues();
-        if (!is_numeric($values['permission'])) {
+        $perm = $form->getField('permission');
+        if (!$perm->isReadonly() && !$perm->isDisabled() && !is_numeric($values['permission'])) {
             $form->addFieldError('permission', "Select a valid page permission");
         }
 

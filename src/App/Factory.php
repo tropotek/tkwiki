@@ -21,6 +21,7 @@ class Factory extends \Bs\Factory
 {
     public function createDomPage(string $templatePath = ''): Page
     {
+        // settings default template
         if (str_starts_with(basename($templatePath), 'default') && is_file(System::makePath($this->getRegistry()->get('wiki.default.template', '')))) {
             $templatePath = System::makePath($this->getRegistry()->get('wiki.default.template', $templatePath));
         }

@@ -2,7 +2,6 @@
 namespace App;
 
 use App\Console\Cron;
-use App\Console\SecretUp;
 use App\Console\Test;
 use App\Console\TestData;
 use App\Console\WikiTest;
@@ -15,10 +14,19 @@ use App\Dom\Modifier\WikiUrl;
 use Bs\Ui\Crumbs;
 use Dom\Modifier;
 use Symfony\Component\Console\Application;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tk\System;
 
 class Factory extends \Bs\Factory
 {
+    public function initEventDispatcher(): ?EventDispatcher
+    {
+        if ($this->getEventDispatcher()) {
+            new Dispatch($this->getEventDispatcher());
+        }
+        return $this->getEventDispatcher();
+    }
+
     public function createDomPage(string $templatePath = ''): Page
     {
         // settings default template

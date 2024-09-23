@@ -52,8 +52,7 @@ class Profile extends ControllerAdmin
             ->setRequired();
 
         $this->form->appendField(new Input('familyName'))
-            ->setGroup($tab)
-            ->setRequired();
+            ->setGroup($tab);
 
         $this->form->appendField(new Input('username'))->setGroup($tab)
             ->setDisabled()

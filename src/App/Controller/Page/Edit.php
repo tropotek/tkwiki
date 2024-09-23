@@ -113,6 +113,7 @@ class Edit extends ControllerPublic
 
         // Set the form
         $this->form = new Form();
+        $this->form->setCsrfTtl(60*60*2);   // 2 hrs
 
         $group = 'Details';
         $this->form->appendField(new Hidden('pid'))->setReadonly();
@@ -155,16 +156,13 @@ class Edit extends ControllerPublic
         $group = 'Extra';
         $list = $this->getConfig()->get('wiki.templates', []);
         $this->form->appendField(new Select('template', $list))
-            ->setRequired()
             ->setGroup($group)
             ->prependOption('-- Site Default --', '');
 
         $this->form->appendField(new Input('keywords'))
-            ->setRequired()
             ->setGroup($group);
 
         $this->form->appendField(new Input('description'))
-            ->setRequired()
             ->setGroup($group);
 
         // Only admins can update css/js content

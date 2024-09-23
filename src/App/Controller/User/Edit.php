@@ -59,6 +59,16 @@ class Edit extends ControllerAdmin
             $this->setAccess(User::PERM_MANAGE_MEMBERS);
         }
 
+        // send inactive user activation email
+        if (isset($_GET['a']) && !$this->user->active) {
+            if (\App\Email\User::sendRecovery($this->user)) {
+                Alert::addSuccess('An email has been sent to ' . $this->user->nameShort . ' to create their password.');
+            } else {
+                Alert::addError('Failed to send email to ' . $this->user->nameShort . ' to create their password.');
+            }
+            Uri::create()->remove('a')->redirect();
+        }
+
         // Get the form template
         $this->form = new Form();
 
@@ -101,7 +111,9 @@ class Edit extends ControllerAdmin
                 $field->setNotes('You require "Manage Staff" to modify permissions');
                 $field->setDisabled();
             }
+        }
 
+        if ($this->user->userId) {
             $this->form->appendField(new Checkbox('active', ['Enable User Login' => '1']))
                 ->setGroup($group);
         }
@@ -158,16 +170,18 @@ class Edit extends ControllerAdmin
         }
 
         $isNew = $this->user->userId == 0;
-
+        if ($isNew) {
+            $this->user->active = false;
+        }
         $this->user->save();
         $this->auth->save();
 
         // Send email to update password
         if ($isNew) {
             if (\App\Email\User::sendRecovery($this->user)) {
-                Alert::addSuccess('An email has been sent to ' . $this->user->email . ' to create their password.');
+                Alert::addSuccess('An email has been sent to ' . $this->user->nameShort . ' to create their password.');
             } else {
-                Alert::addError('Failed to send email to ' . $this->user->email . ' to create their password.');
+                Alert::addError('Failed to send email to ' . $this->user->nameShort . ' to create their password.');
             }
         }
 
@@ -203,6 +217,12 @@ class Edit extends ControllerAdmin
             $msqUrl = Uri::create()->set(Masquerade::QUERY_MSQ, $this->user->userId);
             $template->setAttr('msq', 'href', $msqUrl);
             $template->setVisible('msq');
+        }
+
+        if ($this->user->userId && !$this->user->active) {
+            $url = Uri::create()->set('a');
+            $template->setAttr('activate', 'href', $url);
+            $template->setVisible('activate');
         }
 
         $this->form->getField('title')->addFieldCss('col-1');
@@ -245,9 +265,10 @@ class Edit extends ControllerAdmin
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
       <a href="" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
-      <a href="/" title="Masquerade" data-confirm="Masquerade as this user" class="btn btn-outline-secondary" choice="msq"><i class="fa fa-user-secret"></i> Masquerade</a>
-      <a href="/" title="Convert user to staff" data-confirm="Convert this user to staff" class="btn btn-outline-secondary" choice="to-staff"><i class="fa fa-retweet"></i> Convert To Staff</a>
-      <a href="/" title="Convert user to member" data-confirm="Convert this user to member" class="btn btn-outline-secondary" choice="to-member"><i class="fa fa-retweet"></i> Convert To Member</a>
+      <a href="/" title="Masquerade" data-confirm="Masquerade as this user" class="btn btn-outline-secondary" choice="msq"><i class="fa fa-fw fa-user-secret"></i> Masquerade</a>
+      <a href="/" title="Convert user to staff" data-confirm="Convert this user to staff?" class="btn btn-outline-secondary" choice="to-staff"><i class="fa fa-fw fa-retweet"></i> Convert To Staff</a>
+      <a href="/" title="Convert user to member" data-confirm="Convert this user to member?" class="btn btn-outline-secondary" choice="to-member"><i class="fa fa-fw fa-retweet"></i> Convert To Member</a>
+      <a href="/" title="Send Activation Email" data-confirm="Re-send the user activation email?" class="btn btn-outline-secondary" choice="activate"><i class="fa fa-fw fa-envelope"></i> Send Activate Email</a>
     </div>
   </div>
   <div class="card mb-3">

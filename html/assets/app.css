@@ -130,7 +130,8 @@ form label {
 form .form-check-label {
   font-weight: normal;
 }
-.form-control:disabled, .form-control:read-only {
+.form-control:disabled,
+.form-control:read-only:not([type=file]) {
   pointer-events: none;
   background-color: #EEE;
 }

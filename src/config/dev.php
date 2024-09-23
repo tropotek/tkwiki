@@ -9,9 +9,7 @@
  *   `./bin/cmd debug`
  */
 
-$config = \Tk\Config::instance();
-
-if (!Config::isDebug() || Config::isProd()) {
+if (!\Tk\Config::isDebug() || \Tk\Config::isProd()) {
     error_log("Warning Project must be in debug and in a dev mode to execute dev.php");
     return;
 }

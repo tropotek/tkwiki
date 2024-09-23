@@ -8,6 +8,7 @@ use Dom\Template;
 use JetBrains\PhpStorm\NoReturn;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
+use Tk\Config;
 use Tk\CurlyTemplate;
 
 /**
@@ -64,7 +65,7 @@ class Pdf extends Renderer implements DisplayInterface
             'margin_bottom' => 10,
             'margin_header' => 5,
             'margin_footer' => 5,
-            'tempDir' => $this->getConfig()->getTempPath()
+            'tempDir' => Config::makePath(Config::getTempPath())
         ));
         $mpdf = $this->mpdf;
         //$mpdf->setBasePath($url);

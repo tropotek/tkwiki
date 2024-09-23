@@ -4,6 +4,7 @@ namespace App\Console;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tk\Config;
 
 class TestData extends \Bs\Console\Command\TestData
 {
@@ -18,7 +19,7 @@ class TestData extends \Bs\Console\Command\TestData
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!$this->getConfig()->isDev()) {
+        if (!Config::isDev()) {
             $this->writeError('Error: Only run this command in a dev environment.');
             return self::FAILURE;
         }

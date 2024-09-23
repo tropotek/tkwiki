@@ -6,6 +6,7 @@ use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
+use Tk\Config;
 
 /**
  * Render the secret output
@@ -24,7 +25,7 @@ class Navigation extends Renderer implements DisplayInterface
             $template->setVisible('menu', $user->hasPermission(User::PERM_SYSADMIN | User::PERM_SYSADMIN));
             $template->setVisible('secret', $user->isStaff() && $this->getRegistry()->get('wiki.enable.secret.mod', false));
             $template->setVisible('admin', $user->isAdmin());
-            $template->setVisible('dev', $this->getConfig()->isDev());
+            $template->setVisible('dev', $user->isAdmin() && Config::isDev());
         }
 
         return $template;

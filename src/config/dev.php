@@ -11,7 +11,7 @@
 
 $config = \Tk\Config::instance();
 
-if (!$config->isDebug() || $config->isProd()) {
+if (!Config::isDebug() || Config::isProd()) {
     error_log("Warning Project must be in debug and in a dev mode to execute dev.php");
     return;
 }

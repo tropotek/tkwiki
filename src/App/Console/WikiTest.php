@@ -10,6 +10,7 @@ use Bs\Factory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Bs\Console\Console;
+use Tk\Config;
 
 /**
  * Basic self check of page and secret user access
@@ -28,7 +29,7 @@ class WikiTest extends Console
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!$this->getConfig()->isDev()) {
+        if (!Config::isDev()) {
             $this->writeError('Error: Only run this command in a dev environment.');
             return self::FAILURE;
         }

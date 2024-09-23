@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Db\User;
 use Bs\ControllerPublic;
 use Dom\Template;
+use Tk\Config;
 use Tk\Log;
 use Tk\Uri;
 
@@ -23,7 +24,7 @@ class Test extends ControllerPublic
     {
         $this->getPage()->setTitle('Test Page');
 
-        if (!$this->getConfig()->isDev() && !User::getAuthUser()->isAdmin()) {
+        if (!Config::isDev() && !User::getAuthUser()->isAdmin()) {
             Uri::create('/')->redirect();
         }
 

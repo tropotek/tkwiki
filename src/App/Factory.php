@@ -15,6 +15,7 @@ use Bs\Ui\Crumbs;
 use Dom\Modifier;
 use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Tk\Config;
 use Tk\System;
 
 class Factory extends \Bs\Factory
@@ -30,8 +31,8 @@ class Factory extends \Bs\Factory
     public function createDomPage(string $templatePath = ''): Page
     {
         // settings default template
-        if (str_starts_with(basename($templatePath), 'default') && is_file(System::makePath($this->getRegistry()->get('wiki.default.template', '')))) {
-            $templatePath = System::makePath($this->getRegistry()->get('wiki.default.template', $templatePath));
+        if (str_starts_with(basename($templatePath), 'default') && is_file(Config::makePath($this->getRegistry()->get('wiki.default.template', '')))) {
+            $templatePath = Config::makePath($this->getRegistry()->get('wiki.default.template', $templatePath));
         }
         return new Page($templatePath);
     }
@@ -79,7 +80,7 @@ class Factory extends \Bs\Factory
             // Setup App Console Commands
             $app->add(new Cron());
             //$app->add(new Zap());
-            if ($this->getConfig()->isDev()) {
+            if (Config::isDev()) {
                 $app->add(new WikiTest());
                 $app->add(new TestData());
                 $app->add(new Test());

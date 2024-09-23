@@ -5,7 +5,7 @@ use App\Helper\ViewCategoryList;
 use Dom\Modifier\FilterInterface;
 
 /**
- * Convert all page category liting modules set in the WYSIWYG editor.
+ * Convert all page category listing modules set in the WYSIWYG editor.
  * This will display a list of all pages (with permissions) within a category
  */
 class CategoryList extends FilterInterface

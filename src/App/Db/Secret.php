@@ -1,9 +1,8 @@
 <?php
 namespace App\Db;
 
-use Bs\Db\Traits\UserTrait;
+use App\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
-use Bs\Db\User;
 use Tk\DataMap\DataMap;
 use Tk\DataMap\Db\Boolean;
 use Tk\DataMap\Db\DateTime;

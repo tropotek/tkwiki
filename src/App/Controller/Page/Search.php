@@ -2,6 +2,7 @@
 namespace App\Controller\Page;
 
 use App\Db\Page;
+use App\Db\User;
 use Bs\ControllerPublic;
 use Dom\Template;
 use Tk\Db;
@@ -33,12 +34,12 @@ class Search extends ControllerPublic
             'permission' => Page::PERM_PUBLIC,
         ], '-modified', 250);
 
-        if ($this->getFactory()->getAuthUser()) {
-            $filter['userId'] = $this->getFactory()->getAuthUser()->userId;
-            if ($this->getFactory()->getAuthUser()->isMember()) {
+        if (User::getAuthUser()) {
+            $filter['userId'] = User::getAuthUser()->userId;
+            if (User::getAuthUser()->isMember()) {
                 $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
             }
-            if ($this->getFactory()->getAuthUser()->isStaff()) {
+            if (User::getAuthUser()->isStaff()) {
                 $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
             }
         }
@@ -55,7 +56,7 @@ class Search extends ControllerPublic
         $template = $this->getTemplate();
 
         foreach($this->rows as $page) {
-            if (!$page->canView($this->getAuthUser())) continue;
+            if (!$page->canView(User::getAuthUser())) continue;
 
             $rpt = $template->getRepeat('row');
             $rpt->setText('title', $page->title);
@@ -77,7 +78,7 @@ class Search extends ControllerPublic
                 }
 
                 $rpt->setHtml('description', htmlentities($description));
-                $rpt->setText('author', $page->getUser()->getName());
+                $rpt->setText('author', $page->getUser()->nameShort);
                 $rpt->setText('date', $page->getContent()->getCreated()->format(\Tk\Date::FORMAT_MED_DATE));
                 $rpt->setText('time', $page->getContent()->getCreated()->format('H:i'));
                 if (trim($page->getContent()->keywords)) {

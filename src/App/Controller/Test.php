@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Db\User;
 use Bs\ControllerPublic;
 use Dom\Template;
 use Tk\Log;
@@ -22,7 +23,7 @@ class Test extends ControllerPublic
     {
         $this->getPage()->setTitle('Test Page');
 
-        if (!$this->getConfig()->isDev() && !$this->getAuthUser()->isAdmin()) {
+        if (!$this->getConfig()->isDev() && !User::getAuthUser()->isAdmin()) {
             Uri::create('/')->redirect();
         }
 

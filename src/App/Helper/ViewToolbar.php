@@ -3,7 +3,7 @@ namespace App\Helper;
 
 use App\Db\Content;
 use App\Db\Page;
-use Bs\Db\User;
+use App\Db\User;
 use Bs\Traits\SystemTrait;
 use Bs\Ui\Dialog;
 use Dom\Renderer\DisplayInterface;
@@ -28,7 +28,7 @@ class ViewToolbar extends Renderer implements DisplayInterface
     {
         $this->page = $page;
         $this->content = $page->getContent();
-        $this->user = $this->getAuthUser();
+        $this->user = \App\Db\User::getAuthUser();
     }
 
     public function getPage(): Page
@@ -55,7 +55,7 @@ class ViewToolbar extends Renderer implements DisplayInterface
             $template->setAttr('history', 'href', Uri::create('/historyManager')->set('pageId', $this->getPage()->pageId));
             $template->setVisible('can-edit');
         }
-        if ($this->getAuthUser()?->isStaff()) {
+        if (\App\Db\User::getAuthUser()?->isStaff()) {
             $template->setVisible('info-url');
             $dialog = $this->showInfoDialog();
             $template->appendBodyTemplate($dialog->show());
@@ -76,19 +76,19 @@ class ViewToolbar extends Renderer implements DisplayInterface
         $dialog = new Dialog('Page Information', 'page-info-dialog');
         $html = <<<HTML
 <ul class="list-unstyled">
-  <li>Author: <span var="author"></span></li>
   <li>Title: <span var="title"></span></li>
   <li>Category: <span var="category"></span></li>
   <li>Permission: <span var="permission"></span></li>
   <li>Current Revision: <span var="revision"></span></li>
   <li>Views: <span var="views"></span></li>
+  <li>Author: <span var="author"></span></li>
   <li>Modified: <span var="modified"></span></li>
   <li>Created: <span var="created"></span></li>
 </ul>
 HTML;
-        $t = $this->loadTemplate($html);
+        $t = Template::load($html);
 
-        $t->setText('author', $this->page->getUser()->getName());
+        $t->setText('author', $this->page->getUser()->nameShort);
         $t->setText('title', $this->page->title);
         $t->setText('category', $this->page->category);
         $t->setText('permission', $this->page->getPermissionLabel());
@@ -113,7 +113,7 @@ HTML;
 </div>
 HTML;
 
-        return $this->loadTemplate($html);
+        return Template::load($html);
     }
 
 }

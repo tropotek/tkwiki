@@ -2,6 +2,7 @@
 namespace App\Controller\Secret;
 
 use App\Db\Secret;
+use App\Db\User;
 use Bs\ControllerPublic;
 use Bs\Table;
 use Dom\Template;
@@ -21,7 +22,7 @@ class Manager extends ControllerPublic
         $this->getPage()->setTitle('Secret Manager');
         $this->getCrumbs()->reset();
         if (
-            !$this->getAuthUser()?->isStaff() ||
+            !User::getAuthUser()?->isStaff() ||
             !$this->getRegistry()->get('wiki.enable.secret.mod', false)
         ) {
             Alert::addWarning('You do not have permission to access this page');
@@ -35,8 +36,8 @@ class Manager extends ControllerPublic
 
         // Set the table rows
         $filter = $this->table->getDbFilter();
-        if (!$this->getAuthUser()->isAdmin()) {
-            $filter['userId'] = $this->getAuthUser()->userId;
+        if (!User::getAuthUser()->isAdmin()) {
+            $filter['userId'] = User::getAuthUser()->userId;
             $filter['permission'] = Secret::STAFF_PERMS;
         }
         $rows = Secret::findViewable($filter);

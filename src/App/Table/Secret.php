@@ -1,6 +1,7 @@
 <?php
 namespace App\Table;
 
+use App\Db\User;
 use Bs\Table;
 use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Input;
@@ -51,7 +52,7 @@ class Secret extends Table
         $this->appendCell('userId')
             ->addCss('text-nowrap')
             ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
-                return $obj->getUser()->getName();
+                return $obj->getUser()->nameShort;
             });
 
         $this->appendCell('permission')
@@ -89,7 +90,7 @@ class Secret extends Table
             ->addOnDelete(function(Delete $action, array $selected) {
                 foreach ($selected as $secret_id) {
                     $secret = \App\Db\Secret::find($secret_id);
-                    if ($secret?->canEdit($this->getAuthUser())) {
+                    if ($secret?->canEdit(User::getAuthUser())) {
                         Db::delete('secret', compact('secret_id'));
                     }
                 }

@@ -2,6 +2,7 @@
 namespace App\Api;
 
 use App\Db\Lock;
+use App\Db\User;
 use Bs\Traits\SystemTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,8 +18,8 @@ class Page
     {
         $data = ['status' => 'ok', 'lock' => false];
         $pageId = $_REQUEST['pid'] ?? 0;
-        if ($this->getFactory()->getAuthUser()) {
-            $lock = new Lock($this->getFactory()->getAuthUser());
+        if (User::getAuthUser()) {
+            $lock = new Lock(User::getAuthUser());
             if ($lock->isLocked($pageId)) {
                 $b = $lock->lock($pageId);
                 $data['lock'] = $b;

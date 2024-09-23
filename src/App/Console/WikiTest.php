@@ -4,8 +4,8 @@ namespace App\Console;
 use App\Db\Content;
 use App\Db\Page;
 use App\Db\Secret;
-use Bs\Db\Permissions;
-use Bs\Db\User;
+use App\Db\User;
+use Au\Auth;
 use Bs\Factory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -85,7 +85,7 @@ class WikiTest extends Console
 
     private function showSecrets(?User $user):void
     {
-        $list = array_filter(Factory::instance()->getAvailablePermissions($user), function ($k) use ($user) {
+        $list = array_filter(User::PERMISSION_LIST, function ($k) use ($user) {
             return $user->hasPermission($k);
         }, ARRAY_FILTER_USE_KEY);
         $perms = implode(', ', $list);
@@ -111,7 +111,7 @@ class WikiTest extends Console
 
     private function showPages(?User $user):void
     {
-        $list = array_filter(Factory::instance()->getAvailablePermissions($user), function ($k) use ($user) {
+        $list = array_filter(User::PERMISSION_LIST, function ($k) use ($user) {
             return $user->hasPermission($k);
         }, ARRAY_FILTER_USE_KEY);
         $perms = implode(', ', $list);
@@ -151,9 +151,9 @@ class WikiTest extends Console
 
         $editor = new User();
         $editor->type = User::TYPE_STAFF;
-        $editor->permissions = Permissions::PERM_SYSADMIN | Permissions::PERM_MANAGE_STAFF | Permissions::PERM_MANAGE_MEMBERS;
+        $editor->permissions = User::PERM_SYSADMIN | User::PERM_MANAGE_STAFF | User::PERM_MANAGE_MEMBERS;
         $editor->username = 'editor';
-        $editor->password = User::hashPassword('password');
+        $editor->password = Auth::hashPassword('password');
         $editor->email = 'editor@dev.ttek.org';
         $editor->nameFirst = 'Editor';
         $editor->nameLast = '...';
@@ -162,9 +162,9 @@ class WikiTest extends Console
 
         $staff = new User();
         $staff->type = User::TYPE_STAFF;
-        $staff->permissions = Permissions::PERM_MANAGE_MEMBERS;
+        $staff->permissions = User::PERM_MANAGE_MEMBERS;
         $staff->username = 'staff';
-        $staff->password = User::hashPassword('password');
+        $staff->password = Auth::hashPassword('password');
         $staff->email = 'staff@dev.ttek.org';
         $staff->nameFirst = 'Staff';
         $staff->nameLast = '...';
@@ -174,7 +174,7 @@ class WikiTest extends Console
         $member = new User();
         $member->type = User::TYPE_MEMBER;
         $member->username = 'member';
-        $member->password = User::hashPassword('password');
+        $member->password = Auth::hashPassword('password');
         $member->email = 'member@dev.ttek.org';
         $member->nameFirst = 'Member';
         $member->nameLast = '...';

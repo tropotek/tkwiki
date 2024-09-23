@@ -56,12 +56,6 @@ return function (Config $config) {
     $config['log.logLevel'] = \Psr\Log\LogLevel::ERROR;
 
     /**
-     * Set default home page urls for users
-     * (None required for the wiki)
-     */
-    $config['user.homepage'] = [];
-
-    /**
      * Can users update their password from their profile page
      * (default: false)
      */

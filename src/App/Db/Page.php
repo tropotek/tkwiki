@@ -2,10 +2,9 @@
 namespace App\Db;
 
 use App\Factory;
-use Bs\Db\User;
 use Dom\Template;
 use Tk\Uri;
-use Bs\Db\Traits\UserTrait;
+use App\Db\Traits\UserTrait;
 use Bs\Db\Traits\TimestampTrait;
 use Tk\Db;
 use Tk\Db\Filter;
@@ -56,7 +55,7 @@ class Page extends Model
     public string $category     = '';
     public string $title        = '';
     public string $url          = '';
-    public int    $views        = 0;    // todo: implement the page counter and increment it
+    public int    $views        = 0;
     public int    $permission   = 0;
     public int    $linked       = 0;
     public bool   $publish      = true;

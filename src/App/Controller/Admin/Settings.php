@@ -2,8 +2,8 @@
 namespace App\Controller\Admin;
 
 use App\Db\Page;
+use App\Db\User;
 use Bs\ControllerPublic;
-use Bs\Db\Permissions;
 use Bs\Form;
 use Dom\Template;
 use Tk\Alert;
@@ -25,7 +25,7 @@ class Settings extends ControllerPublic
     public function doDefault(): void
     {
         $this->getPage()->setTitle('Edit Settings');
-        $this->setAccess(Permissions::PERM_SYSADMIN);
+        $this->setAccess(User::PERM_SYSADMIN);
 
         $this->getRegistry()->save();
         $this->getCrumbs()->reset();
@@ -190,9 +190,9 @@ class Settings extends ControllerPublic
         $this->form->getField('site.name.short')->addFieldCss('col-6');
         $this->form->getRenderer()->addFieldCss('mb-3');
 
-        $template->setVisible('staff', $this->getAuthUser()->hasPermission(Permissions::PERM_MANAGE_STAFF));
-        $template->setVisible('member', $this->getAuthUser()->hasPermission(Permissions::PERM_MANAGE_MEMBERS));
-        $template->setVisible('admin', $this->getAuthUser()->hasPermission(Permissions::PERM_ADMIN));
+        $template->setVisible('staff', User::getAuthUser()->hasPermission(User::PERM_MANAGE_STAFF));
+        $template->setVisible('member', User::getAuthUser()->hasPermission(User::PERM_MANAGE_MEMBERS));
+        $template->setVisible('admin', User::getAuthUser()->hasPermission(User::PERM_ADMIN));
 
         $template->appendTemplate('content', $this->form->show());
 

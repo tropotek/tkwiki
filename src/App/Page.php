@@ -2,6 +2,7 @@
 namespace App;
 
 use App\Controller\Menu\View;
+use App\Db\User;
 use App\Helper\Navigation;
 use Au\Auth;
 use Bs\Ui\Dialog;
@@ -23,7 +24,6 @@ tkConfig.enableSecretMod = {$secretEnabled};
 JS;
         $template->appendJs($js, array(JsLast::$ATTR_PRIORITY => -9990));
 
-        $template->setText('site-name', $this->getRegistry()->get('site.name.short', ''));
         $template->appendMetaTag('keywords', $this->getRegistry()->get('system.meta.keywords', ''));
         $template->appendMetaTag('description', $this->getRegistry()->get('system.meta.description', ''));
 
@@ -34,6 +34,20 @@ JS;
         $template->setText('year', date('Y'));
         $template->setAttr('home', 'href', Uri::create('/')->toString());
 
+        $user = User::getAuthUser();
+        if (is_null($user)) {
+            $template->setVisible('no-auth');
+            $template->setVisible('loggedOut');
+        } else {
+            $template->setText('username', $user->username);
+            $template->setText('user-name', $user->nameShort);
+            $template->setText('user-type', ucfirst($user->type));
+            $template->setAttr('user-image', 'src', $user->getImageUrl());
+            $template->setAttr('user-home-url', 'href', $user->getHomeUrl());
+
+            $template->setVisible('loggedIn');
+            $template->setVisible('auth');
+        }
 
         // public page
         $this->showMenu();

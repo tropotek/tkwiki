@@ -2,7 +2,7 @@
 namespace App\Dom\Modifier;
 
 use App\Helper\ViewSecretList;
-use Bs\Db\User;
+use App\Db\User;
 use Dom\Modifier\FilterInterface;
 
 /**

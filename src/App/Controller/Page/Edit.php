@@ -4,8 +4,10 @@ namespace App\Controller\Page;
 use App\Db\Content;
 use App\Db\Lock;
 use App\Db\Page;
+use App\Db\User;
 use App\Helper\PageSelect;
 use App\Helper\SecretSelect;
+use Au\Auth;
 use Bs\ControllerPublic;
 use Bs\Form;
 use Dom\Template;
@@ -39,7 +41,7 @@ class Edit extends ControllerPublic
         $delete   = intval($_GET['del'] ?? 0);
 
         $this->getPage()->setTitle('Edit Page');
-        if (!$this->getFactory()->getAuthUser()) {
+        if (!Auth::getAuthUser()) {
             Alert::addWarning('You are not logged in.');
             Page::getHomePage()->getUrl()->redirect();
         }
@@ -49,28 +51,28 @@ class Edit extends ControllerPublic
             $this->getPage()->setCrumbsEnabled(false);
         }
 
-        $this->lock = new Lock($this->getAuthUser());
+        $this->lock = new Lock(User::getAuthUser());
 
         // Find requested page
         $this->page = Page::find($pageId);
 
-        if ($this->page && !$this->page->canEdit($this->getAuthUser())) {
+        if ($this->page && !$this->page->canEdit(User::getAuthUser())) {
             Alert::addWarning('You do not have permissions to edit `' . $this->page->title . '`');
-            if ($this->page->canView($this->getAuthUser())) {
+            if ($this->page->canView(User::getAuthUser())) {
                 $this->page->getUrl()->redirect();
             }
             Page::getHomePage()->getUrl()->redirect();
         }
 
         // Create a new page
-        if (!$this->page && $pageUrl && Page::canCreate($this->getAuthUser())) {
+        if (!$this->page && $pageUrl && Page::canCreate(User::getAuthUser())) {
             $this->page = new Page();
-            $this->page->userId = $this->getAuthUser()->userId;
+            $this->page->userId = User::getAuthUser()->userId;
             $this->page->url = $pageUrl;
             $this->page->title = str_replace('_', ' ', $this->page->url);
             $this->page->permission = \App\Db\Page::PERM_PRIVATE;
             $this->content = new Content();
-            $this->content->userId = $this->getAuthUser()->userId;
+            $this->content->userId = User::getAuthUser()->userId;
         }
 
         if (!$this->page) {
@@ -80,7 +82,7 @@ class Edit extends ControllerPublic
 
         // check if the user can edit the page
         $error = false;
-        if (!$this->page->canEdit($this->getAuthUser())) {
+        if (!$this->page->canEdit(User::getAuthUser())) {
             Alert::addWarning('You do not have permission to edit this page.');
             $error = true;
         }
@@ -166,7 +168,7 @@ class Edit extends ControllerPublic
             ->setGroup($group);
 
         // Only admins can update css/js content
-        if ($this->getAuthUser()->isAdmin()) {
+        if (User::getAuthUser()->isAdmin()) {
             $this->form->appendField(new Textarea('js'))
                 ->setLabel('Page JavaScript')
                 ->setNotes('Only admin users can add javascript')
@@ -260,7 +262,7 @@ class Edit extends ControllerPublic
     public function doDelete($pageId): void
     {
         $page = Page::find($pageId);
-        if ($page && $page->canEdit($this->getAuthUser())) {
+        if ($page && $page->canEdit(User::getAuthUser())) {
             $page->delete();
             Page::getHomePage()->getUrl()->redirect();
         }

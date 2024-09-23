@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller\Page;
 
-use Bs\Db\Permissions;
+use App\Db\User;
 use App\Table\Page;
 use Bs\ControllerPublic;
 use Dom\Template;
@@ -15,7 +15,7 @@ class Manager extends ControllerPublic
     public function doDefault(): void
     {
         $this->getPage()->setTitle('Page Manager');
-        $this->setAccess(Permissions::PERM_SYSADMIN);
+        $this->setAccess(User::PERM_SYSADMIN);
         $this->getCrumbs()->reset();
 
         $this->table = new \App\Table\Page();
@@ -26,8 +26,8 @@ class Manager extends ControllerPublic
         // Set the table rows
         $filter = $this->table->getDbFilter();
 
-        if (!$this->getAuthUser()->isAdmin()) {
-            $filter['userId'] = $this->getAuthUser()->userId;
+        if (!User::getAuthUser()->isAdmin()) {
+            $filter['userId'] = User::getAuthUser()->userId;
             $filter['permission'] = \App\Db\Page::STAFF_PERMS;
         }
         $rows = \App\Db\Page::findViewable($filter);

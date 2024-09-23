@@ -70,8 +70,13 @@ class Page extends Table
         $this->appendCell('userId')
             ->addCss('text-nowrap')
             ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
-                return $page->getUser()->getName();
+                return $page->getUser()->nameShort;
             });
+
+        $this->appendCell('views')
+            ->setSortable(true)
+            ->addCss('text-center')
+            ->addHeaderCss('text-center');
 
         $this->appendCell('modified')
             ->addCss('text-nowrap')

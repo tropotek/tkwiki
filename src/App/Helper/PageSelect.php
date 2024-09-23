@@ -2,6 +2,7 @@
 namespace App\Helper;
 
 use App\Db\Page;
+use App\Db\User;
 use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
@@ -23,13 +24,13 @@ class PageSelect extends Renderer implements DisplayInterface
         $filter = $this->table->getDbFilter();
         $filter->replace([
             'publish' => true,
-            'userId' => $this->getAuthUser()->userId,
+            'userId' => User::getAuthUser()->userId,
             'permission' => Page::PERM_PUBLIC,
         ]);
-        if ($this->getAuthUser()->isMember()) {
+        if (User::getAuthUser()->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         }
-        if ($this->getAuthUser()->isStaff()) {
+        if (User::getAuthUser()->isStaff()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
 
@@ -154,7 +155,7 @@ JS;
   </div>
 </div>
 HTML;
-        return $this->loadTemplate($html);
+        return Template::load($html);
     }
 
 }

@@ -2,6 +2,7 @@
 namespace App\Helper;
 
 use App\Db\Secret;
+use App\Db\User;
 use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
@@ -37,7 +38,7 @@ class ViewSecret extends Renderer implements DisplayInterface
             $template->setVisible('no-url');
         }
 
-        if ($this->secret->canView($this->getAuthUser())) {
+        if ($this->secret->canView(User::getAuthUser())) {
             if ($this->secret->publish) {
                 if ($this->secret->username || $this->secret->password) {
                     if ($this->secret->username) {
@@ -60,7 +61,7 @@ class ViewSecret extends Renderer implements DisplayInterface
             }
         }
 
-        if ($this->secret->canEdit($this->getAuthUser())) {
+        if ($this->secret->canEdit(User::getAuthUser())) {
             $template->setAttr('edit', 'href', Uri::create('/secretEdit')->set('h', $this->secret->hash));
             $template->setVisible('edit');
         }
@@ -83,7 +84,7 @@ class ViewSecret extends Renderer implements DisplayInterface
 </div>
 HTML;
 
-        return $this->loadTemplate($html);
+        return Template::load($html);
     }
 
 }

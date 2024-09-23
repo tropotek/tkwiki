@@ -2,6 +2,7 @@
 namespace App\Dom\Modifier;
 
 use App\Db\Page;
+use App\Db\User;
 use Bs\Traits\SystemTrait;
 use Dom\Modifier\FilterInterface;
 
@@ -20,7 +21,7 @@ class WikiUrl extends FilterInterface
         // Modify wiki URLs
         if ($node->nodeName != 'a') return;
 
-        $user = $this->getAuthUser();
+        $user = User::getAuthUser();
         $css = $node->getAttribute('class');
         $href = $node->getAttribute('href');
 

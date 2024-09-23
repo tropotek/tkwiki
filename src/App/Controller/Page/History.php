@@ -2,6 +2,7 @@
 namespace App\Controller\Page;
 
 use App\Db\Page;
+use App\Db\User;
 use App\Table\Content;
 use Bs\ControllerPublic;
 use Dom\Template;
@@ -26,7 +27,7 @@ class History extends ControllerPublic
             throw new Exception("Page not found!");
         }
 
-        if (!$this->page->canEdit($this->getAuthUser())) {
+        if (!$this->page->canEdit(User::getAuthUser())) {
             Alert::addError("You do not have permission to access this page");
             $this->getBackUrl()->redirect();
         }

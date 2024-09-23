@@ -2,7 +2,7 @@
 namespace App\Helper;
 
 use App\Db\Secret;
-use Bs\Db\User;
+use App\Db\User;
 use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
@@ -37,7 +37,7 @@ class ViewSecretList extends Renderer implements DisplayInterface
         $list = Secret::findFiltered(Filter::create($filter, 'name'));
 
         foreach ($list as $secret) {
-            if (!$secret->canView($this->getAuthUser())) continue;
+            if (!$secret->canView(\App\Db\User::getAuthUser())) continue;
             $row = $template->getRepeat('col');
             $ren = new ViewSecret($secret);
             $row->appendTemplate('col', $ren->show());
@@ -55,7 +55,7 @@ class ViewSecretList extends Renderer implements DisplayInterface
 </div>
 HTML;
 
-        return $this->loadTemplate($html);
+        return Template::load($html);
     }
 
 }

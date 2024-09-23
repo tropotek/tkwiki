@@ -2,6 +2,7 @@
 namespace App\Controller\Secret;
 
 use App\Db\Secret;
+use App\Db\User;
 use Bs\ControllerPublic;
 use Dom\Template;
 use Tk\Alert;
@@ -25,7 +26,7 @@ class Edit extends ControllerPublic
     {
         $this->getPage()->setTitle('Edit Secret');
         if (
-            !$this->getAuthUser()?->isStaff() ||
+            !User::getAuthUser()?->isStaff() ||
             !$this->getRegistry()->get('wiki.enable.secret.mod', false)
         ) {
             Alert::addWarning('You do not have permission to access the page');
@@ -35,7 +36,7 @@ class Edit extends ControllerPublic
         $hash = trim($_GET['h'] ?? '');
 
         $this->secret = new Secret();
-        $this->secret->userId = $this->getFactory()->getAuthUser()->userId;
+        $this->secret->userId = User::getAuthUser()->userId;
         if ($hash) {
             $this->secret = Secret::findByHash($hash);
             if (!$this->secret) {

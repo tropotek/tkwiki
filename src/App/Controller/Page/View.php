@@ -3,6 +3,7 @@ namespace App\Controller\Page;
 
 use App\Db\Content;
 use App\Db\Page;
+use App\Db\User;
 use App\Helper\ViewToolbar;
 use App\Util\Pdf;
 use Bs\ControllerInterface;
@@ -38,7 +39,7 @@ class View extends ControllerPublic
         }
         $this->page = Page::findPage($pageUrl);
         if (!$this->page) {
-            if (Page::canCreate($this->getFactory()->getAuthUser())) {
+            if (Page::canCreate(User::getAuthUser())) {
                 // Create a redirect to the page edit controller
                 Uri::create('/edit')->set('u', $pageUrl)->redirect();
             } else {
@@ -46,7 +47,7 @@ class View extends ControllerPublic
                 throw new HttpException(404, 'Page not found');
             }
         } else {
-            if (!$this->page->canView($this->getFactory()->getAuthUser())) {
+            if (!$this->page->canView(User::getAuthUser())) {
                 Alert::addWarning('You do not have permission to view the page: `' . $this->page->title . '`');
                 Page::getHomePage()->getUrl()->redirect();
             }
@@ -80,7 +81,7 @@ class View extends ControllerPublic
         if (!$this->page) {
             throw new HttpException(404, 'page not found');
         }
-        if (!$this->page->canEdit($this->getFactory()->getAuthUser())) {
+        if (!$this->page->canEdit(User::getAuthUser())) {
             $this->page->getUrl()->redirect();
         }
 

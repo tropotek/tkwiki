@@ -20,7 +20,7 @@ class SecretSelect extends Table
 
         $this->appendCell('userId')
             ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
-                return $obj->getUser()?->getName() ?? '';
+                return $obj->getUser()?->nameShort ?? '';
             });
 
         $this->appendCell('permission')

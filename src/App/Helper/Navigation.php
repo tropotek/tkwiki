@@ -1,7 +1,7 @@
 <?php
 namespace App\Helper;
 
-use Bs\Db\Permissions;
+use App\Db\User;
 use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
@@ -17,11 +17,11 @@ class Navigation extends Renderer implements DisplayInterface
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        $user = $this->getAuthUser();
+        $user = User::getAuthUser();
         if ($user) {
-            $template->setVisible('settings', $user->hasPermission(Permissions::PERM_SYSADMIN));
+            $template->setVisible('settings', $user->hasPermission(User::PERM_SYSADMIN));
             $template->setVisible('pageManager', $user->isStaff());
-            $template->setVisible('menu', $user->hasPermission(Permissions::PERM_SYSADMIN | Permissions::PERM_SYSADMIN));
+            $template->setVisible('menu', $user->hasPermission(User::PERM_SYSADMIN | User::PERM_SYSADMIN));
             $template->setVisible('secret', $user->isStaff() && $this->getRegistry()->get('wiki.enable.secret.mod', false));
             $template->setVisible('admin', $user->isAdmin());
             $template->setVisible('dev', $this->getConfig()->isDev());

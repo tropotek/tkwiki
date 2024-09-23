@@ -2,6 +2,7 @@
 namespace App\Helper;
 
 use App\Db\Page;
+use App\Db\User;
 use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
@@ -33,32 +34,32 @@ class ViewCategoryList extends Renderer implements DisplayInterface
             'publish'  => true,
             'permission' => Page::PERM_PUBLIC
         ];
-        if ($this->getAuthUser()?->isMember()) {
+        if (User::getAuthUser()?->isMember()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER];
         }
-        if ($this->getAuthUser()?->isStaff()) {
+        if (User::getAuthUser()?->isStaff()) {
             $filter['permission'] = [Page::PERM_PUBLIC, Page::PERM_MEMBER, Page::PERM_STAFF];
         }
-        if ($this->getAuthUser()?->isAdmin()) {
+        if (User::getAuthUser()?->isAdmin()) {
             unset($filter['permission']);
         }
 
         $list = Page::findFiltered(Filter::create($filter, 'title'));
 
         foreach ($list as $page) {
-            if (!$page->canView($this->getAuthUser())) continue;
+            if (!$page->canView(User::getAuthUser())) continue;
 
             if ($this->asTable) {
                 $col = $template->getRepeat('col');
                 $col->setText('url', $page->title);
-                $col->setAttr('url', 'href', $page->getPageUrl());
+                $col->setAttr('url', 'href', $page->getUrl());
                 $col->setAttr('url', 'title', $page->title);
                 $col->appendRepeat();
                 $template->setVisible('table');
             } else {
                 $li = $template->getRepeat('li');
                 $li->setText('url', $page->title);
-                $li->setAttr('url', 'href', $page->getPageUrl());
+                $li->setAttr('url', 'href', $page->getUrl());
                 $li->setAttr('url', 'title', $page->title);
                 $li->appendRepeat();
                 $template->setVisible('list');
@@ -81,7 +82,7 @@ class ViewCategoryList extends Renderer implements DisplayInterface
 </div>
 HTML;
 
-        return $this->loadTemplate($html);
+        return Template::load($html);
     }
 
 }

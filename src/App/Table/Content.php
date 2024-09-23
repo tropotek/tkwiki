@@ -48,7 +48,7 @@ class Content extends Table
         $this->appendCell('userId')
             ->addCss('text-nowrap')
             ->addOnValue(function(\App\Db\Content $obj, Cell $cell) {
-                return $obj->getUser()->getName();
+                return $obj->getUser()->nameShort;
             });
 
         // Add Filter Fields

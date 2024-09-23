@@ -2,7 +2,7 @@
 namespace App\Db;
 
 use App\Db\Traits\PageTrait;
-use Bs\Db\Traits\UserTrait;
+use App\Db\Traits\UserTrait;
 use App\Factory;
 use Bs\Db\Traits\CreatedTrait;
 use Tk\Db;
@@ -29,13 +29,13 @@ class Content extends Model
     public function __construct()
     {
         $this->_CreatedTrait();
-        $this->userId = Factory::instance()->getAuthUser()?->userId ?? 0;
+        $this->userId = User::getAuthUser()?->userId ?? 0;
     }
 
     public static function cloneContent(Content $src): Content
     {
         $dst = new static();
-        $dst->userId = Factory::instance()->getAuthUser()?->userId ?? 0;
+        $dst->userId = User::getAuthUser()?->userId ?? 0;
 
         $dst->pageId      = $src->pageId;
         $dst->html        = $src->html;

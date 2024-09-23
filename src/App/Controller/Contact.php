@@ -2,13 +2,11 @@
 namespace App\Controller;
 
 use Bs\ControllerPublic;
-use Bs\Db\User;
 use Bs\Form;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Form\Action\Link;
 use Tk\Form\Action\Submit;
-use Tk\Form\Field\Hidden;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Textarea;
 use Tk\Uri;
@@ -44,14 +42,6 @@ class Contact extends ControllerPublic
         $this->form->setFieldValues($this->getRegistry()->all());
 
         $this->form->execute($_POST);
-
-
-        $user = User::find(1);
-
-        $map = User::getFormMap();
-
-
-
 
     }
 

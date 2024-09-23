@@ -1,7 +1,6 @@
 <?php
 namespace App\Db;
 
-use Bs\Db\User;
 use Bs\Factory;
 use Tk\Db;
 

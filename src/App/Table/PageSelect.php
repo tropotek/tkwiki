@@ -29,7 +29,7 @@ class PageSelect extends Table
 
         $this->appendCell('userId')
             ->addOnValue(function(Page $page, Cell $cell) {
-                return $page->getUser()?->getName() ?? '';
+                return $page->getUser()?->nameShort ?? '';
             });
 
         $this->appendCell('permission')

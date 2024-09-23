@@ -15,46 +15,67 @@
   <script src="/vendor/components/jquery/jquery.min.js"></script>
   <script src="/vendor/components/jqueryui/jquery-ui.min.js"></script>
   <script src="/vendor/ttek/tk-base/assets/js/components/htmx.min.js"></script>
-  <script src="/vendor/ttek/tk-base/assets/js/tkbase.js"></script>
-  <script src="/html/assets/app.js"></script>
-
 
   <style>
     .login-box {
       max-width: 330px;
       margin-top: 11%;
     }
+
     form .btn-primary {
       width: 95%;
     }
+
     form .fld > label {
       display: none;
     }
+
     form .tk-form-errors {
       margin: 15px 0 0 0;
     }
+
     h1 a,
     h2 a,
     h3 a {
       color: inherit;
       text-decoration: none;
     }
+
     h1 a:hover,
     h2 a:hover,
     h3 a:hover {
       text-decoration: underline;
     }
+
+    .form-control:disabled, .form-control:read-only {
+      pointer-events: none;
+      background-color: #EEE;
+    }
+
+    form input:invalid,
+    form textarea:invalid,
+    form select:invalid {
+      background: #FDFDDA !important;
+    }
   </style>
+
+  <script>
+    jQuery(function ($) {
+      // Init page javascript functions
+      tkbase.initPasswordToggle();
+    });
+  </script>
 
 </head>
 <body class="bg-light h-100">
 
 <div class="login-box text-left mx-auto card p-4 w-100 p-2">
+  <div var="alert"></div>
   <div class="" var="content"></div>
 
   <p class="my-3 text-center">
-    <a href="https://www.tropotek.com/" target="_blank" class="small text-muted text-decoration-none">
-      Tropotek &copy; 2023
+    <a href="https://www.tropotek.com/" class="small text-muted text-decoration-none" var="home">
+      <span var="site-name">Tropotek</span> &copy; <span var="year">2023</span>
     </a>
   </p>
 </div>

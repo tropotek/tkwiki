@@ -69,8 +69,7 @@ pre {
 
 /* ==================  WIKI .end  ================== */
 
-
-/* TINY-MCE */
+/*********** T I N Y M C E *************/
 /* Remove promotion button */
 .tox .tox-promotion {
   display: none;
@@ -118,7 +117,8 @@ pre {
   color: #0099FF;
 }
 
-/* \Tk\Form */
+
+/***************** F O R M ******************/
 form textarea {
   height: 150px;
 }
@@ -128,9 +128,18 @@ form label {
 form .form-check-label {
   font-weight: normal;
 }
+.form-control:disabled, .form-control:read-only {
+  pointer-events: none;
+  background-color: #EEE;
+}
+.tk-form input:invalid,
+.tk-form textarea:invalid,
+.tk-form select:invalid {
+  background: #FDFDDA !important;
+}
 
 
-/* \Tk\Table */
+/***************** T A B L E ******************/
 .tk-form-inline {
   margin-bottom: .5rem;
 }

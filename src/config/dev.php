@@ -9,8 +9,6 @@
  *   `./bin/cmd debug`
  */
 
-use Bs\Db\User;
-
 $config = \Tk\Config::instance();
 
 if (!$config->isDebug() || $config->isProd()) {
@@ -18,7 +16,7 @@ if (!$config->isDebug() || $config->isProd()) {
     return;
 }
 
-foreach (User::findAll() as $user) {
-    $user->password = User::hashPassword('password');
-    $user->save();
+foreach (\Au\Auth::findAll() as $auth) {
+    $auth->password = \Au\Auth::hashPassword('password');
+    $auth->save();
 }

@@ -3,6 +3,7 @@ namespace App;
 
 use App\Controller\Menu\View;
 use App\Helper\Navigation;
+use Au\Auth;
 use Bs\Ui\Dialog;
 use Dom\Modifier\JsLast;
 use Dom\Template;
@@ -30,18 +31,20 @@ JS;
         $template->appendJs($this->getRegistry()->get('system.global.js', ''));
         $template->appendCss($this->getRegistry()->get('system.global.css', ''));
 
-        // all pages
-        $this->showAlert();
+        $template->setText('year', date('Y'));
+        $template->setAttr('home', 'href', Uri::create('/')->toString());
+
 
         // public page
-        // TODO Check user permissions for elements to display
         $this->showMenu();
         $this->showCreatePageDialog();
 
+        // all pages
+        $this->showAlert();
         $this->showCrumbs();
 
-        if ($this->getFactory()->getAuthUser()) {
-            $template->setText('username', $this->getFactory()->getAuthUser()->username);
+        if (Auth::getAuthUser()) {
+            $template->setText('username', Auth::getAuthUser()->username);
         }
 
         $userNav = new Navigation();

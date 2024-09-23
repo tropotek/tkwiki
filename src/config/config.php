@@ -38,17 +38,10 @@ return function (Config $config) {
     /**
      * Email template relative path
      */
-    $config['system.mail.template'] = '/html/templates/mail.default.xtpl';
-
-    /**
-     * Enable/disable users to change password from their profile page
-     * default: true
-     */
-    $config['user.profile.password'] = false;
+    $config['system.mail.template'] = '/html/templates/mail.default.html';
 
     /**
      * Enable DB sessions
-     * Used for the tail log page
      */
     $config['session.db_enable'] = true;
 
@@ -58,14 +51,39 @@ return function (Config $config) {
     $config['php.date.timezone'] = 'Australia/Melbourne';
 
     /**
+     * The default log level
+     */
+    $config['log.logLevel'] = \Psr\Log\LogLevel::ERROR;
+
+    /**
      * Set default home page urls for users
      * (None required for the wiki)
      */
     $config['user.homepage'] = [];
 
     /**
-     * The default log level
+     * Can users update their password from their profile page
+     * (default: false)
      */
-    $config['log.logLevel'] = \Psr\Log\LogLevel::ERROR;
+    $config['auth.profile.password'] = false;
+
+    /**
+     * Can users register an account
+     * (default: false)
+     */
+    $config['auth.registration.enable'] = false;
+
+    /**
+     * Validate user passwords on input
+     * - Must include at least one number
+     * - Must include at least one letter
+     * - Must include at least one capital
+     * - Must include at least one symbol
+     * - must >= 8 characters
+     *
+     * Note: validation disabled in dev environments
+     * (default: true)
+     */
+    //$config['auth.password.strict'] = false;
 
 };

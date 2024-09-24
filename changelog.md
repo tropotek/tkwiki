@@ -5,6 +5,12 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.74 [2024-09-25]:
+-------------------------------
+  - cleanup config methods
+  - Update user system
+
+
 Ver 8.0.72 [2024-09-20]:
 -------------------------------
 

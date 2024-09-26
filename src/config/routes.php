@@ -37,6 +37,8 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Controller\User\Login::class, 'doLogin']);
     $routes->add('logout', '/logout')
         ->controller([\App\Controller\User\Login::class, 'doLogout']);
+    $routes->add('login-ssi', '/_ssi')
+        ->controller([\App\Controller\User\Ssi::class, 'doDefault']);
     $routes->add('recover', '/recover')
         ->controller([\App\Controller\User\Recover::class, 'doDefault']);
     $routes->add('recover-pass', '/recoverUpdate')
@@ -47,8 +49,6 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Controller\User\Register::class, 'doDefault']);
 
     // User Member
-    $routes->add('user-dashboard', '/dashboard')
-        ->controller([\App\Controller\Dashboard::class, 'doDefault']);
     $routes->add('user-profile', '/profile')
         ->controller([\App\Controller\User\Profile::class, 'doDefault']);
 

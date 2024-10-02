@@ -57,7 +57,7 @@ class Ssi extends ControllerAdmin
             curl_setopt($ch, CURLOPT_URL, $settings[$oAuth]['endpointToken']);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, [
                 'client_id' => $settings[$oAuth]['clientId'],
                 'client_secret' => $settings[$oAuth]['clientSecret'],
@@ -76,7 +76,7 @@ class Ssi extends ControllerAdmin
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $settings[$oAuth]['endpointScope']);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer '.$data['access_token']]);
             $data = json_decode(curl_exec($ch), true);
 
@@ -110,7 +110,7 @@ class Ssi extends ControllerAdmin
                     [$username, $domain] = explode('@', $email);
                     $user = new User();
                     $user->type       = $settings[$oAuth]['userType'];
-                    $user->givenName  = $data['givenName'] ?? $username;
+                    $user->givenName  = $data['givenName'] ?? $data['name'] ?? $username;
                     $user->familyName = $data['surname'] ?? '';
                     $user->phone      = $data['mobilePhone'] ?? '';
                     $user->save();

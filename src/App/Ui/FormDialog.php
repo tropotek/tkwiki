@@ -85,9 +85,8 @@ jQuery(function($) {
         $('form.tk-form', dialogId)[0].reset();
     });
 
-    $(document).on('htmx:afterSettle', function(evt) {
-        console.log(evt);
-        //tkInit($(dialogId));
+    $(document).on('htmx:afterSettle', function() {
+        tkInit($(dialogId));
     });
 });
 JS;

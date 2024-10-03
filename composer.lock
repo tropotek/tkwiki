@@ -314,22 +314,21 @@
         },
         {
             "name": "mpdf/psr-log-aware-trait",
-            "version": "3.x-dev",
+            "version": "2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/psr-log-aware-trait.git",
-                "reference": "a633da6065e946cc491e1c962850344bb0bf3e78"
+                "reference": "7a077416e8f39eb626dee4246e0af99dd9ace275"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/psr-log-aware-trait/zipball/a633da6065e946cc491e1c962850344bb0bf3e78",
-                "reference": "a633da6065e946cc491e1c962850344bb0bf3e78",
+                "url": "https://api.github.com/repos/mpdf/psr-log-aware-trait/zipball/7a077416e8f39eb626dee4246e0af99dd9ace275",
+                "reference": "7a077416e8f39eb626dee4246e0af99dd9ace275",
                 "shasum": ""
             },
             "require": {
-                "psr/log": "^3.0"
+                "psr/log": "^1.0 || ^2.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -353,9 +352,9 @@
             "description": "Trait to allow support of different psr/log versions.",
             "support": {
                 "issues": "https://github.com/mpdf/psr-log-aware-trait/issues",
-                "source": "https://github.com/mpdf/psr-log-aware-trait/tree/v3.0.0"
+                "source": "https://github.com/mpdf/psr-log-aware-trait/tree/2.x"
             },
-            "time": "2023-05-03T06:19:36+00:00"
+            "time": "2023-05-03T06:18:28+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -779,26 +778,25 @@
         },
         {
             "name": "psr/log",
-            "version": "dev-master",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
+                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
-                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/ef29f6d262798707a9edd554e2b82517ef3a9376",
+                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -824,9 +822,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/3.0.2"
+                "source": "https://github.com/php-fig/log/tree/2.0.0"
             },
-            "time": "2024-09-11T13:17:53+00:00"
+            "time": "2021-07-14T16:41:46+00:00"
         },
         {
             "name": "scssphp/scssphp",
@@ -2814,12 +2812,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "88a608f616645ab7d329a0d039a87cdc9f0af87e"
+                "reference": "4455d7d03b68aa7b3693f082b6bacd9422d29b19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/88a608f616645ab7d329a0d039a87cdc9f0af87e",
-                "reference": "88a608f616645ab7d329a0d039a87cdc9f0af87e",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/4455d7d03b68aa7b3693f082b6bacd9422d29b19",
+                "reference": "4455d7d03b68aa7b3693f082b6bacd9422d29b19",
                 "shasum": ""
             },
             "require": {
@@ -2828,7 +2826,8 @@
                 "ext-json": "*",
                 "ext-pdo": "*",
                 "php": "^8.2",
-                "phpmailer/phpmailer": "~6.0"
+                "phpmailer/phpmailer": "~6.0",
+                "psr/log": "^2.0"
             },
             "type": "library",
             "extra": {

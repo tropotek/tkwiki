@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3154e4b0ce7358222b811de23aa979dc",
+    "content-hash": "a92e59b47e1d5d9da6a7d241ab5d4ff7",
     "packages": [
         {
             "name": "components/font-awesome",
@@ -2812,12 +2812,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "4455d7d03b68aa7b3693f082b6bacd9422d29b19"
+                "reference": "68c2e29791611bc301c197858abf1d59620ed940"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/4455d7d03b68aa7b3693f082b6bacd9422d29b19",
-                "reference": "4455d7d03b68aa7b3693f082b6bacd9422d29b19",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/68c2e29791611bc301c197858abf1d59620ed940",
+                "reference": "68c2e29791611bc301c197858abf1d59620ed940",
                 "shasum": ""
             },
             "require": {
@@ -2826,8 +2826,7 @@
                 "ext-json": "*",
                 "ext-pdo": "*",
                 "php": "^8.2",
-                "phpmailer/phpmailer": "~6.0",
-                "psr/log": "^2.0"
+                "phpmailer/phpmailer": "~6.0"
             },
             "type": "library",
             "extra": {

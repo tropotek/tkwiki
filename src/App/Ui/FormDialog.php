@@ -86,7 +86,8 @@ jQuery(function($) {
     });
 
     $(document).on('htmx:afterSettle', function(evt) {
-        tkInit($(dialogId));
+        console.log(evt);
+        //tkInit($(dialogId));
     });
 });
 JS;

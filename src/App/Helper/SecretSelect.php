@@ -100,6 +100,7 @@ jQuery(function($) {
 
     // Secret select table
     tkRegisterInit(function () {
+        //console.trace();
         let links = $('th a, .tk-foot a', selectDialog).not('[href="javascript:;"], [href="#"]');
 
         // Handle table links
@@ -141,8 +142,6 @@ jQuery(function($) {
         if ($('form .is-invalid', createDialog).length) return;
         let hash = $('#secret_hash', 'form#secret').val();
         let name = $('#secret_name', 'form#secret').val();
-        console.log(name);
-        console.log(hash);
         $(selectDialog).trigger('selected.ss.modal', [hash, name]);
         $(selectDialog).modal('hide');
         $(createDialog).modal('hide');

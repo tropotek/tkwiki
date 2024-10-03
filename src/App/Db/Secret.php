@@ -2,7 +2,7 @@
 namespace App\Db;
 
 use App\Db\Traits\UserTrait;
-use Bs\Db\Traits\TimestampTrait;
+use Bs\Traits\TimestampTrait;
 use Tk\DataMap\DataMap;
 use Tk\DataMap\Db\Boolean;
 use Tk\DataMap\Db\DateTime;

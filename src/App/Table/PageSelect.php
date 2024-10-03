@@ -2,7 +2,7 @@
 namespace App\Table;
 
 use App\Db\Page;
-use Bs\Table;
+use Bs\Mvc\Table;
 use Tk\Form\Field\Input;
 use Tk\Table\Cell;
 

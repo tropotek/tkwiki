@@ -1,11 +1,10 @@
 <?php
 namespace App\Db;
 
-use Au\Auth;
-use Au\Traits\AuthTrait;
-use Au\UserInterface;
-use Bs\Db\File;
-use Bs\Db\Traits\TimestampTrait;
+use Bs\Auth;
+use Bs\Traits\AuthTrait;
+use Bs\Db\UserInterface;
+use Bs\Traits\TimestampTrait;
 use Tk\Color;
 use Tk\Config;
 use Tk\Image;
@@ -107,12 +106,6 @@ class User extends Model implements UserInterface
         }
 
         $this->reload();
-    }
-
-    public function getFileList(array $filter = []): array
-    {
-        $filter += ['model' => $this];
-        return File::findFiltered($filter);
     }
 
     public function getDataPath(): string

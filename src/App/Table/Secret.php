@@ -2,7 +2,7 @@
 namespace App\Table;
 
 use App\Db\User;
-use Bs\Table;
+use Bs\Mvc\Table;
 use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Select;

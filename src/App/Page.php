@@ -4,14 +4,14 @@ namespace App;
 use App\Controller\Menu\View;
 use App\Db\User;
 use App\Helper\Navigation;
-use Au\Auth;
+use Bs\Auth;
 use Bs\Ui\Dialog;
 use Dom\Modifier\JsLast;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Uri;
 
-class Page extends \Bs\Page
+class Page extends \Bs\Mvc\Page
 {
 
     public function show(): ?Template

@@ -5,7 +5,7 @@ use App\Db\MenuItem;
 use App\Db\Page;
 use App\Db\User;
 use App\Helper\PageSelect;
-use Bs\ControllerPublic;
+use Bs\Mvc\ControllerPublic;
 use Bs\Ui\Dialog;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;

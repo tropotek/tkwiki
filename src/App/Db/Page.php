@@ -5,7 +5,7 @@ use App\Factory;
 use Dom\Template;
 use Tk\Uri;
 use App\Db\Traits\UserTrait;
-use Bs\Db\Traits\TimestampTrait;
+use Bs\Traits\TimestampTrait;
 use Tk\Db;
 use Tk\Db\Filter;
 use Tk\Db\Model;

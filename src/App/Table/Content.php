@@ -1,7 +1,7 @@
 <?php
 namespace App\Table;
 
-use Bs\Table;
+use Bs\Mvc\Table;
 use Tk\Alert;
 use Tk\Exception;
 use Tk\Form\Field\Input;

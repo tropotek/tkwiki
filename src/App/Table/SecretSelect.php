@@ -1,7 +1,7 @@
 <?php
 namespace App\Table;
 
-use Bs\Table;
+use Bs\Mvc\Table;
 use Tk\Form\Field\Input;
 use Tk\Table\Cell;
 

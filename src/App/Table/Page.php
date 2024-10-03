@@ -2,7 +2,7 @@
 namespace App\Table;
 
 use Bs\Registry;
-use Bs\Table;
+use Bs\Mvc\Table;
 use Dom\Template;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Select;

@@ -3,7 +3,7 @@ namespace App\Controller\Page;
 
 use App\Db\Page;
 use App\Db\User;
-use Bs\ControllerPublic;
+use Bs\Mvc\ControllerPublic;
 use Dom\Template;
 use Tk\Db;
 use Tk\Db\Filter;

@@ -3,7 +3,7 @@ namespace App\Controller\Secret;
 
 use App\Db\Secret;
 use App\Db\User;
-use Bs\ControllerPublic;
+use Bs\Mvc\ControllerPublic;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Exception;

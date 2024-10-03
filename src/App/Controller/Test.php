@@ -2,10 +2,9 @@
 namespace App\Controller;
 
 use App\Db\User;
-use Bs\ControllerPublic;
+use Bs\Mvc\ControllerPublic;
 use Dom\Template;
 use Tk\Config;
-use Tk\Log;
 use Tk\Uri;
 
 /**

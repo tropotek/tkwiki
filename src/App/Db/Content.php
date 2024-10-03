@@ -3,8 +3,7 @@ namespace App\Db;
 
 use App\Db\Traits\PageTrait;
 use App\Db\Traits\UserTrait;
-use App\Factory;
-use Bs\Db\Traits\CreatedTrait;
+use Bs\Traits\CreatedTrait;
 use Tk\Db;
 use Tk\Db\Filter;
 use Tk\Db\Model;

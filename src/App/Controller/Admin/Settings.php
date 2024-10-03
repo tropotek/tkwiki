@@ -3,8 +3,8 @@ namespace App\Controller\Admin;
 
 use App\Db\Page;
 use App\Db\User;
-use Bs\ControllerPublic;
-use Bs\Form;
+use Bs\Mvc\ControllerPublic;
+use Bs\Mvc\Form;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Form\Action\Link;

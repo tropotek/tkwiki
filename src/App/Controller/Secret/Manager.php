@@ -3,13 +3,12 @@ namespace App\Controller\Secret;
 
 use App\Db\Secret;
 use App\Db\User;
-use Bs\ControllerPublic;
-use Bs\Table;
+use Bs\Mvc\ControllerPublic;
+use Bs\Mvc\Table;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Uri;
 use Tk\Db;
-use Tk\Db\Filter;
 
 class Manager extends ControllerPublic
 {

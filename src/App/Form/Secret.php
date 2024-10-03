@@ -1,7 +1,7 @@
 <?php
 namespace App\Form;
 
-use Bs\Form;
+use Bs\Mvc\Form;
 use Bs\Traits\SystemTrait;
 use Dom\Template;
 use Tk\Alert;

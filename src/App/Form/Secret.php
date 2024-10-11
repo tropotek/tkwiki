@@ -27,8 +27,8 @@ class Secret extends Form
     {
 
         $tab = 'Details';
-        $this->appendField(new Hidden('secretId'))->setReadonly();
-        $this->appendField(new Hidden('hash'))->setReadonly();
+        //$this->appendField(new Hidden('secretId'))->setReadonly();
+        //$this->appendField(new Hidden('hash'))->setReadonly();
 
         $this->appendField(new Input('name'))
             ->setGroup($tab);

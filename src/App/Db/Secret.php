@@ -23,17 +23,17 @@ class Secret extends Model
      * Page permission values
      * NOTE: Admin users have all permissions at all times
      */
-    const PERM_PRIVATE  = 9;
-    const PERM_STAFF    = 2;
-    const PERM_MEMBER   = 1;
+    const int PERM_PRIVATE  = 9;
+    const int PERM_STAFF    = 2;
+    const int PERM_MEMBER   = 1;
 
-    const PERM_LIST = [
+    const array PERM_LIST = [
         self::PERM_PRIVATE  => 'Private',
         self::PERM_STAFF    => 'Staff',
         self::PERM_MEMBER   => 'Member',
     ];
 
-    const STAFF_PERMS = [
+    const array STAFF_PERMS = [
         self::PERM_STAFF,
         self::PERM_MEMBER,
     ];
@@ -61,7 +61,7 @@ class Secret extends Model
 
     public function save(): void
     {
-        $map = static::getDataMap();
+        $map = self::getDataMap();
 
         $values = $map->getArray($this);
         if ($this->secretId) {
@@ -86,7 +86,7 @@ class Secret extends Model
      */
     public static function getDataMap(): DataMap
     {
-        $map = self::$_MAPS[static::class] ?? null;
+        $map = self::$_MAPS[self::class] ?? null;
         if (!is_null($map)) return $map;
 
         $map = new DataMap();
@@ -105,7 +105,7 @@ class Secret extends Model
         $map->addType(new DateTime('modified'));
         $map->addType(new DateTime('created'));
 
-        self::$_MAPS[static::class] = $map;
+        self::$_MAPS[self::class] = $map;
         return $map;
     }
 
@@ -183,7 +183,7 @@ class Secret extends Model
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
-        if (!empty($filter['userId']) && isset($filter['permission'])) {
+        if (!empty($filter['userId']) && !empty($filter['permission'] ?? '')) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
             $filter->appendWhere('(a.user_id IN :userId OR ');
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
@@ -191,7 +191,7 @@ class Secret extends Model
         } elseif (!empty($filter['userId'])) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
             $filter->appendWhere('a.user_id IN :userId AND ');
-        } elseif (isset($filter['permission'])) {
+        } elseif (!empty($filter['permission'] ?? '')) {
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
             $filter->appendWhere('a.permission IN :permission AND ');
         }
@@ -217,12 +217,11 @@ class Secret extends Model
     public static function findFiltered(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
-
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'a.name LIKE :search OR ';
-            $w .= 'a.url LIKE :search OR ';
-            $w .= 'a.secret_id LIKE :search OR ';
+            $w  = 'LOWER(a.name) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.url) LIKE LOWER(:search) OR ';
+            $w .= 'LOWER(a.secret_id) LIKE LOWER(:search) OR ';
             if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 

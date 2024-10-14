@@ -36,7 +36,7 @@ class Zap extends \Bs\Console\Console
             return self::SUCCESS;
         }
 /*
-        $api_key = "u4fqfffouq612bv9ssnkoqn0ps";
+        $api_key = Config::instance->get('zap.api.secret', '');
         $target = "https://godar.ttek.org/Projects/tkwiki/";
 
         //$zap = new Zapv2('tcp://localhost:8080');

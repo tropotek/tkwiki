@@ -31,7 +31,6 @@ class Manager extends ControllerPublic
             $filter['permission'] = \App\Db\Page::STAFF_PERMS;
         }
         $rows = \App\Db\Page::findViewable($filter);
-
         $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());
 
     }

@@ -38,12 +38,14 @@ class History extends ControllerPublic
         $this->table = new Content();
         $this->table->setOrderBy('-created');
         $this->table->setWikiPage($this->page);
+        $this->table->setLimit(25);
         $this->table->execute();
 
         // Set the table rows
         $filter = $this->table->getDbFilter();
         $filter['pageId'] = $this->page->pageId;
         $rows = \App\Db\Content::findFiltered($filter);
+        vd(Db::getLastStatement()->queryString, Db::getLastStatement()->getTotalRows());
         $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());
     }
 

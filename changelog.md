@@ -5,6 +5,16 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.76 [2024-10-14]:
+-------------------------------
+  - fixed create secret
+  - phpstan lvl 6
+  - fix secret edit page
+  - fix form renderers
+  - Fix secret edit-insert form
+  - Added oauth signin options
+
+
 Ver 8.0.74 [2024-09-25]:
 -------------------------------
   - cleanup config methods

@@ -51,6 +51,7 @@ class Content extends Model
         $map = static::getDataMap();
 
         $values = $map->getArray($this);
+
         if ($this->contentId) {
             $values['content_id'] = $this->contentId;
             Db::update('content', 'content_id', $values);

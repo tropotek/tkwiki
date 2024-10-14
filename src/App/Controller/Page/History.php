@@ -45,7 +45,6 @@ class History extends ControllerPublic
         $filter = $this->table->getDbFilter();
         $filter['pageId'] = $this->page->pageId;
         $rows = \App\Db\Content::findFiltered($filter);
-        vd(Db::getLastStatement()->queryString, Db::getLastStatement()->getTotalRows());
         $this->table->setRows($rows, Db::getLastStatement()->getTotalRows());
     }
 

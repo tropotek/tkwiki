@@ -26,6 +26,7 @@ class Secret extends Form
     public function init(): static
     {
         $tab = 'Details';
+        $this->appendField(new Hidden('hash')); // needed for Htmx insert
 
         $this->appendField(new Input('name'))
             ->setGroup($tab);

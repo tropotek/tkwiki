@@ -138,6 +138,7 @@ jQuery(function($) {
     })
 
     $(document).on('secret-success', function() {
+        console.log();
         // exit if there are errors in the form
         if ($('form .is-invalid', createDialog).length) return;
         let hash = $('#secret_hash', 'form#secret').val();

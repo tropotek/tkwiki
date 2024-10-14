@@ -92,8 +92,8 @@ HTML;
         $t->setText('title', $this->page->title);
         $t->setText('category', $this->page->category);
         $t->setText('permission', $this->page->getPermissionLabel());
-        $t->setText('revision', $this->content->contentId);
-        $t->setText('views', $this->page->views);
+        $t->setText('revision', strval($this->content->contentId));
+        $t->setText('views', strval($this->page->views));
         $t->setText('modified', $this->page->getModified(Date::FORMAT_LONG_DATETIME));
         $t->setText('created', $this->page->getCreated(Date::FORMAT_LONG_DATETIME));
 

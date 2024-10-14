@@ -4,16 +4,16 @@ namespace App\Dom\Modifier;
 use App\Db\Secret;
 use App\Helper\ViewSecret;
 use Bs\Traits\SystemTrait;
-use Dom\Modifier\FilterInterface;
+use Dom\Modifier\ModifierInterface;
 
 /**
  * Convert all secret image modules set in the WYSIWYG editor
  */
-class Secrets extends FilterInterface
+class Secrets extends ModifierInterface
 {
     use SystemTrait;
 
-    function init(\DOMDocument $doc) { }
+    function init(\DOMDocument $doc): void { }
 
     public function executeNode(\DOMElement $node): void
     {

@@ -4,7 +4,7 @@ namespace App\Dom\Modifier;
 use App\Db\Page;
 use App\Db\User;
 use Bs\Traits\SystemTrait;
-use Dom\Modifier\FilterInterface;
+use Dom\Modifier\ModifierInterface;
 
 /**
  * This modifier changes link nodes:
@@ -12,7 +12,7 @@ use Dom\Modifier\FilterInterface;
  *  - Update classes for external links
  *
  */
-class WikiUrl extends FilterInterface
+class WikiUrl extends ModifierInterface
 {
     use SystemTrait;
 
@@ -55,5 +55,5 @@ class WikiUrl extends FilterInterface
         $node->setAttribute('class', $css);
     }
 
-    function init(\DOMDocument $doc) { }
+    function init(\DOMDocument $doc): void { }
 }

@@ -130,7 +130,7 @@ class Secret extends Model
         return self::PERM_LIST[$this->permission] ?? '';
     }
 
-    public static function find(int $id): ?static
+    public static function find(int $id): ?self
     {
         return Db::queryOne("
             SELECT *
@@ -141,7 +141,7 @@ class Secret extends Model
         );
     }
 
-    public static function findByHash(string $hash): ?static
+    public static function findByHash(string $hash): ?self
     {
         $hash = trim($hash);
         if (empty($hash)) return null;
@@ -180,7 +180,7 @@ class Secret extends Model
             $w  = 'LOWER(a.name) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.url) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.secret_id) LIKE LOWER(:search) OR ';
-            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
         if (!empty($filter['userId']) && !empty($filter['permission'] ?? '')) {
@@ -222,7 +222,7 @@ class Secret extends Model
             $w  = 'LOWER(a.name) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.url) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.secret_id) LIKE LOWER(:search) OR ';
-            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
         if (!empty($filter['id'])) {

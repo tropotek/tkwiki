@@ -90,7 +90,7 @@ class MenuItem extends Model
         );
     }
 
-    public static function find(int $id): ?static
+    public static function find(int $id): ?self
     {
         return Db::queryOne("
                 SELECT *
@@ -144,7 +144,7 @@ class MenuItem extends Model
             $filter['search'] = '%' . $filter['search'] . '%';
             $w  = 'LOWER(a.name) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.menu_item_id) LIKE LOWER(:search) OR ';
-            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
         if (!empty($filter['id'])) {

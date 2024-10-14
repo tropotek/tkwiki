@@ -64,7 +64,7 @@ class WikiTest extends Console
             'permission' => Page::PERM_PUBLIC,
         ]);
         foreach ($pages as $i => $page) {
-            $author = User::find($page->userId)->nameFirst;
+            $author = User::find($page->userId)->givenName;
             $canView = $page->canView(null) ? 'Yes' : 'No';
             $canEdit = $page->canEdit(null) ? 'Yes' : 'No';
             $this->getOutput()->writeln("  {$i}. {$page->title} [{$author} - ".Page::PERM_LIST[$page->permission]."] [view: $canView] [edit: $canEdit]");
@@ -92,7 +92,7 @@ class WikiTest extends Console
         $this->getOutput()->writeln("USER: {$user->username} - {$user->type} - {$perms}");
         $perms = match (true) {
             $user->isStaff() => Secret::STAFF_PERMS,
-            $user->isMember() => Secret::PERM_MEMBER,
+            default => Secret::PERM_MEMBER
         };
         $filter = [
             'userId' => $user->userId,
@@ -101,10 +101,10 @@ class WikiTest extends Console
         if ($user->isAdmin()) $filter = [];
         $secrets = Secret::findViewable($filter);
         foreach ($secrets as $i => $secret) {
-            $author = User::find($secret->userId)->nameFirst;
+            $author = User::find($secret->userId)->givenName;
             $canView = $secret->canView($user) ? 'Yes' : 'No';
             $canEdit = $secret->canEdit($user) ? 'Yes' : 'No';
-            $this->getOutput()->writeln("  {$i}. {$secret->title} [{$author} - ".Page::PERM_LIST[$secret->permission]."] [view: $canView] [edit: $canEdit]");
+            $this->getOutput()->writeln("  {$i}. {$secret->name} [{$author} - ".Page::PERM_LIST[$secret->permission]."] [view: $canView] [edit: $canEdit]");
         }
 
     }
@@ -118,7 +118,7 @@ class WikiTest extends Console
         $this->getOutput()->writeln("USER: {$user->username} - {$user->type} - {$perms}");
         $perms = match (true) {
             $user->isStaff() => Page::STAFF_PERMS,
-            $user->isMember() => Page::MEMBER_VIEW_PERMS,
+            default => Page::MEMBER_VIEW_PERMS,
         };
         $filter = [
             'userId' => $user->userId,
@@ -127,7 +127,7 @@ class WikiTest extends Console
         if ($user->isAdmin()) $filter = [];
         $pages = Page::findViewable($filter);
         foreach ($pages as $i => $page) {
-            $author = User::find($page->userId)->nameFirst;
+            $author = User::find($page->userId)->givenName;
             $canView = $page->canView($user) ? 'Yes' : 'No';
             $canEdit = $page->canEdit($user) ? 'Yes' : 'No';
             $this->getOutput()->writeln("  {$i}. {$page->title} [{$author} - ".Page::PERM_LIST[$page->permission]."] [view: $canView] [edit: $canEdit]");
@@ -135,7 +135,7 @@ class WikiTest extends Console
 
     }
 
-    private function setup()
+    private function setup(): void
     {
         // create users
         // - staff / editor
@@ -155,8 +155,8 @@ class WikiTest extends Console
         $editor->username = 'editor';
         $editor->password = Auth::hashPassword('password');
         $editor->email = 'editor@dev.ttek.org';
-        $editor->nameFirst = 'Editor';
-        $editor->nameLast = '...';
+        $editor->givenName = 'Editor';
+        $editor->familyName = '...';
         $editor->timezone = 'Australia/Melbourne';
         $editor->save();
 
@@ -166,8 +166,8 @@ class WikiTest extends Console
         $staff->username = 'staff';
         $staff->password = Auth::hashPassword('password');
         $staff->email = 'staff@dev.ttek.org';
-        $staff->nameFirst = 'Staff';
-        $staff->nameLast = '...';
+        $staff->givenName = 'Staff';
+        $staff->familyName = '...';
         $staff->timezone = 'Australia/Melbourne';
         $staff->save();
 
@@ -176,8 +176,8 @@ class WikiTest extends Console
         $member->username = 'member';
         $member->password = Auth::hashPassword('password');
         $member->email = 'member@dev.ttek.org';
-        $member->nameFirst = 'Member';
-        $member->nameLast = '...';
+        $member->givenName = 'Member';
+        $member->familyName = '...';
         $member->timezone = 'Australia/Melbourne';
         $member->save();
 

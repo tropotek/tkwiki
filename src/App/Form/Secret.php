@@ -25,20 +25,17 @@ class Secret extends Form
 
     public function init(): static
     {
-
         $tab = 'Details';
-        //$this->appendField(new Hidden('secretId'))->setReadonly();
-        //$this->appendField(new Hidden('hash'))->setReadonly();
 
         $this->appendField(new Input('name'))
             ->setGroup($tab);
 
-        /** @var Select $permission */
-        $this->appendField(new Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
+        $this->appendField((new Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
             ->setGroup($tab)
             ->setStrict(true)
             ->setRequired()
-            ->prependOption('-- Select --', '');
+            ->prependOption('-- Select --', '')
+        );
 
         $this->appendField(new Input('url'))
             ->setGroup($tab);

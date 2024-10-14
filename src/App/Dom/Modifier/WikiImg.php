@@ -1,9 +1,9 @@
 <?php
 namespace App\Dom\Modifier;
 
-use Dom\Modifier\FilterInterface;
+use Dom\Modifier\ModifierInterface;
 
-class WikiImg extends FilterInterface
+class WikiImg extends ModifierInterface
 {
 
     protected array $found = [];
@@ -17,6 +17,6 @@ class WikiImg extends FilterInterface
         $node->setAttribute('class', $css);
     }
 
-    function init(\DOMDocument $doc) { }
+    function init(\DOMDocument $doc): void { }
 
 }

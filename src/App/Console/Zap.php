@@ -35,7 +35,7 @@ class Zap extends \Bs\Console\Console
             $output->writeln('The command is already running in another process.');
             return self::SUCCESS;
         }
-
+/*
         $api_key = "u4fqfffouq612bv9ssnkoqn0ps";
         $target = "https://godar.ttek.org/Projects/tkwiki/";
 
@@ -100,7 +100,7 @@ class Zap extends \Bs\Console\Console
         //echo "Alerts (" . count($alerts) . "):\n";
         $output->writeln(print_r($alerts, true));
 
-
+*/
         $output->writeln('');
         $this->writeComment('Complete!!!');
 

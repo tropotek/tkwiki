@@ -2,16 +2,16 @@
 namespace App\Dom\Modifier;
 
 use App\Helper\ViewCategoryList;
-use Dom\Modifier\FilterInterface;
+use Dom\Modifier\ModifierInterface;
 
 /**
  * Convert all page category listing modules set in the WYSIWYG editor.
  * This will display a list of all pages (with permissions) within a category
  */
-class CategoryList extends FilterInterface
+class CategoryList extends ModifierInterface
 {
 
-    function init(\DOMDocument $doc) { }
+    function init(\DOMDocument $doc): void { }
 
     public function executeNode(\DOMElement $node): void
     {

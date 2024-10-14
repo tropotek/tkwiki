@@ -26,23 +26,23 @@ class User extends Model implements UserInterface
      *
      * @todo move all permission functions to app level
      */
-    const PERM_ADMIN            = 0x1; // Admin
-    const PERM_SYSADMIN         = 0x2; // Change system settings
-    const PERM_MANAGE_STAFF     = 0x4; // Manage staff
-    const PERM_MANAGE_MEMBERS   = 0x8; // Manage members
-    //                            0x10; // available
+    const int PERM_ADMIN            = 0x1; // Admin
+    const int PERM_SYSADMIN         = 0x2; // Change system settings
+    const int PERM_MANAGE_STAFF     = 0x4; // Manage staff
+    const int PERM_MANAGE_MEMBERS   = 0x8; // Manage members
+    //                                0x10; // available
 
-    const PERMISSION_LIST = [
+    const array PERMISSION_LIST = [
         self::PERM_ADMIN            => "Admin",
         self::PERM_SYSADMIN         => "Manage Settings",
         self::PERM_MANAGE_STAFF     => "Manage Staff",
         self::PERM_MANAGE_MEMBERS   => "Manage Members",
     ];
 
-    const TYPE_STAFF = 'staff';
-    const TYPE_MEMBER = 'member';
+    const string TYPE_STAFF = 'staff';
+    const string TYPE_MEMBER = 'member';
 
-    const TITLE_LIST = [
+    const array TITLE_LIST = [
         'Mr', 'Mrs', 'Ms', 'Dr',
         'Prof', 'Esq', 'Hon', 'Messrs', 'Mmes',
         'Msgr', 'Rev', 'Jr', 'Sr', 'St'
@@ -186,7 +186,7 @@ class User extends Model implements UserInterface
         return null;
     }
 
-    public static function find(int $userId): ?static
+    public static function find(int $userId): ?self
     {
         return Db::queryOne("
             SELECT *
@@ -210,7 +210,7 @@ class User extends Model implements UserInterface
         );
     }
 
-    public static function findByUsername(string $username): ?static
+    public static function findByUsername(string $username): ?self
     {
         $username = trim($username);
         if(empty($username)) return null;
@@ -224,7 +224,7 @@ class User extends Model implements UserInterface
         );
     }
 
-    public static function findByEmail(string $email): ?static
+    public static function findByEmail(string $email): ?self
     {
         $email = trim($email);
         if(empty($email)) return null;
@@ -238,7 +238,7 @@ class User extends Model implements UserInterface
         );
     }
 
-    public static function findByHash(string $hash): ?static
+    public static function findByHash(string $hash): ?self
     {
         $hash = trim($hash);
         if(empty($hash)) return null;
@@ -266,7 +266,7 @@ class User extends Model implements UserInterface
             $w .= 'LOWER(a.email) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.uid) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.user_id) LIKE LOWER(:search) OR ';
-            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
         if (!empty($filter['id'])) {

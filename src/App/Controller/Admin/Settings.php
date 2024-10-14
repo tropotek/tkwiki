@@ -51,21 +51,24 @@ class Settings extends ControllerPublic
             'permission' => Page::PERM_PUBLIC,
             'publish'  => true
         ], '-modified', 25));
-        $this->form->appendField(new Select('wiki.page.home', $list, 'title', 'pageId'))
+        $this->form->appendField((new Select('wiki.page.home', $list, 'title', 'pageId'))
             ->setGroup($tab)
             ->setLabel('Home Page')
             ->setNotes('Select the default wiki page home content.<br/>Note: you cannot delete a home page, you must reassign it first.')
             ->setRequired()
             ->addCss('select-home')
-            ->prependOption('-- Select Home Page --', '');
+            ->prependOption('-- Select Home Page --', '')
+        );
 
-        $this->form->appendField(new Checkbox('wiki.enable.secret.mod'))
+        $this->form->appendField((new Checkbox('wiki.enable.secret.mod'))
             ->setGroup($tab)
             ->setLabel('Enable Secure Credential Module')
             ->setNotes('Store passwords and secret keys securely and with view/edit permissions')
             ->addOnShowOption(function (Template $template, Option $option, $var) {
                 $option->setName('Enable');
-            });
+            })
+        );
+
 
         $list = $this->getConfig()->get('wiki.templates', []);
         $this->form->appendField(new Select('wiki.default.template', $list))
@@ -115,14 +118,15 @@ class Settings extends ControllerPublic
 
 
         $tab = 'Maintenance';
-        $this->form->appendField(new Checkbox('system.maintenance.enabled'))
+        $this->form->appendField((new Checkbox('system.maintenance.enabled'))
             ->setGroup($tab)
             ->addCss('check-enable')
             ->setLabel('Maintenance Mode Enabled')
             ->setNotes('Enable maintenance mode. Admin users will still have access to the site.')
             ->addOnShowOption(function (Template $template, Option $option, $var) {
                 $option->setName('Enable');
-            });
+            })
+        );
 
         $this->form->appendField(new Textarea('system.maintenance.message'))
             ->setGroup($tab)

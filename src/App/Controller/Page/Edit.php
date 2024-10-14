@@ -38,8 +38,10 @@ class Edit extends ControllerPublic
         $pageId   = intval($_GET['pageId'] ?? 0);
         $pageUrl  = trim($_GET['u'] ?? '');
         $delete   = intval($_GET['del'] ?? 0);
+        /** @var \App\Page $page */
+        $page     = $this->getPage();
 
-        $this->getPage()->setTitle('Edit Page');
+        $page->setTitle('Edit Page');
         if (!Auth::getAuthUser()) {
             Alert::addWarning('You are not logged in.');
             Page::getHomePage()->getUrl()->redirect();
@@ -47,7 +49,7 @@ class Edit extends ControllerPublic
 
         $ref = Uri::create($referrer)->getRelativePath();
         if ($ref != '/pageManager') {
-            $this->getPage()->setCrumbsEnabled(false);
+            $page->setCrumbsEnabled(false);
         }
 
         $this->lock = new Lock(User::getAuthUser());
@@ -121,18 +123,20 @@ class Edit extends ControllerPublic
             ->setRequired()
             ->setGroup($group);
 
-        $this->form->appendField(new InputButton('category'))
+        $this->form->appendField((new InputButton('category'))
             ->setNotes('(Optional) Use page categories to group pages and allow them to show in the category listing widget')
             ->addBtnCss('fa fa-chevron-down')
-            ->setGroup($group);
+            ->setGroup($group)
+        );
 
         /** @var Select $permission */
-        $permission = $this->form->appendField(new Select('permission', array_flip(Page::PERM_LIST)))
+        $permission = $this->form->appendField((new Select('permission', array_flip(Page::PERM_LIST)))
             ->setRequired()
             ->setStrict(true)
             ->setGroup($group)
             ->prependOption('-- Select --', '')
-            ->setNotes('Select who can view/edit/delete this page. <a href="/Wiki_How_To#getting_started" target="_blank" title="Permission help">Permission help</a>');
+            ->setNotes('Select who can view/edit/delete this page. <a href="/Wiki_How_To#getting_started" target="_blank" title="Permission help">Permission help</a>')
+        );
 
         if ($this->page && $this->page->url == Page::getHomePage()->url) {
             $permission->setDisabled();
@@ -154,9 +158,10 @@ class Edit extends ControllerPublic
 
         $group = 'Extra';
         $list = $this->getConfig()->get('wiki.templates', []);
-        $this->form->appendField(new Select('template', $list))
+        $this->form->appendField((new Select('template', $list))
             ->setGroup($group)
-            ->prependOption('-- Site Default --', '');
+            ->prependOption('-- Site Default --', '')
+        );
 
         $this->form->appendField(new Input('keywords'))
             ->setGroup($group);
@@ -256,7 +261,7 @@ class Edit extends ControllerPublic
         $action->setRedirect($url);
     }
 
-    public function doDelete($pageId): void
+    public function doDelete(int $pageId): void
     {
         $page = Page::find($pageId);
         if ($page && $page->canEdit(User::getAuthUser())) {

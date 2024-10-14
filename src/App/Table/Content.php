@@ -82,7 +82,7 @@ class Content extends Table
         $this->wPage->getUrl()->redirect();
     }
 
-    public function setWikiPage(\App\Db\Page $page)
+    public function setWikiPage(\App\Db\Page $page): void
     {
         $this->wPage = $page;
     }

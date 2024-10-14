@@ -61,10 +61,8 @@ class Factory extends \Bs\Factory
             if (!$crumbs instanceof Crumbs) {
                 $crumbs = Crumbs::create();
                 $crumbs->setTrim(5);
-                if (\App\Db\Page::getHomePage()) {
-                    $crumbs->setHomeTitle('<i class="fa fa-home"></i>');
-                    $crumbs->setHomeUrl('/' . \App\Db\Page::getHomePage()->url);
-                }
+                $crumbs->setHomeTitle('<i class="fa fa-home"></i>');
+                $crumbs->setHomeUrl('/' . \App\Db\Page::getHomePage()->url);
                 $crumbs->reset();
                 $_SESSION[$id] = $crumbs;
             }

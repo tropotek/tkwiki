@@ -7,6 +7,7 @@ use App\Db\User;
 use App\Helper\ViewToolbar;
 use App\Util\Pdf;
 use Bs\Mvc\ControllerPublic;
+use Bs\Mvc\PageDomInterface;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -128,12 +129,14 @@ class View extends ControllerPublic
             $template->appendJs($this->content->js);
         }
 
+        /** @var PageDomInterface $page */
+        $page = $this->getPage();
         if ($this->content->keywords) {
-            $this->getPage()->getTemplate()->appendMetaTag('keywords', $this->content->keywords, $this->getPage()->getTemplate()->getTitleElement());
+            $page->getTemplate()->appendMetaTag('keywords', $this->content->keywords, $page->getTemplate()->getTitleElement());
         }
 
         if ($this->content->description) {
-            $this->getPage()->getTemplate()->appendMetaTag('description', $this->content->description, $this->getPage()->getTemplate()->getTitleElement());
+            $page->getTemplate()->appendMetaTag('description', $this->content->description, $page->getTemplate()->getTitleElement());
         }
 
         return $template;

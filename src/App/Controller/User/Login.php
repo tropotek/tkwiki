@@ -86,7 +86,7 @@ class Login extends ControllerAdmin
         $auth->save();
 
         if (!empty($values['remember'] ?? '')) {
-            Remember::rememberMe($auth->authId);
+            Remember::rememberMe($auth->authId, 15);
         } else {
             Remember::forgetMe($auth->authId);
         }

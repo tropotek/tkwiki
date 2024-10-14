@@ -94,11 +94,14 @@ class Page extends Table
             ->setAttr('placeholder', 'Search: name');
 
         $list = \App\Db\Page::getCategoryList();
-        $this->getForm()->appendField(new Select('category', $list))->prependOption('-- Category -- ', '');
+        $this->getForm()->appendField((new Select('category', $list))
+            ->prependOption('-- Category -- ', '')
+        );
 
-        $this->getForm()->appendField(new Select('permission', array_flip(\App\Db\Page::PERM_LIST)))
+        $this->getForm()->appendField((new Select('permission', array_flip(\App\Db\Page::PERM_LIST)))
             ->prependOption('-- Permission -- ', '')
-            ->setStrict(true);
+            ->setStrict(true)
+        );
 
         $list = ['-- Link Status --' => '', 'Linked' => 'n', 'Orphaned' => 'y'];
         $this->getForm()->appendField(new Select('isOrphaned', $list));
@@ -107,14 +110,15 @@ class Page extends Table
         $this->initForm();
 
         // Add Table actions
-        $this->appendAction(Delete::create($rowSelect))
+        $this->appendAction((Delete::create($rowSelect))
             ->addOnDelete(function(Delete $action, array $selected) {
                 $homeId = intval(Registry::instance()->get('wiki.page.home', 1));
                 foreach ($selected as $page_id) {
                     if ($page_id == $homeId) continue;
                     Db::delete('page', compact('page_id'));
                 }
-            });
+            })
+        );
 
         return $this;
     }

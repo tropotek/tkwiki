@@ -11,9 +11,9 @@ use Tk\Db\Filter;
 
 class Search extends ControllerPublic
 {
-    const SID = 'search.terms';
+    const string SID = 'search.terms';
 
-    protected array $rows    = [];
+    protected array  $rows    = [];
     protected string $search = '';
     protected int    $total  = 0;
 
@@ -92,7 +92,7 @@ class Search extends ControllerPublic
 
         $terms = '"'.$this->search.'"';
         $template->setText('terms', $terms);
-        $template->setText('found', $this->total);
+        $template->setText('found', strval($this->total));
 
         $css = <<<CSS
 .wiki-search .search-result h4 {

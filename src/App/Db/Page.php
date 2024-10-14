@@ -19,31 +19,31 @@ class Page extends Model
      * The default tag string used for routes
      * This default/home page url can be looked up in the registry (wiki.page.home)
      */
-    const DEFAULT_TAG = '__default';
+    const string DEFAULT_TAG = '__default';
 
     /**
      * Page permission values
      * NOTE: Admin users have all permissions, authors have all permissions to their pages
      */
-    const PERM_PRIVATE  = 9;
-    const PERM_STAFF    = 2;
-    const PERM_MEMBER   = 1;
-	const PERM_PUBLIC   = 0;
+    const int PERM_PRIVATE  = 9;
+    const int PERM_STAFF    = 2;
+    const int PERM_MEMBER   = 1;
+	const int PERM_PUBLIC   = 0;
 
-    const PERM_LIST = [
+    const array PERM_LIST = [
         self::PERM_PRIVATE   => 'Private',
         self::PERM_STAFF     => 'Staff',
         self::PERM_MEMBER    => 'User',
         self::PERM_PUBLIC    => 'Public',
     ];
 
-    const STAFF_PERMS = [
+    const array STAFF_PERMS = [
         self::PERM_STAFF,
         self::PERM_MEMBER,
         self::PERM_PUBLIC,
     ];
 
-    const MEMBER_VIEW_PERMS = [
+    const array MEMBER_VIEW_PERMS = [
         self::PERM_MEMBER,
         self::PERM_PUBLIC,
     ];
@@ -177,13 +177,13 @@ class Page extends Model
         } catch (\Exception $e) { \Tk\Log::debug($e->__toString()); }
     }
 
-    public static function getHomePage(): static
+    public static function getHomePage(): self
     {
         $homeId = intval(Factory::instance()->getRegistry()->get('wiki.page.home', 1));
         return self::find($homeId);
     }
 
-    public static function findPage(string $url): ?Page
+    public static function findPage(string $url): ?self
     {
         if ($url == self::DEFAULT_TAG) {
             $url = self::getHomePage()->url;
@@ -191,7 +191,7 @@ class Page extends Model
         return self::findByUrl($url);
     }
 
-    public static function find(int $id): ?static
+    public static function find(int $id): ?self
     {
         return Db::queryOne("
             SELECT *
@@ -212,7 +212,7 @@ class Page extends Model
         );
     }
 
-    public static function findByHash(string $hash): ?static
+    public static function findByHash(string $hash): ?self
     {
         $hash = trim($hash);
         if (empty($hash)) return null;
@@ -226,7 +226,7 @@ class Page extends Model
         );
     }
 
-    public static function findByUrl($url): ?static
+    public static function findByUrl(string $url): ?self
     {
         return self::findFiltered(['url' => $url])[0] ?? null;
     }
@@ -243,7 +243,7 @@ class Page extends Model
             $w  = 'LOWER(a.title) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.category) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.page_id) LIKE LOWER(:search) OR ';
-            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
         if (!empty($filter['userId']) && isset($filter['permission'])) {
@@ -308,7 +308,7 @@ class Page extends Model
             $w  = 'LOWER(a.title) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.category) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.page_id) LIKE LOWER(:search) OR ';
-            if ($w) $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
         if (!empty($filter['id'])) {

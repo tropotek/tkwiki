@@ -35,7 +35,7 @@ class Pdf extends Renderer implements DisplayInterface
         $this->initPdf();
     }
 
-    public static function create(string $html, string $title = 'PDF DOCUMENT', string $watermark = ''): static
+    public static function create(string $html, string $title = 'PDF DOCUMENT', string $watermark = ''): self
     {
         return new self($html, $title, $watermark);
     }
@@ -92,7 +92,7 @@ class Pdf extends Renderer implements DisplayInterface
     /**
      * Output the pdf to the browser
      */
-    #[NoReturn] public function output(string $filename = ''): void
+    public function output(string $filename = ''): void
     {
         $this->show();
         if (!$filename)

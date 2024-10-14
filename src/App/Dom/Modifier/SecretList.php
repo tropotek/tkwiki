@@ -3,16 +3,16 @@ namespace App\Dom\Modifier;
 
 use App\Helper\ViewSecretList;
 use App\Db\User;
-use Dom\Modifier\FilterInterface;
+use Dom\Modifier\ModifierInterface;
 
 /**
  * Convert all secret list div modules set in the WYSIWYG editor
  * This will display a list of all secret records the user has permission to see
  */
-class SecretList extends FilterInterface
+class SecretList extends ModifierInterface
 {
 
-    function init(\DOMDocument $doc) { }
+    function init(\DOMDocument $doc): void { }
 
     public function executeNode(\DOMElement $node): void
     {

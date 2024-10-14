@@ -76,9 +76,10 @@ class Secret extends Table
         $this->getForm()->appendField(new Input('search'))
             ->setAttr('placeholder', 'Search: name');
 
-        $this->getForm()->appendField(new Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
+        $this->getForm()->appendField((new Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
             ->prependOption('-- Permission -- ', '')
-            ->setStrict(true);
+            ->setStrict(true)
+        );
 
         $this->getForm()->appendField(new Checkbox('otp', ['otp' => 'y']));
 
@@ -86,7 +87,7 @@ class Secret extends Table
         $this->initForm();
 
         // Add Table actions
-        $this->appendAction(Delete::create($rowSelect))
+        $this->appendAction(Delete::create($rowSelect)
             ->addOnDelete(function(Delete $action, array $selected) {
                 foreach ($selected as $secret_id) {
                     $secret = \App\Db\Secret::find($secret_id);
@@ -94,7 +95,8 @@ class Secret extends Table
                         Db::delete('secret', compact('secret_id'));
                     }
                 }
-            });
+            })
+        );
 
         return $this;
     }

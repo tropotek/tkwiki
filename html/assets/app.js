@@ -155,7 +155,7 @@ let app = function () {
       let path = data.elfinderPath ?? '/media';
       return new tinymceElfinder({
         // connector URL (Use elFinder Demo site's connector for this demo)
-        url: tkConfig.vendorOrgUrl + '/tk-base/assets/js/elfinder/connector.minimal.php?path='+ path,
+        url: tkConfig.baseUrl + '/vendor/ttek/tk-base/assets/js/elfinder/connector.minimal.php?path='+ path,
         // upload target folder hash for this tinyMCE
         uploadTargetHash: 'l1_lw',
         // elFinder dialog node id
@@ -198,7 +198,6 @@ let app = function () {
         return url;
       },
       setup: (editor) => {
-
         // Button to create/insert a page into the wiki
         // See \App\Helper\PageSelect object for more info
         editor.ui.registry.addButton('wikiPage', {
@@ -241,8 +240,10 @@ let app = function () {
       // Full tinymce with elfinder file manager
       $('textarea.mce', this).each(function () {
         let el = $(this);
+        let mceElf = getMceElf(el.data());
         el.tinymce($.extend(mceDefaults, {
-          file_picker_callback : getMceElf(el.data()).browser,
+          file_picker_callback : mceElf.browser,
+          images_upload_handler: mceElf.uploadHandler
         }));
       });
     });

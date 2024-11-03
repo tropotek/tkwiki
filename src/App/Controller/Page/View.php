@@ -25,7 +25,7 @@ class View extends ControllerPublic
 
     public function __construct()
     {
-        $this->page = Page::findPage(Uri::create()->basename());
+        $this->page = Page::findPage(basename(Uri::create()->getPath()));
         // use page template if set
         if ($this->page && !empty($this->page->template)) {
             $this->setPageTemplate($this->page->template);

@@ -227,9 +227,7 @@ let app = function () {
             editor.getBody().setAttribute('spellcheck', true);
           });
         }
-
       },
-
     };
 
     tkRegisterInit(function () {

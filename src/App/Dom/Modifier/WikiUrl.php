@@ -5,6 +5,7 @@ use App\Db\Page;
 use App\Db\User;
 use Bs\Traits\SystemTrait;
 use Dom\Modifier\ModifierInterface;
+use Tk\Uri;
 
 /**
  * This modifier changes link nodes:
@@ -27,7 +28,7 @@ class WikiUrl extends ModifierInterface
 
         if (preg_match('/^page:\/\/(.+)/i', $href, $regs)) {
             $page = Page::findByUrl($regs[1]);
-            $url = new \Tk\Uri('/' . $regs[1]);
+            $url = Uri::create('/' . $regs[1]);
             $node->setAttribute('href', $url->getPath());
 
             if ($page) {
@@ -46,7 +47,7 @@ class WikiUrl extends ModifierInterface
                 $css = $this->removeClass($css, 'wk-page');
             }
         } else if (preg_match('/^http|https|ftp|telnet|gopher|news/i', $href, $regs)) {
-            $url = new \Tk\Uri($node->getAttribute('href'));
+            $url = Uri::create($node->getAttribute('href'));
             if (strtolower(str_replace('www.', '', $url->getHost())) != strtolower(str_replace('www.', '', $_SERVER['HTTP_HOST'])) ) {
                 $css = $this->addClass($css, 'wk-link-external');
                 $node->setAttribute('target', '_blank');

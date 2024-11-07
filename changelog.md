@@ -5,6 +5,11 @@ Tk-Wiki
 
 #CHANGELOG#
 
+Ver 8.0.80 [2024-11-08]:
+-------------------------------
+  - Update date fields for objects
+
+
 Ver 8.0.78 [2024-11-03]:
 -------------------------------
   - Fix elFinder

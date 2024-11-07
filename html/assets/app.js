@@ -191,10 +191,16 @@ let app = function () {
         $(tinymce.activeEditor.targetElm).trigger('save.mce');
       },
       urlconverter_callback : function (url, node, on_save) {
-        let parts = url.split(tkConfig.baseUrl);
-        if (tkConfig.baseUrl && parts.length > 1) {
-          url = tkConfig.baseUrl + parts[1];
+        console.log(url);
+        //let baseUrl = tkConfig.baseUrl;
+        let baseUrl = '';
+        console.log(baseUrl);
+        let parts = url.split(baseUrl);
+        if (baseUrl !== '' && parts.length > 1) {
+          console.log(parts);
+          url = baseUrl + parts[1];
         }
+        console.log(url);
         return url;
       },
       setup: (editor) => {

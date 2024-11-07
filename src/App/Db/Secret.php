@@ -50,13 +50,15 @@ class Secret extends Model
     public string $keys       = '';
     public string $notes      = '';
     public string $hash       = '';
-    public \DateTime $modified;
-    public \DateTime $created;
+
+    public \DateTimeImmutable $modified;
+    public \DateTimeImmutable $created;
 
 
     public function __construct()
     {
-        $this->_TimestampTrait();
+        $this->modified = new \DateTimeImmutable();
+        $this->created  = new \DateTimeImmutable();
     }
 
     public function save(): void
@@ -102,8 +104,8 @@ class Secret extends Model
         $map->addType(new TextEncrypt('keys'));
         $map->addType(new TextEncrypt('notes'));
         $map->addType(new Text('hash'), DataMap::READ);
-        $map->addType(new DateTime('modified'));
-        $map->addType(new DateTime('created'));
+        $map->addType((new DateTime('modified'))->setImmutable(true));
+        $map->addType((new DateTime('created'))->setImmutable(true));
 
         self::$_MAPS[self::class] = $map;
         return $map;

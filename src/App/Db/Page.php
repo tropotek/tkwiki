@@ -62,15 +62,17 @@ class Page extends Model
     public bool   $titleVisible = true;
     public bool   $isOrphaned   = false;
     public string $hash         = '';
-    public \DateTime $modified;
-    public \DateTime $created;
+
+    public \DateTimeImmutable $modified;
+    public \DateTimeImmutable $created;
 
     private ?Content $_content = null;
 
 
     public function __construct()
     {
-        $this->_TimestampTrait();
+        $this->modified = new \DateTimeImmutable();
+        $this->created  = new \DateTimeImmutable();
     }
 
     public function save(): void

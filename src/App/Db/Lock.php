@@ -11,7 +11,7 @@ use Tk\Db;
 class Lock
 {
 
-    const TIMEOUT_SEC = 60*2;    // Default 2 minutes
+    const int TIMEOUT_SEC = 60*2;    // Default 2 minutes
 
     protected User $user;
 

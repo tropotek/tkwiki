@@ -22,12 +22,13 @@ class Content extends Model
     public string $description = '';
     public string $css         = '';
     public string $js          = '';
-    public \DateTime $created;
+
+    public \DateTimeImmutable $created;
 
 
     public function __construct()
     {
-        $this->_CreatedTrait();
+        $this->created  = new \DateTimeImmutable();
         $this->userId = User::getAuthUser()?->userId ?? 0;
     }
 

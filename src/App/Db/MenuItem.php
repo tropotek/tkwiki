@@ -10,9 +10,9 @@ class MenuItem extends Model
 {
     use PageTrait;
 
-    const TYPE_ITEM     = 'item';
-    const TYPE_DROPDOWN = 'dropdown';
-    const TYPE_DIVIDER  = 'divider';
+    const string TYPE_ITEM     = 'item';
+    const string TYPE_DROPDOWN = 'dropdown';
+    const string TYPE_DIVIDER  = 'divider';
 
     public int    $menuItemId = 0;
     public ?int   $parentId   = null;

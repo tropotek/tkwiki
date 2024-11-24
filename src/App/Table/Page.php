@@ -106,11 +106,10 @@ class Page extends Table
         $list = ['-- Link Status --' => '', 'Linked' => 'n', 'Orphaned' => 'y'];
         $this->getForm()->appendField(new Select('isOrphaned', $list));
 
-        // init filter fields for actions to access to the filter values
-        $this->initForm();
 
         // Add Table actions
-        $this->appendAction((Delete::create($rowSelect))
+        $this->appendAction((Delete::create())
+            ->addOnGetSelected([$rowSelect, 'getSelected'])
             ->addOnDelete(function(Delete $action, array $selected) {
                 $homeId = intval(Registry::instance()->get('wiki.page.home', 1));
                 foreach ($selected as $page_id) {

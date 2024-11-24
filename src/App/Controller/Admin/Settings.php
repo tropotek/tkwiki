@@ -152,7 +152,7 @@ class Settings extends ControllerPublic
 
     public function onSubmit(Form $form, SubmitExit $action): void
     {
-        $values = $form->getFieldValues();
+        $values = $form->getFieldValues('/^[^_]/');
         // Sanitize values
         $values['wiki.page.home'] = intval($values['wiki.page.home']);
         $values['system.maintenance.enabled'] = intval(truefalse($values['system.maintenance.enabled']));

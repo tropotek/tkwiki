@@ -32,8 +32,6 @@ class SecretSelect extends Table
         $this->getForm()->appendField(new Input('search'))
             ->setAttr('placeholder', 'Search: id, name');
 
-        // init filter fields for actions to access to the filter values
-        $this->initForm();
 
         return $this;
 

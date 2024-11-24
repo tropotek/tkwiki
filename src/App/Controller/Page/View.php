@@ -53,8 +53,12 @@ class View extends ControllerPublic
             }
         }
 
-        $this->page->views++;
-        $this->page->save();
+        // limit view increments to one per session
+        if (!isset($_SESSION['_views'][$this->page->pageId])) {
+            $this->page->views++;
+            $this->page->save();
+            $_SESSION['_views'][$this->page->pageId] = $this->page->pageId;
+        }
 
         $this->getPage()->setTitle($this->page->title);
         $this->content = $this->page->getContent();
@@ -101,7 +105,7 @@ class View extends ControllerPublic
         $rev = '-' . intval($_GET['contentId'] ?? 'unknown');
 
         $pdf = Pdf::create($this->content->html, $this->page->title);
-        $filename = $this->page->title.$rev.'.pdf';
+        $filename = $this->page->title . $rev . '.pdf';
 
         if (!isset($_GET['isHtml'])) {
             $pdf->output($filename);     // comment this to see html version

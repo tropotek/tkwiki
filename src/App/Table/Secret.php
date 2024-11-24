@@ -83,11 +83,10 @@ class Secret extends Table
 
         $this->getForm()->appendField(new Checkbox('otp', ['otp' => 'y']));
 
-        // init filter fields for actions to access to the filter values
-        $this->initForm();
 
         // Add Table actions
-        $this->appendAction(Delete::create($rowSelect)
+        $this->appendAction(Delete::create()
+            ->addOnGetSelected([$rowSelect, 'getSelected'])
             ->addOnDelete(function(Delete $action, array $selected) {
                 foreach ($selected as $secret_id) {
                     $secret = \App\Db\Secret::find($secret_id);

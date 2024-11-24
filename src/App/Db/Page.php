@@ -248,15 +248,18 @@ class Page extends Model
             $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 
-        if (!empty($filter['userId']) && isset($filter['permission'])) {
+        if (
+            isset($filter['userId']) && is_numeric($filter['userId']) &&
+            isset($filter['permission']) && is_numeric($filter['permission'])
+        ) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
             $filter->appendWhere('(a.user_id IN :userId OR ');
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
             $filter->appendWhere('a.permission IN :permission) AND ');
-        } elseif (!empty($filter['userId'])) {
+        } elseif (isset($filter['userId']) && is_numeric($filter['userId'])) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
             $filter->appendWhere('a.user_id IN :userId AND ');
-        } elseif (isset($filter['permission'])) {
+        } elseif (isset($filter['permission']) && is_numeric($filter['permission'])) {
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
             $filter->appendWhere('a.permission IN :permission AND ');
         }

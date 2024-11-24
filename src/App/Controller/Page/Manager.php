@@ -21,6 +21,7 @@ class Manager extends ControllerPublic
         $this->table = new \App\Table\Page();
         $this->table->setOrderBy('title');
         $this->table->setLimit(25);
+
         $this->table->execute();
 
         // Set the table rows

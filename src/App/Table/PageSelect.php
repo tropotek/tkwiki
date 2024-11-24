@@ -41,9 +41,6 @@ class PageSelect extends Table
         $this->getForm()->appendField(new Input('search'))
             ->setAttr('placeholder', 'Search: id, title, category');
 
-        // init filter fields for actions to access to the filter values
-        $this->initForm();
-
         return $this;
     }
 }

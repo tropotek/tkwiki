@@ -47,7 +47,7 @@ class Login extends ControllerAdmin
             ->setRequired()
             ->setAttr('placeholder', 'Password');
 
-        $this->form->appendField(new Checkbox('remember', ['Remember me' => 'remember']))
+        $this->form->appendField(new Checkbox('remember', ['remember' => 'Remember me']))
             ->setLabel('');
 
         $html = <<<HTML

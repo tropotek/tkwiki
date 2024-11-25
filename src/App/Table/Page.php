@@ -98,12 +98,12 @@ class Page extends Table
             ->prependOption('-- Category -- ', '')
         );
 
-        $this->getForm()->appendField((new Select('permission', array_flip(\App\Db\Page::PERM_LIST)))
+        $this->getForm()->appendField((new Select('permission', \App\Db\Page::PERM_LIST))
             ->prependOption('-- Permission -- ', '')
             ->setStrict(true)
         );
 
-        $list = ['-- Link Status --' => '', 'Linked' => 'n', 'Orphaned' => 'y'];
+        $list = ['' => '-- Link Status --', 'n' => 'Linked', 'y' => 'Orphaned'];
         $this->getForm()->appendField(new Select('isOrphaned', $list));
 
 

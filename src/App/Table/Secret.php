@@ -76,12 +76,12 @@ class Secret extends Table
         $this->getForm()->appendField(new Input('search'))
             ->setAttr('placeholder', 'Search: name');
 
-        $this->getForm()->appendField((new Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
+        $this->getForm()->appendField((new Select('permission', \App\Db\Secret::PERM_LIST))
             ->prependOption('-- Permission -- ', '')
             ->setStrict(true)
         );
 
-        $this->getForm()->appendField(new Checkbox('otp', ['otp' => 'y']));
+        $this->getForm()->appendField(new Checkbox('otp', ['y' => 'otp']));
 
 
         // Add Table actions

@@ -130,7 +130,7 @@ class Edit extends ControllerPublic
         );
 
         /** @var Select $permission */
-        $permission = $this->form->appendField((new Select('permission', array_flip(Page::PERM_LIST)))
+        $permission = $this->form->appendField((new Select('permission', Page::PERM_LIST))
             ->setRequired()
             ->setStrict(true)
             ->setGroup($group)
@@ -142,11 +142,11 @@ class Edit extends ControllerPublic
             $permission->setDisabled();
         }
 
-        $this->form->appendField(new Checkbox('titleVisible', ['Show Page Title' => '1']))
+        $this->form->appendField(new Checkbox('titleVisible', ['1' => 'Show Page Title']))
             ->setLabel('')
             ->setGroup($group);
 
-        $this->form->appendField(new Checkbox('publish', ['Publish' => '1']))
+        $this->form->appendField(new Checkbox('publish', ['1' => 'Publish']))
             ->setLabel('')
             ->setGroup($group);
 
@@ -157,7 +157,7 @@ class Edit extends ControllerPublic
 
 
         $group = 'Extra';
-        $list = $this->getConfig()->get('wiki.templates', []);
+        $list = array_flip($this->getConfig()->get('wiki.templates', []));
         $this->form->appendField((new Select('template', $list))
             ->setGroup($group)
             ->prependOption('-- Site Default --', '')

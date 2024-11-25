@@ -31,7 +31,7 @@ class Secret extends Form
         $this->appendField(new Input('name'))
             ->setGroup($tab);
 
-        $this->appendField((new Select('permission', array_flip(\App\Db\Secret::PERM_LIST)))
+        $this->appendField((new Select('permission', \App\Db\Secret::PERM_LIST))
             ->setGroup($tab)
             ->setStrict(true)
             ->setRequired()
@@ -52,7 +52,7 @@ class Secret extends Form
             ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
 
 
-        $this->appendField(new Checkbox('publish', ['Publish' => '1']))
+        $this->appendField(new Checkbox('publish', ['1' => 'Publish']))
             ->setLabel('')
             ->setGroup($tab);
 

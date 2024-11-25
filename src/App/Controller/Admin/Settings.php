@@ -7,6 +7,7 @@ use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\Form;
 use Dom\Template;
 use Tk\Alert;
+use Tk\Collection;
 use Tk\Form\Action\Link;
 use Tk\Form\Action\SubmitExit;
 use Tk\Form\Field\Checkbox;
@@ -51,7 +52,8 @@ class Settings extends ControllerPublic
             'permission' => Page::PERM_PUBLIC,
             'publish'  => true
         ], '-modified', 25));
-        $this->form->appendField((new Select('wiki.page.home', $list, 'title', 'pageId'))
+        $list = Collection::toSelectList($list, 'pageId', 'title');
+        $this->form->appendField((new Select('wiki.page.home', $list))
             ->setGroup($tab)
             ->setLabel('Home Page')
             ->setNotes('Select the default wiki page home content.<br/>Note: you cannot delete a home page, you must reassign it first.')
@@ -69,13 +71,11 @@ class Settings extends ControllerPublic
             })
         );
 
-
-        $list = $this->getConfig()->get('wiki.templates', []);
+        $list = array_flip($this->getConfig()->get('wiki.templates', []));
         $this->form->appendField(new Select('wiki.default.template', $list))
             ->setGroup($tab)
             ->setRequired()
             ->setNotes('Select the sites default template');
-
 
         $tab = 'Email';
         $this->form->appendField(new Input('site.email'))
@@ -89,7 +89,6 @@ class Settings extends ControllerPublic
             ->setLabel('Email Signature')
             ->setNotes('Set the email signature to appear at the footer of all system emails.')
             ->addCss('mce-min');
-
 
         $tab = 'Metadata';
         $this->form->appendField(new Input('system.meta.keywords'))
@@ -115,7 +114,6 @@ class Settings extends ControllerPublic
             ->setLabel('Global CSS Styles')
             ->setNotes('You can omit the &lt;style&gt; tags here')
             ->addCss('code')->setAttr('data-mode', 'css');
-
 
         $tab = 'Maintenance';
         $this->form->appendField((new Checkbox('system.maintenance.enabled'))

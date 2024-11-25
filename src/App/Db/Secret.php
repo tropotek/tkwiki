@@ -266,7 +266,7 @@ class Secret extends Model
             $filter->appendWhere('a.url = :url AND ');
         }
 
-        if (!empty($filter['publish'])) {
+        if (is_bool(truefalse($filter['publish'] ?? null))) {
             $filter['publish'] = truefalse($filter['publish']);
             $filter->appendWhere('a.publish = :publish AND ');
         }

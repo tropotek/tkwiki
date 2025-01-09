@@ -4,6 +4,7 @@ namespace App\Controller\Page;
 use App\Db\User;
 use App\Table\Page;
 use Bs\Mvc\ControllerPublic;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Db;
 
@@ -14,9 +15,9 @@ class Manager extends ControllerPublic
 
     public function doDefault(): void
     {
+        Breadcrumbs::reset();
         $this->getPage()->setTitle('Page Manager');
         $this->setAccess(User::PERM_SYSADMIN);
-        $this->getCrumbs()->reset();
 
         $this->table = new \App\Table\Page();
         $this->table->setOrderBy('title');

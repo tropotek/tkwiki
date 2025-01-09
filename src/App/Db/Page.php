@@ -185,6 +185,12 @@ class Page extends Model
         return self::find($homeId);
     }
 
+    public static function isHomePage(Page $page): bool
+    {
+        $homeId = intval(Factory::instance()->getRegistry()->get('wiki.page.home', 1));
+        return $page->pageId == $homeId;
+    }
+
     public static function findPage(string $url): ?self
     {
         if ($url == self::DEFAULT_TAG) {

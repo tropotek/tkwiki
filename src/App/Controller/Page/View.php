@@ -8,6 +8,7 @@ use App\Helper\ViewToolbar;
 use App\Util\Pdf;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\PageDomInterface;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -58,6 +59,10 @@ class View extends ControllerPublic
             $this->page->views++;
             $this->page->save();
             $_SESSION['_views'][$this->page->pageId] = $this->page->pageId;
+        }
+
+        if (Page::isHomePage($this->page)) {
+            Breadcrumbs::reset();
         }
 
         $this->getPage()->setTitle($this->page->title);

@@ -5,18 +5,16 @@ use App\Console\Cron;
 use App\Console\Test;
 use App\Console\TestData;
 use App\Console\WikiTest;
-use App\Console\Zap;
 use App\Dom\Modifier\CategoryList;
 use App\Dom\Modifier\SecretList;
 use App\Dom\Modifier\Secrets;
 use App\Dom\Modifier\WikiImg;
 use App\Dom\Modifier\WikiUrl;
-use Bs\Ui\Crumbs;
+use Bs\Ui\Breadcrumbs;
 use Dom\Modifier;
 use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tk\Config;
-use Tk\System;
 
 class Factory extends \Bs\Factory
 {
@@ -52,23 +50,11 @@ class Factory extends \Bs\Factory
         return $this->get('templateModifier');
     }
 
-    public function getCrumbs(): ?Crumbs
+    public function initBreadcrumbs(): Breadcrumbs
     {
-        $id = 'breadcrumbs.public';
-        if (!$this->has($id)) {
-            $crumbs = $_SESSION[$id] ?? null;
-
-            if (!$crumbs instanceof Crumbs) {
-                $crumbs = Crumbs::create();
-                $crumbs->setTrim(5);
-                $crumbs->setHomeTitle('<i class="fa fa-home"></i>');
-                $crumbs->setHomeUrl('/' . \App\Db\Page::getHomePage()->url);
-                $crumbs->reset();
-                $_SESSION[$id] = $crumbs;
-            }
-            $this->set($id, $crumbs);
-        }
-        return $this->get($id);
+        $crumbs = Breadcrumbs::init();
+        Breadcrumbs::setHome('/' . \App\Db\Page::getHomePage()->url, '<i class="fa fa-home"></i>');
+        return $crumbs;
     }
 
     public function getConsole(): Application

@@ -4,6 +4,7 @@ namespace App\Controller\Page;
 use App\Db\Page;
 use App\Db\User;
 use Bs\Mvc\ControllerPublic;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Db;
 use Tk\Db\Filter;
@@ -19,8 +20,8 @@ class Search extends ControllerPublic
 
     public function doDefault(): void
     {
+        Breadcrumbs::reset();
         $this->getPage()->setTitle('Search Results');
-        $this->getCrumbs()->reset();
 
         $this->search = trim($_POST['s'] ?? $_SESSION[self::SID] ?? '');
         if (isset($_POST['s'])) {

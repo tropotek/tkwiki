@@ -5,6 +5,7 @@ use App\Db\Secret;
 use App\Db\User;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\Table;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Uri;
@@ -18,8 +19,9 @@ class Manager extends ControllerPublic
 
     public function doDefault(): void
     {
+        Breadcrumbs::reset();
         $this->getPage()->setTitle('Secret Manager');
-        $this->getCrumbs()->reset();
+
         if (
             !User::getAuthUser()?->isStaff() ||
             !$this->getRegistry()->get('wiki.enable.secret.mod', false)

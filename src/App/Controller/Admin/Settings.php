@@ -5,6 +5,7 @@ use App\Db\Page;
 use App\Db\User;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\Form;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Collection;
@@ -25,11 +26,11 @@ class Settings extends ControllerPublic
 
     public function doDefault(): void
     {
+        Breadcrumbs::reset();
         $this->getPage()->setTitle('Edit Settings');
         $this->setAccess(User::PERM_SYSADMIN);
 
         $this->getRegistry()->save();
-        $this->getCrumbs()->reset();
 
         $this->form = new Form();
 

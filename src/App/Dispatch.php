@@ -2,7 +2,6 @@
 namespace App;
 
 use Bs\Listener\RememberHandler;
-use Bs\Listener\CrumbsHandler;
 use Bs\Listener\MaintenanceHandler;
 
 class Dispatch extends \Bs\Dispatch
@@ -23,7 +22,6 @@ class Dispatch extends \Bs\Dispatch
     {
         parent::httpInit();
 
-        $this->getDispatcher()->addSubscriber(new CrumbsHandler());
         $this->getDispatcher()->addSubscriber(new MaintenanceHandler());
         $this->getDispatcher()->addSubscriber(new RememberHandler());
     }

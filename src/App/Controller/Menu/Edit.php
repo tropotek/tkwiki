@@ -6,6 +6,7 @@ use App\Db\Page;
 use App\Db\User;
 use App\Helper\PageSelect;
 use Bs\Mvc\ControllerPublic;
+use Bs\Ui\Breadcrumbs;
 use Bs\Ui\Dialog;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,9 +31,9 @@ class Edit extends ControllerPublic
                 return $this->doDelete();
         }
 
+        Breadcrumbs::reset();
         $this->getPage()->setTitle('Edit Menu');
         $this->setAccess(User::PERM_SYSADMIN);
-        $this->getCrumbs()->reset();
 
         return null;
     }

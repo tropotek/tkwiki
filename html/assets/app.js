@@ -240,10 +240,12 @@ let app = function () {
       $('textarea.mce', this).each(function () {
         let el = $(this);
         let mceElf = getMceElf(el.data());
-        el.tinymce($.extend(mceDefaults, {
+
+        let cfg = $.extend(mceDefaults, {
           file_picker_callback : mceElf.browser,
-          images_upload_handler: mceElf.uploadHandler
-        }));
+          images_upload_handler: mceElf.uploadHandler,
+        });
+        el.tinymce(cfg);
       });
     });
 

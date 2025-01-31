@@ -33,7 +33,7 @@ class Edit extends ControllerPublic
 
         Breadcrumbs::reset();
         $this->getPage()->setTitle('Edit Menu');
-        $this->setAccess(User::PERM_SYSADMIN);
+        $this->setUserAccess(User::PERM_SYSADMIN);
 
         return null;
     }

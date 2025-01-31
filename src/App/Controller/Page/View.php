@@ -23,7 +23,6 @@ class View extends ControllerPublic
     protected ?ViewToolbar $toolbar  = null;
 
 
-
     public function __construct()
     {
         $this->page = Page::findPage(basename(Uri::create()->getPath()));
@@ -49,7 +48,7 @@ class View extends ControllerPublic
             }
         } else {
             if (!$this->page->canView(User::getAuthUser())) {
-                Alert::addWarning('You do not have permission to view the page: `' . $this->page->title . '`');
+                Alert::addWarning('You do not have permission to view the requested page');
                 Page::getHomePage()->getUrl()->redirect();
             }
         }

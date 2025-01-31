@@ -28,7 +28,7 @@ class Settings extends ControllerPublic
     {
         Breadcrumbs::reset();
         $this->getPage()->setTitle('Edit Settings');
-        $this->setAccess(User::PERM_SYSADMIN);
+        $this->setUserAccess(User::PERM_SYSADMIN);
 
         $this->getRegistry()->save();
 

@@ -10,6 +10,7 @@ use App\Helper\SecretSelect;
 use Bs\Auth;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\Form;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Form\Action\Submit;
@@ -49,7 +50,8 @@ class Edit extends ControllerPublic
 
         $ref = Uri::create($referrer)->getRelativePath();
         if ($ref != '/pageManager') {
-            $page->setCrumbsEnabled(false);
+            Breadcrumbs::popCrumb();
+            //$page->setCrumbsEnabled(false);
         }
 
         $this->lock = new Lock(User::getAuthUser());

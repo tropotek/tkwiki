@@ -17,7 +17,7 @@ class Manager extends ControllerPublic
     {
         Breadcrumbs::reset();
         $this->getPage()->setTitle('Page Manager');
-        $this->setAccess(User::PERM_SYSADMIN);
+        $this->setUserAccess(User::PERM_SYSADMIN);
 
         $this->table = new \App\Table\Page();
         $this->table->setOrderBy('title');

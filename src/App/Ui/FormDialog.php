@@ -33,6 +33,7 @@ use Dom\Template;
  *    $template->setAttr('modelBtn', 'data-bs-toggle', 'modal');
  *    $template->setAttr('modelBtn', 'data-bs-target', '#'.$this->dialog->getId());
  *
+ * @deprecated Upgrade all dialogs to HTMX dialogs (See the tktask project)
  */
 class FormDialog extends Dialog
 {

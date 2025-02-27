@@ -59,7 +59,7 @@ class Contact extends ControllerPublic
 
         if ($form->hasErrors()) return;
 
-        $message = $this->getFactory()->createMessage();
+        $message = $this->getFactory()->createMailMessage();
         $message->addTo($form->getFieldValue('email'));
         $message->setSubject($this->getRegistry()->getSiteName() . ' Contact Request');
         $content = <<<HTML

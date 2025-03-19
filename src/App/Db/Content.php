@@ -3,14 +3,12 @@ namespace App\Db;
 
 use App\Db\Traits\PageTrait;
 use App\Db\Traits\UserTrait;
-use Bs\Traits\CreatedTrait;
 use Tk\Db;
 use Tk\Db\Filter;
 use Tk\Db\Model;
 
 class Content extends Model
 {
-    use CreatedTrait;
     use UserTrait;
     use PageTrait;
 

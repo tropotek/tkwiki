@@ -2,7 +2,6 @@
 namespace App\Db;
 
 use App\Db\Traits\UserTrait;
-use Bs\Traits\TimestampTrait;
 use Tk\DataMap\DataMap;
 use Tk\DataMap\Db\Boolean;
 use Tk\DataMap\Db\DateTime;
@@ -17,7 +16,6 @@ use OTPHP\TOTP;
 class Secret extends Model
 {
     use UserTrait;
-    Use TimestampTrait;
 
     /**
      * Page permission values

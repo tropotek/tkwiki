@@ -5,14 +5,12 @@ use App\Factory;
 use Dom\Template;
 use Tk\Uri;
 use App\Db\Traits\UserTrait;
-use Bs\Traits\TimestampTrait;
 use Tk\Db;
 use Tk\Db\Filter;
 use Tk\Db\Model;
 
 class Page extends Model
 {
-    use TimestampTrait;
     use UserTrait;
 
     /**

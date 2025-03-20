@@ -4,7 +4,6 @@
 
 jQuery(function ($) {
   // Init page javascript functions
-  tkbase.initSugar();
   tkbase.initDialogConfirm();
   tkbase.initTkInputLock();
   tkbase.initDataToggle();
@@ -146,57 +145,12 @@ let app = function () {
    *   Custom plugins: https://stackoverflow.com/questions/21779730/custom-plugin-in-custom-directory-for-tinymce-jquery-plugin
    */
   let initTinymce = function () {
-    if (typeof tinymce === "undefined") {
-      console.warn('Plugin not loaded: jquery.tinymce');
-      return;
-    }
+    if (typeof tinymce === "undefined") return;
 
-    function getMceElf(data) {
-      let path = data.elfinderPath ?? '/media';
-      return new tinymceElfinder({
-        // connector URL (Use elFinder Demo site's connector for this demo)
-        url: tkConfig.baseUrl + '/vendor/ttek/tk-base/assets/js/elfinder/connector.minimal.php?path='+ path,
-        // upload target folder hash for this tinyMCE
-        uploadTargetHash: 'l1_lw',
-        // elFinder dialog node id
-        nodeId: 'elfinder'
-      });
-    }
-
-    // Default base tinymce options
-    let mceDefaults = {
-      height: 700,
-      plugins: [
-        'advlist', 'save', 'autolink', 'lists', 'link', 'anchor', 'image', 'media', 'charmap', 'preview',
-        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-        'insertdatetime', 'media', 'table', 'help', 'wordcount', 'codesample'
-      ],
-      toolbar1:
-        'save wikiPage wikiSecret | bold italic strikethrough | blocks | alignleft aligncenter ' +
-        'alignright alignjustify | bullist numlist outdent indent | codesample link image media | removeformat code fullscreen',
-      content_css: [
-        '//cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
-        tkConfig.baseUrl + '/html/assets/app.css'
-      ],
-      content_style: 'body {padding: 15px;}',
-      //contextmenu: 'link image template inserttable | cell row column deletetable',
-      contextmenu: false,
-      image_advtab: true,
-      statusbar: false,
-      extended_valid_elements: 'span[*],i[*],em[*],b[*],a[*],div[*],img[*],input[*],textarea[*],select[*]',
-      //content_security_policy: "default-src 'self'",
-
+    let cfg = {
       save_onsavecallback: () => {
         $('#page-save', tinymce.activeEditor.formElement).trigger('click');
         $(tinymce.activeEditor.targetElm).trigger('save.mce');
-      },
-      urlconverter_callback : function (url, node, on_save) {
-        let baseUrl = tkConfig.baseUrl;
-        let parts = url.split(baseUrl);
-        if (baseUrl !== '' && parts.length > 1) {
-          url = baseUrl + parts[1];
-        }
-        return url;
       },
       setup: (editor) => {
         // Button to create/insert a page into the wiki
@@ -231,23 +185,7 @@ let app = function () {
       },
     };
 
-    tkRegisterInit(function () {
-      // Tiny MCE with only the default editing no upload
-      //   functionality with elfinder
-      $('textarea.mce-min', this).tinymce({});
-
-      // Full tinymce with elfinder file manager
-      $('textarea.mce', this).each(function () {
-        let el = $(this);
-        let mceElf = getMceElf(el.data());
-
-        let cfg = $.extend(mceDefaults, {
-          file_picker_callback : mceElf.browser,
-          images_upload_handler: mceElf.uploadHandler,
-        });
-        el.tinymce(cfg);
-      });
-    });
+    tkbase.initTinymce(cfg);
 
   };  // end initTinymce()
 

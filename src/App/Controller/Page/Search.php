@@ -68,8 +68,8 @@ class Search extends ControllerPublic
             $rpt->setText('link', $page->getUrl());
 
             $rpt->setText('description', 'No Content.');
-            $rpt->setText('date', $page->getCreated()->format(\Tk\Date::FORMAT_MED_DATE));
-            $rpt->setText('time', $page->getCreated()->format('H:i'));
+            $rpt->setText('date', $page->created->format(\Tk\Date::FORMAT_MED_DATE));
+            $rpt->setText('time', $page->created->format('H:i'));
 
             if ($page->getContent()) {
                 $description = $page->getContent()->description;
@@ -80,8 +80,8 @@ class Search extends ControllerPublic
 
                 $rpt->setHtml('description', htmlentities($description));
                 $rpt->setText('author', $page->getUser()->nameShort);
-                $rpt->setText('date', $page->getContent()->getCreated()->format(\Tk\Date::FORMAT_MED_DATE));
-                $rpt->setText('time', $page->getContent()->getCreated()->format('H:i'));
+                $rpt->setText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));
+                $rpt->setText('time', $page->getContent()->created->format('H:i'));
                 if (trim($page->getContent()->keywords)) {
                     $rpt->setText('keywords', $page->getContent()->keywords);
                     $rpt->setVisible('keywords');

@@ -218,9 +218,9 @@ th a,
 td a {
   display: inline-block;
 }
-th a {
-  padding-right: 18px;
-  position: relative;
+th a.desc,
+th a.asc {
+  padding-right: 1.5rem;
 }
 th a:before,
 th a:after {

@@ -1,6 +1,6 @@
 Tk-Wiki
 =======
-`Copyright (C) 2005 Michael Mifsud`
+`Copyright (C) 2005 Tropotek`
 
 
 #CHANGELOG#

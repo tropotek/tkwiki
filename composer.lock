@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "061b8f9f0f477651fa2dac43d690071a",
+    "content-hash": "2d5fd8814cd722227ca521adec666047",
     "packages": [
         {
             "name": "components/font-awesome",
@@ -191,6 +191,65 @@
                 "url": "https://unpkg.com/htmx.org/dist/htmx.min.js"
             },
             "type": "library"
+        },
+        {
+            "name": "khanamiryan/qrcode-detector-decoder",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/khanamiryan/php-qrcode-detector-decoder.git",
+                "reference": "7e0cbfa8490c715b1acbadc30bb89b4ca534e033"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/khanamiryan/php-qrcode-detector-decoder/zipball/7e0cbfa8490c715b1acbadc30bb89b4ca534e033",
+                "reference": "7e0cbfa8490c715b1acbadc30bb89b4ca534e033",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5 | ^8.0 | ^9.0",
+                "rector/rector": "^1.0.4",
+                "symplify/easy-coding-standard": "^11.0",
+                "vimeo/psalm": "^4.24"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/Common/customFunctions.php"
+                ],
+                "psr-4": {
+                    "Zxing\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT",
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ashot Khanamiryan",
+                    "email": "a.khanamiryan@gmail.com",
+                    "homepage": "https://github.com/khanamiryan",
+                    "role": "Developer"
+                }
+            ],
+            "description": "QR code decoder / reader",
+            "homepage": "https://github.com/khanamiryan/php-qrcode-detector-decoder/",
+            "keywords": [
+                "barcode",
+                "qr",
+                "zxing"
+            ],
+            "support": {
+                "issues": "https://github.com/khanamiryan/php-qrcode-detector-decoder/issues",
+                "source": "https://github.com/khanamiryan/php-qrcode-detector-decoder/tree/master"
+            },
+            "time": "2024-05-27T18:40:23+00:00"
         },
         {
             "name": "mpdf/mpdf",
@@ -4518,7 +4577,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": {
+        "khanamiryan/qrcode-detector-decoder": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

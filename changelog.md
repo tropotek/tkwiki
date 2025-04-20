@@ -1,6 +1,5 @@
-Tk-Wiki
+TkWiki
 =======
-`Copyright (C) 2005 Tropotek`
 
 
 #CHANGELOG#

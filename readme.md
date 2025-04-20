@@ -6,11 +6,14 @@ __Author:__ Tropotek <http://www.tropotek.com/>
 A WIKI/CMS that is easy to use for people that want a website to store info fast.
 Perfect for projects that require online documentation, and can be edited by teams.
 
+
 __Features:__
 - The ability to add CSS and Javascript within each page.
 - Create/link pages within the WYSIWYG editor.
 - Edit the nav menu within the wiki
 - Bootstrap 5+ basic template
+- Save 'Secret' site access details for website and share them within groups
+- QR-Code reader for generating One Time Password (OTP) for shared Secrets
 
 ## Contents
 

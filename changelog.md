@@ -4,6 +4,11 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.92 [2025-04-21]:
+-------------------------------
+  - Added QR code reader
+
+
 Ver 8.0.90 [2025-04-20]:
 -------------------------------
   - Added qr-code reader/scanner

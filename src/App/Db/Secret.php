@@ -61,9 +61,7 @@ class Secret extends Model
 
     public function save(): void
     {
-        $map = self::getDataMap();
-
-        $values = $map->getArray($this);
+        $values = self::getDataMap()->getArray($this);
         if ($this->secretId) {
             $values['secret_id'] = $this->secretId;
             Db::update('secret', 'secret_id', $values);

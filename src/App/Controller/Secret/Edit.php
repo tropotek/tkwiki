@@ -74,6 +74,16 @@ class Edit extends ControllerPublic
     <div class="card-header" var="title"><i class="fa fa-users"></i> </div>
     <div class="card-body" var="content"></div>
   </div>
+
+  <div hx-get="/component/qrcodeReader" hx-trigger="load" hx-swap="outerHTML"></div>
+
+<script>
+  jQuery(function($) {
+      $(document).on('qrcode-copy', function (e, code) {
+          $('#secret_otp').val(code);
+      });
+  });
+</script>
 </div>
 HTML;
         return $this->loadTemplate($html);

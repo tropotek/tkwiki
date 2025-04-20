@@ -12,6 +12,8 @@ use Tk\Form\Action\Submit;
 use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Hidden;
 use Tk\Form\Field\Input;
+use Tk\Form\Field\InputButton;
+use Tk\Form\Field\InputGroup;
 use Tk\Form\Field\Password;
 use Tk\Form\Field\Select;
 use Tk\Form\Field\Textarea;
@@ -73,9 +75,15 @@ class SecretEdit extends \Dom\Renderer\Renderer
             ->setGroup($tab)
             ->addFieldCss('col-sm-6');
 
-        $this->form->appendField(new Input('otp'))
+        $this->form->appendField((new InputButton('otp', '<i class="fas fa-qrcode"></i>'))
+            ->setBtnAttr([
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#'.QrcodeReader::CONTAINER_ID,
+            ])
+            ->addBtnCss('border-light-subtle is-dialog')
             ->setGroup($tab)
-            ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
+            ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>')
+        );
 
 //        $this->form->appendField(new Checkbox('publish', ['1' => 'Publish']))
 //            ->setLabel('')
@@ -158,7 +166,7 @@ class SecretEdit extends \Dom\Renderer\Renderer
 
         $html = <<<HTML
 <div>
-  <div class="modal fade" var="dialog" aria-hidden="true">
+  <div class="modal fade" var="dialog" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -169,6 +177,8 @@ class SecretEdit extends \Dom\Renderer\Renderer
       </div>
     </div>
   </div>
+
+  <div hx-get="/component/qrcodeReader" hx-trigger="load" hx-swap="outerHTML"></div>
 
 <script>
   jQuery(function($) {
@@ -184,6 +194,11 @@ class SecretEdit extends \Dom\Renderer\Renderer
         }
     });
 
+    $(document).on('qrcode-copy', function (e, code) {
+      $('[name=otp]', form).val(code);
+      $(dialog).modal('show');
+    });
+
     // reload page after successfull submit
     $(document).on('tkForm:afterSubmit', function(e) {
         if (!$(e.detail.elt).is(form)) return;
@@ -192,6 +207,7 @@ class SecretEdit extends \Dom\Renderer\Renderer
 
     // reset form fields
     $(dialog).on('show.bs.modal', function(e) {
+        if ($(this).data('refresh') === false) return;
         const url = new URL(baseUrl);
         if ($(e.relatedTarget).data('secretId')) {
             url.searchParams.set('secretId', $(e.relatedTarget).data('secretId'));

@@ -125,7 +125,6 @@ class SecretSelect extends \Dom\Renderer\Renderer
   <div hx-get="/component/secretEdit" hx-trigger="load" hx-swap="outerHTML"></div>
 
 <script>
-//htmx.logAll();
   jQuery(function($) {
     const secretDialog = '#{$selectDialogId}';
     const createDialog = '#{$createDialogId}';

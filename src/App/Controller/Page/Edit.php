@@ -122,7 +122,7 @@ class Edit extends ControllerPublic
 
         $this->form->appendField((new InputButton('category'))
             ->setNotes('(Optional) Use page categories to group pages and allow them to show in the category listing widget')
-            ->addBtnCss('fa fa-chevron-down')
+            ->addBtnCss('fa fa-chevron-down border-light-subtle')
             ->setGroup($group)
         );
 

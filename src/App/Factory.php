@@ -63,7 +63,6 @@ class Factory extends \Bs\Factory
             $app = parent::getConsole();
             // Setup App Console Commands
             $app->add(new Cron());
-            //$app->add(new Zap());
             if (Config::isDev()) {
                 $app->add(new WikiTest());
                 $app->add(new TestData());

@@ -1,6 +1,7 @@
 <?php
 namespace App\Form;
 
+use App\Component\QrcodeReader;
 use Bs\Mvc\Form;
 use Bs\Traits\SystemTrait;
 use Dom\Template;
@@ -11,6 +12,7 @@ use Tk\Form\Action\SubmitExit;
 use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Hidden;
 use Tk\Form\Field\Input;
+use Tk\Form\Field\InputButton;
 use Tk\Form\Field\Password;
 use Tk\Form\Field\Select;
 use Tk\Form\Field\Textarea;
@@ -51,10 +53,20 @@ class Secret extends Form
             ->setGroup($tab)
             ->addFieldCss('col-sm-6');
 
-        $this->appendField(new Input('otp'))
-            ->setGroup($tab)
-            ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
+//        $this->appendField(new Input('otp'))
+//            ->setGroup($tab)
+//            ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
 
+
+        $this->form->appendField((new InputButton('otp', '<i class="fas fa-qrcode"></i>'))
+            ->setBtnAttr([
+                'data-bs-toggle' => 'modal',
+                'data-bs-target' => '#'.QrcodeReader::CONTAINER_ID,
+            ])
+            ->addBtnCss('border-light-subtle')
+            ->setGroup($tab)
+            ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>')
+        );
 
         $this->appendField(new Checkbox('publish', ['1' => 'Publish']))
             ->setLabel('')
@@ -124,14 +136,6 @@ class Secret extends Form
             $this->setAttr('hx-select', '#'.$this->form->getId());
             $this->removeAttr('action');
         }
-
-        // Setup field group widths with bootstrap classes
-        $this->getField('permission')->addFieldCss('col-sm-6');
-        $this->getField('name')->addFieldCss('col-sm-6');
-        $this->getField('username')->addFieldCss('col-sm-6');
-        $this->getField('password')->addFieldCss('col-sm-6');
-        $this->getField('keys')->setAttr('style', 'height: 20em;');
-        $this->getField('notes')->setAttr('style', 'height: 20em;');
 
         $renderer = $this->getRenderer();
         $renderer?->addFieldCss('mb-3');

@@ -2,14 +2,7 @@
 namespace App\Component;
 
 use App\Db\User;
-use Bs\Mvc\Form;
 use Dom\Template;
-use Tk\Form\Action\Link;
-use Tk\Form\Action\Submit;
-use Tk\Form\Field\Hidden;
-use Tk\Form\Field\Input;
-use Tk\Form\Field\Password;
-use Tk\Form\Field\Select;
 use Tk\Uri;
 use Zxing\QrReader;
 
@@ -55,8 +48,6 @@ class QrcodeReader extends \Dom\Renderer\Renderer
             $template->setVisible('qr-image-preview');
         }
 
-        //$template->appendTemplate('content', );
-
         return $template;
     }
 
@@ -78,7 +69,7 @@ class QrcodeReader extends \Dom\Renderer\Renderer
           <h4 class="modal-title">QR-Code Reader</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body" var="content">
+        <div class="modal-body">
             <p>Past or select an image to read the QR code</p>
             <div class="text-center qr-image mt-2 mb-2" id="qr-reader-wrapper">
                 <img src="#" id="qr-image-preview" style="min-width: 50%;" choice="qr-image-preview" />

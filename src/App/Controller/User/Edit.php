@@ -79,7 +79,7 @@ class Edit extends ControllerAdmin
         $list = Collection::listCombine(User::TITLE_LIST);
         $this->form->appendField((new Select('title', $list))
             ->setGroup($group)
-            ->prependOption('', '')
+            ->prependOption('')
         );
 
         $this->form->appendField(new Input('givenName'))

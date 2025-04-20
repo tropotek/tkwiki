@@ -131,7 +131,7 @@ class Edit extends ControllerPublic
             ->setRequired()
             ->setStrict(true)
             ->setGroup($group)
-            ->prependOption('-- Select --', '')
+            ->prependOption('-- Select --')
             ->setNotes('Select who can view/edit/delete this page. <a href="/Wiki_How_To#getting_started" target="_blank" title="Permission help">Permission help</a>')
         );
 
@@ -157,7 +157,7 @@ class Edit extends ControllerPublic
         $list = array_flip($this->getConfig()->get('wiki.templates', []));
         $this->form->appendField((new Select('template', $list))
             ->setGroup($group)
-            ->prependOption('-- Site Default --', '')
+            ->prependOption('-- Site Default --')
         );
 
         $this->form->appendField(new Input('keywords'))

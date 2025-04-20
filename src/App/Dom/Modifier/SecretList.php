@@ -1,8 +1,8 @@
 <?php
 namespace App\Dom\Modifier;
 
-use App\Helper\ViewSecretList;
 use App\Db\User;
+use App\Ui\ViewSecretList;
 use Dom\Modifier\ModifierInterface;
 
 /**

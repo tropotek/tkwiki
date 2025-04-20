@@ -60,7 +60,7 @@ class Settings extends ControllerPublic
             ->setNotes('Select the default wiki page home content.<br/>Note: you cannot delete a home page, you must reassign it first.')
             ->setRequired()
             ->addCss('select-home')
-            ->prependOption('-- Select Home Page --', '')
+            ->prependOption('-- Select Home Page --')
         );
 
         $this->form->appendField((new Checkbox('wiki.enable.secret.mod'))

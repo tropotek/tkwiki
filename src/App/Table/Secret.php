@@ -77,7 +77,7 @@ class Secret extends Table
             ->setAttr('placeholder', 'Search: name');
 
         $this->getForm()->appendField((new Select('permission', \App\Db\Secret::PERM_LIST))
-            ->prependOption('-- Permission -- ', '')
+            ->prependOption('-- Permission -- ')
             ->setStrict(true)
         );
 

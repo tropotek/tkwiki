@@ -94,16 +94,12 @@ class QrcodeReader extends \Dom\Renderer\Renderer
     const dialog = '#{$this->getDialogId()}';
     const baseUrl = '{$baseUrl}';
 
-
     $(document).on('htmx:afterSettle', dialog, function(e) {
         let code = $('#qr-image-preview', dialog).data('code');
         $('#fid-qr-code', dialog).val(code);
         if (code) {
             $('.btn-copy', dialog).removeClass('disabled');
         }
-
-        // TODO: reset all dialog elements
-
     });
 
     $(dialog).on('show.bs.modal', function(e) {

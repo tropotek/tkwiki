@@ -5,7 +5,6 @@ use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use JetBrains\PhpStorm\NoReturn;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use Tk\Config;

@@ -95,11 +95,11 @@ class Page extends Table
 
         $list = \App\Db\Page::getCategoryList();
         $this->getForm()->appendField((new Select('category', $list))
-            ->prependOption('-- Category -- ', '')
+            ->prependOption('-- Category -- ')
         );
 
         $this->getForm()->appendField((new Select('permission', \App\Db\Page::PERM_LIST))
-            ->prependOption('-- Permission -- ', '')
+            ->prependOption('-- Permission -- ')
             ->setStrict(true)
         );
 

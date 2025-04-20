@@ -1,5 +1,5 @@
 <?php
-namespace App\Helper;
+namespace App\Ui;
 
 use App\Db\User;
 use Bs\Traits\SystemTrait;

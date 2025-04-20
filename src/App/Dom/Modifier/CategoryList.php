@@ -1,7 +1,7 @@
 <?php
 namespace App\Dom\Modifier;
 
-use App\Helper\ViewCategoryList;
+use App\Ui\ViewCategoryList;
 use Dom\Modifier\ModifierInterface;
 
 /**

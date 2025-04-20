@@ -46,7 +46,7 @@ class Profile extends ControllerAdmin
         $this->form->appendField((new Select('title', $list))
             ->setGroup($tab)
             ->setLabel('Title')
-            ->prependOption('', '')
+            ->prependOption('')
         );
 
         $this->form->appendField(new Input('givenName'))
@@ -91,7 +91,7 @@ class Profile extends ControllerAdmin
         $this->form->appendField(new Link('cancel', Factory::instance()->getBackUrl()));
 
         // Load form with object values
-        $load = $this->form->unmapModel($this->user);
+        $load = $this->user->unmapForm();
         $load['perm'] = array_keys(
             array_filter(
                 User::PERMISSION_LIST,
@@ -108,8 +108,8 @@ class Profile extends ControllerAdmin
     public function onSubmit(Form $form, SubmitExit $action): void
     {
         // set object values from fields
-        $form->mapModel($this->user);
-        $form->mapModel($this->user->getAuth());
+        $this->user->mapForm($form->getFieldValues());
+        $this->user->getAuth()->mapForm($form->getFieldValues());
 
         if ($form->getField('currentPass') && $form->getFieldValue('currentPass')) {
             if (!password_verify($form->getFieldValue('currentPass'), $this->user->getAuth()->password)) {

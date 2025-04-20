@@ -4,7 +4,7 @@ namespace App\Controller\Page;
 use App\Db\Content;
 use App\Db\Page;
 use App\Db\User;
-use App\Helper\ViewToolbar;
+use App\Ui\ViewToolbar;
 use App\Util\Pdf;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\PageDomInterface;

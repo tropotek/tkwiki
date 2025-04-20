@@ -9,6 +9,7 @@ use Tk\Form\Action\Link;
 use Tk\Form\Action\Submit;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Textarea;
+use Tk\Mail\Mailer;
 use Tk\Uri;
 
 /**
@@ -76,7 +77,7 @@ Phone: {phone}<br/>
 HTML;
         $message->setContent($content);
         $message->replace($form->getFieldValues());
-        $this->getFactory()->getMailGateway()->send($message);
+        Mailer::instance()->send($message);
 
         Alert::addSuccess('Message Sent successfully');
         $action->setRedirect(Uri::create());

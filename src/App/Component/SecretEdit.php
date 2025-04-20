@@ -1,32 +1,27 @@
 <?php
+
 namespace App\Component;
 
-use App\Db\Client;
-use App\Db\ClientContact;
 use App\Db\Secret;
 use App\Db\User;
 use Bs\Mvc\Form;
 use Dom\Template;
 use Tk\Form\Action\Link;
 use Tk\Form\Action\Submit;
-use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Hidden;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\InputButton;
-use Tk\Form\Field\InputGroup;
 use Tk\Form\Field\Password;
 use Tk\Form\Field\Select;
-use Tk\Form\Field\Textarea;
-use Tk\Log;
 use Tk\Uri;
 
 class SecretEdit extends \Dom\Renderer\Renderer
 {
     const string CONTAINER_ID = 'secret-edit-dialog';
 
-    protected ?Form   $form     = null;
-    protected array   $hxEvents = [];
-    protected ?Secret $secret   = null;
+    protected ?Form $form = null;
+    protected array $hxEvents = [];
+    protected ?Secret $secret = null;
 
 
     public function doDefault(): ?Template
@@ -60,7 +55,7 @@ class SecretEdit extends \Dom\Renderer\Renderer
             ->setStrict(true)
             ->setRequired()
             ->addFieldCss('col-sm-6')
-            ->prependOption('-- Select --', '')
+            ->prependOption('-- Select --')
         );
 
         $this->form->appendField(new Input('url'))
@@ -78,26 +73,12 @@ class SecretEdit extends \Dom\Renderer\Renderer
         $this->form->appendField((new InputButton('otp', '<i class="fas fa-qrcode"></i>'))
             ->setBtnAttr([
                 'data-bs-toggle' => 'modal',
-                'data-bs-target' => '#'.QrcodeReader::CONTAINER_ID,
+                'data-bs-target' => '#' . QrcodeReader::CONTAINER_ID,
             ])
             ->addBtnCss('border-light-subtle is-dialog')
             ->setGroup($tab)
             ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>')
         );
-
-//        $this->form->appendField(new Checkbox('publish', ['1' => 'Publish']))
-//            ->setLabel('')
-//            ->setGroup($tab);
-
-//        $tab = 'Extra';
-//        $this->form->appendField(new Textarea('keys'))
-//            ->setGroup($tab)
-//            ->setAttr('style', 'height: 20em;');
-//
-//        $this->form->appendField(new Textarea('notes'))
-//            ->setGroup($tab)
-//            ->setAttr('style', 'height: 20em;');
-
 
         $this->form->appendField(new Link('cancel', Uri::create('#')))
             ->setAttr('data-bs-dismiss', 'modal')
@@ -163,6 +144,7 @@ class SecretEdit extends \Dom\Renderer\Renderer
     public function __makeTemplate(): ?Template
     {
         $baseUrl = Uri::create()->toString();
+        $qrDialog = QrcodeReader::CONTAINER_ID;
 
         $html = <<<HTML
 <div>
@@ -182,9 +164,10 @@ class SecretEdit extends \Dom\Renderer\Renderer
 
 <script>
   jQuery(function($) {
-    const dialog = '#{$this->getDialogId()}';
-    const form   = '#{$this->form->getId()}';
-    const baseUrl = '{$baseUrl}';
+    const qrDialog = '#{$qrDialog}';
+    const dialog   = '#{$this->getDialogId()}';
+    const form     = '#{$this->form->getId()}';
+    const baseUrl  = '{$baseUrl}';
 
     // reload init form on load
     $(document).on('htmx:afterSettle', function(e) {
@@ -194,8 +177,12 @@ class SecretEdit extends \Dom\Renderer\Renderer
         }
     });
 
+    // QR reader dialog events
     $(document).on('qrcode-copy', function (e, code) {
       $('[name=otp]', form).val(code);
+    });
+    $(document).on('hide.bs.modal', qrDialog, function(e) {
+      // re-open edit on qr dialog close
       $(dialog).modal('show');
     });
 

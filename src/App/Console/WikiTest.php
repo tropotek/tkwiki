@@ -191,7 +191,7 @@ class WikiTest extends Console
         $cn = new Content();
         $cn->userId = $editor->userId;
         $cn->pageId = $p->pageId;
-        $cn->html = sprintf('<p>Editor Staff Page</p>');
+        $cn->html = '<p>Editor Staff Page</p>';
         $cn->save();
 
         $p = new Page();
@@ -202,7 +202,7 @@ class WikiTest extends Console
         $cn = new Content();
         $cn->userId = $editor->userId;
         $cn->pageId = $p->pageId;
-        $cn->html = sprintf('<p>Editor Member Page</p>');
+        $cn->html = '<p>Editor Member Page</p>';
         $cn->save();
 
         $p = new Page();
@@ -213,7 +213,7 @@ class WikiTest extends Console
         $cn = new Content();
         $cn->userId = $editor->userId;
         $cn->pageId = $p->pageId;
-        $cn->html = sprintf('<p>Editor Public Page</p>');
+        $cn->html = '<p>Editor Public Page</p>';
         $cn->save();
 
         $p = new Page();
@@ -224,7 +224,7 @@ class WikiTest extends Console
         $cn = new Content();
         $cn->userId = $editor->userId;
         $cn->pageId = $p->pageId;
-        $cn->html = sprintf('<p>Editor Private Page</p>');
+        $cn->html = '<p>Editor Private Page</p>';
         $cn->save();
 
 
@@ -237,7 +237,7 @@ class WikiTest extends Console
         $cn = new Content();
         $cn->userId = $staff->userId;
         $cn->pageId = $p->pageId;
-        $cn->html = sprintf('<p>Staff Staff Page</p>');
+        $cn->html = ('<p>Staff Staff Page</p>');
         $cn->save();
 
         $p = new Page();
@@ -248,7 +248,7 @@ class WikiTest extends Console
         $cn = new Content();
         $cn->userId = $staff->userId;
         $cn->pageId = $p->pageId;
-        $cn->html = sprintf('<p>Staff Member Page</p>');
+        $cn->html = ('<p>Staff Member Page</p>');
         $cn->save();
 
         $p = new Page();
@@ -259,7 +259,7 @@ class WikiTest extends Console
         $cn = new Content();
         $cn->userId = $staff->userId;
         $cn->pageId = $p->pageId;
-        $cn->html = sprintf('<p>Staff Public Page</p>');
+        $cn->html = ('<p>Staff Public Page</p>');
         $cn->save();
 
         $p = new Page();
@@ -270,7 +270,7 @@ class WikiTest extends Console
         $cn = new Content();
         $cn->userId = $staff->userId;
         $cn->pageId = $p->pageId;
-        $cn->html = sprintf('<p>Staff Private Page</p>');
+        $cn->html = ('<p>Staff Private Page</p>');
         $cn->save();
 
         // create secrets to test

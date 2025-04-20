@@ -38,7 +38,7 @@ class Secret extends Form
             ->setStrict(true)
             ->setRequired()
             ->addFieldCss('col-sm-6')
-            ->prependOption('-- Select --', '')
+            ->prependOption('-- Select --')
         );
 
         $this->appendField(new Input('url'))

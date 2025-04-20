@@ -3,7 +3,7 @@ namespace App;
 
 use App\Controller\Menu\View;
 use App\Db\User;
-use App\Helper\Navigation;
+use App\Ui\Navigation;
 use Bs\Auth;
 use Bs\Ui\Breadcrumbs;
 use Bs\Ui\Dialog;

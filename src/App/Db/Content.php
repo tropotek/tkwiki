@@ -27,13 +27,13 @@ class Content extends Model
     public function __construct()
     {
         $this->created  = new \DateTimeImmutable();
-        $this->userId = User::getAuthUser()?->userId ?? 0;
+        $this->userId = User::getAuthUser()->userId ?? 0;
     }
 
     public static function cloneContent(Content $src): Content
     {
         $dst = new self();
-        $dst->userId = User::getAuthUser()?->userId ?? 0;
+        $dst->userId = User::getAuthUser()->userId ?? 0;
 
         $dst->pageId      = $src->pageId;
         $dst->html        = $src->html;

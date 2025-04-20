@@ -96,7 +96,7 @@ class Pdf extends Renderer implements DisplayInterface
     {
         $this->show();
         if (!$filename)
-            $filename = \Tk\Uri::create()->basename() . '.pdf';
+            $filename = basename(\Tk\Uri::create()->getPath()) . '.pdf';
 
         header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1
         header('Pragma: no-cache'); // HTTP 1.0
@@ -111,7 +111,7 @@ class Pdf extends Renderer implements DisplayInterface
     public function getPdfAttachment(string $filename = ''): string
     {
         if (!$filename)
-            $filename = \Tk\Uri::create()->basename() . '.pdf';
+            $filename = basename(\Tk\Uri::create()->getPath()) . '.pdf';
         return $this->mpdf->Output($filename, Destination::STRING_RETURN);
     }
 

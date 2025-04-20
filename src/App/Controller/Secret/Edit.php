@@ -39,7 +39,7 @@ class Edit extends ControllerPublic
         $this->secret->userId = User::getAuthUser()->userId;
         if ($hash) {
             $this->secret = Secret::findByHash($hash);
-            if (!$this->secret) {
+            if (is_null($this->secret)) {
                 throw new Exception("cannot find object hash {$hash}");
             }
         }

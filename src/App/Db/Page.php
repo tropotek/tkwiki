@@ -170,7 +170,7 @@ class Page extends Model
             foreach ($nodeList as $node) {
                 $regs = [];
                 if (preg_match('/^page:\/\/(.+)/i', $node->getAttribute('href'), $regs)) {
-                    if (!isset($regs[1]) || $page->url == $regs[1]) continue;
+                    if ($page->url == $regs[1]) continue;
                     self::insertLinkByUrl($page->pageId, $regs[1]);
                 }
             }
@@ -413,13 +413,13 @@ class Page extends Model
         $linked = self::findByUrl($url);
         if (!$linked || self::linkExists($page_id, $linked->pageId)) return 0;
         $linked_id = $linked->pageId;
-        return Db::insertIgnore('links', compact('page_id', 'linked_id'));
+        return (int)Db::insertIgnore('links', compact('page_id', 'linked_id'));
     }
 
     public static function insertLink(int $page_id, int $linked_id): int
     {
         if (self::linkExists($page_id, $linked_id)) return 0;
-        return Db::insertIgnore('links', compact('page_id', 'linked_id'));
+        return (int)Db::insertIgnore('links', compact('page_id', 'linked_id'));
     }
 
     public static function deleteLinkByPageId(int $page_id): bool

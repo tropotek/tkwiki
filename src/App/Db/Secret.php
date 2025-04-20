@@ -114,6 +114,7 @@ class Secret extends Model
      */
     public function genOtpCode(): string
     {
+        if (empty($this->otp)) return '';
         $code = '';
         try {
             $otp = TOTP::create($this->otp);

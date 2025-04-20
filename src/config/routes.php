@@ -73,6 +73,15 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Controller\Admin\Settings::class, 'doDefault']);
 
 
+    // Components
+    $routes->add('com-page-select', '/component/pageSelect')
+        ->controller([\App\Component\PageSelect::class, 'doDefault']);
+    $routes->add('com-secret-select', '/component/secretSelect')
+        ->controller([\App\Component\SecretSelect::class, 'doDefault']);
+    $routes->add('com-secret-edit', '/component/secretEdit')
+        ->controller([\App\Component\SecretEdit::class, 'doDefault']);
+
+
     // API calls (Returns JSON response)
     $routes->add('api-lock-refresh', '/api/lock/refresh')
         ->controller([\App\Api\Page::class, 'doRefreshLock'])

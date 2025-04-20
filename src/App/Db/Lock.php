@@ -21,7 +21,7 @@ class Lock
         $this->user = $user;
     }
 
-    static function create(User $user = null): Lock
+    static function create(?User $user = null): Lock
     {
         return new Lock($user);
     }

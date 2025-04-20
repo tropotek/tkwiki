@@ -152,6 +152,9 @@ let app = function () {
         $('#page-save', tinymce.activeEditor.formElement).trigger('click');
         $(tinymce.activeEditor.targetElm).trigger('save.mce');
       },
+      toolbar1:
+        'save wikiPage wikiSecret | blocks | bold italic strikethrough | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | link image media | removeformat code fullscreen',
       setup: (editor) => {
         // Button to create/insert a page into the wiki
         // See \App\Helper\PageSelect object for more info
@@ -159,7 +162,8 @@ let app = function () {
           icon: 'addtag',
           tooltip: 'Add/Insert Wiki Page',
           onAction: function(_) {
-            $('#page-select-dialog').modal('show');
+            //$('#page-select-dialog').modal('show');
+            $('#page-select').modal('show');
           }
         });
 
@@ -170,7 +174,7 @@ let app = function () {
             icon: 'lock',
             tooltip: 'Add/Insert Secret Content',
             onAction: function (_) {
-              $('#secret-select-dialog').modal('show');
+              $('#secret-select').modal('show');
             }
           });
 

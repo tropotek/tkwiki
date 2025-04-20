@@ -5,8 +5,6 @@ use App\Db\Content;
 use App\Db\Lock;
 use App\Db\Page;
 use App\Db\User;
-use App\Helper\PageSelect;
-use App\Helper\SecretSelect;
 use Bs\Auth;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\Form;
@@ -29,9 +27,6 @@ class Edit extends ControllerPublic
     protected ?Page    $page     = null;
     protected ?Content $content  = null;
     protected ?Lock    $lock     = null;
-
-    protected ?PageSelect   $pageSelect   = null;
-    protected ?SecretSelect $secretSelect = null;
 
     public function doDefault(): void
     {
@@ -191,17 +186,12 @@ class Edit extends ControllerPublic
 
 
         $load = array_merge(
-            $this->form->unmapModel($this->content),
-            $this->form->unmapModel($this->page)
+            $this->content->unmapForm(),
+            $this->page->unmapForm()
         );
         $this->form->setFieldValues($load);
 
         $this->form->execute($_POST);
-
-        $this->pageSelect = new PageSelect();
-        if ($this->getRegistry()->get('wiki.enable.secret.mod', false)) {
-            $this->secretSelect = new SecretSelect();
-        }
 
     }
 
@@ -224,12 +214,11 @@ class Edit extends ControllerPublic
             $form->addFieldError('permission', "Select a valid page permission");
         }
 
-        $form->mapModel($this->page);
-        $form->mapModel($this->content);
+        $this->page->mapForm($values);
+        $this->content->mapForm($values);
 
         $form->addFieldErrors($this->page->validate());
         $form->addFieldErrors($this->content->validate());
-
 
         if ($form->hasErrors()) {
             Alert::addError('Form contains errors.');
@@ -294,15 +283,19 @@ class Edit extends ControllerPublic
         $this->form->getField('description')->addFieldCss('col-sm-6');
         $template->appendTemplate('content', $this->form->show());
 
-        $template->appendBodyTemplate($this->pageSelect->show());
-        if (!is_null($this->secretSelect)) {
-            $template->appendBodyTemplate($this->secretSelect->show());
+        if ($this->getRegistry()->get('wiki.enable.secret.mod', false)) {
+            $template->setVisible('secret-select');
         }
 
-        // Autocomplete js
+        // js props
         $jsPageId = json_encode($this->page->pageId);
+        $pageDialogId = \App\Component\PageSelect::CONTAINER_ID;
+        $secretDialogId = \App\Component\SecretSelect::CONTAINER_ID;
+
         $js = <<<JS
 jQuery(function($) {
+    let pageDialog = '#{$pageDialogId}';
+    let secretDialog = '#{$secretDialogId}';
     let pageId = $jsPageId;
     let cache = {};
     let input = $('[name=category]');
@@ -341,7 +334,7 @@ jQuery(function($) {
     });
 
     // page select event
-    $(document).on('selected.ps.modal', '#page-select-dialog', function(e, title, url, pageId) {
+    $(document).on('selected.ps.modal', pageDialog, function(e, title, url, pageId) {
         const editor = tinymce.activeEditor;
         let attrs = {
           href: 'page://' + url,
@@ -355,7 +348,7 @@ jQuery(function($) {
     });
 
     // category select event
-    $(document).on('catSelect.ps.modal', '#page-select-dialog', function(e, category, attrs) {
+    $(document).on('catSelect.ps.modal', pageDialog, function(e, category, attrs) {
         const editor = tinymce.activeEditor;
         editor.insertContent(editor.dom.createHTML('div', attrs,
             editor.dom.encode('{Category List: ' + category + '}'))
@@ -363,7 +356,7 @@ jQuery(function($) {
     });
 
     // secret select event
-    $(document).on('selected.ss.modal', '#secret-select-dialog', function(e, hash, name) {
+    $(document).on('selected.ss.modal', secretDialog, function(e, hash, name) {
         const editor = tinymce.activeEditor;
         let linkAttrs = {
           class: 'wk-secret',
@@ -372,10 +365,7 @@ jQuery(function($) {
           src: tkConfig.baseUrl + '/html/assets/img/secretbg.png'
         };
         editor.insertContent(editor.dom.createHTML('img', linkAttrs));
-    })
-
-    // on editor save event
-
+    });
 
     // on window unload event
     $(document).data('pageUpdated', false);
@@ -412,6 +402,9 @@ JS;
     <div class="card-header" var="title"><i class="fa fa-users"></i> </div>
     <div class="card-body wk-page-edit" var="content"></div>
   </div>
+
+  <div hx-get="/component/pageSelect" hx-trigger="load" hx-swap="outerHTML"></div>
+  <div hx-get="/component/secretSelect" hx-trigger="load" hx-swap="outerHTML" choice="secret-select"></div>
 </div>
 HTML;
         return $this->loadTemplate($html);

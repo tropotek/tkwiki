@@ -35,17 +35,21 @@ class Secret extends Form
             ->setGroup($tab)
             ->setStrict(true)
             ->setRequired()
+            ->addFieldCss('col-sm-6')
             ->prependOption('-- Select --', '')
         );
 
         $this->appendField(new Input('url'))
-            ->setGroup($tab);
+            ->setGroup($tab)
+            ->addFieldCss('col-sm-6');
 
         $this->appendField(new Input('username'))
-            ->setGroup($tab);
+            ->setGroup($tab)
+            ->addFieldCss('col-sm-6');
 
         $this->appendField(new Password('password'))
-            ->setGroup($tab);
+            ->setGroup($tab)
+            ->addFieldCss('col-sm-6');
 
         $this->appendField(new Input('otp'))
             ->setGroup($tab)
@@ -58,10 +62,12 @@ class Secret extends Form
 
         $tab = 'Extra';
         $this->appendField(new Textarea('keys'))
-            ->setGroup($tab);
+            ->setGroup($tab)
+            ->setAttr('style', 'height: 20em;');
 
         $this->appendField(new Textarea('notes'))
-            ->setGroup($tab);
+            ->setGroup($tab)
+            ->setAttr('style', 'height: 20em;');
 
 
         if ($this->isHtmx()) {
@@ -78,7 +84,7 @@ class Secret extends Form
     {
         $this->init();
 
-        $load = $this->unmapModel($this->getSecret());
+        $load = $this->getSecret()->unmapForm();
         $this->setFieldValues($load);
 
         return parent::execute($values);
@@ -86,7 +92,7 @@ class Secret extends Form
 
     public function onSubmit(Form $form, Submit $action): void
     {
-        $form->mapModel($this->getSecret());
+        $this->getSecret()->mapForm($form->getFieldValues());
 
         $form->addFieldErrors($this->getSecret()->validate());
         if ($form->hasErrors()) {

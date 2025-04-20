@@ -68,7 +68,7 @@ class Search extends ControllerPublic
             $rpt->setText('link', $page->getUrl());
 
             $rpt->setText('description', 'No Content.');
-            $rpt->setText('date', $page->created->format(\Tk\Date::FORMAT_MED_DATE));
+            $rpt->setText('date', $page->created->format(\Tk\Date::FORMAT_LONG_DATE));
             $rpt->setText('time', $page->created->format('H:i'));
 
             if ($page->getContent()) {
@@ -80,7 +80,7 @@ class Search extends ControllerPublic
 
                 $rpt->setHtml('description', htmlentities($description));
                 $rpt->setText('author', $page->getUser()->nameShort);
-                $rpt->setText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_MED_DATE));
+                $rpt->setText('date', $page->getContent()->created->format(\Tk\Date::FORMAT_LONG_DATE));
                 $rpt->setText('time', $page->getContent()->created->format('H:i'));
                 if (trim($page->getContent()->keywords)) {
                     $rpt->setText('keywords', $page->getContent()->keywords);

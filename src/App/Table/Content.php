@@ -78,7 +78,7 @@ class Content extends Table
         $content = \App\Db\Content::cloneContent($revision);
         $content->save();
 
-        Alert::addSuccess('Page reverted to version ' . $revision->contentId . ' [' . $revision->created->format(\Tk\Date::FORMAT_SHORT_DATETIME) . ']');
+        Alert::addSuccess('Page reverted to version ' . $revision->contentId . ' [' . $revision->created->format(\Tk\Date::FORMAT_LONG_DATE) . ']');
         $this->wPage->getUrl()->redirect();
     }
 

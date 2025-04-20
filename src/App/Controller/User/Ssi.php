@@ -55,8 +55,8 @@ class Ssi extends ControllerAdmin
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $settings[$oAuth]['endpointToken']);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, [
                 'client_id' => $settings[$oAuth]['clientId'],
@@ -66,7 +66,12 @@ class Ssi extends ControllerAdmin
                 'grant_type' => 'authorization_code',
                 'scope' => $settings[$oAuth]['scope']]
             );
-            $data = json_decode(curl_exec($ch), true);
+            $result = curl_exec($ch);
+            if ($result === false) {
+                Alert::addError("Invalid login token");
+                Uri::create('/login')->redirect();
+            }
+            $data = json_decode((string)$result, true);
 
             if(!$data || !isset($data['access_token'])) {
                 Alert::addError("Invalid login token");
@@ -75,10 +80,15 @@ class Ssi extends ControllerAdmin
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $settings[$oAuth]['endpointScope']);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer '.$data['access_token']]);
-            $data = json_decode(curl_exec($ch), true);
+            $result = curl_exec($ch);
+            if ($result === false) {
+                Alert::addError("Invalid login token");
+                Uri::create('/login')->redirect();
+            }
+            $data = json_decode((string)$result, true);
 
             if(!$data || !isset($data[$settings[$oAuth]['emailIdentifier']])) {
                 Alert::addError("Invalid user data");
@@ -144,7 +154,7 @@ class Ssi extends ControllerAdmin
             // Update users login data
             $auth = $user->getAuth();
             $auth->lastLogin = Date::create('now', $auth->timezone ?: null);
-            $auth->sessionId = session_id();
+            $auth->sessionId = (string)session_id();
             $auth->save();
 
             // redirect to user home

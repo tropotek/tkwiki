@@ -47,7 +47,7 @@ class Edit extends ControllerAdmin
         $this->user->type = $type;
         if ($userId) {
             $this->user = User::find($userId);
-            if (!$this->user) {
+            if (is_null($this->user)) {
                 throw new Exception('Invalid User ID: ' . $userId);
             }
         }
@@ -124,7 +124,7 @@ class Edit extends ControllerAdmin
         $this->form->appendField(new SubmitExit('save', [$this, 'onSubmit']));
         $this->form->appendField(new Link('cancel', $this->getBackUrl()));
 
-        $load = $this->form->unmapModel($this->user);
+        $load = $this->user->unmapForm();
         if ($this->type == User::TYPE_STAFF) {
             $load['perm'] = array_keys(
                 array_filter(
@@ -160,8 +160,9 @@ class Edit extends ControllerAdmin
         }
 
         // set object values from fields
-        $form->mapModel($this->user);
-        $form->mapModel($this->auth);
+        $values = $form->getFieldValues();
+        $this->user->mapForm($values);
+        $this->auth->mapForm($values);
 
         if ($form->getField('perm')) {
             $this->auth->permissions = array_sum($form->getFieldValue('perm') ?? []);

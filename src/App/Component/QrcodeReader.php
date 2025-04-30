@@ -143,6 +143,7 @@ class QrcodeReader extends \Dom\Renderer\Renderer
         const reader = new FileReader();
         reader.onload = function (e) {
             htmx.ajax('POST', baseUrl, {
+                source: '#qr-reader-wrapper',
                 select: '#qr-reader-wrapper',
                 target: '#qr-reader-wrapper',
                 swap:   'outerHTML',

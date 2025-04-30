@@ -160,7 +160,8 @@ class SecretSelect extends \Dom\Renderer\Renderer
 
         const url = new URL(baseUrl);
         // refresh the secret table list
-        htmx.ajax('get', url.toString(), {
+        htmx.ajax('GET', url.toString(), {
+            source:    '#secret-select-tbl-wrap',
             select:    '#secret-select-tbl-wrap',
             target:    '#secret-select-tbl-wrap',
             swap:      'outerHTML'

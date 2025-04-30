@@ -172,7 +172,7 @@ class SecretEdit extends \Dom\Renderer\Renderer
     // reload init form on load
     $(document).on('htmx:afterSettle', function(e) {
         if (!$(e.detail.elt).is(form)) return;
-        if (e.detail.requestConfig.verb === 'get') {
+        if (e.detail.requestConfig.verb.toUpperCase() === 'GET') {
             tkInit(e.detail.elt);
         }
     });
@@ -203,10 +203,11 @@ class SecretEdit extends \Dom\Renderer\Renderer
             $('.modal-title', dialog).text('Create Secret');
         }
 
-        htmx.ajax('get', url.toString(), {
-            select:    form,
-            target:    form,
-            swap:      'outerHTML'
+        htmx.ajax('GET', url.toString(), {
+            source:    form,
+            // select:    form,
+            // target:    form,
+            // swap:      'outerHTML'
         });
     });
 

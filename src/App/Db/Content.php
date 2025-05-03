@@ -124,11 +124,11 @@ class Content extends Model
         $filter = Filter::create($filter);
 
         if (!empty($filter['search'])) {
-            $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.html) LIKE LOWER(:search) OR ';
-            $w .= 'LOWER(a.keywords) LIKE LOWER(:search) OR ';
-            $w .= 'LOWER(a.description) LIKE LOWER(:search) OR ';
-            $w .= 'LOWER(a.content_id) LIKE LOWER(:search) OR ';
+            $filter['lSearch'] = '%' . $filter['search'] . '%';
+            $w  = 'LOWER(a.html) LIKE LOWER(:lSearch) OR ';
+            $w .= 'LOWER(a.keywords) LIKE LOWER(:lSearch) OR ';
+            $w .= 'LOWER(a.description) LIKE LOWER(:lSearch) OR ';
+            $w .= 'a.content_id = :search OR ';
             $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 

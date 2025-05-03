@@ -245,10 +245,10 @@ class Page extends Model
         $filter = Filter::create($filter);
 
         if (!empty($filter['search'])) {
-            $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.title) LIKE LOWER(:search) OR ';
-            $w .= 'LOWER(a.category) LIKE LOWER(:search) OR ';
-            $w .= 'LOWER(a.page_id) LIKE LOWER(:search) OR ';
+            $filter['lSearch'] = '%' . $filter['search'] . '%';
+            $w  = 'LOWER(a.title) LIKE LOWER(:lSearch) OR ';
+            $w .= 'LOWER(a.category) LIKE LOWER(:lSearch) OR ';
+            $w .= 'a.page_id = :search OR ';
             $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 

@@ -175,10 +175,10 @@ class Secret extends Model
         $filter = Filter::create($filter);
 
         if (!empty($filter['search'])) {
-            $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.name) LIKE LOWER(:search) OR ';
-            $w .= 'LOWER(a.url) LIKE LOWER(:search) OR ';
-            $w .= 'LOWER(a.secret_id) LIKE LOWER(:search) OR ';
+            $filter['lSearch'] = '%' . $filter['search'] . '%';
+            $w  = 'LOWER(a.name) LIKE LOWER(:lSearch) OR ';
+            $w .= 'LOWER(a.url) LIKE LOWER(:lSearch) OR ';
+            $w .= 'a.secret_id = :search OR ';
             $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
         }
 

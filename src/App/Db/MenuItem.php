@@ -139,12 +139,13 @@ class MenuItem extends Model
     public static function findFiltered(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
+        $filter->appendFrom('menu_item a');
 
         if (!empty($filter['search'])) {
             $filter['lSearch'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.name) LIKE LOWER(:lSearch) OR ';
-            $w .= 'a.menu_item_id = :search OR ';
-            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $w  = 'LOWER(a.name) LIKE LOWER(:lSearch)';
+            $w .= 'OR a.menu_item_id = :search';
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {
@@ -152,43 +153,42 @@ class MenuItem extends Model
         }
         if (!empty($filter['menuItemId'])) {
             if (!is_array($filter['menuItemId'])) $filter['menuItemId'] = [$filter['menuItemId']];
-            $filter->appendWhere('a.menu_item_id IN :menuItemId AND ');
+            $filter->appendWhere('AND a.menu_item_id IN :menuItemId');
         }
 
         if (!empty($filter['exclude'])) {
             if (!is_array($filter['exclude'])) $filter['exclude'] = [$filter['exclude']];
-            $filter->appendWhere('a.example_id NOT IN :exclude AND ');
+            $filter->appendWhere('AND a.example_id NOT IN :exclude');
         }
 
         if (isset($filter['parentId'])) {
             if (!$filter['parentId']) {
-                $filter->appendWhere('a.parent_id IS NULL AND ');
+                $filter->appendWhere('AND a.parent_id IS NULL');
             } else {
-                $filter->appendWhere('a.parent_id = :parentId AND ');
+                $filter->appendWhere('AND a.parent_id = :parentId');
             }
         }
 
         if (isset($filter['pageId'])) {
             if (!$filter['pageId']) {
-                $filter->appendWhere('a.page_id IS NULL AND ');
+                $filter->appendWhere('AND a.page_id IS NULL');
             } else {
-                $filter->appendWhere('a.page_id = :pageId AND ');
+                $filter->appendWhere('AND a.page_id = :pageId');
             }
         }
 
         if (!empty($filter['type'])) {
             if (!is_array($filter['type'])) $filter['type'] = [$filter['type']];
-            $filter->appendWhere('a.type IN :type AND ');
+            $filter->appendWhere('AND a.type IN :type');
         }
 
         if (!empty($filter['name'])) {
-            $filter->appendWhere('a.name = :name AND ');
+            $filter->appendWhere('AND a.name = :name');
         }
 
         return Db::query("
             SELECT *
-            FROM menu_item a
-            {$filter->getSql()}",
+            FROM {$filter->getSql()}",
             $filter->all(),
             self::class
         );

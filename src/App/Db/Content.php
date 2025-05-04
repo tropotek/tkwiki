@@ -122,14 +122,15 @@ class Content extends Model
     public static function findFiltered(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
+        $filter->appendFrom('content a');
 
         if (!empty($filter['search'])) {
             $filter['lSearch'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.html) LIKE LOWER(:lSearch) OR ';
-            $w .= 'LOWER(a.keywords) LIKE LOWER(:lSearch) OR ';
-            $w .= 'LOWER(a.description) LIKE LOWER(:lSearch) OR ';
-            $w .= 'a.content_id = :search OR ';
-            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $w  = 'LOWER(a.html) LIKE LOWER(:lSearch)';
+            $w .= 'OR LOWER(a.keywords) LIKE LOWER(:lSearch)';
+            $w .= 'OR LOWER(a.description) LIKE LOWER(:lSearch)';
+            $w .= 'OR a.content_id = :search';
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {
@@ -137,26 +138,25 @@ class Content extends Model
         }
         if (!empty($filter['contentId'])) {
             if (!is_array($filter['contentId'])) $filter['contentId'] = [$filter['contentId']];
-            $filter->appendWhere('a.content_id IN :contentId AND ');
+            $filter->appendWhere('AND a.content_id IN :contentId');
         }
 
         if (!empty($filter['exclude'])) {
             if (!is_array($filter['exclude'])) $filter['exclude'] = [$filter['exclude']];
-            $filter->appendWhere('a.example_id NOT IN :exclude AND ');
+            $filter->appendWhere('AND a.example_id NOT IN :exclude');
         }
 
         if (!empty($filter['pageId'])) {
-        $filter->appendWhere('a.page_id = :pageId AND ');
+        $filter->appendWhere('AND a.page_id = :pageId');
         }
 
         if (!empty($filter['userId'])) {
-            $filter->appendWhere('a.user_id = :userId AND ');
+            $filter->appendWhere('AND a.user_id = :userId');
         }
 
         return Db::query("
             SELECT *
-            FROM content a
-            {$filter->getSql()}",
+            FROM {$filter->getSql()}",
             $filter->all(),
             self::class
         );

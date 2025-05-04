@@ -243,13 +243,14 @@ class Page extends Model
     public static function findViewable(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
+        $filter->appendFrom('v_page a');
 
         if (!empty($filter['search'])) {
             $filter['lSearch'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.title) LIKE LOWER(:lSearch) OR ';
-            $w .= 'LOWER(a.category) LIKE LOWER(:lSearch) OR ';
-            $w .= 'a.page_id = :search OR ';
-            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $w  = 'LOWER(a.title) LIKE LOWER(:lSearch)';
+            $w .= 'OR LOWER(a.category) LIKE LOWER(:lSearch)';
+            $w .= 'OR a.page_id = :search';
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (
@@ -257,49 +258,53 @@ class Page extends Model
             isset($filter['permission']) && is_numeric($filter['permission'])
         ) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
-            $filter->appendWhere('(a.user_id IN :userId OR ');
+            $filter->appendWhere('AND (a.user_id IN :userId');
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
-            $filter->appendWhere('a.permission IN :permission) AND ');
+            $filter->appendWhere('OR a.permission IN :permission)');
         } elseif (isset($filter['userId']) && is_numeric($filter['userId'])) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
-            $filter->appendWhere('a.user_id IN :userId AND ');
+            $filter->appendWhere('AND a.user_id IN :userId');
         } elseif (isset($filter['permission']) && is_numeric($filter['permission'])) {
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
-            $filter->appendWhere('a.permission IN :permission AND ');
+            $filter->appendWhere('AND a.permission IN :permission');
         }
 
         if (!empty($filter['category'])) {
-            $filter->appendWhere('a.category = :category AND ');
+            $filter->appendWhere('AND a.category = :category');
         }
 
         if (!empty($filter['isOrphaned'])) {
             $filter['isOrphaned'] = truefalse($filter['isOrphaned']);
-            $filter->appendWhere('a.is_orphaned = :isOrphaned AND ');
+            $filter->appendWhere('AND a.is_orphaned = :isOrphaned');
         }
 
-        $filter->appendWhere('a.publish AND ');
+        $filter->appendWhere('AND a.publish');
 
         if (!empty($filter['fullSearch'])) {
-            $filter->appendWhere('MATCH (c.html) AGAINST (:fullSearch IN NATURAL LANGUAGE MODE) AND ');
-
-            return Db::query("
-                SELECT *
-                FROM v_page a
-                JOIN (
+            $filter->appendFrom("JOIN (
                     SELECT content_id, html
                     FROM content
                     WHERE MATCH (html) AGAINST (:fullSearch IN NATURAL LANGUAGE MODE)
-                ) c USING (content_id)
-                {$filter->getSql()}",
-                $filter->all(),
-                self::class
-            );
+                ) c USING (content_id)");
+            $filter->appendWhere('AND MATCH (c.html) AGAINST (:fullSearch IN NATURAL LANGUAGE MODE)');
+
+//            return Db::query("
+//                SELECT *
+//                FROM v_page a
+//                JOIN (
+//                    SELECT content_id, html
+//                    FROM content
+//                    WHERE MATCH (html) AGAINST (:fullSearch IN NATURAL LANGUAGE MODE)
+//                ) c USING (content_id)
+//                {$filter->getSql()}",
+//                $filter->all(),
+//                self::class
+//            );
         }
 
         return Db::query("
             SELECT *
-            FROM v_page a
-            {$filter->getSql()}",
+            FROM {$filter->getSql()}",
             $filter->all(),
             self::class
         );
@@ -311,13 +316,14 @@ class Page extends Model
     public static function findFiltered(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
+        $filter->appendFrom('v_page a');
 
         if (!empty($filter['search'])) {
             $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.title) LIKE LOWER(:search) OR ';
-            $w .= 'LOWER(a.category) LIKE LOWER(:search) OR ';
-            $w .= 'LOWER(a.page_id) LIKE LOWER(:search) OR ';
-            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $w  = 'LOWER(a.title) LIKE LOWER(:search)';
+            $w .= 'OR LOWER(a.category) LIKE LOWER(:search)';
+            $w .= 'OR LOWER(a.page_id) LIKE LOWER(:search)';
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {
@@ -325,54 +331,53 @@ class Page extends Model
         }
         if (!empty($filter['pageId'])) {
             if (!is_array($filter['pageId'])) $filter['pageId'] = [$filter['pageId']];
-            $filter->appendWhere('a.page_id IN :contentId AND ');
+            $filter->appendWhere('AND a.page_id IN :contentId');
         }
 
         if (!empty($filter['exclude'])) {
             if (!is_array($filter['exclude'])) $filter['exclude'] = [$filter['exclude']];
-            $filter->appendWhere('a.page_id NOT IN :exclude AND ');
+            $filter->appendWhere('AND a.page_id NOT IN :exclude');
         }
 
         if (!empty($filter['userId'])) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
-            $filter->appendWhere('a.user_id IN :userId AND ');
+            $filter->appendWhere('AND a.user_id IN :userId');
         }
 
         if (!empty($filter['template'])) {
-            $filter->appendWhere('a.template = :template AND ');
+            $filter->appendWhere('AND a.template = :template');
         }
 
         if (!empty($filter['category'])) {
-            $filter->appendWhere('a.category = :category AND ');
+            $filter->appendWhere('AND a.category = :category');
         }
 
         if (!empty($filter['title'])) {
-            $filter->appendWhere('a.title = :title AND ');
+            $filter->appendWhere('AND a.title = :title');
         }
 
         if (!empty($filter['url'])) {
-            $filter->appendWhere('a.url = :url AND ');
+            $filter->appendWhere('AND a.url = :url');
         }
 
         if (is_bool(truefalse($filter['publish'] ?? null))) {
             $filter['publish'] = truefalse($filter['publish']);
-            $filter->appendWhere('a.publish = :publish AND ');
+            $filter->appendWhere('AND a.publish = :publish');
         }
 
         if (!empty($filter['isOrphaned'])) {
             $filter['isOrphaned'] = truefalse($filter['isOrphaned']);
-            $filter->appendWhere('a.is_orphaned = :isOrphaned AND ');
+            $filter->appendWhere('AND a.is_orphaned = :isOrphaned');
         }
 
         if (isset($filter['permission']) && is_numeric($filter['permission'])) {
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
-            $filter->appendWhere('a.permission IN :permission AND ');
+            $filter->appendWhere('AND a.permission IN :permission');
         }
 
         return Db::query("
             SELECT *
-            FROM v_page a
-            {$filter->getSql()}",
+            FROM {$filter->getSql()}",
             $filter->all(),
             self::class
         );

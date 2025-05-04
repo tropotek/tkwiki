@@ -173,38 +173,38 @@ class Secret extends Model
     public static function findViewable(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
+        $filter->appendFrom('v_secret a');
 
         if (!empty($filter['search'])) {
             $filter['lSearch'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.name) LIKE LOWER(:lSearch) OR ';
-            $w .= 'LOWER(a.url) LIKE LOWER(:lSearch) OR ';
-            $w .= 'a.secret_id = :search OR ';
-            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $w  = 'LOWER(a.name) LIKE LOWER(:lSearch)';
+            $w .= 'OR LOWER(a.url) LIKE LOWER(:lSearch)';
+            $w .= 'OR a.secret_id = :search';
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['userId']) && !empty($filter['permission'] ?? '')) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
-            $filter->appendWhere('(a.user_id IN :userId OR ');
+            $filter->appendWhere('AND (a.user_id IN :userId OR ');
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
-            $filter->appendWhere('a.permission IN :permission) AND ');
+            $filter->appendWhere('a.permission IN :permission)');
         } elseif (!empty($filter['userId'])) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
-            $filter->appendWhere('a.user_id IN :userId AND ');
+            $filter->appendWhere('AND a.user_id IN :userId');
         } elseif (!empty($filter['permission'] ?? '')) {
             if (!is_array($filter['permission'])) $filter['permission'] = [$filter['permission']];
-            $filter->appendWhere('a.permission IN :permission AND ');
+            $filter->appendWhere('AND a.permission IN :permission');
         }
 
         if (!empty($filter['otp'])) {
-            $filter->appendWhere("a.otp != '' AND ");
+            $filter->appendWhere("AND a.otp != ''");
         }
 
-        $filter->appendWhere('a.publish AND ');
+        $filter->appendWhere('AND a.publish');
 
         return Db::query("
             SELECT *
-            FROM v_secret a
-            {$filter->getSql()}",
+            FROM {$filter->getSql()}",
             $filter->all(),
             self::class
         );

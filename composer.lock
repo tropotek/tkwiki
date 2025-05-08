@@ -2791,12 +2791,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-installers.git",
-                "reference": "abad011909e3a16ec92ff5ebd7d93f4299fd13a9"
+                "reference": "38cc55b3e316432bf8d35c69ab2348a2ba843711"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/abad011909e3a16ec92ff5ebd7d93f4299fd13a9",
-                "reference": "abad011909e3a16ec92ff5ebd7d93f4299fd13a9",
+                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/38cc55b3e316432bf8d35c69ab2348a2ba843711",
+                "reference": "38cc55b3e316432bf8d35c69ab2348a2ba843711",
                 "shasum": ""
             },
             "require": {

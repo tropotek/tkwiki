@@ -2538,23 +2538,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "82844fb85b16e89bc8278b5e3358f1ad974df7a5"
+                "reference": "3cd332b3759176aa8d1be07dfd8cce70dfd4cfc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/82844fb85b16e89bc8278b5e3358f1ad974df7a5",
-                "reference": "82844fb85b16e89bc8278b5e3358f1ad974df7a5",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/3cd332b3759176aa8d1be07dfd8cce70dfd4cfc8",
+                "reference": "3cd332b3759176aa8d1be07dfd8cce70dfd4cfc8",
                 "shasum": ""
             },
             "require": {
-                "studio-42/elfinder": "~2.1.0",
-                "symfony/console": "^6.2",
-                "symfony/event-dispatcher": "^6.2",
-                "symfony/http-foundation": "^6.2",
-                "symfony/http-kernel": "^6.2",
-                "symfony/lock": "^6.2",
-                "symfony/routing": "^6.2",
-                "tinymce/tinymce": "~7.0",
+                "studio-42/elfinder": "~2.1.0-@stable",
+                "symfony/console": "^6.2-@stable",
+                "symfony/event-dispatcher": "^6.2-@stable",
+                "symfony/http-foundation": "^6.2-@stable",
+                "symfony/http-kernel": "^6.2-@stable",
+                "symfony/lock": "^6.2-@stable",
+                "symfony/routing": "^6.2-@stable",
+                "tinymce/tinymce": "~7.0-@stable",
                 "ttek/tk-domtemplate": "~8.0.0",
                 "ttek/tk-form": "~8.0.0",
                 "ttek/tk-framework": "~8.0.0",
@@ -2707,12 +2707,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "824b9e00a43ee16e6b2414e0fe865cfe0f9dda81"
+                "reference": "ee45cef6b3d75f99c4d41b801e8d587ce7b1b65d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/824b9e00a43ee16e6b2414e0fe865cfe0f9dda81",
-                "reference": "824b9e00a43ee16e6b2414e0fe865cfe0f9dda81",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/ee45cef6b3d75f99c4d41b801e8d587ce7b1b65d",
+                "reference": "ee45cef6b3d75f99c4d41b801e8d587ce7b1b65d",
                 "shasum": ""
             },
             "require": {
@@ -2721,8 +2721,8 @@
                 "ext-json": "*",
                 "ext-pdo": "*",
                 "php": "^8.2",
-                "phpmailer/phpmailer": "~6.0",
-                "psr/http-message": "^1.0"
+                "phpmailer/phpmailer": "~6.0-@stable",
+                "psr/http-message": "^1.0-@stable"
             },
             "type": "library",
             "extra": {
@@ -2773,20 +2773,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-installers.git",
-                "reference": "38cc55b3e316432bf8d35c69ab2348a2ba843711"
+                "reference": "948dc66a1684b501f4e16c2151514b8514575f74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/38cc55b3e316432bf8d35c69ab2348a2ba843711",
-                "reference": "38cc55b3e316432bf8d35c69ab2348a2ba843711",
+                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/948dc66a1684b501f4e16c2151514b8514575f74",
+                "reference": "948dc66a1684b501f4e16c2151514b8514575f74",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^2.0",
+                "composer-plugin-api": "^2.0-@stable",
                 "php": "^8.1"
             },
             "require-dev": {
-                "composer/composer": "^2.0"
+                "composer/composer": "^2.0-@stable"
             },
             "type": "composer-plugin",
             "extra": {

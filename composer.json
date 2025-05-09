@@ -68,10 +68,10 @@
         "htmx/htmx": "2.0.4",
         "jquery/jquery": "3.7.1",
         "twbs/bootstrap": "~5.3.0",
-        "select2/select2": "~4.0-@stable",
-        "studio-42/elfinder": "~2.1.0-@stable",
-        "mpdf/mpdf": "^8.0-@stable",
-        "spomky-labs/otphp": "~11.2.0-@stable",
+        "select2/select2": "~4.0",
+        "studio-42/elfinder": "~2.1.0",
+        "mpdf/mpdf": "^8.0",
+        "spomky-labs/otphp": "~11.2.0",
         "khanamiryan/qrcode-detector-decoder": "dev-master"
     },
     "require-dev": {

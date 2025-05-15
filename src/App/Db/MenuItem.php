@@ -142,10 +142,10 @@ class MenuItem extends Model
         $filter->appendFrom('menu_item a');
 
         if (!empty($filter['search'])) {
-            $filter['lSearch'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.name) LIKE LOWER(:lSearch)';
-            $w .= 'OR a.menu_item_id = :search';
-            $filter->appendWhere('AND (%s)', $w);
+            $filter['lSearch'] = '%' . strtolower($filter['search']) . '%';
+            $w  = "a.menu_item_id = :search ";
+            $w .= "OR LOWER(CONCAT_WS(' ', a.name)) LIKE :lSearch ";
+            if ($w) $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {

@@ -125,12 +125,10 @@ class Content extends Model
         $filter->appendFrom('content a');
 
         if (!empty($filter['search'])) {
-            $filter['lSearch'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.html) LIKE LOWER(:lSearch)';
-            $w .= 'OR LOWER(a.keywords) LIKE LOWER(:lSearch)';
-            $w .= 'OR LOWER(a.description) LIKE LOWER(:lSearch)';
-            $w .= 'OR a.content_id = :search';
-            $filter->appendWhere('AND (%s)', $w);
+            $filter['lSearch'] = '%' . strtolower($filter['search']) . '%';
+            $w  = "a.content_id = :search ";
+            $w .= "OR LOWER(CONCAT_WS(' ', a.html, a.keywords, a.description)) LIKE :lSearch ";
+            if ($w) $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {

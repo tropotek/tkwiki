@@ -1,44 +1,11 @@
-/*********** B O O T S T R A P *************/
-.modal-header-success {
-  color:#fff;
-  border-bottom:1px solid #eee;
-  background-color: #5cb85c;
-}
-.modal-header-warning {
-  color:#fff;
-  border-bottom:1px solid #eee;
-  background-color: #f0ad4e;
-}
-.modal-header-danger {
-  color:#fff;
-  border-bottom:1px solid #eee;
-  background-color: #d9534f;
-}
-.modal-header-info {
-  color:#fff;
-  border-bottom:1px solid #eee;
-  background-color: #5bc0de;
-}
-.modal-header-primary {
-  color:#fff;
-  border-bottom:1px solid #eee;
-  background-color: #428bca;
-}
 
-/*********** T I N Y M C E *************/
-/* Remove promotion button */
-.tox .tox-promotion {
-  display: none;
-}
-/* Add disabled state */
-.mce .disabled,
-.mce-min .disabled {
-  background-color: #E9ECEF;
-}
+
 body {
   color: #5a5a5a;
   background-color: #FFF;
 }
+
+
 .navbar .nav-link.dropdown-toggle {
   text-shadow: #CCC 2px 2px 2px;
 }
@@ -53,192 +20,59 @@ body {
   background-color: #FFF;
 }
 
+
 /* ==================  WIKI Styles  ================== */
 a.wk-page-disable {
-  color: #CCCCCC;
-  cursor: not-allowed;
+    color: #CCCCCC;
+    cursor: not-allowed;
 }
 a.wk-page-new,
 a.wk-page-new.wk-page-disable {
-  color: rgba(255, 0, 0, 0.70);
+    color: rgba(255, 0, 0, 0.70);
 }
 a.wk-link-external {
-  color: #007700;
-  cursor: alias;
+    color: #007700;
+    cursor: alias;
 }
 .wk-content {
-  position: relative;
+    position: relative;
 }
 
 .wk-content .sticky-top {
-  z-index: 999;
+    z-index: 999;
 }
 .wk-content .wk-toolbar {
-  top: 1em;
-  background-color: #FFF;
-  opacity: 0.80;
+    top: 1em;
+    background-color: #FFF;
+    opacity: 0.80;
 }
 .wk-content .wk-toolbar.revision {
-  background-color: rgb(207, 244, 252);
+    background-color: rgb(207, 244, 252);
 }
 
 pre {
-  display: block;
-  padding: 9.5px;
-  margin: 0 0 10px;
-  font-size: 13px;
-  line-height: 1.42857143;
-  word-break: break-all;
-  word-wrap: break-word;
-  color: #333;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    word-break: break-all;
+    word-wrap: break-word;
+    color: #333;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .wk-page-edit .js-edit,
 .wk-page-edit .css-edit {
-  height: 500px;
+    height: 500px;
 }
 
 .text-strike {
-  text-decoration-line: line-through;
+    text-decoration-line: line-through;
 }
 
 /* ==================  WIKI .end  ================== */
 
-/*********** T I N Y M C E *************/
-/* Remove promotion button */
-.tox .tox-promotion {
-  display: none;
-}
-/* Add disabled state */
-.mce .disabled,
-.mce-min .disabled {
-  background-color: #E9ECEF;
-}
-
-
-/* style the wk-secret boxes inside of the WYSIWYG editor */
-.mce-content-body .wk-secret {
-  display: inline-block;
-  height: 5em;
-  width: auto;
-}
-.mce-content-body .wk-secret::after {
-  content: "Secret: " attr(title);
-  font-style: italic;
-  color: #666;
-  background-color: #009900;
-}
-
-.wk-content .wk-secret {
-  display: inline-block;
-  font-size: 0.9em;
-  padding: 0.5em 0.5em 0.5em 0;
-  background-color: #FFF;
-}
-.wk-content .wk-secret .strong {
-  font-weight: bold;
-}
-.wk-content .wk-secret .userpass .fa {
-  opacity: 0.7;
-}
-.wk-content .wk-secret .userpass .fa:hover {
-  opacity: 1;
-  cursor: pointer;
-}
-.wk-content .wk-secret-list .wk-secret {
-  overflow: hidden;
-}
-.wk-content .wk-secret a.wk-secret-edit {
-  color: #0099FF;
-}
-
-
-/***************** F O R M ******************/
-form textarea {
-  height: 150px;
-}
-form label {
-  font-weight: 500;
-}
-form .form-check-label {
-  font-weight: normal;
-}
-.form-control:disabled,
-.form-control:read-only:not([type=file]) {
-  pointer-events: none;
-  background-color: #EEE;
-}
-.tk-form input:invalid,
-.tk-form textarea:invalid,
-.tk-form select:invalid {
-  background: #FDFDDA !important;
-}
-
-
-/***************** T A B L E ******************/
-.tk-form-inline {
-  margin-bottom: .5rem;
-}
-/* position submit buttons for filter form */
-.tk-form-inline .tk-inline-btn {
-  padding-bottom: 0.3rem;
-}
-.tk-table .tk-actions .btn,
-.tk-form-inline .tk-inline-btn .btn {
-  --bs-btn-padding-y: .2rem;
-  --bs-btn-padding-x: .4rem;
-  --bs-btn-font-size: .75rem;
-}
-.tk-table .tk-actions {
-  padding-bottom: 0.75rem;
-}
-.tk-table .tk-actions .btn {
-  margin-right: 0.5rem;
-}
-.tk-table table td a.btn {
-  display: inline;
-  --bs-btn-padding-y: .2rem;
-  --bs-btn-padding-x: .4rem;
-  --bs-btn-font-size: .75rem;
-}
-
-/* Header OrderBy Arrows */
-th
-{
-  /*text-align: center;*/
-}
-.tk-table .max-width,
-td.key {
-  width: 100%;
-}
-th a,
-td a {
-  display: inline-block;
-}
-th a.desc,
-th a.asc {
-  padding-right: 1.5rem;
-}
-th a:before,
-th a:after {
-  border: 4px solid transparent;
-  content: "";
-  display: block;
-  height: 0;
-  right: 5px;
-  top: 50%;
-  position: absolute;
-  width: 0;
-}
-th a.desc:before {
-  border-bottom-color: #666;
-  margin-top: -9px;
-}
-th a.asc:after {
-  border-top-color: #666;
-  margin-top: 1px;
-}
 

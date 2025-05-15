@@ -319,11 +319,10 @@ class Page extends Model
         $filter->appendFrom('v_page a');
 
         if (!empty($filter['search'])) {
-            $filter['search'] = '%' . $filter['search'] . '%';
-            $w  = 'LOWER(a.title) LIKE LOWER(:search)';
-            $w .= 'OR LOWER(a.category) LIKE LOWER(:search)';
-            $w .= 'OR LOWER(a.page_id) LIKE LOWER(:search)';
-            $filter->appendWhere('AND (%s)', $w);
+            $filter['lSearch'] = '%' . strtolower($filter['search']) . '%';
+            $w  = "a.page_id = :search ";
+            $w .= "OR LOWER(CONCAT_WS(' ', a.title, a.category)) LIKE :lSearch ";
+            if ($w) $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {

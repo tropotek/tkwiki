@@ -1481,12 +1481,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "ef8252ece055a6771c39614bcbec68cd146a09e8"
+                "reference": "6b7c97fe1ddac8df3cc9ba6410c8abc683e148ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/ef8252ece055a6771c39614bcbec68cd146a09e8",
-                "reference": "ef8252ece055a6771c39614bcbec68cd146a09e8",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/6b7c97fe1ddac8df3cc9ba6410c8abc683e148ae",
+                "reference": "6b7c97fe1ddac8df3cc9ba6410c8abc683e148ae",
                 "shasum": ""
             },
             "require": {
@@ -1550,7 +1550,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-04T06:50:42+00:00"
+            "time": "2025-05-11T15:36:20+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -2405,12 +2405,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "5be5bdd07600c270083d821a4b20697a47526311"
+                "reference": "548f6760c54197b1084e1e5c71f6d9d523f2f78e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/5be5bdd07600c270083d821a4b20697a47526311",
-                "reference": "5be5bdd07600c270083d821a4b20697a47526311",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/548f6760c54197b1084e1e5c71f6d9d523f2f78e",
+                "reference": "548f6760c54197b1084e1e5c71f6d9d523f2f78e",
                 "shasum": ""
             },
             "require": {
@@ -2481,20 +2481,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-09T08:14:14+00:00"
+            "time": "2025-04-27T18:39:23+00:00"
         },
         {
             "name": "tinymce/tinymce",
-            "version": "7.8.0",
+            "version": "7.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tinymce/tinymce-dist.git",
-                "reference": "88d1b2874256895338034dba28bf6e920aa4ba17"
+                "reference": "41ca209b741864a96b11ca34294b2eeba873ff01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tinymce/tinymce-dist/zipball/88d1b2874256895338034dba28bf6e920aa4ba17",
-                "reference": "88d1b2874256895338034dba28bf6e920aa4ba17",
+                "url": "https://api.github.com/repos/tinymce/tinymce-dist/zipball/41ca209b741864a96b11ca34294b2eeba873ff01",
+                "reference": "41ca209b741864a96b11ca34294b2eeba873ff01",
                 "shasum": ""
             },
             "type": "component",
@@ -2538,9 +2538,9 @@
                 "wysiwyg"
             ],
             "support": {
-                "source": "https://github.com/tinymce/tinymce-dist/tree/7.8.0"
+                "source": "https://github.com/tinymce/tinymce-dist/tree/7.9.0"
             },
-            "time": "2025-04-09T02:06:27+00:00"
+            "time": "2025-05-15T01:47:37+00:00"
         },
         {
             "name": "ttek/tk-base",
@@ -2548,23 +2548,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "cd1365be8dcc86345c95824dbb6c9f00debfc21b"
+                "reference": "06c75dd9503614c9c873ef3dc4dca1346e67f7f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/cd1365be8dcc86345c95824dbb6c9f00debfc21b",
-                "reference": "cd1365be8dcc86345c95824dbb6c9f00debfc21b",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/06c75dd9503614c9c873ef3dc4dca1346e67f7f9",
+                "reference": "06c75dd9503614c9c873ef3dc4dca1346e67f7f9",
                 "shasum": ""
             },
             "require": {
-                "studio-42/elfinder": "~2.1.0",
-                "symfony/console": "^6.2",
-                "symfony/event-dispatcher": "^6.2",
-                "symfony/http-foundation": "^6.2",
-                "symfony/http-kernel": "^6.2",
-                "symfony/lock": "^6.2",
-                "symfony/routing": "^6.2",
-                "tinymce/tinymce": "~7.0",
+                "studio-42/elfinder": "~2.1.0-@stable",
+                "symfony/console": "^6.2-@stable",
+                "symfony/event-dispatcher": "^6.2-@stable",
+                "symfony/http-foundation": "^6.2-@stable",
+                "symfony/http-kernel": "^6.2-@stable",
+                "symfony/lock": "^6.2-@stable",
+                "symfony/routing": "^6.2-@stable",
+                "tinymce/tinymce": "~7.0-@stable",
                 "ttek/tk-domtemplate": "~8.0.0",
                 "ttek/tk-form": "~8.0.0",
                 "ttek/tk-framework": "~8.0.0",
@@ -2579,7 +2579,6 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Au\\": "Au/",
                     "Bs\\": "Bs/"
                 }
             },
@@ -2593,8 +2592,9 @@
                     "homepage": "http://www.tropotek.com/"
                 }
             ],
-            "description": "Base site library for the Au lib",
+            "description": "Tk8 Lib: Tk Lib MVC framework using low-level Symfony framework objects",
             "keywords": [
+                "mvc",
                 "tropotek"
             ],
             "support": {
@@ -2609,19 +2609,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-domtemplate.git",
-                "reference": "1f9173a6462ea7ae6d07882ef118aea2265afdbb"
+                "reference": "c68a2e6482938ded629bb9cd20e59dab0a3d9462"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/1f9173a6462ea7ae6d07882ef118aea2265afdbb",
-                "reference": "1f9173a6462ea7ae6d07882ef118aea2265afdbb",
+                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/c68a2e6482938ded629bb9cd20e59dab0a3d9462",
+                "reference": "c68a2e6482938ded629bb9cd20e59dab0a3d9462",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-tidy": "*",
                 "php": "^8.1",
-                "scssphp/scssphp": "^1.11.0"
+                "scssphp/scssphp": "^1.11.0-@stable"
             },
             "type": "library",
             "extra": {
@@ -2644,7 +2644,7 @@
                     "homepage": "http://www.tropotek.com/"
                 }
             ],
-            "description": "A PHP DOM Template library using XML/HTML files for templates",
+            "description": "Tk8 Lib: PHP DOM Template library with inline SCSS file compiler",
             "keywords": [
                 "dom",
                 "dom-template",
@@ -2668,12 +2668,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "17faf07ae8933d674022ae510caaf20f3f986d7a"
+                "reference": "777060ecf352dc0936d87257b31edaa537e671c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/17faf07ae8933d674022ae510caaf20f3f986d7a",
-                "reference": "17faf07ae8933d674022ae510caaf20f3f986d7a",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/777060ecf352dc0936d87257b31edaa537e671c6",
+                "reference": "777060ecf352dc0936d87257b31edaa537e671c6",
                 "shasum": ""
             },
             "require": {
@@ -2700,7 +2700,7 @@
                     "homepage": "http://www.tropotek.com/"
                 }
             ],
-            "description": "Create dynamic forms easily with the Tk framework",
+            "description": "Tk8 Lib: Form rendering with DOM and PHP templates",
             "keywords": [
                 "form",
                 "tropotek"
@@ -2717,12 +2717,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "ee45cef6b3d75f99c4d41b801e8d587ce7b1b65d"
+                "reference": "fd50c556e44eb1078038eeaf4085c895b6e01c73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/ee45cef6b3d75f99c4d41b801e8d587ce7b1b65d",
-                "reference": "ee45cef6b3d75f99c4d41b801e8d587ce7b1b65d",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/fd50c556e44eb1078038eeaf4085c895b6e01c73",
+                "reference": "fd50c556e44eb1078038eeaf4085c895b6e01c73",
                 "shasum": ""
             },
             "require": {
@@ -2759,7 +2759,7 @@
                     "homepage": "http://www.tropotek.com/"
                 }
             ],
-            "description": "Tropotek Framework",
+            "description": "Tk8 Lib: Tropotek Framework Library",
             "keywords": [
                 "Tk",
                 "framework",
@@ -2783,12 +2783,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-installers.git",
-                "reference": "c11e38b5f6f8d89041423065172838a27635d2cf"
+                "reference": "6c73c53e96b41902737e1b222bcb6f6c20f29f03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/c11e38b5f6f8d89041423065172838a27635d2cf",
-                "reference": "c11e38b5f6f8d89041423065172838a27635d2cf",
+                "url": "https://api.github.com/repos/tropotek/tk-installers/zipball/6c73c53e96b41902737e1b222bcb6f6c20f29f03",
+                "reference": "6c73c53e96b41902737e1b222bcb6f6c20f29f03",
                 "shasum": ""
             },
             "require": {
@@ -2824,7 +2824,7 @@
                     "homepage": "http://www.tropotek.com/"
                 }
             ],
-            "description": "Tropotek composer installer plugin",
+            "description": "Tk8 Lib: composer install/update plugin for the Tk Lib framework",
             "keywords": [
                 "installers",
                 "tropotek"
@@ -2833,7 +2833,7 @@
                 "issues": "https://github.com/tropotek/tk-installers/issues",
                 "source": "https://github.com/tropotek/tk-installers/tree/8.0"
             },
-            "time": "2022-10-15T00:00:00+00:00"
+            "time": "2025-05-10T00:00:00+00:00"
         },
         {
             "name": "ttek/tk-table",
@@ -2841,12 +2841,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-table.git",
-                "reference": "191313797cd2a6e94f72a5cf3b3b447c667a62de"
+                "reference": "ae261de8fac904bca85b58986c0dc392ea609ee1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/191313797cd2a6e94f72a5cf3b3b447c667a62de",
-                "reference": "191313797cd2a6e94f72a5cf3b3b447c667a62de",
+                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/ae261de8fac904bca85b58986c0dc392ea609ee1",
+                "reference": "ae261de8fac904bca85b58986c0dc392ea609ee1",
                 "shasum": ""
             },
             "require": {
@@ -2873,7 +2873,7 @@
                     "homepage": "http://www.tropotek.com/"
                 }
             ],
-            "description": "A dynamic table lib to manage table rendering",
+            "description": "Tk8 Lib: Table rendering with DOM and PHP templates",
             "keywords": [
                 "table",
                 "tropotek"
@@ -3093,12 +3093,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "29e47ed68cea82a0006c1c8949d85c7b15b11a0e"
+                "reference": "282bba0ad285a5ca1104960f094031828f328024"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/29e47ed68cea82a0006c1c8949d85c7b15b11a0e",
-                "reference": "29e47ed68cea82a0006c1c8949d85c7b15b11a0e",
+                "url": "https://api.github.com/repos/composer/composer/zipball/282bba0ad285a5ca1104960f094031828f328024",
+                "reference": "282bba0ad285a5ca1104960f094031828f328024",
                 "shasum": ""
             },
             "require": {
@@ -3149,7 +3149,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "2.8-dev"
+                    "dev-main": "2.9-dev"
                 }
             },
             "autoload": {
@@ -3200,7 +3200,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-16T11:38:39+00:00"
+            "time": "2025-05-13T13:40:39+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -3441,12 +3441,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/spdx-licenses.git",
-                "reference": "614a1b86ff628ca7e0713f733ee09f94569548b0"
+                "reference": "edf364cefe8c43501e21e88110aac10b284c3c9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/614a1b86ff628ca7e0713f733ee09f94569548b0",
-                "reference": "614a1b86ff628ca7e0713f733ee09f94569548b0",
+                "url": "https://api.github.com/repos/composer/spdx-licenses/zipball/edf364cefe8c43501e21e88110aac10b284c3c9f",
+                "reference": "edf364cefe8c43501e21e88110aac10b284c3c9f",
                 "shasum": ""
             },
             "require": {
@@ -3498,7 +3498,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/spdx-licenses/issues",
-                "source": "https://github.com/composer/spdx-licenses/tree/main"
+                "source": "https://github.com/composer/spdx-licenses/tree/1.5.9"
             },
             "funding": [
                 {
@@ -3514,7 +3514,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-26T15:22:11+00:00"
+            "time": "2025-05-12T21:07:07+00:00"
         },
         {
             "name": "composer/xdebug-handler",

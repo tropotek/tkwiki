@@ -2,7 +2,7 @@
 namespace App\Ui;
 
 use App\Db\User;
-use Bs\Traits\SystemTrait;
+use Bs\Registry;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
@@ -13,7 +13,6 @@ use Tk\Config;
  */
 class Navigation extends Renderer implements DisplayInterface
 {
-    use SystemTrait;
 
     public function show(): ?Template
     {
@@ -23,7 +22,7 @@ class Navigation extends Renderer implements DisplayInterface
             $template->setVisible('settings', $user->hasPermission(User::PERM_SYSADMIN));
             $template->setVisible('pageManager', $user->isStaff());
             $template->setVisible('menu', $user->hasPermission(User::PERM_SYSADMIN | User::PERM_SYSADMIN));
-            $template->setVisible('secret', $user->isStaff() && $this->getRegistry()->get('wiki.enable.secret.mod', false));
+            $template->setVisible('secret', $user->isStaff() && Registry::getValue('wiki.enable.secret.mod', false));
             $template->setVisible('admin', $user->isAdmin());
             $template->setVisible('dev', $user->isAdmin() && Config::isDev());
         }

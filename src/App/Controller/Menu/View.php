@@ -4,7 +4,6 @@ namespace App\Controller\Menu;
 use App\Db\MenuItem;
 use App\Db\Page;
 use App\Db\User;
-use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
@@ -15,8 +14,6 @@ use Dom\Template;
  */
 class View extends Renderer implements DisplayInterface
 {
-    use SystemTrait;
-
 
     public function __construct(Template $template)
     {

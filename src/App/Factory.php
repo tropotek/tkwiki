@@ -10,11 +10,13 @@ use App\Dom\Modifier\SecretList;
 use App\Dom\Modifier\Secrets;
 use App\Dom\Modifier\WikiImg;
 use App\Dom\Modifier\WikiUrl;
+use Bs\Registry;
 use Bs\Ui\Breadcrumbs;
 use Dom\Modifier;
 use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tk\Config;
+use Tk\Path;
 
 class Factory extends \Bs\Factory
 {
@@ -29,8 +31,8 @@ class Factory extends \Bs\Factory
     public function createDomPage(string $templatePath = ''): Page
     {
         // settings default template
-        if (str_starts_with(basename($templatePath), 'default') && is_file(Config::makePath($this->getRegistry()->get('wiki.default.template', '')))) {
-            $templatePath = Config::makePath($this->getRegistry()->get('wiki.default.template', $templatePath));
+        if (str_starts_with(basename($templatePath), 'default') && is_file(Path::create(Registry::getValue('wiki.default.template', '')))) {
+            $templatePath = Path::create(Registry::getValue('wiki.default.template', $templatePath));
         }
         return new Page($templatePath);
     }
@@ -39,7 +41,7 @@ class Factory extends \Bs\Factory
     {
         if (!$this->get('templateModifier')) {
             $dm = parent::getTemplateModifier();
-            if ($this->getRegistry()->get('wiki.enable.secret.mod', false)) {
+            if (Registry::getValue('wiki.enable.secret.mod', false)) {
                 $dm->addFilter('wikiSecrets', new Secrets());
                 $dm->addFilter('wikiSecretList', new SecretList());
             }

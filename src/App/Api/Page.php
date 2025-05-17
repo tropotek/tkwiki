@@ -3,13 +3,11 @@ namespace App\Api;
 
 use App\Db\Lock;
 use App\Db\User;
-use Bs\Traits\SystemTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class Page
 {
-    use SystemTrait;
 
     /**
      * Refresh the lock timeout to prevent user losing the lock over long edits.

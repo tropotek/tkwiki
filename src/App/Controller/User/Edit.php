@@ -7,6 +7,7 @@ use Bs\Db\Masquerade;
 use Bs\Mvc\ControllerAdmin;
 use Bs\Factory;
 use Bs\Mvc\Form;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Collection;
@@ -122,7 +123,7 @@ class Edit extends ControllerAdmin
 
         // Form Actions
         $this->form->appendField(new SubmitExit('save', [$this, 'onSubmit']));
-        $this->form->appendField(new Link('cancel', $this->getBackUrl()));
+        $this->form->appendField(new Link('cancel', Breadcrumbs::getBackUrl()));
 
         $load = $this->user->unmapForm();
         if ($this->type == User::TYPE_STAFF) {
@@ -198,14 +199,14 @@ class Edit extends ControllerAdmin
 
         $action->setRedirect(Uri::create('/user/'.$this->type.'Edit')->set('userId', $this->user->userId));
         if ($form->getTriggeredAction()->isExit()) {
-            $action->setRedirect(Factory::instance()->getBackUrl());
+            $action->setRedirect(Breadcrumbs::getBackUrl());
         }
     }
 
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        $template->setAttr('back', 'href', $this->getBackUrl());
+        $template->setAttr('back', 'href', Breadcrumbs::getBackUrl());
 
         if ($this->user->hasPermission(User::PERM_ADMIN)) {
             if ($this->user->isType(User::TYPE_MEMBER)) {

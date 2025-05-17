@@ -5,11 +5,13 @@ use App\Controller\Menu\View;
 use App\Db\User;
 use App\Ui\Navigation;
 use Bs\Auth;
+use Bs\Registry;
 use Bs\Ui\Breadcrumbs;
 use Bs\Ui\Dialog;
 use Dom\Modifier\JsLast;
 use Dom\Template;
 use Tk\Alert;
+use Tk\Config;
 use Tk\Uri;
 
 class Page extends \Bs\Mvc\Page
@@ -19,18 +21,18 @@ class Page extends \Bs\Mvc\Page
     {
         $template = parent::show();
 
-        $secretEnabled = json_encode(boolval($this->getRegistry()->get('wiki.enable.secret.mod', false)));
+        $secretEnabled = json_encode(boolval(Registry::getValue('wiki.enable.secret.mod', false)));
         $js = <<<JS
 tkConfig.enableSecretMod = {$secretEnabled};
 JS;
         $template->appendJs($js, array(JsLast::$ATTR_PRIORITY => -9990));
 
-        $template->appendMetaTag('keywords', $this->getRegistry()->get('system.meta.keywords', ''));
-        $template->appendMetaTag('description', $this->getRegistry()->get('system.meta.description', ''));
+        $template->appendMetaTag('keywords', Registry::getValue('system.meta.keywords', ''));
+        $template->appendMetaTag('description', Registry::getValue('system.meta.description', ''));
 
 
-        $template->appendJs($this->getRegistry()->get('system.global.js', ''));
-        $template->appendCss($this->getRegistry()->get('system.global.css', ''));
+        $template->appendJs(Registry::getValue('system.global.js', ''));
+        $template->appendCss(Registry::getValue('system.global.css', ''));
 
         $template->setText('year', date('Y'));
         $template->setAttr('home', 'href', Uri::create('/')->toString());
@@ -110,7 +112,7 @@ JS;
 HTML;
         $template = $this->loadTemplate($html);
 
-        if ($oAuth && $this->getConfig()->get('auth.'.$oAuth.'.endpointLogout', '')) {
+        if ($oAuth && Config::getValue('auth.'.$oAuth.'.endpointLogout', '')) {
             $template->setText('label', 'Logout from ' . ucwords($oAuth));
             $template->setVisible('ssi');
         }

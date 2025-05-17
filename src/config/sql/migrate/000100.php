@@ -1,22 +1,22 @@
 <?php
+use Bs\Registry;
 
-$registry = \App\Factory::instance()->getRegistry();
-$registry->set('site.name', 'Tropotek Wiki');
-$registry->set('site.name.short', 'Wiki');
-$registry->set('site.email', 'site@email.com');
-$registry->set('site.email.sig', '');
-$registry->set('system.maintenance.enabled', '');
-$registry->set('system.maintenance.message', '');
-$registry->set('system.global.css', '');
-$registry->set('system.global.js', '');
-$registry->set('system.meta.description', '');
-$registry->set('system.meta.keywords', '');
-$registry->set('site.account.registration', '');
+Registry::setValue('site.name', 'Tropotek Wiki');
+Registry::setValue('site.name.short', 'Wiki');
+Registry::setValue('site.email', 'site@email.com');
+Registry::setValue('site.email.sig', '');
+Registry::setValue('system.maintenance.enabled', '');
+Registry::setValue('system.maintenance.message', '');
+Registry::setValue('system.global.css', '');
+Registry::setValue('system.global.js', '');
+Registry::setValue('system.meta.description', '');
+Registry::setValue('system.meta.keywords', '');
+Registry::setValue('site.account.registration', '');
 
-$registry->set('site.page.header.hide', '');
-$registry->set('wiki.page.home', '1');
-$registry->set('wiki.enable.credential.mod', '0');
+Registry::setValue('site.page.header.hide', '');
+Registry::setValue('wiki.page.home', '1');
+Registry::setValue('wiki.enable.credential.mod', '0');
 
-$registry->save();
+Registry::instance()->save();
 
 

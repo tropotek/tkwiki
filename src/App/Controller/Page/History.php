@@ -5,6 +5,7 @@ use App\Db\Page;
 use App\Db\User;
 use App\Table\Content;
 use Bs\Mvc\ControllerPublic;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Db;
@@ -29,7 +30,7 @@ class History extends ControllerPublic
 
         if (!$this->page->canEdit(User::getAuthUser())) {
             Alert::addError("You do not have permission to access this page");
-            $this->getBackUrl()->redirect();
+            Breadcrumbs::getBackUrl()->redirect();
         }
 
         $this->getPage()->setTitle('History for `' . $this->page->title . '`');

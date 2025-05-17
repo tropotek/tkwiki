@@ -1,8 +1,10 @@
 <?php
 namespace App\Controller;
 
+use App\Factory;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\Form;
+use Bs\Registry;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Form\Action\Link;
@@ -40,7 +42,7 @@ class Contact extends ControllerPublic
         $this->form->appendField(new Submit('send', [$this, 'onSubmit']));
         $this->form->appendField(new Link('cancel', Uri::create()));
 
-        $this->form->setFieldValues($this->getRegistry()->all());
+        $this->form->setFieldValues(Registry::instance()->all());
 
         $this->form->execute($_POST);
 
@@ -60,9 +62,6 @@ class Contact extends ControllerPublic
 
         if ($form->hasErrors()) return;
 
-        $message = $this->getFactory()->createMailMessage();
-        $message->addTo($form->getFieldValue('email'));
-        $message->setSubject($this->getRegistry()->getSiteName() . ' Contact Request');
         $content = <<<HTML
 <p>
 Dear {name},
@@ -75,7 +74,9 @@ Phone: {phone}<br/>
   {message}
 </p>
 HTML;
-        $message->setContent($content);
+        $message = Factory::instance()->createMailMessage($content);
+        $message->addTo($form->getFieldValue('email'));
+        $message->setSubject(Registry::getSiteName() . ' Contact Request');
         $message->replace($form->getFieldValues());
         Mailer::instance()->send($message);
 

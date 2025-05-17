@@ -6,6 +6,7 @@ use Bs\Auth;
 use Bs\Mvc\ControllerAdmin;
 use Bs\Mvc\Table;
 use Bs\Db\Masquerade;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Form\Field\Input;
@@ -179,7 +180,8 @@ class Manager extends ControllerAdmin
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
-        $template->setAttr('back', 'href', $this->getBackUrl());
+        $template->addCss('icon', $this->getPage()->getIcon());
+        $template->setAttr('back', 'href', Breadcrumbs::getBackUrl());
 
         if ($this->type == User::TYPE_STAFF) {
             $template->setAttr('create-staff', 'href', Uri::create('/user/staffEdit'));
@@ -208,7 +210,7 @@ class Manager extends ControllerAdmin
     </div>
   </div>
   <div class="card mb-3">
-    <div class="card-header" var="title"><i class="fa fa-users"></i> </div>
+    <div class="card-header"><i var="icon"></i> <span var="title"></span></div>
     <div class="card-body" var="content"></div>
   </div>
 </div>

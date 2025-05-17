@@ -3,7 +3,6 @@ namespace App\Dom\Modifier;
 
 use App\Db\Page;
 use App\Db\User;
-use Bs\Traits\SystemTrait;
 use Dom\Modifier\ModifierInterface;
 use Tk\Uri;
 
@@ -15,7 +14,6 @@ use Tk\Uri;
  */
 class WikiUrl extends ModifierInterface
 {
-    use SystemTrait;
 
     public function executeNode(\DOMElement $node): void
     {

@@ -28,7 +28,7 @@ class Test extends ControllerPublic
         }
 
         // log level test
-//        Log::debug("Log level: " . $this->getConfig()->get('log.logLevel'));
+//        Log::debug("Log level: " . Config::getValue('log.logLevel'));
 //        Log::debug("Debug Message");
 //        Log::info("Info Message");
 //        Log::notice("Notice Message");

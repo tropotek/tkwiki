@@ -1,7 +1,7 @@
 <?php
 namespace App\Util;
 
-use Bs\Traits\SystemTrait;
+use App\Factory;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
@@ -9,6 +9,7 @@ use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use Tk\Config;
 use Tk\CurlyTemplate;
+use Tk\Path;
 
 /**
  * @note This file uses the mpdf lib
@@ -16,7 +17,6 @@ use Tk\CurlyTemplate;
  */
 class Pdf extends Renderer implements DisplayInterface
 {
-    use SystemTrait;
 
     protected ?Mpdf  $mpdf      = null;
     protected string $watermark = '';
@@ -64,7 +64,7 @@ class Pdf extends Renderer implements DisplayInterface
             'margin_bottom' => 10,
             'margin_header' => 5,
             'margin_footer' => 5,
-            'tempDir' => Config::makePath(Config::getTempPath())
+            'tempDir' => Path::createTempPath('/')
         ));
         $mpdf = $this->mpdf;
         //$mpdf->setBasePath($url);
@@ -124,7 +124,7 @@ class Pdf extends Renderer implements DisplayInterface
         $template->appendText('title', $this->getTitle());
         $template->appendHtml('content', $this->getHtml());
 
-        $this->getFactory()->getTemplateModifier()->execute($template->getDocument());
+        Factory::instance()->getTemplateModifier()->execute($template->getDocument());
         return $template;
     }
 

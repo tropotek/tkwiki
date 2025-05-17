@@ -2,13 +2,11 @@
 namespace App\Api;
 
 use App\Db\User;
-use Bs\Traits\SystemTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class Secret
 {
-    use SystemTrait;
 
     public function doGetPass(): JsonResponse
     {

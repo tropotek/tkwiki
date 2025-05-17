@@ -8,9 +8,11 @@ use App\Db\User;
 use Bs\Auth;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\Form;
+use Bs\Registry;
 use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
+use Tk\Config;
 use Tk\Form\Action\Submit;
 use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Hidden;
@@ -154,7 +156,7 @@ class Edit extends ControllerPublic
 
 
         $group = 'Extra';
-        $list = array_flip($this->getConfig()->get('wiki.templates', []));
+        $list = array_flip(Config::getValue('wiki.templates', []));
         $this->form->appendField((new Select('template', $list))
             ->setGroup($group)
             ->prependOption('-- Site Default --')
@@ -199,7 +201,7 @@ class Edit extends ControllerPublic
     {
         $this->lock->unlock($this->page->pageId);
 
-        $url = $this->getFactory()->getBackUrl();
+        $url = Breadcrumbs::getBackUrl();
         if ($this->page->pageId && isset($_GET['e'])) {
             $url = $this->page->getUrl();
         }
@@ -245,7 +247,7 @@ class Edit extends ControllerPublic
 
         Alert::addSuccess('Page save successfully.');
 
-        $url = $this->getFactory()->getBackUrl();
+        $url = Breadcrumbs::getBackUrl();
         if (isset($_GET['e'])) {
             $url = $this->page->getUrl();
         }
@@ -267,7 +269,7 @@ class Edit extends ControllerPublic
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
 
-        $url = $this->getFactory()->getBackUrl();
+        $url = Breadcrumbs::getBackUrl();
         if ($this->page->pageId && isset($_GET['e'])) {
             $url = $this->page->getUrl();
         }
@@ -283,7 +285,7 @@ class Edit extends ControllerPublic
         $this->form->getField('description')->addFieldCss('col-sm-6');
         $template->appendTemplate('content', $this->form->show());
 
-        if ($this->getRegistry()->get('wiki.enable.secret.mod', false)) {
+        if (Registry::getValue('wiki.enable.secret.mod', false)) {
             $template->setVisible('secret-select');
         }
 

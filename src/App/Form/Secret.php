@@ -3,7 +3,7 @@ namespace App\Form;
 
 use App\Component\QrcodeReader;
 use Bs\Mvc\Form;
-use Bs\Traits\SystemTrait;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Form\Action\Link;
@@ -20,7 +20,6 @@ use Tk\Uri;
 
 class Secret extends Form
 {
-    use SystemTrait;
 
     protected bool $htmx = false;
 
@@ -87,7 +86,7 @@ class Secret extends Form
         } else {
             $this->appendField(new SubmitExit('save', [$this, 'onSubmit']));
         }
-        $this->appendField(new Link('cancel', Uri::create($this->getBackUrl())));
+        $this->appendField(new Link('cancel', Breadcrumbs::getBackUrl()));
 
         return $this;
     }
@@ -116,7 +115,7 @@ class Secret extends Form
         Alert::addSuccess('Form save successfully.');
         $action->setRedirect(Uri::create()->set('h', $this->getSecret()->hash));
         if ($form->getTriggeredAction()->isExit()) {
-            $action->setRedirect($this->getBackUrl());
+            $action->setRedirect(Breadcrumbs::getBackUrl());
         }
 
         if ($this->isHtmx()) {

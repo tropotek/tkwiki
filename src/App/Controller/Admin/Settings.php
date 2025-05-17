@@ -5,10 +5,12 @@ use App\Db\Page;
 use App\Db\User;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\Form;
+use Bs\Registry;
 use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Collection;
+use Tk\Config;
 use Tk\Form\Action\Link;
 use Tk\Form\Action\SubmitExit;
 use Tk\Form\Field\Checkbox;
@@ -30,7 +32,7 @@ class Settings extends ControllerPublic
         $this->getPage()->setTitle('Edit Settings');
         $this->setUserAccess(User::PERM_SYSADMIN);
 
-        $this->getRegistry()->save();
+        Registry::instance()->save();
 
         $this->form = new Form();
 
@@ -72,7 +74,7 @@ class Settings extends ControllerPublic
             })
         );
 
-        $list = array_flip($this->getConfig()->get('wiki.templates', []));
+        $list = array_flip(Config::getValue('wiki.templates', []));
         $this->form->appendField(new Select('wiki.default.template', $list))
             ->setGroup($tab)
             ->setRequired()
@@ -134,11 +136,11 @@ class Settings extends ControllerPublic
             ->setNotes('Set the message public users will see when in maintenance mode.');
 
         $this->form->appendField(new SubmitExit('save', [$this, 'onSubmit']));
-        $this->form->appendField(new Link('back', $this->getBackUrl()));
+        $this->form->appendField(new Link('back', Breadcrumbs::getBackUrl()));
 
 
         // Load form with object values
-        $this->form->setFieldValues($this->getRegistry()->all());
+        $this->form->setFieldValues(Registry::instance()->all());
 
         // Execute form with request values
         $values = array_merge(array_combine(
@@ -167,19 +169,19 @@ class Settings extends ControllerPublic
         if (!$values['wiki.page.home']) {
             $form->addFieldError('wiki.page.home', 'Please enter a valid home page');
         }
-        if (!in_array($values['wiki.default.template'], $this->getConfig()->get('wiki.templates', []))) {
+        if (!in_array($values['wiki.default.template'], Config::getValue('wiki.templates', []))) {
             $form->addFieldError('wiki.default.template', 'Please enter a valid wiki template');
         }
 
         if ($form->hasErrors()) return;
 
-        $this->getRegistry()->replace($values);
-        $this->getRegistry()->save();
+        Registry::instance()->replace($values);
+        Registry::instance()->save();
 
         Alert::addSuccess('Site settings saved successfully.');
         $action->setRedirect(Uri::create());
         if ($form->getTriggeredAction()->isExit()) {
-            $action->setRedirect($this->getBackUrl());
+            $action->setRedirect(Breadcrumbs::getBackUrl());
         }
     }
 
@@ -187,7 +189,7 @@ class Settings extends ControllerPublic
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
-        $template->setAttr('back', 'href', $this->getBackUrl());
+        $template->setAttr('back', 'href', Breadcrumbs::getBackUrl());
 
         $this->form->getField('site.name')->addFieldCss('col-6');
         $this->form->getField('site.name.short')->addFieldCss('col-6');

@@ -3,7 +3,7 @@ namespace App\Ui;
 
 use App\Db\Secret;
 use App\Db\User;
-use Bs\Traits\SystemTrait;
+use Bs\Registry;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
@@ -14,7 +14,6 @@ use Tk\Db\Filter;
  */
 class ViewSecretList extends Renderer implements DisplayInterface
 {
-    use SystemTrait;
 
     protected User $user;
 
@@ -27,7 +26,7 @@ class ViewSecretList extends Renderer implements DisplayInterface
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        if (!$this->getRegistry()->get('wiki.enable.secret.mod', false)) {
+        if (!Registry::getValue('wiki.enable.secret.mod', false)) {
             return $template;
         }
 

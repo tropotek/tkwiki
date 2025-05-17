@@ -3,7 +3,6 @@ namespace App\Ui;
 
 use App\Db\Page;
 use App\Db\User;
-use Bs\Traits\SystemTrait;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
@@ -12,11 +11,9 @@ use Tk\Db\Filter;
 
 class ViewCategoryList extends Renderer implements DisplayInterface
 {
-    use SystemTrait;
 
     protected string $category;
-
-    protected bool $asTable = false;
+    protected bool   $asTable = false;
 
 
     public function __construct(string $category, bool $asTable = false)

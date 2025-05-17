@@ -6,6 +6,7 @@ use Bs\Auth;
 use Bs\Mvc\ControllerAdmin;
 use Bs\Factory;
 use Bs\Mvc\Form;
+use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
 use Tk\Collection;
@@ -88,7 +89,7 @@ class Profile extends ControllerAdmin
         }
 
         $this->form->appendField(new SubmitExit('save', [$this, 'onSubmit']));
-        $this->form->appendField(new Link('cancel', Factory::instance()->getBackUrl()));
+        $this->form->appendField(new Link('cancel', Breadcrumbs::getBackUrl()));
 
         // Load form with object values
         $load = $this->user->unmapForm();
@@ -153,7 +154,7 @@ class Profile extends ControllerAdmin
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
-        $template->setAttr('back', 'href', $this->getBackUrl());
+        $template->setAttr('back', 'href', Breadcrumbs::getBackUrl());
 
         $this->form->getField('title')->addFieldCss('col-1');
         $this->form->getField('givenName')->addFieldCss('col-5');

@@ -41,7 +41,7 @@ class Manager extends ControllerPublic
     {
         $template = $this->getTemplate();
         $template->appendText('title', $this->getPage()->getTitle());
-        $template->setAttr('back', 'href', $this->getBackUrl());
+        $template->setAttr('back', 'href', Breadcrumbs::getBackUrl());
 
         $template->appendTemplate('content', $this->table->show());
 

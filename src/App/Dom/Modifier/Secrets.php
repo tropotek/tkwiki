@@ -3,7 +3,6 @@ namespace App\Dom\Modifier;
 
 use App\Db\Secret;
 use App\Ui\ViewSecret;
-use Bs\Traits\SystemTrait;
 use Dom\Modifier\ModifierInterface;
 
 /**
@@ -11,7 +10,6 @@ use Dom\Modifier\ModifierInterface;
  */
 class Secrets extends ModifierInterface
 {
-    use SystemTrait;
 
     function init(\DOMDocument $doc): void { }
 

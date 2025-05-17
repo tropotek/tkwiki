@@ -4,7 +4,6 @@ namespace App\Ui;
 use App\Db\Content;
 use App\Db\Page;
 use App\Db\User;
-use Bs\Traits\SystemTrait;
 use Bs\Ui\Dialog;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
@@ -17,7 +16,6 @@ use Tk\Uri;
  */
 class ViewToolbar extends Renderer implements DisplayInterface
 {
-    use SystemTrait;
 
     protected ?User   $user = null;
     protected Page    $page;

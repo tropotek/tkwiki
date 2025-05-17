@@ -2,6 +2,7 @@
 namespace App\Db;
 
 use App\Factory;
+use Bs\Registry;
 use Dom\Template;
 use Tk\Uri;
 use App\Db\Traits\UserTrait;
@@ -179,13 +180,13 @@ class Page extends Model
 
     public static function getHomePage(): self
     {
-        $homeId = intval(Factory::instance()->getRegistry()->get('wiki.page.home', 1));
+        $homeId = intval(Registry::getValue('wiki.page.home', 1));
         return self::find($homeId);
     }
 
     public static function isHomePage(Page $page): bool
     {
-        $homeId = intval(Factory::instance()->getRegistry()->get('wiki.page.home', 1));
+        $homeId = intval(Registry::getValue('wiki.page.home', 1));
         return $page->pageId == $homeId;
     }
 
@@ -388,17 +389,16 @@ class Page extends Model
      */
     public static function getCategoryList(string $search = ''): array
     {
-        return Db::queryList("
+        $rows = Db::query("
             SELECT DISTINCT category
             FROM page
             WHERE category != ''
             AND category LIKE :search",
-            '',
-            'category',
             [
                 'search' => '%' . $search . '%'
             ]
         );
+        return array_column($rows, 'category');
     }
 
     public static function linkExists(int $pageId, int $linkedId): bool

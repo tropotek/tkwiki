@@ -5,6 +5,7 @@ use App\Db\Secret;
 use App\Db\User;
 use Bs\Mvc\ControllerPublic;
 use Bs\Mvc\Table;
+use Bs\Registry;
 use Bs\Ui\Breadcrumbs;
 use Dom\Template;
 use Tk\Alert;
@@ -24,7 +25,7 @@ class Manager extends ControllerPublic
 
         if (
             !User::getAuthUser()?->isStaff() ||
-            !$this->getRegistry()->get('wiki.enable.secret.mod', false)
+            !Registry::getValue('wiki.enable.secret.mod', false)
         ) {
             Alert::addWarning('You do not have permission to access this page');
             Uri::create('/')->redirect();
@@ -50,7 +51,7 @@ class Manager extends ControllerPublic
     {
         $template = $this->getTemplate();
         $template->setText('title', $this->getPage()->getTitle());
-        $template->setAttr('back', 'href', $this->getBackUrl());
+        $template->setAttr('back', 'href', Breadcrumbs::getBackUrl());
 
         $template->setAttr('create', 'href', Uri::create('/secretEdit'));
 

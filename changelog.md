@@ -4,6 +4,12 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.108 [2025-05-18]:
+-------------------------------
+  - Update to use static methods for Registry and Config
+  - Revert branch to dev mode
+
+
 Ver 8.0.106 [2025-05-09]:
 -------------------------------
 

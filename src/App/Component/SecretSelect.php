@@ -128,14 +128,13 @@ class SecretSelect extends \Dom\Renderer\Renderer
   jQuery(function($) {
     const secretDialog = '#{$selectDialogId}';
     const createDialog = '#{$createDialogId}';
-    const baseUrl = '{$baseUrl}';
-    const secretForm = '#secret-form';
+    const baseUrl      = '{$baseUrl}';
+    const secretForm   = '#secret-form';
 
 
     // reload init form on load
     $(document).on('htmx:afterSettle', function(e) {
         if (!$(e.detail.target).is('#secret-select-content')) return;
-        console.log(e.detail);
         tkInit($(secretDialog));
     });
 
@@ -143,7 +142,7 @@ class SecretSelect extends \Dom\Renderer\Renderer
         // insert existing secret
         let hash = $(this).data('secretHash');
         let name = $(this).data('secretName');
-        $(secretDialog).trigger('selected.ss.modal', [hash, name]);
+        $(document).trigger('selected.ss.modal', [hash, name]);
         $(secretDialog).modal('hide');
         return false;
     })
@@ -156,7 +155,7 @@ class SecretSelect extends \Dom\Renderer\Renderer
 
     $(document).on('tkForm:afterSubmit', function(e) {
       if ($(e.detail.elt).is(secretForm)) {
-        $(secretDialog).trigger('selected.ss.modal', [e.detail.hash, e.detail.name]);
+        $(document).trigger('selected.ss.modal', [e.detail.hash, e.detail.name]);
 
         const url = new URL(baseUrl);
         // refresh the secret table list

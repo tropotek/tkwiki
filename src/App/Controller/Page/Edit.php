@@ -336,7 +336,7 @@ jQuery(function($) {
     });
 
     // page select event
-    $(document).on('selected.ps.modal', pageDialog, function(e, title, url, pageId) {
+    $(document).on('selected.ps.modal', function(e, title, url, pageId) {
         const editor = tinymce.activeEditor;
         let attrs = {
           href: 'page://' + url,
@@ -358,7 +358,7 @@ jQuery(function($) {
     });
 
     // secret select event
-    $(document).on('selected.ss.modal', secretDialog, function(e, hash, name) {
+    $(document).on('selected.ss.modal', function(e, hash, name) {
         const editor = tinymce.activeEditor;
         let linkAttrs = {
           class: 'wk-secret',

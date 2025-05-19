@@ -289,7 +289,7 @@ jQuery(function($) {
     }
 
     // on dialog page select
-    $(document).on('selected.ps.modal', pageDialog, function(e, title, url, pageId) {
+    $(document).on('selected.ps.modal', function(e, title, url, pageId) {
         if (pageId === 0) return;
         $.post(location.href, {action: 'create', pageId: pageId, type: 'item'}, function(data) {
             let li = $(liTpl);

@@ -149,7 +149,7 @@ class PageSelect extends \Dom\Renderer\Renderer
         let title = $(this).data('pageTitle');
         let url = $(this).data('pageUrl');
         let pageId = $(this).data('pageId');
-        $(dialog).trigger('selected.ps.modal', [title, url, pageId]);
+        $(document).trigger('selected.ps.modal', [title, url, pageId]);
         $(dialog).modal('hide');
         return false;
     })
@@ -157,7 +157,7 @@ class PageSelect extends \Dom\Renderer\Renderer
         // On insert new page event
         let title = $(this).parent().find('input').val();
         let url = title.trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-        $(dialog).trigger('selected.ps.modal', [title, url, 0]);
+        $(document).trigger('selected.ps.modal', [title, url, 0]);
         $(dialog).modal('hide');
         return false;
     })
@@ -167,7 +167,7 @@ class PageSelect extends \Dom\Renderer\Renderer
         let attrs = {
           'wk-category-list': category
         };
-        $(dialog).trigger('catSelect.ps.modal', [category, attrs]);
+        $(document).trigger('catSelect.ps.modal', [category, attrs]);
         $(dialog).modal('hide');
         return false;
     });

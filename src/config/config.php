@@ -7,17 +7,6 @@ use Tk\Config;
 return function (Config $config) {
 
     /**
-     * Set environment type to prevent destructive functions on production sites
-     * options are 'dev' | 'prod'
-     */
-    $config['env.type'] = 'prod';
-
-    /**
-     * Enable to view more verbose log messages
-     */
-    $config['debug'] = false;
-
-    /**
      * Site template paths
      */
     $config['path.template.public'] = '/html/default.html';
@@ -36,26 +25,6 @@ return function (Config $config) {
     ];
 
     /**
-     * Email template relative path
-     */
-    $config['system.mail.template'] = '/html/templates/mail.default.html';
-
-    /**
-     * Enable DB sessions
-     */
-    $config['session.db_enable'] = true;
-
-    /**
-     * Set the site timezone for PHP and MySQL
-     */
-    $config['php.date.timezone'] = 'Australia/Melbourne';
-
-    /**
-     * The default log level
-     */
-    $config['log.logLevel'] = \Psr\Log\LogLevel::ERROR;
-
-    /**
      * Can users update their password from their profile page
      * (default: false)
      */
@@ -67,21 +36,10 @@ return function (Config $config) {
      */
     $config['auth.registration.enable'] = false;
 
+
     /**
-     * Validate user passwords on input
-     * - Must include at least one number
-     * - Must include at least one letter
-     * - Must include at least one capital
-     * - Must include at least one symbol
-     * - must >= 8 characters
+     * SSI/SSO oAuth portal configs
      *
-     * Note: validation disabled in dev environments
-     * (default: true)
-     */
-    //$config['auth.password.strict'] = false;
-
-
-    /**
      * Whitelist URLS:
      *   - https://domain.com/_ssi  <- main oauth uri
      *   - https://domain.com/login
@@ -110,6 +68,7 @@ return function (Config $config) {
     $config['auth.microsoft.clientId']        = '';  // define in site /config.php
     $config['auth.microsoft.clientSecret']    = '';  // define in site /config.php
 
+
     /**
      * Google external SSI options
      *
@@ -128,6 +87,7 @@ return function (Config $config) {
     // user defined settings
     $config['auth.google.clientId']        = '';  // define in site /config.php
     $config['auth.google.clientSecret']    = '';  // define in site /config.php
+
 
     /**
      * Facebook external SSI options

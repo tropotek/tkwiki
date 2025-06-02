@@ -20,6 +20,11 @@ body {
   background-color: #FFF;
 }
 
+/** fix session crumbs col */
+.tk-table td.mBreadcrumbs a {
+    display: inline-block !important;
+}
+
 
 /* ==================  WIKI Styles  ================== */
 a.wk-page-disable {

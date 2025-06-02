@@ -90,31 +90,6 @@ class MenuItem extends Model
         );
     }
 
-    public static function find(int $id): ?self
-    {
-        return Db::queryOne("
-                SELECT *
-                FROM menu_item
-                WHERE menu_item_id = :id",
-            compact('id'),
-            self::class
-        );
-    }
-
-    /**
-     * @return array<int,MenuItem>
-     */
-    public static function findAll(): array
-    {
-        return Db::query("
-            SELECT *
-            FROM menu_item
-            ORDER BY order_id",
-            null,
-            self::class
-        );
-    }
-
     public static function updateItem(int $menuItemId, ?int $parentId, int $orderId, string $name): bool
     {
         $ok = Db::execute("

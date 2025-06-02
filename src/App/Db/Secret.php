@@ -129,17 +129,6 @@ class Secret extends Model
         return self::PERM_LIST[$this->permission] ?? '';
     }
 
-    public static function find(int $id): ?self
-    {
-        return Db::queryOne("
-            SELECT *
-            FROM v_secret
-            WHERE secret_id = :id",
-            compact('id'),
-            self::class
-        );
-    }
-
     public static function findByHash(string $hash): ?self
     {
         $hash = trim($hash);
@@ -150,19 +139,6 @@ class Secret extends Model
             FROM v_secret
             WHERE hash = :hash",
             compact('hash'),
-            self::class
-        );
-    }
-
-    /**
-     * @return array<int,Secret>
-     */
-    public static function findAll(): array
-    {
-        return Db::query("
-            SELECT *
-            FROM v_secret",
-            null,
             self::class
         );
     }

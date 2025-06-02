@@ -92,30 +92,6 @@ class Content extends Model
         return false;
     }
 
-    public static function find(int $id): ?self
-    {
-        return Db::queryOne("
-                SELECT *
-                FROM content
-                WHERE content_id = :id",
-            compact('id'),
-            self::class
-        );
-    }
-
-    /**
-     * @return array<int,Content>
-     */
-    public static function findAll(): array
-    {
-        return Db::query("
-            SELECT *
-            FROM content",
-            null,
-            self::class
-        );
-    }
-
     /**
      * @return array<int,Content>
      */

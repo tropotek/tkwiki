@@ -62,7 +62,7 @@ class QrcodeReader extends \Dom\Renderer\Renderer
 
         $html = <<<HTML
 <div>
-  <div class="modal fade" var="dialog" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" var="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">

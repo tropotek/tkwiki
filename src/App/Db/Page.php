@@ -198,27 +198,6 @@ class Page extends Model
         return self::findByUrl($url);
     }
 
-    public static function find(int $id): ?self
-    {
-        return Db::queryOne("
-            SELECT *
-            FROM v_page
-            WHERE page_id = :id",
-            compact('id'),
-            self::class
-        );
-    }
-
-    public static function findAll(): array
-    {
-        return Db::query("
-            SELECT *
-            FROM v_page",
-            null,
-            self::class
-        );
-    }
-
     public static function findByHash(string $hash): ?self
     {
         $hash = trim($hash);

@@ -1,7 +1,6 @@
 <?php
 namespace App\Form;
 
-use App\Component\QrcodeReader;
 use Bs\Mvc\Form;
 use Bs\Ui\Breadcrumbs;
 use Dom\Template;
@@ -52,15 +51,13 @@ class Secret extends Form
             ->setGroup($tab)
             ->addFieldCss('col-sm-6');
 
-//        $this->appendField(new Input('otp'))
-//            ->setGroup($tab)
-//            ->setNotes('OTP secret passphrase. Generate 6 number code based on passphrase. <a href="https://en.wikipedia.org/wiki/One-time_password" target="_blank">More here</a>');
-
-
+        $url = Uri::create('/component/qrcodeReader');
         $this->form->appendField((new InputButton('otp', '<i class="fas fa-qrcode"></i>'))
             ->setBtnAttr([
-                'data-bs-toggle' => 'modal',
-                'data-bs-target' => '#'.QrcodeReader::CONTAINER_ID,
+                'hx-get' => $url,
+                'hx-trigger' => 'click queue:none',
+                'hx-target' => 'body',
+                'hx-swap' => 'beforeend',
             ])
             ->addBtnCss('border-light-subtle')
             ->setGroup($tab)

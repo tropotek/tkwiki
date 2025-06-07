@@ -297,7 +297,6 @@ class Edit extends ControllerPublic
         $js = <<<JS
 jQuery(function($) {
     let pageDialog = '#{$pageDialogId}';
-    let secretDialog = '#{$secretDialogId}';
     let pageId = $jsPageId;
     let cache = {};
     let input = $('[name=category]');
@@ -404,9 +403,6 @@ JS;
     <div class="card-header" var="title"><i class="fa fa-users"></i> </div>
     <div class="card-body wk-page-edit" var="content"></div>
   </div>
-
-  <div hx-get="/component/pageSelect" hx-trigger="load" hx-swap="outerHTML"></div>
-  <div hx-get="/component/secretSelect" hx-trigger="load" hx-swap="outerHTML" choice="secret-select"></div>
 </div>
 HTML;
         return $this->loadTemplate($html);

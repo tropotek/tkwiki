@@ -54,7 +54,7 @@ JS;
 
         // public page
         $this->showMenu();
-        $this->showCreatePageDialog();
+        //$this->showCreatePageDialog();
 
         // all pages
         $this->showAlert();
@@ -130,37 +130,38 @@ JS;
         $this->getTemplate()->prependTemplate('content', $template);
     }
 
-    protected function showCreatePageDialog(): void
-    {
-        $dialog = new Dialog('Create a page', 'create-page-dialog');
-
-        $dialog->addButton('Cancel')->addCss('btn btn-outline-secondary');
-        $dialog->addButton('Create')->addCss('btn btn-outline-primary btn-create');
-
-        $html = <<<HTML
-<div>
-   <div class="mb-3">
-     <label for="create-page-title" class="form-label">Select a title for your new page:</label>
-     <input type="text" name="title" id="create-page-title" class="form-control" placeholder="Page Title">
-   </div>
-</div>
-HTML;
-        $dialog->setContent($html);
-        $js = <<<JS
-jQuery(function ($) {
-    $('.btn-create', '#create-page-dialog').on('click', function () {
-        let url = $('#create-page-title').val().trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-        if (url) {
-            document.location = tkConfig.baseUrl + '/edit?u=' + url;
-        }
-        $('#create-page-dialog').modal('hide');
-    });
-});
-JS;
-        $this->getTemplate()->appendJs($js);
-
-        $this->getTemplate()->appendBodyTemplate($dialog->show());
-    }
+    // TODO Create a dialog component for this
+//    protected function showCreatePageDialog(): void
+//    {
+//        $dialog = new Dialog('Create a page', 'create-page-dialog');
+//
+//        $dialog->addButton('Cancel')->addCss('btn btn-outline-secondary');
+//        $dialog->addButton('Create')->addCss('btn btn-outline-primary btn-create');
+//
+//        $html = <<<HTML
+//<div>
+//   <div class="mb-3">
+//     <label for="create-page-title" class="form-label">Select a title for your new page:</label>
+//     <input type="text" name="title" id="create-page-title" class="form-control" placeholder="Page Title">
+//   </div>
+//</div>
+//HTML;
+//        $dialog->setContent($html);
+//        $js = <<<JS
+//jQuery(function ($) {
+//    $('.btn-create', '#create-page-dialog').on('click', function () {
+//        let url = $('#create-page-title').val().trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+//        if (url) {
+//            document.location = tkConfig.baseUrl + '/edit?u=' + url;
+//        }
+//        $('#create-page-dialog').modal('hide');
+//    });
+//});
+//JS;
+//        $this->getTemplate()->appendJs($js);
+//
+//        $this->getTemplate()->appendBodyTemplate($dialog->show());
+//    }
 
     protected function showMenu(): void
     {

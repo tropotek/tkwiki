@@ -16,7 +16,7 @@ class SecretSelect extends \Dom\Renderer\Renderer
     const string CONTAINER_ID = 'secret-select';
 
     protected Table $table;
-    protected bool $showCreate = true;
+    protected bool  $showCreate = true;
 
 
     public function doDefault(): ?Template
@@ -96,94 +96,70 @@ class SecretSelect extends \Dom\Renderer\Renderer
     public function __makeTemplate(): ?Template
     {
         $selectDialogId = self::CONTAINER_ID;
-        $createDialogId = SecretEdit::CONTAINER_ID;
-        $baseUrl = Uri::create()->set('sc', (int)$this->showCreate)->toString();
 
         $html = <<<HTML
-<div>
-  <div class="modal fade" tabindex="-1" var="dialog">
+<div class="modal fade" tabindex="-1" var="dialog">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Select Secret</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Select Secret</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" var="content"></div>
+            <div class="modal-footer" style="justify-content: space-between;" choice="show-create">
+                <div>
+                    <button class="btn btn-sm btn-outline-primary btn-create-secret" type="button"
+                        hx-get="/component/secretEdit"
+                        hx-trigger="click queue:none"
+                        hx-target="body"
+                        hx-swap="beforeend">Create</button>
+                    <button class="btn btn-sm btn-outline-success btn-insert-list" type="button" var="user-id">Insert My List</button>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body" var="content"></div>
-        <div class="modal-footer" style="justify-content: space-between;" choice="show-create">
-          <div>
-            <button class="btn btn-sm btn-outline-primary btn-create-secret" type="button">Create</button>
-            <button class="btn btn-sm btn-outline-success btn-insert-list" type="button" var="user-id">Insert My List</button>
-          </div>
-          <div class="actions">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-
-  <div hx-get="/component/secretEdit" hx-trigger="load" hx-swap="outerHTML"></div>
 
 <script>
-  jQuery(function($) {
-    const secretDialog = '#{$selectDialogId}';
-    const createDialog = '#{$createDialogId}';
-    const baseUrl      = '{$baseUrl}';
-    const secretForm   = '#secret-form';
+jQuery(function($) {
+    const dialog = '#{$selectDialogId}';
+    const table  = '#{$this->table->getId()}';
 
 
-    // reload init form on load
-    $(document).on('htmx:afterSettle', function(e) {
-        if (!$(e.detail.target).is('#secret-select-content')) return;
-        tkInit($(secretDialog));
-    });
-
-    $(secretDialog).on('click', '.wiki-insert', function() {
+    tkInit(table);
+    $('.wiki-insert', dialog).on('click', function() {
         // insert existing secret
         let hash = $(this).data('secretHash');
         let name = $(this).data('secretName');
         $(document).trigger('selected.ss.modal', [hash, name]);
-        $(secretDialog).modal('hide');
-        return false;
-    })
-    .on('click', '.btn-create-secret', function() {
-        $(secretDialog).modal('hide');
-        $(createDialog).modal('show');
+        $(dialog).modal('hide');
         return false;
     });
-
-
-    $(document).on('tkForm:afterSubmit', function(e) {
-      if ($(e.detail.elt).is(secretForm)) {
-        $(document).trigger('selected.ss.modal', [e.detail.hash, e.detail.name]);
-
-        const url = new URL(baseUrl);
-        // refresh the secret table list
-        htmx.ajax('GET', url.toString(), {
-            source:    '#secret-select-tbl-wrap',
-            select:    '#secret-select-tbl-wrap',
-            target:    '#secret-select-tbl-wrap',
-            swap:      'outerHTML'
-        });
-
-        $(secretDialog).modal('hide');
-        $(createDialog).modal('hide');
-      }
+    $('.btn-create-secret', dialog).on('click', function() {
+        $(dialog).modal('hide');
     });
-
-    $('.btn-insert-list', secretDialog).on('click', function() {
+    $('.btn-insert-list', dialog).on('click', function() {
         const editor = tinymce.activeEditor;
         let linkAttrs = {
           class: 'wk-secret-list',
           'wk-secret-list': $(this).data('user-id')
         };
         editor.insertContent(editor.dom.createHTML('div', linkAttrs, editor.dom.encode('{Secret Table Listing}')));
-        $(secretDialog).modal('hide');
+        $(dialog).modal('hide');
     });
 
-  });
-</script>
+    // open the dialog as soon as HTMX settles
+    $(dialog).modal('show');
 
+    // remove the dialog element from the dom when it closes
+    $(dialog).on('hidden.bs.modal', function() {
+        $(dialog).remove();
+    });
+
+});
+</script>
 </div>
 HTML;
         return Template::load($html);

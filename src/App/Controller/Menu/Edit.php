@@ -216,7 +216,13 @@ HTML;
             Add Item
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item btn-add-page" href="javascript:;" data-bs-toggle="modal" data-bs-target="#page-select">Add Page</a></li>
+            <li>
+                <a class="dropdown-item btn-add-page" href="javascript:;"
+                    hx-get="/component/pageSelect"
+                    hx-trigger="click queue:none"
+                    hx-target="body"
+                    hx-swap="beforeend">Add Page</a>
+            </li>
             <li><a class="dropdown-item btn-add-dropdown" href="javascript:;" data-bs-toggle="modal" data-bs-target="#create-dropdown-dialog">Add Dropdown</a></li>
             <li><a class="dropdown-item btn-add-divider" href="javascript:;">Add Divider</a></li>
           </ul>
@@ -230,7 +236,6 @@ HTML;
 
     </div>
   </div>
-  <div hx-get="/component/pageSelect?sc=0" hx-trigger="load" hx-swap="outerHTML" var="dialog"></div>
 
 <script>
 jQuery(function($) {

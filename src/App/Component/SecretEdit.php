@@ -19,16 +19,16 @@ class SecretEdit extends \Dom\Renderer\Renderer
 {
     const string CONTAINER_ID = 'secret-edit-dialog';
 
-    protected ?Form $form = null;
-    protected array $hxEvents = [];
-    protected ?Secret $secret = null;
+    protected ?Form   $form       = null;
+    protected ?Secret $secret     = null;
+    protected array   $hxTriggers = [];
 
 
     public function doDefault(): ?Template
     {
         if (!User::getAuthUser()) return null;
 
-        $secretId = intval($_GET['secretId'] ?? $_POST['secretId'] ?? 0);
+        $secretId = intval($_REQUEST['secretId'] ?? 0);
 
         $this->secret = Secret::find($secretId);
         if (is_null($this->secret)) {
@@ -37,12 +37,6 @@ class SecretEdit extends \Dom\Renderer\Renderer
         }
 
         $this->form = new Form($this->secret, 'secret-form');
-        $this->form->setAction('');
-        $this->form->setAttr('hx-post', Uri::create('/component/secretEdit'));
-        $this->form->setAttr('hx-swap', 'outerHTML');
-        $this->form->setAttr('hx-target', "#{$this->form->getId()}");
-        $this->form->setAttr('hx-select', "#{$this->form->getId()}");
-
 
         $tab = 'Details';
         $this->form->appendField(new Hidden('hash')); // needed for Htmx insert
@@ -70,10 +64,13 @@ class SecretEdit extends \Dom\Renderer\Renderer
             ->setGroup($tab)
             ->addFieldCss('col-sm-6');
 
+        $url = Uri::create('/component/qrcodeReader');
         $this->form->appendField((new InputButton('otp', '<i class="fas fa-qrcode"></i>'))
             ->setBtnAttr([
-                'data-bs-toggle' => 'modal',
-                'data-bs-target' => '#' . QrcodeReader::CONTAINER_ID,
+                'hx-get' => $url,
+                'hx-trigger' => 'click queue:none',
+                'hx-target' => 'body',
+                'hx-swap' => 'beforeend',
             ])
             ->addBtnCss('border-light-subtle is-dialog')
             ->setGroup($tab)
@@ -91,9 +88,15 @@ class SecretEdit extends \Dom\Renderer\Renderer
 
         $this->form->execute($_POST);
 
+        if (!$this->form->isSubmitted()) {
+            // Always set the htmx target and swap to end of the surrounding page <body>.
+            header('HX-Retarget: body');
+            header('HX-Reswap: beforeend');
+        }
+
         // Send HX event headers
-        if (count($this->hxEvents)) {
-            header(sprintf('HX-Trigger: %s', json_encode($this->hxEvents)));
+        if (count($this->hxTriggers)) {
+            header(sprintf('HX-Trigger: %s', json_encode($this->hxTriggers)));
         }
 
         return $this->show();
@@ -106,7 +109,7 @@ class SecretEdit extends \Dom\Renderer\Renderer
 
         $form->addFieldErrors($this->secret->validate());
         if ($form->hasErrors()) {
-            $this->hxEvents['tkForm:onError'] = [
+            $this->hxTriggers['tkForm:onError'] = [
                 'status' => 'err',
                 'errors' => $form->getAllErrors()
             ];
@@ -116,7 +119,8 @@ class SecretEdit extends \Dom\Renderer\Renderer
         $this->secret->save();
 
         // Trigger HX events
-        $this->hxEvents['tkForm:afterSubmit'] = [
+        $this->hxTriggers['tkForm:afterSubmit'] = [
+            'target' => '#' . self::CONTAINER_ID,
             'status' => 'ok',
             'secretId' => $this->secret->secretId,
             'name' => $this->secret->name,
@@ -131,7 +135,7 @@ class SecretEdit extends \Dom\Renderer\Renderer
         $this->form->getRenderer()->getTemplate()->addCss('actions', 'mt-4 float-end');
         $this->form->getRenderer()->getTemplate()->removeCss('fields', 'g-3 mt-1')->addCss('fields', 'g-2');
 
-        $template->appendTemplate('content', $this->form->show());
+        $template->appendTemplate('content', $this->form->htmxShow());
 
         return $template;
     }
@@ -143,75 +147,71 @@ class SecretEdit extends \Dom\Renderer\Renderer
 
     public function __makeTemplate(): ?Template
     {
-        $baseUrl = Uri::create()->toString();
         $qrDialog = QrcodeReader::CONTAINER_ID;
 
         $html = <<<HTML
-<div>
-  <div class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" var="dialog">
+<div class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" var="dialog">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Create Secret</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create Secret</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" var="content"></div>
         </div>
-        <div class="modal-body" var="content"></div>
-      </div>
     </div>
-  </div>
-
-  <div hx-get="/component/qrcodeReader" hx-trigger="load" hx-swap="outerHTML"></div>
 
 <script>
-  jQuery(function($) {
+jQuery(function($) {
     const qrDialog = '#{$qrDialog}';
     const dialog   = '#{$this->getDialogId()}';
     const form     = '#{$this->form->getId()}';
-    const baseUrl  = '{$baseUrl}';
 
-    // reload init form on load
-    $(document).on('htmx:afterSettle', function(e) {
-        if (!$(e.detail.elt).is(form)) return;
-        if (e.detail.requestConfig.verb.toUpperCase() === 'GET') {
-            tkInit(e.detail.elt);
+
+    $(document).on('htmx:afterSettle', dialog, function(e) {
+        tkInit(form);
+    });
+
+    // open the dialog as soon as HTMX settles
+    tkInit(form);
+    $(dialog).modal('show');
+
+    // put focus field when dialog shows
+    $(dialog).on('shown.bs.modal', function() {
+        $(dialog).data('detatch', true);
+        setTimeout(function() { $('input:not(:hidden), textarea, select', dialog).first().focus(); }, 0);
+    });
+
+    // catch dialog finished handling post request
+    $('body').on('tkForm:afterSubmit', function(e) {
+        $(document).trigger('selected.ss.modal', [e.detail.hash, e.detail.name]);
+        $(dialog).modal('hide');
+    });
+
+    // remove the dialog element from the dom when it closes
+    $(document).on('hidden.bs.modal', dialog, function() {
+        // do not detatch dialog if flag is set to false
+        if ($(dialog).data('detatch') !== false) {
+            $(dialog).remove();
         }
+    });
+
+    $('.fld-otp button', form).on('click', function(e) {
+        $(dialog).data('detatch', false);
+        $(dialog).modal('hide');
     });
 
     // QR reader dialog events
     $(document).on('qrcode-copy', function (e, code) {
       $('[name=otp]', form).val(code);
     });
-    $(document).on('hide.bs.modal', qrDialog, function(e) {
-      // re-open edit on qr dialog close
-      $(dialog).modal('show');
+
+    $(document).on('hidden.bs.modal', qrDialog, function() {
+        // re-open edit on qr dialog close
+        $(dialog).modal('show');
     });
 
-    // reload page after successfull submit
-    $(document).on('tkForm:afterSubmit', function(e) {
-        if (!$(e.detail.elt).is(form)) return;
-        $(dialog).modal('hide');
-    });
-
-    // reset form fields
-    $(dialog).on('show.bs.modal', function(e) {
-        if ($(this).data('refresh') === false) return;
-        const url = new URL(baseUrl);
-        if ($(e.relatedTarget).data('secretId')) {
-            url.searchParams.set('secretId', $(e.relatedTarget).data('secretId'));
-            $('.modal-title', dialog).text('Edit Secret');
-        } else {
-            $('.modal-title', dialog).text('Create Secret');
-        }
-
-        htmx.ajax('GET', url.toString(), {
-            source:    form,
-            // select:    form,
-            // target:    form,
-            // swap:      'outerHTML'
-        });
-    });
-
-  });
+});
 </script>
 </div>
 HTML;

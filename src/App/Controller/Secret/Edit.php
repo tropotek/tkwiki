@@ -77,8 +77,6 @@ class Edit extends ControllerPublic
     <div class="card-body" var="content"></div>
   </div>
 
-  <div hx-get="/component/qrcodeReader" hx-trigger="load" hx-swap="outerHTML"></div>
-
 <script>
   jQuery(function($) {
       $(document).on('qrcode-copy', function (e, code) {

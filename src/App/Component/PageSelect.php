@@ -56,7 +56,6 @@ class PageSelect extends \Dom\Renderer\Renderer
                 return \App\Db\Page::PERM_LIST[$page->permission] ?? '';
             });
 
-
         // Add Filter Fields
         $this->table->getForm()->appendField(new Input('search'))
             ->setAttr('placeholder', 'Search title or category');
@@ -129,13 +128,51 @@ class PageSelect extends \Dom\Renderer\Renderer
   </div>
 
 <script>
-  jQuery(function($) {
+jQuery(function($) {
     const dialog = '#{$dialogId}';
+    const table  = '#{$this->table->getId()}';
 
-    $(dialog).on('show.bs.modal', function(e) {
+    function init() {
+        tkInit(table);
+        $(dialog).on('click', '.wiki-insert', function() {
+            // On insert existing page event
+            let title = $(this).data('pageTitle');
+            let url = $(this).data('pageUrl');
+            let pageId = $(this).data('pageId');
+            $(document).trigger('selected.ps.modal', [title, url, pageId]);
+            $(dialog).modal('hide');
+            return false;
+        })
+        .on('click', '.btn-create-page', function() {
+            // On insert new page event
+            let title = $(this).parent().find('input').val();
+            let url = title.trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+            $(document).trigger('selected.ps.modal', [title, url, 0]);
+            $(dialog).modal('hide');
+            return false;
+        })
+        .on('click', '.wiki-cat-list', function() {
+            // On insert new page event
+            let category = $(this).data('category');
+            let attrs = {
+              'wk-category-list': category
+            };
+            $(document).trigger('catSelect.ps.modal', [category, attrs]);
+            $(dialog).modal('hide');
+            return false;
+        });
+    }
+
+    $(document).on('htmx:afterSettle', dialog, function(e) {
+        init();
+    });
+
+    // open the dialog as soon as HTMX settles
+    init();
+    $(dialog).modal('show');
+
+    $(dialog).on('shown.bs.modal', function() {
         $('input', this).val('');
-    })
-    .on('shown.bs.modal', function() {
         if (tinymce.activeEditor) {
             let title = tinymce.activeEditor.selection.getContent({ format: 'text' });
             if (title !== '') {
@@ -143,38 +180,14 @@ class PageSelect extends \Dom\Renderer\Renderer
             }
             $('input', this).last().focus();
         }
-    })
-    .on('click', '.wiki-insert', function() {
-        // On insert existing page event
-        let title = $(this).data('pageTitle');
-        let url = $(this).data('pageUrl');
-        let pageId = $(this).data('pageId');
-        $(document).trigger('selected.ps.modal', [title, url, pageId]);
-        $(dialog).modal('hide');
-        return false;
-    })
-    .on('click', '.btn-create-page', function() {
-        // On insert new page event
-        let title = $(this).parent().find('input').val();
-        let url = title.trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-        $(document).trigger('selected.ps.modal', [title, url, 0]);
-        $(dialog).modal('hide');
-        return false;
-    })
-    .on('click', '.wiki-cat-list', function() {
-        // On insert new page event
-        let category = $(this).data('category');
-        let attrs = {
-          'wk-category-list': category
-        };
-        $(document).trigger('catSelect.ps.modal', [category, attrs]);
-        $(dialog).modal('hide');
-        return false;
     });
 
-  });
+    // remove the dialog element from the dom when it closes
+    $(dialog).on('hidden.bs.modal', function() {
+        $(dialog).remove();
+    });
+});
 </script>
-
 </div>
 HTML;
         return Template::load($html);

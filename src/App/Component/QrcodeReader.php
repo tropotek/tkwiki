@@ -10,9 +10,9 @@ class QrcodeReader extends \Dom\Renderer\Renderer
 {
     const string CONTAINER_ID = 'qr-reader-dialog';
 
-    protected array   $hxEvents = [];
-    protected string  $image = '';
-    protected string  $code = '';
+    protected string  $image      = '';
+    protected string  $code       = '';
+    protected array   $hxTriggers = [];
 
 
     public function doDefault(): ?Template
@@ -30,8 +30,8 @@ class QrcodeReader extends \Dom\Renderer\Renderer
         }
 
         // Send HX event headers
-        if (count($this->hxEvents)) {
-            header(sprintf('HX-Trigger: %s', json_encode($this->hxEvents)));
+        if (count($this->hxTriggers)) {
+            header(sprintf('HX-Trigger: %s', json_encode($this->hxTriggers)));
         }
 
         return $this->show();
@@ -61,36 +61,34 @@ class QrcodeReader extends \Dom\Renderer\Renderer
         $baseUrl = Uri::create()->toString();
 
         $html = <<<HTML
-<div>
-  <div class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" var="dialog">
+<div class="modal fade" tabindex="-1" aria-hidden="true" var="dialog">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">QR-Code Reader</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-            <p>Past or select an image to read the QR code</p>
-            <div class="text-center qr-image mt-2 mb-2" id="qr-reader-wrapper">
-                <img src="#" id="qr-image-preview" style="min-width: 50%;" choice="qr-image-preview" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">QR-Code Reader</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+            <div class="modal-body">
+                <p>Past or select an image to read the QR code</p>
+                <div class="text-center qr-image mt-2 mb-2" id="qr-reader-wrapper">
+                    <img src="#" id="qr-image-preview" style="min-width: 50%;" choice="qr-image-preview" />
+                </div>
 
-            <div class="mt-2 mb-2">
-                <input type="file" class="form-control" accept=".jpg,.png,.gif" name="qr-image" />
-            </div>
-            <div class="mt-2 mb-2">
-                <div class="input-group input-group-merge">
-                  <input type="text" class="form-control" value="" name="decoded" placeholder="QR code" readonly id="fid-qr-code" />
-                  <a href="javascript:;" class="btn btn-white border-light-subtle btn-copy disabled" type="button" title="Click to use code">Copy</a>
+                <div class="mt-2 mb-2">
+                    <input type="file" class="form-control" accept=".jpg,.png,.gif" name="qr-image" />
+                </div>
+                <div class="mt-2 mb-2">
+                    <div class="input-group input-group-merge">
+                      <input type="text" class="form-control" value="" name="decoded" placeholder="QR code" readonly id="fid-qr-code" />
+                      <a href="javascript:;" class="btn btn-white border-light-subtle btn-copy disabled" type="button" title="Click to use code">Copy</a>
+                    </div>
                 </div>
             </div>
         </div>
-      </div>
     </div>
-  </div>
 
 <script>
-  jQuery(function($) {
+jQuery(function($) {
     const dialog = '#{$this->getDialogId()}';
     const baseUrl = '{$baseUrl}';
 
@@ -100,6 +98,14 @@ class QrcodeReader extends \Dom\Renderer\Renderer
         if (code) {
             $('.btn-copy', dialog).removeClass('disabled');
         }
+    });
+
+    // open the dialog as soon as HTMX settles
+    $(dialog).modal('show');
+
+    // remove the dialog element from the dom when it closes
+    $(dialog).on('hidden.bs.modal', function() {
+        $(dialog).remove();
     });
 
     $(dialog).on('show.bs.modal', function(e) {
@@ -156,8 +162,9 @@ class QrcodeReader extends \Dom\Renderer\Renderer
         reader.readAsDataURL(blob);
     }
 
-  });
+});
 </script>
+
 <style>
 div.qr-image {
     min-height: 250px;

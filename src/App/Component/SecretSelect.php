@@ -4,6 +4,7 @@ namespace App\Component;
 use App\Db\Page;
 use App\Db\Secret;
 use App\Db\User;
+use Bs\Mvc\ComponentInterface;
 use Bs\Mvc\Table;
 use Dom\Template;
 use Tk\Db;
@@ -11,7 +12,7 @@ use Tk\Form\Field\Input;
 use Tk\Table\Cell;
 use Tk\Uri;
 
-class SecretSelect extends \Dom\Renderer\Renderer
+class SecretSelect extends \Dom\Renderer\Renderer implements ComponentInterface
 {
     const string CONTAINER_ID = 'secret-select';
 

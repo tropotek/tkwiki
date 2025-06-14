@@ -4,6 +4,7 @@ namespace App\Component;
 
 use App\Db\Secret;
 use App\Db\User;
+use Bs\Mvc\ComponentInterface;
 use Bs\Mvc\Form;
 use Dom\Template;
 use Tk\Form\Action\Link;
@@ -15,7 +16,7 @@ use Tk\Form\Field\Password;
 use Tk\Form\Field\Select;
 use Tk\Uri;
 
-class SecretEdit extends \Dom\Renderer\Renderer
+class SecretEdit extends \Dom\Renderer\Renderer implements ComponentInterface
 {
     const string CONTAINER_ID = 'secret-edit-dialog';
 

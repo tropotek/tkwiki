@@ -2,11 +2,12 @@
 namespace App\Component;
 
 use App\Db\User;
+use Bs\Mvc\ComponentInterface;
 use Dom\Template;
 use Tk\Uri;
 use Zxing\QrReader;
 
-class QrcodeReader extends \Dom\Renderer\Renderer
+class QrcodeReader extends \Dom\Renderer\Renderer implements ComponentInterface
 {
     const string CONTAINER_ID = 'qr-reader-dialog';
 

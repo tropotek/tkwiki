@@ -16,6 +16,7 @@ Registry::setValue('site.account.registration', '');
 Registry::setValue('site.page.header.hide', '');
 Registry::setValue('wiki.page.home', '1');
 Registry::setValue('wiki.enable.credential.mod', '0');
+Registry::setValue('wiki.default.template', '/html/default.html');
 
 Registry::instance()->save();
 

@@ -4,6 +4,13 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.112 [2025-06-21]:
+-------------------------------
+  - convert all dialog components
+  - Update to use new Model object
+  - Fix dialog select lists
+
+
 Ver 8.0.110 [2025-05-18]:
 -------------------------------
 

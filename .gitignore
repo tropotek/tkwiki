@@ -17,5 +17,5 @@ node_modules
 # Project Files
 /config.php
 /.htaccess
-/.htaccess
+/robots.txt
 

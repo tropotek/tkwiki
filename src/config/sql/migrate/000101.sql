@@ -126,16 +126,6 @@ CREATE TABLE IF NOT EXISTS secret (
 SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_SAFE_UPDATES = 0;
 
--- Add wiki user
-TRUNCATE TABLE user;
-TRUNCATE TABLE auth;
-TRUNCATE TABLE auth_remember;
-
-INSERT INTO user (type, given_name) VALUES ('staff', 'Administrator');
-INSERT INTO auth (fkey, fid, permissions, username, email, timezone) VALUES
-  ('App\\Db\\User', LAST_INSERT_ID(), 1, 'wikiadmin', 'wiki@example.com', 'Australia/Melbourne');
-
-
 
 TRUNCATE TABLE page;
 TRUNCATE TABLE content;

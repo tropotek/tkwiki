@@ -5,7 +5,6 @@ use App\Db\User;
 use Bs\Auth;
 use Bs\Db\Masquerade;
 use Bs\Mvc\ControllerAdmin;
-use Bs\Factory;
 use Bs\Mvc\Form;
 use Bs\Ui\Breadcrumbs;
 use Dom\Template;
@@ -22,7 +21,6 @@ use Tk\Uri;
 
 /**
  *
- * @todo Implement the user phone and address fields. Look at using google api to get timestamp etc.
  */
 class Edit extends ControllerAdmin
 {

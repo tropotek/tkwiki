@@ -4,7 +4,6 @@ namespace App\Controller\User;
 use App\Db\User;
 use Bs\Auth;
 use Bs\Mvc\ControllerAdmin;
-use Bs\Factory;
 use Bs\Mvc\Form;
 use Bs\Ui\Breadcrumbs;
 use Dom\Template;
@@ -20,6 +19,9 @@ use Tk\Form\Field\Password;
 use Tk\Form\Field\Select;
 use Tk\Uri;
 
+/**
+ *
+ */
 class Profile extends ControllerAdmin
 {
 

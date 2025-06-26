@@ -40,7 +40,7 @@ class Recover extends ControllerDomInterface
             ->setAttr('autocomplete', 'off')
             ->setAttr('placeholder', 'Username')
             ->setRequired()
-            ->setNotes('Enter your username to recover access your account.');
+            ->setNotes('Enter your username to recover your account.');
 
         $html = <<<HTML
             <a href="/login">Login</a>
@@ -111,7 +111,7 @@ class Recover extends ControllerDomInterface
             ->setAttr('placeholder', 'Password Confirm')
             ->setAttr('autocomplete', 'off')->setRequired();
 
-        $this->form->appendField(new Submit('recover', [$this, 'onRecover']));
+        $this->form->appendField(new Submit('save', [$this, 'onRecover']));
 
         $load = [];
         $this->form->setFieldValues($load);

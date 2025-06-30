@@ -6,7 +6,6 @@ use App\Db\Page;
 use App\Db\User;
 use Bs\Mvc\ControllerPublic;
 use Bs\Ui\Breadcrumbs;
-use Bs\Ui\Dialog;
 use Dom\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -120,8 +119,6 @@ class Edit extends ControllerPublic
         $template->appendHtml('menu-box', $ul);
         $template->setVisible('menu-box');
 
-        $this->showDropdownDialog();
-
         return $template;
     }
 
@@ -173,30 +170,9 @@ HTML;
         return $ul;
     }
 
-    protected function showDropdownDialog(): void
-    {
-        $dialog = new Dialog('Create dropdown Item', 'create-dropdown-dialog');
-
-        $dialog->addButton('Cancel')->addCss('btn btn-outline-secondary');
-        $dialog->addButton('Create')->addCss('btn btn-outline-primary btn-create');
-
-        $html = <<<HTML
-<div>
-   <div class="mb-3">
-     <label for="create-dropdown-name" class="form-label">Select a name for the dropdown:</label>
-     <input type="text" name="title" id="create-dropdown-name" class="form-control" placeholder="Dropdown Name">
-   </div>
-</div>
-HTML;
-        $dialog->setContent($html);
-
-        $this->getTemplate()->appendBodyTemplate($dialog->show());
-    }
 
     public function __makeTemplate(): ?Template
     {
-        $selectDialogId = \App\Component\PageSelect::CONTAINER_ID;
-
         $html = <<<HTML
 <div>
 
@@ -223,7 +199,9 @@ HTML;
                     hx-target="body"
                     hx-swap="beforeend">Add Page</a>
             </li>
-            <li><a class="dropdown-item btn-add-dropdown" href="javascript:;" data-bs-toggle="modal" data-bs-target="#create-dropdown-dialog">Add Dropdown</a></li>
+            <li><a class="dropdown-item btn-add-dropdown" href="javascript:;"
+                    hx-get="/component/menuAddDropdown"
+                    hx-trigger="click queue:none">Add Dropdown</a></li>
             <li><a class="dropdown-item btn-add-divider" href="javascript:;">Add Divider</a></li>
           </ul>
         </div>
@@ -239,8 +217,6 @@ HTML;
 
 <script>
 jQuery(function($) {
-    let pageDialog = '#{$selectDialogId}';
-
     const liTpl = `
 <li id="item-0" data-item-id="0" data-page-id="0">
   <i class="fa fa-fw fa-ellipsis-vertical"/>
@@ -307,15 +283,14 @@ jQuery(function($) {
             $('a', li).attr('contentEditable', 'true');
             sortable.append(li);
             $('button.btn-save-menu').prop('disabled', false);
-
-            $(pageDialog).modal('hide');
         });
         return false;
     });
 
     // Add dropdown item
-    sortable.on('create-dropdown', function(obj, name) {
-        // Create new menu item and get item id returned from server
+    $(document).on('create-dropdown', function(obj, name) {
+        if (!name) return;
+        // Create dropdown item and get item id returned from server
         $.post(location.href, {action: 'create', pageId: 0, type: 'dropdown', name: name}, function(data) {
             let li = $(liTpl);
             li.addClass('dropdown');
@@ -342,23 +317,6 @@ jQuery(function($) {
             $('a', li).html(data.name);
             sortable.append(li);
         });
-    });
-
-
-    // Show create menu item dropdown
-    $('.btn-create', '#create-dropdown-dialog').on('click', function () {
-        let name = $('#create-dropdown-name').val().trim();
-        if (name) {
-            $('.sortable').trigger('create-dropdown', [name]);
-        }
-        $('#create-dropdown-dialog').modal('hide');
-    });
-
-    $('#create-dropdown-dialog').on('show.bs.modal', function () {
-        $('input', this).val('');
-    })
-    .on('shown.bs.modal', function () {
-        $('input:first', this).focus();
     });
 
 });

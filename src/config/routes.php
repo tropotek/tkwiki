@@ -82,6 +82,10 @@ return function (CollectionConfigurator $routes) {
         ->controller([\App\Component\SecretEdit::class, 'doDefault']);
     $routes->add('com-qr-code-reader', '/component/qrcodeReader')
         ->controller([\App\Component\QrcodeReader::class, 'doDefault']);
+    $routes->add('com-page-info', '/component/pageInfo')
+        ->controller([\App\Component\PageInfo::class, 'doDefault']);
+    $routes->add('com-menu-add-dropdown', '/component/menuAddDropdown')
+        ->controller([\App\Component\MenuAddDropdown::class, 'doDefault']);
 
 
     // API calls (Returns JSON response)

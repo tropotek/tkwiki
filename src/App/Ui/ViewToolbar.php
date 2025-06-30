@@ -4,11 +4,9 @@ namespace App\Ui;
 use App\Db\Content;
 use App\Db\Page;
 use App\Db\User;
-use Bs\Ui\Dialog;
 use Dom\Renderer\DisplayInterface;
 use Dom\Renderer\Renderer;
 use Dom\Template;
-use Tk\Date;
 use Tk\Uri;
 
 /**
@@ -54,11 +52,9 @@ class ViewToolbar extends Renderer implements DisplayInterface
             $template->setVisible('can-edit');
         }
         if (\App\Db\User::getAuthUser()?->isStaff()) {
-            $template->setVisible('info-url');
-            $dialog = $this->showInfoDialog();
-            $template->appendBodyTemplate($dialog->show());
-            $template->setAttr('info-url', 'data-bs-toggle', 'modal');
-            $template->setAttr('info-url', 'data-bs-target', '#'.$dialog->getId());
+            $url = Uri::create('/component/pageInfo', ['pageId' => $this->page->pageId]);
+            $template->setAttr('info-dialog', 'hx-get', $url);
+            $template->setVisible('info-dialog');
         }
         $template->setAttr('pdf-url', 'href', Uri::create()->set('pdf'));
 
@@ -69,36 +65,6 @@ class ViewToolbar extends Renderer implements DisplayInterface
         return $template;
     }
 
-    protected function showInfoDialog(): Dialog
-    {
-        $dialog = new Dialog('Page Information', 'page-info-dialog');
-        $html = <<<HTML
-<ul class="list-unstyled">
-  <li>Title: <span var="title"></span></li>
-  <li>Category: <span var="category"></span></li>
-  <li>Permission: <span var="permission"></span></li>
-  <li>Current Revision: <span var="revision"></span></li>
-  <li>Views: <span var="views"></span></li>
-  <li>Author: <span var="author"></span></li>
-  <li>Modified: <span var="modified"></span></li>
-  <li>Created: <span var="created"></span></li>
-</ul>
-HTML;
-        $t = Template::load($html);
-
-        $t->setText('author', $this->page->getUser()->nameShort);
-        $t->setText('title', $this->page->title);
-        $t->setText('category', $this->page->category);
-        $t->setText('permission', $this->page->getPermissionLabel());
-        $t->setText('revision', strval($this->content->contentId));
-        $t->setText('views', strval($this->page->views));
-        $t->setText('modified', $this->page->modified->format(Date::FORMAT_LONG_DATETIME));
-        $t->setText('created', $this->page->modified->format(Date::FORMAT_LONG_DATETIME));
-
-        $dialog->setContent($t);
-        return $dialog;
-    }
-
     public function __makeTemplate(): ?Template
     {
         $html = <<<HTML
@@ -107,10 +73,11 @@ HTML;
   <a href="javascript:;" title="Page History" class="btn btn-outline-secondary" choice="can-edit" var="history"><i class="fa fa-fw fa-clock-rotate-left"></i></a>
   <a href="/?pdf=pdf" title="Download PDF" class="btn btn-outline-secondary" target="_blank" var="pdf-url"><i class="fa fa-fw fa-file-pdf"></i></a>
   <a href="javascript:window.print();" title="Print Document" class="btn btn-outline-secondary"><i class="fa fa-fw fa-print"></i></a>
-  <a href="javascript:;" title="Page Info" class="btn btn-outline-secondary" choice="info-url"><i class="fa fa-fw fa-circle-info"></i></a>
+  <a href="javascript:;" title="Page Info" class="btn btn-outline-secondary" choice="info-dialog"
+        hx-get="/component/pageInfo"
+        hx-trigger="click queue:none"><i class="fa fa-fw fa-circle-info"></i></a>
 </div>
 HTML;
-
         return Template::load($html);
     }
 

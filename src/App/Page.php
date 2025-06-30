@@ -7,7 +7,6 @@ use App\Ui\Navigation;
 use Bs\Auth;
 use Bs\Registry;
 use Bs\Ui\Breadcrumbs;
-use Bs\Ui\Dialog;
 use Dom\Modifier\JsLast;
 use Dom\Template;
 use Tk\Alert;

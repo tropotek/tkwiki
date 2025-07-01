@@ -151,7 +151,7 @@ class WikiTest extends Console
 
         $editor = new User();
         $editor->type = User::TYPE_STAFF;
-        $editor->permissions = User::PERM_SYSADMIN | User::PERM_MANAGE_STAFF | User::PERM_MANAGE_MEMBERS;
+        $editor->permissions = User::PERM_SYSADMIN | User::PERM_MANAGE_MEMBERS;
         $editor->username = 'editor';
         $editor->password = Auth::hashPassword('password');
         $editor->email = 'editor@dev.ttek.org';

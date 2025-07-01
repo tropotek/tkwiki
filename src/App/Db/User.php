@@ -24,17 +24,24 @@ class User extends Model implements UserInterface
      *
      * @todo move all permission functions to app level
      */
-    const int PERM_ADMIN            = 0x1; // Admin
-    const int PERM_SYSADMIN         = 0x2; // Change system settings
-    const int PERM_MANAGE_STAFF     = 0x4; // Manage staff
-    const int PERM_MANAGE_MEMBERS   = 0x8; // Manage members
-    //                                0x10; // available
+    const int PERM_ADMIN          = 0x1; // Admin
+    const int PERM_SYSADMIN       = 0x2; // Change system settings
+    const int PERM_MANAGE_MEMBERS = 0x4; // Manage members
+    // const int PERM_            = 0x8; // available
+
+	// combinations of permissions to access parts of the system
+    const int CHANGE_USERS = self::PERM_SYSADMIN | self::PERM_MANAGE_MEMBERS;
 
     const array PERMISSION_LIST = [
-        self::PERM_ADMIN            => "Admin",
-        self::PERM_SYSADMIN         => "Manage Settings",
-        self::PERM_MANAGE_STAFF     => "Manage Staff",
-        self::PERM_MANAGE_MEMBERS   => "Manage Members",
+        self::PERM_ADMIN          => "Admin",
+        self::PERM_SYSADMIN       => "Manage Settings",
+        self::PERM_MANAGE_MEMBERS => "Manage Members",
+    ];
+
+    const array PERMISSION_DESCRIPTION_LIST = [
+        self::PERM_ADMIN          => "Access to all features and settings",
+        self::PERM_SYSADMIN       => "Change system settings, manage staff users",
+        self::PERM_MANAGE_MEMBERS => "Manage site member users",
     ];
 
     const string TYPE_STAFF = 'staff';

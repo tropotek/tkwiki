@@ -195,8 +195,8 @@ class Settings extends ControllerPublic
         $this->form->getField('site.name.short')->addFieldCss('col-6');
         $this->form->getRenderer()->addFieldCss('mb-3');
 
-        $template->setVisible('staff', User::getAuthUser()->hasPermission(User::PERM_MANAGE_STAFF));
-        $template->setVisible('member', User::getAuthUser()->hasPermission(User::PERM_MANAGE_MEMBERS));
+        $template->setVisible('staff', User::getAuthUser()->hasPermission(User::PERM_SYSADMIN));
+        $template->setVisible('member', User::getAuthUser()->hasPermission(User::CHANGE_USERS));
         $template->setVisible('admin', User::getAuthUser()->hasPermission(User::PERM_ADMIN));
 
         $template->appendTemplate('content', $this->form->show());

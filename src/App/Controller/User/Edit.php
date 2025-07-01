@@ -53,10 +53,10 @@ class Edit extends ControllerAdmin
         $this->auth = $this->user->getAuth();
 
         if ($this->type == User::TYPE_STAFF) {
-            $this->setUserAccess(User::PERM_MANAGE_STAFF);
+            $this->setUserAccess(User::PERM_SYSADMIN);
         }
         if ($this->type == User::TYPE_MEMBER) {
-            $this->setUserAccess(User::PERM_MANAGE_MEMBERS);
+            $this->setUserAccess(User::CHANGE_USERS);
         }
 
         // send inactive user activation email
@@ -108,7 +108,7 @@ class Edit extends ControllerAdmin
                 ->setLabel('Permissions')
                 ->setGroup('Permissions');
 
-            if (!Auth::getAuthUser()->hasPermission(User::PERM_MANAGE_STAFF)) {
+            if (!Auth::getAuthUser()->hasPermission(User::PERM_SYSADMIN)) {
                 $field->setNotes('You require "Manage Staff" to modify permissions');
                 $field->setDisabled();
             }

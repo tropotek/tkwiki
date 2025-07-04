@@ -58,7 +58,7 @@ class Content extends Table
         return $this;
     }
 
-    public function execute(): static
+    public function execute(?callable $onInit = null): static
     {
         if (isset($_GET['r'])) {
             $this->doRevert(intval($_GET['r']));

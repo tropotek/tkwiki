@@ -44,7 +44,7 @@ class View extends ControllerPublic
                 Uri::create('/edit')->set('u', $pageUrl)->redirect();
             } else {
                 // Must be a public non-logged in user
-                throw new HttpException(404, 'Page not found');
+                throw new HttpException(404, 'Page not found: ' . $pageUrl);
             }
         } else {
             if (!$this->page->canView(User::getAuthUser())) {

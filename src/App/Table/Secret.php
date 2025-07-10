@@ -81,7 +81,11 @@ class Secret extends Table
             ->setStrict(true)
         );
 
-        $this->getForm()->appendField(new Checkbox('otp', ['y' => 'otp']));
+        $list = ['y' => 'Yes', 'n' => 'No'];
+        $this->getForm()->appendField((new Select('otp', $list))
+            ->prependOption('-- OTP -- ')
+            ->setStrict(true)
+        );
 
 
         // Add Table actions

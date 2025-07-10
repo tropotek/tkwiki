@@ -149,7 +149,7 @@ class Secret extends Model
     public static function findViewable(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
-        $filter->appendFrom('v_secret a');
+        $filter->appendFrom(static::getPrimaryTable() . ' a');
 
         if (!empty($filter['search'])) {
             $filter['lSearch'] = '%' . strtolower($filter['search']) . '%';
@@ -171,8 +171,13 @@ class Secret extends Model
             $filter->appendWhere('AND a.permission IN :permission');
         }
 
-        if (!empty($filter['otp'])) {
-            $filter->appendWhere("AND a.otp != ''");
+        if (is_bool(truefalse($filter['otp'] ?? null))) {
+            $filter['otp'] = truefalse($filter['otp']);
+            if (truefalse($filter['otp'])) {
+                $filter->appendWhere("AND a.otp != ''");
+            } else {
+                $filter->appendWhere("AND a.otp = ''");
+            }
         }
 
         $filter->appendWhere('AND a.publish');

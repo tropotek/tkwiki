@@ -223,7 +223,7 @@ class Page extends Model
     public static function findViewable(array|Filter $filter): array
     {
         $filter = Filter::create($filter);
-        $filter->appendFrom('v_page a');
+        $filter->appendFrom(static::getPrimaryTable() . ' a');
 
         if (!empty($filter['search'])) {
             $filter['lSearch'] = '%' . $filter['search'] . '%';

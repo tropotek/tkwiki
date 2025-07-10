@@ -158,6 +158,7 @@ class Manager extends ControllerAdmin
 
         // Set the table rows
         $filter = $this->table->getDbFilter();
+        vd($this->type);
         $filter->set('type', $this->type);
         $rows = User::findFiltered($filter);
 

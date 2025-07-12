@@ -40,11 +40,12 @@ class View extends ControllerPublic
         $this->page = Page::findPage($pageUrl);
         if (!$this->page) {
             if (Page::canCreate(User::getAuthUser())) {
-                // Create a redirect to the page edit controller
+                // if use has permission, create a new page
                 Uri::create('/edit')->set('u', $pageUrl)->redirect();
             } else {
-                // Must be a public non-logged in user
-                throw new HttpException(404, 'Page not found: ' . $pageUrl);
+                // Must be a public non-logged in user, then page not found
+                Alert::addWarning('Page not found');
+                Page::getHomePage()->getUrl()->redirect();
             }
         } else {
             if (!$this->page->canView(User::getAuthUser())) {

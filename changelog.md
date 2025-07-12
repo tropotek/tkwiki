@@ -4,6 +4,12 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.124 [2025-07-13]:
+-------------------------------
+  - fix OTP filter
+  - Fixuser manager type filter
+
+
 Ver 8.0.122 [2025-07-09]:
 -------------------------------
 

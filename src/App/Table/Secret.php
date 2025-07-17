@@ -22,8 +22,9 @@ class Secret extends Table
         $this->appendCell($rowSelect);
 
         $this->appendCell('actions')
+            ->addHeaderCss('text-center')
             ->addCss('text-nowrap text-center')
-            ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
+            ->addOnHtml(function(\App\Db\Secret $obj, Cell $cell) {
                 $url = $obj->url;
                 return <<<HTML
                     <a class="btn btn-sm btn-outline-primary" href="$url" title="Open in new tab" target="_blank"><i class="fa fa-globe"></i></a>
@@ -31,8 +32,9 @@ class Secret extends Table
             });
 
         $this->appendCell('otp')
+            ->addHeaderCss('text-center')
             ->addCss('text-nowrap text-center wk-secret')
-            ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
+            ->addOnHtml(function(\App\Db\Secret $obj, Cell $cell) {
                 if (empty($obj->otp)) return '';
                 $cell->setAttr('data-secret-hash', $obj->hash);
                 return <<<HTML
@@ -44,7 +46,7 @@ class Secret extends Table
             ->addCss('text-nowrap')
             ->addHeaderCss('max-width')
             ->setSortable(true)
-            ->addOnValue(function(\App\Db\Secret $obj, Cell $cell) {
+            ->addOnHtml(function(\App\Db\Secret $obj, Cell $cell) {
                 $url = Uri::create('/secretEdit', ['h' => $obj->hash]);
                 return sprintf('<a href="%s">%s</a>', $url, $obj->name);
             });
@@ -62,14 +64,16 @@ class Secret extends Table
             });
 
         $this->appendCell('publish')
-            ->addCss('text-nowrap')
+            ->addHeaderCss('text-center')
+            ->addCss('text-nowrap text-center')
             ->setSortable(true)
             ->addOnValue('\Tk\Table\Type\Boolean::onValue');
 
         $this->appendCell('created')
-            ->addCss('text-nowrap')
+            ->addHeaderCss('text-end')
+            ->addCss('text-end text-nowrap')
             ->setSortable(true)
-            ->addOnValue('\Tk\Table\Type\DateFmt::onValue');
+            ->addOnValue('\Tk\Table\Type\Date::getLongDateTime');
 
 
         // Add Filter Fields
@@ -89,17 +93,16 @@ class Secret extends Table
 
 
         // Add Table actions
-        $this->appendAction(Delete::create()
-            ->addOnGetSelected([$rowSelect, 'getSelected'])
-            ->addOnDelete(function(Delete $action, array $selected) {
+        $this->table->appendAction(Delete::create()
+            ->addOnExecute(function(Delete $action) use ($rowSelect) {
+                $selected = $rowSelect->getSelected();
                 foreach ($selected as $secret_id) {
                     $secret = \App\Db\Secret::find($secret_id);
                     if ($secret?->canEdit(User::getAuthUser())) {
-                        Db::delete('secret', compact('secret_id'));
+                        Db::delete('team', compact('secret_id'));
                     }
                 }
-            })
-        );
+            }));
 
         return $this;
     }

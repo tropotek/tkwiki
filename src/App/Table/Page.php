@@ -6,6 +6,7 @@ use Bs\Mvc\Table;
 use Dom\Template;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Select;
+use Tk\Table\Action\ColumnSelect;
 use Tk\Uri;
 use Tk\Db;
 use Tk\Table\Action\Delete;
@@ -46,19 +47,23 @@ class Page extends Table
         $this->appendCell('url')
             ->addCss('text-nowrap')
             ->setSortable(true)
+            ->setAttr(ColumnSelect::ATTR_HIDE, true)
             ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
                 return sprintf('<a href="%s">/%s</a>', $page->getUrl(), $page->url);
             });
 
         $this->appendCell('publish')
-            ->addCss('text-nowrap')
+            ->addHeaderCss('text-center')
+            ->addCss('text-nowrap text-center')
             ->setSortable(true)
             ->addOnValue('\Tk\Table\Type\Boolean::onValue');
 
         $this->appendCell('isOrphaned')
-            ->addCss('text-nowrap')
+            ->addHeaderCss('text-center')
+            ->addCss('text-nowrap text-center')
             ->setHeader('Orphan')
             ->setSortable(true)
+            ->setAttr(ColumnSelect::ATTR_HIDE, true)
             ->addOnValue('\Tk\Table\Type\Boolean::onValue');
 
         $this->appendCell('permission')
@@ -69,24 +74,29 @@ class Page extends Table
 
         $this->appendCell('userId')
             ->addCss('text-nowrap')
+            ->setAttr(ColumnSelect::ATTR_HIDE, true)
             ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
                 return $page->getUser()->nameShort;
             });
 
         $this->appendCell('views')
+            ->addHeaderCss('text-center')
+            ->addCss('text-nowrap text-center')
             ->setSortable(true)
-            ->addCss('text-center')
             ->addHeaderCss('text-center');
 
         $this->appendCell('modified')
-            ->addCss('text-nowrap')
+            ->addHeaderCss('text-end')
+            ->addCss('text-end text-nowrap')
             ->setSortable(true)
-            ->addOnValue('\Tk\Table\Type\DateFmt::onValue');
+            ->addOnValue('\Tk\Table\Type\Date::getLongDateTime');
 
         $this->appendCell('created')
-            ->addCss('text-nowrap')
+            ->addHeaderCss('text-end')
+            ->addCss('text-end text-nowrap')
             ->setSortable(true)
-            ->addOnValue('\Tk\Table\Type\DateFmt::onValue');
+            ->setAttr(ColumnSelect::ATTR_HIDE, true)
+            ->addOnValue('\Tk\Table\Type\Date::getLongDateTime');
 
 
         // Add Filter Fields
@@ -108,16 +118,17 @@ class Page extends Table
 
 
         // Add Table actions
-        $this->appendAction((Delete::create())
-            ->addOnGetSelected([$rowSelect, 'getSelected'])
-            ->addOnDelete(function(Delete $action, array $selected) {
+        $this->table->appendAction(ColumnSelect::create());
+
+        $this->table->appendAction(Delete::create()
+            ->addOnExecute(function(Delete $action) use ($rowSelect) {
+                $selected = $rowSelect->getSelected();
                 $homeId = intval(Registry::instance()->get('wiki.page.home', 1));
                 foreach ($selected as $page_id) {
                     if ($page_id == $homeId) continue;
                     Db::delete('page', compact('page_id'));
                 }
-            })
-        );
+            }));
 
         return $this;
     }

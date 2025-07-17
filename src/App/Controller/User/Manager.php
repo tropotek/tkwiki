@@ -53,8 +53,9 @@ class Manager extends ControllerAdmin
         $this->table->appendCell($rowSelect);
 
         $this->table->appendCell('actions')
+            ->addHeaderCss('text-center')
             ->addCss('text-nowrap text-center')
-            ->addOnValue(function(User $user, Cell $cell) {
+            ->addOnHtml(function(User $user, Cell $cell) {
                 $msq = Uri::create()->set(Masquerade::QUERY_MSQ, $user->userId);
                 $disabled = !Masquerade::canMasqueradeAs(Auth::getAuthUser(), $user->getAuth()) ? 'disabled' : '';
                 return <<<HTML
@@ -66,7 +67,7 @@ class Manager extends ControllerAdmin
             ->addCss('text-nowrap')
             ->addHeaderCss('max-width')
             ->setSortable(true)
-            ->addOnValue(function(User $user, Cell $cell) {
+            ->addOnHtml(function(User $user, Cell $cell) {
                 $url = Uri::create('/user/'.$user->type.'Edit', ['userId' => $user->userId]);
                 return sprintf('<a href="%s">%s</a>', $url, $user->username);
             });
@@ -81,13 +82,13 @@ class Manager extends ControllerAdmin
 
         $this->table->appendCell('email')
             ->setSortable(true)
-            ->addOnValue(function(User $user, Cell $cell) {
+            ->addOnHtml(function(User $user, Cell $cell) {
                 return sprintf('<a href="mailto:%s">%s</a>', $user->email, $user->email);
             });
 
         if (User::getAuthUser()->hasPermission(User::PERM_ADMIN) && $this->type == User::TYPE_STAFF) {
             $this->table->appendCell('permissions')
-                ->addOnValue(function (User $user, Cell $cell) {
+                ->addOnHtml(function (User $user, Cell $cell) {
                     if ($user->hasPermission(User::PERM_ADMIN)) {
                         $list = User::PERMISSION_LIST;
                         return $list[User::PERM_ADMIN];
@@ -100,18 +101,22 @@ class Manager extends ControllerAdmin
         }
 
         $this->table->appendCell('active')
+            ->addHeaderCss('text-center')
+            ->addCss('text-center text-nowrap')
             ->setSortable(true)
             ->addOnValue('\Tk\Table\Type\Boolean::onValue');
 
         $this->table->appendCell('lastLogin')
-            ->addCss('text-nowrap')
+            ->addHeaderCss('text-end')
+            ->addCss('text-end text-nowrap')
             ->setSortable(true)
             ->addOnValue('\Tk\Table\Type\DateTime::onValue');
 
         $this->table->appendCell('created')
-            ->addCss('text-nowrap')
+            ->addHeaderCss('text-end')
+            ->addCss('text-end text-nowrap')
             ->setSortable(true)
-            ->addOnValue('\Tk\Table\Type\DateFmt::onValue');
+            ->addOnValue('\Tk\Table\Type\Date::getLongDateTime');
 
 
         // Add Filter Fields
@@ -126,33 +131,26 @@ class Manager extends ControllerAdmin
         $this->table->appendAction(\Tk\Table\Action\Select::create('Active Status', 'fa fa-fw fa-times')
             ->setActions(['Active' => 'active', 'Disable' => 'disable'])
             ->setConfirmStr('Toggle active/disable on the selected rows?')
-            ->addOnGetSelected([$rowSelect, 'getSelected'])
-            ->addOnSelect(function(\Tk\Table\Action\Select $action, array $selected, string $value) {
+            ->addOnExecute(function(\Tk\Table\Action\Select $action) use ($rowSelect) {
+                if (!isset($_POST[$action->getRequestKey()])) return;
+                $active = trim(strtolower($_POST[$action->getRequestKey()] ?? 'active')) == 'active';
+                $selected = $rowSelect->getSelected();
                 foreach ($selected as $id) {
-                    $u = User::find($id);
-                    $a = $u->getAuth();
-                    $a->active = (strtolower($value) == 'active');
-                    $a->save();
+                    $obj = User::find((int)$id);
+                    $obj->active = $active;
+                    $obj->save();
                 }
-            })
-        );
+            }));
 
         $this->table->appendAction(Csv::create()
-            ->addOnCsv(function(Csv $action, array $selected) {
-                $action->setExcluded(['id', 'actions', 'permissions']);
-                $this->table->getCell('username')->getOnValue()->reset();
-                $this->table->getCell('email')->getOnValue()->reset();    // remove html from cell
-                $filter = $this->table->getDbFilter();
-                if ($selected) {
-                    $filter['type'] = $this->type;
-                    $filter['userId'] = $selected;
-                    $rows = User::findFiltered($filter);
-                } else {
-                    $rows = User::findFiltered($filter->resetLimits());
+            ->addOnExecute(function(Csv $action) {
+                if (!$this->table->getCell(User::getPrimaryProperty())) {
+                    $this->table->prependCell(User::getPrimaryProperty())->setHeader('id');
                 }
-                return $rows;
-            })
-        );
+                $filter = $this->table->getDbFilter()->resetLimits();
+                $filter->set('type', $this->type);
+                return User::findFiltered($filter);
+            }));
 
         $this->table->execute();
 

@@ -21,7 +21,7 @@ class Content extends Table
 
         $this->appendCell('actions')
             ->addCss('text-nowrap text-center')
-            ->addOnValue(function(\App\Db\Content $obj, Cell $cell) {
+            ->addOnHtml(function(\App\Db\Content $obj, Cell $cell) {
                 $revUrl  = Uri::create()->set('r', $obj->contentId);
                 $viewUrl = Uri::create('/view')->set('contentId', $obj->contentId);
                 return <<<HTML
@@ -32,24 +32,24 @@ class Content extends Table
 
         $this->appendCell('contentId')
             ->setHeader('Revision')
-            ->addCss('text-nowrap')
-            ->addOnValue(function(\App\Db\Content $obj, Cell $cell) {
+            ->addCss('text-nowrap max-width')
+            ->addOnHtml(function(\App\Db\Content $obj, Cell $cell) {
                 if ($this->wPage->contentId == $obj->contentId) {
                     return sprintf('<strong title="Current">%s</strong>', $obj->contentId);
                 }
                 return $obj->contentId;
             });
 
-        $this->appendCell('created')
-            ->addHeaderCss('max-width')
-            ->addCss('text-nowrap')
-            ->addOnValue('\Tk\Table\Type\DateTime::onValue');
-
         $this->appendCell('userId')
             ->addCss('text-nowrap')
             ->addOnValue(function(\App\Db\Content $obj, Cell $cell) {
                 return $obj->getUser()->nameShort;
             });
+
+        $this->appendCell('created')
+            ->addHeaderCss('text-end')
+            ->addCss('text-nowrap text-end')
+            ->addOnValue('\Tk\Table\Type\Date::getLongDateTime');
 
         // Add Filter Fields
         $this->getForm()->appendField(new Input('search'))

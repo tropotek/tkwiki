@@ -1,11 +1,14 @@
 <?php
 namespace App\Table;
 
+use App\Db\Team;
 use App\Db\User;
 use Bs\Mvc\Table;
 use Tk\Form\Field\Checkbox;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Select;
+use Tk\Table\Action\ColumnSelect;
+use Tk\Table\Action\Csv;
 use Tk\Uri;
 use Tk\Db;
 use Tk\Table\Action\Delete;
@@ -93,16 +96,9 @@ class Secret extends Table
 
 
         // Add Table actions
-        $this->table->appendAction(Delete::create()
-            ->addOnExecute(function(Delete $action) use ($rowSelect) {
-                $selected = $rowSelect->getSelected();
-                foreach ($selected as $secret_id) {
-                    $secret = \App\Db\Secret::find($secret_id);
-                    if ($secret?->canEdit(User::getAuthUser())) {
-                        Db::delete('team', compact('secret_id'));
-                    }
-                }
-            }));
+        $this->table->appendAction(ColumnSelect::create());
+        $this->table->appendAction(Delete::createDefault(\App\Db\Secret::class, $rowSelect));
+        $this->table->appendAction(Csv::createDefault(\App\Db\Secret::class, $rowSelect));
 
         return $this;
     }

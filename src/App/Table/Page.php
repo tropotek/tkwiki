@@ -7,6 +7,7 @@ use Dom\Template;
 use Tk\Form\Field\Input;
 use Tk\Form\Field\Select;
 use Tk\Table\Action\ColumnSelect;
+use Tk\Table\Action\Csv;
 use Tk\Uri;
 use Tk\Db;
 use Tk\Table\Action\Delete;
@@ -119,7 +120,6 @@ class Page extends Table
 
         // Add Table actions
         $this->table->appendAction(ColumnSelect::create());
-
         $this->table->appendAction(Delete::create()
             ->addOnExecute(function(Delete $action) use ($rowSelect) {
                 $selected = $rowSelect->getSelected();
@@ -129,6 +129,8 @@ class Page extends Table
                     Db::delete('page', compact('page_id'));
                 }
             }));
+        $this->table->appendAction(Csv::createDefault(\App\Db\Page::class, $rowSelect));
+
 
         return $this;
     }

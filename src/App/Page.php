@@ -58,7 +58,6 @@ JS;
         // all pages
         $this->showAlert();
         $this->showCrumbs();
-        $this->showLogoutDialog();
 
         if (Auth::getAuthUser()) {
             $template->setText('username', Auth::getAuthUser()->username);
@@ -69,98 +68,6 @@ JS;
 
         return $template;
     }
-
-    /**
-     * Show a logout confirmation dialog
-     */
-    protected function showLogoutDialog(): void
-    {
-        //if (!(Auth::getAuthUser() && isset($_SESSION['_OAUTH']))) return;
-        if (!(Auth::getAuthUser())) return;
-        $oAuth = $_SESSION['_OAUTH'] ?? '';
-
-        $html = <<<HTML
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <form method="get" action="/logout">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="logoutModalLabel">Logout</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to leave?
-
-          <div class="form-check" choice="ssi">
-            <input class="form-check-input" type="checkbox" name="ssi" value="1" id="fid-ssi-logout">
-            <label class="form-check-label" for="fid-ssi-logout" var="label">
-              Logout from Microsoft
-            </label>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Logout</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-HTML;
-        $template = $this->loadTemplate($html);
-
-        if ($oAuth && Config::getValue('auth.'.$oAuth.'.endpointLogout', '')) {
-            $template->setText('label', 'Logout from ' . ucwords($oAuth));
-            $template->setVisible('ssi');
-        }
-
-        $js = <<<JS
-jQuery(function($) {
-    $('.btn-logout').on('click', function() {
-        $('#logoutModal').modal('show');
-        return false;
-    });
-});
-JS;
-        $template->appendJs($js);
-
-        $this->getTemplate()->prependTemplate('content', $template);
-    }
-
-    // TODO Create a dialog component for this
-//    protected function showCreatePageDialog(): void
-//    {
-//        $dialog = new Dialog('Create a page', 'create-page-dialog');
-//
-//        $dialog->addButton('Cancel')->addCss('btn btn-outline-secondary');
-//        $dialog->addButton('Create')->addCss('btn btn-outline-primary btn-create');
-//
-//        $html = <<<HTML
-//<div>
-//   <div class="mb-3">
-//     <label for="create-page-title" class="form-label">Select a title for your new page:</label>
-//     <input type="text" name="title" id="create-page-title" class="form-control" placeholder="Page Title">
-//   </div>
-//</div>
-//HTML;
-//        $dialog->setContent($html);
-//        $js = <<<JS
-//jQuery(function ($) {
-//    $('.btn-create', '#create-page-dialog').on('click', function () {
-//        let url = $('#create-page-title').val().trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-//        if (url) {
-//            document.location = tkConfig.baseUrl + '/edit?u=' + url;
-//        }
-//        $('#create-page-dialog').modal('hide');
-//    });
-//});
-//JS;
-//        $this->getTemplate()->appendJs($js);
-//
-//        $this->getTemplate()->appendBodyTemplate($dialog->show());
-//    }
 
     protected function showMenu(): void
     {

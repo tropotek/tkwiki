@@ -45,7 +45,7 @@ class Navigation extends Renderer implements DisplayInterface
   <li><a class="dropdown-item" href="/info" choice="dev">Info</a></li>
   <li><a class="dropdown-item" href="/_test" choice="dev">Test</a></li>
   <li><hr class="dropdown-divider"></li>
-  <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+  <li><a class="dropdown-item" href="#" hx-get="/component/logoutDialog" hx-trigger="click queue:none" hx-target="body" hx-swap="beforeend">Sign out</a></li>
 </ul>
 HTML;
 

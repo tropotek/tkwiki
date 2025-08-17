@@ -4,7 +4,7 @@ namespace App;
 use Bs\Listener\RememberHandler;
 use Bs\Listener\MaintenanceHandler;
 
-class Dispatch extends \Bs\Dispatch
+class Listeners extends \Bs\Listeners
 {
 
     /**

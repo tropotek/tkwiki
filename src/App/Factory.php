@@ -23,10 +23,11 @@ use Tk\Path;
 
 class Factory extends \Bs\Factory
 {
+
     public function initEventDispatcher(): ?EventDispatcher
     {
-        if ($this->getEventDispatcher()) {
-            new Dispatch($this->getEventDispatcher());
+        if (!$this->has('eventDispatcher')) {
+            new Listeners($this->getEventDispatcher());
         }
         return $this->getEventDispatcher();
     }

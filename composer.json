@@ -64,6 +64,8 @@
         "ext-pdo": "*",
         "ext-dom": "*",
         "ext-libxml": "*",
+        "ext-openssl": "*",
+
         "ttek/tk-base": "~8.0.0",
         "htmx/htmx": "2.0.4",
         "jquery/jquery": "3.7.1",

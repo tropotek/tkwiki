@@ -70,8 +70,8 @@ class Factory extends \Bs\Factory
             // Setup App Console Commands
             $app->add(new Cron());
             if (Config::isDev()) {
-                $app->add(new WikiTest());
-                $app->add(new TestData());
+                //$app->add(new WikiTest());
+                //$app->add(new TestData());
                 $app->add(new Test());
             }
         }

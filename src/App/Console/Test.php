@@ -26,28 +26,6 @@ class Test extends Console
             return self::FAILURE;
         }
 
-        $rows = DB::query('SELECT * FROM secret');
-
-        $oldEnc = new Encrypt(Config::getValue('system.encrypt.old'));
-        $newEnc = new Encrypt(Config::getValue('system.encrypt'));
-        foreach ($rows as $row) {
-            $row->url = $oldEnc->basicDecrypt($row->url);
-            $row->username = $oldEnc->basicDecrypt($row->username);
-            $row->password = $oldEnc->basicDecrypt($row->password);
-            $row->otp = $oldEnc->basicDecrypt($row->otp);
-            $row->keys = $oldEnc->basicDecrypt($row->keys);
-            $row->notes = $oldEnc->basicDecrypt($row->notes);
-            vd($row);
-            $row->url = $newEnc->safeEncrypt($row->url);
-            $row->username = $newEnc->safeEncrypt($row->username);
-            $row->password = $newEnc->safeEncrypt($row->password);
-            $row->otp = $newEnc->safeEncrypt($row->otp);
-            $row->keys = $newEnc->safeEncrypt($row->keys);
-            $row->notes = $newEnc->safeEncrypt($row->notes);
-            vd($row);
-            //DB::update('secret', 'secret_id', $row);
-        }
-
 
 
         $output->writeln('Complete!!!');

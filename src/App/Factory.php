@@ -46,12 +46,12 @@ class Factory extends \Bs\Factory
         if (!$this->get('templateModifier')) {
             $dm = parent::getTemplateModifier();
             if (Registry::getValue('wiki.enable.secret.mod', false)) {
-                $dm->addFilter('wikiSecrets', new Secrets());
-                $dm->addFilter('wikiSecretList', new SecretList());
+                $dm->addModifier(new Secrets());
+                $dm->addModifier(new SecretList());
             }
-            $dm->addFilter('wikiCategoryList', new CategoryList());
-            $dm->addFilter('wikiImg', new WikiImg());
-            $dm->addFilter('wikiUrl', new WikiUrl());
+            $dm->addModifier(new CategoryList());
+            $dm->addModifier(new WikiImg());
+            $dm->addModifier(new WikiUrl());
         }
         return $this->get('templateModifier');
     }

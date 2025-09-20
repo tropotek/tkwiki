@@ -100,7 +100,7 @@ class Login extends ControllerAdmin
         $auth->save();
 
         if (!empty($values['remember'] ?? '')) {
-            Remember::rememberMe($auth->authId, 15);
+            Remember::rememberMe($auth->authId, Config::getValue('auth.rememberme.ttl', Remember::TTL_WEEK));
         } else {
             Remember::forgetMe($auth->authId);
         }

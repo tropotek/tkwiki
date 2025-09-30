@@ -23,7 +23,7 @@ class View extends Renderer implements DisplayInterface
     public function show(): ?Template
     {
         $template = $this->getTemplate();
-        if (!$template->getRepeat('dropdown')) return $template;
+        if (!$template->hasNode(Template::TYPE_REPEAT, 'dropdown')) return $template;
 
         // Order in DESC because we are prepending elements to the ul menu
         $items = MenuItem::findByParentId(0);

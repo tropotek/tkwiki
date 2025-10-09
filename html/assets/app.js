@@ -85,6 +85,14 @@ let app = function () {
      */
     let initWkSecret = function () {
 
+        function fadeIn(el) {
+            $(el).addClass('fade-in');
+            setTimeout(() => {
+                $(el).removeClass('fade-in');
+            }, 500);
+
+        }
+
         function loadData(el, params, callback) {
             let hash = el.data('secretHash');
             if (!hash) return;
@@ -113,16 +121,19 @@ let app = function () {
             if (!secret.length) return;
             if (secret.data('pw')) {
                 copyToClipboard(secret.data('pw'));
+                fadeIn($('.pas', $(this).parent()));
                 return;
             }
             loadData(secret, {p: secret.data('secretHash')}, function (data) {
                 secret.data('pw', data.pw);
+                fadeIn($('.pas', $(this).parent()));
                 copyToClipboard(data.pw);
             });
         });
 
         $('.wk-secret .cp-usr').on('click', function () {
             let val = $('.usr', $(this).parent()).text();
+            fadeIn($('.usr', $(this).parent()));
             copyToClipboard(val);
         });
 
@@ -131,6 +142,7 @@ let app = function () {
             if (!secret.length) return;
             loadData(secret, {p: secret.data('secretHash')}, function (data) {
                 $('.otp-code', secret).text(data.otp);
+                fadeIn($('.otp-code', secret));
                 copyToClipboard(data.otp);
             });
             return false;

@@ -215,14 +215,17 @@ HTML;
     </div>
   </div>
 
+<template id="template-menu-item">
+    <li id="item-0" data-item-id="0" data-page-id="0">
+      <i class="fa fa-fw fa-ellipsis-vertical"></i>
+      <a href="javascript:;"></a>
+      <b class="fa fa-fw fa-trash text-danger float-end"></b>
+    </li>
+</template>
+
 <script>
-jQuery(function($) {
-    const liTpl = `
-<li id="item-0" data-item-id="0" data-page-id="0">
-  <i class="fa fa-fw fa-ellipsis-vertical"/>
-  <a href="javascript:;"/>
-  <b class="fa fa-fw fa-trash text-danger float-end"></b>
-</li>`;
+jQuery(function($) {    
+    let liTpl = $('#template-menu-item').html();
 
     // Setup the nested sortable plugin
     let sortable = $('.sortable').nestedSortable({
@@ -293,6 +296,7 @@ jQuery(function($) {
         // Create dropdown item and get item id returned from server
         $.post(location.href, {action: 'create', pageId: 0, type: 'dropdown', name: name}, function(data) {
             let li = $(liTpl);
+            console.log(li);
             li.addClass('dropdown');
             li.attr('id', 'item-' + data.menuItemId);
             li.data('itemId', data.menuItemId);

@@ -28,6 +28,7 @@ class Secret extends Table
             ->addHeaderCss('text-center')
             ->addCss('text-nowrap text-center')
             ->addOnHtml(function(\App\Db\Secret $obj, Cell $cell) {
+                if (empty($obj->url)) return '';
                 $url = $obj->url;
                 return <<<HTML
                     <a class="btn btn-sm btn-outline-primary" href="$url" title="Open in new tab" target="_blank"><i class="fa fa-globe"></i></a>

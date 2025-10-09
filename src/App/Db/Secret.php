@@ -171,9 +171,10 @@ class Secret extends Model
             $filter->appendWhere('AND a.permission IN :permission');
         }
 
-        if (is_bool(truefalse($filter['otp'] ?? null))) {
-            $filter['otp'] = truefalse($filter['otp']);
-            if (truefalse($filter['otp'])) {
+        $filter['otp'] = truefalse($filter['otp'] ?? null);
+        if (is_bool($filter['otp'])) {
+            vd($filter['otp']);
+            if ($filter['otp']) {
                 $filter->appendWhere("AND a.otp != ''");
             } else {
                 $filter->appendWhere("AND a.otp = ''");

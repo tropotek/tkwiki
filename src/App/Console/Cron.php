@@ -2,6 +2,7 @@
 namespace App\Console;
 
 use App\Db\Page;
+use App\Db\Secret;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -41,7 +42,11 @@ class Cron extends Console
             Page::indexPage($page);
         }
 
-        $this->writeComment('Completed!!!');
+        // TODO: this will clean up empty encrypted fields, remove on next release
+        $secrets = Secret::findAll();
+        foreach ($secrets as $secret) {
+            $secret->save();
+        }
 
         $this->release();   // release lock
         return self::SUCCESS;

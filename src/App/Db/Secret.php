@@ -173,7 +173,6 @@ class Secret extends Model
 
         $filter['otp'] = truefalse($filter['otp'] ?? null);
         if (is_bool($filter['otp'])) {
-            vd($filter['otp']);
             if ($filter['otp']) {
                 $filter->appendWhere("AND a.otp != ''");
             } else {
@@ -202,7 +201,7 @@ class Secret extends Model
             $w  = 'LOWER(a.name) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.url) LIKE LOWER(:search) OR ';
             $w .= 'LOWER(a.secret_id) LIKE LOWER(:search) OR ';
-            $filter->appendWhere('(%s) AND ', substr($w, 0, -3));
+            $filter->appendWhere('AND (%s)', substr($w, 0, -3));
         }
 
         if (!empty($filter['id'])) {
@@ -210,17 +209,17 @@ class Secret extends Model
         }
         if (!empty($filter['secretId'])) {
             if (!is_array($filter['secretId'])) $filter['secretId'] = [$filter['secretId']];
-            $filter->appendWhere('a.secret_id IN :secretId AND ');
+            $filter->appendWhere('AND a.secret_id IN :secretId');
         }
 
         if (!empty($filter['exclude'])) {
             if (!is_array($filter['exclude'])) $filter['exclude'] = [$filter['exclude']];
-            $filter->appendWhere('a.secret_id NOT IN :exclude AND ');
+            $filter->appendWhere('AND a.secret_id NOT IN :exclude');
         }
 
         if (!empty($filter['userId'])) {
             if (!is_array($filter['userId'])) $filter['userId'] = [$filter['userId']];
-            $filter->appendWhere('a.user_id IN :userId AND ');
+            $filter->appendWhere('AND a.user_id IN :userId');
         }
 
         if (!empty($filter['permission'])) {
@@ -229,24 +228,24 @@ class Secret extends Model
                 $perm |= $p;
             }
             $filter['permission'] = $perm;
-            $filter->appendWhere('a.permission = :permission AND ');
+            $filter->appendWhere('AND a.permission = :permission');
         }
 
         if (!empty($filter['name'])) {
-            $filter->appendWhere('a.name = :name AND ');
+            $filter->appendWhere('AND a.name = :name');
         }
 
         if (!empty($filter['otp'])) {
-            $filter->appendWhere("a.otp != '' AND ");
+            $filter->appendWhere("AND a.otp != ''");
         }
 
         if (!empty($filter['url'])) {
-            $filter->appendWhere('a.url = :url AND ');
+            $filter->appendWhere('AND a.url = :url');
         }
 
-        if (is_bool(truefalse($filter['publish'] ?? null))) {
-            $filter['publish'] = truefalse($filter['publish']);
-            $filter->appendWhere('a.publish = :publish AND ');
+        $filter['publish'] = truefalse($filter['publish'] ?? null);
+        if (is_bool($filter['publish'])) {
+            $filter->appendWhere($filter['publish'] ? 'AND a.publish' : 'AND NOT a.publish');
         }
 
         return Db::query("

@@ -288,9 +288,9 @@ class User extends Model implements UserInterface
             $filter->appendWhere('AND (a.permissions & :permission) != 0');
         }
 
-        if (is_bool(truefalse($filter['active'] ?? null))) {
-            $filter['active'] = truefalse($filter['active']);
-            $filter->appendWhere('AND a.active = :active');
+        $filter['active'] = truefalse($filter['active'] ?? null);
+        if (is_bool($filter['active'])) {
+            $filter->appendWhere($filter['active'] ? 'AND a.active' : 'AND NOT a.active');
         }
 
         return Db::query("

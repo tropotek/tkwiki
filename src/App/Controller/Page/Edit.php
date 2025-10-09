@@ -349,7 +349,7 @@ jQuery(function($) {
     });
 
     // category select event
-    $(document).on('catSelect.ps.modal', pageDialog, function(e, category, attrs) {
+    $(document).on('catSelect.ps.modal', function(e, category, attrs) {
         const editor = tinymce.activeEditor;
         editor.insertContent(editor.dom.createHTML('div', attrs,
             editor.dom.encode('{Category List: ' + category + '}'))

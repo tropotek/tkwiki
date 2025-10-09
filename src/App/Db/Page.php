@@ -339,14 +339,14 @@ class Page extends Model
             $filter->appendWhere('AND a.url = :url');
         }
 
-        if (is_bool(truefalse($filter['publish'] ?? null))) {
-            $filter['publish'] = truefalse($filter['publish']);
-            $filter->appendWhere('AND a.publish = :publish');
+        $filter['publish'] = truefalse($filter['publish'] ?? null);
+        if (is_bool($filter['publish'])) {
+            $filter->appendWhere($filter['publish'] ? 'AND a.publish' : 'AND NOT a.publish');
         }
 
-        if (!empty($filter['isOrphaned'])) {
-            $filter['isOrphaned'] = truefalse($filter['isOrphaned']);
-            $filter->appendWhere('AND a.is_orphaned = :isOrphaned');
+        $filter['isOrphaned'] = truefalse($filter['isOrphaned'] ?? null);
+        if (is_bool($filter['isOrphaned'])) {
+            $filter->appendWhere($filter['isOrphaned'] ? 'AND a.is_orphaned' : 'AND NOT a.is_orphaned');
         }
 
         if (isset($filter['permission']) && is_numeric($filter['permission'])) {

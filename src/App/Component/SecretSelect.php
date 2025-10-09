@@ -99,25 +99,27 @@ class SecretSelect extends \Dom\Renderer\Renderer implements ComponentInterface
         $selectDialogId = self::CONTAINER_ID;
 
         $html = <<<HTML
-<div class="modal fade" tabindex="-1" var="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Select Secret</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" var="content"></div>
-            <div class="modal-footer" style="justify-content: space-between;" choice="show-create">
-                <div>
-                    <button class="btn btn-sm btn-outline-primary btn-create-secret" type="button"
-                        hx-get="/component/secretEdit"
-                        hx-trigger="click queue:none"
-                        hx-target="body"
-                        hx-swap="beforeend">Create</button>
-                    <button class="btn btn-sm btn-outline-success btn-insert-list" type="button" var="user-id">Insert My List</button>
+<div>
+    <div class="modal fade" tabindex="-1" var="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Select Secret</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="actions">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-body" var="content"></div>
+                <div class="modal-footer" style="justify-content: space-between;" choice="show-create">
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary btn-create-secret" type="button"
+                            hx-get="/component/secretEdit"
+                            hx-trigger="click queue:none"
+                            hx-target="body"
+                            hx-swap="beforeend">Create</button>
+                        <button class="btn btn-sm btn-outline-success btn-insert-list" type="button" var="user-id">Insert My List</button>
+                    </div>
+                    <div class="actions">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,20 +130,17 @@ jQuery(function($) {
     const dialog = '#{$selectDialogId}';
     const table  = '#{$this->table->getId()}';
 
-
     tkInit(table);
-    $('.wiki-insert', dialog).on('click', function() {
+    $(dialog).on('click', '.wiki-insert', function() {
         // insert existing secret
         let hash = $(this).data('secretHash');
         let name = $(this).data('secretName');
         $(document).trigger('selected.ss.modal', [hash, name]);
         $(dialog).modal('hide');
         return false;
-    });
-    $('.btn-create-secret', dialog).on('click', function() {
+    }).on('click', '.btn-create-secret', function() {
         $(dialog).modal('hide');
-    });
-    $('.btn-insert-list', dialog).on('click', function() {
+    }).on('click', '.btn-insert-list', function() {
         const editor = tinymce.activeEditor;
         let linkAttrs = {
           class: 'wk-secret-list',
@@ -151,7 +150,7 @@ jQuery(function($) {
         $(dialog).modal('hide');
     });
 
-    // open the dialog as soon as HTMX settles
+    // open the dialog
     $(dialog).modal('show');
 
     // remove the dialog element from the dom when it closes

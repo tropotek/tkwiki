@@ -133,43 +133,36 @@ jQuery(function($) {
     const dialog = '#{$dialogId}';
     const table  = '#{$this->table->getId()}';
 
-    function init() {
-        tkInit(table);
-        $(dialog).on('click', '.wiki-insert', function() {
-            // On insert existing page event
-            let title = $(this).data('pageTitle');
-            let url = $(this).data('pageUrl');
-            let pageId = $(this).data('pageId');
-            $(document).trigger('selected.ps.modal', [title, url, pageId]);
-            $(dialog).modal('hide');
-            return false;
-        })
-        .on('click', '.btn-create-page', function() {
-            // On insert new page event
-            let title = $(this).parent().find('input').val();
-            let url = title.trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-            $(document).trigger('selected.ps.modal', [title, url, 0]);
-            $(dialog).modal('hide');
-            return false;
-        })
-        .on('click', '.wiki-cat-list', function() {
-            // On insert new page event
-            let category = $(this).data('category');
-            let attrs = {
-              'wk-category-list': category
-            };
-            $(document).trigger('catSelect.ps.modal', [category, attrs]);
-            $(dialog).modal('hide');
-            return false;
-        });
-    }
-
-    $(document).on('htmx:afterSettle', dialog, function(e) {
-        init();
+    tkInit(table);
+    $(dialog).on('click', '.wiki-insert', function() {
+        // On insert existing page event
+        let title = $(this).data('pageTitle');
+        let url = $(this).data('pageUrl');
+        let pageId = $(this).data('pageId');
+        $(document).trigger('selected.ps.modal', [title, url, pageId]);
+        $(dialog).modal('hide');
+        return false;
+    })
+    .on('click', '.btn-create-page', function() {
+        // On insert new page event
+        let title = $(this).parent().find('input').val();
+        let url = title.trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+        $(document).trigger('selected.ps.modal', [title, url, 0]);
+        $(dialog).modal('hide');
+        return false;
+    })
+    .on('click', '.wiki-cat-list', function() {
+        // On insert new page event
+        let category = $(this).data('category');
+        let attrs = {
+          'wk-category-list': category
+        };
+        $(document).trigger('catSelect.ps.modal', [category, attrs]);
+        $(dialog).modal('hide');
+        return false;
     });
 
-    // open the dialog as soon as HTMX settles
-    init();
+    // open the dialog
     $(dialog).modal('show');
 
     $(dialog).on('shown.bs.modal', function() {

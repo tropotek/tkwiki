@@ -4,6 +4,14 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.146 [2025-10-09]:
+-------------------------------
+  - Fix js bugs in component selet dialogs
+  - clean empty encrypted fields
+  - Added fadein on copy secret prop
+  - fix bug with edit menu page
+
+
 Ver 8.0.144 [2025-09-30]:
 -------------------------------
 

@@ -42,12 +42,6 @@ class Cron extends Console
             Page::indexPage($page);
         }
 
-        // TODO: this will clean up empty encrypted fields, remove on next release
-        $secrets = Secret::findAll();
-        foreach ($secrets as $secret) {
-            $secret->save();
-        }
-
         $this->release();   // release lock
         return self::SUCCESS;
     }

@@ -104,8 +104,7 @@ class PageSelect extends \Dom\Renderer\Renderer implements ComponentInterface
         $dialogId = self::CONTAINER_ID;
 
         $html = <<<HTML
-<div>
-  <div class="modal fade" tabindex="-1" var="dialog">
+<div class="modal fade" tabindex="-1" var="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -126,14 +125,16 @@ class PageSelect extends \Dom\Renderer\Renderer implements ComponentInterface
         </div>
       </div>
     </div>
-  </div>
 
 <script>
 jQuery(function($) {
     const dialog = '#{$dialogId}';
     const table  = '#{$this->table->getId()}';
 
-    tkInit(table);
+    $(document).on('htmx:afterSettle', dialog, function(e) {
+        tkInit(table);
+    });
+    
     $(dialog).on('click', '.wiki-insert', function() {
         // On insert existing page event
         let title = $(this).data('pageTitle');
@@ -163,6 +164,7 @@ jQuery(function($) {
     });
 
     // open the dialog
+    tkInit(table);
     $(dialog).modal('show');
 
     $(dialog).on('shown.bs.modal', function() {

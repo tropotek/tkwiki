@@ -48,7 +48,7 @@ class Page extends Table
         $this->appendCell('url')
             ->addCss('text-nowrap')
             ->setSortable(true)
-            ->setAttr(ColumnSelect::ATTR_HIDE, true)
+            ->setAttr(ColumnSelect::ATTR_HIDE, 1)
             ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
                 return sprintf('<a href="%s">/%s</a>', $page->getUrl(), $page->url);
             });
@@ -64,7 +64,7 @@ class Page extends Table
             ->addCss('text-nowrap text-center')
             ->setHeader('Orphan')
             ->setSortable(true)
-            ->setAttr(ColumnSelect::ATTR_HIDE, true)
+            ->setAttr(ColumnSelect::ATTR_HIDE, 1)
             ->addOnValue('\Tk\Table\Type\Boolean::onValue');
 
         $this->appendCell('permission')
@@ -75,7 +75,7 @@ class Page extends Table
 
         $this->appendCell('userId')
             ->addCss('text-nowrap')
-            ->setAttr(ColumnSelect::ATTR_HIDE, true)
+            ->setAttr(ColumnSelect::ATTR_HIDE, 1)
             ->addOnValue(function(\App\Db\Page $page, Cell $cell) {
                 return $page->getUser()->nameShort;
             });
@@ -96,7 +96,7 @@ class Page extends Table
             ->addHeaderCss('text-end')
             ->addCss('text-end text-nowrap')
             ->setSortable(true)
-            ->setAttr(ColumnSelect::ATTR_HIDE, true)
+            ->setAttr(ColumnSelect::ATTR_HIDE, 1)
             ->addOnValue('\Tk\Table\Type\Date::getLongDateTime');
 
 

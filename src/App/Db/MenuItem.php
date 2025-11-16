@@ -120,7 +120,7 @@ class MenuItem extends Model
             $filter['lSearch'] = '%' . strtolower($filter['search']) . '%';
             $w  = "a.menu_item_id = :search ";
             $w .= "OR LOWER(CONCAT_WS(' ', a.name)) LIKE :lSearch ";
-            if ($w) $filter->appendWhere('AND (%s)', $w);
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {

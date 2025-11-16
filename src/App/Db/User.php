@@ -248,7 +248,7 @@ class User extends Model implements UserInterface
             $filter['lSearch'] = '%' . strtolower($filter['search']) . '%';
             $w  = "a.user_id = :search ";
             $w .= "OR LOWER(CONCAT_WS(' ', a.given_name, a.family_name, a.email, a.uid)) LIKE :lSearch ";
-            if ($w) $filter->appendWhere('AND (%s)', $w);
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {

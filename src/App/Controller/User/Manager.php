@@ -111,7 +111,7 @@ class Manager extends ControllerAdmin
             ->addHeaderCss('text-end')
             ->addCss('text-end text-nowrap')
             ->setSortable(true)
-            ->addOnValue('\Tk\Table\Type\DateTime::onValue');
+            ->addOnValue('\Tk\Table\Type\Date::getLongDateTime');
 
         $this->table->appendCell('created')
             ->addHeaderCss('text-end')

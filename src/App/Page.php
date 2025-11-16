@@ -24,7 +24,7 @@ class Page extends \Bs\Mvc\Page
         $js = <<<JS
 tkConfig.enableSecretMod = {$secretEnabled};
 JS;
-        $template->appendJs($js, array(JsLast::$ATTR_PRIORITY => -9990));
+        $template->appendJs($js, [JsLast::$ATTR_PRIORITY => '-9990']);
 
         $template->appendMetaTag('keywords', Registry::getValue('system.meta.keywords', ''));
         $template->appendMetaTag('description', Registry::getValue('system.meta.description', ''));

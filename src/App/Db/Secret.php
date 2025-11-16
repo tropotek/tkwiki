@@ -8,6 +8,7 @@ use Tk\DataMap\Db\DateTime;
 use Tk\DataMap\Db\Integer;
 use Tk\DataMap\Db\Text;
 use Tk\DataMap\Db\TextEncrypt;
+use Tk\DataMap\ModelMapper;
 use Tk\Db;
 use Tk\Db\Filter;
 use Tk\Db\Model;
@@ -84,26 +85,18 @@ class Secret extends Model
      */
     public static function getDataMap(): DataMap
     {
-        $map = self::$_MAPS[self::class] ?? null;
-        if (!is_null($map)) return $map;
+        if (ModelMapper::instance()->hasDataMap(self::class)) {
+            return ModelMapper::instance()->getDataMap(self::class);
+        }
 
-        $map = new DataMap();
-        $map->addType(new Integer('secretId', 'secret_id'))->setFlag(DataMap::PRI);
-        $map->addType(new Integer('userId', 'user_id'));
-        $map->addType(new Integer('permission'));
-        $map->addType(new Text('name'));
+        $map = parent::getDataMap();
         $map->addType(new TextEncrypt('url'));
         $map->addType(new TextEncrypt('username'));
         $map->addType(new TextEncrypt('password'));
         $map->addType(new TextEncrypt('otp'));
-        $map->addType(new Boolean('publish'));
         $map->addType(new TextEncrypt('keys'));
         $map->addType(new TextEncrypt('notes'));
-        $map->addType(new Text('hash'), DataMap::READ);
-        $map->addType((new DateTime('modified'))->setImmutable(true));
-        $map->addType((new DateTime('created'))->setImmutable(true));
 
-        self::$_MAPS[self::class] = $map;
         return $map;
     }
 
@@ -155,7 +148,7 @@ class Secret extends Model
             $filter['lSearch'] = '%' . strtolower($filter['search']) . '%';
             $w  = "a.secret_id = :search ";
             $w .= "OR LOWER(CONCAT_WS(' ', a.name, a.url)) LIKE :lSearch ";
-            if ($w) $filter->appendWhere('AND (%s)', $w);
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['userId']) && !empty($filter['permission'] ?? '')) {

@@ -302,7 +302,7 @@ class Page extends Model
             $filter['lSearch'] = '%' . strtolower($filter['search']) . '%';
             $w  = "a.page_id = :search ";
             $w .= "OR LOWER(CONCAT_WS(' ', a.title, a.category)) LIKE :lSearch ";
-            if ($w) $filter->appendWhere('AND (%s)', $w);
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {

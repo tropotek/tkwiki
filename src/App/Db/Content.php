@@ -104,7 +104,7 @@ class Content extends Model
             $filter['lSearch'] = '%' . strtolower($filter['search']) . '%';
             $w  = "a.content_id = :search ";
             $w .= "OR LOWER(CONCAT_WS(' ', a.html, a.keywords, a.description)) LIKE :lSearch ";
-            if ($w) $filter->appendWhere('AND (%s)', $w);
+            $filter->appendWhere('AND (%s)', $w);
         }
 
         if (!empty($filter['id'])) {

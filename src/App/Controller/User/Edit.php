@@ -228,10 +228,10 @@ class Edit extends ControllerAdmin
             $template->setVisible('msq');
         }
 
-        if ($this->user->userId && !$this->user->active) {
+        if ($this->user->userId) {
             $url = Uri::create()->set('a');
-            $template->setAttr('activate', 'href', $url);
-            $template->setVisible('activate');
+            $template->setAttr('reset', 'href', $url);
+            $template->setVisible('reset');
         }
 
         $this->form->getField('title')->addFieldCss('col-1');
@@ -277,7 +277,7 @@ class Edit extends ControllerAdmin
       <a href="/" title="Masquerade" data-confirm="Masquerade as this user" class="btn btn-outline-secondary" choice="msq"><i class="fa fa-fw fa-user-secret"></i> Masquerade</a>
       <a href="/" title="Convert user to staff" data-confirm="Convert this user to staff?" class="btn btn-outline-secondary" choice="to-staff"><i class="fa fa-fw fa-retweet"></i> Convert To Staff</a>
       <a href="/" title="Convert user to member" data-confirm="Convert this user to member?" class="btn btn-outline-secondary" choice="to-member"><i class="fa fa-fw fa-retweet"></i> Convert To Member</a>
-      <a href="/" title="Send Activation Email" data-confirm="Re-send the user activation email?" class="btn btn-outline-secondary" choice="activate"><i class="fa fa-fw fa-envelope"></i> Send Activate Email</a>
+      <a href="/" title="Request Password Reset Email" data-confirm="Send an email to request user to reset their password?<br>Note: This will activate any inactive account." class="btn btn-outline-secondary" choice="reset"><i class="fa fa-fw fa-envelope"></i> Send Password Reset Email</a>
     </div>
   </div>
   <div class="card mb-3">

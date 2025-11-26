@@ -35,10 +35,10 @@ class Navigation extends Renderer implements DisplayInterface
         $html = <<<HTML
 <ul var="nav">
   <li><a class="dropdown-item" href="/profile">My Profile</a></li>
-  <li><a class="dropdown-item" href="/settings" var="settings">Site Settings</a></li>
-  <li><a class="dropdown-item" href="/pageManager" var="pageManager">Wiki Pages</a></li>
-  <li><a class="dropdown-item" href="/menuEdit" var="menu">Menu Edit</a></li>
-  <li><a class="dropdown-item" href="/secretManager" var="secret">Secret Manager</a></li>
+  <li><a class="dropdown-item" href="/settings" choice="settings">Site Settings</a></li>
+  <li><a class="dropdown-item" href="/pageManager" choice="pageManager">Wiki Pages</a></li>
+  <li><a class="dropdown-item" href="/menuEdit" choice="menu">Menu Edit</a></li>
+  <li><a class="dropdown-item" href="/secretManager" choice="secret">Secret Manager</a></li>
   <li><hr class="dropdown-divider" choice="admin"></li>
   <li><a class="dropdown-item" href="/sessions" choice="admin">Current Sessions</a></li>
   <li><a class="dropdown-item" href="/tailLog" choice="admin">Tail Log</a></li>

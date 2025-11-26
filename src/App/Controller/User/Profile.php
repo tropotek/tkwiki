@@ -3,6 +3,7 @@ namespace App\Controller\User;
 
 use App\Db\User;
 use Bs\Auth;
+use Bs\Db\Masquerade;
 use Bs\Mvc\ControllerAdmin;
 use Bs\Mvc\Form;
 use Bs\Ui\Breadcrumbs;
@@ -42,6 +43,19 @@ class Profile extends ControllerAdmin
         $this->user = User::getAuthUser();
         $this->form = new Form($this->user);
 
+        // send inactive user activation email
+        if (isset($_GET['pass'])) {
+            if ($_GET['pass'] != $this->user->hash) {
+                throw new \Exception('Invalid user action, please contact your administrator.');
+            }
+            if (\App\Email\User::sendRecovery($this->user)) {
+                Alert::addSuccess('An email has been sent to ' . $this->user->nameShort . ' to create their password.');
+            } else {
+                Alert::addError('Failed to send email to ' . $this->user->nameShort . ' to create their password.');
+            }
+            Uri::create()->remove('pass')->redirect();
+        }
+
         $tab = 'Details';
         $this->form->appendField(new Hidden('userId'))->setReadonly();
 
@@ -77,19 +91,6 @@ class Profile extends ControllerAdmin
                 ->setReadonly();
         }
 
-        if (Config::instance()->get('auth.profile.password')) {
-            $tab = 'Password';
-            $this->form->appendField(new Password('currentPass'))->setGroup($tab)
-                ->setLabel('Current Password')
-                ->setAttr('autocomplete', 'new-password');
-            $this->form->appendField(new Password('newPass'))->setGroup($tab)
-                ->setLabel('New Password')
-                ->setAttr('autocomplete', 'new-password');
-            $this->form->appendField(new Password('confPass'))->setGroup($tab)
-                ->setLabel('Confirm Password')
-                ->setAttr('autocomplete', 'new-password');
-        }
-
         $this->form->appendField(new SubmitExit('save', [$this, 'onSubmit']));
         $this->form->appendField(new Link('cancel', Breadcrumbs::getBackUrl()));
 
@@ -105,7 +106,6 @@ class Profile extends ControllerAdmin
         $this->form->setFieldValues($load);
 
         $this->form->execute($_POST);
-
     }
 
     public function onSubmit(Form $form, SubmitExit $action): void
@@ -114,23 +114,6 @@ class Profile extends ControllerAdmin
         $this->user->mapForm($form->getFieldValues());
         $this->user->getAuth()->mapForm($form->getFieldValues());
 
-        if ($form->getField('currentPass') && $form->getFieldValue('currentPass')) {
-            if (!password_verify($form->getFieldValue('currentPass'), $this->user->getAuth()->password)) {
-                $form->addFieldError('currentPass', 'Invalid current password, password not updated');
-            }
-            if ($form->getField('newPass') && $form->getFieldValue('newPass')) {
-                if ($form->getFieldValue('newPass') != $form->getFieldValue('confPass')) {
-                    $form->addFieldError('newPass', 'Passwords do not match');
-                } else {
-                    if (!$e = Auth::validatePassword($form->getFieldValue('newPass'))) {
-                        $form->addFieldError('newPass', 'Week password: ' . implode(', ', $e));
-                    }
-                }
-            } else {
-                $form->addFieldError('newPass', 'Please supply a new password');
-            }
-        }
-
         $form->addFieldErrors($this->user->validate());
         $form->addFieldErrors($this->user->getAuth()->validate());
 
@@ -138,10 +121,7 @@ class Profile extends ControllerAdmin
             Alert::addError('Form contains errors.');
             return;
         }
-        if ($form->getFieldValue('currentPass')) {
-            $this->user->getAuth()->password = Auth::hashPassword($form->getFieldValue('newPass'));
-            Alert::addSuccess('Your password has been updated, remember to use this on your next login.');
-        }
+
         $this->user->save();
         $this->user->getAuth()->save();
 
@@ -167,6 +147,12 @@ class Profile extends ControllerAdmin
         $this->form->getRenderer()->addFieldCss('mb-3');
         $template->appendTemplate('content', $this->form->show());
 
+        if (Config::instance()->get('auth.profile.password')) {
+            $template->setVisible('pass');
+            $url = Uri::create()->set('pass', $this->user->hash);
+            $template->setAttr('pass', 'href', $url);
+        }
+
         return $template;
     }
 
@@ -178,6 +164,7 @@ class Profile extends ControllerAdmin
     <div class="card-header"><i class="fa fa-cogs"></i> Actions</div>
     <div class="card-body" var="actions">
       <a href="/" title="Back" class="btn btn-outline-secondary" var="back"><i class="fa fa-arrow-left"></i> Back</a>
+      <a href="/" title="Send Change Password Email" data-confirm="Request change password email?" class="btn btn-outline-secondary" choice="pass"><i class="fa fa-fw fa-key"></i> Change Password</a>
     </div>
   </div>
   <div class="card mb-3">

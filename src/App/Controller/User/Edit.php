@@ -290,6 +290,4 @@ class Edit extends ControllerAdmin
 HTML;
         return $this->loadTemplate($html);
     }
-
-
 }

@@ -9,7 +9,7 @@
     ],
     "time": "2025-11-27",
     "license": "GPL",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "authors":  [
          {
             "name": "Tropotek",

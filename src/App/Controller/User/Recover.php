@@ -45,7 +45,7 @@ class Recover extends ControllerDomInterface
         $html = '<a href="/login">Login</a>';
         if (Config::getValue('auth.registration.enable', false)) {
             $html .= ' | <a href="/register">Register</a>';
-        }tk 
+        }
         $this->form->appendField(new Html('links', $html))->setLabel('')->addFieldCss('text-center');
         $this->form->appendField(new Submit('recover', [$this, 'onDefault']));
 

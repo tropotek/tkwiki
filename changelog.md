@@ -4,6 +4,11 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.148 [2025-11-27]:
+-------------------------------
+  - removed run once script
+
+
 Ver 8.0.146 [2025-10-09]:
 -------------------------------
   - Fix js bugs in component selet dialogs

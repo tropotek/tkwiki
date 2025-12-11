@@ -116,9 +116,9 @@ class Pdf extends Renderer implements DisplayInterface
 
     public function show(): ?Template
     {
-        $template->setTitleText($this->getTitle());
-        
         $template = $this->getTemplate();
+        $template->setTitleText($this->getTitle());
+
         if ($this->rendered) return $template;
         $this->rendered = true;
 

@@ -128,9 +128,6 @@ jQuery(function($) {
     const dialog = '#{$selectDialogId}';
     const table  = '#{$this->table->getId()}';
 
-    $(document).on('htmx:afterSettle', dialog, function(e) {
-        tkInit(table);
-    });
 
     $(dialog).on('click', '.wiki-insert', function() {
         // insert existing secret

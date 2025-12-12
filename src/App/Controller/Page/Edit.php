@@ -367,6 +367,14 @@ jQuery(function($) {
         };
         editor.insertContent(editor.dom.createHTML('img', linkAttrs));
     });
+    
+    // catch dialog finished handling post request
+    $(document).on('tkForm:afterSubmit', function(e) {
+        if (e.detail.target === '#secret-edit-dialog')  {
+            $(document).trigger('selected.ss.modal', [e.detail.hash, e.detail.name]);
+            $(e.detail.target).modal('hide');
+        }
+    });
 
     // on window unload event
     $(document).data('pageUpdated', false);
@@ -381,6 +389,8 @@ jQuery(function($) {
     $('button#form_cancel, button#form_save').on('click', function() {
         $(document).data('pageUpdated', false);
     });
+    
+    
 });
 JS;
 

@@ -63,6 +63,7 @@ class Secret extends Model
     public function save(): void
     {
         $values = self::getDataMap()->getArray($this);
+//vd(self::getDataMap(), $values);
         if ($this->secretId) {
             $values['secret_id'] = $this->secretId;
             Db::update('secret', 'secret_id', $values);
@@ -81,23 +82,16 @@ class Secret extends Model
     }
 
     /**
-     * create a custom data map for encrypted types
+     * customize the data map for this model
      */
-    public static function getDataMap(): DataMap
+    public static function __dataMap(DataMap $map): void
     {
-        if (ModelMapper::instance()->hasDataMap(self::class)) {
-            return ModelMapper::instance()->getDataMap(self::class);
-        }
-
-        $map = parent::getDataMap();
         $map->addType(new TextEncrypt('url'));
         $map->addType(new TextEncrypt('username'));
         $map->addType(new TextEncrypt('password'));
         $map->addType(new TextEncrypt('otp'));
         $map->addType(new TextEncrypt('keys'));
         $map->addType(new TextEncrypt('notes'));
-
-        return $map;
     }
 
     /**

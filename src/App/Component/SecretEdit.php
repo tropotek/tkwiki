@@ -127,6 +127,7 @@ class SecretEdit extends \Dom\Renderer\Renderer implements ComponentInterface
             'name' => $this->secret->name,
             'hash' => $this->secret->hash,
         ];
+        $this->hxTriggers['tkForm:dialogclose'] = '#'.self::CONTAINER_ID;
     }
 
     public function show(): ?Template
@@ -169,25 +170,9 @@ jQuery(function($) {
     const form     = '#{$this->form->getId()}';
 
 
-    $(document).on('htmx:afterSettle', dialog, function(e) {
-        tkInit(form);
-    });
-
     // open the dialog as soon as HTMX settles
     tkInit(form);
     $(dialog).modal('show');
-
-    // put focus field when dialog shows
-    $(dialog).on('shown.bs.modal', function() {
-        $(dialog).data('detatch', true);
-        setTimeout(function() { $('input:not(:hidden), textarea, select', dialog).first().focus(); }, 0);
-    });
-
-    // catch dialog finished handling post request
-    $('body').on('tkForm:afterSubmit', function(e) {
-        $(document).trigger('selected.ss.modal', [e.detail.hash, e.detail.name]);
-        $(dialog).modal('hide');
-    });
 
     // remove the dialog element from the dom when it closes
     $(document).on('hidden.bs.modal', dialog, function() {
@@ -195,6 +180,11 @@ jQuery(function($) {
         if ($(dialog).data('detatch') !== false) {
             $(dialog).remove();
         }
+    });
+
+    // put focus field when dialog shows
+    $(dialog).on('shown.bs.modal', function() {
+        $(dialog).data('detatch', true);
     });
 
     $('.fld-otp button', form).on('click', function(e) {

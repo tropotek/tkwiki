@@ -131,9 +131,9 @@ jQuery(function($) {
     const dialog = '#{$dialogId}';
     const table  = '#{$this->table->getId()}';
 
-    $(document).on('htmx:afterSettle', dialog, function(e) {
-        tkInit(table);
-    });
+    // $(document).on('htmx:afterSettle', dialog, function(e) {
+    //     tkInit(table);
+    // });
     
     $(dialog).on('click', '.wiki-insert', function() {
         // On insert existing page event

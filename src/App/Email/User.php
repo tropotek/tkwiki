@@ -60,7 +60,7 @@ class User
             Uri::create('/registerActivate')->getPath(),
         ], [
             'h' => $user->hash
-        ], 60);
+        ], 30);
         $message->set('activate-url', $gt->getUrl()->toString());
 
         return Mailer::instance()->send($message);
@@ -93,7 +93,7 @@ class User
             Uri::create('/recoverUpdate')->getPath(),
         ], [
             'h' => $user->hash
-        ], 20);
+        ], 30);
         $message->set('activate-url', $gt->getUrl()->toString());
 
         return Mailer::instance()->send($message);

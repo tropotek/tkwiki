@@ -122,6 +122,7 @@ HTTP ports are not implemented yet.
 #### TODO
 
 - Add phpmyadmin or Adminer to the docker container
+- see if we can run the DB as the same userid as the webserver, or just use a db volume?
 - remove the need for the init.sql
 - Show how to setup the first user for the site or build a deploy script?
 - Add default users to the DB

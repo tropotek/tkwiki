@@ -115,6 +115,20 @@ What is the base URL path [/]:
 
 Now visit the site at https://localhost:440
 
-HHTP prots are not implemented yet.
+HTTP ports are not implemented yet.
+
+-------
+
+#### TODO
+
+- Add phpmyadmin or Adminer to the docker container
+- remove the need for the init.sql
+- Show how to setup the first user for the site or build a deploy script?
+- Add default users to the DB
+- Add debug options to the example config.php.in
+- Test the mirroring script
+- run tests with tk-tool cli and tagging a release from
+- Test with other tk sites, not for production just development.
+
 
 

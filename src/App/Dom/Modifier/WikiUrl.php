@@ -46,7 +46,8 @@ class WikiUrl extends ModifierInterface
             }
         } else if (preg_match('/^http|https|ftp|telnet|gopher|news/i', $href, $regs)) {
             $url = Uri::create($node->getAttribute('href'));
-            if (strtolower(str_replace('www.', '', $url->getHost())) != strtolower(str_replace('www.', '', $_SERVER['HTTP_HOST'])) ) {
+            $parts = parse_url($_SERVER['HTTP_HOST']);
+            if (strtolower(str_replace('www.', '', $url->getHost())) != strtolower(str_replace('www.', '', $parts['host'] ?? '')) ) {
                 $css = $this->addClass($css, 'wk-link-external');
                 $node->setAttribute('target', '_blank');
             }

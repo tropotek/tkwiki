@@ -72,4 +72,49 @@ __Warning:__ Upgrading could potentially break the site. Be sure to back up all 
 site `/data` files before running these commands.
 
 
+### Docker Development
+
+Create a `.env` from the `.env.example` file and edit the values.
+
+Start the docker containers:
+```bash
+docker-compose up --build -d
+docker compose down
+```
+
+Then enter a terminal in the container:
+```bash
+docker exec -it tkwiki_app_1 /bin/bash
+```
+
+**Run these commands from the container terminal**
+
+Create a sym link for frankenphp to access the public folder:
+```bash
+ln -s ./ /public
+```
+
+For the first run and to setup the DB user edit the `./docker/maria-init.sql` and add your DB user password.
+_This si only a temp fix, remember to revert your changes here do not commit them._
+
+
+Install the dependencies with composer: 
+```bash
+composer install
+```
+```
+Set the DB hostname [localhost]: db
+Set the DB port [3306]: 
+Set the DB name: wiki
+Set the DB user: dev
+Set the DB password: ****
+Saving config.php
+Creating .htaccess file
+What is the base URL path [/]:
+```
+
+Now visit the site at https://localhost:440
+
+HHTP prots are not implemented yet.
+
 

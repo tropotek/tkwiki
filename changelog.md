@@ -4,6 +4,14 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.162 [2026-04-24]:
+-------------------------------
+  - added delete revision functionality
+  - finalise docker setup
+  - working docker development setup
+  - Getting tk docker dev env. ready
+
+
 Ver 8.0.160 [2026-01-16]:
 -------------------------------
 

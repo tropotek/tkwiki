@@ -18,13 +18,15 @@ class ViewToolbar extends Renderer implements DisplayInterface
     protected ?User   $user = null;
     protected Page    $page;
     protected Content $content;
+    protected bool    $isRevision = false;
 
 
-    public function __construct(Page $page)
+    public function __construct(Page $page, bool $isRevision = false)
     {
         $this->page = $page;
         $this->content = $page->getContent();
-        $this->user = \App\Db\User::getAuthUser();
+        $this->user = User::getAuthUser();
+        $this->isRevision = $isRevision;
     }
 
     public function getPage(): Page
@@ -46,12 +48,26 @@ class ViewToolbar extends Renderer implements DisplayInterface
     {
         $template = $this->getTemplate();
 
+        if ($this->isRevision) {
+            $contentId = (int)($_GET['contentId'] ?? 0);
+            if (
+                (User::getAuthUser()?->isAdmin()
+                || (User::getAuthUser()?->userId ?? 0) == $this->page->userId)
+                && $contentId != $this->page->contentId
+            ) {
+                $template->setAttr('delete-url', 'data-confirm', 'Are you sure you want to delete revision number ' . $contentId);
+                $template->setAttr('delete-url', 'href', Uri::create()->set('del', $contentId));
+                $template->setVisible('can-delete');
+            }
+
+        }
+
         if ($this->getPage()->canEdit($this->getUser())) {
             $template->setAttr('edit-url', 'href', Uri::create('/edit')->set('pageId', $this->getPage()->pageId)->set('e'));
             $template->setAttr('history', 'href', Uri::create('/historyManager')->set('pageId', $this->getPage()->pageId));
             $template->setVisible('can-edit');
         }
-        if (\App\Db\User::getAuthUser()?->isStaff()) {
+        if (User::getAuthUser()?->isStaff()) {
             $url = Uri::create('/component/pageInfo', ['pageId' => $this->page->pageId]);
             $template->setAttr('info-dialog', 'hx-get', $url);
             $template->setVisible('info-dialog');
@@ -70,6 +86,7 @@ class ViewToolbar extends Renderer implements DisplayInterface
         $html = <<<HTML
 <div class="wk-toolbar btn-group btn-group-sm float-end" role="group" aria-label="Small button group" var="group">
   <a href="/edit?pageId=1" title="Edit The Page" class="btn btn-outline-secondary" choice="can-edit" var="edit-url"><i class="fa fa-fw fa-pencil"></i></a>
+  <a href="/view?del=" title="Delete The content" data-confirm="Are you sure you want to delete this revision?" class="btn btn-outline-secondary" choice="can-delete" var="delete-url"><i class="fa fa-fw fa-trash"></i></a>
   <a href="javascript:;" title="Page History" class="btn btn-outline-secondary" choice="can-edit" var="history"><i class="fa fa-fw fa-clock-rotate-left"></i></a>
   <a href="/?pdf=pdf" title="Download PDF" class="btn btn-outline-secondary" target="_blank" var="pdf-url"><i class="fa fa-fw fa-file-pdf"></i></a>
   <a href="javascript:window.print();" title="Print Document" class="btn btn-outline-secondary"><i class="fa fa-fw fa-print"></i></a>

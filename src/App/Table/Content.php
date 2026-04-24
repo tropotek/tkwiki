@@ -1,10 +1,15 @@
 <?php
 namespace App\Table;
 
+use App\Db\User;
 use Bs\Mvc\Table;
+use Bs\Registry;
 use Tk\Alert;
+use Tk\Db;
 use Tk\Exception;
 use Tk\Form\Field\Input;
+use Tk\Table\Action\Delete;
+use Tk\Table\Cell\RowSelect;
 use Tk\Uri;
 use Tk\Table\Cell;
 
@@ -17,6 +22,17 @@ class Content extends Table
     {
         if (!$this->wPage) {
             throw new Exception("Wiki page not found");
+        }
+
+        if (User::getAuthUser()->isAdmin() || User::getAuthUser()->userId == $this->wPage->userId) {
+            $rowSelect = RowSelect::create('id', 'contentId');
+            $rowSelect->addOnHtml(function(\App\Db\Content $obj, Cell $cell) {
+                if ($this->wPage->contentId == $obj->contentId) {
+                    return '';
+                }
+                return null;
+            });
+            $this->appendCell($rowSelect);
         }
 
         $this->appendCell('actions')
@@ -54,6 +70,19 @@ class Content extends Table
         // Add Filter Fields
         $this->getForm()->appendField(new Input('search'))
             ->setAttr('placeholder', 'Search: name');
+
+        $this->table->appendAction(Delete::create()
+            ->addOnExecute(function(Delete $action) use ($rowSelect) {
+                if (!(User::getAuthUser()->isAdmin() || User::getAuthUser()->userId == $this->wPage->userId)) {
+                    return;
+                }
+
+                $selected = $rowSelect->getSelected();
+                foreach ($selected as $content_id) {
+                    if ($this->wPage->contentId == $content_id) return;
+                    Db::delete('content', compact('content_id'));
+                }
+            }));
 
         return $this;
     }

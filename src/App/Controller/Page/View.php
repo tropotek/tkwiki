@@ -98,9 +98,27 @@ class View extends ControllerPublic
             return $this->doPdf();
         }
 
+        if (isset($_GET['del'])) {
+            $contentId = (int)($_GET['del'] ?? 0);
+            if ($this->content->contentId !== $contentId) {
+                throw new HttpException(400, 'Invalid content ID for deletion');
+            }
+            if (
+                !User::getAuthUser()?->isAdmin()
+                || (User::getAuthUser()?->userId ?? 0) != $this->page->userId
+                || $this->content->contentId === $this->page->contentId
+            ) {
+                return null;
+            }
+            $this->content->delete();
+            Alert::addSuccess('Revision deleted successfully');
+            Breadcrumbs::getBackUrl()->redirect();
+        }
+
         Alert::addInfo('You are viewing revision ' . $this->content->contentId .
             ' <a href="'.$this->page->getUrl().'">click here</a> to return to current revision');
-        $this->toolbar = new ViewToolbar($this->page);
+
+        $this->toolbar = new ViewToolbar($this->page, true);
 
         return null;
     }

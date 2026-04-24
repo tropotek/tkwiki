@@ -1,6 +1,4 @@
-#FROM dunglas/frankenphp:latest
 FROM dunglas/frankenphp:php8.4
-#FROM dunglas/frankenphp:php8.3
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -23,11 +21,9 @@ RUN apt-get update && \
 
 # Install required PHP extensions for Moodle
 RUN install-php-extensions \
-    curl \
-    date \
     intl \
-    json \
-    mbstring \
+    bcmath \
+    gmp \
     pcntl \
     mysqli \
     pdo_mysql \

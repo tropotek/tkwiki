@@ -4,6 +4,10 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.164 [2026-04-24]:
+-------------------------------
+
+
 Ver 8.0.162 [2026-04-24]:
 -------------------------------
   - added delete revision functionality

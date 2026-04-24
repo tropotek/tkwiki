@@ -1,5 +1,6 @@
 #FROM dunglas/frankenphp:latest
-FROM dunglas/frankenphp:php8.4
+#FROM dunglas/frankenphp:php8.4
+FROM dunglas/frankenphp:php8.3
 
 # Set the working directory inside the container
 WORKDIR /app

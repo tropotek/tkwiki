@@ -2842,12 +2842,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "abb4b8de26fb947cdda90a91c6a337570021c105"
+                "reference": "4665bfaefb34f19522cb17c5b87bb484e53807b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/abb4b8de26fb947cdda90a91c6a337570021c105",
-                "reference": "abb4b8de26fb947cdda90a91c6a337570021c105",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/4665bfaefb34f19522cb17c5b87bb484e53807b0",
+                "reference": "4665bfaefb34f19522cb17c5b87bb484e53807b0",
                 "shasum": ""
             },
             "require": {
@@ -3093,12 +3093,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-table.git",
-                "reference": "39f9e43fbd27ca7482af985b15ceda4cb20413d0"
+                "reference": "691debdef6506ff76408aeb8dd4c9a2ec91b051a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/39f9e43fbd27ca7482af985b15ceda4cb20413d0",
-                "reference": "39f9e43fbd27ca7482af985b15ceda4cb20413d0",
+                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/691debdef6506ff76408aeb8dd4c9a2ec91b051a",
+                "reference": "691debdef6506ff76408aeb8dd4c9a2ec91b051a",
                 "shasum": ""
             },
             "require": {
@@ -4298,28 +4298,26 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "8.1.x-dev",
+            "version": "7.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "2c8e7a47bbc5f30f950c615f02fe341a05416c12"
+                "reference": "dcd8f96bcdc0f128ec406c765cc066c6035d1be3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/2c8e7a47bbc5f30f950c615f02fe341a05416c12",
-                "reference": "2c8e7a47bbc5f30f950c615f02fe341a05416c12",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/dcd8f96bcdc0f128ec406c765cc066c6035d1be3",
+                "reference": "dcd8f96bcdc0f128ec406c765cc066c6035d1be3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.4.1",
-                "symfony/deprecation-contracts": "^2.5|^3",
+                "php": ">=8.2",
                 "symfony/polyfill-ctype": "~1.8",
                 "symfony/polyfill-mbstring": "~1.8"
             },
             "require-dev": {
-                "symfony/process": "^7.4|^8.0"
+                "symfony/process": "^6.4|^7.0|^8.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -4346,7 +4344,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/filesystem/tree/8.1"
+                "source": "https://github.com/symfony/filesystem/tree/7.4"
             },
             "funding": [
                 {
@@ -4366,29 +4364,28 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-09T14:06:24+00:00"
+            "time": "2026-04-18T13:18:21+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "8.1.x-dev",
+            "version": "7.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "d92d0d250630df6d75d565da410e249a23fb548e"
+                "reference": "cd62dddfea85e04c4c206cd44a324e390a79651c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/d92d0d250630df6d75d565da410e249a23fb548e",
-                "reference": "d92d0d250630df6d75d565da410e249a23fb548e",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/cd62dddfea85e04c4c206cd44a324e390a79651c",
+                "reference": "cd62dddfea85e04c4c206cd44a324e390a79651c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.4.1"
+                "php": ">=8.2"
             },
             "require-dev": {
-                "symfony/filesystem": "^7.4|^8.0"
+                "symfony/filesystem": "^6.4|^7.0|^8.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -4415,7 +4412,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/finder/tree/8.1"
+                "source": "https://github.com/symfony/finder/tree/7.4"
             },
             "funding": [
                 {
@@ -4435,7 +4432,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-18T13:52:23+00:00"
+            "time": "2026-04-18T13:18:21+00:00"
         },
         {
             "name": "symfony/polyfill-php73",
@@ -4682,22 +4679,21 @@
         },
         {
             "name": "symfony/process",
-            "version": "8.1.x-dev",
+            "version": "7.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "da3ac768d523a3c9a5b43ea19f215b25142bd83b"
+                "reference": "89c0b2214a31fce737e3474a1eb37c20a1b31260"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/da3ac768d523a3c9a5b43ea19f215b25142bd83b",
-                "reference": "da3ac768d523a3c9a5b43ea19f215b25142bd83b",
+                "url": "https://api.github.com/repos/symfony/process/zipball/89c0b2214a31fce737e3474a1eb37c20a1b31260",
+                "reference": "89c0b2214a31fce737e3474a1eb37c20a1b31260",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.4.1"
+                "php": ">=8.2"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -4724,7 +4720,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/8.1"
+                "source": "https://github.com/symfony/process/tree/7.4"
             },
             "funding": [
                 {
@@ -4744,7 +4740,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-18T13:52:23+00:00"
+            "time": "2026-04-18T13:18:21+00:00"
         }
     ],
     "aliases": [],

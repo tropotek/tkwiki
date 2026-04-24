@@ -76,7 +76,6 @@ class Content extends Table
                 if (!(User::getAuthUser()->isAdmin() || User::getAuthUser()->userId == $this->wPage->userId)) {
                     return;
                 }
-
                 $selected = $rowSelect->getSelected();
                 foreach ($selected as $content_id) {
                     if ($this->wPage->contentId == $content_id) return;

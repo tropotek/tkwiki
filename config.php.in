@@ -13,6 +13,27 @@ return function (Config $config) {
      * System DB DSN: hostname[:port]/username/password/dbname
      */
     $config['db.mysql'] = '{db.mysql}';
+    if (getenv('DB_HOST')) {
+        $config['db.mysql'] = sprintf(
+            '%s:%s/%s/%s/%s',
+            getenv('DB_HOST') ?: 'localhost',
+            getenv('DB_PORT') ?: 3306,
+            getenv('DB_USER'),
+            getenv('DB_PASS'),
+            getenv('DB_NAME')
+        );
+    }
+
+    if (getenv('APP_MAILER') == 'smtp') {
+        $config['mail.driver'] = getenv('APP_MAILER') ?: '';
+        $config['mail.smtp.enableAuth'] = ((getenv('APP_AUTH') ?: 1) == 1);
+        $config['mail.smtp.enableKeepAlive'] = ((getenv('APP_KEEPALIVE') ?: 1) == 1);
+        $config['mail.smtp.secure'] = ((getenv('APP_SECURE') ?: 1) == 1);
+        $config['mail.smtp.host'] = getenv('APP_MAILER_HOST') ?: '';
+        $config['mail.smtp.port'] = getenv('APP_MAILER_PORT') ?: '';
+        $config['mail.smtp.username'] = getenv('APP_MAILER_USER') ?: '';
+        $config['mail.smtp.password'] = getenv('APP_MAILER_PASS') ?: '';
+    }
 
     /**
      * System string encrypt secret
@@ -31,4 +52,39 @@ return function (Config $config) {
      */
     //$config['auth.rememberme.ttl'] = 60 * 24 * 28;
 
+
+
+    // site environment type
+    //$config['env.type'] = Config::ENV_DEVELOPMENT;
+
+    // Setup dev environment
+    if ($config->isDev()) {
+        // Send all emails to the debug address
+        $config['system.debug.email'] = 'info@example.com';
+        // DB mirror src site (site root path)
+        //$config['db.mirror.secret'] = '';
+        //$config['db.mirror.url'] = 'https://example.com';
+
+        $config['auth.password.strict'] = false;
+
+        error_reporting(-1);
+        $config['php.display_errors'] = 'On';
+        $config['php.error_log'] = 'error.log';
+        $config['log.logLevel'] = \Psr\Log\LogLevel::DEBUG;
+
+        // force logging with NO_LOG links
+        //$config['log.enableNoLog'] = false;
+
+        // customise request log info
+        $config['site.log.params'] = 0;
+        // | StartupHandler::SITE_NAME
+        // | StartupHandler::REQUEST_URI
+        // | StartupHandler::CLIENT_IP
+        // | StartupHandler::CLIENT_AGENT
+        // | StartupHandler::SESSION_ID
+        // | StartupHandler::PHP_VER
+        // | StartupHandler::CONTROLLER
+        // | StartupHandler::METRICS
+
+    }
 };

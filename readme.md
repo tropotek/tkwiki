@@ -89,19 +89,14 @@ docker exec -it tkwiki_app_1 /bin/bash
 
 **Run these commands from the container terminal**
 
-Create a sym link for frankenphp to access the public folder:
-```bash
-ln -s ./ /public
-```
-
-For the first run and to setup the DB user edit the `./docker/maria-init.sql` and add your DB user password.
-_This si only a temp fix, remember to revert your changes here do not commit them._
-
-
 Install the dependencies with composer: 
 ```bash
 composer install
+# or
+docker exec -it tkwiki_app_1 composer install 
 ```
+
+Enter your details when prompted
 ```
 Set the DB hostname [localhost]: db
 Set the DB port [3306]: 
@@ -116,20 +111,5 @@ What is the base URL path [/]:
 Now visit the site at https://localhost:440
 
 HTTP ports are not implemented yet.
-
--------
-
-#### TODO
-
-- Add phpmyadmin or Adminer to the docker container
-- see if we can run the DB as the same userid as the webserver, or just use a db volume?
-- remove the need for the init.sql
-- Show how to setup the first user for the site or build a deploy script?
-- Add default users to the DB
-- Add debug options to the example config.php.in
-- Test the mirroring script
-- run tests with tk-tool cli and tagging a release from
-- Test with other tk sites, not for production just development.
-
 
 

@@ -23,4 +23,4 @@ node_modules
 /.htaccess
 /robots.txt
 /*log
-
+docker-compose-*.yml

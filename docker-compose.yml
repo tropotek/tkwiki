@@ -32,7 +32,6 @@ services:
       - ./.env
     volumes:
       - db:/var/lib/mysql
-      - ./docker/maria-init.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
     ports:
       - '${DB_MARIADB_PORT:-3306}:3306'
     restart: unless-stopped

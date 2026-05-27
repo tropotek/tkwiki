@@ -23,9 +23,9 @@ services:
         # Option B: Allow both but disable auto-redirects/certs
         #- CADDY_GLOBAL_OPTIONS="auto_https off"
         - DB_HOST=db
-        - DB_NAME='${MARIADB_DATABASE}'
-        - DB_USER='${MARIADB_USER}'
-        - DB_PASS='${MARIADB_PASSWORD}'
+        - DB_NAME=${MARIADB_DATABASE}
+        - DB_USER=${MARIADB_USER}
+        - DB_PASS=${MARIADB_PASSWORD}
     entrypoint: ["/bin/sh", "/app/docker/entry.sh"]
     command: ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
     depends_on:

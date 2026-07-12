@@ -24,3 +24,7 @@ node_modules
 /robots.txt
 /*log
 docker-compose-*.yml
+.gitnexus
+.claude
+CLAUDE.md
+AGENTS.md

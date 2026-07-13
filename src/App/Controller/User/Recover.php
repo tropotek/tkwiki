@@ -83,7 +83,10 @@ class Recover extends ControllerDomInterface
             /** @var User $user */
             $user = $auth->getDbModel();
             if ($user) {
-                \App\Email\User::sendRecovery($user);
+                $sent = \App\Email\User::sendRecovery($user);
+                if (!$sent) {
+                    \Tk\Log::warning('Recovery email failed to send for user: ' . $user->username);
+                }
             }
         }
 

@@ -85,7 +85,7 @@ class Login extends ControllerAdmin
         $ip = \Tk\System::getClientIp();
         $maxAttempts = (int)Config::getValue('auth.login.maxAttempts', 5);
         $lockoutMins = (int)Config::getValue('auth.login.lockoutMins', 15);
-        if (LoginAttempt::countRecent($username, $ip, $lockoutMins) >= $maxAttempts) {
+        if (LoginAttempt::countRecent('login:' . $username, $ip, $lockoutMins) >= $maxAttempts) {
             $form->addError('Too many failed attempts. Please try again later.');
             return;
         }
@@ -93,12 +93,12 @@ class Login extends ControllerAdmin
         $factory = Factory::instance();
         $result = $factory->getAuthController()->authenticate($username, $password);
         if ($result->getCode() != Result::SUCCESS) {
-            LoginAttempt::record($username, $ip);
+            LoginAttempt::record('login:' . $username, $ip);
             Log::debug($result->getMessage());
             $form->addError('Invalid login details.');
             return;
         }
-        LoginAttempt::clear($username, $ip);
+        LoginAttempt::clear('login:' . $username, $ip);
 
         // Login success
         $auth = Auth::getAuthUser();

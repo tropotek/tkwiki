@@ -83,11 +83,11 @@ class Recover extends ControllerDomInterface
         $ip = \Tk\System::getClientIp();
         $maxAttempts = (int)Config::getValue('auth.login.maxAttempts', 5);
         $lockoutMins = (int)Config::getValue('auth.login.lockoutMins', 15);
-        if (LoginAttempt::countRecent($user->username, $ip, $lockoutMins) >= $maxAttempts) {
+        if (LoginAttempt::countRecent('recover:' . $user->username, $ip, $lockoutMins) >= $maxAttempts) {
             Alert::addWarning('Too many requests. Please try again later.');
             Uri::create('/')->redirect();
         }
-        LoginAttempt::record($user->username, $ip);
+        LoginAttempt::record('recover:' . $user->username, $ip);
 
         if (\App\Email\User::sendRecovery($user)) {
             Alert::addSuccess('Please check your email for instructions to recover your account.');

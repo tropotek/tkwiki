@@ -45,9 +45,11 @@ class Profile extends ControllerAdmin
 
         // send inactive user activation email
         if (isset($_GET['pass'])) {
-            if ($_GET['pass'] != $this->user->hash) {
+            $nonce = \Tk\Session::instance()->get('profile.pass.nonce', '');
+            if (empty($nonce) || !hash_equals($nonce, (string)$_GET['pass'])) {
                 throw new \Exception('Invalid user action, please contact your administrator.');
             }
+            \Tk\Session::instance()->remove('profile.pass.nonce');
             if (\App\Email\User::sendRecovery($this->user)) {
                 Alert::addSuccess('An email has been sent to ' . $this->user->nameShort . ' to create their password.');
             } else {
@@ -149,7 +151,9 @@ class Profile extends ControllerAdmin
 
         if (Config::instance()->get('auth.profile.password')) {
             $template->setVisible('pass');
-            $url = Uri::create()->set('pass', $this->user->hash);
+            $nonce = bin2hex(random_bytes(16));
+            \Tk\Session::instance()->set('profile.pass.nonce', $nonce);
+            $url = Uri::create()->set('pass', $nonce);
             $template->setAttr('pass', 'href', $url);
         }
 

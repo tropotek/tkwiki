@@ -110,7 +110,7 @@ class Recover extends ControllerDomInterface
             throw new Exception("You do not have permission to access this page.");
         }
 
-        $this->auth = Auth::findByHash($this->token->payload['h'] ?? '');
+        $this->auth = Auth::find((int)($this->token->payload['authId'] ?? 0));
         if (is_null($this->auth)) {
             throw new Exception("Invalid user token");
         }

@@ -149,7 +149,7 @@ class Register extends ControllerDomInterface
             Uri::create('/')->redirect();
         }
 
-        $this->auth = Auth::findByHash($this->token->payload['h'] ?? '');
+        $this->auth = Auth::find((int)($this->token->payload['authId'] ?? 0));
         if (is_null($this->auth) || $this->auth->active) {
             Alert::addError('Invalid user token');
             Uri::create('/')->redirect();
@@ -216,6 +216,7 @@ class Register extends ControllerDomInterface
 
             // log user in and redirect to user home
             Alert::addSuccess('You account has been successfully activated.');
+            \Tk\Session::instance()->regenerateId();
             Factory::instance()->getAuthController()->getStorage()->write($user->username);
             $user->getHomeUrl()->redirect();
         }

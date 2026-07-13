@@ -72,8 +72,18 @@ class Login extends ControllerAdmin
 
         $username = trim($values['username'] ?? '');
         $password = trim($values['password'] ?? '');
-        $throttleKey = 'login:' . $username;
 
+        $unresolved = false;
+        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            $auth = Auth::findByEmail($username);
+            if ($auth instanceof Auth) {
+                $username = $auth->username;
+            } else {
+                $unresolved = true;
+            }
+        }
+
+        $throttleKey = 'login:' . $username;
         $ip = \Tk\System::getClientIp();
         $maxAttempts = (int)Config::getValue('auth.login.maxAttempts', 5);
         $lockoutMins = (int)Config::getValue('auth.login.lockoutMins', 15);
@@ -82,15 +92,10 @@ class Login extends ControllerAdmin
             return;
         }
 
-        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
-            $auth = Auth::findByEmail($username);
-            if ($auth instanceof Auth) {
-                $username = $auth->username;
-            } else {
-                LoginAttempt::record($throttleKey, $ip);
-                $form->addError('Invalid login details.');
-                return;
-            }
+        if ($unresolved) {
+            LoginAttempt::record($throttleKey, $ip);
+            $form->addError('Invalid login details.');
+            return;
         }
 
         $factory = Factory::instance();

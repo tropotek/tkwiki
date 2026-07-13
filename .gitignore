@@ -22,9 +22,10 @@ node_modules
 /config.php
 /.htaccess
 /robots.txt
-/*log
+/*.log
 docker-compose-*.yml
 .gitnexus
 .claude
+.superpowers
 CLAUDE.md
 AGENTS.md

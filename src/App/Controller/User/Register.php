@@ -84,25 +84,10 @@ class Register extends ControllerDomInterface
             $form->addFieldError('name', 'Please enter a valid name');
         }
         if (!filter_var($form->getFieldValue('email'), FILTER_VALIDATE_EMAIL)) {
-            $form->addFieldError('email', 'Please enter a valid email');
+            $form->addFieldError('email', 'Please enter a valid email address');
         }
-
         if (!$form->getFieldValue('username')) {
             $form->addFieldError('username', 'Invalid field username value');
-        } else {
-            $dup = Auth::findByUsername($form->getFieldValue('username'));
-            if ($dup instanceof Auth) {
-                $form->addFieldError('username', 'This username is unavailable');
-            }
-        }
-
-        if (!filter_var($form->getFieldValue('email'), FILTER_VALIDATE_EMAIL)) {
-            $form->addFieldError('email', 'Please enter a valid email address');
-        } else {
-            $dup = Auth::findByEmail($form->getFieldValue('email'));
-            if ($dup instanceof Auth) {
-                $form->addFieldError('email', 'This email is unavailable');
-            }
         }
 
         $form->addFieldErrors($user->validate());
@@ -110,20 +95,26 @@ class Register extends ControllerDomInterface
             return;
         }
 
-        [$user->givenName, $user->familyName] = explode(' ', $form->getFieldValue('name'));
-        $user->save();
+        // Do not reveal via distinct messaging whether the username/email is already
+        // registered - only actually create the account when both are genuinely free.
+        $dupUsername = Auth::findByUsername($form->getFieldValue('username'));
+        $dupEmail = Auth::findByEmail($form->getFieldValue('email'));
+        if (!($dupUsername instanceof Auth) && !($dupEmail instanceof Auth)) {
+            [$user->givenName, $user->familyName] = explode(' ', $form->getFieldValue('name'));
+            $user->save();
 
-        $auth = Auth::create($user);
-        $auth->mapForm($form->getFieldValues());
-        $auth->active = false;
-        $auth->save();
+            $auth = Auth::create($user);
+            $auth->mapForm($form->getFieldValues());
+            $auth->active = false;
+            $auth->save();
 
-        // reload user
-        $user->reload();
+            // reload user
+            $user->reload();
 
-        \App\Email\User::sendRegister($user);
+            \App\Email\User::sendRegister($user);
+        }
 
-        Alert::addSuccess('Please check your email for instructions to activate your account.');
+        Alert::addSuccess('If those details are valid, a registration email has been sent.');
         Uri::create('/')->redirect();
     }
 

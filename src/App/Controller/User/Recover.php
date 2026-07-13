@@ -63,38 +63,31 @@ class Recover extends ControllerDomInterface
             return;
         }
 
-        $auth = Auth::findByUsername(strtolower($form->getFieldValue('username')));
+        $username = strtolower($form->getFieldValue('username'));
+        $auth = Auth::findByUsername($username);
         if (!$auth) {
-            $auth = Auth::findByEmail(strtolower($form->getFieldValue('username')));
-        }
-        if (!($auth && $auth->active)) {
-            Alert::addError("Invalid user account");
-            Uri::create('/')->redirect();
-        }
-
-        /** @var User $user */
-        $user = $auth->getDbModel();
-        if (!$user) {
-            $form->setFieldValue('username', '');
-            $form->addFieldError('username', 'Please enter a valid username.');
-            return;
+            $auth = Auth::findByEmail($username);
         }
 
         $ip = \Tk\System::getClientIp();
         $maxAttempts = (int)Config::getValue('auth.login.maxAttempts', 5);
         $lockoutMins = (int)Config::getValue('auth.login.lockoutMins', 15);
-        if (LoginAttempt::countRecent('recover:' . $user->username, $ip, $lockoutMins) >= $maxAttempts) {
+        $throttleKey = 'recover:' . ($auth instanceof Auth ? $auth->username : $username);
+        if (LoginAttempt::countRecent($throttleKey, $ip, $lockoutMins) >= $maxAttempts) {
             Alert::addWarning('Too many requests. Please try again later.');
             Uri::create('/')->redirect();
         }
-        LoginAttempt::record('recover:' . $user->username, $ip);
+        LoginAttempt::record($throttleKey, $ip);
 
-        if (\App\Email\User::sendRecovery($user)) {
-            Alert::addSuccess('Please check your email for instructions to recover your account.');
-        } else {
-            Alert::addWarning('Recovery email failed to send. Please <a href="/contact">contact us.</a>');
+        if ($auth instanceof Auth && $auth->active) {
+            /** @var User $user */
+            $user = $auth->getDbModel();
+            if ($user) {
+                \App\Email\User::sendRecovery($user);
+            }
         }
 
+        Alert::addSuccess('If an account matches, an email has been sent with recovery instructions.');
         Uri::create('/')->redirect();
     }
 

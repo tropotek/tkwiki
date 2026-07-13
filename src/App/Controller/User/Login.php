@@ -77,7 +77,8 @@ class Login extends ControllerAdmin
             if ($auth instanceof Auth) {
                 $username = $auth->username;
             } else {
-                $form->addFieldError('username', 'Invalid user account.');
+                LoginAttempt::record('login:' . $username, \Tk\System::getClientIp());
+                $form->addError('Invalid login details.');
                 return;
             }
         }

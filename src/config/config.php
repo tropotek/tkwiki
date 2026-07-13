@@ -36,6 +36,14 @@ return function (Config $config) {
      */
     $config['auth.registration.enable'] = false;
 
+    /**
+     * Brute-force login throttling (per username+IP)
+     * maxAttempts: number of failed attempts allowed within lockoutMins before blocking
+     * lockoutMins: sliding window (in minutes) that failed attempts are counted over
+     */
+    $config['auth.login.maxAttempts'] = 5;
+    $config['auth.login.lockoutMins'] = 15;
+
 
     /**
      * SSI/SSO oAuth portal configs

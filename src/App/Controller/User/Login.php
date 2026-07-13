@@ -2,6 +2,7 @@
 namespace App\Controller\User;
 
 use Bs\Auth;
+use Bs\Db\LoginAttempt;
 use Bs\Db\Remember;
 use Bs\Mvc\ControllerAdmin;
 use Bs\Factory;
@@ -81,13 +82,23 @@ class Login extends ControllerAdmin
             }
         }
 
+        $ip = \Tk\System::getClientIp();
+        $maxAttempts = (int)Config::getValue('auth.login.maxAttempts', 5);
+        $lockoutMins = (int)Config::getValue('auth.login.lockoutMins', 15);
+        if (LoginAttempt::countRecent($username, $ip, $lockoutMins) >= $maxAttempts) {
+            $form->addError('Too many failed attempts. Please try again later.');
+            return;
+        }
+
         $factory = Factory::instance();
         $result = $factory->getAuthController()->authenticate($username, $password);
         if ($result->getCode() != Result::SUCCESS) {
+            LoginAttempt::record($username, $ip);
             Log::debug($result->getMessage());
             $form->addError('Invalid login details.');
             return;
         }
+        LoginAttempt::clear($username, $ip);
 
         // Login success
         $auth = Auth::getAuthUser();

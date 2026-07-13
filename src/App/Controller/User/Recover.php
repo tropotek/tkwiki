@@ -5,6 +5,7 @@ use Bs\Auth;
 use Bs\Mvc\ControllerDomInterface;
 use App\Db\User;
 use Bs\Db\GuestToken;
+use Bs\Db\LoginAttempt;
 use Bs\Mvc\Form;
 use Dom\Template;
 use Tk\Alert;
@@ -78,6 +79,15 @@ class Recover extends ControllerDomInterface
             $form->addFieldError('username', 'Please enter a valid username.');
             return;
         }
+
+        $ip = \Tk\System::getClientIp();
+        $maxAttempts = (int)Config::getValue('auth.login.maxAttempts', 5);
+        $lockoutMins = (int)Config::getValue('auth.login.lockoutMins', 15);
+        if (LoginAttempt::countRecent($user->username, $ip, $lockoutMins) >= $maxAttempts) {
+            Alert::addWarning('Too many requests. Please try again later.');
+            Uri::create('/')->redirect();
+        }
+        LoginAttempt::record($user->username, $ip);
 
         if (\App\Email\User::sendRecovery($user)) {
             Alert::addSuccess('Please check your email for instructions to recover your account.');

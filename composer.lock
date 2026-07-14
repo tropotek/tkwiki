@@ -2882,12 +2882,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "7588d21c229de3ffbfaff2a8f4b271b0de3b1de7"
+                "reference": "b149df461770b7e467da883b2178297e3584d790"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/7588d21c229de3ffbfaff2a8f4b271b0de3b1de7",
-                "reference": "7588d21c229de3ffbfaff2a8f4b271b0de3b1de7",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/b149df461770b7e467da883b2178297e3584d790",
+                "reference": "b149df461770b7e467da883b2178297e3584d790",
                 "shasum": ""
             },
             "require": {
@@ -2938,7 +2938,7 @@
                 "issues": "https://github.com/tropotek/tk-base/issues",
                 "source": "https://github.com/tropotek/tk-base/tree/8.0"
             },
-            "time": "2026-07-13T00:00:00+00:00"
+            "time": "2025-11-15T00:00:00+00:00"
         },
         {
             "name": "ttek/tk-domtemplate",
@@ -3010,12 +3010,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "72f66c4d0518f44d2f1cddc678ec583343d0e735"
+                "reference": "35eb5e1d61787cc6720a37d669e4873fbbd43b75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/72f66c4d0518f44d2f1cddc678ec583343d0e735",
-                "reference": "72f66c4d0518f44d2f1cddc678ec583343d0e735",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/35eb5e1d61787cc6720a37d669e4873fbbd43b75",
+                "reference": "35eb5e1d61787cc6720a37d669e4873fbbd43b75",
                 "shasum": ""
             },
             "require": {
@@ -3063,12 +3063,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "a281211e952d991c3d84cd1afda5e83532e1bf92"
+                "reference": "b422a3d6468c23379e604644ed7d372aa6635452"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/a281211e952d991c3d84cd1afda5e83532e1bf92",
-                "reference": "a281211e952d991c3d84cd1afda5e83532e1bf92",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/b422a3d6468c23379e604644ed7d372aa6635452",
+                "reference": "b422a3d6468c23379e604644ed7d372aa6635452",
                 "shasum": ""
             },
             "require": {
@@ -3125,7 +3125,7 @@
                     "type": "Paypal"
                 }
             ],
-            "time": "2026-07-13T00:00:00+00:00"
+            "time": "2024-10-01T00:00:00+00:00"
         },
         {
             "name": "ttek/tk-table",

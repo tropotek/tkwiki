@@ -7,9 +7,9 @@
         "wiki",
         "CMS"
     ],
-    "time": "2026-04-24",
+    "time": "2026-07-15",
     "license": "GPL",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "authors":  [
          {
             "name": "Tropotek",

@@ -8,6 +8,8 @@ services:
       - ./.env
     volumes:
       - ./:/app
+      - caddy_data:/data
+      - caddy_config:/config
       - ./docker/php.ini:/usr/local/etc/php/conf.d/99-moodle.ini
     ports:
       - "${HTTP_APP_PORT:-80}:80"

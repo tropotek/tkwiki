@@ -2,6 +2,7 @@
 namespace App\Controller\User;
 
 use Bs\Auth;
+use Bs\Db\LoginAttempt;
 use Bs\Db\Remember;
 use Bs\Mvc\ControllerAdmin;
 use Bs\Factory;
@@ -71,23 +72,41 @@ class Login extends ControllerAdmin
 
         $username = trim($values['username'] ?? '');
         $password = trim($values['password'] ?? '');
+
+        $unresolved = false;
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
             $auth = Auth::findByEmail($username);
             if ($auth instanceof Auth) {
                 $username = $auth->username;
             } else {
-                $form->addFieldError('username', 'Invalid user account.');
-                return;
+                $unresolved = true;
             }
+        }
+
+        $throttleKey = 'login:' . $username;
+        $ip = \Tk\System::getClientIp();
+        $maxAttempts = (int)Config::getValue('auth.login.maxAttempts', 5);
+        $lockoutMins = (int)Config::getValue('auth.login.lockoutMins', 15);
+        if (LoginAttempt::countRecent($throttleKey, $ip, $lockoutMins) >= $maxAttempts) {
+            $form->addError('Too many failed attempts. Please try again later.');
+            return;
+        }
+
+        if ($unresolved) {
+            LoginAttempt::record($throttleKey, $ip);
+            $form->addError('Invalid login details.');
+            return;
         }
 
         $factory = Factory::instance();
         $result = $factory->getAuthController()->authenticate($username, $password);
         if ($result->getCode() != Result::SUCCESS) {
+            LoginAttempt::record($throttleKey, $ip);
             Log::debug($result->getMessage());
             $form->addError('Invalid login details.');
             return;
         }
+        LoginAttempt::clear($throttleKey, $ip);
 
         // Login success
         $auth = Auth::getAuthUser();

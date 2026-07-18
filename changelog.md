@@ -4,6 +4,29 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.176 [2026-07-15]:
+-------------------------------
+
+
+Ver 8.0.174 [2026-07-14]:
+-------------------------------
+
+
+Ver 8.0.172 [2026-07-13]:
+-------------------------------
+  - update composer
+  - Fix login throttle bypass via email resolution
+  - fix: enforce login throttle uniformly and log recovery email failures
+  - security: uniform auth messaging to prevent user enumeration
+  - security: drop predictable hash from auth flows; nonce Profile gate; regen on activation
+  - security: separate login and recovery throttle budgets
+  - security: throttle failed logins and recovery sends
+  - Merge remote-tracking branch 'origin/8.0' into 8.0
+  - finalise docker setup, fix api route
+  - updates
+  - finalise docker setup
+
+
 Ver 8.0.170 [2026-04-24]:
 -------------------------------
 

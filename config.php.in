@@ -52,6 +52,9 @@ return function (Config $config) {
      */
     //$config['auth.rememberme.ttl'] = 60 * 24 * 28;
 
+    // Brute-force login throttling (per username+IP)
+    //$config['auth.login.maxAttempts'] = 5;
+    //$config['auth.login.lockoutMins'] = 15;
 
 
     // site environment type

@@ -59,7 +59,7 @@ class User
         $gt = GuestToken::create([
             Uri::create('/registerActivate')->getPath(),
         ], [
-            'h' => $user->hash
+            'authId' => $user->getAuth()->authId
         ], 30);
         $message->set('activate-url', $gt->getUrl()->toString());
 
@@ -92,7 +92,7 @@ class User
         $gt = GuestToken::create([
             Uri::create('/recoverUpdate')->getPath(),
         ], [
-            'h' => $user->hash
+            'authId' => $user->getAuth()->authId
         ], 30);
         $message->set('activate-url', $gt->getUrl()->toString());
 

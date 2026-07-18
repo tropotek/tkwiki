@@ -5,6 +5,7 @@ use Bs\Auth;
 use Bs\Mvc\ControllerDomInterface;
 use App\Db\User;
 use Bs\Db\GuestToken;
+use Bs\Db\LoginAttempt;
 use Bs\Mvc\Form;
 use Dom\Template;
 use Tk\Alert;
@@ -62,29 +63,34 @@ class Recover extends ControllerDomInterface
             return;
         }
 
-        $auth = Auth::findByUsername(strtolower($form->getFieldValue('username')));
+        $username = strtolower($form->getFieldValue('username'));
+        $auth = Auth::findByUsername($username);
         if (!$auth) {
-            $auth = Auth::findByEmail(strtolower($form->getFieldValue('username')));
+            $auth = Auth::findByEmail($username);
         }
-        if (!($auth && $auth->active)) {
-            Alert::addError("Invalid user account");
+
+        $ip = \Tk\System::getClientIp();
+        $maxAttempts = (int)Config::getValue('auth.login.maxAttempts', 5);
+        $lockoutMins = (int)Config::getValue('auth.login.lockoutMins', 15);
+        $throttleKey = 'recover:' . ($auth instanceof Auth ? $auth->username : $username);
+        if (LoginAttempt::countRecent($throttleKey, $ip, $lockoutMins) >= $maxAttempts) {
+            Alert::addWarning('Too many requests. Please try again later.');
             Uri::create('/')->redirect();
         }
+        LoginAttempt::record($throttleKey, $ip);
 
-        /** @var User $user */
-        $user = $auth->getDbModel();
-        if (!$user) {
-            $form->setFieldValue('username', '');
-            $form->addFieldError('username', 'Please enter a valid username.');
-            return;
+        if ($auth instanceof Auth && $auth->active) {
+            /** @var User $user */
+            $user = $auth->getDbModel();
+            if ($user) {
+                $sent = \App\Email\User::sendRecovery($user);
+                if (!$sent) {
+                    \Tk\Log::warning('Recovery email failed to send for user: ' . $user->username);
+                }
+            }
         }
 
-        if (\App\Email\User::sendRecovery($user)) {
-            Alert::addSuccess('Please check your email for instructions to recover your account.');
-        } else {
-            Alert::addWarning('Recovery email failed to send. Please <a href="/contact">contact us.</a>');
-        }
-
+        Alert::addSuccess('If an account matches, an email has been sent with recovery instructions.');
         Uri::create('/')->redirect();
     }
 
@@ -100,7 +106,7 @@ class Recover extends ControllerDomInterface
             throw new Exception("You do not have permission to access this page.");
         }
 
-        $this->auth = Auth::findByHash($this->token->payload['h'] ?? '');
+        $this->auth = Auth::find((int)($this->token->payload['authId'] ?? 0));
         if (is_null($this->auth)) {
             throw new Exception("Invalid user token");
         }

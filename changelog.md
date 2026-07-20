@@ -4,6 +4,13 @@ TkWiki
 
 #CHANGELOG#
 
+Ver 8.0.178 [2026-07-20]:
+-------------------------------
+  - update composer
+  - Merge remote-tracking branch 'origin/8.0' into 8.0
+  - updates
+
+
 Ver 8.0.176 [2026-07-15]:
 -------------------------------
 

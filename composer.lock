@@ -2645,12 +2645,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "7016110c2fbed47169b7c6cc38b18d1eff9c35b2"
+                "reference": "7ebb5b1515d6fa4bc1f231b550a61e291723f3b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/7016110c2fbed47169b7c6cc38b18d1eff9c35b2",
-                "reference": "7016110c2fbed47169b7c6cc38b18d1eff9c35b2",
+                "url": "https://api.github.com/repos/symfony/string/zipball/7ebb5b1515d6fa4bc1f231b550a61e291723f3b4",
+                "reference": "7ebb5b1515d6fa4bc1f231b550a61e291723f3b4",
                 "shasum": ""
             },
             "require": {
@@ -2728,7 +2728,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-27T21:01:45+00:00"
+            "time": "2026-07-19T19:34:23+00:00"
         },
         {
             "name": "symfony/var-dumper",
@@ -2882,12 +2882,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "5e474d7ed4bf409ecb185667da1d2c84d1d7543a"
+                "reference": "e0e68bcf97385c0ded14c8398d4cc890c67eef08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/5e474d7ed4bf409ecb185667da1d2c84d1d7543a",
-                "reference": "5e474d7ed4bf409ecb185667da1d2c84d1d7543a",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/e0e68bcf97385c0ded14c8398d4cc890c67eef08",
+                "reference": "e0e68bcf97385c0ded14c8398d4cc890c67eef08",
                 "shasum": ""
             },
             "require": {
@@ -3064,12 +3064,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "549468d45f31c22dae11fc5e7c447e45ea1dc483"
+                "reference": "26dfbafbe46014f205f41a2f2618485f45c556fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/549468d45f31c22dae11fc5e7c447e45ea1dc483",
-                "reference": "549468d45f31c22dae11fc5e7c447e45ea1dc483",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/26dfbafbe46014f205f41a2f2618485f45c556fb",
+                "reference": "26dfbafbe46014f205f41a2f2618485f45c556fb",
                 "shasum": ""
             },
             "require": {
@@ -3325,12 +3325,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "2323050187bbb28c81d787fabcd49e9b39b28272"
+                "reference": "c008272789979f709f7fcb32c2ecf1d2db5e84e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/2323050187bbb28c81d787fabcd49e9b39b28272",
-                "reference": "2323050187bbb28c81d787fabcd49e9b39b28272",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/c008272789979f709f7fcb32c2ecf1d2db5e84e5",
+                "reference": "c008272789979f709f7fcb32c2ecf1d2db5e84e5",
                 "shasum": ""
             },
             "require": {
@@ -3390,7 +3390,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-02T08:23:19+00:00"
+            "time": "2026-07-18T12:35:13+00:00"
         },
         {
             "name": "composer/class-map-generator",
@@ -3468,12 +3468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "2ce09be45d1f93264540913317dd48eb2613d26d"
+                "reference": "138899a081757ceb770bd53b1ca575244d8aed06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/2ce09be45d1f93264540913317dd48eb2613d26d",
-                "reference": "2ce09be45d1f93264540913317dd48eb2613d26d",
+                "url": "https://api.github.com/repos/composer/composer/zipball/138899a081757ceb770bd53b1ca575244d8aed06",
+                "reference": "138899a081757ceb770bd53b1ca575244d8aed06",
                 "shasum": ""
             },
             "require": {
@@ -3576,7 +3576,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-17T13:38:27+00:00"
+            "time": "2026-07-18T12:52:39+00:00"
         },
         {
             "name": "composer/metadata-minifier",

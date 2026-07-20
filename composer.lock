@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b3543e58a0144a9d885e0ea3c2bcf622",
+    "content-hash": "f587fd7b67eedb6cd6e3580b2bac5028",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -2878,16 +2878,16 @@
         },
         {
             "name": "ttek/tk-base",
-            "version": "8.0.x-dev",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-base.git",
-                "reference": "c0a2799e42f567ac79c0c3fbec18a66a634111a5"
+                "reference": "5e474d7ed4bf409ecb185667da1d2c84d1d7543a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/c0a2799e42f567ac79c0c3fbec18a66a634111a5",
-                "reference": "c0a2799e42f567ac79c0c3fbec18a66a634111a5",
+                "url": "https://api.github.com/repos/tropotek/tk-base/zipball/5e474d7ed4bf409ecb185667da1d2c84d1d7543a",
+                "reference": "5e474d7ed4bf409ecb185667da1d2c84d1d7543a",
                 "shasum": ""
             },
             "require": {
@@ -2899,19 +2899,20 @@
                 "symfony/lock": "^6.2-@stable",
                 "symfony/routing": "^6.2-@stable",
                 "tinymce/tinymce": "~7.0-@stable",
-                "ttek/tk-domtemplate": "^8.0",
-                "ttek/tk-form": "^8.0",
-                "ttek/tk-framework": "^8.0",
-                "ttek/tk-table": "^8.0",
+                "ttek/tk-domtemplate": "^8.1",
+                "ttek/tk-form": "^8.1",
+                "ttek/tk-framework": "^8.1",
+                "ttek/tk-table": "^8.1",
                 "vlucas/phpdotenv": "^5.6-@stable"
             },
             "require-dev": {
                 "composer/composer": "^2.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.0.x-dev"
+                    "dev-main": "8.1.x-dev"
                 }
             },
             "autoload": {
@@ -2936,22 +2937,22 @@
             ],
             "support": {
                 "issues": "https://github.com/tropotek/tk-base/issues",
-                "source": "https://github.com/tropotek/tk-base/tree/8.0"
+                "source": "https://github.com/tropotek/tk-base/tree/main"
             },
             "time": "2025-11-15T00:00:00+00:00"
         },
         {
             "name": "ttek/tk-domtemplate",
-            "version": "8.0.x-dev",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-domtemplate.git",
-                "reference": "f6a066bd255aa92b69fd0db32b393217a43f30bd"
+                "reference": "6e7e213ee6fedd402088e2b38942ad4e883ff6ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/f6a066bd255aa92b69fd0db32b393217a43f30bd",
-                "reference": "f6a066bd255aa92b69fd0db32b393217a43f30bd",
+                "url": "https://api.github.com/repos/tropotek/tk-domtemplate/zipball/6e7e213ee6fedd402088e2b38942ad4e883ff6ab",
+                "reference": "6e7e213ee6fedd402088e2b38942ad4e883ff6ab",
                 "shasum": ""
             },
             "require": {
@@ -2965,7 +2966,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.0.x-dev"
+                    "dev-main": "8.1.x-dev"
                 }
             },
             "autoload": {
@@ -2994,7 +2995,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tropotek/tk-domtemplate/issues",
-                "source": "https://github.com/tropotek/tk-domtemplate/tree/8.0"
+                "source": "https://github.com/tropotek/tk-domtemplate/tree/main"
             },
             "funding": [
                 {
@@ -3006,29 +3007,29 @@
         },
         {
             "name": "ttek/tk-form",
-            "version": "8.0.x-dev",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-form.git",
-                "reference": "35eb5e1d61787cc6720a37d669e4873fbbd43b75"
+                "reference": "748f78b4e35c296147b3044c8d426b1c8cda0354"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/35eb5e1d61787cc6720a37d669e4873fbbd43b75",
-                "reference": "35eb5e1d61787cc6720a37d669e4873fbbd43b75",
+                "url": "https://api.github.com/repos/tropotek/tk-form/zipball/748f78b4e35c296147b3044c8d426b1c8cda0354",
+                "reference": "748f78b4e35c296147b3044c8d426b1c8cda0354",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "php": "^8.3",
-                "ttek/tk-domtemplate": "^8.0",
-                "ttek/tk-framework": "^8.0"
+                "ttek/tk-domtemplate": "^8.1",
+                "ttek/tk-framework": "^8.1"
             },
             "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.0.x-dev"
+                    "dev-main": "8.1.x-dev"
                 }
             },
             "autoload": {
@@ -3053,22 +3054,22 @@
             ],
             "support": {
                 "issues": "https://github.com/tropotek/tk-form/issues",
-                "source": "https://github.com/tropotek/tk-form/tree/8.0"
+                "source": "https://github.com/tropotek/tk-form/tree/main"
             },
             "time": "2025-05-08T00:00:00+00:00"
         },
         {
             "name": "ttek/tk-framework",
-            "version": "8.0.x-dev",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-framework.git",
-                "reference": "b422a3d6468c23379e604644ed7d372aa6635452"
+                "reference": "549468d45f31c22dae11fc5e7c447e45ea1dc483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/b422a3d6468c23379e604644ed7d372aa6635452",
-                "reference": "b422a3d6468c23379e604644ed7d372aa6635452",
+                "url": "https://api.github.com/repos/tropotek/tk-framework/zipball/549468d45f31c22dae11fc5e7c447e45ea1dc483",
+                "reference": "549468d45f31c22dae11fc5e7c447e45ea1dc483",
                 "shasum": ""
             },
             "require": {
@@ -3087,7 +3088,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.0.x-dev"
+                    "dev-main": "8.1.x-dev"
                 }
             },
             "autoload": {
@@ -3117,7 +3118,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tropotek/tk-framework/issues",
-                "source": "https://github.com/tropotek/tk-framework/tree/8.0"
+                "source": "https://github.com/tropotek/tk-framework/tree/main"
             },
             "funding": [
                 {
@@ -3129,30 +3130,30 @@
         },
         {
             "name": "ttek/tk-table",
-            "version": "8.0.x-dev",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tropotek/tk-table.git",
-                "reference": "65708b054bfaea6812054d9942a5c47ff89e17e0"
+                "reference": "cb856ceaeb3ba48f90b795694f4a6ddd0e8e2a5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/65708b054bfaea6812054d9942a5c47ff89e17e0",
-                "reference": "65708b054bfaea6812054d9942a5c47ff89e17e0",
+                "url": "https://api.github.com/repos/tropotek/tk-table/zipball/cb856ceaeb3ba48f90b795694f4a6ddd0e8e2a5e",
+                "reference": "cb856ceaeb3ba48f90b795694f4a6ddd0e8e2a5e",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "php": "^8.3",
-                "ttek/tk-domtemplate": "^8.0",
-                "ttek/tk-form": "^8.0",
-                "ttek/tk-framework": "^8.0"
+                "ttek/tk-domtemplate": "^8.1",
+                "ttek/tk-form": "^8.1",
+                "ttek/tk-framework": "^8.1"
             },
             "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.0.x-dev"
+                    "dev-main": "8.1.x-dev"
                 }
             },
             "autoload": {
@@ -3177,7 +3178,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tropotek/tk-table/issues",
-                "source": "https://github.com/tropotek/tk-table/tree/8.0"
+                "source": "https://github.com/tropotek/tk-table/tree/main"
             },
             "time": "2025-05-08T00:00:00+00:00"
         },
@@ -3467,12 +3468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "1f54358cf86f316ac92a4ddc56ea9ce027480c1f"
+                "reference": "2ce09be45d1f93264540913317dd48eb2613d26d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/1f54358cf86f316ac92a4ddc56ea9ce027480c1f",
-                "reference": "1f54358cf86f316ac92a4ddc56ea9ce027480c1f",
+                "url": "https://api.github.com/repos/composer/composer/zipball/2ce09be45d1f93264540913317dd48eb2613d26d",
+                "reference": "2ce09be45d1f93264540913317dd48eb2613d26d",
                 "shasum": ""
             },
             "require": {
@@ -3575,7 +3576,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-10T07:27:41+00:00"
+            "time": "2026-07-17T13:38:27+00:00"
         },
         {
             "name": "composer/metadata-minifier",
